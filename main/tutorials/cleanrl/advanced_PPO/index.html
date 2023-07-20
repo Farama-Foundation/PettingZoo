@@ -1,0 +1,1148 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="">
+    <meta property="og:title" content="PettingZoo Documentation" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/cleanrl/advanced_PPO.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tianshou Tutorial" href="../../tianshou/" /><link rel="prev" title="CleanRL: Implementing PPO" href="../implementing_PPO/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/cleanrl/advanced_PPO.html" />
+
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
+        <title>CleanRL: Advanced PPO - PettingZoo Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    <header class="farama-header" aria-label="Farama header">
+      <div class="farama-header__container">
+        <div class="farama-header__left--mobile">
+          <label class="nav-overlay-icon" for="__navigation">
+            <div class="visually-hidden">Toggle site navigation sidebar</div>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <defs></defs>
+              <line x1="0.5" y1="4" x2="23.5" y2="4"></line>
+              <line x1="0.232" y1="12" x2="23.5" y2="12"></line>
+              <line x1="0.232" y1="20" x2="23.5" y2="20"></line>
+            </svg>
+          </label>
+        </div>
+        <div class="farama-header__left farama-header__center--mobile">
+          <a href="../../../">
+              <img class="farama-header__logo only-light" src="../../../_static/img/PettingZoo.svg" alt="Light Logo"/>
+              <img class="farama-header__logo only-dark" src="../../../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
+            <span class="farama-header__title">PettingZoo Documentation</span>
+          </a>
+        </div>
+        <div class="farama-header__right">
+          <div class="farama-header-menu">
+            <button class="farama-header-menu__btn" aria-label="Open Farama Menu" aria-expanded="false" aria-haspopup="true" aria-controls="farama-menu">
+              <img class="farama-black-logo-invert" src="../../../_static/img/farama-logo-header.svg">
+              <svg viewBox="0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polyline style="stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-width: 2px;" points="1 7 12 18 23 7"></polyline>
+              </svg>
+            </button>
+            <div class="farama-header-menu-container farama-hidden" aria-hidden="true" id="farama-menu">
+              <div class="farama-header-menu__header">
+                <a href="https://farama.org">
+                  <img class="farama-header-menu__logo farama-white-logo-invert" src="../../../_static/img/farama_solid_white.svg" alt="Farama Foundation logo">
+                  <span>Farama Foundation</span>
+                </a>
+                <div class="farama-header-menu-header__right">
+                  <button id="farama-close-menu">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-close">
+                      <line x1="3" y1="21" x2="21" y2="3"></line>
+                      <line x1="3" y1="3" x2="21" y2="21"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="farama-header-menu__body">
+                <!-- Response from farama.org/api/projects.json -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="page">
+  <!--<header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../"><div class="brand">PettingZoo Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>-->
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="farama-sidebar__title" href="../../../">
+      <img class="farama-header__logo only-light" src="../../../_static/img/PettingZoo.svg" alt="Light Logo"/>
+      <img class="farama-header__logo only-dark" src="../../../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
+    <span class="farama-header__title">PettingZoo Documentation</span>
+  </a><form class="sidebar-search-container" method="get" action="../../../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../content/basic_usage/">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../content/environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../content/environment_tests/">Testing Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/aec/">AEC API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/parallel/">Parallel API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/wrappers/">Wrappers</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Wrappers</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/wrappers/pz_wrappers/">PettingZoo Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/wrappers/supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/wrappers/shimmy_wrappers/">Shimmy Compatibility Wrappers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/utils/">Utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Environments</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/atari/">Atari</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Atari</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/basketball_pong/">Basketball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/boxing/">Boxing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/combat_plane/">Combat: Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/combat_tank/">Combat: Tank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/double_dunk/">Double Dunk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/entombed_competitive/">Emtombed: Competitive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/entombed_cooperative/">Emtombed: Cooperative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/flag_capture/">Flag Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/foozpong/">Foozpong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/ice_hockey/">Ice Hockey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/joust/">Joust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/mario_bros/">Mario Bros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/maze_craze/">Maze Craze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/othello/">Othello</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/pong/">Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/quadrapong/">Quadrapong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/space_invaders/">Space Invaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/space_war/">Space War</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/surround/">Surround</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/tennis/">Tennis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/video_checkers/">Video Checkers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/volleyball_pong/">Volleyball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/warlords/">Warlords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/atari/wizard_of_wor/">Wizard of Wor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/butterfly/">Butterfly</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Butterfly</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/butterfly/cooperative_pong/">Cooperative Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/butterfly/knights_archers_zombies/">Knights Archers Zombies (‘KAZ’)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/butterfly/pistonball/">Pistonball</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/chess/">Chess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/connect_four/">Connect Four</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/gin_rummy/">Gin Rummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/go/">Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/hanabi/">Hanabi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/rps/">Rock Paper Scissors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/texas_holdem_no_limit/">Texas Hold’em No Limit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/texas_holdem/">Texas Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/tictactoe/">Tic Tac Toe</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/mpe/">MPE</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of MPE</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple/">Simple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_adversary/">Simple Adversary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_crypto/">Simple Crypto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_spread/">Simple Spread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_tag/">Simple Tag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_world_comm/">Simple World Comm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/sisl/">SISL</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of SISL</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/sisl/multiwalker/">Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/sisl/pursuit/">Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/sisl/waterworld/">Waterworld</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments/third_party_envs/">Third-Party Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">CleanRL Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../implementing_PPO/">CleanRL: Implementing PPO</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">CleanRL: Advanced PPO</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tianshou/">Tianshou Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Tianshou Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../rllib/">Ray RLlib Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Ray RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/pistonball/">RLlib: PPO for Pistonball</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/holdem/">RLlib: DQN for Simple Poker</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../langchain/">LangChain Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LangChain Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../langchain/langchain/">LangChain: Creating LLM agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../sb3/">Stable-Baselines3 Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../sb3/kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sb3/waterworld/">SB3: PPO for Waterworld</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sb3/connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">Github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release_notes/">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/tree/master/docs/">Contribute to the Docs</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main-container">
+
+    
+
+    
+
+    <div class="main">
+      <div class="content">
+        <div class="article-container">
+          <a href="#" class="back-to-top muted-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+            </svg>
+            <span>Back to top</span>
+          </a>
+          <div class="content-icon-container">
+      <div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/cleanrl/advanced_PPO.py" title="Edit this page">
+    <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+      <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+    </svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+              <button class="theme-toggle" title="Toggle color theme">
+                <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+                <svg class="theme-icon-when-auto">
+                  <use href="#svg-sun-half"></use>
+                </svg>
+                <svg class="theme-icon-when-dark">
+                  <use href="#svg-moon"></use>
+                </svg>
+                <svg class="theme-icon-when-light">
+                  <use href="#svg-sun"></use>
+                </svg>
+              </button>
+            </div>
+            <label class="toc-overlay-icon toc-content-icon" for="__toc">
+              <div class="visually-hidden">Toggle table of contents sidebar</div>
+              <i class="icon"><svg>
+                  <use href="#svg-toc"></use>
+                </svg></i>
+            </label>
+          </div>
+          <article role="main">
+            
+            <section id="cleanrl-advanced-ppo">
+<h1>CleanRL: Advanced PPO<a class="headerlink" href="#cleanrl-advanced-ppo" title="Permalink to this heading">#</a></h1>
+<p>This tutorial shows how to train <a class="reference external" href="https://docs.cleanrl.dev/rl-algorithms/ppo/">PPO</a> agents on <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/pistonball/">Atari</a> environments (<a class="reference external" href="https://pettingzoo.farama.org/api/parallel/">Parallel</a>).
+This is a full training script including CLI, logging and integration with <a class="reference external" href="https://www.tensorflow.org/tensorboard">TensorBoard</a> and <a class="reference external" href="https://wandb.ai/">WandB</a> for experiment tracking.</p>
+<p>This tutorial is mirrored from <a class="reference external" href="https://github.com/vwxyzjn/cleanrl">CleanRL</a>’s examples. Full documentation and experiment results can be found at <a class="reference external" href="https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy">https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy</a></p>
+<section id="environment-setup">
+<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
+<p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly,atari,testing]&gt;=1.23.1
+SuperSuit&gt;=3.8.1
+tensorboard&gt;=2.11.2
+torch&gt;=1.13.1
+</pre></div>
+</div>
+<p>Then, install ROMs using <a class="reference external" href="https://github.com/Farama-Foundation/AutoROM">AutoROM</a>, or specify the path to your Atari rom using the <code class="docutils literal notranslate"><span class="pre">rom_path</span></code> argument (see <a class="reference internal" href="#/environments/atari/#common-parameters"><span class="xref myst">Common Parameters</span></a>).</p>
+</section>
+<section id="code">
+<h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
+<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with CleanRL. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>, or create an issue on <a class="reference external" href="https://github.com/vwxyzjn/cleanrl/issues">CleanRL’s GitHub</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Advanced training script adapted from CleanRL&#39;s repository: https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_pettingzoo_ma_atari.py.</span>
+
+<span class="sd">This is a full training script including CLI, logging and integration with TensorBoard and WandB for experiment tracking.</span>
+
+<span class="sd">Full documentation and experiment results can be found at https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy.</span>
+
+<span class="sd">Note: default value for total-timesteps has been changed from 2 million to 8000, for easier testing.</span>
+
+<span class="sd">Authors: Costa (https://github.com/vwxyzjn), Elliot (https://github.com/elliottower)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># flake8: noqa</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">distutils.util</span> <span class="kn">import</span> <span class="n">strtobool</span>
+
+<span class="kn">import</span> <span class="nn">gymnasium</span> <span class="k">as</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">supersuit</span> <span class="k">as</span> <span class="nn">ss</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.categorical</span> <span class="kn">import</span> <span class="n">Categorical</span>
+<span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+
+
+<span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
+    <span class="c1"># fmt: off</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--exp-name&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the name of this experiment&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--seed&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;seed of the experiment&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--torch-deterministic&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;if toggled, `torch.backends.cudnn.deterministic=False`&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--cuda&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;if toggled, cuda will be enabled by default&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--track&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;if toggled, this experiment will be tracked with Weights and Biases&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--wandb-project-name&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;cleanRL&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the wandb&#39;s project name&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--wandb-entity&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the entity (team) of wandb&#39;s project&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--capture-video&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;whether to capture videos of the agent performances (check out `videos` folder)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Algorithm specific arguments</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--env-id&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;pong_v3&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the id of the environment&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--total-timesteps&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">12000</span><span class="p">,</span>  <span class="c1"># CleanRL default: 2000000</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;total timesteps of the experiments&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--learning-rate&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.5e-4</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the learning rate of the optimizer&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--num-envs&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the number of parallel game environments&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--num-steps&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the number of steps to run in each environment per policy rollout&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--anneal-lr&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Toggle learning rate annealing for policy and value networks&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gamma&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the discount factor gamma&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gae-lambda&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the lambda for the general advantage estimation&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--num-minibatches&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the number of mini-batches&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--update-epochs&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the K epochs to update the policy&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--norm-adv&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Toggles advantages normalization&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--clip-coef&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the surrogate clipping coefficient&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--clip-vloss&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Toggles whether or not to use a clipped loss for the value function, as per the paper.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--ent-coef&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;coefficient of the entropy&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--vf-coef&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;coefficient of the value function&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--max-grad-norm&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the maximum norm for the gradient clipping&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--target-kl&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the target KL divergence threshold&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">num_envs</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">)</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">minibatch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">//</span> <span class="n">args</span><span class="o">.</span><span class="n">num_minibatches</span><span class="p">)</span>
+    <span class="c1"># fmt: on</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+
+<span class="k">def</span> <span class="nf">layer_init</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">bias_const</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="n">bias_const</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">layer</span>
+
+
+<span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">layer_init</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">4</span><span class="p">)),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">layer_init</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">layer_init</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">(),</span>
+            <span class="n">layer_init</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">512</span><span class="p">)),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actor</span> <span class="o">=</span> <span class="n">layer_init</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span><span class="o">.</span><span class="n">n</span><span class="p">),</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic</span> <span class="o">=</span> <span class="n">layer_init</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span> <span class="o">/=</span> <span class="mf">255.0</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))))</span>
+
+    <span class="k">def</span> <span class="nf">get_action_and_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span> <span class="o">/=</span> <span class="mf">255.0</span>
+        <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">Categorical</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">probs</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">action</span><span class="p">,</span> <span class="n">probs</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">action</span><span class="p">),</span> <span class="n">probs</span><span class="o">.</span><span class="n">entropy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># --num-steps 32 --num-envs 6 --total-timesteps 256</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">run_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">env_id</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">exp_name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">track</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">wandb</span>
+
+        <span class="n">wandb</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+            <span class="n">project</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">wandb_project_name</span><span class="p">,</span>
+            <span class="n">entity</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">wandb_entity</span><span class="p">,</span>
+            <span class="n">sync_tensorboard</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">config</span><span class="o">=</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">run_name</span><span class="p">,</span>
+            <span class="n">monitor_gym</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">save_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;runs/</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span>
+        <span class="s2">&quot;hyperparameters&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;|param|value|</span><span class="se">\n</span><span class="s2">|-|-|</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span>
+        <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;|</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">|&quot;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()])),</span>
+    <span class="p">)</span>
+
+    <span class="c1"># TRY NOT TO MODIFY: seeding</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">torch_deterministic</span>
+
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">cuda</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+
+    <span class="c1"># env setup</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pettingzoo.atari.</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">env_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">max_observation_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_skip_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">clip_reward_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">agent_indicator_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">type_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">pettingzoo_env_to_vec_env_v1</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="n">envs</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v1</span><span class="p">(</span>
+        <span class="n">env</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s2">&quot;gymnasium&quot;</span>
+    <span class="p">)</span>
+    <span class="n">envs</span><span class="o">.</span><span class="n">single_observation_space</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">observation_space</span>
+    <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">action_space</span>
+    <span class="n">envs</span><span class="o">.</span><span class="n">is_vector_env</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">capture_video</span><span class="p">:</span>
+        <span class="n">envs</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">wrappers</span><span class="o">.</span><span class="n">RecordVideo</span><span class="p">(</span><span class="n">envs</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;videos/</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+        <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span>
+    <span class="p">),</span> <span class="s2">&quot;only discrete action space is supported&quot;</span>
+
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+
+    <span class="c1"># ALGO Logic: Storage setup</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">)</span> <span class="o">+</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_observation_space</span><span class="o">.</span><span class="n">shape</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">)</span> <span class="o">+</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span><span class="o">.</span><span class="n">shape</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">logprobs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">rewards</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">terminations</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">truncations</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="c1"># TRY NOT TO MODIFY: start the game</span>
+    <span class="n">global_step</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">next_obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">next_obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">next_obs</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">next_termination</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">next_truncation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">num_envs</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">num_updates</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">total_timesteps</span> <span class="o">//</span> <span class="n">args</span><span class="o">.</span><span class="n">batch_size</span>
+
+    <span class="k">for</span> <span class="n">update</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_updates</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Annealing the rate if instructed to do so.</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">anneal_lr</span><span class="p">:</span>
+            <span class="n">frac</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">update</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_updates</span>
+            <span class="n">lrnow</span> <span class="o">=</span> <span class="n">frac</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">learning_rate</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lrnow</span>
+
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">):</span>
+            <span class="n">global_step</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">num_envs</span>
+            <span class="n">obs</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_obs</span>
+            <span class="n">terminations</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_termination</span>
+            <span class="n">truncations</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_truncation</span>
+
+            <span class="c1"># ALGO LOGIC: action logic</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">action</span><span class="p">,</span> <span class="n">logprob</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span><span class="n">next_obs</span><span class="p">)</span>
+                <span class="n">values</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">actions</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">action</span>
+            <span class="n">logprobs</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">logprob</span>
+
+            <span class="c1"># TRY NOT TO MODIFY: execute the game and log data.</span>
+            <span class="n">next_obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span>
+                <span class="n">action</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="n">rewards</span><span class="p">[</span><span class="n">step</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">next_obs</span><span class="p">,</span> <span class="n">next_termination</span><span class="p">,</span> <span class="n">next_truncation</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">next_obs</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">termination</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">truncation</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="c1"># TODO: fix this</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">info</span><span class="p">):</span>
+                <span class="n">player_idx</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">%</span> <span class="mi">2</span>
+                <span class="k">if</span> <span class="s2">&quot;episode&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;global_step=</span><span class="si">{</span><span class="n">global_step</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">player_idx</span><span class="si">}</span><span class="s2">-episodic_return=</span><span class="si">{</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;episode&#39;</span><span class="p">][</span><span class="s1">&#39;r&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;charts/episodic_return-player</span><span class="si">{</span><span class="n">player_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s2">&quot;episode&quot;</span><span class="p">][</span><span class="s2">&quot;r&quot;</span><span class="p">],</span>
+                        <span class="n">global_step</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;charts/episodic_length-player</span><span class="si">{</span><span class="n">player_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s2">&quot;episode&quot;</span><span class="p">][</span><span class="s2">&quot;l&quot;</span><span class="p">],</span>
+                        <span class="n">global_step</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># bootstrap value if not done</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">next_value</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">next_obs</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">advantages</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">rewards</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">lastgaelam</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">next_done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">next_termination</span><span class="p">,</span> <span class="n">next_truncation</span><span class="p">)</span>
+            <span class="n">dones</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">num_steps</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">args</span><span class="o">.</span><span class="n">num_steps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">nextnonterminal</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">next_done</span>
+                    <span class="n">nextvalues</span> <span class="o">=</span> <span class="n">next_value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nextnonterminal</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">dones</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">nextvalues</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">rewards</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">nextvalues</span> <span class="o">*</span> <span class="n">nextnonterminal</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">advantages</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">lastgaelam</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">delta</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">gae_lambda</span> <span class="o">*</span> <span class="n">nextnonterminal</span> <span class="o">*</span> <span class="n">lastgaelam</span>
+                <span class="p">)</span>
+            <span class="n">returns</span> <span class="o">=</span> <span class="n">advantages</span> <span class="o">+</span> <span class="n">values</span>
+
+        <span class="c1"># flatten the batch</span>
+        <span class="n">b_obs</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_observation_space</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">b_logprobs</span> <span class="o">=</span> <span class="n">logprobs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">b_actions</span> <span class="o">=</span> <span class="n">actions</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">b_advantages</span> <span class="o">=</span> <span class="n">advantages</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">b_returns</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">b_values</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Optimizing the policy and value network</span>
+        <span class="n">b_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">clipfracs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">update_epochs</span><span class="p">):</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">b_inds</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">minibatch_size</span><span class="p">):</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">minibatch_size</span>
+                <span class="n">mb_inds</span> <span class="o">=</span> <span class="n">b_inds</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+
+                <span class="n">_</span><span class="p">,</span> <span class="n">newlogprob</span><span class="p">,</span> <span class="n">entropy</span><span class="p">,</span> <span class="n">newvalue</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span>
+                    <span class="n">b_obs</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">],</span> <span class="n">b_actions</span><span class="o">.</span><span class="n">long</span><span class="p">()[</span><span class="n">mb_inds</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">logratio</span> <span class="o">=</span> <span class="n">newlogprob</span> <span class="o">-</span> <span class="n">b_logprobs</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">]</span>
+                <span class="n">ratio</span> <span class="o">=</span> <span class="n">logratio</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
+
+                <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                    <span class="c1"># calculate approx_kl http://joschu.net/blog/kl-approx.html</span>
+                    <span class="n">old_approx_kl</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">logratio</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                    <span class="n">approx_kl</span> <span class="o">=</span> <span class="p">((</span><span class="n">ratio</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">logratio</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                    <span class="n">clipfracs</span> <span class="o">+=</span> <span class="p">[</span>
+                        <span class="p">((</span><span class="n">ratio</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">args</span><span class="o">.</span><span class="n">clip_coef</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                    <span class="p">]</span>
+
+                <span class="n">mb_advantages</span> <span class="o">=</span> <span class="n">b_advantages</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">norm_adv</span><span class="p">:</span>
+                    <span class="n">mb_advantages</span> <span class="o">=</span> <span class="p">(</span><span class="n">mb_advantages</span> <span class="o">-</span> <span class="n">mb_advantages</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span>
+                        <span class="n">mb_advantages</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-8</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># Policy loss</span>
+                <span class="n">pg_loss1</span> <span class="o">=</span> <span class="o">-</span><span class="n">mb_advantages</span> <span class="o">*</span> <span class="n">ratio</span>
+                <span class="n">pg_loss2</span> <span class="o">=</span> <span class="o">-</span><span class="n">mb_advantages</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span>
+                    <span class="n">ratio</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">args</span><span class="o">.</span><span class="n">clip_coef</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">clip_coef</span>
+                <span class="p">)</span>
+                <span class="n">pg_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">pg_loss1</span><span class="p">,</span> <span class="n">pg_loss2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+                <span class="c1"># Value loss</span>
+                <span class="n">newvalue</span> <span class="o">=</span> <span class="n">newvalue</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">clip_vloss</span><span class="p">:</span>
+                    <span class="n">v_loss_unclipped</span> <span class="o">=</span> <span class="p">(</span><span class="n">newvalue</span> <span class="o">-</span> <span class="n">b_returns</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+                    <span class="n">v_clipped</span> <span class="o">=</span> <span class="n">b_values</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">]</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span>
+                        <span class="n">newvalue</span> <span class="o">-</span> <span class="n">b_values</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">],</span>
+                        <span class="o">-</span><span class="n">args</span><span class="o">.</span><span class="n">clip_coef</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">.</span><span class="n">clip_coef</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">v_loss_clipped</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_clipped</span> <span class="o">-</span> <span class="n">b_returns</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+                    <span class="n">v_loss_max</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v_loss_unclipped</span><span class="p">,</span> <span class="n">v_loss_clipped</span><span class="p">)</span>
+                    <span class="n">v_loss</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">v_loss_max</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">v_loss</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">newvalue</span> <span class="o">-</span> <span class="n">b_returns</span><span class="p">[</span><span class="n">mb_inds</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+                <span class="n">entropy_loss</span> <span class="o">=</span> <span class="n">entropy</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="n">pg_loss</span> <span class="o">-</span> <span class="n">args</span><span class="o">.</span><span class="n">ent_coef</span> <span class="o">*</span> <span class="n">entropy_loss</span> <span class="o">+</span> <span class="n">v_loss</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">vf_coef</span>
+
+                <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">args</span><span class="o">.</span><span class="n">max_grad_norm</span><span class="p">)</span>
+                <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">target_kl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">approx_kl</span> <span class="o">&gt;</span> <span class="n">args</span><span class="o">.</span><span class="n">target_kl</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+        <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span> <span class="o">=</span> <span class="n">b_values</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">b_returns</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">var_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+        <span class="n">explained_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">var_y</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">/</span> <span class="n">var_y</span>
+
+        <span class="c1"># TRY NOT TO MODIFY: record rewards for plotting purposes</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span>
+            <span class="s2">&quot;charts/learning_rate&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;lr&quot;</span><span class="p">],</span> <span class="n">global_step</span>
+        <span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s2">&quot;losses/value_loss&quot;</span><span class="p">,</span> <span class="n">v_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">global_step</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s2">&quot;losses/policy_loss&quot;</span><span class="p">,</span> <span class="n">pg_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">global_step</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s2">&quot;losses/entropy&quot;</span><span class="p">,</span> <span class="n">entropy_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">global_step</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s2">&quot;losses/old_approx_kl&quot;</span><span class="p">,</span> <span class="n">old_approx_kl</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">global_step</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s2">&quot;losses/approx_kl&quot;</span><span class="p">,</span> <span class="n">approx_kl</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">global_step</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s2">&quot;losses/clipfrac&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">clipfracs</span><span class="p">),</span> <span class="n">global_step</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s2">&quot;losses/explained_variance&quot;</span><span class="p">,</span> <span class="n">explained_var</span><span class="p">,</span> <span class="n">global_step</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SPS:&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">global_step</span> <span class="o">/</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)))</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span>
+            <span class="s2">&quot;charts/SPS&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">global_step</span> <span class="o">/</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)),</span> <span class="n">global_step</span>
+        <span class="p">)</span>
+
+    <span class="n">envs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+          </article>
+        </div>
+        <footer>
+          
+          <div class="related-pages">
+            <a class="next-page" href="../../tianshou/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Tianshou Tutorial</div>
+              </div>
+              <svg class="furo-related-icon">
+                <use href="#svg-arrow-right"></use>
+              </svg>
+            </a>
+            <a class="prev-page" href="../implementing_PPO/">
+              <svg class="furo-related-icon">
+                <use href="#svg-arrow-right"></use>
+              </svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">CleanRL: Implementing PPO</div>
+                
+              </div>
+            </a>
+          </div>
+          <div class="bottom-of-page">
+            <div class="left-details">
+              <div class="copyright">
+                Copyright &#169; 2023 Farama Foundation
+              </div>
+              <!--
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            -->
+            </div>
+            <div class="right-details">
+              <div class="icons">
+                <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/"
+                  aria-label="On GitHub">
+                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+                    </path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+        </footer>
+      </div>
+      <aside class="toc-drawer">
+        
+        
+        <div class="toc-sticky toc-scroll">
+          <div class="toc-title-container">
+            <span class="toc-title">
+              On this page
+            </span>
+          </div>
+          <div class="toc-tree-container">
+            <div class="toc-tree">
+              <ul>
+<li><a class="reference internal" href="#">CleanRL: Advanced PPO</a><ul>
+<li><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
+<li><a class="reference internal" href="#code">Code</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+          </div>
+        </div>
+        
+        
+      </aside>
+    </div>
+  </div>
+</div>
+    <script>
+      const toggleMenu = () => {
+        const menuBtn = document.querySelector(".farama-header-menu__btn");
+        const menuContainer = document.querySelector(".farama-header-menu-container");
+        if (document.querySelector(".farama-header-menu").classList.contains("active")) {
+          menuBtn.setAttribute("aria-expanded", "false");
+          menuContainer.setAttribute("aria-hidden", "true");
+        } else {
+          menuBtn.setAttribute("aria-expanded", "true");
+          menuContainer.setAttribute("aria-hidden", "false");
+        }
+        document.querySelector(".farama-header-menu").classList.toggle("active");
+      }
+
+      document.querySelector(".farama-header-menu__btn").addEventListener("click", toggleMenu);
+      document.getElementById("farama-close-menu").addEventListener("click", toggleMenu);
+    </script>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q4EGMJ3R24"></script>
+      <script>
+        const enableGtag = () => {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Q4EGMJ3R24');
+        }
+        (() => {
+            if (!localStorage.getItem("acceptedCookieAlert")) {
+                const boxElem = document.createElement("div");
+                boxElem.classList.add("cookie-alert");
+                const containerElem = document.createElement("div");
+                containerElem.classList.add("cookie-alert__container");
+                const textElem = document.createElement("p");
+                textElem.innerHTML = `This page uses <a href="https://analytics.google.com/">
+                                    Google Analytics</a> to collect statistics.`;
+                                    containerElem.appendChild(textElem);
+
+                const declineBtn = Object.assign(document.createElement("button"),
+                  {
+                    innerText: "Deny",
+                    className: "farama-btn cookie-alert__button",
+                    id: "cookie-alert__decline",
+                  }
+                );
+                declineBtn.addEventListener("click", () => {
+                  localStorage.setItem("acceptedCookieAlert", false);
+                  boxElem.remove();
+                });
+
+                const acceptBtn = Object.assign(document.createElement("button"),
+                  {
+                    innerText: "Allow",
+                    className: "farama-btn cookie-alert__button",
+                    id: "cookie-alert__accept",
+                  }
+                );
+                acceptBtn.addEventListener("click", () => {
+                  localStorage.setItem("acceptedCookieAlert", true);
+                  boxElem.remove();
+                  enableGtag();
+                });
+
+                containerElem.appendChild(declineBtn);
+                containerElem.appendChild(acceptBtn);
+                boxElem.appendChild(containerElem);
+                document.body.appendChild(boxElem);
+            } else if (localStorage.getItem("acceptedCookieAlert") === "true") {
+              enableGtag();
+            }
+        })()
+      </script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    
+    <script>
+
+      const createProjectsList = (projects, displayImages) => {
+        const ulElem = Object.assign(document.createElement('ul'),
+          {
+            className:'farama-header-menu-list',
+          }
+        )
+        for (let project of projects) {
+          const liElem = document.createElement("li");
+          const aElem = Object.assign(document.createElement("a"),
+            {
+              href: project.link
+            }
+          );
+          liElem.appendChild(aElem);
+          if (displayImages) {
+            const imgElem = Object.assign(document.createElement("img"),
+              {
+                src: project.image ? imagesBasepath + project.image : imagesBasepath + "/farama_black.svg",
+                alt: `${project.name} logo`,
+                className: "farama-black-logo-invert"
+              }
+            );
+            aElem.appendChild(imgElem);
+          }
+          aElem.appendChild(document.createTextNode(project.name));
+          ulElem.appendChild(liElem);
+        }
+        return ulElem;
+      }
+
+      // Create menu with Farama projects by using the API at farama.org/api/projects.json
+      const createCORSRequest = (method, url) => {
+        let xhr = new XMLHttpRequest();
+        xhr.responseType = 'json';
+
+        if ("withCredentials" in xhr) {
+          xhr.open(method, url, true);
+        } else if (typeof XDomainRequest != "undefined") {
+          // IE8 & IE9
+          xhr = new XDomainRequest();
+          xhr.open(method, url);
+        } else {
+          // CORS not supported.
+          xhr = null;
+        }
+        return xhr;
+      };
+
+      const url = 'https://farama.org/api/projects.json';
+      const imagesBasepath = "https://farama.org/assets/images"
+      const method = 'GET';
+      let xhr = createCORSRequest(method, url);
+
+      xhr.onload = () => {
+        const jsonResponse = xhr.response;
+        const sections = {
+          "Core Projects": [],
+          "Mature Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          },
+          "Foundation": [
+            {
+              name: "About",
+              link: "https://farama.org/about"
+            },
+            {
+              name: "Standards",
+              link: "https://farama.org/project_standards",
+            },
+            {
+              name: "Donate",
+              link: "https://farama.org/donations"
+            }
+          ]
+        }
+
+        // Categorize projects
+        Object.keys(jsonResponse).forEach(key => {
+          projectJson = jsonResponse[key];
+          if (projectJson.website !== null) {
+            projectJson.link = projectJson.website;
+          } else {
+            projectJson.link = projectJson.github;
+          }
+          if (projectJson.type === "core") {
+            sections["Core Projects"].push(projectJson)
+          } else if (projectJson.type == "mature") {
+            if (projectJson.website !== null) {
+              sections["Mature Projects"]["Documentation"].push(projectJson)
+            } else {
+              sections["Mature Projects"]["Repositories"].push(projectJson)
+            }
+          } else {
+            if (projectJson.website !== null) {
+              sections["Incubating Projects"]["Documentation"].push(projectJson)
+            } else {
+              sections["Incubating Projects"]["Repositories"].push(projectJson)
+            }
+          }
+        })
+
+        const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        Object.keys(sections).forEach((key, i) => {
+          const sectionElem = Object.assign(
+            document.createElement('div'), {
+              className:'farama-header-menu__section',
+            }
+          )
+          sectionElem.appendChild(Object.assign(document.createElement('span'),
+            {
+              className:'farama-header-menu__section-title' ,
+              innerText: key
+            }
+          ))
+          // is not a list
+          if (sections[key].constructor !== Array) {
+            const subSections = sections[key];
+            const subSectionContainerElem = Object.assign(
+                document.createElement('div'), {
+                  className:'farama-header-menu__subsections-container',
+                  style: key == "Mature Projects" ? "display: flex" : ""
+                }
+            )
+            Object.keys(subSections).forEach((subKey, i) => {
+              const subSectionElem = Object.assign(
+                document.createElement('div'), {
+                  className:'farama-header-menu__subsection',
+                }
+              )
+              subSectionElem.appendChild(Object.assign(document.createElement('span'),
+                {
+                  className:'farama-header-menu__subsection-title' ,
+                  innerText: subKey
+                }
+              ))
+              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              subSectionElem.appendChild(ulElem);
+              subSectionContainerElem.appendChild(subSectionElem);
+            })
+            sectionElem.appendChild(subSectionContainerElem);
+          } else {
+            const projects = sections[key];
+            const ulElem = createProjectsList(projects, true);
+            sectionElem.appendChild(ulElem);
+          }
+          menuContainer.appendChild(sectionElem)
+        });
+      }
+
+      xhr.onerror = function() {
+        console.error("Unable to load projects");
+      };
+
+      xhr.send();
+    </script>
+
+    
+    <script>
+      const versioningConfig = {
+        githubUser: 'Farama-Foundation',
+        githubRepo: 'PettingZoo',
+      };
+      fetch('/main/_static/versioning/versioning_menu.html').then(response => {
+        if (response.status === 200) {
+            response.text().then(text => {
+                const container = document.createElement("div");
+                container.innerHTML = text;
+                document.querySelector("body").appendChild(container);
+                // innerHtml doenst evaluate scripts, we need to add them dynamically
+                Array.from(container.querySelectorAll("script")).forEach(oldScript => {
+                    const newScript = document.createElement("script");
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            });
+        } else {
+            console.warn("Unable to load versioning menu", response);
+        }
+      });
+    </script>
+
+    </body>
+</html>
