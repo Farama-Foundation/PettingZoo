@@ -235,25 +235,24 @@ class raw_env(RLCardBase, EzPickle):
         super().step(action)
         for i, player in enumerate(self.possible_agents):
             state = self.env.game.get_state(self._name_to_int(player))
-            print(state)
         if self.render_mode == "human":
             self.render()
 
-    def render(self):
-        if self.render_mode is None:
-            gymnasium.logger.warn(
-                "You are calling render method without specifying any render mode."
-            )
-            return
-
-        for player in self.possible_agents:
-            state = self.env.game.round.players[self._name_to_int(player)].hand
-            print(f"\n===== {player}'s Hand =====")
-            print_card([c.__str__()[::-1] for c in state])
-        state = self.env.game.get_state(0)
-        print("\n==== Top Discarded Card ====")
-        print_card([c.__str__() for c in state["top_discard"]] if state else None)
-        print("\n")
+    # def render(self):
+    #     if self.render_mode is None:
+    #         gymnasium.logger.warn(
+    #             "You are calling render method without specifying any render mode."
+    #         )
+    #         return
+    #
+    #     for player in self.possible_agents:
+    #         state = self.env.game.round.players[self._name_to_int(player)].hand
+    #         print(f"\n===== {player}'s Hand =====")
+    #         print_card([c.__str__()[::-1] for c in state])
+    #     state = self.env.game.get_state(0)
+    #     print("\n==== Top Discarded Card ====")
+    #     print_card([c.__str__() for c in state["top_discard"]] if state else None)
+    #     print("\n")
 
 
     """
@@ -314,6 +313,17 @@ class raw_env(RLCardBase, EzPickle):
         white = (255, 255, 255)
         self.screen.fill(bg_color)
 
+        print(screen_height)
+
+        print(f'Values'
+              f'Top Player: Text: {calculate_height(screen_height, 4, 1, tile_size, -(22 / 20))} \n'
+              f'Top Player: Tile: {calculate_height(screen_height, 4, 1, tile_size, -1)} \n')
+
+        print(f'Middle: Text: {calculate_height(screen_height, 2, 1, tile_size, (-2/3))} \n'
+              f'Middle: Text with add: {calculate_height(screen_height, 2, 1, tile_size, (-2/3)) - tile_size * (-13/200)} \n'
+              f'No offset: Text: {calculate_height(screen_height, 2, 1, tile_size, 0)} \n'
+              f'Middle: Card: {calculate_height(screen_height, 2, 1, tile_size, -(1 / 2))}')
+
         # Load and blit all images for each card in each player's hand
         for i, player in enumerate(self.possible_agents):
             state = self.env.game.get_state(self._name_to_int(player))
@@ -361,6 +371,7 @@ class raw_env(RLCardBase, EzPickle):
                     ),
                     calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)),
                 )
+
             else:
                 textRect.center = (
                     (
@@ -373,61 +384,34 @@ class raw_env(RLCardBase, EzPickle):
             self.screen.blit(text, textRect)
 
             # Load and blit discarded cards
+            font = get_font(os.path.join("font", "Minecraft.ttf"), 36)
+            text = font.render("Top Discarded Card", True, white)
+            textRect = text.get_rect()
+            textRect.center = (
+                (calculate_width(self, screen_width, i)),
+                calculate_height(screen_height, 2, 1, tile_size, (-2 / 3))
+                + (tile_size * (13 / 200)),
+            )
+            self.screen.blit(text, textRect)
+
             for i, card in enumerate(state["top_discard"]):
                 card_img = get_image(os.path.join("img", card + ".png"))
                 card_img = pygame.transform.scale(
                     card_img, (int(tile_size * (142 / 197)), int(tile_size))
                 )
 
-                if len(state["top_discard"]) <= 3:
-                    self.screen.blit(
-                        card_img,
+                self.screen.blit(
+                    card_img,
+                    (
                         (
                             (
-                                (
-                                        ((screen_width / 2) + (tile_size * 31 / 616))
-                                        - calculate_offset(state["top_discard"], i, tile_size)
-                                ),
-                                calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
-                            )
-                        ),
-                    )
-                else:
-                    if i <= 2:
-                        self.screen.blit(
-                            card_img,
-                            (
-                                (
-                                    (
-                                            ((screen_width / 2) + (tile_size * 31 / 616))
-                                            - calculate_offset(
-                                        state["top_discard"][:3], i, tile_size
-                                    )
-                                    ),
-                                    calculate_height(
-                                        screen_height, 2, 1, tile_size, -21 / 20
-                                    ),
-                                )
+                                    ((screen_width / 2) + (tile_size * 31 / 616))
+                                    - calculate_offset(state["top_discard"], i, tile_size)
                             ),
+                            calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
                         )
-                    else:
-                        self.screen.blit(
-                            card_img,
-                            (
-                                (
-                                    (
-                                            ((screen_width / 2) + (tile_size * 31 / 616))
-                                            - calculate_offset(
-                                        state["top_discard"][3:], i - 3, tile_size
-                                    )
-                                    ),
-                                    calculate_height(
-                                        screen_height, 2, 1, tile_size, 1 / 20
-                                    ),
-                                )
-                            ),
-                        )
-
+                    ),
+                )
 
         if self.render_mode == "human":
             pygame.display.update()
