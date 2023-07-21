@@ -112,7 +112,7 @@ class CustomEnvironment(ParallelEnv):
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        return MultiDiscrete([7 * 7 - 1] * 3)
+        return MultiDiscrete([7 * 7] * 3)
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
