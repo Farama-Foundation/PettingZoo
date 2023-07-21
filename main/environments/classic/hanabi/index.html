@@ -395,7 +395,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">hanabi_v4</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">hanabi_v5</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -436,8 +436,8 @@ played card does not satisfy these conditions, a life token is placed. The game 
 <section id="environment-arguments">
 <h2>Environment arguments<a class="headerlink" href="#environment-arguments" title="Permalink to this heading">#</a></h2>
 <p>Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hanabi_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hand_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_information_tokens</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-<span class="n">max_life_tokens</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">observation_type</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hanabi_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hand_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_information_tokens</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+<span class="n">max_life_tokens</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">observation_type</span><span class="o">=</span><span class="s2">&quot;minimal&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">colors</span></code>: Number of colors the cards can take (affects size of deck)</p>
@@ -445,7 +445,11 @@ played card does not satisfy these conditions, a life token is placed. The game 
 <p><code class="docutils literal notranslate"><span class="pre">hand_size</span></code>: Size of player’s hands. Standard game is (4 if players &gt;= 4 else 5)</p>
 <p><code class="docutils literal notranslate"><span class="pre">max_information_tokens</span></code>: Maximum number of information tokens (more tokens makes the game easier by allowing more information to be revealed)</p>
 <p><code class="docutils literal notranslate"><span class="pre">max_life_tokens</span></code>: Maximum number of life tokens (more tokens makes the game easier by allowing more information to be revealed)</p>
-<p><code class="docutils literal notranslate"><span class="pre">observation_type</span></code>: 0: Minimal observation. 1: First-order common knowledge observation (default).</p>
+<p><code class="docutils literal notranslate"><span class="pre">observation_type</span></code>:
+“minimal”: Minimal observation (what a human sees).
+“card_knowledge”: includes per-card knowledge of past hints, as well as simple inferred knowledge of the form
+“this card is not red, because it was not revealed as red in a past”.
+“seer” shows all cards, including the player’s own cards, regardless of what hints have been given.</p>
 </section>
 <section id="observation-space">
 <h2>Observation Space<a class="headerlink" href="#observation-space" title="Permalink to this heading">#</a></h2>
@@ -692,6 +696,7 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
+<li><p>v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility (1.23.0)</p></li>
 <li><p>v4: Fixed bug in arbitrary calls to observe() (1.8.0)</p></li>
 <li><p>v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)</p></li>
 <li><p>v2: Fixed default parameters (1.4.2)</p></li>
@@ -708,9 +713,8 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.hanabi.hanabi.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hand_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_information_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_life_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_start_player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env" title="Permalink to this definition">#</a></dt>
-<dd><p>This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py.</p>
-<p>Initializes the <cite>raw_env</cite> class.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.hanabi.hanabi.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hand_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_information_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_life_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'card_knowledge'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_start_player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes the <cite>raw_env</cite> class.</p>
 <dl class="simple">
 <dt>Parameter descriptions :</dt><dd><ul class="simple">
 <li><p>colors: int, Number of colors in [2,5].</p></li>
@@ -720,8 +724,9 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 <li><p>max_information_tokens: int, Number of information tokens (&gt;=0).</p></li>
 <li><p>max_life_tokens: int, Number of life tokens (&gt;=1).</p></li>
 <li><dl class="simple">
-<dt>observation_type: int.</dt><dd><p>0: Minimal observation.
-1: First-order common knowledge observation.</p>
+<dt>observation_type: str.</dt><dd><p>“minimal””: Minimal observation.
+“card_knowledge”: First-order common knowledge observation.
+“seer”: Full information of all cards.</p>
 </dd>
 </dl>
 </li>
@@ -735,25 +740,27 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 “max_information_tokens”: 8,
 “max_life_tokens”: 3,
 “hand_size”: (4 if players &gt;= 4 else 5)
-“observation_type”: 1,
-“hand_size”: 2
+“observation_type”: “card_knowledge”,
+“hand_size”: 2,
 }</p>
 </dd>
 <dt>Hanabi-Small<span class="classifier">{</span></dt><dd><p>“colors”: 2,
 “ranks”: 5,
 “players”: 2,
-“max_information_tokens”: 3
+“max_information_tokens”: 3,
 “hand_size”: 2,
-“max_life_tokens”: 1
-“observation_type”: 1}</p>
+“max_life_tokens”: 1,
+“observation_type”: “card_knowledge”,
+}</p>
 </dd>
 <dt>Hanabi-Very-Small<span class="classifier">{</span></dt><dd><p>“colors”: 1,
 “ranks”: 5,
 “players”: 2,
-“max_information_tokens”: 3
+“max_information_tokens”: 3,
 “hand_size”: 2,
-“max_life_tokens”: 1
-“observation_type”: 1}</p>
+“max_life_tokens”: 1,
+“observation_type”: “card_knowledge”,
+}</p>
 </dd>
 </dl>
 </dd>
