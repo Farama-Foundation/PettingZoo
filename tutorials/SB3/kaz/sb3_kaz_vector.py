@@ -14,7 +14,6 @@ import time
 
 import supersuit as ss
 from stable_baselines3 import PPO
-from stable_baselines3.ppo import CnnPolicy, MlpPolicy
 
 from pettingzoo.butterfly import knights_archers_zombies_v10
 
@@ -44,7 +43,7 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
 
     # Use a CNN policy if the observation space is visual
     model = PPO(
-        MlpPolicy if visual_observation else CnnPolicy,
+        "CnnPolicy" if visual_observation else "MlpPolicy",
         env,
         verbose=3,
         batch_size=256,
