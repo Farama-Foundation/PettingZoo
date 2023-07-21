@@ -65,9 +65,13 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
     # Evaluate a trained agent vs a random agent
     env = env_fn.env(render_mode=render_mode, **env_kwargs)
 
-    # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
-    env = ss.resize_v1(env, x_size=84, y_size=84)
-    env = ss.frame_stack_v1(env, 3)
+    # Pre-process using SuperSuit
+    visual_observation = not env.unwrapped.vector_state
+    if visual_observation:
+        # If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking
+        env = ss.color_reduction_v0(env, mode="B")
+        env = ss.resize_v1(env, x_size=84, y_size=84)
+        env = ss.frame_stack_v1(env, 3)
 
     print(
         f"\nStarting evaluation on {str(env.metadata['name'])} (num_games={num_games}, render_mode={render_mode})"
