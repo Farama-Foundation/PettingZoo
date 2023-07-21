@@ -104,7 +104,7 @@ class CustomEnvironment(ParallelEnv):
         return observations, rewards, terminations, truncations, infos
 
     def render(self):
-        grid = np.zeros((7, 7))
+        grid = np.full((8,8), ' ', dtype='U1')
         grid[self.prisoner_y, self.prisoner_x] = "P"
         grid[self.guard_y, self.guard_x] = "G"
         grid[self.escape_y, self.escape_x] = "E"
