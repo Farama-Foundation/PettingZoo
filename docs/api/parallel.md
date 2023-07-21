@@ -7,7 +7,7 @@ title: Parallel
 
 In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via `<game>.parallel_env()`. This API is based around the paradigm of *Partially Observable Stochastic Games* (POSGs) and the details are similar to [RLlib's MultiAgent environment specification](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we allow for different observation and action spaces between the agents.
 
-All parallel environments can be converted into AEC environments by splitting a simultaneous turn into sequential turns, with observations only from the previous cycle.
+[PettingZoo Wrappers](/api/wrappers/pz_wrappers/) can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).
 
 We provide tutorials for creating two custom Parallel environments: [Rock-Paper-Scissors](https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment), and a simple [gridworld environment](https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic/)
 
