@@ -6,7 +6,7 @@ title: AEC
 
 # AEC API
 
-By default, PettingZoo models games as [*Agent Environment Cycle*](https://arxiv.org/abs/2009.13051) (AEC) environments. This allows it to support any type of game multi-agent RL can consider.
+By default, PettingZoo models games as [*Agent Environment Cycle*](https://arxiv.org/abs/2009.14471) (AEC) environments. This allows it to support any type of game multi-agent RL can consider.
 
 [PettingZoo Classic](https://pettingzoo.farama.org/environments/classic/) provides standard examples of AEC environments for turn-based games, many of which implement [Illegal Action Masking](#action-masking).
 
