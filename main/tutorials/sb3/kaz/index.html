@@ -398,6 +398,7 @@
 <p>This tutorial shows how to train agents using <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) on the <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights-Archers-Zombies</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
 <p>We use SuperSuit to create vectorized environments, leveraging multithreading to speed up training (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html">vector environments documentation</a>).</p>
 <p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">model saving documentation</a>).</p>
+<p>If the observation space is visual (<code class="docutils literal notranslate"><span class="pre">vector_state=False</span></code> in <code class="docutils literal notranslate"><span class="pre">env_kwargs</span></code>), we pre-process using color reduction, resizing, and frame stacking, and use a <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html#stable_baselines3.ppo.CnnPolicy">CNN</a> policy.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This environment has a visual (3-dimensional) observation space, so we use a CNN feature extractor.</p>
@@ -411,7 +412,8 @@
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly]&gt;=1.23.1
 stable-baselines3&gt;=2.0.0
-supersuit&gt;=3.8.1
+# TODO: update to SS release once it&#39;s released
+supersuit @ git+https://github.com/Farama-Foundation/SuperSuit.git
 </pre></div>
 </div>
 </section>
@@ -436,7 +438,7 @@ supersuit&gt;=3.8.1
 
 <span class="kn">import</span> <span class="nn">supersuit</span> <span class="k">as</span> <span class="nn">ss</span>
 <span class="kn">from</span> <span class="nn">stable_baselines3</span> <span class="kn">import</span> <span class="n">PPO</span>
-<span class="kn">from</span> <span class="nn">stable_baselines3.ppo</span> <span class="kn">import</span> <span class="n">MlpPolicy</span>
+<span class="kn">from</span> <span class="nn">stable_baselines3.ppo</span> <span class="kn">import</span> <span class="n">CnnPolicy</span><span class="p">,</span> <span class="n">MlpPolicy</span>
 
 <span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
 
@@ -449,31 +451,26 @@ supersuit&gt;=3.8.1
     <span class="c1"># MarkovVectorEnv does not support environments with varying numbers of active agents unless black_death is set to True</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">black_death_v3</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 
-    <span class="c1"># Pre-process using SuperSuit (color reduction, resizing and frame stacking)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="c1"># Pre-process using SuperSuit</span>
+    <span class="n">visual_observation</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">vector_state</span>
+    <span class="k">if</span> <span class="n">visual_observation</span><span class="p">:</span>
+        <span class="c1"># If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">pettingzoo_env_to_vec_env_v1</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s2">&quot;stable_baselines3&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s2">&quot;stable_baselines3&quot;</span><span class="p">)</span>
 
-    <span class="c1"># TODO: test different hyperparameters</span>
+    <span class="c1"># Use a CNN policy if the observation space is visual</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="p">(</span>
-        <span class="n">MlpPolicy</span><span class="p">,</span>
+        <span class="n">CnnPolicy</span> <span class="k">if</span> <span class="n">visual_observation</span> <span class="k">else</span> <span class="n">MlpPolicy</span><span class="p">,</span>
         <span class="n">env</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">gamma</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
-        <span class="n">n_steps</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
-        <span class="n">ent_coef</span><span class="o">=</span><span class="mf">0.0905168</span><span class="p">,</span>
-        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.00062211</span><span class="p">,</span>
-        <span class="n">vf_coef</span><span class="o">=</span><span class="mf">0.042202</span><span class="p">,</span>
-        <span class="n">max_grad_norm</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-        <span class="n">gae_lambda</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
-        <span class="n">n_epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-        <span class="n">clip_range</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -492,9 +489,13 @@ supersuit&gt;=3.8.1
     <span class="c1"># Evaluate a trained agent vs a random agent</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
-    <span class="c1"># Pre-process using SuperSuit (color reduction, resizing and frame stacking)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="c1"># Pre-process using SuperSuit</span>
+    <span class="n">visual_observation</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">vector_state</span>
+    <span class="k">if</span> <span class="n">visual_observation</span><span class="p">:</span>
+        <span class="c1"># If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Starting evaluation on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> (num_games=</span><span class="si">{</span><span class="n">num_games</span><span class="si">}</span><span class="s2">, render_mode=</span><span class="si">{</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">)&quot;</span>
@@ -547,10 +548,8 @@ supersuit&gt;=3.8.1
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">env_fn</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span>
 
-    <span class="c1"># Notes on environment configuration:</span>
-    <span class="c1"># max_cycles 100, max_zombies 4, seems to work well (13 points over 10 games)</span>
-    <span class="c1"># max_cycles 900 (default) allowed the knights to get kills 1/10 games, but worse archer performance (6 points)</span>
-    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_zombies</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="c1"># Set vector_state to false in order to use visual observations (significantly longer training time)</span>
+    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_zombies</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">vector_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Train a model (takes ~5 minutes on a laptop CPU)</span>
     <span class="n">train</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">81_920</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
