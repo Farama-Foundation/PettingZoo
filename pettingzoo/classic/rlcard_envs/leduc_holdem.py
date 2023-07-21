@@ -82,30 +82,43 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 """
 from __future__ import annotations
 
+import os
+
 import gymnasium
-from rlcard.utils.utils import print_card
+import numpy as np
+import pygame
+from gymnasium.utils import EzPickle
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
 
+def get_image(path):
+    from os import path as os_path
+
+    cwd = os_path.dirname(__file__)
+    image = pygame.image.load(cwd + "/" + path)
+    return image
+
+
+def get_font(path, size):
+    from os import path as os_path
+
+    cwd = os_path.dirname(__file__)
+    font = pygame.font.Font((cwd + "/" + path), size)
+    return font
+
 
 def env(**kwargs):
-    render_mode = kwargs.get("render_mode")
-    if render_mode == "ansi":
-        kwargs["render_mode"] = "human"
-        env = raw_env(**kwargs)
-        env = wrappers.CaptureStdoutWrapper(env)
-    else:
-        env = raw_env(**kwargs)
+    env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
 
-class raw_env(RLCardBase):
+class raw_env(RLCardBase, EzPickle):
     metadata = {
-        "render_modes": ["human"],
+        "render_modes": ["human", "rgb_array"],
         "name": "leduc_holdem_v4",
         "is_parallelizable": False,
         "render_fps": 1,
@@ -115,9 +128,15 @@ class raw_env(RLCardBase):
         self,
         num_players: int = 2,
         render_mode: str | None = None,
+        screen_height: int | None = 1000,
     ):
-        super().__init__("leduc-holdem", num_players, (36,))
+        EzPickle.__init__(self, num_players, render_mode, screen_height)
+        super().__init__("leduc-holdem", num_players, (72,))
         self.render_mode = render_mode
+        self.screen_height = screen_height
+
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
     def step(self, action):
         super().step(action)
@@ -132,13 +151,240 @@ class raw_env(RLCardBase):
             )
             return
 
-        for player in self.possible_agents:
-            state = self.env.game.get_state(self._name_to_int(player))
-            print(f"\n=============== {player}'s Hand ===============")
-            print_card(state["hand"])
-            print("\n{}'s Chips: {}".format(player, state["my_chips"]))
-        print("\n================= Public Cards =================")
-        print_card(state["public_card"]) if state["public_card"] is not None else print(
-            "No public cards."
+        def calculate_width(self, screen_width, i):
+            return int(
+                (
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2)
+                )
+                + (tile_size * 31 / 616)
+            )
+
+        def calculate_offset(tile_size):
+            return int(
+                ((tile_size * 23 / 28))  # - ((j) * (tile_size * 23 / 28))
+            )
+
+        def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
+            return int(multiplier * screen_height / divisor + tile_size * offset)
+
+        screen_height = self.screen_height
+        screen_width = int(
+            screen_height * (1 / 20)
+            + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2)
         )
-        print("\n")
+
+        # TODO: refactor this and check if pygame.font init needs to be done
+        # Ideally this should look like all the other environments
+        if self.render_mode == "human":
+            if self.screen is None:
+                pygame.init()
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
+                pygame.display.set_caption("Leduc Hold'em")
+        elif self.screen is None:
+            pygame.font.init()
+            self.screen = pygame.Surface((screen_width, screen_height))
+
+        # Setup dimensions for card size and setup for colors
+        tile_size = screen_height * 2 / 10
+
+        bg_color = (7, 99, 36)
+        white = (255, 255, 255)
+        self.screen.fill(bg_color)
+
+        chips = {
+            0: {"value": 10000, "img": "ChipOrange.png", "number": 0},
+            1: {"value": 5000, "img": "ChipPink.png", "number": 0},
+            2: {"value": 1000, "img": "ChipYellow.png", "number": 0},
+            3: {"value": 100, "img": "ChipBlack.png", "number": 0},
+            4: {"value": 50, "img": "ChipBlue.png", "number": 0},
+            5: {"value": 25, "img": "ChipGreen.png", "number": 0},
+            6: {"value": 10, "img": "ChipLightBlue.png", "number": 0},
+            7: {"value": 5, "img": "ChipRed.png", "number": 0},
+            8: {"value": 1, "img": "ChipWhite.png", "number": 0},
+        }
+
+        # Load and blit all images for each card in each player's hand
+        for i, player in enumerate(self.possible_agents):
+            state = self.env.game.get_state(self._name_to_int(player))
+            # Load specified card
+            # Each player holds only one card. Unlike Texas Hold'em, state['hand'] = str, and not a list
+            card = state['hand']
+            card_img = get_image(os.path.join("img", card + ".png"))
+            card_img = pygame.transform.scale(
+                card_img, (int(tile_size * (142 / 197)), int(tile_size))
+            )
+            # Players with even id go above public cards
+            if i % 2 == 0:
+                self.screen.blit(
+                    card_img,
+                    (
+                        (
+                                calculate_width(self, screen_width, i)
+                                - calculate_offset(tile_size)
+                        ),
+                        calculate_height(screen_height, 4, 1, tile_size, -1),
+                    ),
+                )
+                # Players with odd id go below public cards
+            else:
+                self.screen.blit(
+                    card_img,
+                    (
+                        (
+                                calculate_width(self, screen_width, i)
+                                - calculate_offset(tile_size)
+                        ),
+                        calculate_height(screen_height, 4, 3, tile_size, 0),
+                    ),
+                )
+
+            # Load and blit text for player name
+            font = get_font(os.path.join("font", "Minecraft.ttf"), 36)
+            text = font.render("Player " + str(i + 1), True, white)
+            textRect = text.get_rect()
+            if i % 2 == 0:
+                textRect.center = (
+                    (
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2) - tile_size * (4 / 10)
+                    ),
+                    calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)),
+                )
+            else:
+                textRect.center = (
+                    (
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2) - tile_size * (4 / 10)
+                    ),
+                    calculate_height(screen_height, 4, 3, tile_size, (23 / 20)),
+                )
+            self.screen.blit(text, textRect)
+
+            # Load and blit number of poker chips for each player
+            font = get_font(os.path.join("font", "Minecraft.ttf"), 24)
+            text = font.render(str(state["my_chips"]), True, white)
+            textRect = text.get_rect()
+
+            # Calculate number of each chip
+            total = state["my_chips"]
+            height = 0
+            for key in chips:
+                num = total / chips[key]["value"]
+                chips[key]["number"] = int(num)
+                total %= chips[key]["value"]
+
+                chip_img = get_image(os.path.join("img", chips[key]["img"]))
+                chip_img = pygame.transform.scale(
+                    chip_img, (int(tile_size / 2), int(tile_size * 16 / 45))
+                )
+
+                # Blit poker chip img
+                for j in range(0, int(chips[key]["number"])):
+                    if i % 2 == 0:
+                        self.screen.blit(
+                            chip_img,
+                            (
+                                (
+                                        calculate_width(self, screen_width, i)
+                                        + tile_size * (2 / 10)
+                                ),
+                                calculate_height(screen_height, 4, 1, tile_size, -1 / 2)
+                                - ((j + height) * tile_size / 15),
+                            ),
+                        )
+                    else:
+                        self.screen.blit(
+                            chip_img,
+                            (
+                                (
+                                        calculate_width(self, screen_width, i)
+                                        + tile_size * (2 / 10)
+                                ),
+                                calculate_height(screen_height, 4, 3, tile_size, 1 / 2)
+                                - ((j + height) * tile_size / 15),
+                            ),
+                        )
+                height += chips[key]["number"]
+
+            # Blit text number
+            if i % 2 == 0:
+                textRect.center = (
+                    (calculate_width(self, screen_width, i) + tile_size * (9 / 20)),
+                    calculate_height(screen_height, 4, 1, tile_size, -1 / 2)
+                    - ((height + 1) * tile_size / 15),
+                )
+            else:
+                textRect.center = (
+                    (calculate_width(self, screen_width, i) + tile_size * (9 / 20)),
+                    calculate_height(screen_height, 4, 3, tile_size, 1 / 2)
+                    - ((height + 1) * tile_size / 15),
+                )
+            self.screen.blit(text, textRect)
+
+        # Load and blit public cards
+        if state["public_card"] is not None:
+            card = state["public_card"]
+            card_img = get_image(os.path.join("img", card + ".png"))
+            card_img = pygame.transform.scale(
+                card_img, (int(tile_size * (142 / 197)), int(tile_size))
+            )
+            if len(state["public_card"]) <= 3:
+                self.screen.blit(
+                    card_img,
+                    (
+                        (
+                            (
+                                    ((screen_width / 2) + (tile_size * 31 / 616))
+                                    - calculate_offset(tile_size)
+                            ),
+                            calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
+                        )
+                    ),
+                )
+            else:
+                if i <= 2:
+                    self.screen.blit(
+                        card_img,
+                        (
+                            (
+                                (
+                                        ((screen_width / 2) + (tile_size * 31 / 616))
+                                        - calculate_offset(tile_size)
+                                ),
+                                calculate_height(
+                                    screen_height, 2, 1, tile_size, -21 / 20
+                                ),
+                            )
+                        ),
+                    )
+                else:
+                    self.screen.blit(
+                        card_img,
+                        (
+                            (
+                                (
+                                        ((screen_width / 2) + (tile_size * 31 / 616))
+                                        - calculate_offset(tile_size)
+                                ),
+                                calculate_height(
+                                    screen_height, 2, 1, tile_size, 1 / 20
+                                ),
+                            )
+                        ),
+                    )
+
+        if self.render_mode == "human":
+            pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+
+        return (
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
+        )

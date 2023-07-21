@@ -110,8 +110,11 @@ Penalties of `deadwood_count / 100` ensure that the reward never goes below -1.
 """
 from __future__ import annotations
 
+import os
+
 import gymnasium
 import numpy as np
+import pygame
 from gymnasium.utils import EzPickle
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.utils import melding as melding
@@ -123,14 +126,35 @@ from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
 
 
+# def env(**kwargs):
+#     render_mode = kwargs.get("render_mode")
+#     if render_mode == "ansi":
+#         kwargs["render_mode"] = "human"
+#         env = raw_env(**kwargs)
+#         env = wrappers.CaptureStdoutWrapper(env)
+#     else:
+#         env = raw_env(**kwargs)
+#     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+#     env = wrappers.AssertOutOfBoundsWrapper(env)
+#     env = wrappers.OrderEnforcingWrapper(env)
+#     return env
+
+def get_image(path):
+    from os import path as os_path
+
+    cwd = os_path.dirname(__file__)
+    image = pygame.image.load(cwd + "/" + path)
+    return image
+
+def get_font(path, size):
+    from os import path as os_path
+
+    cwd = os_path.dirname(__file__)
+    font = pygame.font.Font((cwd + "/" + path), size)
+    return font
+
 def env(**kwargs):
-    render_mode = kwargs.get("render_mode")
-    if render_mode == "ansi":
-        kwargs["render_mode"] = "human"
-        env = raw_env(**kwargs)
-        env = wrappers.CaptureStdoutWrapper(env)
-    else:
-        env = raw_env(**kwargs)
+    env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -151,6 +175,7 @@ class raw_env(RLCardBase, EzPickle):
         gin_reward: float = 1.0,
         opponents_hand_visible: bool | None = False,
         render_mode: str | None = None,
+        screen_height: int | None = 1000,
     ):
         EzPickle.__init__(
             self,
@@ -166,6 +191,10 @@ class raw_env(RLCardBase, EzPickle):
 
         self.env.game.judge.scorer.get_payoff = self._get_payoff
         self.render_mode = render_mode
+        self.screen_height = screen_height
+
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
     def _get_payoff(self, player: GinRummyPlayer, game) -> float:
         going_out_action = game.round.going_out_action
@@ -204,7 +233,9 @@ class raw_env(RLCardBase, EzPickle):
 
     def step(self, action):
         super().step(action)
-
+        for i, player in enumerate(self.possible_agents):
+            state = self.env.game.get_state(self._name_to_int(player))
+            print(state)
         if self.render_mode == "human":
             self.render()
 
@@ -223,3 +254,189 @@ class raw_env(RLCardBase, EzPickle):
         print("\n==== Top Discarded Card ====")
         print_card([c.__str__() for c in state["top_discard"]] if state else None)
         print("\n")
+
+
+    """
+    States
+    {player_id: #id, 'hand': [list of hands], 'top_discard': [list of hand], 'dead_cards': [list], 
+    'opponent_known_cards': [list], unknown_cards: [list]}
+    
+    To render:
+    {'player_id', 'hand', 'top_discard'}
+    """
+
+    def render(self):
+        if self.render_mode is None:
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        def calculate_width(self, screen_width, i):
+            return int(
+                (
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2)
+                )
+                + (tile_size * 31 / 616)
+            )
+
+        def calculate_offset(hand, j, tile_size):
+            return int(
+                (len(hand) * (tile_size * 23 / 56)) - ((j) * (tile_size * 23 / 28))
+            )
+
+        def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
+            return int(multiplier * screen_height / divisor + tile_size * offset)
+
+        screen_height = self.screen_height
+        screen_width = int(
+            screen_height * (1 / 20)
+            + 3.5 * (screen_height * 1 / 2)
+        )
+
+        # TODO: refactor this and check if pygame.font init needs to be done
+        # Ideally this should look like all the other environments
+        if self.render_mode == "human":
+            if self.screen is None:
+                pygame.init()
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
+                pygame.display.set_caption("Gin Rummy")
+        elif self.screen is None:
+            pygame.font.init()
+            self.screen = pygame.Surface((screen_width, screen_height))
+
+        # Setup dimensions for card size and setup for colors
+        tile_size = screen_height * 2 / 10
+
+        bg_color = (7, 99, 36)
+        white = (255, 255, 255)
+        self.screen.fill(bg_color)
+
+        # Load and blit all images for each card in each player's hand
+        for i, player in enumerate(self.possible_agents):
+            state = self.env.game.get_state(self._name_to_int(player))
+            for j, card in enumerate(state["hand"]):
+                # Load specified card
+                card_img = get_image(os.path.join("img", card + ".png"))
+                card_img = pygame.transform.scale(
+                    card_img, (int(tile_size * (142 / 197)), int(tile_size))
+                )
+                # Players with even id go above public cards
+                if i % 2 == 0:
+                    self.screen.blit(
+                        card_img,
+                        (
+                            (
+                                    calculate_width(self, screen_width, i)
+                                    - calculate_offset(state["hand"], j, tile_size)
+                            ),
+                            calculate_height(screen_height, 4, 1, tile_size, -1),
+                        ),
+                    )
+                # Players with odd id go below public cards
+                else:
+                    self.screen.blit(
+                        card_img,
+                        (
+                            (
+                                    calculate_width(self, screen_width, i)
+                                    - calculate_offset(state["hand"], j, tile_size)
+                            ),
+                            calculate_height(screen_height, 4, 3, tile_size, 0),
+                        ),
+                    )
+
+            # Load and blit text for player name
+            font = get_font(os.path.join("font", "Minecraft.ttf"), 36)
+            text = font.render("Player " + str(i + 1), True, white)
+            textRect = text.get_rect()
+            if i % 2 == 0:
+                textRect.center = (
+                    (
+                            screen_width
+                            / (np.ceil(len(self.possible_agents) / 2) + 1)
+                            * np.ceil((i + 1) / 2)
+                    ),
+                    calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)),
+                )
+            else:
+                textRect.center = (
+                    (
+                            screen_width
+                            / (np.ceil(len(self.possible_agents) / 2) + 1)
+                            * np.ceil((i + 1) / 2)
+                    ),
+                    calculate_height(screen_height, 4, 3, tile_size, (23 / 20)),
+                )
+            self.screen.blit(text, textRect)
+
+            # Load and blit discarded cards
+            for i, card in enumerate(state["top_discard"]):
+                card_img = get_image(os.path.join("img", card + ".png"))
+                card_img = pygame.transform.scale(
+                    card_img, (int(tile_size * (142 / 197)), int(tile_size))
+                )
+
+                if len(state["top_discard"]) <= 3:
+                    self.screen.blit(
+                        card_img,
+                        (
+                            (
+                                (
+                                        ((screen_width / 2) + (tile_size * 31 / 616))
+                                        - calculate_offset(state["top_discard"], i, tile_size)
+                                ),
+                                calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
+                            )
+                        ),
+                    )
+                else:
+                    if i <= 2:
+                        self.screen.blit(
+                            card_img,
+                            (
+                                (
+                                    (
+                                            ((screen_width / 2) + (tile_size * 31 / 616))
+                                            - calculate_offset(
+                                        state["top_discard"][:3], i, tile_size
+                                    )
+                                    ),
+                                    calculate_height(
+                                        screen_height, 2, 1, tile_size, -21 / 20
+                                    ),
+                                )
+                            ),
+                        )
+                    else:
+                        self.screen.blit(
+                            card_img,
+                            (
+                                (
+                                    (
+                                            ((screen_width / 2) + (tile_size * 31 / 616))
+                                            - calculate_offset(
+                                        state["top_discard"][3:], i - 3, tile_size
+                                    )
+                                    ),
+                                    calculate_height(
+                                        screen_height, 2, 1, tile_size, 1 / 20
+                                    ),
+                                )
+                            ),
+                        )
+
+
+        if self.render_mode == "human":
+            pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+
+        return (
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
+        )
