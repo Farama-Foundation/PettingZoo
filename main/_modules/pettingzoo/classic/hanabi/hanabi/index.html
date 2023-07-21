@@ -394,7 +394,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import               | `from pettingzoo.classic import hanabi_v4` |</span>
+<span class="sd">| Import               | `from pettingzoo.classic import hanabi_v5` |</span>
 <span class="sd">|----------------------|--------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                   |</span>
 <span class="sd">| Parallel API         | Yes                                        |</span>
@@ -417,8 +417,8 @@
 <span class="sd">Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.</span>
 
 <span class="sd">``` python</span>
-<span class="sd">hanabi_v4.env(colors=5, rank=5, players=2, hand_size=5, max_information_tokens=8,</span>
-<span class="sd">max_life_tokens=3, observation_type=1)</span>
+<span class="sd">hanabi_v5.env(colors=5, rank=5, players=2, hand_size=5, max_information_tokens=8,</span>
+<span class="sd">max_life_tokens=3, observation_type=&quot;minimal&quot;)</span>
 <span class="sd">```</span>
 
 <span class="sd">`colors`: Number of colors the cards can take (affects size of deck)</span>
@@ -431,7 +431,11 @@
 
 <span class="sd">`max_life_tokens`: Maximum number of life tokens (more tokens makes the game easier by allowing more information to be revealed)</span>
 
-<span class="sd">`observation_type`: 0: Minimal observation. 1: First-order common knowledge observation (default).</span>
+<span class="sd">`observation_type`:</span>
+<span class="sd">    &quot;minimal&quot;: Minimal observation (what a human sees).</span>
+<span class="sd">    &quot;card_knowledge&quot;: includes per-card knowledge of past hints, as well as simple inferred knowledge of the form</span>
+<span class="sd">        &quot;this card is not red, because it was not revealed as red in a past&quot;.</span>
+<span class="sd">    &quot;seer&quot; shows all cards, including the player&#39;s own cards, regardless of what hints have been given.</span>
 
 <span class="sd">### Observation Space</span>
 
@@ -533,6 +537,7 @@
 
 <span class="sd">### Version History</span>
 
+<span class="sd">* v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility (1.23.0)</span>
 <span class="sd">* v4: Fixed bug in arbitrary calls to observe() (1.8.0)</span>
 <span class="sd">* v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)</span>
 <span class="sd">* v2: Fixed default parameters (1.4.2)</span>
@@ -541,39 +546,17 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">gymnasium</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">gymnasium</span> <span class="kn">import</span> <span class="n">spaces</span>
 <span class="kn">from</span> <span class="nn">gymnasium.utils</span> <span class="kn">import</span> <span class="n">EzPickle</span>
+<span class="kn">from</span> <span class="nn">shimmy.openspiel_compatibility</span> <span class="kn">import</span> <span class="n">OpenSpielCompatibilityV0</span>
 
 <span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">AECEnv</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">agent_selector</span><span class="p">,</span> <span class="n">wrappers</span>
-
-<span class="c1"># importing Hanabi and throw error message if pypi package is not installed correctly.</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">hanabi_learning_environment.rl_env</span> <span class="kn">import</span> <span class="n">HanabiEnv</span>
-
-<span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-        <span class="p">(</span>
-            <span class="s2">&quot;Hanabi is not installed.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Run ´pip3 install hanabi_learning_environment´ from within your project environment.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Consult hanabi/README.md for detailed information.&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Wrapper class around Deepmind&#39;s Hanabi Learning Environment.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-
-<span class="k">class</span> <span class="nc">HanabiScorePenalty</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
-
-    <span class="k">def</span> <span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">score</span><span class="p">())</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">wrappers</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.agent_selector</span> <span class="kn">import</span> <span class="n">agent_selector</span>
 
 
 <div class="viewcode-block" id="env"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.env">[docs]</a><span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -585,18 +568,16 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=</span><span class="n">HanabiScorePenalty</span><span class="p">(</span><span class="n">env</span><span class="p">))</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">env</span></div>
 
 
 <div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env">[docs]</a><span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py.&quot;&quot;&quot;</span>
-
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;hanabi_v4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;hanabi_v5&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="p">}</span>
@@ -621,7 +602,7 @@
         <span class="n">hand_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
         <span class="n">max_information_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
         <span class="n">max_life_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="n">observation_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">observation_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;card_knowledge&quot;</span><span class="p">,</span>
         <span class="n">random_start_player</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">render_mode</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -634,9 +615,10 @@
 <span class="sd">              - hand_size: int, Hand size in [2,5].</span>
 <span class="sd">              - max_information_tokens: int, Number of information tokens (&gt;=0).</span>
 <span class="sd">              - max_life_tokens: int, Number of life tokens (&gt;=1).</span>
-<span class="sd">              - observation_type: int.</span>
-<span class="sd">                    0: Minimal observation.</span>
-<span class="sd">                    1: First-order common knowledge observation.</span>
+<span class="sd">              - observation_type: str.</span>
+<span class="sd">                    &quot;minimal&quot;&quot;: Minimal observation.</span>
+<span class="sd">                    &quot;card_knowledge&quot;: First-order common knowledge observation.</span>
+<span class="sd">                    &quot;seer&quot;: Full information of all cards.</span>
 <span class="sd">              - random_start_player: bool, Random start player.</span>
 
 <span class="sd">        Common game configurations:</span>
@@ -647,27 +629,29 @@
 <span class="sd">                &quot;max_information_tokens&quot;: 8,</span>
 <span class="sd">                &quot;max_life_tokens&quot;: 3,</span>
 <span class="sd">                &quot;hand_size&quot;: (4 if players &gt;= 4 else 5)</span>
-<span class="sd">                &quot;observation_type&quot;: 1,</span>
-<span class="sd">                &quot;hand_size&quot;: 2</span>
+<span class="sd">                &quot;observation_type&quot;: &quot;card_knowledge&quot;,</span>
+<span class="sd">                &quot;hand_size&quot;: 2,</span>
 <span class="sd">                }</span>
 
 <span class="sd">            Hanabi-Small : {</span>
 <span class="sd">                &quot;colors&quot;: 2,</span>
 <span class="sd">                &quot;ranks&quot;: 5,</span>
 <span class="sd">                &quot;players&quot;: 2,</span>
-<span class="sd">                &quot;max_information_tokens&quot;: 3</span>
+<span class="sd">                &quot;max_information_tokens&quot;: 3,</span>
 <span class="sd">                &quot;hand_size&quot;: 2,</span>
-<span class="sd">                &quot;max_life_tokens&quot;: 1</span>
-<span class="sd">                &quot;observation_type&quot;: 1}</span>
+<span class="sd">                &quot;max_life_tokens&quot;: 1,</span>
+<span class="sd">                &quot;observation_type&quot;: &quot;card_knowledge&quot;,</span>
+<span class="sd">                }</span>
 
 <span class="sd">            Hanabi-Very-Small : {</span>
 <span class="sd">                &quot;colors&quot;: 1,</span>
 <span class="sd">                &quot;ranks&quot;: 5,</span>
 <span class="sd">                &quot;players&quot;: 2,</span>
-<span class="sd">                &quot;max_information_tokens&quot;: 3</span>
+<span class="sd">                &quot;max_information_tokens&quot;: 3,</span>
 <span class="sd">                &quot;hand_size&quot;: 2,</span>
-<span class="sd">                &quot;max_life_tokens&quot;: 1</span>
-<span class="sd">                &quot;observation_type&quot;: 1}</span>
+<span class="sd">                &quot;max_life_tokens&quot;: 1,</span>
+<span class="sd">                &quot;observation_type&quot;: &quot;card_knowledge&quot;,</span>
+<span class="sd">                }</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -706,39 +690,30 @@
             <span class="s2">&quot;observation_type&quot;</span><span class="p">:</span> <span class="n">observation_type</span><span class="p">,</span>
             <span class="s2">&quot;random_start_player&quot;</span><span class="p">:</span> <span class="n">random_start_player</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="p">:</span> <span class="n">HanabiEnv</span> <span class="o">=</span> <span class="n">HanabiEnv</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span> <span class="o">=</span> <span class="n">OpenSpielCompatibilityV0</span><span class="p">(</span>
+            <span class="n">game_name</span><span class="o">=</span><span class="s2">&quot;hanabi&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span>
+        <span class="p">)</span>
 
         <span class="c1"># List of agent names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;player_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">players</span><span class="p">)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">possible_agents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">:</span> <span class="nb">str</span>
 
-        <span class="c1"># Sets hanabi game to clean state and updates all internal dictionaries</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-        <span class="c1"># Set action_spaces and observation_spaces based on params in hanabi_env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">name</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">num_moves</span><span class="p">())</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
+            <span class="n">a</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">player_name</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span>
+            <span class="n">a</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
-                        <span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                        <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">vectorized_observation_shape</span><span class="p">()[</span><span class="mi">0</span><span class="p">],),</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
-                    <span class="p">),</span>
+                    <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
                     <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
                         <span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                         <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">num_moves</span><span class="p">(),),</span>
+                        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">n</span><span class="p">,),</span>
                         <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">}</span>
             <span class="p">)</span>
-            <span class="k">for</span> <span class="n">player_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span>
         <span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
@@ -748,10 +723,6 @@
 
 <div class="viewcode-block" id="raw_env.action_space"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.action_space">[docs]</a>    <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
-
-    <span class="k">def</span> <span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span> <span class="o">=</span> <span class="n">HanabiEnv</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_raise_error_if_config_values_out_of_range</span><span class="p">(</span>
@@ -799,22 +770,24 @@
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">max_life_tokens</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">observation_type</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="n">observation_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;minimal&quot;</span><span class="p">,</span> <span class="s2">&quot;card_knowledge&quot;</span><span class="p">,</span> <span class="s2">&quot;seer&quot;</span><span class="p">]):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">observation_type</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">observation_type</span><span class="si">}</span><span class="s2"> must be either &#39;minimal&#39;, &#39;card_knowledge&#39;, or &#39;seer&#39;. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">observation_vector_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">vectorized_observation_shape</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">legal_moves</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">][</span><span class="s2">&quot;legal_moves&quot;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">))</span> <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">all_moves</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">num_moves</span><span class="p">()))</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">))]</span>
 
     <span class="c1"># ToDo: Fix Return value</span>
 <div class="viewcode-block" id="raw_env.reset"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -824,35 +797,45 @@
 <span class="sd">            observation: Optional list of integers of length self.observation_vector_dim, describing observations of</span>
 <span class="sd">            current agent (agent_selection).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        <span class="c1"># if seed is not None:</span>
+        <span class="c1">#     config = dict(seed=seed, **self._config)</span>
+        <span class="c1">#     self.hanabi_env = OpenSpielCompatibilityV0(</span>
+        <span class="c1">#         pyspiel.load_game(&quot;hanabi&quot;, config), render_mode=self.render_mode</span>
+        <span class="c1">#     )</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
-        <span class="c1"># Reset underlying hanabi reinforcement learning environment</span>
-        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-        <span class="c1"># Reset agent and agent_selection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_agents</span><span class="p">(</span><span class="n">player_number</span><span class="o">=</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;current_player&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="c1"># Reset internal state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_process_latest_observations</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">)</span></div>
+        <span class="c1"># if self.hanabi_env._env.num_distinct_actions() != self.hanabi_env.</span>
 
-    <span class="k">def</span> <span class="nf">_reset_agents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rearrange self.agents as pyhanabi starts a different player after each reset().&quot;&quot;&quot;</span>
-        <span class="c1"># Shifts self.agents list as long order starting player is not according to player_number</span>
-        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;player_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">player_number</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="c1"># Reset spaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">a</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
+                    <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
+                        <span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">n</span><span class="p">,),</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
+        <span class="p">}</span>
 
-        <span class="c1"># Agent order list, on which the agent selector operates on.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">rewards</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">_cumulative_rewards</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">agent_selection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">rewards</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">terminations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">truncations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
-
-        <span class="c1"># Reset agent_selection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">_step_agents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="raw_env.step"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">observe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">as_vector</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -869,9 +852,6 @@
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_was_dead_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-
-        <span class="n">agent_on_turn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
 
         <span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">legal_moves</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -879,58 +859,18 @@
             <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Iterate agent_selection</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_step_agents</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-            <span class="c1"># Apply action</span>
-            <span class="n">all_observations</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">)</span>
-
-            <span class="c1"># Update internal state</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_process_latest_observations</span><span class="p">(</span>
-                <span class="n">obs</span><span class="o">=</span><span class="n">all_observations</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="n">done</span>
-            <span class="p">)</span>
-
-            <span class="c1"># sets current reward for 0 to initialize reward accumulation</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span><span class="p">[</span><span class="n">agent_on_turn</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">agent_selection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">rewards</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">terminations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">truncations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span></div>
 
 <div class="viewcode-block" id="raw_env.observe"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.observe">[docs]</a>    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">observation</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">agent_name</span><span class="p">][</span><span class="s2">&quot;observations_vectorized&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">agent_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span>
-            <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span><span class="o">.</span><span class="n">low</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="n">legal_moves</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">agent_name</span><span class="p">][</span><span class="s2">&quot;legal_moves&quot;</span><span class="p">]</span>
-        <span class="n">action_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">num_moves</span><span class="p">(),</span> <span class="s2">&quot;int8&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">legal_moves</span><span class="p">:</span>
-            <span class="n">action_mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">action_mask</span><span class="p">}</span></div>
-
-    <span class="k">def</span> <span class="nf">_process_latest_observations</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">reward</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">done</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates internal state.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">latest_observations</span> <span class="o">=</span> <span class="n">obs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">reward</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">player_name</span><span class="p">:</span> <span class="n">done</span> <span class="k">for</span> <span class="n">player_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">player_name</span><span class="p">:</span> <span class="n">done</span> <span class="k">for</span> <span class="n">player_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-
-        <span class="c1"># Here we have to deal with the player index with offset = 1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">player_name</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">legal_moves</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_observations</span><span class="p">[</span><span class="s2">&quot;player_observations&quot;</span><span class="p">][</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="n">player_name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="p">][</span><span class="s2">&quot;legal_moves_as_int&quot;</span><span class="p">],</span>
-                <span class="c1"># legal_moves_as_dict=self.latest_observations[&#39;player_observations&#39;][int(player_name[-1])][&#39;legal_moves&#39;],</span>
-                <span class="n">observations_vectorized</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_observations</span><span class="p">[</span><span class="s2">&quot;player_observations&quot;</span><span class="p">][</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="n">player_name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="p">][</span><span class="s2">&quot;vectorized&quot;</span><span class="p">],</span>
-                <span class="c1"># observations=self.latest_observations[&#39;player_observations&#39;][int(player_name[-1])</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">player_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
-        <span class="p">}</span>
+        <span class="n">observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent_name</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">agent_name</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">mask</span><span class="p">}</span></div>
 
 <div class="viewcode-block" id="raw_env.render"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prints player&#39;s data.</span>
@@ -942,17 +882,10 @@
                 <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
             <span class="p">)</span>
             <span class="k">return</span>
-
-        <span class="n">player_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latest_observations</span><span class="p">[</span><span class="s2">&quot;player_observations&quot;</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Active player:&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="n">player_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;current_player_offset&quot;</span><span class="p">]],</span>
-        <span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">player_data</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;========&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;pyhanabi&quot;</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">()</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+            <span class="k">return</span></div>
 
 <div class="viewcode-block" id="raw_env.close"><a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
