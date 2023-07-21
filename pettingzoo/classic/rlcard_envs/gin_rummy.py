@@ -313,17 +313,6 @@ class raw_env(RLCardBase, EzPickle):
         white = (255, 255, 255)
         self.screen.fill(bg_color)
 
-        print(screen_height)
-
-        print(f'Values'
-              f'Top Player: Text: {calculate_height(screen_height, 4, 1, tile_size, -(22 / 20))} \n'
-              f'Top Player: Tile: {calculate_height(screen_height, 4, 1, tile_size, -1)} \n')
-
-        print(f'Middle: Text: {calculate_height(screen_height, 2, 1, tile_size, (-2/3))} \n'
-              f'Middle: Text with add: {calculate_height(screen_height, 2, 1, tile_size, (-2/3)) - tile_size * (-13/200)} \n'
-              f'No offset: Text: {calculate_height(screen_height, 2, 1, tile_size, 0)} \n'
-              f'Middle: Card: {calculate_height(screen_height, 2, 1, tile_size, -(1 / 2))}')
-
         # Load and blit all images for each card in each player's hand
         for i, player in enumerate(self.possible_agents):
             state = self.env.game.get_state(self._name_to_int(player))
