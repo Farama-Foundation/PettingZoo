@@ -374,11 +374,11 @@ class raw_env(RLCardBase, EzPickle):
             )
             self.screen.blit(text, textRect)
 
-            draw_borders(x=((screen_width / 2) + (tile_size * 31 / 616)) -
-                           int(tile_size * 23 /56) - 5,
-                         y=calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)) - 4,
-                         width=int(tile_size) - 45,
-                         height=int(tile_size) + 6,
+            draw_borders(x=int((screen_width / 2) + (tile_size * 31 / 616)) -
+                           int(tile_size * 23 / 56) - 5,
+                         y=calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)) - 6,
+                         width=int(tile_size) - int(tile_size * (9 / 40)),
+                         height=int(tile_size) + 10,
                          bw=3,
                          color='white')
 
