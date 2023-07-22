@@ -76,6 +76,12 @@ PettingZoo environments for classic game theory problems: [Prisoner's Dilemma](h
 Modernized clone of the [Breakout](https://en.wikipedia.org/wiki/Breakout_(video_game)) arcade game, using [Unity](https://unity.com/) game engine and PettingZoo.
 * Online playable game (using [Unity WebGL](https://docs.unity3d.com/2020.1/Documentation/Manual/webgl-gettingstarted.html) and [Unity ML-Agents](https://unity.com/products/machine-learning-agents)): [link](https://sethcram.weebly.com/breakout-clone.html), [tutorial](https://www.youtube.com/watch?v=zPFU30tbyKs)
 
+### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.1-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
+
+Implementation of the board game *Fanorona*.
+
 ### [Gobblet-RL](https://github.com/elliottower/gobblet-rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
@@ -184,14 +190,6 @@ PettingZoo environment for online multi-player game [Battlesnake](https://play.b
 [![GitHub last commit](https://img.shields.io/github/last-commit/NaIwo/BomberManAI)]()
 
 Environment with a simplified version of the video game *BomberMan*.
-
-
-### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.8.1-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
-[![GitHub last commit](https://img.shields.io/github/last-commit/AbhijeetKrishnan/fanorona-aec)]()
-
-Implementation of the board game *Fanorona*.
 
 
 ### [Galaga AI](https://github.com/SonicKurt/Galaga-AI)
