@@ -120,24 +120,10 @@ from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.utils import melding as melding
 from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.action_event import GinAction, KnockAction
-from rlcard.utils.utils import print_card
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
 
-
-# def env(**kwargs):
-#     render_mode = kwargs.get("render_mode")
-#     if render_mode == "ansi":
-#         kwargs["render_mode"] = "human"
-#         env = raw_env(**kwargs)
-#         env = wrappers.CaptureStdoutWrapper(env)
-#     else:
-#         env = raw_env(**kwargs)
-#     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
-#     env = wrappers.AssertOutOfBoundsWrapper(env)
-#     env = wrappers.OrderEnforcingWrapper(env)
-#     return env
 
 def get_image(path):
     from os import path as os_path
@@ -146,12 +132,14 @@ def get_image(path):
     image = pygame.image.load(cwd + "/" + path)
     return image
 
+
 def get_font(path, size):
     from os import path as os_path
 
     cwd = os_path.dirname(__file__)
     font = pygame.font.Font((cwd + "/" + path), size)
     return font
+
 
 def env(**kwargs):
     env = raw_env(**kwargs)
@@ -238,32 +226,10 @@ class raw_env(RLCardBase, EzPickle):
         if self.render_mode == "human":
             self.render()
 
-    # def render(self):
-    #     if self.render_mode is None:
-    #         gymnasium.logger.warn(
-    #             "You are calling render method without specifying any render mode."
-    #         )
-    #         return
-    #
-    #     for player in self.possible_agents:
-    #         state = self.env.game.round.players[self._name_to_int(player)].hand
-    #         print(f"\n===== {player}'s Hand =====")
-    #         print_card([c.__str__()[::-1] for c in state])
-    #     state = self.env.game.get_state(0)
-    #     print("\n==== Top Discarded Card ====")
-    #     print_card([c.__str__() for c in state["top_discard"]] if state else None)
-    #     print("\n")
-
-
     """
-    States
-    {player_id: #id, 'hand': [list of hands], 'top_discard': [list of hand], 'dead_cards': [list], 
-    'opponent_known_cards': [list], unknown_cards: [list]}
-    
     To render:
-    {'player_id', 'hand', 'top_discard'}
+    state: {'player_id', 'hand', 'top_discard'}
     """
-
     def render(self):
         if self.render_mode is None:
             gymnasium.logger.warn(
@@ -288,6 +254,12 @@ class raw_env(RLCardBase, EzPickle):
 
         def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
             return int(multiplier * screen_height / divisor + tile_size * offset)
+
+        def draw_borders(x, y, width, height, bw, color):
+            pygame.draw.line(self.screen, color, (x - bw // 2 + 1, y), (x + width + bw // 2, y), bw)
+            pygame.draw.line(self.screen, color, (x - bw // 2 + 1, y + height), (x + width + bw // 2, y + height), bw)
+            pygame.draw.line(self.screen, color, (x, y - bw // 2 + 1), (x, y + height + bw // 2), bw)
+            pygame.draw.line(self.screen, color, (x + width, y - bw // 2 + 1), (x + width, y + height + bw // 2), bw)
 
         screen_height = self.screen_height
         screen_width = int(
@@ -372,18 +344,7 @@ class raw_env(RLCardBase, EzPickle):
                 )
             self.screen.blit(text, textRect)
 
-            # Load and blit discarded cards
-            font = get_font(os.path.join("font", "Minecraft.ttf"), 36)
-            text = font.render("Top Discarded Card", True, white)
-            textRect = text.get_rect()
-            textRect.center = (
-                (calculate_width(self, screen_width, i)),
-                calculate_height(screen_height, 2, 1, tile_size, (-2 / 3))
-                + (tile_size * (13 / 200)),
-            )
-            self.screen.blit(text, textRect)
-
-            for i, card in enumerate(state["top_discard"]):
+            for j, card in enumerate(state["top_discard"]):
                 card_img = get_image(os.path.join("img", card + ".png"))
                 card_img = pygame.transform.scale(
                     card_img, (int(tile_size * (142 / 197)), int(tile_size))
@@ -395,12 +356,31 @@ class raw_env(RLCardBase, EzPickle):
                         (
                             (
                                     ((screen_width / 2) + (tile_size * 31 / 616))
-                                    - calculate_offset(state["top_discard"], i, tile_size)
+                                    - calculate_offset(state["top_discard"], j, tile_size)
                             ),
                             calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
                         )
                     ),
                 )
+
+            # Load and blit discarded cards
+            font = get_font(os.path.join("font", "Minecraft.ttf"), 36)
+            text = font.render("Top Discarded Card", True, white)
+            textRect = text.get_rect()
+            textRect.center = (
+                (calculate_width(self, screen_width, 0)),
+                calculate_height(screen_height, 2, 1, tile_size, (-2 / 3))
+                + (tile_size * (13 / 200)),
+            )
+            self.screen.blit(text, textRect)
+
+            draw_borders(x=((screen_width / 2) + (tile_size * 31 / 616)) -
+                           int(tile_size * 23 /56) - 5,
+                         y=calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)) - 4,
+                         width=int(tile_size) - 45,
+                         height=int(tile_size) + 6,
+                         bw=3,
+                         color='white')
 
         if self.render_mode == "human":
             pygame.display.update()
