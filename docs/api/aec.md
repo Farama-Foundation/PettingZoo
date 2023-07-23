@@ -89,8 +89,10 @@ The [_Agent Environment Cycle_](https://arxiv.org/abs/2009.13051) (AEC) model wa
 - Action and observation spaces which can change over time, and differ per agent (see [generated_agents](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/test/example_envs/generated_agents_env_v0.py) and [variable_env_test](https://github.com/Farama-Foundation/PettingZoo/blob/master/test/variable_env_test.py))
 - Changing turn order and evolving environment dynamics (e.g., games with multiple stages, reversing turns)
 
-In an AEC environment, agents act sequentially, receiving separate observations and rewards after each step.
-This is a natural way of representing sequential games such as Chess, and is flexible enough to handle any type of game that multi-agent RL can consider.
+In an AEC environment, agents act sequentially, receiving updated observations and rewards before taking an action. The environment updates after each agent's step, making it a natural way of representing sequential games such as Chess. The AEC model is flexible enough to handle any type of game that multi-agent RL can consider.
+
+with the underlying environment updating after each agent's step. Agents receive updated observations and rewards at the beginning of their . The environment is updated after every step, 
+This is a natural way of representing sequential games such as Chess, and 
 
 ```{figure} /_static/img/aec_cycle_figure.png
     :width: 480px
@@ -98,14 +100,15 @@ This is a natural way of representing sequential games such as Chess, and is fle
 ```
 
 This is in contrast to the [*Partially Observable Stochastic Game*](https://en.wikipedia.org/wiki/Game_theory#Stochastic_outcomes_(and_relation_to_other_fields)) (POSG) model, represented in our [Parallel API](/api/parallel/), where agents act simultaneously and can only receive observations and rewards at the end of a cycle.
-This makes it difficult to represent sequential games such as Chess, and results in race conditions--where agents choose to take actions which are mutually exclusive. This causes environment behavior to differ depending on internal resolution of agent order, resulting in hard-to-detect bugs if even a single race condition is not caught and handled by the environment (e.g., through tie-breaking).
+This makes it difficult to represent sequential games, and results in race conditions--where agents choose to take actions which are mutually exclusive. This causes environment behavior to differ depending on internal resolution of agent order, resulting in hard-to-detect bugs if even a single race condition is not caught and handled by the environment (e.g., through tie-breaking).
 
 The AEC model is similar to [*Extensive Form Games*](https://en.wikipedia.org/wiki/Extensive-form_game) (EFGs) model, used in DeepMind's [OpenSpiel](https://github.com/deepmind/open_spiel).
 EFGs represent sequential games as trees, explicitly representing every possible sequence of actions as a root to leaf path in the tree.
 A limitation of EFGs is that the formal definition is specific to game-theory, and only allows rewards at the end of a game, whereas in RL, learning often requires frequent rewards.
 
 EFGs can be extended to represent stochastic games by adding a player representing the environment (e.g., [chance nodes](https://openspiel.readthedocs.io/en/latest/concepts.html#the-tree-representation) in OpenSpiel), which takes actions according to a given probability distribution. However, this requires users to manually sample and apply chance node actions whenever interacting with the environment, leaving room for user error and potential random seeding issues.
-AEC environments, in contrast, handle environment dynamics internally after each agent step, resulting in a simpler mental model of the environment, and allowing for arbitrary and evolving environment dynamics (as opposed to static chance distribution).
+
+AEC environments, in contrast, handle environment dynamics internally after each agent step, resulting in a simpler mental model of the environment, and allowing for arbitrary and evolving environment dynamics (as opposed to static chance distribution). The AEC model also more closely resembles how computer games are implemented in code, and can be thought of similar to the game loop in game programming.
 
 For more information about the AEC model and PettingZoo's design philosophy, see [*PettingZoo: A Standard API for Multi-Agent
 Reinforcement Learning*](https://arxiv.org/pdf/2009.14471.pdf).
