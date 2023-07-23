@@ -44,9 +44,9 @@ The following code should run without any issues. The comments are designed to h
 
 The following script uses [pytest](https://docs.pytest.org/en/latest/) to test all other PettingZoo environments which support action masking.
 
-This code yields good results on simpler environments like [Gin Rummy](/environments/classic/gin_rummy/) and [Texas Hold’em No Limit](/environments/classic/texas_holdem_no_limit/), while more difficult environments such as [Chess](/environments/classic/chess/) or [Hanabi](/environments/classic/hanabi/) will likely take much more training time and hyperparameter tuning.
+This code yields decent results on simpler environments like [Connect Four](/environments/classic/connect_four/), while more difficult environments such as [Chess](/environments/classic/chess/) or [Hanabi](/environments/classic/hanabi/) will likely take much more training time and hyperparameter tuning.
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/test_sb3_action_mask.py
+.. literalinclude:: ../../../tutorials/SB3/test/test_sb3_action_mask.py
    :language: python
 ```
