@@ -394,9 +394,11 @@
             
             <section id="aec-api">
 <h1>AEC API<a class="headerlink" href="#aec-api" title="Permalink to this heading">#</a></h1>
-<p>By default, PettingZoo models games as <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) environments. This allows it to support any type of game multi-agent RL can consider.</p>
-<p><a class="reference external" href="https://pettingzoo.farama.org/environments/classic/">PettingZoo Classic</a> provides standard examples of AEC environments for turn-based games, many of which implement <a class="reference internal" href="#action-masking">Illegal Action Masking</a>.</p>
-<p>We provide a <a class="reference external" href="https://pettingzoo.farama.org/content/environment_creation/#example-custom-environment">tutorial</a> for creating a simple Rock-Paper-Scissors AEC environment, showing how games with simultaneous actions can also be represented with AEC environments.</p>
+<p>By default, PettingZoo models games as <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) environments. This allows PettingZoo to represent any type of game multi-agent RL can consider.</p>
+<p><a class="reference internal" href="../../environments/classic/"><span class="doc std std-doc">PettingZoo Classic</span></a> provides standard examples of AEC environments for turn-based games, many of which implement <a class="reference internal" href="#action-masking">Illegal Action Masking</a>.</p>
+<p>We provide a <a class="reference internal" href="../../content/environment_creation/"><span class="doc std std-doc">tutorial</span></a> for creating a simple Rock-Paper-Scissors AEC environment, showing how games with simultaneous actions can also be represented with AEC environments.</p>
+<p><a class="reference internal" href="../wrappers/pz_wrappers/"><span class="doc std std-doc">PettingZoo Wrappers</span></a> can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).</p>
+<p>For more information, see <a class="reference internal" href="#about-aec">About AEC</a> or <a class="reference external" href="https://arxiv.org/pdf/2009.14471.pdf"><em>PettingZoo: A Standard API for Multi-Agent Reinforcement Learning</em></a>.</p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <p>AEC environments can be interacted with as follows:</p>
@@ -461,6 +463,33 @@
 <p>To implement action masking in a custom environment, see <a class="reference external" href="https://pettingzoo.farama.org/tutorials/environmentcreation/3-action-masking/">Environment Creation: Action Masking</a></p>
 <p>For more information on action masking, see <a class="reference external" href="https://arxiv.org/abs/2006.14171">A Closer Look at Invalid Action Masking in Policy Gradient Algorithms</a> (Huang, 2022)</p>
 </section>
+</section>
+<section id="about-aec">
+<h2>About AEC<a class="headerlink" href="#about-aec" title="Permalink to this heading">#</a></h2>
+<p>The <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) model was designed as a <a class="reference external" href="https://github.com/openai/gym">Gym</a>-like API for MARL, supporting all possible use cases and types of environments. This includes environments with:</p>
+<ul class="simple">
+<li><p>Large number of agents (see <a class="reference external" href="https://magent2.farama.org/">Magent2</a>)</p></li>
+<li><p>Variable number of agents (see <a class="reference internal" href="../../environments/butterfly/knights_archers_zombies/"><span class="doc std std-doc">Knights, Archers, Zombies</span></a>)</p></li>
+<li><p>Action and observation spaces of any type (e.g., <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.Box">Box</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.Discrete">Discrete</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.MultiDiscrete">MultiDiscrete</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#multibinary">MultiBinary</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.Text">Text</a>)</p></li>
+<li><p>Nested action and observation spaces (e.g., <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#dict">Dict</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#tuple">Tuple</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#sequence">Sequence</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#graph">Graph</a>)</p></li>
+<li><p>Support for action masking (see <a class="reference internal" href="../../environments/classic/"><span class="doc std std-doc">Classic</span></a> environments)</p></li>
+<li><p>Action and observation spaces which can change over time, and differ per agent (see <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/test/example_envs/generated_agents_env_v0.py">generated_agents</a> and <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/test/variable_env_test.py">variable_env_test</a>)</p></li>
+<li><p>Changing turn order and evolving environment dynamics (e.g., games with multiple stages, reversing turns)</p></li>
+</ul>
+<p>In an AEC environment, agents act sequentially, receiving separate observations and rewards after each step.
+This is a natural way of representing sequential games such as Chess, and is flexible enough to handle any type of game that multi-agent RL can consider.</p>
+<figure class="align-default" id="the-aec-diagram-of-chess">
+<a class="reference internal image-reference" href="_static/img/aec_cycle_figure.png"><img alt="_static/img/aec_cycle_figure.png" src="_static/img/aec_cycle_figure.png" style="width: 480px;" /></a>
+</figure>
+<p>This is in contrast to the <a class="reference external" href="https://en.wikipedia.org/wiki/Game_theory#Stochastic_outcomes_(and_relation_to_other_fields)"><em>Partially Observable Stochastic Game</em></a> (POSG) model, represented in our <a class="reference internal" href="../parallel/"><span class="doc std std-doc">Parallel API</span></a>, where agents act simultaneously and can only receive observations and rewards at the end of a cycle.
+This makes it difficult to represent sequential games such as Chess, and results in race conditions–where agents choose to take actions which are mutually exclusive. This causes environment behavior to differ depending on internal resolution of agent order, resulting in hard-to-detect bugs if even a single race condition is not caught and handled by the environment (e.g., through tie-breaking).</p>
+<p>The AEC model is similar to <a class="reference external" href="https://en.wikipedia.org/wiki/Extensive-form_game"><em>Extensive Form Games</em></a> (EFGs) model, used in DeepMind’s <a class="reference external" href="https://github.com/deepmind/open_spiel">OpenSpiel</a>.
+EFGs represent sequential games as trees, explicitly representing every possible sequence of actions as a root to leaf path in the tree.
+A limitation of EFGs is that the formal definition is specific to game-theory, and only allows rewards at the end of a game, whereas in RL, learning often requires frequent rewards.</p>
+<p>EFGs can be extended to represent stochastic games by adding a player representing the environment (e.g., <a class="reference external" href="https://openspiel.readthedocs.io/en/latest/concepts.html#the-tree-representation">chance nodes</a> in OpenSpiel), which takes actions according to a given probability distribution. However, this requires users to manually sample and apply chance node actions whenever interacting with the environment, leaving room for user error and potential random seeding issues.
+AEC environments, in contrast, handle environment dynamics internally after each agent step, resulting in a simpler mental model of the environment, and allowing for arbitrary and evolving environment dynamics (as opposed to static chance distribution).</p>
+<p>For more information about the AEC model and PettingZoo’s design philosophy, see <a class="reference external" href="https://arxiv.org/pdf/2009.14471.pdf"><em>PettingZoo: A Standard API for Multi-Agent
+Reinforcement Learning</em></a>.</p>
 </section>
 <section id="aecenv">
 <h2>AECEnv<a class="headerlink" href="#aecenv" title="Permalink to this heading">#</a></h2>
@@ -698,6 +727,7 @@ or any other resources that should be released.</p>
 <li><a class="reference internal" href="#action-masking">Action Masking</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#about-aec">About AEC</a></li>
 <li><a class="reference internal" href="#aecenv">AECEnv</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv"><code class="docutils literal notranslate"><span class="pre">AECEnv</span></code></a></li>
 </ul>
