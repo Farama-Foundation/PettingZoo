@@ -5,7 +5,7 @@ from copy import copy
 import numpy as np
 from gymnasium.spaces import Discrete, MultiDiscrete
 
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
