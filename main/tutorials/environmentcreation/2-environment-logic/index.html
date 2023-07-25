@@ -442,8 +442,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="mi">7</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="mi">6</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
@@ -516,7 +516,7 @@
         <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span>
 
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;P&quot;</span>
         <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;G&quot;</span>
         <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span>
