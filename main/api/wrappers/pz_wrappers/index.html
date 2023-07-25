@@ -455,7 +455,7 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
 <span class="n">parallel_env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
 <span class="n">parallel_env</span> <span class="o">=</span> <span class="n">CaptureStdoutWrapper</span><span class="p">(</span><span class="n">parallel_env</span><span class="p">)</span>
 
-<span class="n">observations</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="k">while</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
     <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>  <span class="c1"># this is where you would insert your policy</span>
