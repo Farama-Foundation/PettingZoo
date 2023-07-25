@@ -69,7 +69,7 @@ from pettingzoo.butterfly import pistonball_v6
 parallel_env = pistonball_v6.env()
 parallel_env = CaptureStdoutWrapper(parallel_env)
 
-observations = parallel_env.reset()
+observations, infos = parallel_env.reset()
 
 while parallel_env.agents:
     actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
