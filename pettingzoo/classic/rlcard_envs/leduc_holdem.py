@@ -126,12 +126,12 @@ class raw_env(RLCardBase, EzPickle):
 
     def __init__(
         self,
-        num_players: int = 2,
+        # num_players: int = 2, # Ludec only allows fixed number of players = 2
         render_mode: str | None = None,
         screen_height: int | None = 1000,
     ):
-        EzPickle.__init__(self, num_players, render_mode, screen_height)
-        super().__init__("leduc-holdem", num_players, (72,))
+        EzPickle.__init__(self, render_mode, screen_height)
+        super().__init__("leduc-holdem", 2, (72,))
         self.render_mode = render_mode
         self.screen_height = screen_height
 
@@ -332,50 +332,21 @@ class raw_env(RLCardBase, EzPickle):
             card_img = pygame.transform.scale(
                 card_img, (int(tile_size * (142 / 197)), int(tile_size))
             )
-            if len(state["public_card"]) <= 3:
-                self.screen.blit(
-                    card_img,
+
+            self.screen.blit(
+                card_img,
+                (
                     (
                         (
-                            (
-                                    ((screen_width / 2) + (tile_size * 31 / 616))
-                                    - calculate_offset(tile_size)
-                            ),
-                            calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
-                        )
-                    ),
-                )
-            else:
-                if i <= 2:
-                    self.screen.blit(
-                        card_img,
-                        (
-                            (
-                                (
-                                        ((screen_width / 2) + (tile_size * 31 / 616))
-                                        - calculate_offset(tile_size)
-                                ),
-                                calculate_height(
-                                    screen_height, 2, 1, tile_size, -21 / 20
-                                ),
-                            )
+                                ((screen_width / 2) + (tile_size * 31 / 616))
+                                - calculate_offset(tile_size)  # + (tile_size / 2)
+                        ),
+                        calculate_height(
+                            screen_height, 2, 1, tile_size, -(1 / 2)
                         ),
                     )
-                else:
-                    self.screen.blit(
-                        card_img,
-                        (
-                            (
-                                (
-                                        ((screen_width / 2) + (tile_size * 31 / 616))
-                                        - calculate_offset(tile_size)
-                                ),
-                                calculate_height(
-                                    screen_height, 2, 1, tile_size, 1 / 20
-                                ),
-                            )
-                        ),
-                    )
+                ),
+            )
 
         if self.render_mode == "human":
             pygame.display.update()
