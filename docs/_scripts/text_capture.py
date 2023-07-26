@@ -1,9 +1,8 @@
 import json
 import random
+from test.all_modules import all_environments
 
 import numpy as np
-
-from test.all_modules import all_environments
 
 
 def shrink_lines(data, max_height, max_width):
