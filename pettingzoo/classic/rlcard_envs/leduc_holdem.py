@@ -331,7 +331,7 @@ class raw_env(RLCardBase, EzPickle):
                     (
                         (
                                 ((screen_width / 2) + (tile_size * 31 / 616))
-                                - calculate_offset(tile_size)  # + (tile_size / 2)
+                                - calculate_offset(tile_size) + (tile_size / 2)
                         ),
                         calculate_height(
                             screen_height, 2, 1, tile_size, -(1 / 2)
