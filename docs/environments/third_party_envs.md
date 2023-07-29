@@ -45,12 +45,10 @@ Using [Google DeepMind](https://www.deepmind.com/)'s [MuZero](https://en.wikiped
 
 ### [CookingZoo](https://github.com/DavidRother/gym-cooking)
 
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-red)]()
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.0-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
-[![GitHub last commit](https://img.shields.io/github/last-commit/DavidRother/gym-cooking)]()
 
-Fork of the game *Too Many Cooks*.
-
+CookingZoo: a gym-cooking derivative to simulate a complex cooking environment.
 
 ### [Crazy-RL](https://github.com/ffelten/CrazyRL)
 
@@ -76,6 +74,19 @@ PettingZoo environments for classic game theory problems: [Prisoner's Dilemma](h
 Modernized clone of the [Breakout](https://en.wikipedia.org/wiki/Breakout_(video_game)) arcade game, using [Unity](https://unity.com/) game engine and PettingZoo.
 * Online playable game (using [Unity WebGL](https://docs.unity3d.com/2020.1/Documentation/Manual/webgl-gettingstarted.html) and [Unity ML-Agents](https://unity.com/products/machine-learning-agents)): [link](https://sethcram.weebly.com/breakout-clone.html), [tutorial](https://www.youtube.com/watch?v=zPFU30tbyKs)
 
+### [Carla Gym](https://github.com/johnMinelli/carla-gym/)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/johnMinelli/carla-gym)]()
+
+PettingZoo interface for CARLA Autonomous Driving simulator.
+
+### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.1-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
+
+Implementation of the board game *Fanorona*.
+
 ### [Gobblet-RL](https://github.com/elliottower/gobblet-rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
@@ -91,12 +102,13 @@ Interactive PettingZoo implementation of the [Gobblet](https://en.wikipedia.org/
 
 Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.org/wiki/Cathedral_(board_game)) board game.
 
-### [Carla Gym](https://github.com/johnMinelli/carla-gym/)
+### [Interactive Connect Four](https://huggingface.co/spaces/ClementBM/connectfour)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.4-blue)]()
+[![HuggingFace likes](https://img.shields.io/badge/stars-_2-blue)]()
 
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.0-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/johnMinelli/carla-gym)]()
+ Play [Connect Four](https://pettingzoo.farama.org/environments/classic/connect_four/) in real-time against an [RLlib](https://docs.ray.io/en/latest/rllib/index.html) agent trained via self-play and PPO.
+* Online game demo (using [Gradio](https://www.gradio.app/) and [HuggingFace Spaces](https://huggingface.co/docs/hub/spaces-overview)): [link](https://huggingface.co/spaces/ClementBM/connectfour), [tutorial](https://clementbm.github.io/project/2023/03/29/reinforcement-learning-connect-four-rllib.html)
 
-PettingZoo interface for CARLA Autonomous Driving simulator.
 
 
 ___
@@ -184,15 +196,6 @@ PettingZoo environment for online multi-player game [Battlesnake](https://play.b
 [![GitHub last commit](https://img.shields.io/github/last-commit/NaIwo/BomberManAI)]()
 
 Environment with a simplified version of the video game *BomberMan*.
-
-
-### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.8.1-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
-[![GitHub last commit](https://img.shields.io/github/last-commit/AbhijeetKrishnan/fanorona-aec)]()
-
-Implementation of the board game *Fanorona*.
-
 
 ### [Galaga AI](https://github.com/SonicKurt/Galaga-AI)
 

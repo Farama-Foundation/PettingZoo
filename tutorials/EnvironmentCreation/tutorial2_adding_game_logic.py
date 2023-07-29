@@ -5,7 +5,7 @@ from copy import copy
 import numpy as np
 from gymnasium.spaces import Discrete, MultiDiscrete
 
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
@@ -30,8 +30,8 @@ class CustomEnvironment(ParallelEnv):
         self.prisoner_x = 0
         self.prisoner_y = 0
 
-        self.guard_x = 7
-        self.guard_y = 7
+        self.guard_x = 6
+        self.guard_y = 6
 
         self.escape_x = random.randint(2, 5)
         self.escape_y = random.randint(2, 5)
@@ -104,7 +104,7 @@ class CustomEnvironment(ParallelEnv):
         return observations, rewards, terminations, truncations, infos
 
     def render(self):
-        grid = np.zeros((7, 7))
+        grid = np.full((7, 7), " ")
         grid[self.prisoner_y, self.prisoner_x] = "P"
         grid[self.guard_y, self.guard_x] = "G"
         grid[self.escape_y, self.escape_x] = "E"
@@ -112,7 +112,7 @@ class CustomEnvironment(ParallelEnv):
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        return MultiDiscrete([7 * 7 - 1] * 3)
+        return MultiDiscrete([7 * 7] * 3)
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):

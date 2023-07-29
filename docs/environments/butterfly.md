@@ -39,7 +39,7 @@ To launch a [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pi
 from pettingzoo.butterfly import pistonball_v6
 
 env = pistonball_v6.parallel_env(render_mode="human")
-observations = env.reset()
+observations, infos = env.reset()
 
 while env.agents:
     # this is where you would insert your policy

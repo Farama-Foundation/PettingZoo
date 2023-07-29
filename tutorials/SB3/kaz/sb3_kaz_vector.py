@@ -14,7 +14,7 @@ import time
 
 import supersuit as ss
 from stable_baselines3 import PPO
-from stable_baselines3.ppo import MlpPolicy
+from stable_baselines3.ppo import CnnPolicy, MlpPolicy
 
 from pettingzoo.butterfly import knights_archers_zombies_v10
 
@@ -27,31 +27,26 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
     # MarkovVectorEnv does not support environments with varying numbers of active agents unless black_death is set to True
     env = ss.black_death_v3(env)
 
-    # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
-    env = ss.resize_v1(env, x_size=84, y_size=84)
-    env = ss.frame_stack_v1(env, 3)
+    # Pre-process using SuperSuit
+    visual_observation = not env.unwrapped.vector_state
+    if visual_observation:
+        # If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking
+        env = ss.color_reduction_v0(env, mode="B")
+        env = ss.resize_v1(env, x_size=84, y_size=84)
+        env = ss.frame_stack_v1(env, 3)
 
     env.reset(seed=seed)
 
     print(f"Starting training on {str(env.metadata['name'])}.")
 
     env = ss.pettingzoo_env_to_vec_env_v1(env)
-    env = ss.concat_vec_envs_v1(env, 8, num_cpus=2, base_class="stable_baselines3")
+    env = ss.concat_vec_envs_v1(env, 8, num_cpus=1, base_class="stable_baselines3")
 
-    # TODO: test different hyperparameters
+    # Use a CNN policy if the observation space is visual
     model = PPO(
-        MlpPolicy,
+        CnnPolicy if visual_observation else MlpPolicy,
         env,
         verbose=3,
-        gamma=0.95,
-        n_steps=256,
-        ent_coef=0.0905168,
-        learning_rate=0.00062211,
-        vf_coef=0.042202,
-        max_grad_norm=0.9,
-        gae_lambda=0.99,
-        n_epochs=5,
-        clip_range=0.3,
         batch_size=256,
     )
 
@@ -70,9 +65,13 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
     # Evaluate a trained agent vs a random agent
     env = env_fn.env(render_mode=render_mode, **env_kwargs)
 
-    # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
-    env = ss.resize_v1(env, x_size=84, y_size=84)
-    env = ss.frame_stack_v1(env, 3)
+    # Pre-process using SuperSuit
+    visual_observation = not env.unwrapped.vector_state
+    if visual_observation:
+        # If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking
+        env = ss.color_reduction_v0(env, mode="B")
+        env = ss.resize_v1(env, x_size=84, y_size=84)
+        env = ss.frame_stack_v1(env, 3)
 
     print(
         f"\nStarting evaluation on {str(env.metadata['name'])} (num_games={num_games}, render_mode={render_mode})"
@@ -125,10 +124,8 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 if __name__ == "__main__":
     env_fn = knights_archers_zombies_v10
 
-    # Notes on environment configuration:
-    # max_cycles 100, max_zombies 4, seems to work well (13 points over 10 games)
-    # max_cycles 900 (default) allowed the knights to get kills 1/10 games, but worse archer performance (6 points)
-    env_kwargs = dict(max_cycles=100, max_zombies=4)
+    # Set vector_state to false in order to use visual observations (significantly longer training time)
+    env_kwargs = dict(max_cycles=100, max_zombies=4, vector_state=True)
 
     # Train a model (takes ~5 minutes on a laptop CPU)
     train(env_fn, steps=81_920, seed=0, **env_kwargs)

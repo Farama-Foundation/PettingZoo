@@ -5,7 +5,7 @@ from copy import copy
 import numpy as np
 from gymnasium.spaces import Discrete, MultiDiscrete
 
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
@@ -71,7 +71,7 @@ class CustomEnvironment(ParallelEnv):
             self.guard_y += 1
 
         # Generate action masks
-        prisoner_action_mask = np.ones(4)
+        prisoner_action_mask = np.ones(4, dtype=np.int8)
         if self.prisoner_x == 0:
             prisoner_action_mask[0] = 0  # Block left movement
         elif self.prisoner_x == 6:
@@ -81,7 +81,7 @@ class CustomEnvironment(ParallelEnv):
         elif self.prisoner_y == 6:
             prisoner_action_mask[3] = 0  # Block up movement
 
-        guard_action_mask = np.ones(4)
+        guard_action_mask = np.ones(4, dtype=np.int8)
         if self.guard_x == 0:
             guard_action_mask[0] = 0
         elif self.guard_x == 6:

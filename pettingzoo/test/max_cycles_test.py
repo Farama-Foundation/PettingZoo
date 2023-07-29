@@ -5,7 +5,7 @@ def max_cycles_test(mod):
     max_cycles = 4
     parallel_env = mod.parallel_env(max_cycles=max_cycles)
 
-    observations = parallel_env.reset()
+    observations, infos = parallel_env.reset()
     terminations = {agent: False for agent in parallel_env.agents}
     truncations = {agent: False for agent in parallel_env.agents}
     test_cycles = (
