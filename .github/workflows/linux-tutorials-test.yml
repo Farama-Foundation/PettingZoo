@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
-        tutorial: ['Tianshou', 'EnvironmentCreation', 'CleanRL', 'SB3/kaz', 'SB3/waterworld', 'SB3/connect_four', 'SB3/test'] # TODO: add back RLlib once it is fixed
+        tutorial: ['Tianshou', 'EnvironmentCreation', 'CleanRL', 'RLlib', 'SB3/kaz', 'SB3/waterworld', 'SB3/connect_four', 'SB3/test'] # TODO: add back RLlib once it is fixed
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
