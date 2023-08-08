@@ -1,6 +1,6 @@
 PettingZoo[classic, butterfly]==1.23.1
 Pillow>=9.4.0
-ray[rllib]>=2.6.2
+ray[rllib] @ git+https://github.com/ray-project/ray.git
 SuperSuit==3.8.0
 torch>=1.13.1
 tensorflow-probability>=0.19.0
