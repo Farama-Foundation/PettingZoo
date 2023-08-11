@@ -4,7 +4,7 @@ title: "SB3: Action Masked PPO for Connect Four"
 
 # SB3: Action Masked PPO for Connect Four
 
-This tutorial shows how to train a agents using Maskable [Proximal Policy Optimization](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html) (PPO) on the [Connect Four](https://pettingzoo.farama.org/environments/classic/chess/) environment ([AEC](https://pettingzoo.farama.org/api/aec/)).
+This tutorial shows how to train a agents using Maskable [Proximal Policy Optimization](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html) (PPO) on the [Connect Four](/environments/classic/chess/) environment ([AEC](/api/aec/)).
 
 It creates a custom Wrapper to convert to a [Gymnasium](https://gymnasium.farama.org/)-like environment which is compatible with [SB3 action masking](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html).
 

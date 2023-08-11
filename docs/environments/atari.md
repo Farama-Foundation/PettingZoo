@@ -52,7 +52,7 @@ Install ROMs using [AutoROM](https://github.com/Farama-Foundation/AutoROM), or s
 
 ### Usage
 
-To launch a [Space Invaders](https://pettingzoo.farama.org/environments/atari/space_invaders/) environment with random agents:
+To launch a [Space Invaders](/environments/atari/space_invaders/) environment with random agents:
 ```python
 from pettingzoo.atari import space_invaders_v2
 

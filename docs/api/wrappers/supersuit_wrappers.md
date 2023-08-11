@@ -6,7 +6,7 @@ title: Supersuit Wrappers
 
 The [SuperSuit](https://github.com/Farama-Foundation/SuperSuit) companion package (`pip install supersuit`) includes a collection of pre-processing functions which can applied to both [AEC](/api/aec/) and [Parallel](/api/parallel/) environments.
 
-To convert [space invaders](https://pettingzoo.farama.org/environments/atari/space_invaders/) to a greyscale observation space and stack the last 4 frames:
+To convert [space invaders](/environments/atari/space_invaders/) to a greyscale observation space and stack the last 4 frames:
 
 ``` python
 from pettingzoo.atari import space_invaders_v2
