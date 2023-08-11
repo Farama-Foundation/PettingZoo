@@ -260,15 +260,13 @@ class raw_env(AECEnv):
         screen_height = self.screen_height
         screen_width = self.screen_height
 
-        # TODO: refactor this and check if pygame.font init needs to be done
-        # Ideally this should look like all the other environments
+        if self.screen is None:
+            pygame.init()
+
         if self.render_mode == "human":
-            if self.screen is None:
-                pygame.init()
-                self.screen = pygame.display.set_mode((screen_width, screen_height))
-                pygame.display.set_caption("Tic-Tac-Toe")
-        elif self.screen is None:
-            pygame.font.init()
+            self.screen = pygame.display.set_mode((screen_width, screen_height))
+            pygame.display.set_caption("Tic-Tac-Toe")
+        else:
             self.screen = pygame.Surface((screen_width, screen_height))
 
         # Setup dimensions for 'x' and 'o' marks
