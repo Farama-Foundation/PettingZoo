@@ -36,7 +36,7 @@ pip install pettingzoo[classic]
 
 ### Usage
 
-To launch a [Texas Holdem](https://pettingzoo.farama.org/environments/classic/texas_holdem/) environment with random agents:
+To launch a [Texas Holdem](/environments/classic/texas_holdem/) environment with random agents:
 ``` python
 from pettingzoo.classic import texas_holdem_v4
 

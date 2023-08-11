@@ -27,7 +27,7 @@ pip install pettingzoo[sisl]
 ````
 
 ### Usage
-To launch a [Waterworld](https://pettingzoo.farama.org/environments/sisl/waterworld/) environment with random agents:
+To launch a [Waterworld](/environments/sisl/waterworld/) environment with random agents:
 
 ```python
 from pettingzoo.sisl import waterworld_v4

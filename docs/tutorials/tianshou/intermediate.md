@@ -4,7 +4,7 @@ title: "Tianshou: Training Agents"
 
 # Tianshou: Training Agents
 
-This tutorial shows how to use [Tianshou](https://github.com/thu-ml/tianshou) to train a [Deep Q-Network](https://tianshou.readthedocs.io/en/master/tutorials/dqn.html) (DQN) agent to play vs a [random policy](https://tianshou.readthedocs.io/en/master/_modules/tianshou/policy/random.html) agent in the [Tic-Tac-Toe](https://pettingzoo.farama.org/environments/classic/tictactoe/) environment.
+This tutorial shows how to use [Tianshou](https://github.com/thu-ml/tianshou) to train a [Deep Q-Network](https://tianshou.readthedocs.io/en/master/tutorials/dqn.html) (DQN) agent to play vs a [random policy](https://tianshou.readthedocs.io/en/master/_modules/tianshou/policy/random.html) agent in the [Tic-Tac-Toe](/environments/classic/tictactoe/) environment.
 
 ## Environment Setup
 To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.

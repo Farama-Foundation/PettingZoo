@@ -4,7 +4,7 @@ title: "RLlib: DQN for Simple Poker"
 
 # RLlib: DQN for Simple Poker
 
-This tutorial shows how to train a [Deep Q-Network](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#deep-q-networks-dqn-rainbow-parametric-dqn) (DQN) agent on the [Leduc Hold'em](https://pettingzoo.farama.org/environments/classic/leduc_holdem/) environment ([AEC](https://pettingzoo.farama.org/api/aec/)).
+This tutorial shows how to train a [Deep Q-Network](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#deep-q-networks-dqn-rainbow-parametric-dqn) (DQN) agent on the [Leduc Hold'em](/environments/classic/leduc_holdem/) environment ([AEC](/api/aec/)).
 
 After training, run the provided code to watch your trained agent play vs itself. See the [documentation](https://docs.ray.io/en/latest/rllib/rllib-saving-and-loading-algos-and-policies.html) for more information.
 

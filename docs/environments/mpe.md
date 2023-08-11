@@ -34,7 +34,7 @@ pip install pettingzoo[mpe]
 ````
 
 ### Usage
-To launch a [Simple Tag](https://pettingzoo.farama.org/environments/mpe/simple_tag/) environment with random agents:
+To launch a [Simple Tag](/environments/mpe/simple_tag/) environment with random agents:
 
 ``` python
 from pettingzoo.mpe import simple_tag_v3
