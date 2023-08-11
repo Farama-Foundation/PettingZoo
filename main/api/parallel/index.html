@@ -397,7 +397,11 @@
 <p>In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via <code class="docutils literal notranslate"><span class="pre">&lt;game&gt;.parallel_env()</span></code>. This API is based around the paradigm of <em>Partially Observable Stochastic Games</em> (POSGs) and the details are similar to <a class="reference external" href="https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical">RLlib’s MultiAgent environment specification</a>, except we allow for different observation and action spaces between the agents.</p>
 <p>For a comparison with the AEC API, see <a class="reference external" href="https://pettingzoo.farama.org/api/aec/#about-aec">About AEC</a>. For more information, see <a class="reference external" href="https://arxiv.org/pdf/2009.14471.pdf"><em>PettingZoo: A Standard API for Multi-Agent Reinforcement Learning</em></a>.</p>
 <p><a class="reference internal" href="../wrappers/pz_wrappers/"><span class="doc std std-doc">PettingZoo Wrappers</span></a> can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).</p>
-<p>We provide tutorials for creating two custom Parallel environments: <a class="reference external" href="https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment">Rock-Paper-Scissors</a>, and a simple <a class="reference external" href="https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic/">gridworld environment</a></p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
+<p><a class="reference internal" href="../../environments/butterfly/"><span class="doc std std-doc">PettingZoo Butterfly</span></a> provides standard examples of Parallel environments, such as <a class="reference internal" href="../../environments/butterfly/pistonball/"><span class="doc std std-doc">Pistonball</span></a>.</p>
+<p>We provide tutorials for creating two custom Parallel environments: <a class="reference external" href="https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment">Rock-Paper-Scissors (Parallel)</a>, and a simple <a class="reference internal" href="../../tutorials/environmentcreation/2-environment-logic/"><span class="doc std std-doc">gridworld environment</span></a></p>
+</section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <p>Parallel environments can be interacted with as follows:</p>
@@ -619,6 +623,7 @@ centralized training decentralized execution methods like QMIX</p>
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Parallel API</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#usage">Usage</a></li>
 <li><a class="reference internal" href="#parallelenv">ParallelEnv</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.env.ParallelEnv"><code class="docutils literal notranslate"><span class="pre">ParallelEnv</span></code></a><ul>
