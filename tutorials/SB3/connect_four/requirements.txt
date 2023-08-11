@@ -1,4 +1,3 @@
 pettingzoo[classic]>=1.23.1
-# TODO: update to v2.1.0 once it is released
 stable-baselines3 @ git+https://github.com/DLR-RM/stable-baselines3
 sb3-contrib>=2.0.0
