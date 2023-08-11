@@ -11,7 +11,11 @@ For a comparison with the AEC API, see [About AEC](https://pettingzoo.farama.org
 
 [PettingZoo Wrappers](/api/wrappers/pz_wrappers/) can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).
 
-We provide tutorials for creating two custom Parallel environments: [Rock-Paper-Scissors](https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment), and a simple [gridworld environment](https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic/)
+## Examples
+
+[PettingZoo Butterfly](/environments/butterfly/) provides standard examples of Parallel environments, such as [Pistonball](/environments/butterfly/pistonball).
+
+We provide tutorials for creating two custom Parallel environments: [Rock-Paper-Scissors (Parallel)](https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment), and a simple [gridworld environment](/tutorials/environmentcreation/2-environment-logic/)
 
 ## Usage
 
