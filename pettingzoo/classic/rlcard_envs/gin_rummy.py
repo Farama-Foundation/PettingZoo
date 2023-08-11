@@ -151,7 +151,7 @@ def env(**kwargs):
 
 class raw_env(RLCardBase, EzPickle):
     metadata = {
-        "render_modes": ["human"],
+        "render_modes": ["human", "rgb_array"],
         "name": "gin_rummy_v4",
         "is_parallelizable": False,
         "render_fps": 1,
@@ -221,8 +221,7 @@ class raw_env(RLCardBase, EzPickle):
 
     def step(self, action):
         super().step(action)
-        for i, player in enumerate(self.possible_agents):
-            state = self.env.game.get_state(self._name_to_int(player))
+
         if self.render_mode == "human":
             self.render()
 

@@ -22,8 +22,8 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Values | [0, 1]                                           |
 
 
-Leduc Hold'em is a variation of Limit Texas Hold'em with fixed number of 2 players, 2 rounds and a deck of six cards (Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting, one public card is revealed. Another round follow. At the end, the player with
-the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.
+Leduc Hold'em is a variation of Limit Texas Hold'em with fixed number of 2 players, 2 rounds and a deck of six cards (Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting, one public card is revealed.
+Another round follows. At the end, the player with the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
@@ -119,7 +119,6 @@ class raw_env(RLCardBase, EzPickle):
 
     def __init__(
         self,
-        # num_players: int = 2, # Ludec only allows fixed number of players = 2
         render_mode: str | None = None,
         screen_height: int | None = 1000,
     ):
