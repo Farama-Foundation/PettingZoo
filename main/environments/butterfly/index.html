@@ -445,9 +445,9 @@
 <p>Butterfly environments are challenging scenarios created by Farama, using Pygame with visual Atari spaces.</p>
 <p>All environments require a high degree of coordination and require learning of emergent behaviors to achieve an optimal policy. As such, these environments are currently very challenging to learn.</p>
 <p>Environments are highly configurable via arguments specified in their respective documentation:
-<a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/cooperative_pong/">Cooperative Pong</a>,
-<a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights Archers Zombies</a>,
-<a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/pistonball/">Pistonball</a>.</p>
+<a class="reference internal" href="cooperative_pong/"><span class="doc std std-doc">Cooperative Pong</span></a>,
+<a class="reference internal" href="knights_archers_zombies/"><span class="doc std std-doc">Knights Archers Zombies</span></a>,
+<a class="reference internal" href="pistonball/"><span class="doc std std-doc">Pistonball</span></a>.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
 <p>The unique dependencies for this set of environments can be installed via:</p>
@@ -457,7 +457,7 @@
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
-<p>To launch a <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/pistonball/">Pistonball</a> environment with random agents:</p>
+<p>To launch a <a class="reference internal" href="pistonball/"><span class="doc std std-doc">Pistonball</span></a> environment with random agents:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
@@ -471,7 +471,7 @@
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>To launch a <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights Archers Zombies</a> environment with interactive user input (see <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py">manual_policy.py</a>):</p>
+<p>To launch a <a class="reference internal" href="knights_archers_zombies/"><span class="doc std std-doc">Knights Archers Zombies</span></a> environment with interactive user input (see <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py">manual_policy.py</a>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
 

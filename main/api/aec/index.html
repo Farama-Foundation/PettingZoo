@@ -395,10 +395,13 @@
             <section id="aec-api">
 <h1>AEC API<a class="headerlink" href="#aec-api" title="Permalink to this heading">#</a></h1>
 <p>By default, PettingZoo models games as <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) environments. This allows PettingZoo to represent any type of game multi-agent RL can consider.</p>
+<p>For more information, see <a class="reference internal" href="#about-aec">About AEC</a> or <a class="reference external" href="https://arxiv.org/pdf/2009.14471.pdf"><em>PettingZoo: A Standard API for Multi-Agent Reinforcement Learning</em></a>.</p>
+<p><a class="reference internal" href="../wrappers/pz_wrappers/"><span class="doc std std-doc">PettingZoo Wrappers</span></a> can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).</p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
 <p><a class="reference internal" href="../../environments/classic/"><span class="doc std std-doc">PettingZoo Classic</span></a> provides standard examples of AEC environments for turn-based games, many of which implement <a class="reference internal" href="#action-masking">Illegal Action Masking</a>.</p>
 <p>We provide a <a class="reference internal" href="../../content/environment_creation/"><span class="doc std std-doc">tutorial</span></a> for creating a simple Rock-Paper-Scissors AEC environment, showing how games with simultaneous actions can also be represented with AEC environments.</p>
-<p><a class="reference internal" href="../wrappers/pz_wrappers/"><span class="doc std std-doc">PettingZoo Wrappers</span></a> can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).</p>
-<p>For more information, see <a class="reference internal" href="#about-aec">About AEC</a> or <a class="reference external" href="https://arxiv.org/pdf/2009.14471.pdf"><em>PettingZoo: A Standard API for Multi-Agent Reinforcement Learning</em></a>.</p>
+</section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <p>AEC environments can be interacted with as follows:</p>
@@ -449,7 +452,7 @@
 </div>
 <p>Note: action masking is optional, and can be implemented using either <code class="docutils literal notranslate"><span class="pre">observation</span></code> or <code class="docutils literal notranslate"><span class="pre">info</span></code>.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://pettingzoo.farama.org/environments/classic/">PettingZoo Classic</a> environments store action masks in the <code class="docutils literal notranslate"><span class="pre">observation</span></code> dict:</p>
+<li><p><a class="reference internal" href="../../environments/classic/"><span class="doc std std-doc">PettingZoo Classic</span></a> environments store action masks in the <code class="docutils literal notranslate"><span class="pre">observation</span></code> dict:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">mask</span> <span class="pre">=</span> <span class="pre">observation[&quot;action_mask&quot;]</span></code></p></li>
 </ul>
@@ -460,7 +463,7 @@
 </ul>
 </li>
 </ul>
-<p>To implement action masking in a custom environment, see <a class="reference external" href="https://pettingzoo.farama.org/tutorials/environmentcreation/3-action-masking/">Environment Creation: Action Masking</a></p>
+<p>To implement action masking in a custom environment, see <a class="reference internal" href="../../tutorials/environmentcreation/3-action-masking/"><span class="doc std std-doc">Environment Creation: Action Masking</span></a></p>
 <p>For more information on action masking, see <a class="reference external" href="https://arxiv.org/abs/2006.14171">A Closer Look at Invalid Action Masking in Policy Gradient Algorithms</a> (Huang, 2022)</p>
 </section>
 </section>
@@ -724,6 +727,7 @@ or any other resources that should be released.</p>
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">AEC API</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#action-masking">Action Masking</a></li>
 </ul>
