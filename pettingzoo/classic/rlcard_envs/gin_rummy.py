@@ -151,7 +151,7 @@ def env(**kwargs):
 
 class raw_env(RLCardBase, EzPickle):
     metadata = {
-        "render_modes": ["human"],
+        "render_modes": ["human", "rgb_array"],
         "name": "gin_rummy_v4",
         "is_parallelizable": False,
         "render_fps": 1,

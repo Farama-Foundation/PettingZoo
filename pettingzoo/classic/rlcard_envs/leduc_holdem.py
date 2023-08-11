@@ -118,7 +118,6 @@ class raw_env(RLCardBase, EzPickle):
 
     def __init__(
         self,
-        # num_players: int = 2, # Ludec only allows fixed number of players = 2
         render_mode: str | None = None,
         screen_height: int | None = 1000,
     ):

@@ -166,3 +166,5 @@ cython_debug/
 .idea/modules.xml
 .idea/misc.xml
 .idea/inspectionProfiles/profiles_settings.xml
+test/test_renders.py
+test/test_tutorial.py

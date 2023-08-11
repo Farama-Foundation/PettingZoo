@@ -68,8 +68,9 @@ If the game ends in a draw, both players will receive a reward of 0.
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
+
 import os
-import time
 
 import gymnasium
 import numpy as np
@@ -108,7 +109,7 @@ def env(render_mode=None):
 
 class raw_env(AECEnv):
     metadata = {
-        "render_modes": ["human"],
+        "render_modes": ["human", "rgb_array"],
         "name": "tictactoe_v3",
         "is_parallelizable": False,
         "render_fps": 1,
