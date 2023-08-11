@@ -7,7 +7,8 @@
 :name: leduc_holdem
 ```
 
-This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general
+information.
 
 | Import             | `from pettingzoo.classic import leduc_holdem_v4` |
 |--------------------|--------------------------------------------------|
@@ -22,17 +23,22 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Values | [0, 1]                                           |
 
 
-Leduc Hold'em is a variation of Limit Texas Hold'em with fixed number of 2 players, 2 rounds and a deck of six cards (Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting, one public card is revealed. Another round follow. At the end, the player with
+Leduc Hold'em is a variation of Limit Texas Hold'em with fixed number of 2 players, 2 rounds and a deck of six cards
+(Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting,
+one public card is revealed. Another round follow. At the end, the player with
 the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.
 
-Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation
+for additional details. Please cite their work if you use this game in research.
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described
+below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries of the main observation space correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by
-the current player and the opponent, respectively.
+As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries
+of the main observation space correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards.
+Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.
 
 |  Index  | Description                                                                  |
 |:-------:|------------------------------------------------------------------------------|
@@ -44,8 +50,11 @@ the current player and the opponent, respectively.
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one
-whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation.
+The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not.
+The `action_mask` will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward
+of 0 for all other agents.
 
 ### Action Space
 
@@ -68,7 +77,8 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
-* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated
+   over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
 
 """
@@ -83,6 +93,7 @@ from gymnasium.utils import EzPickle
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
+
 
 def get_image(path):
     from os import path as os_path
@@ -145,17 +156,15 @@ class raw_env(RLCardBase, EzPickle):
         def calculate_width(self, screen_width, i):
             return int(
                 (
-                        screen_width
-                        / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2)
+                    screen_width
+                    / (np.ceil(len(self.possible_agents) / 2) + 1)
+                    * np.ceil((i + 1) / 2)
                 )
                 + (tile_size * 31 / 616)
             )
 
         def calculate_offset(tile_size):
-            return int(
-                ((tile_size * 23 / 28))  # - ((j) * (tile_size * 23 / 28))
-            )
+            return int(tile_size * 23 / 28)  # - ((j) * (tile_size * 23 / 28))
 
         def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
             return int(multiplier * screen_height / divisor + tile_size * offset)
@@ -201,7 +210,7 @@ class raw_env(RLCardBase, EzPickle):
             state = self.env.game.get_state(self._name_to_int(player))
             # Load specified card
             # Each player holds only one card. Unlike Texas Hold'em, state['hand'] = str, and not a list
-            card = state['hand']
+            card = state["hand"]
             card_img = get_image(os.path.join("img", card + ".png"))
             card_img = pygame.transform.scale(
                 card_img, (int(tile_size * (142 / 197)), int(tile_size))
@@ -212,8 +221,8 @@ class raw_env(RLCardBase, EzPickle):
                     card_img,
                     (
                         (
-                                calculate_width(self, screen_width, i)
-                                - calculate_offset(tile_size)
+                            calculate_width(self, screen_width, i)
+                            - calculate_offset(tile_size)
                         ),
                         calculate_height(screen_height, 4, 1, tile_size, -1),
                     ),
@@ -224,8 +233,8 @@ class raw_env(RLCardBase, EzPickle):
                     card_img,
                     (
                         (
-                                calculate_width(self, screen_width, i)
-                                - calculate_offset(tile_size)
+                            calculate_width(self, screen_width, i)
+                            - calculate_offset(tile_size)
                         ),
                         calculate_height(screen_height, 4, 3, tile_size, 0),
                     ),
@@ -240,7 +249,8 @@ class raw_env(RLCardBase, EzPickle):
                     (
                         screen_width
                         / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2) - tile_size * (4 / 10)
+                        * np.ceil((i + 1) / 2)
+                        - tile_size * (4 / 10)
                     ),
                     calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)),
                 )
@@ -249,7 +259,8 @@ class raw_env(RLCardBase, EzPickle):
                     (
                         screen_width
                         / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2) - tile_size * (4 / 10)
+                        * np.ceil((i + 1) / 2)
+                        - tile_size * (4 / 10)
                     ),
                     calculate_height(screen_height, 4, 3, tile_size, (23 / 20)),
                 )
@@ -280,8 +291,8 @@ class raw_env(RLCardBase, EzPickle):
                             chip_img,
                             (
                                 (
-                                        calculate_width(self, screen_width, i)
-                                        + tile_size * (2 / 10)
+                                    calculate_width(self, screen_width, i)
+                                    + tile_size * (2 / 10)
                                 ),
                                 calculate_height(screen_height, 4, 1, tile_size, -1 / 2)
                                 - ((j + height) * tile_size / 15),
@@ -292,8 +303,8 @@ class raw_env(RLCardBase, EzPickle):
                             chip_img,
                             (
                                 (
-                                        calculate_width(self, screen_width, i)
-                                        + tile_size * (2 / 10)
+                                    calculate_width(self, screen_width, i)
+                                    + tile_size * (2 / 10)
                                 ),
                                 calculate_height(screen_height, 4, 3, tile_size, 1 / 2)
                                 - ((j + height) * tile_size / 15),
@@ -329,12 +340,11 @@ class raw_env(RLCardBase, EzPickle):
                 (
                     (
                         (
-                                ((screen_width / 2) + (tile_size * 31 / 616))
-                                - calculate_offset(tile_size) + (tile_size / 2)
+                            ((screen_width / 2) + (tile_size * 31 / 616))
+                            - calculate_offset(tile_size)
+                            + (tile_size / 2)
                         ),
-                        calculate_height(
-                            screen_height, 2, 1, tile_size, -(1 / 2)
-                        ),
+                        calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
                     )
                 ),
             )

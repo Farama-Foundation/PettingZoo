@@ -74,8 +74,8 @@ import os
 
 import gymnasium
 import numpy as np
-from gymnasium import spaces
 import pygame
+from gymnasium import spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.tictactoe.board import Board
@@ -89,12 +89,14 @@ def get_image(path):
     image = pygame.image.load(cwd + "/" + path)
     return image
 
+
 def get_font(path, size):
     from os import path as os_path
 
     cwd = os_path.dirname(__file__)
     font = pygame.font.Font((cwd + "/" + path), size)
     return font
+
 
 def env(render_mode=None):
     internal_render_mode = render_mode if render_mode != "ansi" else "human"
@@ -116,9 +118,7 @@ class raw_env(AECEnv):
     }
 
     def __init__(
-        self,
-        render_mode: str | None = None,
-        screen_height: int | None = 1000
+        self, render_mode: str | None = None, screen_height: int | None = 1000
     ):
         super().__init__()
         self.board = Board()
@@ -304,17 +304,14 @@ class raw_env(AECEnv):
                     continue
 
                 mark_img = get_image(os.path.join("img", mark + ".png"))
-                mark_img = pygame.transform.scale(
-                    mark_img, (tile_size, tile_size)
-                )
+                mark_img = pygame.transform.scale(mark_img, (tile_size, tile_size))
 
                 self.screen.blit(
                     mark_img,
                     (
                         (screen_width / 3.1) * x + (screen_width / 17),
-
-                        (screen_width / 3.145) * y + (screen_height / 19)
-                    )
+                        (screen_width / 3.145) * y + (screen_height / 19),
+                    ),
                 )
 
         if self.render_mode == "human":

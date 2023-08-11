@@ -191,9 +191,9 @@ class raw_env(RLCardBase, EzPickle):
         def calculate_width(self, screen_width, i):
             return int(
                 (
-                        screen_width
-                        / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2)
+                    screen_width
+                    / (np.ceil(len(self.possible_agents) / 2) + 1)
+                    * np.ceil((i + 1) / 2)
                 )
                 + (tile_size * 33 / 616)
             )
@@ -257,10 +257,12 @@ class raw_env(RLCardBase, EzPickle):
                         card_img,
                         (
                             (
-                                    calculate_width(self, screen_width, i)
-                                    - calculate_offset(state["hand"], j, tile_size)
-                                    - tile_size * (8 / 10) * (1 - np.ceil(i / 2))
-                                    * (0 if len(self.possible_agents) == 2 else 1)
+                                calculate_width(self, screen_width, i)
+                                - calculate_offset(state["hand"], j, tile_size)
+                                - tile_size
+                                * (8 / 10)
+                                * (1 - np.ceil(i / 2))
+                                * (0 if len(self.possible_agents) == 2 else 1)
                             ),
                             calculate_height(screen_height, 4, 1, tile_size, -1),
                         ),
@@ -271,10 +273,12 @@ class raw_env(RLCardBase, EzPickle):
                         card_img,
                         (
                             (
-                                    calculate_width(self, screen_width, i)
-                                    - calculate_offset(state["hand"], j, tile_size)
-                                    - tile_size * (8 / 10) * (1 - np.ceil((i - 1) / 2))
-                                    * (0 if len(self.possible_agents) == 2 else 1)
+                                calculate_width(self, screen_width, i)
+                                - calculate_offset(state["hand"], j, tile_size)
+                                - tile_size
+                                * (8 / 10)
+                                * (1 - np.ceil((i - 1) / 2))
+                                * (0 if len(self.possible_agents) == 2 else 1)
                             ),
                             calculate_height(screen_height, 4, 3, tile_size, 0),
                         ),
@@ -287,20 +291,26 @@ class raw_env(RLCardBase, EzPickle):
             if i % 2 == 0:
                 textRect.center = (
                     (
-                            screen_width
-                            / (np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)
-                            - tile_size * (8 / 10) * (1 - np.ceil(i / 2))
-                            * (0 if len(self.possible_agents) == 2 else 1)
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2)
+                        - tile_size
+                        * (8 / 10)
+                        * (1 - np.ceil(i / 2))
+                        * (0 if len(self.possible_agents) == 2 else 1)
                     ),
                     calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)),
                 )
             else:
                 textRect.center = (
                     (
-                            screen_width
-                            / (np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)
-                            - tile_size * (8 / 10) * (1 - np.ceil((i - 1) / 2))
-                            * (0 if len(self.possible_agents) == 2 else 1)
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2)
+                        - tile_size
+                        * (8 / 10)
+                        * (1 - np.ceil((i - 1) / 2))
+                        * (0 if len(self.possible_agents) == 2 else 1)
                     ),
                     calculate_height(screen_height, 4, 3, tile_size, (23 / 20)),
                 )
@@ -331,9 +341,14 @@ class raw_env(RLCardBase, EzPickle):
                             chip_img,
                             (
                                 (
-                                        calculate_width(self, screen_width, i)
-                                        + tile_size * (8 / 10)
-                                        * (1 if len(self.possible_agents) == 2 else np.ceil(i / 2))
+                                    calculate_width(self, screen_width, i)
+                                    + tile_size
+                                    * (8 / 10)
+                                    * (
+                                        1
+                                        if len(self.possible_agents) == 2
+                                        else np.ceil(i / 2)
+                                    )
                                 ),
                                 calculate_height(screen_height, 4, 1, tile_size, -1 / 2)
                                 - ((j + height) * tile_size / 15),
@@ -344,9 +359,14 @@ class raw_env(RLCardBase, EzPickle):
                             chip_img,
                             (
                                 (
-                                        calculate_width(self, screen_width, i)
-                                        + tile_size * (8 / 10)
-                                        * (1 if len(self.possible_agents) == 2 else np.ceil((i - 1) / 2))
+                                    calculate_width(self, screen_width, i)
+                                    + tile_size
+                                    * (8 / 10)
+                                    * (
+                                        1
+                                        if len(self.possible_agents) == 2
+                                        else np.ceil((i - 1) / 2)
+                                    )
                                 ),
                                 calculate_height(screen_height, 4, 3, tile_size, 1 / 2)
                                 - ((j + height) * tile_size / 15),
@@ -357,21 +377,29 @@ class raw_env(RLCardBase, EzPickle):
             # Blit text number
             if i % 2 == 0:
                 textRect.center = (
-                    (calculate_width(self, screen_width, i)
-                     + (tile_size * (5 / 20))
-                     + tile_size * (8 / 10)
-                     * (1 if len(self.possible_agents) == 2 else np.ceil(i / 2))
-                     ),
+                    (
+                        calculate_width(self, screen_width, i)
+                        + (tile_size * (5 / 20))
+                        + tile_size
+                        * (8 / 10)
+                        * (1 if len(self.possible_agents) == 2 else np.ceil(i / 2))
+                    ),
                     calculate_height(screen_height, 4, 1, tile_size, -1 / 2)
                     - ((height + 1) * tile_size / 15),
                 )
             else:
                 textRect.center = (
-                    (calculate_width(self, screen_width, i)
-                     + (tile_size * (5 / 20))
-                     + tile_size * (8 / 10)
-                     * (1 if len(self.possible_agents) == 2 else np.ceil((i - 1) / 2))
-                     ),
+                    (
+                        calculate_width(self, screen_width, i)
+                        + (tile_size * (5 / 20))
+                        + tile_size
+                        * (8 / 10)
+                        * (
+                            1
+                            if len(self.possible_agents) == 2
+                            else np.ceil((i - 1) / 2)
+                        )
+                    ),
                     calculate_height(screen_height, 4, 3, tile_size, 1 / 2)
                     - ((height + 1) * tile_size / 15),
                 )
@@ -389,8 +417,8 @@ class raw_env(RLCardBase, EzPickle):
                     (
                         (
                             (
-                                    ((screen_width / 2) + (tile_size * 31 / 616))
-                                    - calculate_offset(state["public_cards"], i, tile_size)
+                                ((screen_width / 2) + (tile_size * 31 / 616))
+                                - calculate_offset(state["public_cards"], i, tile_size)
                             ),
                             calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
                         )
@@ -403,10 +431,10 @@ class raw_env(RLCardBase, EzPickle):
                         (
                             (
                                 (
-                                        ((screen_width / 2) + (tile_size * 31 / 616))
-                                        - calculate_offset(
-                                    state["public_cards"][:3], i, tile_size
-                                )
+                                    ((screen_width / 2) + (tile_size * 31 / 616))
+                                    - calculate_offset(
+                                        state["public_cards"][:3], i, tile_size
+                                    )
                                 ),
                                 calculate_height(
                                     screen_height, 2, 1, tile_size, -21 / 20
@@ -420,10 +448,10 @@ class raw_env(RLCardBase, EzPickle):
                         (
                             (
                                 (
-                                        ((screen_width / 2) + (tile_size * 31 / 616))
-                                        - calculate_offset(
-                                    state["public_cards"][3:], i - 3, tile_size
-                                )
+                                    ((screen_width / 2) + (tile_size * 31 / 616))
+                                    - calculate_offset(
+                                        state["public_cards"][3:], i - 3, tile_size
+                                    )
                                 ),
                                 calculate_height(
                                     screen_height, 2, 1, tile_size, 1 / 20
