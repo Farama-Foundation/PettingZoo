@@ -1,9 +1,8 @@
 import json
 import random
+from test.all_modules import all_environments
 
 import numpy as np
-
-from pettingzoo.test.all_modules import all_environments
 
 
 def shrink_lines(data, max_height, max_width):
@@ -17,7 +16,6 @@ for name, module in all_environments.items():
     if "classic/" not in name:
         continue
     env = module.env()
-    # env = gin_rummy_v0.env()
     env.reset()
 
     all_text = [env.render()]

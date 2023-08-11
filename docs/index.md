@@ -72,7 +72,7 @@ An API standard for multi-agent reinforcement learning.
 **PettingZoo is a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.**
 PettingZoo includes a wide variety of reference environments, helpful utilities, and tools for creating your own custom environments.
 
-The [AEC API](https://pettingzoo.farama.org/api/aec/) supports sequential turn based environments, while the [Parallel API](https://pettingzoo.farama.org/api/parallel/) supports environments with simultaneous actions.
+The [AEC API](/api/aec/) supports sequential turn based environments, while the [Parallel API](/api/parallel/) supports environments with simultaneous actions.
 
 Environments can be interacted with using a similar interface to [Gymnasium](https://gymnasium.farama.org):
 
