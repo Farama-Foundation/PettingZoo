@@ -299,6 +299,8 @@ class raw_env(RLCardBase, EzPickle):
         # Load and blit all images for each card in each player's hand
         for i, player in enumerate(self.possible_agents):
             state = self.env.game.get_state(self._name_to_int(player))
+            if len(state) == 0:
+                continue
             for j, card in enumerate(state["hand"]):
                 # Load specified card
                 card_img = get_image(os.path.join("img", card + ".png"))
