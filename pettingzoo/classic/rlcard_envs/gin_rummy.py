@@ -230,6 +230,7 @@ class raw_env(RLCardBase, EzPickle):
     To render:
     state: {'player_id', 'hand', 'top_discard'}
     """
+
     def render(self):
         if self.render_mode is None:
             gymnasium.logger.warn(
@@ -240,9 +241,9 @@ class raw_env(RLCardBase, EzPickle):
         def calculate_width(self, screen_width, i):
             return int(
                 (
-                        screen_width
-                        / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2)
+                    screen_width
+                    / (np.ceil(len(self.possible_agents) / 2) + 1)
+                    * np.ceil((i + 1) / 2)
                 )
                 + (tile_size * 31 / 616)
             )
@@ -256,16 +257,29 @@ class raw_env(RLCardBase, EzPickle):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
         def draw_borders(x, y, width, height, bw, color):
-            pygame.draw.line(self.screen, color, (x - bw // 2 + 1, y), (x + width + bw // 2, y), bw)
-            pygame.draw.line(self.screen, color, (x - bw // 2 + 1, y + height), (x + width + bw // 2, y + height), bw)
-            pygame.draw.line(self.screen, color, (x, y - bw // 2 + 1), (x, y + height + bw // 2), bw)
-            pygame.draw.line(self.screen, color, (x + width, y - bw // 2 + 1), (x + width, y + height + bw // 2), bw)
+            pygame.draw.line(
+                self.screen, color, (x - bw // 2 + 1, y), (x + width + bw // 2, y), bw
+            )
+            pygame.draw.line(
+                self.screen,
+                color,
+                (x - bw // 2 + 1, y + height),
+                (x + width + bw // 2, y + height),
+                bw,
+            )
+            pygame.draw.line(
+                self.screen, color, (x, y - bw // 2 + 1), (x, y + height + bw // 2), bw
+            )
+            pygame.draw.line(
+                self.screen,
+                color,
+                (x + width, y - bw // 2 + 1),
+                (x + width, y + height + bw // 2),
+                bw,
+            )
 
         screen_height = self.screen_height
-        screen_width = int(
-            screen_height * (1 / 20)
-            + 3.5 * (screen_height * 1 / 2)
-        )
+        screen_width = int(screen_height * (1 / 20) + 3.5 * (screen_height * 1 / 2))
 
         # TODO: refactor this and check if pygame.font init needs to be done
         # Ideally this should look like all the other environments
@@ -300,8 +314,8 @@ class raw_env(RLCardBase, EzPickle):
                         card_img,
                         (
                             (
-                                    calculate_width(self, screen_width, i)
-                                    - calculate_offset(state["hand"], j, tile_size)
+                                calculate_width(self, screen_width, i)
+                                - calculate_offset(state["hand"], j, tile_size)
                             ),
                             calculate_height(screen_height, 4, 1, tile_size, -1),
                         ),
@@ -312,8 +326,8 @@ class raw_env(RLCardBase, EzPickle):
                         card_img,
                         (
                             (
-                                    calculate_width(self, screen_width, i)
-                                    - calculate_offset(state["hand"], j, tile_size)
+                                calculate_width(self, screen_width, i)
+                                - calculate_offset(state["hand"], j, tile_size)
                             ),
                             calculate_height(screen_height, 4, 3, tile_size, 0),
                         ),
@@ -326,9 +340,9 @@ class raw_env(RLCardBase, EzPickle):
             if i % 2 == 0:
                 textRect.center = (
                     (
-                            screen_width
-                            / (np.ceil(len(self.possible_agents) / 2) + 1)
-                            * np.ceil((i + 1) / 2)
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2)
                     ),
                     calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)),
                 )
@@ -336,9 +350,9 @@ class raw_env(RLCardBase, EzPickle):
             else:
                 textRect.center = (
                     (
-                            screen_width
-                            / (np.ceil(len(self.possible_agents) / 2) + 1)
-                            * np.ceil((i + 1) / 2)
+                        screen_width
+                        / (np.ceil(len(self.possible_agents) / 2) + 1)
+                        * np.ceil((i + 1) / 2)
                     ),
                     calculate_height(screen_height, 4, 3, tile_size, (23 / 20)),
                 )
@@ -355,8 +369,8 @@ class raw_env(RLCardBase, EzPickle):
                     (
                         (
                             (
-                                    ((screen_width / 2) + (tile_size * 31 / 616))
-                                    - calculate_offset(state["top_discard"], j, tile_size)
+                                ((screen_width / 2) + (tile_size * 31 / 616))
+                                - calculate_offset(state["top_discard"], j, tile_size)
                             ),
                             calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
                         )
@@ -374,13 +388,16 @@ class raw_env(RLCardBase, EzPickle):
             )
             self.screen.blit(text, textRect)
 
-            draw_borders(x=int((screen_width / 2) + (tile_size * 31 / 616)) -
-                           int(tile_size * 23 / 56) - 5,
-                         y=calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)) - 6,
-                         width=int(tile_size) - int(tile_size * (9 / 40)),
-                         height=int(tile_size) + 10,
-                         bw=3,
-                         color='white')
+            draw_borders(
+                x=int((screen_width / 2) + (tile_size * 31 / 616))
+                - int(tile_size * 23 / 56)
+                - 5,
+                y=calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)) - 6,
+                width=int(tile_size) - int(tile_size * (9 / 40)),
+                height=int(tile_size) + 10,
+                bw=3,
+                color="white",
+            )
 
         if self.render_mode == "human":
             pygame.display.update()

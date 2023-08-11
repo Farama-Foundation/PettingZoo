@@ -84,6 +84,7 @@ from gymnasium.utils import EzPickle
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
 
+
 def get_image(path):
     from os import path as os_path
 
@@ -146,17 +147,15 @@ class raw_env(RLCardBase, EzPickle):
         def calculate_width(self, screen_width, i):
             return int(
                 (
-                        screen_width
-                        / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2)
+                    screen_width
+                    / (np.ceil(len(self.possible_agents) / 2) + 1)
+                    * np.ceil((i + 1) / 2)
                 )
                 + (tile_size * 31 / 616)
             )
 
         def calculate_offset(tile_size):
-            return int(
-                ((tile_size * 23 / 28))  # - ((j) * (tile_size * 23 / 28))
-            )
+            return int(tile_size * 23 / 28)  # - ((j) * (tile_size * 23 / 28))
 
         def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
             return int(multiplier * screen_height / divisor + tile_size * offset)
@@ -202,7 +201,7 @@ class raw_env(RLCardBase, EzPickle):
             state = self.env.game.get_state(self._name_to_int(player))
             # Load specified card
             # Each player holds only one card. Unlike Texas Hold'em, state['hand'] = str, and not a list
-            card = state['hand']
+            card = state["hand"]
             card_img = get_image(os.path.join("img", card + ".png"))
             card_img = pygame.transform.scale(
                 card_img, (int(tile_size * (142 / 197)), int(tile_size))
@@ -213,8 +212,8 @@ class raw_env(RLCardBase, EzPickle):
                     card_img,
                     (
                         (
-                                calculate_width(self, screen_width, i)
-                                - calculate_offset(tile_size)
+                            calculate_width(self, screen_width, i)
+                            - calculate_offset(tile_size)
                         ),
                         calculate_height(screen_height, 4, 1, tile_size, -1),
                     ),
@@ -225,8 +224,8 @@ class raw_env(RLCardBase, EzPickle):
                     card_img,
                     (
                         (
-                                calculate_width(self, screen_width, i)
-                                - calculate_offset(tile_size)
+                            calculate_width(self, screen_width, i)
+                            - calculate_offset(tile_size)
                         ),
                         calculate_height(screen_height, 4, 3, tile_size, 0),
                     ),
@@ -241,7 +240,8 @@ class raw_env(RLCardBase, EzPickle):
                     (
                         screen_width
                         / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2) - tile_size * (4 / 10)
+                        * np.ceil((i + 1) / 2)
+                        - tile_size * (4 / 10)
                     ),
                     calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)),
                 )
@@ -250,7 +250,8 @@ class raw_env(RLCardBase, EzPickle):
                     (
                         screen_width
                         / (np.ceil(len(self.possible_agents) / 2) + 1)
-                        * np.ceil((i + 1) / 2) - tile_size * (4 / 10)
+                        * np.ceil((i + 1) / 2)
+                        - tile_size * (4 / 10)
                     ),
                     calculate_height(screen_height, 4, 3, tile_size, (23 / 20)),
                 )
@@ -281,8 +282,8 @@ class raw_env(RLCardBase, EzPickle):
                             chip_img,
                             (
                                 (
-                                        calculate_width(self, screen_width, i)
-                                        + tile_size * (2 / 10)
+                                    calculate_width(self, screen_width, i)
+                                    + tile_size * (2 / 10)
                                 ),
                                 calculate_height(screen_height, 4, 1, tile_size, -1 / 2)
                                 - ((j + height) * tile_size / 15),
@@ -293,8 +294,8 @@ class raw_env(RLCardBase, EzPickle):
                             chip_img,
                             (
                                 (
-                                        calculate_width(self, screen_width, i)
-                                        + tile_size * (2 / 10)
+                                    calculate_width(self, screen_width, i)
+                                    + tile_size * (2 / 10)
                                 ),
                                 calculate_height(screen_height, 4, 3, tile_size, 1 / 2)
                                 - ((j + height) * tile_size / 15),
@@ -330,12 +331,11 @@ class raw_env(RLCardBase, EzPickle):
                 (
                     (
                         (
-                                ((screen_width / 2) + (tile_size * 31 / 616))
-                                - calculate_offset(tile_size) + (tile_size / 2)
+                            ((screen_width / 2) + (tile_size * 31 / 616))
+                            - calculate_offset(tile_size)
+                            + (tile_size / 2)
                         ),
-                        calculate_height(
-                            screen_height, 2, 1, tile_size, -(1 / 2)
-                        ),
+                        calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
                     )
                 ),
             )
