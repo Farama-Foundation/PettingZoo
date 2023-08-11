@@ -123,7 +123,7 @@ class raw_env(RLCardBase, EzPickle):
         screen_height: int | None = 1000,
     ):
         EzPickle.__init__(self, render_mode, screen_height)
-        super().__init__("leduc-holdem", 2, (72,))
+        super().__init__("leduc-holdem", 2, (36,))
         self.render_mode = render_mode
         self.screen_height = screen_height
 
