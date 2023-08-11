@@ -1,6 +1,6 @@
-PettingZoo[classic, butterfly]>=1.23.1
+PettingZoo[classic, butterfly]==1.23.1
 Pillow>=9.4.0
-ray[rllib]>=2.5.1 # Note: RLlib's PettingZoo wrapper is currently broken, but will be fixed with https://github.com/ray-project/ray/pull/34696
-SuperSuit>=3.9.0
+ray[rllib]>2.6.2
+SuperSuit==3.8.0
 torch>=1.13.1
 tensorflow-probability>=0.19.0
