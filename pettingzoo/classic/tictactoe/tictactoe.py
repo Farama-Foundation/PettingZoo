@@ -261,7 +261,6 @@ class raw_env(AECEnv):
         screen_height = self.screen_height
         screen_width = self.screen_height
 
-        # TODO: refactor this and check if pygame.font init needs to be done
         # Ideally this should look like all the other environments
         if self.render_mode == "human":
             if self.screen is None:
