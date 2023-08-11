@@ -4,7 +4,7 @@ title: "SB3: PPO for Waterworld (Parallel)"
 
 # SB3: PPO for Waterworld
 
-This tutorial shows how to train agents using [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) on the [Waterworld](https://pettingzoo.farama.org/environments/sisl/waterworld/) environment ([Parallel](https://pettingzoo.farama.org/api/parallel/)).
+This tutorial shows how to train agents using [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) on the [Waterworld](/environments/sisl/waterworld/) environment ([Parallel](/api/parallel/)).
 
 We use SuperSuit to create vectorized environments, leveraging multithreading to speed up training (see SB3's [vector environments documentation](https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html)).
 

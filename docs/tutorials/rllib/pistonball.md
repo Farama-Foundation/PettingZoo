@@ -4,7 +4,7 @@ title: "RLlib: PPO for Pistonball (Parallel)"
 
 # RLlib: PPO for Pistonball
 
-This tutorial shows how to train [Proximal Policy Optimization](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo) (PPO) agents on the [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment ([Parallel](https://pettingzoo.farama.org/api/parallel/)).
+This tutorial shows how to train [Proximal Policy Optimization](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo) (PPO) agents on the [Pistonball](/environments/butterfly/pistonball/) environment ([Parallel](/api/parallel/)).
 
 After training, run the provided code to watch your trained agent play vs itself. See the [documentation](https://docs.ray.io/en/latest/rllib/rllib-saving-and-loading-algos-and-policies.html) for more information.
 
