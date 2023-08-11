@@ -76,6 +76,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.tictactoe.board import Board
@@ -109,7 +110,7 @@ def env(render_mode=None):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "tictactoe_v3",
@@ -121,6 +122,7 @@ class raw_env(AECEnv):
         self, render_mode: str | None = None, screen_height: int | None = 1000
     ):
         super().__init__()
+        EzPickle.__init__(self, render_mode, screen_height)
         self.board = Board()
 
         self.agents = ["player_1", "player_2"]
@@ -314,3 +316,11 @@ class raw_env(AECEnv):
 
         if self.render_mode == "human":
             pygame.display.update()
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+
+        return (
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
+        )
