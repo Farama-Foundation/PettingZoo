@@ -106,7 +106,7 @@ Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.or
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.4-blue)]()
 [![HuggingFace likes](https://img.shields.io/badge/stars-_2-blue)]()
 
- Play [Connect Four](https://pettingzoo.farama.org/environments/classic/connect_four/) in real-time against an [RLlib](https://docs.ray.io/en/latest/rllib/index.html) agent trained via self-play and PPO.
+ Play [Connect Four](/environments/classic/connect_four/) in real-time against an [RLlib](https://docs.ray.io/en/latest/rllib/index.html) agent trained via self-play and PPO.
 * Online game demo (using [Gradio](https://www.gradio.app/) and [HuggingFace Spaces](https://huggingface.co/docs/hub/spaces-overview)): [link](https://huggingface.co/spaces/ClementBM/connectfour), [tutorial](https://clementbm.github.io/project/2023/03/29/reinforcement-learning-connect-four-rllib.html)
 
 

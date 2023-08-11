@@ -4,7 +4,7 @@ title: "CleanRL: Advanced PPO"
 
 # CleanRL: Advanced PPO
 
-This tutorial shows how to train [PPO](https://docs.cleanrl.dev/rl-algorithms/ppo/) agents on [Atari](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environments ([Parallel](https://pettingzoo.farama.org/api/parallel/)).
+This tutorial shows how to train [PPO](https://docs.cleanrl.dev/rl-algorithms/ppo/) agents on [Atari](/environments/butterfly/pistonball/) environments ([Parallel](/api/parallel/)).
 This is a full training script including CLI, logging and integration with [TensorBoard](https://www.tensorflow.org/tensorboard) and [WandB](https://wandb.ai/) for experiment tracking.
 
 This tutorial is mirrored from [CleanRL](https://github.com/vwxyzjn/cleanrl)'s examples. Full documentation and experiment results can be found at [https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy](https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy)
