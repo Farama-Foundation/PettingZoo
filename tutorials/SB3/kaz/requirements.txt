@@ -1,4 +1,3 @@
 pettingzoo[butterfly]>=1.23.1
 stable-baselines3>=2.0.0
-# TODO: update to SS release once it's released
-supersuit @ git+https://github.com/Farama-Foundation/SuperSuit.git
+supersuit>=3.9.0
