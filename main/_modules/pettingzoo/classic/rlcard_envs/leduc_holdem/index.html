@@ -407,18 +407,10 @@
 <span class="sd">| Observation Values | [0, 1]                                           |</span>
 
 
-<span class="sd">Leduc Hold&#39;em is a variation of Limit Texas Hold&#39;em with 2 players, 2 rounds and a deck of six cards (Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting, one public card is revealed. Another round follow. At the end, the player with</span>
-<span class="sd">the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.</span>
+<span class="sd">Leduc Hold&#39;em is a variation of Limit Texas Hold&#39;em with fixed number of 2 players, 2 rounds and a deck of six cards (Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting, one public card is revealed.</span>
+<span class="sd">Another round follows. At the end, the player with the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.</span>
 
 <span class="sd">Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.</span>
-
-<span class="sd">### Arguments</span>
-
-<span class="sd">``` python</span>
-<span class="sd">leduc_holdem_v4.env(num_players=2)</span>
-<span class="sd">```</span>
-
-<span class="sd">`num_players`: Sets the number of players in the game. Minimum is 2.</span>
 
 <span class="sd">### Observation Space</span>
 
@@ -467,30 +459,44 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">import</span> <span class="nn">gymnasium</span>
-<span class="kn">from</span> <span class="nn">rlcard.utils.utils</span> <span class="kn">import</span> <span class="n">print_card</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">gymnasium.utils</span> <span class="kn">import</span> <span class="n">EzPickle</span>
 
 <span class="kn">from</span> <span class="nn">pettingzoo.classic.rlcard_envs.rlcard_base</span> <span class="kn">import</span> <span class="n">RLCardBase</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">wrappers</span>
 
 
+<span class="k">def</span> <span class="nf">get_image</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">os_path</span>
+
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os_path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">image</span>
+
+
+<span class="k">def</span> <span class="nf">get_font</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">os_path</span>
+
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os_path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">((</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">font</span>
+
+
 <div class="viewcode-block" id="env"><a class="viewcode-back" href="../../../../../environments/classic/leduc_holdem/#pettingzoo.classic.rlcard_envs.leduc_holdem.env">[docs]</a><span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="n">render_mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;render_mode&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;ansi&quot;</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;render_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;human&quot;</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">CaptureStdoutWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">env</span></div>
 
 
-<div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/classic/leduc_holdem/#pettingzoo.classic.rlcard_envs.leduc_holdem.raw_env">[docs]</a><span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">RLCardBase</span><span class="p">):</span>
+<div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/classic/leduc_holdem/#pettingzoo.classic.rlcard_envs.leduc_holdem.raw_env">[docs]</a><span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">RLCardBase</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -498,11 +504,16 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;leduc-holdem&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="p">,</span> <span class="p">(</span><span class="mi">36</span><span class="p">,))</span>
+        <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;leduc-holdem&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="mi">36</span><span class="p">,))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">=</span> <span class="n">screen_height</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
 
 <div class="viewcode-block" id="raw_env.step"><a class="viewcode-back" href="../../../../../environments/classic/leduc_holdem/#pettingzoo.classic.rlcard_envs.leduc_holdem.raw_env.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
@@ -517,16 +528,211 @@
             <span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name_to_int</span><span class="p">(</span><span class="n">player</span><span class="p">))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=============== </span><span class="si">{</span><span class="n">player</span><span class="si">}</span><span class="s2">&#39;s Hand ===============&quot;</span><span class="p">)</span>
-            <span class="n">print_card</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;hand&quot;</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&#39;s Chips: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;my_chips&quot;</span><span class="p">]))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">================= Public Cards =================&quot;</span><span class="p">)</span>
-        <span class="n">print_card</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;public_card&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;public_card&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;No public cards.&quot;</span>
+        <span class="k">def</span> <span class="nf">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">screen_width</span>
+                    <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">31</span> <span class="o">/</span> <span class="mi">616</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calculate_offset</span><span class="p">(</span><span class="n">tile_size</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">23</span> <span class="o">/</span> <span class="mi">28</span><span class="p">)</span>  <span class="c1"># - ((j) * (tile_size * 23 / 28))</span>
+
+        <span class="k">def</span> <span class="nf">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="n">divisor</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">multiplier</span> <span class="o">*</span> <span class="n">screen_height</span> <span class="o">/</span> <span class="n">divisor</span> <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="n">offset</span><span class="p">)</span>
+
+        <span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
+        <span class="n">screen_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">screen_height</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">screen_height</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Leduc Hold&#39;em&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
+
+        <span class="c1"># Setup dimensions for card size and setup for colors</span>
+        <span class="n">tile_size</span> <span class="o">=</span> <span class="n">screen_height</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">10</span>
+
+        <span class="n">bg_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>
+        <span class="n">white</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">bg_color</span><span class="p">)</span>
+
+        <span class="n">chips</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">0</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipOrange.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipPink.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipYellow.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipBlack.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">4</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipBlue.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">5</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipGreen.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">6</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipLightBlue.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">7</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipRed.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">8</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="s2">&quot;ChipWhite.png&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Load and blit all images for each card in each player&#39;s hand</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">player</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">):</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name_to_int</span><span class="p">(</span><span class="n">player</span><span class="p">))</span>
+            <span class="c1"># Load specified card</span>
+            <span class="c1"># Each player holds only one card. Unlike Texas Hold&#39;em, state[&#39;hand&#39;] = str, and not a list</span>
+            <span class="n">card</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;hand&quot;</span><span class="p">]</span>
+            <span class="n">card_img</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="n">card</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">))</span>
+            <span class="n">card_img</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
+                <span class="n">card_img</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">142</span> <span class="o">/</span> <span class="mi">197</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tile_size</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="c1"># Players with even id go above public cards</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                    <span class="n">card_img</span><span class="p">,</span>
+                    <span class="p">(</span>
+                        <span class="p">(</span>
+                            <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                            <span class="o">-</span> <span class="n">calculate_offset</span><span class="p">(</span><span class="n">tile_size</span><span class="p">)</span>
+                        <span class="p">),</span>
+                        <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="c1"># Players with odd id go below public cards</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                    <span class="n">card_img</span><span class="p">,</span>
+                    <span class="p">(</span>
+                        <span class="p">(</span>
+                            <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                            <span class="o">-</span> <span class="n">calculate_offset</span><span class="p">(</span><span class="n">tile_size</span><span class="p">)</span>
+                        <span class="p">),</span>
+                        <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Load and blit text for player name</span>
+            <span class="n">font</span> <span class="o">=</span> <span class="n">get_font</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="s2">&quot;Minecraft.ttf&quot;</span><span class="p">),</span> <span class="mi">36</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">&quot;Player &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="n">white</span><span class="p">)</span>
+            <span class="n">textRect</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="n">screen_width</span>
+                        <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                        <span class="o">-</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">4</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="mi">22</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="n">screen_width</span>
+                        <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                        <span class="o">-</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">4</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">textRect</span><span class="p">)</span>
+
+            <span class="c1"># Load and blit number of poker chips for each player</span>
+            <span class="n">font</span> <span class="o">=</span> <span class="n">get_font</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="s2">&quot;Minecraft.ttf&quot;</span><span class="p">),</span> <span class="mi">24</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;my_chips&quot;</span><span class="p">]),</span> <span class="kc">True</span><span class="p">,</span> <span class="n">white</span><span class="p">)</span>
+            <span class="n">textRect</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+
+            <span class="c1"># Calculate number of each chip</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;my_chips&quot;</span><span class="p">]</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chips</span><span class="p">:</span>
+                <span class="n">num</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+                <span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+                <span class="n">total</span> <span class="o">%=</span> <span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+                <span class="n">chip_img</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;img&quot;</span><span class="p">]))</span>
+                <span class="n">chip_img</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
+                    <span class="n">chip_img</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">tile_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">/</span> <span class="mi">45</span><span class="p">))</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Blit poker chip img</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;number&quot;</span><span class="p">])):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                            <span class="n">chip_img</span><span class="p">,</span>
+                            <span class="p">(</span>
+                                <span class="p">(</span>
+                                    <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                                    <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                <span class="p">),</span>
+                                <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                                <span class="o">-</span> <span class="p">((</span><span class="n">j</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                            <span class="n">chip_img</span><span class="p">,</span>
+                            <span class="p">(</span>
+                                <span class="p">(</span>
+                                    <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                                    <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                <span class="p">),</span>
+                                <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                                <span class="o">-</span> <span class="p">((</span><span class="n">j</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+                <span class="n">height</span> <span class="o">+=</span> <span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;number&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Blit text number</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
+                    <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="o">-</span> <span class="p">((</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
+                    <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="o">-</span> <span class="p">((</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">textRect</span><span class="p">)</span>
+
+        <span class="c1"># Load and blit public cards</span>
+        <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;public_card&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">card</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;public_card&quot;</span><span class="p">]</span>
+            <span class="n">card_img</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="n">card</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">))</span>
+            <span class="n">card_img</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
+                <span class="n">card_img</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">142</span> <span class="o">/</span> <span class="mi">197</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tile_size</span><span class="p">))</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                <span class="n">card_img</span><span class="p">,</span>
+                <span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="p">(</span>
+                            <span class="p">((</span><span class="n">screen_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">31</span> <span class="o">/</span> <span class="mi">616</span><span class="p">))</span>
+                            <span class="o">-</span> <span class="n">calculate_offset</span><span class="p">(</span><span class="n">tile_size</span><span class="p">)</span>
+                            <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                        <span class="p">),</span>
+                        <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
+                    <span class="p">)</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
+
+        <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span></div></div>
 </pre></div>
           </article>
         </div>

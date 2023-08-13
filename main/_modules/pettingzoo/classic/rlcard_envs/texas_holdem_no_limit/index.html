@@ -580,7 +580,7 @@
                     <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="p">)</span>
-                <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">31</span> <span class="o">/</span> <span class="mi">616</span><span class="p">)</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">33</span> <span class="o">/</span> <span class="mi">616</span><span class="p">)</span>
             <span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">calculate_offset</span><span class="p">(</span><span class="n">hand</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">):</span>
@@ -594,18 +594,16 @@
         <span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
         <span class="n">screen_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
             <span class="n">screen_height</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span>
-            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">screen_height</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">screen_height</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span>
         <span class="p">)</span>
 
-        <span class="c1"># TODO: refactor this and check if pygame.font init needs to be done</span>
-        <span class="c1"># Ideally this should look like all the other environments</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Texas Hold&#39;em No Limit&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Texas Hold&#39;em No Limit&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
 
         <span class="c1"># Setup dimensions for card size and setup for colors</span>
@@ -644,6 +642,10 @@
                             <span class="p">(</span>
                                 <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                                 <span class="o">-</span> <span class="n">calculate_offset</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;hand&quot;</span><span class="p">],</span> <span class="n">j</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">)</span>
+                                <span class="o">-</span> <span class="n">tile_size</span>
+                                <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                                <span class="o">*</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
                             <span class="p">),</span>
                             <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
                         <span class="p">),</span>
@@ -656,6 +658,10 @@
                             <span class="p">(</span>
                                 <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                                 <span class="o">-</span> <span class="n">calculate_offset</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;hand&quot;</span><span class="p">],</span> <span class="n">j</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">)</span>
+                                <span class="o">-</span> <span class="n">tile_size</span>
+                                <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                                <span class="o">*</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
                             <span class="p">),</span>
                             <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                         <span class="p">),</span>
@@ -671,6 +677,10 @@
                         <span class="n">screen_width</span>
                         <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                         <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                        <span class="o">-</span> <span class="n">tile_size</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="p">),</span>
                     <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="mi">22</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
                 <span class="p">)</span>
@@ -680,6 +690,10 @@
                         <span class="n">screen_width</span>
                         <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                         <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                        <span class="o">-</span> <span class="n">tile_size</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="p">),</span>
                     <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
                 <span class="p">)</span>
@@ -711,7 +725,13 @@
                             <span class="p">(</span>
                                 <span class="p">(</span>
                                     <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-                                    <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                    <span class="o">+</span> <span class="n">tile_size</span>
+                                    <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                    <span class="o">*</span> <span class="p">(</span>
+                                        <span class="mi">1</span>
+                                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+                                        <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                                    <span class="p">)</span>
                                 <span class="p">),</span>
                                 <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
                                 <span class="o">-</span> <span class="p">((</span><span class="n">j</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
@@ -723,7 +743,13 @@
                             <span class="p">(</span>
                                 <span class="p">(</span>
                                     <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-                                    <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                    <span class="o">+</span> <span class="n">tile_size</span>
+                                    <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                                    <span class="o">*</span> <span class="p">(</span>
+                                        <span class="mi">1</span>
+                                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+                                        <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                                    <span class="p">)</span>
                                 <span class="p">),</span>
                                 <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
                                 <span class="o">-</span> <span class="p">((</span><span class="n">j</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
@@ -734,13 +760,29 @@
             <span class="c1"># Blit text number</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="p">(</span><span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">21</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
+                    <span class="p">(</span>
+                        <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">20</span><span class="p">))</span>
+                        <span class="o">+</span> <span class="n">tile_size</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                    <span class="p">),</span>
                     <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
                     <span class="o">-</span> <span class="p">((</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="p">(</span><span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">21</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)),</span>
+                    <span class="p">(</span>
+                        <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">20</span><span class="p">))</span>
+                        <span class="o">+</span> <span class="n">tile_size</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                        <span class="o">*</span> <span class="p">(</span>
+                            <span class="mi">1</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+                            <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="p">),</span>
                     <span class="n">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
                     <span class="o">-</span> <span class="p">((</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">/</span> <span class="mi">15</span><span class="p">),</span>
                 <span class="p">)</span>
