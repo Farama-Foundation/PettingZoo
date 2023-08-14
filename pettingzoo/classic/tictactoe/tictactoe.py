@@ -250,6 +250,15 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reset()
         self.agent_selection = self._agent_selector.reset()
 
+        if self.screen is None:
+            pygame.init()
+
+        if self.render_mode == "human":
+            self.screen = pygame.display.set_mode((self.screen_height, self.screen_height))
+            pygame.display.set_caption("Tic-Tac-Toe")
+        else:
+            self.screen = pygame.Surface((self.screen_height, self.screen_height))
+
     def close(self):
         pass
 
@@ -262,15 +271,6 @@ class raw_env(AECEnv, EzPickle):
 
         screen_height = self.screen_height
         screen_width = self.screen_height
-
-        if self.screen is None:
-            pygame.init()
-
-        if self.render_mode == "human":
-            self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.display.set_caption("Tic-Tac-Toe")
-        else:
-            self.screen = pygame.Surface((screen_width, screen_height))
 
         # Setup dimensions for 'x' and 'o' marks
         tile_size = int(screen_height / 4)
@@ -316,6 +316,7 @@ class raw_env(AECEnv, EzPickle):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
