@@ -8,7 +8,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
     <meta property="og:url" content="https://pettingzoo.farama.org/environments/mpe/simple_speaker_listener.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Simple Spread" href="../simple_spread/" /><link rel="prev" title="Simple Push" href="../simple_push/" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Simple Spread" href="../simple_spread/" /><link rel="prev" title="Simple Reference" href="../simple_reference/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/mpe/simple_speaker_listener.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
@@ -281,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../simple_tag/">Simple Tag</a></li>
@@ -383,7 +384,7 @@
           </div>
           <article role="main">
             <div class="farama-env-icon-container">
-              <img class="farama-env-icon" src="../../../_static/img/icons/mpe/simple_speaker_listener.png">
+              <img class="farama-env-icon" src="/home/runner/work/PettingZoo/PettingZoo/docs/_scripts/../_static/img/icons/mpe/simple_speaker_listener.png">
             </div>
             <section id="simple-speaker-listener">
 <h1>Simple Speaker Listener<a class="headerlink" href="#simple-speaker-listener" title="Permalink to this heading">#</a></h1>
@@ -447,6 +448,49 @@
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>:  number of frames (a step for each agent) until game terminates</p>
 <p><code class="docutils literal notranslate"><span class="pre">continuous_actions</span></code>: Whether agent action spaces are discrete(default) or continuous</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<section id="aec">
+<h3>AEC<a class="headerlink" href="#aec" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.mpe</span> <span class="kn">import</span> <span class="n">simple_speaker_listener_v4</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">simple_speaker_listener_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span>
+            <span class="n">agent</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>  <span class="c1"># this is where you would insert your policy</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</section>
+<section id="parallel">
+<h3>Parallel<a class="headerlink" href="#parallel" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.mpe</span> <span class="kn">import</span> <span class="n">simple_speaker_listener_v4</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">simple_speaker_listener_v4</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+    <span class="c1"># this is where you would insert your policy</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+
+    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</section>
 </section>
 <section id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
@@ -520,7 +564,7 @@
                 <use href="#svg-arrow-right"></use>
               </svg>
             </a>
-            <a class="prev-page" href="../simple_push/">
+            <a class="prev-page" href="../simple_reference/">
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
@@ -529,7 +573,7 @@
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Simple Push</div>
+                <div class="title">Simple Reference</div>
                 
               </div>
             </a>
@@ -575,6 +619,11 @@
               <ul>
 <li><a class="reference internal" href="#">Simple Speaker Listener</a><ul>
 <li><a class="reference internal" href="#arguments">Arguments</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#aec">AEC</a></li>
+<li><a class="reference internal" href="#parallel">Parallel</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#pettingzoo.mpe.simple_speaker_listener.simple_speaker_listener.raw_env"><code class="docutils literal notranslate"><span class="pre">raw_env</span></code></a><ul>
 <li><a class="reference internal" href="#pettingzoo.mpe.simple_speaker_listener.simple_speaker_listener.raw_env.action_spaces"><code class="docutils literal notranslate"><span class="pre">raw_env.action_spaces</span></code></a></li>
