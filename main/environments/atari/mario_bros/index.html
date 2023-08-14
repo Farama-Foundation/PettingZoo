@@ -281,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_tag/">Simple Tag</a></li>
@@ -383,7 +384,7 @@
           </div>
           <article role="main">
             <div class="farama-env-icon-container">
-              <img class="farama-env-icon" src="../../../_static/img/icons/atari/mario_bros.png">
+              <img class="farama-env-icon" src="/home/runner/work/PettingZoo/PettingZoo/docs/_scripts/../_static/img/icons/atari/mario_bros.png">
             </div>
             <section id="mario-bros">
 <h1>Mario Bros<a class="headerlink" href="#mario-bros" title="Permalink to this heading">#</a></h1>
@@ -521,6 +522,49 @@
 <li><p>v0: Initial versions release (1.0.0)</p></li>
 </ul>
 </section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<section id="aec">
+<h3>AEC<a class="headerlink" href="#aec" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">mario_bros_v3</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">mario_bros_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span>
+            <span class="n">agent</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>  <span class="c1"># this is where you would insert your policy</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</section>
+<section id="parallel">
+<h3>Parallel<a class="headerlink" href="#parallel" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">mario_bros_v3</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">mario_bros_v3</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+    <span class="c1"># this is where you would insert your policy</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+
+    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</section>
+</section>
 <section id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
@@ -604,6 +648,11 @@
 <li><a class="reference internal" href="#environment-parameters">Environment parameters</a></li>
 <li><a class="reference internal" href="#action-space">Action Space</a></li>
 <li><a class="reference internal" href="#version-history">Version History</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#aec">AEC</a></li>
+<li><a class="reference internal" href="#parallel">Parallel</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#pettingzoo.atari.mario_bros.mario_bros.raw_env"><code class="docutils literal notranslate"><span class="pre">raw_env</span></code></a></li>
 </ul>
