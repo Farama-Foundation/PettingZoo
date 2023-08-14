@@ -7,8 +7,7 @@
 :name: leduc_holdem
 ```
 
-This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general
-information.
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
 | Import             | `from pettingzoo.classic import leduc_holdem_v4` |
 |--------------------|--------------------------------------------------|
@@ -23,22 +22,17 @@ information.
 | Observation Values | [0, 1]                                           |
 
 
-Leduc Hold'em is a variation of Limit Texas Hold'em with fixed number of 2 players, 2 rounds and a deck of six cards
-(Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting,
-one public card is revealed. Another round follow. At the end, the player with
-the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.
+Leduc Hold'em is a variation of Limit Texas Hold'em with fixed number of 2 players, 2 rounds and a deck of six cards (Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting, one public card is revealed.
+Another round follows. At the end, the player with the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.
 
-Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation
-for additional details. Please cite their work if you use this game in research.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described
-below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries
-of the main observation space correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards.
-Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.
+As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries of the main observation space correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by
+the current player and the opponent, respectively.
 
 |  Index  | Description                                                                  |
 |:-------:|------------------------------------------------------------------------------|
@@ -50,11 +44,8 @@ Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player an
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation.
-The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not.
-The `action_mask` will be all zeros for any agent except the one
-whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward
-of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 
@@ -77,8 +68,7 @@ of 0 for all other agents.
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
-* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated
-   over after they are done (1.4.0)
+* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
 
 """
@@ -133,7 +123,7 @@ class raw_env(RLCardBase, EzPickle):
         screen_height: int | None = 1000,
     ):
         EzPickle.__init__(self, render_mode, screen_height)
-        super().__init__("leduc-holdem", 2, (72,))
+        super().__init__("leduc-holdem", 2, (36,))
         self.render_mode = render_mode
         self.screen_height = screen_height
 
@@ -175,14 +165,13 @@ class raw_env(RLCardBase, EzPickle):
             + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2)
         )
 
-        # Ideally this should look like all the other environments
+        if self.screen is None:
+            pygame.init()
+
         if self.render_mode == "human":
-            if self.screen is None:
-                pygame.init()
-                self.screen = pygame.display.set_mode((screen_width, screen_height))
-                pygame.display.set_caption("Leduc Hold'em")
-        elif self.screen is None:
-            pygame.font.init()
+            self.screen = pygame.display.set_mode((screen_width, screen_height))
+            pygame.display.set_caption("Leduc Hold'em")
+        else:
             self.screen = pygame.Surface((screen_width, screen_height))
 
         # Setup dimensions for card size and setup for colors

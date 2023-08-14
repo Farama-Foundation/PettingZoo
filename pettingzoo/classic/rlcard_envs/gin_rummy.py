@@ -180,6 +180,7 @@ class raw_env(RLCardBase, EzPickle):
         self.env.game.judge.scorer.get_payoff = self._get_payoff
         self.render_mode = render_mode
         self.screen_height = screen_height
+        self.save_states = None  # Used for rendering when agents are terminated.
 
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
@@ -280,14 +281,13 @@ class raw_env(RLCardBase, EzPickle):
         screen_height = self.screen_height
         screen_width = int(screen_height * (1 / 20) + 3.5 * (screen_height * 1 / 2))
 
-        # Ideally this should look like all the other environments
+        if self.screen is None:
+            pygame.init()
+
         if self.render_mode == "human":
-            if self.screen is None:
-                pygame.init()
-                self.screen = pygame.display.set_mode((screen_width, screen_height))
-                pygame.display.set_caption("Gin Rummy")
-        elif self.screen is None:
-            pygame.font.init()
+            self.screen = pygame.display.set_mode((screen_width, screen_height))
+            pygame.display.set_caption("Gin Rummy")
+        else:
             self.screen = pygame.Surface((screen_width, screen_height))
 
         # Setup dimensions for card size and setup for colors
@@ -300,6 +300,14 @@ class raw_env(RLCardBase, EzPickle):
         # Load and blit all images for each card in each player's hand
         for i, player in enumerate(self.possible_agents):
             state = self.env.game.get_state(self._name_to_int(player))
+
+            # This is to mitigate the issue of a blank board render without cards as env returns an empty state on
+            # agent termination. Used to store states for renders when agents are terminated
+            if len(state) == 0:
+                state = self.save_states
+            else:
+                self.save_states = state
+
             for j, card in enumerate(state["hand"]):
                 # Load specified card
                 card_img = get_image(os.path.join("img", card + ".png"))
