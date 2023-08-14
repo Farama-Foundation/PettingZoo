@@ -254,7 +254,9 @@ class raw_env(AECEnv, EzPickle):
             pygame.init()
 
         if self.render_mode == "human":
-            self.screen = pygame.display.set_mode((self.screen_height, self.screen_height))
+            self.screen = pygame.display.set_mode(
+                (self.screen_height, self.screen_height)
+            )
             pygame.display.set_caption("Tic-Tac-Toe")
         else:
             self.screen = pygame.Surface((self.screen_height, self.screen_height))
