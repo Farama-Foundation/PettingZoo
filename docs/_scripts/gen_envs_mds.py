@@ -4,7 +4,8 @@ This script reads documentation from /pettingzoo and puts it into md files insid
 
 import os
 import re
-from test.all_modules import all_environments
+
+from pettingzoo.utils.all_modules import all_environments
 
 
 def add_frontmatter(text, frontmatter_options):

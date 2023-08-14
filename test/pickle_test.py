@@ -1,10 +1,10 @@
 import pickle
-from test.all_modules import all_environments
 
 import pytest
 from gymnasium.utils.env_checker import data_equivalence
 
 from pettingzoo.test.seed_test import seed_action_spaces, seed_observation_spaces
+from pettingzoo.utils.all_modules import all_environments
 
 ALL_ENVS = list(all_environments.items())
 

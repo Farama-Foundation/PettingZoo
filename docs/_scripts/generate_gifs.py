@@ -1,5 +1,6 @@
 import subprocess
-from test.all_modules import all_environments
+
+from pettingzoo.utils.all_modules import all_environments
 
 # procs = []
 for name, module in all_environments.items():
