@@ -76,7 +76,7 @@ if __name__ == "__main__":
                 env_name = env_name.replace("\\", "/").split("/")[1]
 
             frontmatter_options = {
-                "env_icon": f'"{docs_dir}/_static/img/icons/{env_type}/{env_name}.png"'
+                "env_icon": f'"../../../_static/img/icons/{env_type}/{env_name}.png"'
             }
 
             if i == 0:
