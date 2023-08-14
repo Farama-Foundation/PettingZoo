@@ -4,6 +4,7 @@ This script reads documentation from /pettingzoo and puts it into md files insid
 
 import os
 import re
+from test.all_modules import all_environments
 
 
 def add_frontmatter(text, frontmatter_options):
@@ -84,6 +85,45 @@ if __name__ == "__main__":
                 if "rlcard_envs" not in env_dir_path
                 else env_dir_path + ".py"
             )
+            # Full usage scripts for each environment page
+            full_env_names = [
+                full_name
+                for full_name in all_environments.keys()
+                if env_name in full_name
+            ]
+            env_name_version = full_env_names[0].split("/")[1]
+            if env_type == "classic":
+                with open("../code_examples/usage_aec_action_mask.py") as f:
+                    usage = f.read()
+                usage = usage.replace("connect_four_v3", env_name_version)
+                docs_text += f"""## Usage
+### AEC
+```python
+{usage}
+```
+"""
+            else:
+                with open("../code_examples/usage_aec.py") as f:
+                    usage = f.read()
+                usage = usage.replace("space_invaders_v2", env_name_version)
+                usage = usage.replace("atari", env_type)
+                with open("../code_examples/usage_parallel.py") as f:
+                    usage_parallel = f.read()
+                usage_parallel = usage_parallel.replace(
+                    "pistonball_v6", env_name_version
+                )
+                usage_parallel = usage_parallel.replace("butterfly", env_type)
+                docs_text += f"""## Usage
+### AEC
+```python
+{usage}
+```
+### Parallel
+```python
+{usage_parallel}
+```
+"""
+            # API information
             if "rlcard_envs" in env_dir_path:
                 docs_text += f"""## API
 ```{{eval-rst}}
