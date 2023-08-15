@@ -634,7 +634,18 @@
         <span class="c1"># selects the first agent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reinit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Tic-Tac-Toe&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="raw_env.close"><a class="viewcode-back" href="../../../../../environments/classic/tictactoe/#pettingzoo.classic.tictactoe.tictactoe.raw_env.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
@@ -648,15 +659,6 @@
 
         <span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
         <span class="n">screen_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Tic-Tac-Toe&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
 
         <span class="c1"># Setup dimensions for &#39;x&#39; and &#39;o&#39; marks</span>
         <span class="n">tile_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">screen_height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
@@ -702,6 +704,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
 
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
 
