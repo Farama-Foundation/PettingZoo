@@ -208,30 +208,11 @@ class raw_env(AECEnv, EzPickle):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-        self.reinit()
-
     def observation_space(self, agent):
         return self.observation_spaces[agent]
 
     def action_space(self, agent):
         return self.action_spaces[agent]
-
-    def reinit(self):
-        self.agents = self.possible_agents[:]
-        self._agent_selector = agent_selector(self.agents)
-        self.agent_selection = self._agent_selector.next()
-        self.rewards = {agent: 0 for agent in self.agents}
-        self._cumulative_rewards = {agent: 0 for agent in self.agents}
-        self.terminations = {agent: False for agent in self.agents}
-        self.truncations = {agent: False for agent in self.agents}
-        self.infos = {agent: {} for agent in self.agents}
-
-        self.state = {agent: self._none for agent in self.agents}
-        self.observations = {agent: self._none for agent in self.agents}
-
-        self.history = [0] * (2 * 5)
-
-        self.num_moves = 0
 
     def render(self):
         if self.render_mode is None:
@@ -248,15 +229,6 @@ class raw_env(AECEnv, EzPickle):
 
         screen_height = self.screen_height
         screen_width = int(screen_height * 5 / 14)
-
-        if self.screen is None:
-            pygame.init()
-
-        if self.render_mode == "human":
-            self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.display.set_caption("Rock Paper Scissors")
-        else:
-            self.screen = pygame.Surface((screen_width, screen_height))
 
         # Load and all of the necessary images
         paper = get_image(os.path.join("img", "Paper.png"))
@@ -294,43 +266,37 @@ class raw_env(AECEnv, EzPickle):
 
         for i, move in enumerate(self.history[0:10]):
             # Blit move history
-            if move == "ROCK":
+            if self._moves[move] == "ROCK":
                 self.screen.blit(
                     rock,
                     (
                         (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
+                        + offset((i) % 2, screen_height / 9, screen_height * 7 / 126),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
-            elif move == "PAPER":
+            elif self._moves[move] == "PAPER":
                 self.screen.blit(
                     paper,
                     (
                         (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
+                        + offset((i) % 2, screen_height / 9, screen_height * 7 / 126),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
-            elif move == "SCISSORS":
+            elif self._moves[move] == "SCISSORS":
                 self.screen.blit(
                     scissors,
                     (
                         (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
+                        + offset((i) % 2, screen_height / 9, screen_height * 7 / 126),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
-            elif move == "SPOCK":
+            elif self._moves[move] == "SPOCK":
                 self.screen.blit(
                     spock,
                     (
@@ -342,7 +308,7 @@ class raw_env(AECEnv, EzPickle):
                         + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
-            elif move == "LIZARD":
+            elif self._moves[move] == "LIZARD":
                 self.screen.blit(
                     lizard,
                     (
@@ -452,7 +418,33 @@ class raw_env(AECEnv, EzPickle):
             self.screen = None
 
     def reset(self, seed=None, options=None):
-        self.reinit()
+        self.agents = self.possible_agents[:]
+        self._agent_selector = agent_selector(self.agents)
+        self.agent_selection = self._agent_selector.next()
+        self.rewards = {agent: 0 for agent in self.agents}
+        self._cumulative_rewards = {agent: 0 for agent in self.agents}
+        self.terminations = {agent: False for agent in self.agents}
+        self.truncations = {agent: False for agent in self.agents}
+        self.infos = {agent: {} for agent in self.agents}
+
+        self.state = {agent: self._none for agent in self.agents}
+        self.observations = {agent: self._none for agent in self.agents}
+
+        self.history = [-1] * (2 * 5)
+
+        self.num_moves = 0
+
+        screen_height = self.screen_height
+        screen_width = int(screen_height * 5 / 14)
+
+        if self.screen is None:
+            pygame.init()
+
+        if self.render_mode == "human":
+            self.screen = pygame.display.set_mode((screen_width, screen_height))
+            pygame.display.set_caption("Rock Paper Scissors")
+        else:
+            self.screen = pygame.Surface((screen_width, screen_height))
 
     def step(self, action):
         if (
@@ -496,6 +488,9 @@ class raw_env(AECEnv, EzPickle):
                     self.agents[1 - self.agent_name_mapping[i]]
                 ]
 
+            if self.render_mode == "human":
+                self.render()
+
             # record history by pushing back
             self.history[2:] = self.history[:-2]
             self.history[0] = self.state[self.agents[0]]
@@ -506,9 +501,9 @@ class raw_env(AECEnv, EzPickle):
 
             self._clear_rewards()
 
+            if self.render_mode == "human":
+                self.render()
+
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
-
-        if self.render_mode == "human":
-            self.render()

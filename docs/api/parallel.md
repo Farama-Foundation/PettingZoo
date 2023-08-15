@@ -31,7 +31,7 @@ while env.agents:
     actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}
 
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
-env.close()
+parallel_env.close()
 ```
 
 ## ParallelEnv
