@@ -96,7 +96,7 @@ if __name__ == "__main__":
                 if env_name in full_name
             ]
             env_name_version = full_env_names[0].split("/")[1]
-            if env_type == "classic":
+            if env_type == "classic" and env_name != "rps":
                 with open(f"{docs_dir}/code_examples/usage_aec_action_mask.py") as f:
                     usage = f.read()
                 usage = usage.replace("connect_four_v3", env_name_version)
