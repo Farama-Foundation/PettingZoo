@@ -172,7 +172,7 @@ Note: while many PettingZoo environments use agent_selector to manage agent cycl
 
 .. automodule:: pettingzoo.utils.agent_selector
    :members:
-   :undoc-members:
+   :exclude-members: mqueue
 ```
 
 
@@ -203,15 +203,14 @@ Note: while many PettingZoo environments use agent_selector to manage agent cycl
 
 [//]: # (```)
 
-[//]: # (```{eval-rst})
+### EnvLogger
 
-[//]: # (.. currentmodule:: pettingzoo.utils)
+EnvLogger provides functionality for common warnings and errors for environments, and allows for custom messages. It is used internally in [PettingZoo Wrappers](/api/wrappers/pz_wrappers/).
 
-[//]: # ()
-[//]: # (.. automodule:: pettingzoo.utils.env_logger)
+```{eval-rst}
 
-[//]: # (   :members:)
-
-[//]: # (   :undoc-members:)
-
-[//]: # (```)
+.. currentmodule:: pettingzoo.utils
+.. autoclass:: pettingzoo.utils.env_logger.EnvLogger
+   :members:
+   :undoc-members:
+```
