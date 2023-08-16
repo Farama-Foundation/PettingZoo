@@ -9,12 +9,13 @@ import gymnasium.spaces
 
 class EnvLogger:
     """Used for logging warnings and errors for environments."""
+
     mqueue: list[Any] = []
     _output: bool = True
 
     @staticmethod
     def get_logger() -> Logger:
-        """Returns the logger object"""
+        """Returns the logger object."""
         logger = logging.getLogger(__name__)
         return logger
 
@@ -76,7 +77,7 @@ class EnvLogger:
 
     @staticmethod
     def warn_on_illegal_move() -> None:
-        """Warns: ``[WARNING]: Illegal move made, game terminating with current player losing. \nobs['action_mask'] contains a mask of all legal moves that can be chosen.``."""
+        """Warns: ``[WARNING]: Illegal move made, game terminating with current player losing.``."""
         EnvLogger._generic_warning(
             "[WARNING]: Illegal move made, game terminating with current player losing. \nobs['action_mask'] contains a mask of all legal moves that can be chosen."
         )
