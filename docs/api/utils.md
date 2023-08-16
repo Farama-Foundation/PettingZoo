@@ -5,9 +5,19 @@ title: Utils
 
 # Utils
 
-PettingZoo has some utilities to help make simple interactions with the environment trivial to implement. Utilities which are designed to help make environments easier to develop are in the developer documentation.
+PettingZoo has an assortment of helper utilities which provide additional functionality for interacting with environments.
+
+Note: see also [PettingZoo Wrappers](/api/wrappers/pz_wrappers/), which provide additional functionality for customizing environments.
 
 ### Average Total Reward
+
+```{eval-rst}
+.. currentmodule:: pettingzoo.utils
+
+.. automodule:: pettingzoo.utils.average_total_reward
+   :members:
+   :undoc-members:
+```
 
 The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.
 
@@ -21,6 +31,9 @@ average_total_reward(env, max_episodes=100, max_steps=10000000000)
 ```
 
 Where `max_episodes` and `max_steps` both limit the total number of evaluations (when the first is hit evaluation stops)
+
+
+
 
 [//]: # (### Manual Control)
 
@@ -117,12 +130,88 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 
 ### Observation Saving
 
+```{eval-rst}
+.. currentmodule:: pettingzoo.utils
+
+.. automodule:: pettingzoo.utils.save_observation
+   :members:
+   :undoc-members:
+```
+
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
 
 ``` python
 from pettingzoo.utils import save_observation
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
-env.reset()
-save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
+env.reset(seed=42)
+save_observation(env, agent=None, all_agents=False)
 ```
+
+### Capture Stdout
+
+Base class which is used by [CaptureStdoutWrapper](https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.CaptureStdoutWrapper). Captures system standard out as a string value in a variable.
+
+
+```{eval-rst}
+.. currentmodule:: pettingzoo.utils
+
+.. automodule:: pettingzoo.utils.capture_stdout
+   :members:
+   :undoc-members:
+```
+
+### Agent Selector
+
+The agent selector utility allows for easy cycling of agents in an AEC environment. At any time it can be reset or reinitialized with a new order, allowing for changes in turn order or handling a dynamic number of agents (see [Knights-Archers-Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) for an example of spawning/killing agents)
+
+Note: while many PettingZoo environments use agent_selector to manage agent cycling internally, it is not intended to be used externally when interacting with an environment. Instead, use `for agent in env.agent_iter()` (see [AEC API Usage](https://pettingzoo.farama.org/api/aec/#usage)).
+
+```{eval-rst}
+.. currentmodule:: pettingzoo.utils
+
+.. automodule:: pettingzoo.utils.agent_selector
+   :members:
+   :undoc-members:
+```
+
+
+
+[//]: # (```{eval-rst})
+
+[//]: # (.. currentmodule:: pettingzoo.utils)
+
+[//]: # ()
+[//]: # (.. automodule:: pettingzoo.utils.deprecated_module)
+
+[//]: # (   :members: )
+
+[//]: # (   :undoc-members:)
+
+[//]: # (```)
+
+[//]: # (```{eval-rst})
+
+[//]: # (.. currentmodule:: pettingzoo.utils)
+
+[//]: # ()
+[//]: # (.. automodule:: pettingzoo.utils.env)
+
+[//]: # (   :members: )
+
+[//]: # (   :undoc-members:)
+
+[//]: # (```)
+
+[//]: # (```{eval-rst})
+
+[//]: # (.. currentmodule:: pettingzoo.utils)
+
+[//]: # ()
+[//]: # (.. automodule:: pettingzoo.utils.env_logger)
+
+[//]: # (   :members:)
+
+[//]: # (   :undoc-members:)
+
+[//]: # (```)
