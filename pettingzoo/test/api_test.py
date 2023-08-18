@@ -46,6 +46,14 @@ try:
         env.reset()
         return env.agents[0]
 
+    from pettingzoo.classic import connect_four_v3
+
+    @pytest.fixture
+    def action_mask():
+        env = connect_four_v3.env()
+        env.reset()
+        return env.observation_space(env.agents[0]).sample()["action_mask"]
+
 except ModuleNotFoundError:
     pass
 
@@ -132,9 +140,7 @@ def test_observation(observation, observation_0, env_name=None):
             observation = observation["observation"]
             test_observation(observation, observation_0, env_name)
         if isinstance(observation, dict) and "action_mask" in observation.keys():
-            test_action_mask(
-                observation["action_mask"], env_name
-            )
+            test_action_mask(observation["action_mask"], env_name)
         return
     if np.isinf(observation).any():
         warnings.warn(
