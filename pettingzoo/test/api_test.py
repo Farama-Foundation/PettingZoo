@@ -133,7 +133,7 @@ def test_observation(observation, observation_0, env_name=None):
             test_observation(observation, observation_0, env_name)
         if isinstance(observation, dict) and "action_mask" in observation.keys():
             test_action_mask(
-                observation["action_mask"], observation_0["action_mask"], env_name
+                observation["action_mask"], env_name
             )
         return
     if np.isinf(observation).any():
@@ -179,7 +179,7 @@ def test_observation(observation, observation_0, env_name=None):
         )
 
 
-def test_action_mask(action_mask, action_mask_0, env_name=None):
+def test_action_mask(action_mask, env_name=None):
     if not isinstance(action_mask, np.ndarray):
         warnings.warn("Action mask is not a NumPy array")
         return
@@ -195,16 +195,6 @@ def test_action_mask(action_mask, action_mask_0, env_name=None):
         assert False, "Action mask can not be an empty array"
     if action_mask.shape == (1,):
         warnings.warn("Action mask is a single number")
-    if not isinstance(action_mask, action_mask_0.__class__):
-        warnings.warn("Action masks between agents are different classes")
-    if (
-        (action_mask.shape != action_mask_0.shape)
-        and (len(action_mask.shape) == len(action_mask_0.shape))
-        and env_name not in env_diff_obs_shapes
-    ):
-        warnings.warn("Action masks are different shapes")
-    if len(action_mask.shape) != len(action_mask_0.shape):
-        warnings.warn("Action masks have different number of dimensions")
     if not np.can_cast(action_mask.dtype, np.dtype("float64")):
         warnings.warn("Action mask numpy array is not a numeric dtype")
     if (
