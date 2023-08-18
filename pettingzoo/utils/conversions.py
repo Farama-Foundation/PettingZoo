@@ -45,9 +45,9 @@ def aec_wrapper_fn(par_env_fn: Callable) -> Callable:
 
 
 def aec_to_parallel(aec_env: AECEnv) -> ParallelEnv:
-    """Converts an aec environment to a parallel environment.
+    """Converts an AEC environment to a Parallel environment.
 
-    In the case of an existing parallel environment wrapped using a `parallel_to_aec_wrapper`, this function will return the original parallel environment.
+    In the case of an existing Parallel environment wrapped using a `parallel_to_aec_wrapper`, this function will return the original Parallel environment.
     Otherwise, it will apply the `aec_to_parallel_wrapper` to convert the environment.
     """
     if isinstance(aec_env, OrderEnforcingWrapper) and isinstance(
@@ -60,9 +60,9 @@ def aec_to_parallel(aec_env: AECEnv) -> ParallelEnv:
 
 
 def parallel_to_aec(par_env: ParallelEnv) -> AECEnv:
-    """Converts an aec environment to a parallel environment.
+    """Converts a Parallel environment to an AEC environment.
 
-    In the case of an existing aec environment wrapped using a `aec_to_prallel_wrapper`, this function will return the original AEC environment.
+    In the case of an existing AEC environment wrapped using a `aec_to_parallel_wrapper`, this function will return the original AEC environment.
     Otherwise, it will apply the `parallel_to_aec_wrapper` to convert the environment.
     """
     if isinstance(par_env, aec_to_parallel_wrapper):
@@ -100,7 +100,7 @@ class aec_to_parallel_wrapper(ParallelEnv):
 
     def __init__(self, aec_env):
         assert aec_env.metadata.get("is_parallelizable", False), (
-            "Converting from an AEC environment to a parallel environment "
+            "Converting from an AEC environment to a Parallel environment "
             "with the to_parallel wrapper is not generally safe "
             "(the AEC environment should only update once at the end "
             "of each cycle). If you have confirmed that your AEC environment "
@@ -218,7 +218,7 @@ class aec_to_parallel_wrapper(ParallelEnv):
 
 
 class parallel_to_aec_wrapper(AECEnv):
-    """Converts a parallel environment into an AEC environment."""
+    """Converts a Parallel environment into an AEC environment."""
 
     def __init__(self, parallel_env):
         self.env = parallel_env

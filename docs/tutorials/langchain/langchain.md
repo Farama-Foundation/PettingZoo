@@ -20,7 +20,7 @@ To follow this tutorial, you will need to install the dependencies shown below. 
 
 ## Environment Loop
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/LangChain/langchain.py
+.. literalinclude:: ../../../tutorials/LangChain/langchain_example.py
    :pyobject: main
    :language: python
 ```
@@ -46,7 +46,7 @@ The `PettingZooAgent` extends the `GymnasiumAgent` to the multi-agent setting. T
 We can now run a simulation of a multi-agent rock, paper, scissors game using the `PettingZooAgent`.
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/LangChain/langchain.py
+.. literalinclude:: ../../../tutorials/LangChain/langchain_example.py
    :pyobject: rock_paper_scissors
    :language: python
 ```
@@ -128,7 +128,7 @@ Some `PettingZoo` environments provide an `action_mask` to tell the agent which 
 ### Tic-Tac-Toe
 Here is an example of a Tic-Tac-Toe game that uses the `ActionMaskAgent`.
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/LangChain/langchain.py
+.. literalinclude:: ../../../tutorials/LangChain/langchain_example.py
    :pyobject: tic_tac_toe
    :language: python
 ```
@@ -363,7 +363,7 @@ Action: None
 ### Texas Holdem' No Limit
 Here is an example of a Texas Hold'em No Limit game that uses the `ActionMaskAgent`.
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/LangChain/langchain.py
+.. literalinclude:: ../../../tutorials/LangChain/langchain_example.py
    :pyobject: texas_holdem_no_limit
    :language: python
 ```
