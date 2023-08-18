@@ -79,7 +79,6 @@ parallel_env.close()
 
     .. automethod:: step
     .. automethod:: reset
-    .. automethod:: seed
     .. automethod:: render
     .. automethod:: close
     .. automethod:: state
