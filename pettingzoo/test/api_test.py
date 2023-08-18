@@ -125,11 +125,13 @@ env_neg_inf_obs = [
 
 
 def test_observation(observation, observation_0, env_name=None):
-    if not isinstance(observation, np.ndarray) and (
-        env_name is not None and env_name not in env_obs_dicts
-    ):
-        warnings.warn("Observation is not NumPy array")
-        return
+    if not isinstance(observation, np.ndarray):
+        if env_name is not None and env_name not in env_obs_dicts:
+            warnings.warn("Observation is not a NumPy array")
+        if isinstance(observation, dict) and "observation" in observation.keys():
+            observation = observation["observation"]
+        else:
+            return
     if np.isinf(observation).any():
         warnings.warn(
             "Observation contains infinity (np.inf) or negative infinity (-np.inf)"
