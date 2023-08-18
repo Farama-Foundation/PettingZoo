@@ -46,6 +46,14 @@ try:
         env.reset()
         return env.agents[0]
 
+    from pettingzoo.classic import connect_four_v3
+
+    @pytest.fixture
+    def action_mask():
+        env = connect_four_v3.env()
+        env.reset()
+        return env.observation_space(env.agents[0]).sample()["action_mask"]
+
 except ModuleNotFoundError:
     pass
 
@@ -125,10 +133,14 @@ env_neg_inf_obs = [
 
 
 def test_observation(observation, observation_0, env_name=None):
-    if not isinstance(observation, np.ndarray) or (
-        env_name is not None and env_name not in env_obs_dicts
-    ):
-        warnings.warn("Observation is not NumPy array")
+    if not isinstance(observation, np.ndarray):
+        if env_name is not None and env_name not in env_obs_dicts:
+            warnings.warn("Observation is not a NumPy array")
+        if isinstance(observation, dict) and "observation" in observation.keys():
+            observation = observation["observation"]
+            test_observation(observation, observation_0, env_name)
+        if isinstance(observation, dict) and "action_mask" in observation.keys():
+            test_action_mask(observation["action_mask"], env_name)
         return
     if np.isinf(observation).any():
         warnings.warn(
@@ -170,6 +182,35 @@ def test_observation(observation, observation_0, env_name=None):
     ):
         warnings.warn(
             "The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing."
+        )
+
+
+def test_action_mask(action_mask, env_name=None):
+    if not isinstance(action_mask, np.ndarray):
+        warnings.warn("Action mask is not a NumPy array")
+        return
+    if np.isinf(action_mask).any():
+        warnings.warn(
+            "Action mask contains infinity (np.inf) or negative infinity (-np.inf)"
+        )
+    if np.isnan(action_mask).any():
+        warnings.warn("Action mask contains NaNs")
+    if len(action_mask.shape) > 1:
+        warnings.warn("Action mask has more than 1 dimension")
+    if action_mask.shape == (0,):
+        assert False, "Action mask can not be an empty array"
+    if action_mask.shape == (1,):
+        warnings.warn("Action mask is a single number")
+    if not np.can_cast(action_mask.dtype, np.dtype("float64")):
+        warnings.warn("Action mask numpy array is not a numeric dtype")
+    if (
+        np.array_equal(action_mask, np.zeros(action_mask.shape))
+        and env_name not in env_all_zeros_obs
+    ):
+        warnings.warn("Action mask numpy array is all zeros (no legal actions).")
+    if not np.array_equal(action_mask, action_mask.astype(bool)):
+        warnings.warn(
+            "Action mask is not boolean (contains values other than 0 and 1)."
         )
 
 
