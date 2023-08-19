@@ -6,16 +6,16 @@ from typing import Any
 import gymnasium.spaces
 import numpy as np
 
-from pettingzoo.utils.env import ActionType, AECEnv, ObsType
+from pettingzoo.utils.env import ActionType, AgentID, AECEnv, ObsType
 
 
-class BaseWrapper(AECEnv):
+class BaseWrapper(AECEnv[AgentID, ObsType, ActionType]):
     """Creates a wrapper around `env` parameter.
 
     All AECEnv wrappers should inherit from this base class
     """
 
-    def __init__(self, env: AECEnv):
+    def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
         super().__init__()
         self.env = env
 
@@ -54,7 +54,7 @@ class BaseWrapper(AECEnv):
         return getattr(self.env, name)
 
     @property
-    def observation_spaces(self) -> dict[str, gymnasium.spaces.Space]:
+    def observation_spaces(self) -> dict[AgentID, gymnasium.spaces.Space]:
         warnings.warn(
             "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
         )
@@ -68,7 +68,7 @@ class BaseWrapper(AECEnv):
             ) from e
 
     @property
-    def action_spaces(self) -> dict[str, gymnasium.spaces.Space]:
+    def action_spaces(self) -> dict[AgentID, gymnasium.spaces.Space]:
         warnings.warn(
             "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
         )
@@ -79,10 +79,10 @@ class BaseWrapper(AECEnv):
                 "The base environment does not have an action_spaces dict attribute. Use the environment's `action_space` method instead"
             ) from e
 
-    def observation_space(self, agent: str) -> gymnasium.spaces.Space:
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self.env.observation_space(agent)
 
-    def action_space(self, agent: str) -> gymnasium.spaces.Space:
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self.env.action_space(agent)
 
     @property
@@ -106,7 +106,7 @@ class BaseWrapper(AECEnv):
         self.agents = self.env.agents
         self._cumulative_rewards = self.env._cumulative_rewards
 
-    def observe(self, agent: str) -> ObsType | None:
+    def observe(self, agent: AgentID) -> ObsType | None:
         return self.env.observe(agent)
 
     def state(self) -> np.ndarray:

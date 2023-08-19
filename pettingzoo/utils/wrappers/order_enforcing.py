@@ -4,12 +4,12 @@ from typing import Any
 
 import numpy as np
 
-from pettingzoo.utils.env import ActionType, AECEnv, AECIterable, AECIterator, ObsType
+from pettingzoo.utils.env import ActionType, AECEnv, AECIterable, AECIterator, AgentID, ObsType
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
-class OrderEnforcingWrapper(BaseWrapper):
+class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     """Checks if function calls or attribute access are in a disallowed order.
 
     * error on getting rewards, terminations, truncations, infos, agent_selection before reset
@@ -19,7 +19,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     * warn on calling step after environment is terminated or truncated
     """
 
-    def __init__(self, env: AECEnv):
+    def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
         self._has_reset = False
         self._has_rendered = False
         self._has_updated = False
@@ -80,7 +80,7 @@ class OrderEnforcingWrapper(BaseWrapper):
             self._has_updated = True
             super().step(action)
 
-    def observe(self, agent: str) -> ObsType | None:
+    def observe(self, agent: AgentID) -> ObsType | None:
         if not self._has_reset:
             EnvLogger.error_observe_before_reset()
         return super().observe(agent)
@@ -90,7 +90,7 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.error_state_before_reset()
         return super().state()
 
-    def agent_iter(self, max_iter: int = 2**63) -> AECOrderEnforcingIterable:
+    def agent_iter(self, max_iter: int = 2**63) -> AECOrderEnforcingIterable[AgentID, ObsType, ActionType]:
         if not self._has_reset:
             EnvLogger.error_agent_iter_before_reset()
         return AECOrderEnforcingIterable(self, max_iter)
@@ -111,13 +111,13 @@ class OrderEnforcingWrapper(BaseWrapper):
             return repr(self)
 
 
-class AECOrderEnforcingIterable(AECIterable):
-    def __iter__(self) -> AECOrderEnforcingIterator:
+class AECOrderEnforcingIterable(AECIterable[AgentID, ObsType, ActionType]):
+    def __iter__(self) -> AECOrderEnforcingIterator[AgentID, ObsType, ActionType]:
         return AECOrderEnforcingIterator(self.env, self.max_iter)
 
 
-class AECOrderEnforcingIterator(AECIterator):
-    def __next__(self) -> str:
+class AECOrderEnforcingIterator(AECIterator[AgentID, ObsType, ActionType]):
+    def __next__(self) -> AgentID:
         agent = super().__next__()
         assert hasattr(
             self.env, "_has_updated"

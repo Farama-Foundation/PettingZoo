@@ -6,11 +6,10 @@ import gymnasium.spaces
 import numpy as np
 from gymnasium.utils import seeding
 
-from pettingzoo.utils.env import ActionType, ObsType, ParallelEnv
+from pettingzoo.utils.env import ParallelEnv, AgentID, ObsType, ActionType
 
-
-class BaseParallelWrapper(ParallelEnv):
-    def __init__(self, env: ParallelEnv):
+class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
+    def __init__(self, env: ParallelEnv[AgentID, ObsType, ActionType]):
         self.env = env
 
         self.metadata = env.metadata
@@ -29,7 +28,7 @@ class BaseParallelWrapper(ParallelEnv):
 
     def reset(
         self, seed: int | None = None, options: dict | None = None
-    ) -> tuple[dict[str, ObsType], dict[str, dict]]:
+    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict]]:
         self.np_random, _ = seeding.np_random(seed)
 
         res, info = self.env.reset(seed=seed, options=options)
@@ -37,13 +36,13 @@ class BaseParallelWrapper(ParallelEnv):
         return res, info
 
     def step(
-        self, actions: dict[str, ActionType]
+        self, actions: dict[AgentID, ActionType]
     ) -> tuple[
-        dict[str, ObsType],
-        dict[str, float],
-        dict[str, bool],
-        dict[str, bool],
-        dict[str, dict],
+        dict[AgentID, ObsType],
+        dict[AgentID, float],
+        dict[AgentID, bool],
+        dict[AgentID, bool],
+        dict[AgentID, dict],
     ]:
         res = self.env.step(actions)
         self.agents = self.env.agents
@@ -63,7 +62,7 @@ class BaseParallelWrapper(ParallelEnv):
         return self.env.state()
 
     @property
-    def observation_spaces(self) -> dict[str, gymnasium.spaces.Space]:
+    def observation_spaces(self) -> dict[AgentID, gymnasium.spaces.Space]:
         warnings.warn(
             "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
         )
@@ -77,7 +76,7 @@ class BaseParallelWrapper(ParallelEnv):
             ) from e
 
     @property
-    def action_spaces(self) -> dict[str, gymnasium.spaces.Space]:
+    def action_spaces(self) -> dict[AgentID, gymnasium.spaces.Space]:
         warnings.warn(
             "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
         )
@@ -88,8 +87,8 @@ class BaseParallelWrapper(ParallelEnv):
                 "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
             ) from e
 
-    def observation_space(self, agent: str) -> gymnasium.spaces.Space:
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self.env.observation_space(agent)
 
-    def action_space(self, agent: str) -> gymnasium.spaces.Space:
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self.env.action_space(agent)
