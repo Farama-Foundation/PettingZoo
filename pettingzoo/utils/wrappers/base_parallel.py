@@ -6,7 +6,8 @@ import gymnasium.spaces
 import numpy as np
 from gymnasium.utils import seeding
 
-from pettingzoo.utils.env import ParallelEnv, AgentID, ObsType, ActionType
+from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
+
 
 class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
     def __init__(self, env: ParallelEnv[AgentID, ObsType, ActionType]):

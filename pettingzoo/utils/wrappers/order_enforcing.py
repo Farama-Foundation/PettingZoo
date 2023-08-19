@@ -4,7 +4,14 @@ from typing import Any
 
 import numpy as np
 
-from pettingzoo.utils.env import ActionType, AECEnv, AECIterable, AECIterator, AgentID, ObsType
+from pettingzoo.utils.env import (
+    ActionType,
+    AECEnv,
+    AECIterable,
+    AECIterator,
+    AgentID,
+    ObsType,
+)
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
@@ -90,7 +97,9 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             EnvLogger.error_state_before_reset()
         return super().state()
 
-    def agent_iter(self, max_iter: int = 2**63) -> AECOrderEnforcingIterable[AgentID, ObsType, ActionType]:
+    def agent_iter(
+        self, max_iter: int = 2**63
+    ) -> AECOrderEnforcingIterable[AgentID, ObsType, ActionType]:
         if not self._has_reset:
             EnvLogger.error_agent_iter_before_reset()
         return AECOrderEnforcingIterable(self, max_iter)

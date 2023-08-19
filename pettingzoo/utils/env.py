@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Iterable, Iterator, Generic, TypeVar
+from typing import Any, Generic, Iterable, Iterator, TypeVar
 
 import gymnasium.spaces
 import numpy as np
@@ -307,7 +307,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         dict[AgentID, float],
         dict[AgentID, bool],
         dict[AgentID, bool],
-        dict[AgentID, dict]
+        dict[AgentID, dict],
     ]:
         """Receives a dictionary of actions keyed by the agent name.
 
