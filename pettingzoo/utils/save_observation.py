@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import os
+from typing import Any, Optional
 
 import gymnasium.spaces
 import numpy as np
 
-from pettingzoo.utils.env import AECEnv, AgentID, ParallelEnv
+from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType, ParallelEnv
 
 
-def _check_observation_saveable(env: AECEnv | ParallelEnv, agent: AgentID) -> None:
+def _check_observation_saveable(
+    env: AECEnv[AgentID, Any, Any] | ParallelEnv[AgentID, Any, Any], agent: AgentID
+) -> None:
     obs_space = env.observation_space(agent)
     assert isinstance(
         obs_space, gymnasium.spaces.Box
@@ -28,7 +31,7 @@ def _check_observation_saveable(env: AECEnv | ParallelEnv, agent: AgentID) -> No
 # save the observation of an agent. If agent not specified uses env selected agent. If all_agents
 # then all agents in environment observation recorded.
 def save_observation(
-    env: AECEnv,
+    env: AECEnv[AgentID, Any, Any],
     agent: AgentID | None = None,
     all_agents: bool = False,
     save_dir: str = os.getcwd(),

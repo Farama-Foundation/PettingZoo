@@ -186,7 +186,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
             self.infos[agent],
         )
 
-    def _was_dead_step(self, action: None) -> None:
+    def _was_dead_step(self, action: ActionType) -> None:
         """Helper function that performs step() for dead agents.
 
         Does the following:

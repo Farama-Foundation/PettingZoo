@@ -21,7 +21,7 @@ def get_type(agent):
     return agent[: agent.rfind("_")]
 
 
-class parallel_env(ParallelEnv):
+class parallel_env(ParallelEnv[str, np.ndarray, int | None]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):
@@ -30,7 +30,7 @@ class parallel_env(ParallelEnv):
         self._act_spaces = {}
 
         # dummy state space, not actually used
-        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self.state_space = gymnasium.spaces.MultiDiscrete([10, 10])
         self._state = self.state_space.sample()
 
         self.types = []
@@ -86,7 +86,7 @@ class parallel_env(ParallelEnv):
         # Reset spaces and types
         self._obs_spaces = {}
         self._act_spaces = {}
-        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self.state_space = gymnasium.spaces.MultiDiscrete([10, 10])
         self._state = self.state_space.sample()
 
         self.types = []
