@@ -1,7 +1,7 @@
 import copy
 import warnings
 from collections import defaultdict
-from typing import Any, Callable, Generic, Optional, TypeVar
+from typing import Callable, Optional
 
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType, ParallelEnv
@@ -236,8 +236,8 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
 
         try:
             self.render_mode = (
-                self.env.render_mode
-            )  # pyright: ignore[reportGeneralTypeIssues]
+                self.env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
+            )
         except AttributeError:
             warnings.warn(
                 f"The base environment `{parallel_env}` does not have a `render_mode` defined."
@@ -251,8 +251,8 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         # Not every environment has the .state_space attribute implemented
         try:
             self.state_space = (
-                self.env.state_space
-            )  # pyright: ignore[reportGeneralTypeIssues]
+                self.env.state_space  # pyright: ignore[reportGeneralTypeIssues]
+            )
         except AttributeError:
             pass
 
@@ -401,8 +401,8 @@ class turn_based_aec_to_parallel_wrapper(
         # Not every environment has the .state_space attribute implemented
         try:
             self.state_space = (
-                self.aec_env.state_space
-            )  # pyright: ignore[reportGeneralTypeIssues]
+                self.aec_env.state_space  # pyright: ignore[reportGeneralTypeIssues]
+            )
         except AttributeError:
             pass
 

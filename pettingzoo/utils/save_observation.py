@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Optional
+from typing import Any
 
 import gymnasium.spaces
 import numpy as np
 
-from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType, ParallelEnv
+from pettingzoo.utils.env import AECEnv, AgentID, ParallelEnv
 
 
 def _check_observation_saveable(
