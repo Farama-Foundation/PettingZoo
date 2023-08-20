@@ -29,9 +29,9 @@ from pettingzoo.test.seed_test import seed_test
 from pettingzoo.test.state_test import state_test
 
 parameterized_envs = [
+    ["atari/boxing_v2", boxing_v2, dict()],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="grayscale_image")],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="ram")],
-    ["atari/boxing_v2", boxing_v2, dict(full_action_space=False)],
     ["atari/combat_plane_v2", combat_plane_v2, dict(game_version="jet")],
     ["atari/combat_plane_v2", combat_plane_v2, dict(guided_missile=True)],
     ["atari/combat_tank_v2", combat_tank_v2, dict(has_maze=True)],
@@ -53,12 +53,17 @@ parameterized_envs = [
         ),
     ],
     ["classic/leduc_holdem_v4", leduc_holdem_v4, dict()],
-    ["classic/texas_holdem_v4", texas_holdem_v4, dict(num_players=2)],
+    ["classic/texas_holdem_v4", texas_holdem_v4, dict()],
     ["classic/texas_holdem_v4", texas_holdem_v4, dict(num_players=3)],
     ["classic/texas_holdem_v4", texas_holdem_v4, dict(num_players=4)],
-    ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, dict(num_players=2)],
+    ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, dict()],
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, dict(num_players=3)],
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, dict(num_players=4)],
+    [
+        "butterfly/knights_archers_zombies_v10",
+        knights_archers_zombies_v10,
+        dict(),
+    ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
@@ -72,17 +77,7 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(killable_knights=True, killable_archers=True),
-    ],
-    [
-        "butterfly/knights_archers_zombies_v10",
-        knights_archers_zombies_v10,
         dict(killable_knights=False, killable_archers=False),
-    ],
-    [
-        "butterfly/knights_archers_zombies_v10",
-        knights_archers_zombies_v10,
-        dict(line_death=False),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
@@ -107,21 +102,11 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(use_typemasks=False),
-    ],
-    [
-        "butterfly/knights_archers_zombies_v10",
-        knights_archers_zombies_v10,
         dict(max_zombies=2, max_arrows=60),
     ],
-    ["butterfly/pistonball_v6", pistonball_v6, dict(continuous=True)],
+    ["butterfly/pistonball_v6", pistonball_v6, dict()],
     ["butterfly/pistonball_v6", pistonball_v6, dict(n_pistons=30)],
     ["butterfly/pistonball_v6", pistonball_v6, dict(continuous=False)],
-    [
-        "butterfly/pistonball_v6",
-        pistonball_v6,
-        dict(random_drop=True, random_rotate=True),
-    ],
     [
         "butterfly/pistonball_v6",
         pistonball_v6,
@@ -129,10 +114,10 @@ parameterized_envs = [
     ],
     ["classic/go_v5", go_v5, dict(board_size=13, komi=2.5)],
     ["classic/go_v5", go_v5, dict(board_size=9, komi=0.0)],
+    ["classic/hanabi_v5", hanabi_v5, dict()],
     ["classic/hanabi_v5", hanabi_v5, dict(colors=3)],
     ["classic/hanabi_v5", hanabi_v5, dict(ranks=3)],
     ["classic/hanabi_v5", hanabi_v5, dict(players=4)],
-    ["classic/hanabi_v5", hanabi_v5, dict(hand_size=5)],
     ["classic/hanabi_v5", hanabi_v5, dict(max_information_tokens=3)],
     ["classic/hanabi_v5", hanabi_v5, dict(max_life_tokens=2)],
     [
@@ -148,9 +133,7 @@ parameterized_envs = [
         ),
     ],
     ["classic/hanabi_v5", hanabi_v5, dict(observation_type="minimal")],
-    ["classic/hanabi_v5", hanabi_v5, dict(observation_type="card_knowledge")],
     ["classic/hanabi_v5", hanabi_v5, dict(observation_type="seer")],
-    ["classic/hanabi_v5", hanabi_v5, dict(random_start_player=False)],
     ["classic/hanabi_v5", hanabi_v5, dict(random_start_player=True)],
     ["mpe/simple_adversary_v3", simple_adversary_v3, dict(N=4)],
     ["mpe/simple_reference_v3", simple_reference_v3, dict(local_ratio=0.2)],
@@ -166,27 +149,6 @@ parameterized_envs = [
         dict(num_good=1, num_adversaries=1, num_obstacles=1),
     ],
     [
-        "mpe/simple_world_comm_v3",
-        simple_world_comm_v3,
-        dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3),
-    ],
-    [
-        "mpe/simple_world_comm_v3",
-        simple_world_comm_v3,
-        dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1),
-    ],
-    [
-        "mpe/simple_adversary_v3",
-        simple_adversary_v3,
-        dict(N=4, continuous_actions=True),
-    ],
-    [
-        "mpe/simple_reference_v3",
-        simple_reference_v3,
-        dict(local_ratio=0.2, continuous_actions=True),
-    ],
-    ["mpe/simple_spread_v3", simple_spread_v3, dict(N=5, continuous_actions=True)],
-    [
         "mpe/simple_tag_v3",
         simple_tag_v3,
         dict(num_good=5, num_adversaries=10, num_obstacles=4, continuous_actions=True),
@@ -195,6 +157,16 @@ parameterized_envs = [
         "mpe/simple_tag_v3",
         simple_tag_v3,
         dict(num_good=1, num_adversaries=1, num_obstacles=1, continuous_actions=True),
+    ],
+    [
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
+        dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3),
+    ],
+    [
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
+        dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1),
     ],
     [
         "mpe/simple_world_comm_v3",
@@ -218,6 +190,17 @@ parameterized_envs = [
             continuous_actions=True,
         ),
     ],
+    [
+        "mpe/simple_adversary_v3",
+        simple_adversary_v3,
+        dict(N=4, continuous_actions=True),
+    ],
+    [
+        "mpe/simple_reference_v3",
+        simple_reference_v3,
+        dict(local_ratio=0.2, continuous_actions=True),
+    ],
+    ["mpe/simple_spread_v3", simple_spread_v3, dict(N=5, continuous_actions=True)],
     ["sisl/multiwalker_v9", multiwalker_v9, dict(n_walkers=10)],
     ["sisl/multiwalker_v9", multiwalker_v9, dict(shared_reward=False)],
     ["sisl/multiwalker_v9", multiwalker_v9, dict(terminate_on_fall=False)],
@@ -226,8 +209,8 @@ parameterized_envs = [
         multiwalker_v9,
         dict(terminate_on_fall=False, remove_on_fall=False),
     ],
+    ["sisl/pursuit_v4", pursuit_v4, dict()],
     ["sisl/pursuit_v4", pursuit_v4, dict(x_size=8, y_size=19)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(shared_reward=True)],
     ["sisl/pursuit_v4", pursuit_v4, dict(n_evaders=5, n_pursuers=16)],
     ["sisl/pursuit_v4", pursuit_v4, dict(obs_range=15)],
     ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3)],
