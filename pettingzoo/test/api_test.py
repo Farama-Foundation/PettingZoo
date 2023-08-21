@@ -249,7 +249,7 @@ def test_observation_action_spaces(env, agent_0):
             )
         if (not isinstance(agent, str)) and agent != "env":
             warnings.warn(
-                "Agent's are recommended to have numbered string names, like player_0"
+                "Agents are recommended to have numbered string names, like player_0"
             )
         if not isinstance(agent, str) or not re.match(
             "[a-z]+_[0-9]+", agent
