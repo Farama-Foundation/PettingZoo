@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="LangChain: Creating LLM agents" href="langchain/" /><link rel="prev" title="RLlib: DQN for Simple Poker" href="../rllib/holdem/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/langchain/index.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>LangChain Tutorial - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -395,37 +395,37 @@
           <article role="main">
             
             <section id="langchain-tutorial">
-<h1>LangChain Tutorial<a class="headerlink" href="#langchain-tutorial" title="Permalink to this heading">#</a></h1>
+<h1>LangChain Tutorial<a class="headerlink" href="#langchain-tutorial" title="Link to this heading">#</a></h1>
 <p>This tutorial provides an example of using <a class="reference external" href="https://github.com/hwchase17/langchain">LangChain</a> create LLM agents that can interact with PettingZoo environments:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="langchain/"><span class="std std-doc">LangChain: Creating LLM Agents</span></a>: <em>Create LLM Agents using LangChain</em></p></li>
 </ul>
 <section id="langchain-overview">
-<h2>LangChain Overview<a class="headerlink" href="#langchain-overview" title="Permalink to this heading">#</a></h2>
+<h2>LangChain Overview<a class="headerlink" href="#langchain-overview" title="Link to this heading">#</a></h2>
 <p><a class="reference external" href="https://github.com/hwchase17/langchain">LangChain</a> is a framework for developing applications powered by language models through composability.</p>
 <p>There are six main areas that LangChain is designed to help with. These are, in increasing order of complexity:</p>
 <section id="llms-and-prompts">
-<h3>📃 LLMs and Prompts:<a class="headerlink" href="#llms-and-prompts" title="Permalink to this heading">#</a></h3>
+<h3>📃 LLMs and Prompts:<a class="headerlink" href="#llms-and-prompts" title="Link to this heading">#</a></h3>
 <p>This includes prompt management, prompt optimization, a generic interface for all LLMs, and common utilities for working with LLMs.</p>
 </section>
 <section id="chains">
-<h3>🔗 Chains:<a class="headerlink" href="#chains" title="Permalink to this heading">#</a></h3>
+<h3>🔗 Chains:<a class="headerlink" href="#chains" title="Link to this heading">#</a></h3>
 <p>Chains go beyond a single LLM call and involve sequences of calls (whether to an LLM or a different utility). LangChain provides a standard interface for chains, lots of integrations with other tools, and end-to-end chains for common applications.</p>
 </section>
 <section id="data-augmented-generation">
-<h3>📚 Data Augmented Generation:<a class="headerlink" href="#data-augmented-generation" title="Permalink to this heading">#</a></h3>
+<h3>📚 Data Augmented Generation:<a class="headerlink" href="#data-augmented-generation" title="Link to this heading">#</a></h3>
 <p>Data Augmented Generation involves specific types of chains that first interact with an external data source to fetch data for use in the generation step. Examples include summarization of long pieces of text and question/answering over specific data sources.</p>
 </section>
 <section id="agents">
-<h3>🤖 Agents:<a class="headerlink" href="#agents" title="Permalink to this heading">#</a></h3>
+<h3>🤖 Agents:<a class="headerlink" href="#agents" title="Link to this heading">#</a></h3>
 <p>Agents involve an LLM making decisions about which Actions to take, taking that Action, seeing an Observation, and repeating that until done. LangChain provides a standard interface for agents, a selection of agents to choose from, and examples of end-to-end agents.</p>
 </section>
 <section id="memory">
-<h3>🧠 Memory:<a class="headerlink" href="#memory" title="Permalink to this heading">#</a></h3>
+<h3>🧠 Memory:<a class="headerlink" href="#memory" title="Link to this heading">#</a></h3>
 <p>Memory refers to persisting state between calls of a chain/agent. LangChain provides a standard interface for memory, a collection of memory implementations, and examples of chains/agents that use memory.</p>
 </section>
 <section id="evaluation">
-<h3>🧐 Evaluation:<a class="headerlink" href="#evaluation" title="Permalink to this heading">#</a></h3>
+<h3>🧐 Evaluation:<a class="headerlink" href="#evaluation" title="Link to this heading">#</a></h3>
 <p>[BETA] Generative models are notoriously hard to evaluate with traditional metrics. One new way of evaluating them is using language models themselves to do the evaluation. LangChain provides some prompts/chains for assisting in this.</p>
 <div class="toctree-wrapper compound">
 </div>
@@ -598,9 +598,9 @@
         })()
       </script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

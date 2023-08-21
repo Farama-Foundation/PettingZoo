@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -10,11 +10,11 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/classic/chess/chess.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/classic/chess/chess.html" />
 
-    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>pettingzoo.classic.chess.chess - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -505,7 +505,9 @@
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.agent_selector</span> <span class="kn">import</span> <span class="n">agent_selector</span>
 
 
-<div class="viewcode-block" id="env"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.env">[docs]</a><span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="env">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.env">[docs]</a>
+<span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -513,7 +515,10 @@
     <span class="k">return</span> <span class="n">env</span></div>
 
 
-<div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env">[docs]</a><span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
+
+<div class="viewcode-block" id="raw_env">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env">[docs]</a>
+<span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;ansi&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;chess_v6&quot;</span><span class="p">,</span>
@@ -587,13 +592,21 @@
                 <span class="s2">&quot;king&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;king_black&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;king_white&quot;</span><span class="p">)],</span>
             <span class="p">}</span>
 
-<div class="viewcode-block" id="raw_env.observation_space"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.observation_space">[docs]</a>    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+<div class="viewcode-block" id="raw_env.observation_space">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.observation_space">[docs]</a>
+    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="raw_env.action_space"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.action_space">[docs]</a>    <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+
+<div class="viewcode-block" id="raw_env.action_space">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.action_space">[docs]</a>
+    <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="raw_env.observe"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.observe">[docs]</a>    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+
+<div class="viewcode-block" id="raw_env.observe">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.observe">[docs]</a>
+    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="n">current_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
 
         <span class="n">observation</span> <span class="o">=</span> <span class="n">chess_utils</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="n">current_index</span><span class="p">)</span>
@@ -619,7 +632,10 @@
 
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">action_mask</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="raw_env.reset"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="raw_env.reset">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">chess</span><span class="o">.</span><span class="n">Board</span><span class="p">()</span>
@@ -638,6 +654,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
+
     <span class="k">def</span> <span class="nf">set_game_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_val</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
@@ -645,7 +662,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">result_val</span> <span class="o">*</span> <span class="n">result_coef</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;legal_moves&quot;</span><span class="p">:</span> <span class="p">[]}</span>
 
-<div class="viewcode-block" id="raw_env.step"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<div class="viewcode-block" id="raw_env.step">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.step">[docs]</a>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -690,7 +709,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="raw_env.render"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="raw_env.render">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
@@ -703,6 +725,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span><span class="si">}</span><span class="s2"> is not a valid render mode. Available modes are: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;render_modes&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_render_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -732,10 +755,14 @@
                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)),</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="raw_env.close"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="raw_env.close">
+<a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.close">[docs]</a>
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span></div>
+</div>
+
 </pre></div>
           </article>
         </div>
@@ -853,9 +880,9 @@
         })()
       </script>
 
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

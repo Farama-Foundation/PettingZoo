@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -10,11 +10,11 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/classic/rlcard_envs/texas_holdem.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/classic/rlcard_envs/texas_holdem.html" />
 
-    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>pettingzoo.classic.rlcard_envs.texas_holdem - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -493,7 +493,9 @@
     <span class="k">return</span> <span class="n">font</span>
 
 
-<div class="viewcode-block" id="env"><a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.env">[docs]</a><span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="env">
+<a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.env">[docs]</a>
+<span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -501,7 +503,10 @@
     <span class="k">return</span> <span class="n">env</span></div>
 
 
-<div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env">[docs]</a><span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">RLCardBase</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
+
+<div class="viewcode-block" id="raw_env">
+<a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env">[docs]</a>
+<span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">RLCardBase</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;texas_holdem_v4&quot;</span><span class="p">,</span>
@@ -523,13 +528,18 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
 
-<div class="viewcode-block" id="raw_env.step"><a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<div class="viewcode-block" id="raw_env.step">
+<a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.step">[docs]</a>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="raw_env.render"><a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="raw_env.render">
+<a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
@@ -815,7 +825,9 @@
             <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span>
             <span class="k">else</span> <span class="kc">None</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
           </article>
         </div>
@@ -933,9 +945,9 @@
         })()
       </script>
 
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

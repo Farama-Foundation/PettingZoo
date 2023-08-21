@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Basketball Pong" href="basketball_pong/" /><link rel="prev" title="Utils" href="../../api/utils/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/atari.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Atari - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -394,7 +394,7 @@
           <article role="main">
             
             <section id="atari">
-<h1>Atari<a class="headerlink" href="#atari" title="Permalink to this heading">#</a></h1>
+<h1>Atari<a class="headerlink" href="#atari" title="Link to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>The Atari environments are based off the <a class="reference external" href="https://github.com/mgbellemare/Arcade-Learning-Environment">Arcade Learning Environment</a>. This environment was instrumental in the development of modern reinforcement learning, and so we hope that our <a class="reference external" href="https://github.com/Farama-Foundation/Multi-Agent-ALE">multi-agent version</a> of it will be useful in the development of multi-agent reinforcement learning.</p>
@@ -697,7 +697,7 @@
 </html>
     
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
 <p>The unique dependencies for this set of environments can be installed via:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pettingzoo<span class="o">[</span>atari<span class="o">]</span>
 </pre></div>
@@ -705,7 +705,7 @@
 <p>Install ROMs using <a class="reference external" href="https://github.com/Farama-Foundation/AutoROM">AutoROM</a>, or specify the path to your Atari rom using the <code class="docutils literal notranslate"><span class="pre">rom_path</span></code> argument (see <a class="reference internal" href="#common-parameters">Common Parameters</a>).</p>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
 <p>To launch a <a class="reference internal" href="space_invaders/"><span class="doc std std-doc">Space Invaders</span></a> environment with random agents:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">space_invaders_v2</span>
 
@@ -726,11 +726,11 @@
 </div>
 </section>
 <section id="games-overview">
-<h2>Games Overview<a class="headerlink" href="#games-overview" title="Permalink to this heading">#</a></h2>
+<h2>Games Overview<a class="headerlink" href="#games-overview" title="Link to this heading">#</a></h2>
 <p>Most games have two players, with the exception of Warlords and a couple of Pong variations which have four players.</p>
 </section>
 <section id="environment-details">
-<h2>Environment Details<a class="headerlink" href="#environment-details" title="Permalink to this heading">#</a></h2>
+<h2>Environment Details<a class="headerlink" href="#environment-details" title="Link to this heading">#</a></h2>
 <p>The ALE has been studied extensively and a few notable problems have been identified:</p>
 <ul class="simple">
 <li><p><strong>Determinism</strong>: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit">SuperSuit’s</a> <code class="docutils literal notranslate"><span class="pre">sticky_actions</span></code> wrapper (example below). This is the recommended approach of  <em>“Machado et al. (2018), “Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents”</em></p></li>
@@ -738,7 +738,7 @@
 </ul>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">#</a></h2>
 <p>We encourage the use of the <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit">supersuit</a> library for preprocessing. The unique dependencies for this set of environments can be installed via:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>supersuit
 </pre></div>
@@ -769,7 +769,7 @@
 </div>
 </section>
 <section id="common-parameters">
-<h2>Common Parameters<a class="headerlink" href="#common-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Common Parameters<a class="headerlink" href="#common-parameters" title="Link to this heading">#</a></h2>
 <p>All the Atari environments have the following environment parameters:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">atari_game</span><span class="o">&gt;.</span><span class="n">env</span><span class="p">(</span><span class="n">obs_type</span><span class="o">=</span><span class="s1">&#39;rgb_image&#39;</span><span class="p">,</span> <span class="n">full_action_space</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">auto_rom_install_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
@@ -792,7 +792,7 @@ If this is not specified (has value <code class="docutils literal notranslate"><
 installed at the default AutoROM path.</p>
 </section>
 <section id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">#</a></h2>
 <p>Multiplayer games within the Arcade Learning Environment were introduced in:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">terry2020arcade</span><span class="p">,</span>
   <span class="n">Title</span> <span class="o">=</span> <span class="p">{</span><span class="n">Multiplayer</span> <span class="n">Support</span> <span class="k">for</span> <span class="n">the</span> <span class="n">Arcade</span> <span class="n">Learning</span> <span class="n">Environment</span><span class="p">},</span>
@@ -979,9 +979,9 @@ installed at the default AutoROM path.</p>
         })()
       </script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Third-Party Environments" href="../../third_party_envs/" /><link rel="prev" title="Pursuit" href="../pursuit/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/sisl/waterworld.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Waterworld - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -387,7 +387,7 @@
               <img class="farama-env-icon" src="../../../_static/img/icons/sisl/waterworld.png">
             </div>
             <section id="waterworld">
-<h1>Waterworld<a class="headerlink" href="#waterworld" title="Permalink to this heading">#</a></h1>
+<h1>Waterworld<a class="headerlink" href="#waterworld" title="Link to this heading">#</a></h1>
 <figure class="align-default" id="id1">
 <a class="reference internal image-reference" href="../../../_images/sisl_waterworld.gif"><img alt="../../../_images/sisl_waterworld.gif" src="../../../_images/sisl_waterworld.gif" style="width: 140px;" /></a>
 </figure>
@@ -435,7 +435,7 @@ times the size of the pursuer radius, while food has a radius 2 times the size o
 globally to all pursuers, or applied locally to specific pursuers. The environment is a continuous 2D space, and each pursuer has a position with x and y values each in the range [0,1]. Agents can not move beyond barriers at the minimum and maximum x and y values. Agents act by choosing a thrust
 vector to add to their current velocity. Each pursuer has a number of evenly spaced sensors which can read the speed and direction of objects near the pursuer. This information is reported in the observation space, and can be used to navigate the environment.</p>
 <section id="observation-space">
-<h2>Observation Space<a class="headerlink" href="#observation-space" title="Permalink to this heading">#</a></h2>
+<h2>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">#</a></h2>
 <p>The observation shape of each agent is a vector of length &gt; 4 that is dependent on the environment’s input arguments. The full size of the vector is the number of features per sensor multiplied by the number of sensors, plus two elements indicating whether the pursuer collided with food or with
 poison respectively. The number of features per sensor is 8 by default with <code class="docutils literal notranslate"><span class="pre">speed_features</span></code> enabled, or 5 if <code class="docutils literal notranslate"><span class="pre">speed_features</span></code> is turned off. Therefore with <code class="docutils literal notranslate"><span class="pre">speed_features</span></code> enabled, the observation shape takes the full form of <code class="docutils literal notranslate"><span class="pre">(8</span> <span class="pre">×</span> <span class="pre">n_sensors)</span> <span class="pre">+</span> <span class="pre">2</span></code>. Elements of the observation vector take on
 values in the range [-1, 1].</p>
@@ -538,19 +538,19 @@ environment for the observation space. These values represent the distances and 
 </div>
 </section>
 <section id="action-space">
-<h2>Action Space<a class="headerlink" href="#action-space" title="Permalink to this heading">#</a></h2>
+<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">#</a></h2>
 <p>The agents have a continuous action space represented as a 2 element vector, which corresponds to horizontal and vertical thrust. The range of values depends on <code class="docutils literal notranslate"><span class="pre">pursuer_max_accel</span></code>.  Action values must be in the range <code class="docutils literal notranslate"><span class="pre">[-pursuer_max_accel,</span> <span class="pre">pursuer_max_accel]</span></code>. If the magnitude of this action
 vector exceeds <code class="docutils literal notranslate"><span class="pre">pursuer_max_accel</span></code>, it will be scaled down to <code class="docutils literal notranslate"><span class="pre">pursuer_max_accel</span></code>. This velocity vector is added to the archea’s current velocity.</p>
 <p><strong>Agent action space:</strong> <code class="docutils literal notranslate"><span class="pre">[horizontal_thrust,</span> <span class="pre">vertical_thrust]</span></code></p>
 </section>
 <section id="rewards">
-<h2>Rewards<a class="headerlink" href="#rewards" title="Permalink to this heading">#</a></h2>
+<h2>Rewards<a class="headerlink" href="#rewards" title="Link to this heading">#</a></h2>
 <p>When multiple agents (depending on <code class="docutils literal notranslate"><span class="pre">n_coop</span></code>) capture food together each agent receives a reward of <code class="docutils literal notranslate"><span class="pre">food_reward</span></code> (the food is not destroyed). They receive a shaping reward of <code class="docutils literal notranslate"><span class="pre">encounter_reward</span></code> for touching food, a reward of <code class="docutils literal notranslate"><span class="pre">poison_reward</span></code> for touching poison, and a <code class="docutils literal notranslate"><span class="pre">thrust_penalty</span> <span class="pre">x</span> <span class="pre">||action||</span></code>
 reward for every action, where <code class="docutils literal notranslate"><span class="pre">||action||</span></code> is the euclidean norm of the action velocity. All of these rewards are also distributed based on <code class="docutils literal notranslate"><span class="pre">local_ratio</span></code>, where the rewards scaled by <code class="docutils literal notranslate"><span class="pre">local_ratio</span></code> (local rewards) are applied to the agents whose actions produced the rewards, and the rewards
 averaged over the number of agents (global rewards) are scaled by <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">local_ratio)</span></code> and applied to every agent. The environment runs for 500 frames by default.</p>
 </section>
 <section id="arguments">
-<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading">#</a></h2>
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">waterworld_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">n_pursuers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_evaders</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_poisons</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_coop</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_sensors</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="n">sensor_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span> <span class="n">obstacle_radius</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
 <span class="n">obstacle_coord</span><span class="o">=</span><span class="p">[(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)],</span> <span class="n">pursuer_max_accel</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">evader_speed</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
@@ -587,9 +587,9 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 </ul>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
 <section id="aec">
-<h3>AEC<a class="headerlink" href="#aec" title="Permalink to this heading">#</a></h3>
+<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.sisl</span> <span class="kn">import</span> <span class="n">waterworld_v4</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">waterworld_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
@@ -611,7 +611,7 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 </div>
 </section>
 <section id="parallel">
-<h3>Parallel<a class="headerlink" href="#parallel" title="Permalink to this heading">#</a></h3>
+<h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.sisl</span> <span class="kn">import</span> <span class="n">waterworld_v4</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">waterworld_v4</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
@@ -629,19 +629,19 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 </section>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.waterworld.waterworld.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.env" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.waterworld.waterworld.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.env" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.waterworld.waterworld.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.waterworld.waterworld.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env" title="Link to this definition">#</a></dt>
 <dd><p>Uses the <code class="docutils literal notranslate"><span class="pre">args</span></code> and <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> from the object’s constructor for pickling.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env.action_space">
-<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.action_space" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.action_space" title="Link to this definition">#</a></dt>
 <dd><p>Takes in agent and returns the action space for that agent.</p>
 <p>MUST return the same value for the same agent name</p>
 <p>Default implementation is to return the action_spaces dict</p>
@@ -649,7 +649,7 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.close" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.close" title="Link to this definition">#</a></dt>
 <dd><p>Closes any resources that should be released.</p>
 <p>Closes the rendering window, subprocesses, network connections,
 or any other resources that should be released.</p>
@@ -657,7 +657,7 @@ or any other resources that should be released.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env.observation_space">
-<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.observation_space" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.observation_space" title="Link to this definition">#</a></dt>
 <dd><p>Takes in agent and returns the observation space for that agent.</p>
 <p>MUST return the same value for the same agent name</p>
 <p>Default implementation is to return the observation_spaces dict</p>
@@ -665,14 +665,14 @@ or any other resources that should be released.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env.observe">
-<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.observe" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.observe" title="Link to this definition">#</a></dt>
 <dd><p>Returns the observation an agent currently can make.</p>
 <p><cite>last()</cite> calls this function.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.render" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the environment as specified by self.render_mode.</p>
 <p>Render mode can be <cite>human</cite> to display a window.
 Other render modes in the default environments are <cite>‘rgb_array’</cite>
@@ -682,13 +682,13 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.reset" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.reset" title="Link to this definition">#</a></dt>
 <dd><p>Resets the environment to a starting state.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.waterworld.waterworld.raw_env.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.step" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/waterworld/waterworld/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.waterworld.waterworld.raw_env.step" title="Link to this definition">#</a></dt>
 <dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
 <p>Automatically switches control to the next agent.</p>
 </dd></dl>
@@ -877,9 +877,9 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

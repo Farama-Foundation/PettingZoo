@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Supersuit Wrappers" href="../supersuit_wrappers/" /><link rel="prev" title="Wrappers" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/wrappers/pz_wrappers.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>PettingZoo Wrappers - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -394,21 +394,21 @@
           <article role="main">
             
             <section id="pettingzoo-wrappers">
-<h1>PettingZoo Wrappers<a class="headerlink" href="#pettingzoo-wrappers" title="Permalink to this heading">#</a></h1>
+<h1>PettingZoo Wrappers<a class="headerlink" href="#pettingzoo-wrappers" title="Link to this heading">#</a></h1>
 <p>PettingZoo includes the following types of wrappers:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#conversion-wrappers">Conversion Wrappers</a>: wrappers for converting environments between the <a class="reference internal" href="../../aec/"><span class="doc std std-doc">AEC</span></a> and <a class="reference internal" href="../../parallel/"><span class="doc std std-doc">Parallel</span></a> APIs</p></li>
 <li><p><a class="reference internal" href="#utility-wrappers">Utility Wrappers</a>: a set of wrappers which provide convenient reusable logic, such as enforcing turn order or clipping out-of-bounds actions.</p></li>
 </ul>
 <section id="conversion-wrappers">
-<h2>Conversion wrappers<a class="headerlink" href="#conversion-wrappers" title="Permalink to this heading">#</a></h2>
-<section id="module-pettingzoo.utils.conversions">
-<span id="aec-to-parallel"></span><h3>AEC to Parallel<a class="headerlink" href="#module-pettingzoo.utils.conversions" title="Permalink to this heading">#</a></h3>
-<dl class="py function">
+<h2>Conversion wrappers<a class="headerlink" href="#conversion-wrappers" title="Link to this heading">#</a></h2>
+<section id="aec-to-parallel">
+<h3>AEC to Parallel<a class="headerlink" href="#aec-to-parallel" title="Link to this heading">#</a></h3>
+<dl class="py function" id="module-pettingzoo.utils.conversions">
 <dt class="sig sig-object py" id="pettingzoo.utils.conversions.aec_to_parallel">
-<span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.conversions.</span></span><span class="sig-name descname"><span class="pre">aec_to_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aec_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a></span></span><a class="reference internal" href="../../../_modules/pettingzoo/utils/conversions/#aec_to_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.conversions.aec_to_parallel" title="Permalink to this definition">#</a></dt>
-<dd><p>Converts an aec environment to a parallel environment.</p>
-<p>In the case of an existing parallel environment wrapped using a <cite>parallel_to_aec_wrapper</cite>, this function will return the original parallel environment.
+<span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.conversions.</span></span><span class="sig-name descname"><span class="pre">aec_to_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aec_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a></span></span><a class="reference internal" href="../../../_modules/pettingzoo/utils/conversions/#aec_to_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.conversions.aec_to_parallel" title="Link to this definition">#</a></dt>
+<dd><p>Converts an AEC environment to a Parallel environment.</p>
+<p>In the case of an existing Parallel environment wrapped using a <cite>parallel_to_aec_wrapper</cite>, this function will return the original Parallel environment.
 Otherwise, it will apply the <cite>aec_to_parallel_wrapper</cite> to convert the environment.</p>
 </dd></dl>
 
@@ -426,13 +426,13 @@ Otherwise, it will apply the <cite>aec_to_parallel_wrapper</cite> to convert the
 </pre></div>
 </div>
 </section>
-<section id="module-pettingzoo.utils.conversions">
-<span id="parallel-to-aec"></span><h3>Parallel to AEC<a class="headerlink" href="#module-pettingzoo.utils.conversions" title="Permalink to this heading">#</a></h3>
-<dl class="py function">
+<section id="parallel-to-aec">
+<h3>Parallel to AEC<a class="headerlink" href="#parallel-to-aec" title="Link to this heading">#</a></h3>
+<dl class="py function" id="module-pettingzoo.utils.conversions">
 <dt class="sig sig-object py" id="pettingzoo.utils.conversions.parallel_to_aec">
-<span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.conversions.</span></span><span class="sig-name descname"><span class="pre">parallel_to_aec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></span><a class="reference internal" href="../../../_modules/pettingzoo/utils/conversions/#parallel_to_aec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.conversions.parallel_to_aec" title="Permalink to this definition">#</a></dt>
-<dd><p>Converts an aec environment to a parallel environment.</p>
-<p>In the case of an existing aec environment wrapped using a <cite>aec_to_prallel_wrapper</cite>, this function will return the original AEC environment.
+<span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.conversions.</span></span><span class="sig-name descname"><span class="pre">parallel_to_aec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></span><a class="reference internal" href="../../../_modules/pettingzoo/utils/conversions/#parallel_to_aec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.conversions.parallel_to_aec" title="Link to this definition">#</a></dt>
+<dd><p>Converts a Parallel environment to an AEC environment.</p>
+<p>In the case of an existing AEC environment wrapped using a <cite>aec_to_parallel_wrapper</cite>, this function will return the original AEC environment.
 Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the environment.</p>
 </dd></dl>
 
@@ -447,7 +447,7 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
 </section>
 </section>
 <section id="utility-wrappers">
-<h2>Utility Wrappers<a class="headerlink" href="#utility-wrappers" title="Permalink to this heading">#</a></h2>
+<h2>Utility Wrappers<a class="headerlink" href="#utility-wrappers" title="Link to this heading">#</a></h2>
 <p>We wanted our pettingzoo environments to be both easy to use and easy to implement. To combine these, we have a set of simple wrappers which provide input validation and other convenient reusable logic.</p>
 <p>You can apply these wrappers to your environment in a similar manner to the below examples:</p>
 <p>To wrap a Parallel environment.</p>
@@ -483,14 +483,14 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
 <p>Note: Most AEC environments include TerminateIllegalWrapper in their initialization, so this code does not change the environment’s behavior.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.BaseWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">BaseWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/base/#BaseWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.BaseWrapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">BaseWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/base/#BaseWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.BaseWrapper" title="Link to this definition">#</a></dt>
 <dd><p>Creates a wrapper around <cite>env</cite> parameter.</p>
 <p>All AECEnv wrappers should inherit from this base class</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.TerminateIllegalWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">TerminateIllegalWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">illegal_reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/terminate_illegal/#TerminateIllegalWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.TerminateIllegalWrapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">TerminateIllegalWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">illegal_reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/terminate_illegal/#TerminateIllegalWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.TerminateIllegalWrapper" title="Link to this definition">#</a></dt>
 <dd><p>This wrapper terminates the game with the current player losing in case of illegal values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -501,26 +501,26 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.CaptureStdoutWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">CaptureStdoutWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/capture_stdout/#CaptureStdoutWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.CaptureStdoutWrapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">CaptureStdoutWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/capture_stdout/#CaptureStdoutWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.CaptureStdoutWrapper" title="Link to this definition">#</a></dt>
 <dd><p>Takes an environment which prints to terminal, and gives it an <cite>ansi</cite> render mode where it captures the terminal output and returns it as a string instead.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">AssertOutOfBoundsWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/assert_out_of_bounds/#AssertOutOfBoundsWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">AssertOutOfBoundsWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/assert_out_of_bounds/#AssertOutOfBoundsWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper" title="Link to this definition">#</a></dt>
 <dd><p>Asserts if the action given to step is outside of the action space.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ClipOutOfBoundsWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/clip_out_of_bounds/#ClipOutOfBoundsWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ClipOutOfBoundsWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/clip_out_of_bounds/#ClipOutOfBoundsWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper" title="Link to this definition">#</a></dt>
 <dd><p>Clips the input action to fit in the continuous action space (emitting a warning if it does so).</p>
 <p>Applied to continuous environments in pettingzoo.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.OrderEnforcingWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">OrderEnforcingWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/order_enforcing/#OrderEnforcingWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">OrderEnforcingWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/order_enforcing/#OrderEnforcingWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper" title="Link to this definition">#</a></dt>
 <dd><p>Checks if function calls or attribute access are in a disallowed order.</p>
 <ul class="simple">
 <li><p>error on getting rewards, terminations, truncations, infos, agent_selection before reset</p></li>
@@ -605,11 +605,11 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
               <ul>
 <li><a class="reference internal" href="#">PettingZoo Wrappers</a><ul>
 <li><a class="reference internal" href="#conversion-wrappers">Conversion wrappers</a><ul>
-<li><a class="reference internal" href="#module-pettingzoo.utils.conversions">AEC to Parallel</a><ul>
+<li><a class="reference internal" href="#aec-to-parallel">AEC to Parallel</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.conversions.aec_to_parallel"><code class="docutils literal notranslate"><span class="pre">aec_to_parallel()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-pettingzoo.utils.conversions">Parallel to AEC</a><ul>
+<li><a class="reference internal" href="#parallel-to-aec">Parallel to AEC</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.conversions.parallel_to_aec"><code class="docutils literal notranslate"><span class="pre">parallel_to_aec()</span></code></a></li>
 </ul>
 </li>
@@ -710,9 +710,9 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
