@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Simple Tag" href="../simple_tag/" /><link rel="prev" title="Simple Speaker Listener" href="../simple_speaker_listener/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/mpe/simple_spread.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Simple Spread - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -387,7 +387,7 @@
               <img class="farama-env-icon" src="../../../_static/img/icons/mpe/simple_spread.png">
             </div>
             <section id="simple-spread">
-<h1>Simple Spread<a class="headerlink" href="#simple-spread" title="Permalink to this heading">#</a></h1>
+<h1>Simple Spread<a class="headerlink" href="#simple-spread" title="Link to this heading">#</a></h1>
 <figure class="align-default" id="id1">
 <a class="reference internal image-reference" href="../../../_images/mpe_simple_spread.gif"><img alt="../../../_images/mpe_simple_spread.gif" src="../../../_images/mpe_simple_spread.gif" style="width: 140px;" /></a>
 </figure>
@@ -442,7 +442,7 @@
 <p>Agent observations: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">self_pos,</span> <span class="pre">landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions,</span> <span class="pre">communication]</span></code></p>
 <p>Agent action space: <code class="docutils literal notranslate"><span class="pre">[no_action,</span> <span class="pre">move_left,</span> <span class="pre">move_right,</span> <span class="pre">move_down,</span> <span class="pre">move_up]</span></code></p>
 <section id="arguments">
-<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading">#</a></h2>
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">simple_spread_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">local_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">continuous_actions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -452,9 +452,9 @@
 <p><code class="docutils literal notranslate"><span class="pre">continuous_actions</span></code>: Whether agent action spaces are discrete(default) or continuous</p>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
 <section id="aec">
-<h3>AEC<a class="headerlink" href="#aec" title="Permalink to this heading">#</a></h3>
+<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.mpe</span> <span class="kn">import</span> <span class="n">simple_spread_v3</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">simple_spread_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
@@ -476,7 +476,7 @@
 </div>
 </section>
 <section id="parallel">
-<h3>Parallel<a class="headerlink" href="#parallel" title="Permalink to this heading">#</a></h3>
+<h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.mpe</span> <span class="kn">import</span> <span class="n">simple_spread_v3</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">simple_spread_v3</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
@@ -494,54 +494,54 @@
 </section>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.mpe.simple_spread.simple_spread.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cycles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_actions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/mpe/simple_spread/simple_spread/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.mpe.simple_spread.simple_spread.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cycles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_actions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/mpe/simple_spread/simple_spread/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env" title="Link to this definition">#</a></dt>
 <dd><p>Uses the <code class="docutils literal notranslate"><span class="pre">args</span></code> and <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> from the object’s constructor for pickling.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.action_spaces">
-<span class="sig-name descname"><span class="pre">action_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">gymnasium.spaces.Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.action_spaces" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">action_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">gymnasium.spaces.Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.action_spaces" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.agent_selection">
-<span class="sig-name descname"><span class="pre">agent_selection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AgentID</span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.agent_selection" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">agent_selection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AgentID</span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.agent_selection" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.agents">
-<span class="sig-name descname"><span class="pre">agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.agents" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.agents" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.infos">
-<span class="sig-name descname"><span class="pre">infos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.infos" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">infos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.infos" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.observation_spaces">
-<span class="sig-name descname"><span class="pre">observation_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">gymnasium.spaces.Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.observation_spaces" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observation_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">gymnasium.spaces.Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.observation_spaces" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.possible_agents">
-<span class="sig-name descname"><span class="pre">possible_agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.possible_agents" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">possible_agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.possible_agents" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.rewards">
-<span class="sig-name descname"><span class="pre">rewards</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.rewards" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rewards</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.rewards" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.terminations">
-<span class="sig-name descname"><span class="pre">terminations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.terminations" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">terminations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.terminations" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.mpe.simple_spread.simple_spread.raw_env.truncations">
-<span class="sig-name descname"><span class="pre">truncations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.truncations" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">truncations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.mpe.simple_spread.simple_spread.raw_env.truncations" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -726,9 +726,9 @@
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

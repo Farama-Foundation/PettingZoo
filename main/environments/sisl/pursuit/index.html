@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Waterworld" href="../waterworld/" /><link rel="prev" title="Multiwalker" href="../multiwalker/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/sisl/pursuit.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Pursuit - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -387,7 +387,7 @@
               <img class="farama-env-icon" src="../../../_static/img/icons/sisl/pursuit.png">
             </div>
             <section id="pursuit">
-<h1>Pursuit<a class="headerlink" href="#pursuit" title="Permalink to this heading">#</a></h1>
+<h1>Pursuit<a class="headerlink" href="#pursuit" title="Link to this heading">#</a></h1>
 <figure class="align-default" id="id1">
 <a class="reference internal image-reference" href="../../../_images/sisl_pursuit.gif"><img alt="../../../_images/sisl_pursuit.gif" src="../../../_images/sisl_pursuit.gif" style="width: 140px;" /></a>
 </figure>
@@ -435,11 +435,11 @@ and the evader is removed from the environment. Pursuers also receive a reward o
 the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in section 4.1 of the PettingZoo paper applied.</p>
 <p>Observation shape takes the full form of <code class="docutils literal notranslate"><span class="pre">(obs_range,</span> <span class="pre">obs_range,</span> <span class="pre">3)</span></code> where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.</p>
 <section id="manual-control">
-<h2>Manual Control<a class="headerlink" href="#manual-control" title="Permalink to this heading">#</a></h2>
+<h2>Manual Control<a class="headerlink" href="#manual-control" title="Link to this heading">#</a></h2>
 <p>Select different pursuers with ‘J’ and ‘K’. The selected pursuer can be moved with the arrow keys.</p>
 </section>
 <section id="arguments">
-<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading">#</a></h2>
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pursuit_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_evaders</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
 <span class="n">n_pursuers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">obs_range</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n_catch</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freeze_evaders</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tag_reward</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
 <span class="n">catch_reward</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">urgency_reward</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">surround</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint_window</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -460,7 +460,7 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <p><code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>:  After max_cycles steps all agents will return done</p>
 </section>
 <section id="version-history">
-<h2>Version History<a class="headerlink" href="#version-history" title="Permalink to this heading">#</a></h2>
+<h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)</p></li>
 <li><p>v3: Observation space bug fixed (1.5.0)</p></li>
@@ -470,9 +470,9 @@ the red pursuer agents. The environment terminates when every evader has been ca
 </ul>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
 <section id="aec">
-<h3>AEC<a class="headerlink" href="#aec" title="Permalink to this heading">#</a></h3>
+<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.sisl</span> <span class="kn">import</span> <span class="n">pursuit_v4</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
@@ -494,7 +494,7 @@ the red pursuer agents. The environment terminates when every evader has been ca
 </div>
 </section>
 <section id="parallel">
-<h3>Parallel<a class="headerlink" href="#parallel" title="Permalink to this heading">#</a></h3>
+<h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.sisl</span> <span class="kn">import</span> <span class="n">pursuit_v4</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v4</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
@@ -512,19 +512,19 @@ the red pursuer agents. The environment terminates when every evader has been ca
 </section>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.pursuit.pursuit.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.env" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.pursuit.pursuit.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.env" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.pursuit.pursuit.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.sisl.pursuit.pursuit.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env" title="Link to this definition">#</a></dt>
 <dd><p>Uses the <code class="docutils literal notranslate"><span class="pre">args</span></code> and <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> from the object’s constructor for pickling.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.action_space">
-<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.action_space" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.action_space" title="Link to this definition">#</a></dt>
 <dd><p>Takes in agent and returns the action space for that agent.</p>
 <p>MUST return the same value for the same agent name</p>
 <p>Default implementation is to return the action_spaces dict</p>
@@ -532,7 +532,7 @@ the red pursuer agents. The environment terminates when every evader has been ca
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.close" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.close" title="Link to this definition">#</a></dt>
 <dd><p>Closes any resources that should be released.</p>
 <p>Closes the rendering window, subprocesses, network connections,
 or any other resources that should be released.</p>
@@ -540,7 +540,7 @@ or any other resources that should be released.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.observation_space">
-<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.observation_space" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.observation_space" title="Link to this definition">#</a></dt>
 <dd><p>Takes in agent and returns the observation space for that agent.</p>
 <p>MUST return the same value for the same agent name</p>
 <p>Default implementation is to return the observation_spaces dict</p>
@@ -548,14 +548,14 @@ or any other resources that should be released.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.observe">
-<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.observe" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.observe" title="Link to this definition">#</a></dt>
 <dd><p>Returns the observation an agent currently can make.</p>
 <p><cite>last()</cite> calls this function.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.render" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the environment as specified by self.render_mode.</p>
 <p>Render mode can be <cite>human</cite> to display a window.
 Other render modes in the default environments are <cite>‘rgb_array’</cite>
@@ -565,13 +565,13 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.reset" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.reset" title="Link to this definition">#</a></dt>
 <dd><p>Resets the environment to a starting state.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.step" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.step" title="Link to this definition">#</a></dt>
 <dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
 <p>Automatically switches control to the next agent.</p>
 </dd></dl>
@@ -749,9 +749,9 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

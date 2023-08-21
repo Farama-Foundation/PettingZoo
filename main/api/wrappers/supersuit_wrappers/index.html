@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Shimmy Compatibility Wrappers" href="../shimmy_wrappers/" /><link rel="prev" title="PettingZoo Wrappers" href="../pz_wrappers/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/wrappers/supersuit_wrappers.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Supersuit Wrappers - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -394,7 +394,7 @@
           <article role="main">
             
             <section id="supersuit-wrappers">
-<h1>Supersuit Wrappers<a class="headerlink" href="#supersuit-wrappers" title="Permalink to this heading">#</a></h1>
+<h1>Supersuit Wrappers<a class="headerlink" href="#supersuit-wrappers" title="Link to this heading">#</a></h1>
 <p>The <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit">SuperSuit</a> companion package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">supersuit</span></code>) includes a collection of pre-processing functions which can applied to both <a class="reference internal" href="../../aec/"><span class="doc std std-doc">AEC</span></a> and <a class="reference internal" href="../../parallel/"><span class="doc std std-doc">Parallel</span></a> environments.</p>
 <p>To convert <a class="reference internal" href="../../../environments/atari/space_invaders/"><span class="doc std std-doc">space invaders</span></a> to a greyscale observation space and stack the last 4 frames:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">space_invaders_v2</span>
@@ -406,140 +406,140 @@
 </pre></div>
 </div>
 <section id="included-functions">
-<h2>Included Functions<a class="headerlink" href="#included-functions" title="Permalink to this heading">#</a></h2>
+<h2>Included Functions<a class="headerlink" href="#included-functions" title="Link to this heading">#</a></h2>
 <p>Supersuit includes the following wrappers:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="clip_reward_v0">
-<span class="sig-name descname"><span class="pre">clip_reward_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clip_reward_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">clip_reward_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clip_reward_v0" title="Link to this definition">#</a></dt>
 <dd><p>Clips rewards to between lower_bound and upper_bound. This is a popular way of handling rewards with significant variance of magnitude, especially in Atari environments.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clip_actions_v0">
-<span class="sig-name descname"><span class="pre">clip_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clip_actions_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">clip_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clip_actions_v0" title="Link to this definition">#</a></dt>
 <dd><p>Clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="color_reduction_v0">
-<span class="sig-name descname"><span class="pre">color_reduction_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#color_reduction_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">color_reduction_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#color_reduction_v0" title="Link to this definition">#</a></dt>
 <dd><p>Simplifies color information in graphical ((x,y,3) shaped) environments. <cite>mode=’full’</cite> fully greyscales of the observation. This can be computationally intensive. Arguments of ‘R’, ‘G’ or ‘B’ just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dtype_v0">
-<span class="sig-name descname"><span class="pre">dtype_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dtype_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dtype_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dtype_v0" title="Link to this definition">#</a></dt>
 <dd><p>Recasts your observation as a certain dtype. Many graphical games return <cite>uint8</cite> observations, while neural networks generally want <cite>float16</cite> or <cite>float32</cite>. <cite>dtype</cite> can be anything NumPy would except as a dtype argument (e.g. np.dtype classes or strings).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="flatten_v0">
-<span class="sig-name descname"><span class="pre">flatten_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flatten_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">flatten_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flatten_v0" title="Link to this definition">#</a></dt>
 <dd><p>flattens observations into a 1D array.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="frame_skip_v0">
-<span class="sig-name descname"><span class="pre">frame_skip_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#frame_skip_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">frame_skip_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#frame_skip_v0" title="Link to this definition">#</a></dt>
 <dd><p>Skips <cite>num_frames</cite> number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari’s frameskip parameter, <cite>num_frames</cite> can also be a tuple <cite>(min_skip, max_skip)</cite>, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="delay_observations_v0">
-<span class="sig-name descname"><span class="pre">delay_observations_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#delay_observations_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">delay_observations_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#delay_observations_v0" title="Link to this definition">#</a></dt>
 <dd><p>Delays observation by <cite>delay</cite> frames. Before <cite>delay</cite> frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sticky_actions_v0">
-<span class="sig-name descname"><span class="pre">sticky_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat_action_probability</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sticky_actions_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sticky_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat_action_probability</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sticky_actions_v0" title="Link to this definition">#</a></dt>
 <dd><p>Assigns a probability of an old action “sticking” to the environment and not updating as requested. This is to prevent agents from learning predefined action patterns in highly deterministic games like Atari. Note that the stickiness is cumulative, so an action has a repeat_action_probability^2 chance of an action sticking for two turns in a row, etc. This is the recommended way of adding randomness to Atari by <em>“Machado et al. (2018), “Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents”</em></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="frame_stack_v1">
-<span class="sig-name descname"><span class="pre">frame_stack_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#frame_stack_v1" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">frame_stack_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#frame_stack_v1" title="Link to this definition">#</a></dt>
 <dd><p>Stacks the most recent frames. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. 2D or 3D arrays are stacked to be taller 3D arrays. At the start of the game, frames that don’t yet exist are filled with 0s. <cite>num_frames=1</cite> is analogous to not using this function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="max_observation_v0">
-<span class="sig-name descname"><span class="pre">max_observation_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#max_observation_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">max_observation_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#max_observation_v0" title="Link to this definition">#</a></dt>
 <dd><p>The resulting observation becomes the max over <cite>memory</cite> number of prior frames. This is important for Atari environments, as many games have elements that are intermitently flashed on the instead of being constant, due to the peculiarities of the console and CRT TVs. The OpenAI baselines MaxAndSkip Atari wrapper is equivalent to doing <cite>memory=2</cite> and then a  <cite>frame_skip</cite> of 4.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="normalize_obs_v0">
-<span class="sig-name descname"><span class="pre">normalize_obs_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#normalize_obs_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">normalize_obs_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#normalize_obs_v0" title="Link to this definition">#</a></dt>
 <dd><p>Linearly scales observations to the range <cite>env_min</cite> (default 0) to <cite>env_max</cite> (default 1), given the known minimum and maximum observation values defined in the observation space. Only works on Box observations with float32 or float64 dtypes and finite bounds. If you wish to normalize another type, you can first apply the dtype wrapper to convert your type to float32 or float64.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="reshape_v0">
-<span class="sig-name descname"><span class="pre">reshape_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reshape_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reshape_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reshape_v0" title="Link to this definition">#</a></dt>
 <dd><p>Reshapes observations into given shape.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="resize_v1">
-<span class="sig-name descname"><span class="pre">resize_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear_interp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#resize_v1" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">resize_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear_interp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#resize_v1" title="Link to this definition">#</a></dt>
 <dd><p>Performs interpolation to up-size or down-size observation image using area interpolation by default. Linear interpolation is also available by setting <cite>linear_interp=True</cite> (it’s faster and better for up-sizing). This wrapper is only available for 2D or 3D observations, and only makes sense if the observation is an image.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="nan_noop_v0">
-<span class="sig-name descname"><span class="pre">nan_noop_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_noop_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">nan_noop_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_noop_v0" title="Link to this definition">#</a></dt>
 <dd><p>If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a no operation action in its place. The noop action is accepted as an argument in the <cite>step(action, no_op_action)</cite> function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="nan_zeros_v0">
-<span class="sig-name descname"><span class="pre">nan_zeros_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_zeros_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">nan_zeros_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_zeros_v0" title="Link to this definition">#</a></dt>
 <dd><p>If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a zeros action in its place.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="nan_random_v0">
-<span class="sig-name descname"><span class="pre">nan_random_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_random_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">nan_random_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_random_v0" title="Link to this definition">#</a></dt>
 <dd><p>If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a random action in its place. The random action will be retrieved from the action mask.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="scale_actions_v0">
-<span class="sig-name descname"><span class="pre">scale_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scale_actions_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scale_actions_v0" title="Link to this definition">#</a></dt>
 <dd><p>Scales the high and low bounds of the action space by the <cite>scale</cite> argument in __init__(). Additionally, scales any actions by the same value when step() is called.</p>
 </dd></dl>
 
 </section>
 <section id="included-multi-agent-only-functions">
-<h2>Included Multi-Agent Only Functions<a class="headerlink" href="#included-multi-agent-only-functions" title="Permalink to this heading">#</a></h2>
+<h2>Included Multi-Agent Only Functions<a class="headerlink" href="#included-multi-agent-only-functions" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="agent_indicator_v0">
-<span class="sig-name descname"><span class="pre">agent_indicator_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#agent_indicator_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">agent_indicator_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#agent_indicator_v0" title="Link to this definition">#</a></dt>
 <dd><p>Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to <em>n</em> additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it’s acting on. Set the <cite>type_only</cite> parameter to parse the name of the agent as <cite>&lt;type&gt;_&lt;n&gt;</cite> and have the appended 1-hot vector only identify the type, rather than the specific agent name. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in <em>Cooperative Multi-Agent Control Using Deep Reinforcement Learning.</em></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="black_death_v2">
-<span class="sig-name descname"><span class="pre">black_death_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#black_death_v2" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">black_death_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#black_death_v2" title="Link to this definition">#</a></dt>
 <dd><p>Instead of removing dead actions, observations and rewards are 0 and actions are ignored. This can simplify handling agent death mechanics. The name “black death” does not come from the plague, but from the fact that you see a black image (an image filled with zeros) when you die.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pad_action_space_v0">
-<span class="sig-name descname"><span class="pre">pad_action_space_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pad_action_space_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">pad_action_space_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pad_action_space_v0" title="Link to this definition">#</a></dt>
 <dd><p>Pads the action spaces of all agents to be be the same as the biggest, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>.  This enables MARL methods that require homogeneous action spaces for all agents to work with environments with heterogeneous action spaces. Discrete actions inside the padded region will be set to zero, and Box actions will be cropped down to the original space.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pad_observations_v0">
-<span class="sig-name descname"><span class="pre">pad_observations_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pad_observations_v0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">pad_observations_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pad_observations_v0" title="Link to this definition">#</a></dt>
 <dd><p>Pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.</p>
 </dd></dl>
 
 </section>
 <section id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">#</a></h2>
 <p>If you use this in your research, please cite:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">SuperSuit</span><span class="p">,</span>
   <span class="n">Title</span> <span class="o">=</span> <span class="p">{</span><span class="n">SuperSuit</span><span class="p">:</span> <span class="n">Simple</span> <span class="n">Microwrappers</span> <span class="k">for</span> <span class="n">Reinforcement</span> <span class="n">Learning</span> <span class="n">Environments</span><span class="p">},</span>
@@ -736,9 +736,9 @@
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>

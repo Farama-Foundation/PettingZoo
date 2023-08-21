@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -10,11 +10,11 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/utils/conversions.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../genindex/" /><link rel="search" title="Search" href="../../../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/utils/conversions.html" />
 
-    <link rel="shortcut icon" href="../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>pettingzoo.utils.conversions - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?digest=5d0deb98f4b2e6cecaee64745957f1068f205919" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -430,10 +430,12 @@
     <span class="k">return</span> <span class="n">aec_fn</span>
 
 
-<div class="viewcode-block" id="aec_to_parallel"><a class="viewcode-back" href="../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.aec_to_parallel">[docs]</a><span class="k">def</span> <span class="nf">aec_to_parallel</span><span class="p">(</span><span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts an aec environment to a parallel environment.</span>
+<div class="viewcode-block" id="aec_to_parallel">
+<a class="viewcode-back" href="../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.aec_to_parallel">[docs]</a>
+<span class="k">def</span> <span class="nf">aec_to_parallel</span><span class="p">(</span><span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts an AEC environment to a Parallel environment.</span>
 
-<span class="sd">    In the case of an existing parallel environment wrapped using a `parallel_to_aec_wrapper`, this function will return the original parallel environment.</span>
+<span class="sd">    In the case of an existing Parallel environment wrapped using a `parallel_to_aec_wrapper`, this function will return the original Parallel environment.</span>
 <span class="sd">    Otherwise, it will apply the `aec_to_parallel_wrapper` to convert the environment.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aec_env</span><span class="p">,</span> <span class="n">OrderEnforcingWrapper</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
@@ -445,10 +447,13 @@
         <span class="k">return</span> <span class="n">par_env</span></div>
 
 
-<div class="viewcode-block" id="parallel_to_aec"><a class="viewcode-back" href="../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.parallel_to_aec">[docs]</a><span class="k">def</span> <span class="nf">parallel_to_aec</span><span class="p">(</span><span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts an aec environment to a parallel environment.</span>
 
-<span class="sd">    In the case of an existing aec environment wrapped using a `aec_to_prallel_wrapper`, this function will return the original AEC environment.</span>
+<div class="viewcode-block" id="parallel_to_aec">
+<a class="viewcode-back" href="../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.parallel_to_aec">[docs]</a>
+<span class="k">def</span> <span class="nf">parallel_to_aec</span><span class="p">(</span><span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a Parallel environment to an AEC environment.</span>
+
+<span class="sd">    In the case of an existing AEC environment wrapped using a `aec_to_parallel_wrapper`, this function will return the original AEC environment.</span>
 <span class="sd">    Otherwise, it will apply the `parallel_to_aec_wrapper` to convert the environment.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">par_env</span><span class="p">,</span> <span class="n">aec_to_parallel_wrapper</span><span class="p">):</span>
@@ -457,6 +462,7 @@
         <span class="n">aec_env</span> <span class="o">=</span> <span class="n">parallel_to_aec_wrapper</span><span class="p">(</span><span class="n">par_env</span><span class="p">)</span>
         <span class="n">ordered_env</span> <span class="o">=</span> <span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ordered_env</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">turn_based_aec_to_parallel</span><span class="p">(</span><span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">:</span>
@@ -486,7 +492,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aec_env</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">aec_env</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_parallelizable&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">&quot;Converting from an AEC environment to a parallel environment &quot;</span>
+            <span class="s2">&quot;Converting from an AEC environment to a Parallel environment &quot;</span>
             <span class="s2">&quot;with the to_parallel wrapper is not generally safe &quot;</span>
             <span class="s2">&quot;(the AEC environment should only update once at the end &quot;</span>
             <span class="s2">&quot;of each cycle). If you have confirmed that your AEC environment &quot;</span>
@@ -604,7 +610,7 @@
 
 
 <span class="k">class</span> <span class="nc">parallel_to_aec_wrapper</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a parallel environment into an AEC environment.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a Parallel environment into an AEC environment.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallel_env</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">parallel_env</span>
@@ -974,9 +980,9 @@
         })()
       </script>
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=02c22e3c"></script>
+    <script src="../../../../_static/documentation_options.js?v=97aa7057"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
