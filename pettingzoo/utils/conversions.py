@@ -1,7 +1,7 @@
 import copy
 import warnings
 from collections import defaultdict
-from typing import Callable, Optional
+from typing import Callable, Dict, Optional
 
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType, ParallelEnv
@@ -296,7 +296,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self._observations, self.infos = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
-        self._actions: dict[AgentID, Optional[ActionType]] = {
+        self._actions: Dict[AgentID, Optional[ActionType]] = {
             agent: None for agent in self.agents
         }
         self._agent_selector = agent_selector(self._live_agents)
@@ -349,7 +349,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
 
             self.agents = self.env.agents + [
                 agent
-                for agent in sorted(self._observations.keys(), key=lambda x: hash(x))
+                for agent in sorted(self._observations.keys(), key=lambda x: str(x))
                 if agent not in env_agent_set
             ]
 

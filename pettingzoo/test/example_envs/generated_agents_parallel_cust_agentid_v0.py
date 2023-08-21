@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Tuple, Union
 
 import gymnasium
 import numpy as np
@@ -19,11 +19,11 @@ def raw_env(**kwargs):
     return conversions.parallel_to_aec(parallel_env(**kwargs))
 
 
-def get_type(agent: tuple[str, int]):
+def get_type(agent: Tuple[str, int]):
     return agent[0]
 
 
-class parallel_env(ParallelEnv[tuple[str, int], np.ndarray, Union[int, None]]):
+class parallel_env(ParallelEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):

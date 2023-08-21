@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pettingzoo.test import api_test, parallel_api_test, seed_test
 from pettingzoo.test.example_envs import (
     generated_agents_env_cust_agentid_v0,
