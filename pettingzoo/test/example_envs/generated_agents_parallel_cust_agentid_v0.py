@@ -20,6 +20,7 @@ def raw_env(**kwargs):
 def get_type(agent: tuple[str, int]):
     return agent[0]
 
+
 class parallel_env(ParallelEnv[tuple[str, int], np.ndarray, int | None]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
@@ -120,7 +121,9 @@ class parallel_env(ParallelEnv[tuple[str, int], np.ndarray, int | None]):
         if not truncated:
             for i in range(6):
                 if self.np_random.random() < 0.1 and len(self.agents) >= 10:
-                    all_terminations[self.agents[self.np_random.choice(len(self.agents))]] = True
+                    all_terminations[
+                        self.agents[self.np_random.choice(len(self.agents))]
+                    ] = True
 
             for i in range(3):
                 if self.np_random.random() < 0.1:

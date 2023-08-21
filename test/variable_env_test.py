@@ -1,9 +1,9 @@
 from pettingzoo.test import api_test, parallel_api_test, seed_test
 from pettingzoo.test.example_envs import (
-    generated_agents_env_v0,
-    generated_agents_parallel_v0,
     generated_agents_env_cust_agentid_v0,
-    generated_agents_parallel_cust_agentid_v0
+    generated_agents_env_v0,
+    generated_agents_parallel_cust_agentid_v0,
+    generated_agents_parallel_v0,
 )
 from pettingzoo.test.seed_test import (
     check_environment_deterministic_parallel,
@@ -37,7 +37,11 @@ def test_generated_agents_parallel_to_aec():
     seed_test(lambda: parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
 
     api_test(parallel_to_aec(generated_agents_parallel_cust_agentid_v0.parallel_env()))
-    seed_test(lambda: parallel_to_aec(generated_agents_parallel_cust_agentid_v0.parallel_env()))
+    seed_test(
+        lambda: parallel_to_aec(
+            generated_agents_parallel_cust_agentid_v0.parallel_env()
+        )
+    )
 
 
 def test_double_conversion_equals():

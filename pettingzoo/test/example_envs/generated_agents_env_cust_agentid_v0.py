@@ -16,6 +16,7 @@ def env():
 def get_type(agent: tuple[str, int]):
     return agent[0]
 
+
 class raw_env(AECEnv[tuple[str, int], np.ndarray, int | None]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_env_v0"}
 
