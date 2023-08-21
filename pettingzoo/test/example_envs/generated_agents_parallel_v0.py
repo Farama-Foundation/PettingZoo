@@ -1,3 +1,5 @@
+from typing import Union
+
 import gymnasium
 import numpy as np
 from gymnasium.utils import seeding
@@ -21,7 +23,7 @@ def get_type(agent):
     return agent[: agent.rfind("_")]
 
 
-class parallel_env(ParallelEnv[str, np.ndarray, int | None]):
+class parallel_env(ParallelEnv[str, np.ndarray, Union[int, None]]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):

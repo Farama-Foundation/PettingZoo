@@ -1,3 +1,5 @@
+from typing import Union
+
 import gymnasium
 import numpy as np
 
@@ -17,7 +19,7 @@ def get_type(agent: tuple[str, int]):
     return agent[0]
 
 
-class raw_env(AECEnv[tuple[str, int], np.ndarray, int | None]):
+class raw_env(AECEnv[tuple[str, int], np.ndarray, Union[int, None]]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_env_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):
