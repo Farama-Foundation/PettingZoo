@@ -1,3 +1,5 @@
+from typing import Union
+
 import gymnasium
 import numpy as np
 
@@ -17,7 +19,7 @@ def get_type(agent):
     return agent[: agent.rfind("_")]
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_env_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):
@@ -26,7 +28,7 @@ class raw_env(AECEnv):
         self._act_spaces = {}
 
         # dummy state space, not actually used
-        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self.state_space = gymnasium.spaces.MultiDiscrete([10, 10])
         self._state = self.state_space.sample()
 
         self.types = []
@@ -87,7 +89,7 @@ class raw_env(AECEnv):
 
         self._obs_spaces = {}
         self._act_spaces = {}
-        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self.state_space = gymnasium.spaces.MultiDiscrete([10, 10])
         self._state = self.state_space.sample()
 
         self.types = []
