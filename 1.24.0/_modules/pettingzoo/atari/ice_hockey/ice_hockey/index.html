@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -10,11 +10,11 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/atari/ice_hockey/ice_hockey.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/atari/ice_hockey/ice_hockey.html" />
 
-    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>pettingzoo.atari.ice_hockey.ice_hockey - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -280,6 +280,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mpe/simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mpe/simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mpe/simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/mpe/simple_tag/">Simple Tag</a></li>
@@ -463,7 +464,9 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/atari/ice_hockey/#pettingzoo.atari.ice_hockey.ice_hockey.raw_env">[docs]</a><span class="k">def</span> <span class="nf">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="raw_env">
+<a class="viewcode-back" href="../../../../../environments/atari/ice_hockey/#pettingzoo.atari.ice_hockey.ice_hockey.raw_env">[docs]</a>
+<span class="k">def</span> <span class="nf">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
@@ -473,6 +476,7 @@
     <span class="k">return</span> <span class="n">BaseAtariEnv</span><span class="p">(</span>
         <span class="n">game</span><span class="o">=</span><span class="s2">&quot;ice_hockey&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span></div>
+
 
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">base_env_wrapper_fn</span><span class="p">(</span><span class="n">raw_env</span><span class="p">)</span>
@@ -594,10 +598,10 @@
         })()
       </script>
 
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
-    <script src="../../../../../_static/doctools.js"></script>
-    <script src="../../../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../../../_static/scripts/furo.js"></script>
+    <script src="../../../../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
 
@@ -727,7 +731,7 @@
             const subSectionContainerElem = Object.assign(
                 document.createElement('div'), {
                   className:'farama-header-menu__subsections-container',
-                  style: key == "Mature Projects" ? "display: flex" : ""
+                  style: 'display: flex'
                 }
             )
             Object.keys(subSections).forEach((subKey, i) => {
@@ -742,7 +746,7 @@
                   innerText: subKey
                 }
               ))
-              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
               subSectionElem.appendChild(ulElem);
               subSectionContainerElem.appendChild(subSectionElem);
             })

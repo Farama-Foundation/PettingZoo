@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Connect Four" href="../connect_four/" /><link rel="prev" title="Classic" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/classic/chess.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Chess - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -281,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../mpe/simple_tag/">Simple Tag</a></li>
@@ -386,7 +387,7 @@
               <img class="farama-env-icon" src="../../../_static/img/icons/classic/chess.png">
             </div>
             <section id="chess">
-<h1>Chess<a class="headerlink" href="#chess" title="Permalink to this heading">#</a></h1>
+<h1>Chess<a class="headerlink" href="#chess" title="Link to this heading">#</a></h1>
 <figure class="align-default" id="id1">
 <a class="reference internal image-reference" href="../../../_images/classic_chess.gif"><img alt="../../../_images/classic_chess.gif" src="../../../_images/classic_chess.gif" style="width: 140px;" /></a>
 </figure>
@@ -431,7 +432,7 @@
 </div>
 <p>Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.</p>
 <section id="observation-space">
-<h2>Observation Space<a class="headerlink" href="#observation-space" title="Permalink to this heading">#</a></h2>
+<h2>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">#</a></h2>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
 <p>Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 111 channels representing:</p>
 <ul class="simple">
@@ -455,13 +456,13 @@ Similar to LeelaChessZero, en passant possibilities are represented by displayin
 <p>Unlike AlphaZero, where the board orientation may vary, in our system, the <code class="docutils literal notranslate"><span class="pre">env.board_history</span></code> always maintains the orientation towards the white agent, with the white agent’s king consistently positioned on the 1st row. In simpler terms, both players are observing the same board layout.</p>
 <p>Nevertheless, we have incorporated a convenient feature, the env.observe(‘player_1’) function, specifically for the black agent’s orientation. This facilitates the training of agents capable of playing proficiently as both black and white.</p>
 <section id="legal-actions-mask">
-<h3>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Permalink to this heading">#</a></h3>
+<h3>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Link to this heading">#</a></h3>
 <p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one
 whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
 </section>
 </section>
 <section id="action-space">
-<h2>Action Space<a class="headerlink" href="#action-space" title="Permalink to this heading">#</a></h2>
+<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">#</a></h2>
 <p>From the AlphaZero chess paper:</p>
 <blockquote>
 <div><p>[In AlphaChessZero, the] action space is a 8x8x73 dimensional array.
@@ -510,7 +511,7 @@ queen.</p>
 </div>
 </section>
 <section id="rewards">
-<h2>Rewards<a class="headerlink" href="#rewards" title="Permalink to this heading">#</a></h2>
+<h2>Rewards<a class="headerlink" href="#rewards" title="Link to this heading">#</a></h2>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -529,7 +530,7 @@ queen.</p>
 </div>
 </section>
 <section id="version-history">
-<h2>Version History<a class="headerlink" href="#version-history" title="Permalink to this heading">#</a></h2>
+<h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>v6: Fixed wrong player starting first, check for insufficient material/50-turn rule/three fold repetition (1.23.2)</p></li>
 <li><p>v5: Changed python-chess version to version 1.7 (1.13.1)</p></li>
@@ -540,20 +541,45 @@ queen.</p>
 <li><p>v0: Initial versions release (1.0.0)</p></li>
 </ul>
 </section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<section id="aec">
+<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">chess_v6</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">chess_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="c1"># this is where you would insert your policy</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</section>
+</section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.chess.chess.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.env" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.chess.chess.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.env" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.chess.chess.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">800</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env" title="Permalink to this definition">#</a></dt>
-<dd><p>Uses the <code class="docutils literal notranslate"><span class="pre">args</span></code> and <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> from the object’s constructor for pickling.</p>
-<dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.chess.chess.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">800</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.action_space">
-<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.action_space" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.action_space" title="Link to this definition">#</a></dt>
 <dd><p>Takes in agent and returns the action space for that agent.</p>
 <p>MUST return the same value for the same agent name</p>
 <p>Default implementation is to return the action_spaces dict</p>
@@ -561,7 +587,7 @@ queen.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.close" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.close" title="Link to this definition">#</a></dt>
 <dd><p>Closes any resources that should be released.</p>
 <p>Closes the rendering window, subprocesses, network connections,
 or any other resources that should be released.</p>
@@ -569,7 +595,7 @@ or any other resources that should be released.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.observation_space">
-<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.observation_space" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.observation_space" title="Link to this definition">#</a></dt>
 <dd><p>Takes in agent and returns the observation space for that agent.</p>
 <p>MUST return the same value for the same agent name</p>
 <p>Default implementation is to return the observation_spaces dict</p>
@@ -577,14 +603,14 @@ or any other resources that should be released.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.observe">
-<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.observe" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.observe" title="Link to this definition">#</a></dt>
 <dd><p>Returns the observation an agent currently can make.</p>
 <p><cite>last()</cite> calls this function.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.render" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the environment as specified by self.render_mode.</p>
 <p>Render mode can be <cite>human</cite> to display a window.
 Other render modes in the default environments are <cite>‘rgb_array’</cite>
@@ -594,13 +620,13 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.reset" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.reset" title="Link to this definition">#</a></dt>
 <dd><p>Resets the environment to a starting state.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.step" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.step" title="Link to this definition">#</a></dt>
 <dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
 <p>Automatically switches control to the next agent.</p>
 </dd></dl>
@@ -675,6 +701,10 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 <li><a class="reference internal" href="#action-space">Action Space</a></li>
 <li><a class="reference internal" href="#rewards">Rewards</a></li>
 <li><a class="reference internal" href="#version-history">Version History</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#aec">AEC</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#pettingzoo.classic.chess.chess.env"><code class="docutils literal notranslate"><span class="pre">env</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.classic.chess.chess.raw_env"><code class="docutils literal notranslate"><span class="pre">raw_env</span></code></a><ul>
@@ -775,10 +805,10 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
 
@@ -908,7 +938,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
             const subSectionContainerElem = Object.assign(
                 document.createElement('div'), {
                   className:'farama-header-menu__subsections-container',
-                  style: key == "Mature Projects" ? "display: flex" : ""
+                  style: 'display: flex'
                 }
             )
             Object.keys(subSections).forEach((subKey, i) => {
@@ -923,7 +953,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
                   innerText: subKey
                 }
               ))
-              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
               subSectionElem.appendChild(ulElem);
               subSectionContainerElem.appendChild(subSectionElem);
             })

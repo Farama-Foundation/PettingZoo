@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="prev" title="SB3: Action Masked PPO for Connect Four" href="../tutorials/sb3/connect_four/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/release_notes/index.html" />
 
-    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Release Notes - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -281,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_tag/">Simple Tag</a></li>
@@ -393,26 +394,28 @@
           <article role="main">
             
             <section id="release-notes">
-<h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this heading">#</a></h1>
+<h1>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">#</a></h1>
 <section id="release-1-24-0">
-<h2>PettingZoo 1.24.0<a class="headerlink" href="#release-1-24-0" title="Permalink to this heading">#</a></h2>
-<p><em>Released on 2023-07-21 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.24.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.24.0/">PyPI</a></em></p>
+<h2>PettingZoo 1.24.0<a class="headerlink" href="#release-1-24-0" title="Link to this heading">#</a></h2>
+<p><em>Released on 2023-08-22 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.24.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.24.0/">PyPI</a></em></p>
 <h2>PettingZoo 1.24.0 Release Notes:</h2>
-<p>This release includes two new environment versions, many documentation, testing and bugfix updates, and support for Python 3.11. <a href="https://pettingzoo.farama.org/environments/classic/chess/" rel="nofollow">Chess</a> has been updated to v6 with multiple key improvements, and <a href="https://pettingzoo.farama.org/environments/classic/hanabi/" rel="nofollow">Hanabi</a> has been updated to v5 and now depends on <a href="https://shimmy.farama.org/" rel="nofollow">Shimmy</a>'s <a href="https://github.com/deepmind/open_spiel">OpenSpiel</a> wrapper, which is implemented in C++ and thoroughly tested, rather than the unmaintained <a href="https://github.com/deepmind/hanabi-learning-environment">Hanabi Learning Environment</a>. Other improvements include fixed rendering and FPS inconsistencies across all environments, as well as expanded testing, doctesting, and code linting to match <a href="https://github.com/Farama-Foundation/Gymnasium">Gymnasium</a>.</p>
-<p>We are also excited to announce 3 tutorials for <a href="https://github.com/DLR-RM/stable-baselines3">Stable-Baselines3</a>, and an updated <a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> multi-agent Atari tutorial including <a href="https://wandb.ai/" rel="nofollow">WandB</a> and <a href="https://www.tensorflow.org/tensorboard" rel="nofollow">TensorBoard</a> integration.</p>
+<p>This release includes support for Python 3.11, many updates to <a href="https://pettingzoo.farama.org/environments/classic/" rel="nofollow">Classic</a> environments (including updated Chess and Hanabi environment versions, and rendering for all RLCard envs), and many bugfixes, testing expansion, documentation updates.</p>
+<p>We are also excited to announce 3 tutorials for <a href="https://github.com/DLR-RM/stable-baselines3">Stable-Baselines3</a>, updated RLlib tutorials (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1839746341" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1051" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1051/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1051">#1051</a>), and an updated <a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> multi-agent Atari tutorial including <a href="https://wandb.ai/" rel="nofollow">WandB</a> and <a href="https://www.tensorflow.org/tensorboard" rel="nofollow">TensorBoard</a> integration.</p>
 <p>Co-released in order to make this release possible are <a href="https://github.com/Farama-Foundation/SuperSuit/releases/tag/3.9.0">SuperSuit 3.9.0</a> and <a href="https://github.com/Farama-Foundation/Shimmy/releases/tag/v1.2.0">Shimmy 1.2.0</a>, fixing <a href="https://github.com/DLR-RM/stable-baselines3">Stable-Baselines3</a> and <a href="https://github.com/deepmind/open_spiel">OpenSpiel</a> compatibility, respectively.</p>
 <h2>Breaking Changes</h2>
 <ul>
 <li>Python 3.7 is no longer supported, as it has reached end-of-life (<a href="https://endoflife.date/python" rel="nofollow">link</a>)</li>
-<li>We have deprecated <code>chess_v5</code> in favor of updated <code>chess_v6</code>
-<ul>
-<li>Perspective has been fixed to white agent, en passant represenation (see <a href="https://github.com/Farama-Foundation/PettingZoo/blob/6a0498956fbd0de6b942e520ac1130e7ed6ef855/pettingzoo/classic/chess/chess_utils.py#L311">docstring</a>) has been made consistent with Leela Chess Zero, and additional checks have been added for insufficient material</li>
-</ul>
-</li>
+<li>We have deprecated <code>chess_v5</code> in favor of updated <code>chess_v6</code></li>
+<li>We have deprecated <code>hanabi_v4</code> in favor of <code>hanabi_v5</code></li>
 </ul>
 <h2>New Features and Improvements</h2>
 <ul>
 <li>Python 3.11 support (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1806318016" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1029" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1029/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1029">#1029</a>)</li>
+<li>Permit AgentIDs other than <code>str</code> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1857995578" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1071" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1071/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1071">#1071</a>)
+<ul>
+<li>It is now acceptable to use other types such as integers as AgentIDs</li>
+</ul>
+</li>
 <li>Add <a href="https://github.com/DLR-RM/stable-baselines3">Stable-Baselines3</a> tutorial (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792483076" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1015" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1015/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1015">#1015</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1794155347" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1017" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1017/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1017">#1017</a>), with examples for:
 <ul>
 <li>Vectorized environments with visual observations (<a href="https://pettingzoo.farama.org/tutorials/sb3/kaz/" rel="nofollow">Knights, Archers, Zombies</a>)</li>
@@ -420,7 +423,7 @@
 <li>Environments with illegal action masking observations (<a href="https://pettingzoo.farama.org/main/tutorials/sb3/connect_four/" rel="nofollow">Connect Four</a>)</li>
 </ul>
 </li>
-<li>Add updated <a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> multi-agent atari example (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1810800519" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1033" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1033/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1033">#1033</a>)
+<li>Add updated <a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> multi-agent <a href="https://pettingzoo.farama.org/environments/atari/" rel="nofollow">Atari</a> example (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1810800519" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1033" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1033/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1033">#1033</a>)
 <ul>
 <li>Adapted to work with Gymnasium and current PettingZoo/SuperSuit</li>
 <li>Full training script with CLI/logging and integration with <a href="https://wandb.ai/" rel="nofollow">WandB</a> and <a href="https://www.tensorflow.org/tensorboard" rel="nofollow">TensorBoard</a></li>
@@ -430,6 +433,7 @@
 <ul>
 <li>Add checks for insufficient material, 50-moves and 3-fold repetition (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1749724753" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/997" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/997/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/997">#997</a>)</li>
 <li>Fix to white perspective, fix observation bug, add documentation (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1765716403" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1004" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1004/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1004">#1004</a>)</li>
+<li>En passant represenation (see <a href="https://github.com/Farama-Foundation/PettingZoo/blob/6a0498956fbd0de6b942e520ac1130e7ed6ef855/pettingzoo/classic/chess/chess_utils.py#L311">docstring</a>) has been made consistent with Leela Chess Zero (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1765716403" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1004" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1004/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1004">#1004</a>)</li>
 <li>Update python-chess version from 1.7.0 to 1.9.4 (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1805646979" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1026" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1026/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1026">#1026</a>)</li>
 </ul>
 </li>
@@ -440,34 +444,41 @@
 <li>First update in over 2 years, fixed a large number of issues and brought up to current code standards</li>
 </ul>
 </li>
-<li>Add additional pre-commit hooks to match Gymnasium (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792083282" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1012" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1012/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1012">#1012</a>)</li>
+<li>Add rendering for <a href="https://pettingzoo.farama.org/environments/classic/gin_rummy/" rel="nofollow">Gin Rummy</a>, <a href="https://pettingzoo.farama.org/environments/classic/leduc_holdem/" rel="nofollow">Leduc Holdem</a>, and <a href="https://pettingzoo.farama.org/environments/classic/tictactoe/" rel="nofollow">Tic-Tac-Toe</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1846939386" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1054" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1054/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1054">#1054</a>)</li>
+<li>Adapt <a href="https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper" rel="nofollow">AssertOutOfBounds</a> wrapper to work with all environments, rather than discrete only (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1820826817" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1046" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1046/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1046">#1046</a>)</li>
+<li>Add additional pre-commit hooks, doctests to match Gymnasium (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792083282" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1012" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1012/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1012">#1012</a>)</li>
 </ul>
 <h2>Bug Fixes</h2>
 <ul>
-<li>Fix Pistonball to only render if render_mode is not None (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792409318" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1014" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1014/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1014">#1014</a>)</li>
-<li>Fix Connect Four not switching to next agent after termination (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1798202132" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1020" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1020/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1020">#1020</a>)</li>
+<li>Fix <a href="https://pettingzoo.farama.org/environments/butterfly/pistonball" rel="nofollow">Pistonball</a> to only render if render_mode is not None (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792409318" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1014" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1014/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1014">#1014</a>)</li>
+<li>Fix <a href="https://pettingzoo.farama.org/environments/classic/connect_four/" rel="nofollow">Connect Four</a> not switching to next agent after termination (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1798202132" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1020" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1020/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1020">#1020</a>)</li>
 <li>Fix classic environments screen sizes, add type hints, fix pre-commit (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1750441181" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/998" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/998/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/998">#998</a>)</li>
 <li>Fix all environments to render at correct FPS, clean up pygame code (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1761423877" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/999" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/999/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/999">#999</a>)</li>
-<li>Fix SuperSuit integration for SB3 tutorials (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1808757902" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1031" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1031/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1031">#1031</a>)</li>
-<li>Update CleanRL tutorial requirements to most recent SuperSuit/PettingZoo versions (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1797526638" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1019" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1019/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1019">#1019</a>)</li>
-<li>Update RLlib tutorial requirements to most recent SuperSuit/PettingZoo versions by (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1797525075" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1018" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1018/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1018">#1018</a>)</li>
+<li>Fix SuperSuit integration for <a href="https://pettingzoo.farama.org/tutorials/sb3/" rel="nofollow">SB3 tutorials</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1808757902" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1031" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1031/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1031">#1031</a>)</li>
+<li>Update <a href="https://pettingzoo.farama.org/tutorials/cleanrl/" rel="nofollow">CleanRL tutorial</a> requirements to most recent SuperSuit/PettingZoo versions (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1797526638" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1019" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1019/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1019">#1019</a>)</li>
+<li>Update <a href="https://pettingzoo.farama.org/tutorials/rllib/" rel="nofollow">RLlib tutorial</a> requirements to most recent SuperSuit/PettingZoo versions by (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1797525075" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1018" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1018/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1018">#1018</a>)</li>
+<li>Fix typo in Waterworld documentation (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1848801437" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1058" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1058/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1058">#1058</a>)</li>
 </ul>
 <h2>Documentation Updates</h2>
 <ul>
+<li>Add working usage examples for every environment automatically (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1848796996" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1057" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1057/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1057">#1057</a>)</li>
+<li>Significantly expand <a href="https://pettingzoo.farama.org/api/aec/" rel="nofollow">AEC</a> and <a href="https://pettingzoo.farama.org/api/parallel/#" rel="nofollow">Parallel API</a> documentation with comparisons to EFGs/POSGs (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1816476134" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1041" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1041/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1041">#1041</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1847013833" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1055" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1055/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1055">#1055</a>)</li>
 <li>Enable doctesting to ensure docstring code examples are correct (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792793611" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1016" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1016/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1016">#1016</a>)</li>
 <li>Update environments demo and environment GIFs (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1735160131" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/993" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/993/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/993">#993</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792031589" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1011" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1011/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1011">#1011</a>)</li>
-<li>Fix typos in Tianshou tutorial (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1737080742" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/994" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/994/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/994">#994</a>)</li>
-<li>Update and expand chess documentation (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1764237940" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1002" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1002/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1002">#1002</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1764263778" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1003" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1003/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1003">#1003</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792085243" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1013" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1013/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1013">#1013</a>)</li>
-<li>Update documentation site Chess gif to use current version and pixel art instead of ascii (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1791868596" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1010" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1010/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1010">#1010</a>)</li>
+<li>Fix typos in <a href="https://pettingzoo.farama.org/tutorials/tianshou/" rel="nofollow">Tianshou tutorial</a> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1737080742" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/994" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/994/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/994">#994</a>)</li>
+<li>Update and expand <a href="https://pettingzoo.farama.org/environments/classic/chess/" rel="nofollow">Chess</a> documentation (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1764237940" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1002" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1002/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1002">#1002</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1764263778" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1003" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1003/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1003">#1003</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1792085243" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1013" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1013/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1013">#1013</a>)</li>
+<li>Update documentation site <a href="https://pettingzoo.farama.org/environments/classic/chess/" rel="nofollow">Chess</a> gif to use current version and pixel art instead of ascii (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1791868596" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1010" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1010/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1010">#1010</a>)</li>
 <li>Add pre-commit, code style black badges to README (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1801942903" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1024" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1024/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1024">#1024</a>)</li>
-<li>Add third party environment: Interactive Connect Four using HuggingFace Spaces (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1810804815" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1034" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1034/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1034">#1034</a>)</li>
+<li>Add third party environment: <a href="https://pettingzoo.farama.org/main/environments/third_party_envs/#interactive-connect-four" rel="nofollow">Interactive Connect Four</a> using HuggingFace Spaces (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1810804815" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1034" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1034/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1034">#1034</a>)</li>
+<li>Fix typos in parallel env documentation (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1822703334" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1047" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1047/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1047">#1047</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1819083998" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1045" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1045/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1045">#1045</a>)</li>
+<li>Fix typos in environment creation tutorial (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1815357351" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1036" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1036/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1036">#1036</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1815390817" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1037" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1037/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1037">#1037</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1815850356" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1038" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1038/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1038">#1038</a>)</li>
 </ul>
 <h2>Contributors</h2>
-<p>This release includes contributions from: <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/elliottower/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/elliottower">@elliottower</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/DmytroIvasiuk/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/DmytroIvasiuk">@DmytroIvasiuk</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jacob975/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jacob975">@jacob975</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dylwil3/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dylwil3">@dylwil3</a>, and <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/Jammf/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/Jammf">@Jammf</a>.</p>
+<p>This release includes contributions from: <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/elliottower/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/elliottower">@elliottower</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/DmytroIvasiuk/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/DmytroIvasiuk">@DmytroIvasiuk</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jacob975/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jacob975">@jacob975</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dylwil3/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dylwil3">@dylwil3</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/Jammf/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/Jammf">@Jammf</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/Bamboofungus/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/Bamboofungus">@Bamboofungus</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/BertrandDecoster/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/BertrandDecoster">@BertrandDecoster</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/murtazarang/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/murtazarang">@murtazarang</a> and <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/pimpale/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/pimpale">@pimpale</a>.</p>
 <p>Many thanks to our contributors, as well as many past contributors who have made this possible. We would also like to thank everyone who has helped out with bug reports or feature suggestions, which are critical to our development. We are always welcoming new contributors, if you are interested please join our Discord server at <a href="https://discord.gg/nhvKkYa6qX" rel="nofollow">https://discord.gg/nhvKkYa6qX</a></p>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.23.1...1.24.0"><tt>1.23.1...1.24.0</tt></a></p></section>
 <section id="release-1-23-1">
-<h2>PettingZoo 1.23.1<a class="headerlink" href="#release-1-23-1" title="Permalink to this heading">#</a></h2>
+<h2>PettingZoo 1.23.1<a class="headerlink" href="#release-1-23-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2023-05-24 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.23.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.23.1/">PyPI</a></em></p>
 <h2><strong>PettingZoo 1.23.1 Release Notes:</strong></h2>
 <p>This release is a small hotfix to fix compatibility issues with <a href="https://github.com/Farama-Foundation/shimmy">Shimmy</a> and other small bugs.</p>
@@ -493,7 +504,7 @@
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.23.0...1.23.1"><tt>1.23.0...1.23.1</tt></a></p></section>
 <section id="release-1-23-0">
-<h2>PettingZoo 1.23.0<a class="headerlink" href="#release-1-23-0" title="Permalink to this heading">#</a></h2>
+<h2>PettingZoo 1.23.0<a class="headerlink" href="#release-1-23-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2023-05-15 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.23.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.23.0/">PyPI</a></em></p>
 <h2><strong>PettingZoo 1.23.0 Release Notes:</strong></h2>
 <p>This release finishes the process of standardizing the PettingZoo API to fully match <a href="https://github.com/Farama-Foundation/Gymnasium">Gymnasium</a>. The deprecated <code>env.seed()</code> method has been removed in favor of <code>env.reset(seed=seed)</code>, and the <code>return_info</code> argument from <code>reset()</code> has been removed—info is now always returned on reset.</p>
@@ -546,7 +557,7 @@
 </ul>
 <p><strong>Full Changelog</strong>:<a href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.3...1.23.0"> 1.22.3...1.23.0</a></p></section>
 <section id="release-1-22-4">
-<h2>1.22.4<a class="headerlink" href="#release-1-22-4" title="Permalink to this heading">#</a></h2>
+<h2>1.22.4<a class="headerlink" href="#release-1-22-4" title="Link to this heading">#</a></h2>
 <p><em>Released on 2023-03-20 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.4">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.4/">PyPI</a></em></p>
 <h2>This release has been yanked due to breaking API changes. We are working hard to address this in the next release.</h2>
 <h2>What's Changed</h2>
@@ -577,7 +588,7 @@
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.3...1.22.4"><tt>1.22.3...1.22.4</tt></a></p></section>
 <section id="release-1-22-3">
-<h2>1.22.3<a class="headerlink" href="#release-1-22-3" title="Permalink to this heading">#</a></h2>
+<h2>1.22.3<a class="headerlink" href="#release-1-22-3" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-12-28 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.3">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.3/">PyPI</a></em></p>
 <h2>What's Changed</h2>
 <ul>
@@ -600,7 +611,7 @@
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.2...1.22.3"><tt>1.22.2...1.22.3</tt></a></p></section>
 <section id="release-1-22-2">
-<h2>1.22.2<a class="headerlink" href="#release-1-22-2" title="Permalink to this heading">#</a></h2>
+<h2>1.22.2<a class="headerlink" href="#release-1-22-2" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-11-11 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.2/">PyPI</a></em></p>
 <h2>What's Changed</h2>
 <ul>
@@ -622,7 +633,7 @@
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.1...1.22.2"><tt>1.22.1...1.22.2</tt></a></p></section>
 <section id="release-1-22-1">
-<h2>1.22.1<a class="headerlink" href="#release-1-22-1" title="Permalink to this heading">#</a></h2>
+<h2>1.22.1<a class="headerlink" href="#release-1-22-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-10-25 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.1/">PyPI</a></em></p>
 <h2>What's Changed</h2>
 <ul>
@@ -641,7 +652,7 @@
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.0...1.22.1"><tt>1.22.0...1.22.1</tt></a></p></section>
 <section id="release-1-22-0">
-<h2>1.22.0<a class="headerlink" href="#release-1-22-0" title="Permalink to this heading">#</a></h2>
+<h2>1.22.0<a class="headerlink" href="#release-1-22-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-10-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.0/">PyPI</a></em></p>
 <p>Major API change: <code>done</code> -&gt; <code>termination</code> and <code>truncation</code>, matching Gymnasium's new API.<br>
 The dependency <code>gym</code> has been switched with <code>gymnasium</code>, which is maintained.</p>
@@ -663,7 +674,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.21.0...1.22.0"><tt>1.21.0...1.22.0</tt></a></p></section>
 <section id="release-1-21-0">
-<h2>1.21.0<a class="headerlink" href="#release-1-21-0" title="Permalink to this heading">#</a></h2>
+<h2>1.21.0<a class="headerlink" href="#release-1-21-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-09-24 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.21.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.21.0/">PyPI</a></em></p>
 <h2>What's Changed</h2>
 <ol>
@@ -701,11 +712,11 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.20.1...1.21.0"><tt>1.20.1...1.21.0</tt></a></p></section>
 <section id="release-1-20-1">
-<h2>1.20.1<a class="headerlink" href="#release-1-20-1" title="Permalink to this heading">#</a></h2>
+<h2>1.20.1<a class="headerlink" href="#release-1-20-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-08-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.20.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.20.1/">PyPI</a></em></p>
 <p>Refer to the previous version (1.20.0) for list of changes, this version simply exists due to technical problems with publishing to PyPI.</p></section>
 <section id="release-1-20-0">
-<h2>1.20.0<a class="headerlink" href="#release-1-20-0" title="Permalink to this heading">#</a></h2>
+<h2>1.20.0<a class="headerlink" href="#release-1-20-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-08-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.20.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.20.0/">PyPI</a></em></p>
 <h2>What's Changed</h2>
 <ul>
@@ -728,20 +739,20 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 </ul>
 <p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.19.1...1.20.0"><tt>1.19.1...1.20.0</tt></a></p></section>
 <section id="release-1-19-1">
-<h2>1.19.1<a class="headerlink" href="#release-1-19-1" title="Permalink to this heading">#</a></h2>
+<h2>1.19.1<a class="headerlink" href="#release-1-19-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-06-21 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.19.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.19.1/">PyPI</a></em></p>
 <ul>
 <li>Update Gym requirement version</li>
 </ul></section>
 <section id="release-1-19-0">
-<h2>1.19.0<a class="headerlink" href="#release-1-19-0" title="Permalink to this heading">#</a></h2>
+<h2>1.19.0<a class="headerlink" href="#release-1-19-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-06-21 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.19.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.19.0/">PyPI</a></em></p>
 <ul>
 <li>Streamlined all envs to have consistent folder structures</li>
 <li>Added <code>info</code> as output of <code>reset</code> to be consistent with new Gym API</li>
 </ul></section>
 <section id="release-0-18-1">
-<h2>0.18.1: 1.18.1<a class="headerlink" href="#release-0-18-1" title="Permalink to this heading">#</a></h2>
+<h2>0.18.1: 1.18.1<a class="headerlink" href="#release-0-18-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-04-29 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/0.18.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/0.18.1/">PyPI</a></em></p>
 <ul>
 <li>Massive overhaul to Knight Archers Zombies, version bumped</li>
@@ -756,14 +767,14 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 </ul>
 <p>(The PettingZoo 1.18.0 release never existed due to technical issues)</p></section>
 <section id="release-1-17-0">
-<h2>1.17.0<a class="headerlink" href="#release-1-17-0" title="Permalink to this heading">#</a></h2>
+<h2>1.17.0<a class="headerlink" href="#release-1-17-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-03-15 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.17.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.17.0/">PyPI</a></em></p>
 <ul>
 <li>Changed metadata naming scheme to match gym. In particular <code>render.modes</code> -&gt; <code>render_modes</code> and <code>video.frames_per_second</code> -&gt; <code>render_fps</code></li>
 <li>Fixed bad pettingzoo import error messages caused by autodeprication logic</li>
 </ul></section>
 <section id="release-1-16-0">
-<h2>1.16.0<a class="headerlink" href="#release-1-16-0" title="Permalink to this heading">#</a></h2>
+<h2>1.16.0<a class="headerlink" href="#release-1-16-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-03-05 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.16.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.16.0/">PyPI</a></em></p>
 <ul>
 <li>KAZ: Code rewrite and numerous fixes, added manual control capabililty</li>
@@ -775,7 +786,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Moved magent render logic to Magent repo</li>
 </ul></section>
 <section id="release-1-15-0">
-<h2>1.15.0<a class="headerlink" href="#release-1-15-0" title="Permalink to this heading">#</a></h2>
+<h2>1.15.0<a class="headerlink" href="#release-1-15-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2022-01-28 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.15.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.15.0/">PyPI</a></em></p>
 <ul>
 <li>Bug fixes to KAZ, pistonball, multiwalker, cooperative pong. Versions bumped.</li>
@@ -787,7 +798,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Fixed the API tests to better support agent generation</li>
 </ul></section>
 <section id="release-1-14-0">
-<h2>1.14.0<a class="headerlink" href="#release-1-14-0" title="Permalink to this heading">#</a></h2>
+<h2>1.14.0<a class="headerlink" href="#release-1-14-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-12-05 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.14.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.14.0/">PyPI</a></em></p>
 <p>-Bug fixes and partial redesign to pursuit environment logic and rendering. Environment is now learnable, version bumped<br>
 -Bug fixes and reward function redesign for cooperative pong environment, version bumped<br>
@@ -796,7 +807,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 -Python 3.10 support<br>
 -Fixed parallel API tests to allow environments without possible_agents</p></section>
 <section id="release-1-13-1">
-<h2>1.13.1<a class="headerlink" href="#release-1-13-1" title="Permalink to this heading">#</a></h2>
+<h2>1.13.1<a class="headerlink" href="#release-1-13-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-10-19 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.13.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.13.1/">PyPI</a></em></p>
 <ul>
 <li>Fixed unnecessary warnings generated about observation and action spaces</li>
@@ -806,7 +817,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Various documentation fixes</li>
 </ul></section>
 <section id="release-1-12-0">
-<h2>1.12.0<a class="headerlink" href="#release-1-12-0" title="Permalink to this heading">#</a></h2>
+<h2>1.12.0<a class="headerlink" href="#release-1-12-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-10-08 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.12.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.12.0/">PyPI</a></em></p>
 <ul>
 <li>API changes
@@ -825,7 +836,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Better code formatting (isort, etc.)</li>
 </ul></section>
 <section id="release-1-11-1">
-<h2>1.11.1<a class="headerlink" href="#release-1-11-1" title="Permalink to this heading">#</a></h2>
+<h2>1.11.1<a class="headerlink" href="#release-1-11-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-08-19 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.11.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.11.1/">PyPI</a></em></p>
 <ul>
 <li>Fix scipy and pyglet dependencies for sisl environments</li>
@@ -833,7 +844,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Update rlcard to v1.0.4 with a fix for texas hold'em no limit; bump version</li>
 </ul></section>
 <section id="release-1-11-0">
-<h2>1.11.0<a class="headerlink" href="#release-1-11-0" title="Permalink to this heading">#</a></h2>
+<h2>1.11.0<a class="headerlink" href="#release-1-11-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-08-02 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.11.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.11.0/">PyPI</a></em></p>
 <p>-Upgraded to RLCard 1.0.3, bumped all versions. Also added support for num_players in RLcard based environments which can have variable numbers of players.<br>
 -Fixed Go and Chess observation spaces, bumped versions<br>
@@ -843,7 +854,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 -Fix odd cache problem using RGB rendering in cooperative pong<br>
 -Misc fixes to tests and warning messages</p></section>
 <section id="release-1-10-0">
-<h2>1.10.0<a class="headerlink" href="#release-1-10-0" title="Permalink to this heading">#</a></h2>
+<h2>1.10.0<a class="headerlink" href="#release-1-10-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-07-17 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.10.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.10.0/">PyPI</a></em></p>
 <ul>
 <li>Added continuous action support for MPE environments as an argument</li>
@@ -853,7 +864,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Changed observation in cooperative pong to include entire screen, bumped version</li>
 </ul></section>
 <section id="release-1-9-0">
-<h2>1.9.0<a class="headerlink" href="#release-1-9-0" title="Permalink to this heading">#</a></h2>
+<h2>1.9.0<a class="headerlink" href="#release-1-9-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-06-12 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.9.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.9.0/">PyPI</a></em></p>
 <ul>
 <li>Created no action timer for pong to encourage players to serve (before there was no penalty to stalling the game forever). Bumped version of all pong environments (pong, basketball_pong, volleyball_pong, foozpong, quadrapong)</li>
@@ -867,35 +878,35 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Changed max cycles test to be more robust under agent death</li>
 </ul></section>
 <section id="release-1-8-2">
-<h2>1.8.2<a class="headerlink" href="#release-1-8-2" title="Permalink to this heading">#</a></h2>
+<h2>1.8.2<a class="headerlink" href="#release-1-8-2" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-05-14 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.8.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.8.2/">PyPI</a></em></p>
 <ul>
 <li>fixed multiwalker bug, bumped environment version.</li>
 <li>Added support for custom render modes in render_test</li>
 </ul></section>
 <section id="release-1-8-1">
-<h2>1.8.1<a class="headerlink" href="#release-1-8-1" title="Permalink to this heading">#</a></h2>
+<h2>1.8.1<a class="headerlink" href="#release-1-8-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-04-16 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.8.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.8.1/">PyPI</a></em></p>
 <ul>
 <li>Added argument to seed test to disable the seed()-reset() test. Docs updated.</li>
 <li>Minor changes to MAgent rendering</li>
 </ul></section>
 <section id="release-1-8-0">
-<h2>1.8.0<a class="headerlink" href="#release-1-8-0" title="Permalink to this heading">#</a></h2>
+<h2>1.8.0<a class="headerlink" href="#release-1-8-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-04-04 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.8.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.8.0/">PyPI</a></em></p>
 <ul>
 <li>Fixed arbitrary calls to observe() in classic games (especially tictactoe and connect 4)</li>
 <li>Fixed documentation for tictactoe and pistonball</li>
 </ul></section>
 <section id="release-1-7-0">
-<h2>1.7.0<a class="headerlink" href="#release-1-7-0" title="Permalink to this heading">#</a></h2>
+<h2>1.7.0<a class="headerlink" href="#release-1-7-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-03-27 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.7.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.7.0/">PyPI</a></em></p>
 <ul>
 <li>Fixed MAgent bugs and changed default to non-minimap mode, bumped versions.</li>
 <li>Fix transient installation error.</li>
 </ul></section>
 <section id="release-1-6-1">
-<h2>1.6.1<a class="headerlink" href="#release-1-6-1" title="Permalink to this heading">#</a></h2>
+<h2>1.6.1<a class="headerlink" href="#release-1-6-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-03-08 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.6.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.6.1/">PyPI</a></em></p>
 <p>Minor miscellaneous fixes and small feature additions:</p>
 <ul>
@@ -906,7 +917,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>fixed prison manual control</li>
 </ul></section>
 <section id="release-1-6-0">
-<h2>1.6.0<a class="headerlink" href="#release-1-6-0" title="Permalink to this heading">#</a></h2>
+<h2>1.6.0<a class="headerlink" href="#release-1-6-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-02-21 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.6.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.6.0/">PyPI</a></em></p>
 <ul>
 <li>Changed default values of max_cycles in pistonball, prison, prospector</li>
@@ -918,23 +929,23 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
 <li>Documentation updates.</li>
 </ul></section>
 <section id="release-1-5-2">
-<h2>1.5.2<a class="headerlink" href="#release-1-5-2" title="Permalink to this heading">#</a></h2>
+<h2>1.5.2<a class="headerlink" href="#release-1-5-2" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-01-29 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.5.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.5.2/">PyPI</a></em></p>
 <p>Fix miscellaneous annoying loading messages for butterfly environments. Improvements to save_obs and related functionality. Fixes to KAZ.</p></section>
 <section id="release-1-5-1">
-<h2>1.5.1<a class="headerlink" href="#release-1-5-1" title="Permalink to this heading">#</a></h2>
+<h2>1.5.1<a class="headerlink" href="#release-1-5-1" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-01-13 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.5.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.5.1/">PyPI</a></em></p>
 <p>Fixes MPE rendering dependency, fixes minor left over dependencies on six, fixes issues when pickling Pistonball. No versions were bumped.</p></section>
 <section id="release-1-5-0">
-<h2>1.5.0<a class="headerlink" href="#release-1-5-0" title="Permalink to this heading">#</a></h2>
+<h2>1.5.0<a class="headerlink" href="#release-1-5-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2021-01-05 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.5.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.5.0/">PyPI</a></em></p>
 <p>Refactors tests to be generally usable by third party environments. Added average reward calculating util, and made minor improvements to random_demo and save_obs utils. Removed black death argument from KAZ (it's now a wrapper in supersuit). Redid how illegal actions are handled in classic, by making observations dictionaries where one element is the observation and the other is a proper illegal action mask. Pistonball was refactored for readability, to run faster and to allow the number of pistons to be varied via argument. Waterworld was completely refactored with various major fixes. RLCard version was bumped (and includes bug fixes impacting environments). MAgent rendering looks much better now (versions not bumped). Major bug in the observation space of pursuit is fixed. Add Python 3.9 support. Update Gym version. Fixed multiwalker observation space, for good this time, and made large improvements to code quality. Removed NaN wrapper.</p></section>
 <section id="release-1-4-2">
-<h2>1.4.2<a class="headerlink" href="#release-1-4-2" title="Permalink to this heading">#</a></h2>
+<h2>1.4.2<a class="headerlink" href="#release-1-4-2" title="Link to this heading">#</a></h2>
 <p><em>Released on 2020-11-26 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.4.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.4.2/">PyPI</a></em></p>
 <p>Pistonball reward and miscellaneous problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.</p></section>
 <section id="release-1-4-0">
-<h2>1.4.0<a class="headerlink" href="#release-1-4-0" title="Permalink to this heading">#</a></h2>
+<h2>1.4.0<a class="headerlink" href="#release-1-4-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2020-11-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.4.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.4.0/">PyPI</a></em></p>
 <p>General: Substantial API upgrades (see <a href="https://www.pettingzoo.ml/api" rel="nofollow">https://www.pettingzoo.ml/api</a>), overhaul of the handling of agent death. In particular, the agents list now only contains live agents (agents which have not been done). Moved significant logic from wrappers to raw environment. Renamed max_frames to max_cycles and made the meaning of this argument consistent across all environments.</p>
 <p>Atari: Fixed entombed_cooperative rewards, add support for custom ROM directory specification</p>
@@ -1114,10 +1125,10 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         })()
       </script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+    <script src="../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
 
@@ -1247,7 +1258,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             const subSectionContainerElem = Object.assign(
                 document.createElement('div'), {
                   className:'farama-header-menu__subsections-container',
-                  style: key == "Mature Projects" ? "display: flex" : ""
+                  style: 'display: flex'
                 }
             )
             Object.keys(subSections).forEach((subKey, i) => {
@@ -1262,7 +1273,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
                   innerText: subKey
                 }
               ))
-              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
               subSectionElem.appendChild(ulElem);
               subSectionContainerElem.appendChild(subSectionElem);
             })

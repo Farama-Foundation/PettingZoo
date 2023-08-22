@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Parallel API" href="../parallel/" /><link rel="prev" title="Testing Environments" href="../../content/environment_tests/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/aec.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>AEC API - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -281,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_tag/">Simple Tag</a></li>
@@ -393,12 +394,17 @@
           <article role="main">
             
             <section id="aec-api">
-<h1>AEC API<a class="headerlink" href="#aec-api" title="Permalink to this heading">#</a></h1>
-<p>By default, PettingZoo models games as <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) environments. This allows it to support any type of game multi-agent RL can consider.</p>
-<p><a class="reference external" href="https://pettingzoo.farama.org/environments/classic/">PettingZoo Classic</a> provides standard examples of AEC environments for turn-based games, many of which implement <a class="reference internal" href="#action-masking">Illegal Action Masking</a>.</p>
-<p>We provide a <a class="reference external" href="https://pettingzoo.farama.org/content/environment_creation/#example-custom-environment">tutorial</a> for creating a simple Rock-Paper-Scissors AEC environment, showing how games with simultaneous actions can also be represented with AEC environments.</p>
+<h1>AEC API<a class="headerlink" href="#aec-api" title="Link to this heading">#</a></h1>
+<p>By default, PettingZoo models games as <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) environments. This allows PettingZoo to represent any type of game multi-agent RL can consider.</p>
+<p>For more information, see <a class="reference internal" href="#about-aec">About AEC</a> or <a class="reference external" href="https://arxiv.org/pdf/2009.14471.pdf"><em>PettingZoo: A Standard API for Multi-Agent Reinforcement Learning</em></a>.</p>
+<p><a class="reference internal" href="../wrappers/pz_wrappers/"><span class="doc std std-doc">PettingZoo Wrappers</span></a> can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).</p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="../../environments/classic/"><span class="doc std std-doc">PettingZoo Classic</span></a> provides standard examples of AEC environments for turn-based games, many of which implement <a class="reference internal" href="#action-masking">Illegal Action Masking</a>.</p>
+<p>We provide a <a class="reference internal" href="../../content/environment_creation/"><span class="doc std std-doc">tutorial</span></a> for creating a simple Rock-Paper-Scissors AEC environment, showing how games with simultaneous actions can also be represented with AEC environments.</p>
+</section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
 <p>AEC environments can be interacted with as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">rps_v2</span>
 
@@ -418,7 +424,7 @@
 </pre></div>
 </div>
 <section id="action-masking">
-<h3>Action Masking<a class="headerlink" href="#action-masking" title="Permalink to this heading">#</a></h3>
+<h3>Action Masking<a class="headerlink" href="#action-masking" title="Link to this heading">#</a></h3>
 <p>AEC environments often include action masks, in order to mark valid/invalid actions for the agent.</p>
 <p>To sample actions using action masking:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">chess_v6</span>
@@ -447,7 +453,7 @@
 </div>
 <p>Note: action masking is optional, and can be implemented using either <code class="docutils literal notranslate"><span class="pre">observation</span></code> or <code class="docutils literal notranslate"><span class="pre">info</span></code>.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://pettingzoo.farama.org/environments/classic/">PettingZoo Classic</a> environments store action masks in the <code class="docutils literal notranslate"><span class="pre">observation</span></code> dict:</p>
+<li><p><a class="reference internal" href="../../environments/classic/"><span class="doc std std-doc">PettingZoo Classic</span></a> environments store action masks in the <code class="docutils literal notranslate"><span class="pre">observation</span></code> dict:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">mask</span> <span class="pre">=</span> <span class="pre">observation[&quot;action_mask&quot;]</span></code></p></li>
 </ul>
@@ -458,15 +464,43 @@
 </ul>
 </li>
 </ul>
-<p>To implement action masking in a custom environment, see <a class="reference external" href="https://pettingzoo.farama.org/tutorials/environmentcreation/3-action-masking/">Environment Creation: Action Masking</a></p>
+<p>To implement action masking in a custom environment, see <a class="reference internal" href="../../tutorials/environmentcreation/3-action-masking/"><span class="doc std std-doc">Environment Creation: Action Masking</span></a></p>
 <p>For more information on action masking, see <a class="reference external" href="https://arxiv.org/abs/2006.14171">A Closer Look at Invalid Action Masking in Policy Gradient Algorithms</a> (Huang, 2022)</p>
 </section>
 </section>
+<section id="about-aec">
+<h2>About AEC<a class="headerlink" href="#about-aec" title="Link to this heading">#</a></h2>
+<p>The <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) model was designed as a <a class="reference external" href="https://github.com/openai/gym">Gym</a>-like API for MARL, supporting all possible use cases and types of environments. This includes environments with:</p>
+<ul class="simple">
+<li><p>Large number of agents (see <a class="reference external" href="https://magent2.farama.org/">Magent2</a>)</p></li>
+<li><p>Variable number of agents (see <a class="reference internal" href="../../environments/butterfly/knights_archers_zombies/"><span class="doc std std-doc">Knights, Archers, Zombies</span></a>)</p></li>
+<li><p>Action and observation spaces of any type (e.g., <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.Box">Box</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.Discrete">Discrete</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.MultiDiscrete">MultiDiscrete</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#multibinary">MultiBinary</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/fundamental/#gymnasium.spaces.Text">Text</a>)</p></li>
+<li><p>Nested action and observation spaces (e.g., <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#dict">Dict</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#tuple">Tuple</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#sequence">Sequence</a>, <a class="reference external" href="https://gymnasium.farama.org/api/spaces/composite/#graph">Graph</a>)</p></li>
+<li><p>Support for action masking (see <a class="reference internal" href="../../environments/classic/"><span class="doc std std-doc">Classic</span></a> environments)</p></li>
+<li><p>Action and observation spaces which can change over time, and differ per agent (see <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/test/example_envs/generated_agents_env_v0.py">generated_agents</a> and <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/test/variable_env_test.py">variable_env_test</a>)</p></li>
+<li><p>Changing turn order and evolving environment dynamics (e.g., games with multiple stages, reversing turns)</p></li>
+</ul>
+<p>In an AEC environment, agents act sequentially, receiving updated observations and rewards before taking an action. The environment updates after each agent’s step, making it a natural way of representing sequential games such as Chess. The AEC model is flexible enough to handle any type of game that multi-agent RL can consider.</p>
+<p>with the underlying environment updating after each agent’s step. Agents receive updated observations and rewards at the beginning of their . The environment is updated after every step,
+This is a natural way of representing sequential games such as Chess, and</p>
+<figure class="align-default" id="the-aec-diagram-of-chess">
+<a class="reference internal image-reference" href="../../_images/aec_cycle_figure.png"><img alt="../../_images/aec_cycle_figure.png" src="../../_images/aec_cycle_figure.png" style="width: 480px;" /></a>
+</figure>
+<p>This is in contrast to the <a class="reference external" href="https://en.wikipedia.org/wiki/Game_theory#Stochastic_outcomes_(and_relation_to_other_fields)"><em>Partially Observable Stochastic Game</em></a> (POSG) model, represented in our <a class="reference internal" href="../parallel/"><span class="doc std std-doc">Parallel API</span></a>, where agents act simultaneously and can only receive observations and rewards at the end of a cycle.
+This makes it difficult to represent sequential games, and results in race conditions–where agents choose to take actions which are mutually exclusive. This causes environment behavior to differ depending on internal resolution of agent order, resulting in hard-to-detect bugs if even a single race condition is not caught and handled by the environment (e.g., through tie-breaking).</p>
+<p>The AEC model is similar to <a class="reference external" href="https://en.wikipedia.org/wiki/Extensive-form_game"><em>Extensive Form Games</em></a> (EFGs) model, used in DeepMind’s <a class="reference external" href="https://github.com/deepmind/open_spiel">OpenSpiel</a>.
+EFGs represent sequential games as trees, explicitly representing every possible sequence of actions as a root to leaf path in the tree.
+A limitation of EFGs is that the formal definition is specific to game-theory, and only allows rewards at the end of a game, whereas in RL, learning often requires frequent rewards.</p>
+<p>EFGs can be extended to represent stochastic games by adding a player representing the environment (e.g., <a class="reference external" href="https://openspiel.readthedocs.io/en/latest/concepts.html#the-tree-representation">chance nodes</a> in OpenSpiel), which takes actions according to a given probability distribution. However, this requires users to manually sample and apply chance node actions whenever interacting with the environment, leaving room for user error and potential random seeding issues.</p>
+<p>AEC environments, in contrast, handle environment dynamics internally after each agent step, resulting in a simpler mental model of the environment, and allowing for arbitrary and evolving environment dynamics (as opposed to static chance distribution). The AEC model also more closely resembles how computer games are implemented in code, and can be thought of similar to the game loop in game programming.</p>
+<p>For more information about the AEC model and PettingZoo’s design philosophy, see <a class="reference external" href="https://arxiv.org/pdf/2009.14471.pdf"><em>PettingZoo: A Standard API for Multi-Agent
+Reinforcement Learning</em></a>.</p>
+</section>
 <section id="aecenv">
-<h2>AECEnv<a class="headerlink" href="#aecenv" title="Permalink to this heading">#</a></h2>
+<h2>AECEnv<a class="headerlink" href="#aecenv" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.env.</span></span><span class="sig-name descname"><span class="pre">AECEnv</span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.env.</span></span><span class="sig-name descname"><span class="pre">AECEnv</span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv" title="Link to this definition">#</a></dt>
 <dd><p>The AECEnv steps agents one at a time.</p>
 <p>If you are unsure if you have implemented a AECEnv correctly, try running
 the <cite>api_test</cite> documented in the Developer documentation on the website.</p>
@@ -474,10 +508,10 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 </section>
 <section id="attributes">
-<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">#</a></h2>
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.agents">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.agents" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.agents" title="Link to this definition">#</a></dt>
 <dd><p>A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -488,13 +522,13 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.num_agents">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">num_agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.num_agents" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">num_agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.num_agents" title="Link to this definition">#</a></dt>
 <dd><p>The length of the agents list.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.possible_agents">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">possible_agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.possible_agents" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">possible_agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.possible_agents" title="Link to this definition">#</a></dt>
 <dd><p>A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -505,13 +539,13 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.max_num_agents">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">max_num_agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.max_num_agents" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">max_num_agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.max_num_agents" title="Link to this definition">#</a></dt>
 <dd><p>The length of the possible_agents list.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.agent_selection">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">agent_selection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.agent_selection" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">agent_selection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AgentID</span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.agent_selection" title="Link to this definition">#</a></dt>
 <dd><p>An attribute of the environment corresponding to the currently selected agent that an action can be taken for.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -522,17 +556,17 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.terminations">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">terminations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.terminations" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">terminations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.terminations" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.truncations">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">truncations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.truncations" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">truncations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.truncations" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.rewards">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">rewards</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.rewards" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">rewards</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.rewards" title="Link to this definition">#</a></dt>
 <dd><p>A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. <cite>last()</cite> does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="mi">0</span><span class="p">:[</span><span class="n">first</span> <span class="n">agent</span> <span class="n">reward</span><span class="p">],</span> <span class="mi">1</span><span class="p">:[</span><span class="n">second</span> <span class="n">agent</span> <span class="n">reward</span><span class="p">]</span> <span class="o">...</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:[</span><span class="n">nth</span> <span class="n">agent</span> <span class="n">reward</span><span class="p">]}</span>
 </pre></div>
@@ -546,7 +580,7 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.infos">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">infos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.infos" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">infos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.infos" title="Link to this definition">#</a></dt>
 <dd><p>A dict of info for each current agent, keyed by name. Each agent’s info is also a dict. Note that agents can be added or removed from this attribute. <cite>last()</cite> accesses this attribute. The returned dict looks like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:[</span><span class="n">first</span> <span class="n">agent</span> <span class="n">info</span><span class="p">],</span> <span class="mi">1</span><span class="p">:[</span><span class="n">second</span> <span class="n">agent</span> <span class="n">info</span><span class="p">]</span> <span class="o">...</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:[</span><span class="n">nth</span> <span class="n">agent</span> <span class="n">info</span><span class="p">]}</span>
 </pre></div>
@@ -560,7 +594,7 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.observation_spaces">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">observation_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">gymnasium.spaces.space.Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.observation_spaces" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">observation_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.observation_spaces" title="Link to this definition">#</a></dt>
 <dd><p>A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -571,7 +605,7 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.action_spaces">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">action_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">gymnasium.spaces.space.Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.action_spaces" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">action_spaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.action_spaces" title="Link to this definition">#</a></dt>
 <dd><p>A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -582,30 +616,30 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 
 </section>
 <section id="methods">
-<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">#</a></h2>
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">#</a></h2>
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.step">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ActionType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.step" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ActionType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.step" title="Link to this definition">#</a></dt>
 <dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
 <p>Automatically switches control to the next agent.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.reset">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.reset" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.reset" title="Link to this definition">#</a></dt>
 <dd><p>Resets the environment to a starting state.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.observe">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObsType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.observe" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AgentID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObsType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.observe" title="Link to this definition">#</a></dt>
 <dd><p>Returns the observation an agent currently can make.</p>
 <p><cite>last()</cite> calls this function.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.render">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.render" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the environment as specified by self.render_mode.</p>
 <p>Render mode can be <cite>human</cite> to display a window.
 Other render modes in the default environments are <cite>‘rgb_array’</cite>
@@ -615,7 +649,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.close">
-<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.close" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.close" title="Link to this definition">#</a></dt>
 <dd><p>Closes any resources that should be released.</p>
 <p>Closes the rendering window, subprocesses, network connections,
 or any other resources that should be released.</p>
@@ -694,10 +728,12 @@ or any other resources that should be released.</p>
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">AEC API</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#action-masking">Action Masking</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#about-aec">About AEC</a></li>
 <li><a class="reference internal" href="#aecenv">AECEnv</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv"><code class="docutils literal notranslate"><span class="pre">AECEnv</span></code></a></li>
 </ul>
@@ -810,10 +846,10 @@ or any other resources that should be released.</p>
         })()
       </script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
 
@@ -943,7 +979,7 @@ or any other resources that should be released.</p>
             const subSectionContainerElem = Object.assign(
                 document.createElement('div'), {
                   className:'farama-header-menu__subsections-container',
-                  style: key == "Mature Projects" ? "display: flex" : ""
+                  style: 'display: flex'
                 }
             )
             Object.keys(subSections).forEach((subKey, i) => {
@@ -958,7 +994,7 @@ or any other resources that should be released.</p>
                   innerText: subKey
                 }
               ))
-              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
               subSectionElem.appendChild(ulElem);
               subSectionContainerElem.appendChild(subSectionElem);
             })
