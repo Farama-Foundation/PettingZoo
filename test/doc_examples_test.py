@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from docs.code_examples import aec_rps, parallel_rps
 
 from pettingzoo.test import api_test, parallel_api_test

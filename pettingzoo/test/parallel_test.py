@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 import warnings
 
@@ -9,10 +11,15 @@ from pettingzoo.utils.conversions import (
     parallel_to_aec_wrapper,
     turn_based_aec_to_parallel_wrapper,
 )
+from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers import BaseWrapper
 
 
-def sample_action(env, obs, agent):
+def sample_action(
+    env: ParallelEnv[AgentID, ObsType, ActionType],
+    obs: dict[AgentID, ObsType],
+    agent: AgentID,
+) -> ActionType:
     agent_obs = obs[agent]
     if isinstance(agent_obs, dict) and "action_mask" in agent_obs:
         legal_actions = np.flatnonzero(agent_obs["action_mask"])
@@ -22,7 +29,7 @@ def sample_action(env, obs, agent):
     return env.action_space(agent).sample()
 
 
-def parallel_api_test(par_env, num_cycles=1000):
+def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
     par_env.max_cycles = num_cycles
 
     if not hasattr(par_env, "possible_agents"):

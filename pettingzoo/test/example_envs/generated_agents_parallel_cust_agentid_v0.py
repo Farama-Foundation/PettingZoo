@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Tuple, Union
 
 import gymnasium
 import numpy as np
@@ -19,11 +19,11 @@ def raw_env(**kwargs):
     return conversions.parallel_to_aec(parallel_env(**kwargs))
 
 
-def get_type(agent):
-    return agent[: agent.rfind("_")]
+def get_type(agent: Tuple[str, int]):
+    return agent[0]
 
 
-class parallel_env(ParallelEnv[str, np.ndarray, Union[int, None]]):
+class parallel_env(ParallelEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):
@@ -56,7 +56,7 @@ class parallel_env(ParallelEnv[str, np.ndarray, Union[int, None]]):
     def observe(self, agent):
         return self.observation_space(agent).sample()
 
-    def add_type(self):
+    def add_type(self) -> str:
         type_id = len(self.types)
         num_actions = self.np_random.integers(3, 10)
         obs_size = self.np_random.integers(10, 50)
@@ -71,10 +71,10 @@ class parallel_env(ParallelEnv[str, np.ndarray, Union[int, None]]):
         self._agent_counters[new_type] = 0
         return new_type
 
-    def add_agent(self, type):
+    def add_agent(self, type: str):
         agent_id = self._agent_counters[type]
         self._agent_counters[type] += 1
-        agent_name = f"{type}_{agent_id}"
+        agent_name = (type, agent_id)
         self.agents.append(agent_name)
         return agent_name
 
@@ -123,7 +123,9 @@ class parallel_env(ParallelEnv[str, np.ndarray, Union[int, None]]):
         if not truncated:
             for i in range(6):
                 if self.np_random.random() < 0.1 and len(self.agents) >= 10:
-                    all_terminations[self.np_random.choice(self.agents)] = True
+                    all_terminations[
+                        self.agents[self.np_random.choice(len(self.agents))]
+                    ] = True
 
             for i in range(3):
                 if self.np_random.random() < 0.1:
@@ -138,7 +140,7 @@ class parallel_env(ParallelEnv[str, np.ndarray, Union[int, None]]):
 
         all_infos = {agent: {} for agent in self.agents}
         all_rewards = {agent: 0 for agent in self.agents}
-        all_rewards[self.np_random.choice(self.agents)] = 1
+        all_rewards[self.agents[self.np_random.choice(len(self.agents))]] = 1
         all_observes = {agent: self.observe(agent) for agent in self.agents}
         self.agents = [
             agent

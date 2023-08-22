@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from gymnasium.utils.env_checker import data_equivalence
 
 
