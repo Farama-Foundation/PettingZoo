@@ -390,14 +390,21 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">AECIterable</span><span class="p">,</span> <span class="n">AECIterator</span><span class="p">,</span> <span class="n">ObsType</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ActionType</span><span class="p">,</span>
+    <span class="n">AECEnv</span><span class="p">,</span>
+    <span class="n">AECIterable</span><span class="p">,</span>
+    <span class="n">AECIterator</span><span class="p">,</span>
+    <span class="n">AgentID</span><span class="p">,</span>
+    <span class="n">ObsType</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.env_logger</span> <span class="kn">import</span> <span class="n">EnvLogger</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.wrappers.base</span> <span class="kn">import</span> <span class="n">BaseWrapper</span>
 
 
 <div class="viewcode-block" id="OrderEnforcingWrapper">
 <a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.OrderEnforcingWrapper">[docs]</a>
-<span class="k">class</span> <span class="nc">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if function calls or attribute access are in a disallowed order.</span>
 
 <span class="sd">    * error on getting rewards, terminations, truncations, infos, agent_selection before reset</span>
@@ -407,7 +414,7 @@
 <span class="sd">    * warn on calling step after environment is terminated or truncated</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_rendered</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_updated</span> <span class="o">=</span> <span class="kc">False</span>
@@ -468,7 +475,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_has_updated</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span><span class="p">:</span>
             <span class="n">EnvLogger</span><span class="o">.</span><span class="n">error_observe_before_reset</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
@@ -478,7 +485,9 @@
             <span class="n">EnvLogger</span><span class="o">.</span><span class="n">error_state_before_reset</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">agent_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">63</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECOrderEnforcingIterable</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">agent_iter</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">63</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECOrderEnforcingIterable</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span><span class="p">:</span>
             <span class="n">EnvLogger</span><span class="o">.</span><span class="n">error_agent_iter_before_reset</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">AECOrderEnforcingIterable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">)</span>
@@ -500,13 +509,13 @@
 
 
 
-<span class="k">class</span> <span class="nc">AECOrderEnforcingIterable</span><span class="p">(</span><span class="n">AECIterable</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECOrderEnforcingIterator</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">AECOrderEnforcingIterable</span><span class="p">(</span><span class="n">AECIterable</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECOrderEnforcingIterator</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">AECOrderEnforcingIterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">AECOrderEnforcingIterator</span><span class="p">(</span><span class="n">AECIterator</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">AECOrderEnforcingIterator</span><span class="p">(</span><span class="n">AECIterator</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AgentID</span><span class="p">:</span>
         <span class="n">agent</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span>
         <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="s2">&quot;_has_updated&quot;</span>

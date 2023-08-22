@@ -386,21 +386,23 @@
             <h1>Source code for pettingzoo.utils.wrappers.terminate_illegal</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">ObsType</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.env_logger</span> <span class="kn">import</span> <span class="n">EnvLogger</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.wrappers.base</span> <span class="kn">import</span> <span class="n">BaseWrapper</span>
 
 
 <div class="viewcode-block" id="TerminateIllegalWrapper">
 <a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.TerminateIllegalWrapper">[docs]</a>
-<span class="k">class</span> <span class="nc">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This wrapper terminates the game with the current player losing in case of illegal values.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        illegal_reward: number that is the value of the player making an illegal move.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">],</span> <span class="n">illegal_reward</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_illegal_value</span> <span class="o">=</span> <span class="n">illegal_reward</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
@@ -410,7 +412,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="n">obs</span>
@@ -421,6 +423,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="s2">&quot;action_mask&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span>
         <span class="p">),</span> <span class="s2">&quot;action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper&quot;</span>
