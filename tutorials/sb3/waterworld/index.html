@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="SB3: Action Masked PPO for Connect Four" href="../connect_four/" /><link rel="prev" title="SB3: PPO for Knights-Archers-Zombies" href="../kaz/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/sb3/waterworld.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>SB3: PPO for Waterworld - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -281,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_tag/">Simple Tag</a></li>
@@ -394,8 +395,8 @@
           <article role="main">
             
             <section id="sb3-ppo-for-waterworld">
-<h1>SB3: PPO for Waterworld<a class="headerlink" href="#sb3-ppo-for-waterworld" title="Permalink to this heading">#</a></h1>
-<p>This tutorial shows how to train agents using <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) on the <a class="reference external" href="https://pettingzoo.farama.org/environments/sisl/waterworld/">Waterworld</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/parallel/">Parallel</a>).</p>
+<h1>SB3: PPO for Waterworld<a class="headerlink" href="#sb3-ppo-for-waterworld" title="Link to this heading">#</a></h1>
+<p>This tutorial shows how to train agents using <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) on the <a class="reference internal" href="../../../environments/sisl/waterworld/"><span class="doc std std-doc">Waterworld</span></a> environment (<a class="reference internal" href="../../../api/parallel/"><span class="doc std std-doc">Parallel</span></a>).</p>
 <p>We use SuperSuit to create vectorized environments, leveraging multithreading to speed up training (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html">vector environments documentation</a>).</p>
 <p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">model saving documentation</a>).</p>
 <div class="admonition note">
@@ -403,22 +404,20 @@
 <p>This environment has a discrete (1-dimensional) observation space, so we use an MLP feature extractor.</p>
 </div>
 <section id="environment-setup">
-<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
+<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[sisl]&gt;=1.23.1
 stable-baselines3&gt;=2.0.0
-# TODO: update to SS release once it&#39;s done
-supersuit @ git+https://github.com/Farama-Foundation/SuperSuit.git
-# TODO: remove pymunk requirement before 1.24.0 PZ release, as it will be added as a requirement to sisl
+supersuit&gt;=3.9.0
 pymunk
 </pre></div>
 </div>
 </section>
 <section id="code">
-<h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
+<h2>Code<a class="headerlink" href="#code" title="Link to this heading">#</a></h2>
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with SB3. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-and-evaluation">
-<h3>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Permalink to this heading">#</a></h3>
+<h3>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Stable-Baselines3 to train agents to play the Waterworld environment using SuperSuit vector envs.</span>
 
 <span class="sd">For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html</span>
@@ -694,10 +693,10 @@ pymunk
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
 
@@ -827,7 +826,7 @@ pymunk
             const subSectionContainerElem = Object.assign(
                 document.createElement('div'), {
                   className:'farama-header-menu__subsections-container',
-                  style: key == "Mature Projects" ? "display: flex" : ""
+                  style: 'display: flex'
                 }
             )
             Object.keys(subSections).forEach((subKey, i) => {
@@ -842,7 +841,7 @@ pymunk
                   innerText: subKey
                 }
               ))
-              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
               subSectionElem.appendChild(ulElem);
               subSectionContainerElem.appendChild(subSectionElem);
             })
