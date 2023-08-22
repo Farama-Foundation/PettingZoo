@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark">
@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tutorial: Action Masking" href="../3-action-masking/" /><link rel="prev" title="Tutorial: Repository Structure" href="../1-project-structure/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
         <title>Tutorial: Environment Logic - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
     
     
 
@@ -281,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_crypto/">Simple Crypto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_reference/">Simple Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_spread/">Simple Spread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/mpe/simple_tag/">Simple Tag</a></li>
@@ -394,9 +395,9 @@
           <article role="main">
             
             <section id="tutorial-environment-logic">
-<h1>Tutorial: Environment Logic<a class="headerlink" href="#tutorial-environment-logic" title="Permalink to this heading">#</a></h1>
+<h1>Tutorial: Environment Logic<a class="headerlink" href="#tutorial-environment-logic" title="Link to this heading">#</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>Now that we have a basic understanding of the structure of environment repositories, we can start thinking about the fun part - environment logic!</p>
 <p>For this tutorial, we will be creating a two-player game consisting of a prisoner, trying to escape, and a guard, trying to catch the prisoner. This game will be played on a 7x7 grid, where:</p>
 <ul class="simple">
@@ -407,9 +408,9 @@
 </ul>
 </section>
 <section id="code">
-<h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
+<h2>Code<a class="headerlink" href="#code" title="Link to this heading">#</a></h2>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">/custom-environment/env/custom_environment.py</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
+<div class="code-block-caption"><span class="caption-text">/custom-environment/env/custom_environment.py</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
@@ -417,7 +418,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">MultiDiscrete</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">ParallelEnv</span>
+<span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">ParallelEnv</span>
 
 
 <span class="k">class</span> <span class="nc">CustomEnvironment</span><span class="p">(</span><span class="n">ParallelEnv</span><span class="p">):</span>
@@ -442,8 +443,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="mi">7</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="mi">6</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
@@ -516,7 +517,7 @@
         <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span>
 
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;P&quot;</span>
         <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;G&quot;</span>
         <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span>
@@ -524,7 +525,7 @@
 
     <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">MultiDiscrete</span><span class="p">([</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">MultiDiscrete</span><span class="p">([</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
 
     <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
@@ -693,10 +694,10 @@
         })()
       </script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
     <script>
 
@@ -826,7 +827,7 @@
             const subSectionContainerElem = Object.assign(
                 document.createElement('div'), {
                   className:'farama-header-menu__subsections-container',
-                  style: key == "Mature Projects" ? "display: flex" : ""
+                  style: 'display: flex'
                 }
             )
             Object.keys(subSections).forEach((subKey, i) => {
@@ -841,7 +842,7 @@
                   innerText: subKey
                 }
               ))
-              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
               subSectionElem.appendChild(ulElem);
               subSectionContainerElem.appendChild(subSectionElem);
             })
