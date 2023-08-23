@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from pettingzoo.atari import (
@@ -67,32 +69,32 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(spawn_rate=50),
+        dict(spawn_rate=50, max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(num_knights=4, num_archers=5),
+        dict(num_knights=4, num_archers=5, max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(killable_knights=False, killable_archers=False),
+        dict(killable_knights=False, killable_archers=False, max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(sequence_space=True, use_typemasks=True),
+        dict(sequence_space=True, use_typemasks=True, max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(vector_state=False),
+        dict(vector_state=False, max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(vector_state=False, pad_observation=False),
+        dict(vector_state=False, pad_observation=False, max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
@@ -102,15 +104,15 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(max_zombies=2, max_arrows=60),
+        dict(max_zombies=2, max_arrows=60, max_cycles=50),
     ],
-    ["butterfly/pistonball_v6", pistonball_v6, dict()],
-    ["butterfly/pistonball_v6", pistonball_v6, dict(n_pistons=30)],
-    ["butterfly/pistonball_v6", pistonball_v6, dict(continuous=False)],
+    ["butterfly/pistonball_v6", pistonball_v6, dict(max_cycles=50)],
+    ["butterfly/pistonball_v6", pistonball_v6, dict(n_pistons=30, max_cycles=50)],
+    ["butterfly/pistonball_v6", pistonball_v6, dict(continuous=False, max_cycles=50)],
     [
         "butterfly/pistonball_v6",
         pistonball_v6,
-        dict(random_drop=False, random_rotate=False),
+        dict(random_drop=False, random_rotate=False, max_cycles=50),
     ],
     ["classic/go_v5", go_v5, dict(board_size=13, komi=2.5)],
     ["classic/go_v5", go_v5, dict(board_size=9, komi=0.0)],
@@ -209,12 +211,13 @@ parameterized_envs = [
         multiwalker_v9,
         dict(terminate_on_fall=False, remove_on_fall=False),
     ],
-    ["sisl/pursuit_v4", pursuit_v4, dict()],
-    ["sisl/pursuit_v4", pursuit_v4, dict(x_size=8, y_size=19)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(n_evaders=5, n_pursuers=16)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(obs_range=15)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(freeze_evaders=True)],
+    ["sisl/pursuit_v4", pursuit_v4, dict(max_cycles=50)],
+    ["sisl/pursuit_v4", pursuit_v4, dict(x_size=8, y_size=19, max_cycles=50)],
+    ["sisl/pursuit_v4", pursuit_v4, dict(shared_reward=True, max_cycles=50)],
+    ["sisl/pursuit_v4", pursuit_v4, dict(n_evaders=5, n_pursuers=16, max_cycles=50)],
+    ["sisl/pursuit_v4", pursuit_v4, dict(obs_range=15, max_cycles=50)],
+    ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3, max_cycles=50)],
+    ["sisl/pursuit_v4", pursuit_v4, dict(freeze_evaders=True, max_cycles=50)],
     ["sisl/waterworld_v4", waterworld_v4, dict(n_pursuers=3, n_evaders=6)],
     ["sisl/waterworld_v4", waterworld_v4, dict(n_coop=1)],
     ["sisl/waterworld_v4", waterworld_v4, dict(n_poisons=4)],

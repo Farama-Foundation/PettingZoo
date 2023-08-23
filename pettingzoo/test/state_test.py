@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Tests that the environment's state() and state_space() methods work as expected."""
 import warnings
 

@@ -1,18 +1,20 @@
 from __future__ import annotations
 
-from pettingzoo.utils.env import ActionType, AECEnv, ObsType
+from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
-class TerminateIllegalWrapper(BaseWrapper):
+class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     """This wrapper terminates the game with the current player losing in case of illegal values.
 
     Args:
         illegal_reward: number that is the value of the player making an illegal move.
     """
 
-    def __init__(self, env: AECEnv, illegal_reward: float):
+    def __init__(
+        self, env: AECEnv[AgentID, ObsType, ActionType], illegal_reward: float
+    ):
         super().__init__(env)
         self._illegal_value = illegal_reward
         self._prev_obs = None
@@ -22,7 +24,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         self._prev_obs = None
         super().reset(seed=seed, options=options)
 
-    def observe(self, agent: str) -> ObsType | None:
+    def observe(self, agent: AgentID) -> ObsType | None:
         obs = super().observe(agent)
         if agent == self.agent_selection:
             self._prev_obs = obs
@@ -33,6 +35,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         if self._prev_obs is None:
             self.observe(self.agent_selection)
         assert self._prev_obs
+        assert isinstance(self._prev_obs, dict)
         assert (
             "action_mask" in self._prev_obs
         ), "action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper"
