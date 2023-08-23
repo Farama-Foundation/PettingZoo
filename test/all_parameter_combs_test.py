@@ -64,7 +64,7 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(),
+        dict(max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
