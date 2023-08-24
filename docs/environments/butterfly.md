@@ -50,7 +50,7 @@ env.close()
 ```
 
 To launch a [Knights Archers Zombies](/environments/butterfly/knights_archers_zombies/) environment with interactive user input (see [manual_policy.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py)):
-```python
+```python notest
 import pygame
 from pettingzoo.butterfly import knights_archers_zombies_v10
 

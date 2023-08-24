@@ -63,12 +63,13 @@ We wanted our pettingzoo environments to be both easy to use and easy to impleme
 You can apply these wrappers to your environment in a similar manner to the below examples:
 
 To wrap a Parallel environment.
-```python
+```python notest
 from pettingzoo.utils import CaptureStdoutWrapper
 from pettingzoo.butterfly import pistonball_v6
 parallel_env = pistonball_v6.env()
 parallel_env = CaptureStdoutWrapper(parallel_env)
 
+#TODO parallel_env.reset() returns None here
 observations, infos = parallel_env.reset()
 
 while parallel_env.agents:
@@ -77,7 +78,7 @@ while parallel_env.agents:
 ```
 
 To wrap an AEC environment:
-```python
+```python notest
 from pettingzoo.utils import TerminateIllegalWrapper
 from pettingzoo.classic import rps_v2
 env = rps_v2.env()
@@ -90,6 +91,7 @@ for agent in env.agent_iter():
         action = None
     else:
         action = env.action_space(agent).sample()  # this is where you would insert your policy
+    #TODO RPS observe() returns an np.array instead of dict, triggering an assert statement in TerminateIllegalWrapper
     env.step(action)
 env.close()
 ```

@@ -25,19 +25,25 @@ env = pistonball_v6.env()
 Environments are generally highly configurable via arguments at creation, i.e.:
 
 ``` python
-cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=False)
+from pettingzoo.butterfly import cooperative_pong_v5
+
+cooperative_pong_v5.env(ball_speed=18, left_paddle_speed=25,
+right_paddle_speed=25, cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
 
 ## Interacting With Environments
 
 Environments can be interacted with using a similar interface to Gymnasium:
 
-``` python
+``` python notest
+from pettingzoo.butterfly import cooperative_pong_v5
+
+env = cooperative_pong_v5.env()
 env.reset()
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
     action = env.action_space(agent).sample() # this is where you would insert your policy
+    #TODO ValueError: when an agent is dead, the only valid action is None
     env.step(action)
 ```
 
@@ -116,6 +122,8 @@ When an agent is terminated or truncated, it's removed from `agents`, so when th
 If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
 
 ``` python
+from pettingzoo.butterfly import knights_archers_zombies_v10
+
 base_env = knights_archers_zombies_v10.env().unwrapped
 ```
 

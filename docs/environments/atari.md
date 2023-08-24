@@ -92,7 +92,7 @@ pip install supersuit
 
 Here is some example usage for the Atari preprocessing:
 
-``` python
+``` python notest
 import supersuit
 from pettingzoo.atari import space_invaders_v1
 
