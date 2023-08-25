@@ -294,11 +294,6 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
 
     def reset(self, seed=None, options=None):
         self._observations, self.infos = self.env.reset(seed=seed, options=options)
-
-        # Every environment needs to return infos that contain the same keys as the observations
-        if bool(self.infos) == False:
-            self.infos = {agent: {} for agent in self._observations.keys()}
-
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions: Dict[AgentID, Optional[ActionType]] = {
@@ -309,6 +304,12 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self.terminations = {agent: False for agent in self.agents}
         self.truncations = {agent: False for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
+
+        # Every environment needs to return infos that contain the same keys as the observations
+        if bool(self.infos) == False:
+            warnings.warn("The `infos` dictionary returned by `env.reset` was empty. Agent IDs as keys will be used")
+            self.infos = {agent: {} for agent in self.agents}
+
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.new_agents = []
         self.new_values = {}
