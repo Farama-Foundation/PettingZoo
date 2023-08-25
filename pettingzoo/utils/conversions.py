@@ -305,11 +305,14 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self.truncations = {agent: False for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
 
-        # Every environment needs to return infos that contain the same keys as the observations
-        if bool(self.infos) == False:
+        # Every environment needs to return infos that contain self.agents as their keys
+        if not self.infos:
             warnings.warn("The `infos` dictionary returned by `env.reset` was empty. Agent IDs as keys will be used")
             self.infos = {agent: {} for agent in self.agents}
-
+        elif set(self.infos.keys()) != set(self.agents):
+            warnings.warn("The `infos` dictionary keys returned by `env.reset` is not equal to the agent IDs listed in `self.agents`. Overwriting with just agent IDs as keys")
+            self.infos = {agent: {} for agent in self.agents}
+            
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.new_agents = []
         self.new_values = {}
