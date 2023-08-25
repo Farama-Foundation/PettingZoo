@@ -45,7 +45,11 @@ class CustomEnvironment(ParallelEnv):
             "prisoner": {"observation": observation, "action_mask": [0, 1, 1, 0]},
             "guard": {"observation": observation, "action_mask": [1, 0, 0, 1]},
         }
-        return observations, {}
+
+        # Get dummy infos. Necessary for proper parallel_to_aec conversion
+        infos = {a: {} for a in self.agents}
+
+        return observations, infos
 
     def step(self, actions):
         # Execute actions

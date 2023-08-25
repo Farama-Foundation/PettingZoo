@@ -44,7 +44,11 @@ class CustomEnvironment(ParallelEnv):
             )
             for a in self.agents
         }
-        return observations, {}
+
+        # Get dummy infos. Necessary for proper parallel_to_aec conversion
+        infos = {a: {} for a in self.agents}
+
+        return observations, infos
 
     def step(self, actions):
         # Execute actions
