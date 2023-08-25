@@ -10,7 +10,6 @@ ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
 AgentID = TypeVar("AgentID")
 
-
 # deprecated
 ObsDict = dict[AgentID, ObsType]
 
