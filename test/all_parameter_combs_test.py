@@ -3,34 +3,96 @@ from __future__ import annotations
 import pytest
 
 from pettingzoo.atari import (
+    basketball_pong_v3,
     boxing_v2,
     combat_plane_v2,
     combat_tank_v2,
+    double_dunk_v3,
+    entombed_competitive_v3,
+    entombed_cooperative_v3,
+    flag_capture_v2,
+    foozpong_v3,
+    ice_hockey_v2,
+    joust_v3,
+    mario_bros_v3,
     maze_craze_v3,
+    othello_v3,
+    pong_v3,
+    quadrapong_v4,
     space_invaders_v2,
+    space_war_v2,
+    surround_v2,
+    tennis_v3,
+    video_checkers_v4,
+    volleyball_pong_v3,
+    warlords_v3,
+    wizard_of_wor_v3,
 )
-from pettingzoo.butterfly import knights_archers_zombies_v10, pistonball_v6
+from pettingzoo.butterfly import (
+    cooperative_pong_v5,
+    knights_archers_zombies_v10,
+    pistonball_v6,
+)
 from pettingzoo.classic import (
+    chess_v6,
+    connect_four_v3,
+    gin_rummy_v4,
     go_v5,
     hanabi_v5,
     leduc_holdem_v4,
+    rps_v2,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
+    tictactoe_v3,
 )
 from pettingzoo.mpe import (
     simple_adversary_v3,
+    simple_crypto_v3,
+    simple_push_v3,
     simple_reference_v3,
+    simple_speaker_listener_v4,
     simple_spread_v3,
     simple_tag_v3,
+    simple_v3,
     simple_world_comm_v3,
 )
 from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
+from pettingzoo.test import max_cycles_test, parallel_api_test
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.render_test import render_test
 from pettingzoo.test.seed_test import seed_test
 from pettingzoo.test.state_test import state_test
 
 parameterized_envs = [
+    ["atari/space_war_v2", space_war_v2, dict()],
+    ["atari/quadrapong_v4", quadrapong_v4, dict()],
+    ["atari/basketball_pong_v3", basketball_pong_v3, dict()],
+    ["atari/wizard_of_wor_v3", wizard_of_wor_v3, dict()],
+    ["atari/ice_hockey_v2", ice_hockey_v2, dict()],
+    ["atari/pong_v3", pong_v3, dict()],
+    ["atari/surround_v2", surround_v2, dict()],
+    ["atari/entombed_competitive_v3", entombed_competitive_v3, dict()],
+    ["atari/flag_capture_v2", flag_capture_v2, dict()],
+    ["atari/entombed_cooperative_v3", entombed_cooperative_v3, dict()],
+    ["atari/tennis_v3", tennis_v3, dict()],
+    ["atari/warlords_v3", warlords_v3, dict()],
+    ["atari/mario_bros_v3", mario_bros_v3, dict()],
+    ["atari/joust_v3", joust_v3, dict()],
+    ["atari/foozpong_v3", foozpong_v3, dict()],
+    ["atari/video_checkers_v4", video_checkers_v4, dict()],
+    ["atari/othello_v3", othello_v3, dict()],
+    ["atari/double_dunk_v3", double_dunk_v3, dict()],
+    ["atari/volleyball_pong_v3", volleyball_pong_v3, dict()],
+    ["butterfly/cooperative_pong_v5", cooperative_pong_v5, dict()],
+    ["classic/connect_four_v3", connect_four_v3, dict()],
+    ["classic/rps_v2", rps_v2, dict()],
+    ["classic/chess_v6", chess_v6, dict()],
+    ["classic/tictactoe_v3", tictactoe_v3, dict()],
+    ["classic/gin_rummy_v4", gin_rummy_v4, dict()],
+    ["mpe/simple_v3", simple_v3, dict()],
+    ["mpe/simple_push_v3", simple_push_v3, dict()],
+    ["mpe/simple_crypto_v3", simple_crypto_v3, dict()],
+    ["mpe/simple_speaker_listener_v4", simple_speaker_listener_v4, dict()],
     ["atari/boxing_v2", boxing_v2, dict()],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="grayscale_image")],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="ram")],
@@ -207,7 +269,7 @@ parameterized_envs = [
     ["sisl/multiwalker_v9", multiwalker_v9, dict(shared_reward=False)],
     ["sisl/multiwalker_v9", multiwalker_v9, dict(terminate_on_fall=False)],
     [
-        "sisl/multiwalker_v8",
+        "sisl/multiwalker_v9",
         multiwalker_v9,
         dict(terminate_on_fall=False, remove_on_fall=False),
     ],
@@ -232,14 +294,22 @@ def test_module(name, env_module, kwargs):
     _env = env_module.env(**kwargs)
     api_test(_env)
 
+    if "classic/" not in name:
+        parallel_api_test(env_module.parallel_env())
+        max_cycles_test(env_module)
+
     # some atari environments fail this test, waterworld fails for certain seeds
-    if "atari/" not in name and "waterworld" not in name:
+    if "atari/" not in name:
         seed_test(lambda: env_module.env(**kwargs), 50)
 
     render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))
+
+    if ("butterfly/" in name) or ("mpe/" in name):
+        state_test(env_module.env(), env_module.parallel_env())
+
     try:
-        _env.state()
-        if hasattr(env_module, "parallel_env"):
+        if hasattr(env_module, "parallel_env") and "rps" not in name:
+            _env.state()
             par_env = env_module.parallel_env(**kwargs)
             state_test(_env, par_env)
     except NotImplementedError:
