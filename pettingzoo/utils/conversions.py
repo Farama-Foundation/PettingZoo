@@ -294,6 +294,11 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
 
     def reset(self, seed=None, options=None):
         self._observations, self.infos = self.env.reset(seed=seed, options=options)
+
+        # Every environment needs to return infos that contain the same keys as the observations
+        if bool(self.infos) == False:
+            self.infos = {agent: {} for agent in self._observations.keys()}
+
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions: Dict[AgentID, Optional[ActionType]] = {
