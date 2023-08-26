@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Generic, Iterable, Iterator, TypeVar
+from typing import Any, Dict, Generic, Iterable, Iterator, TypeVar
 
 import gymnasium.spaces
 import numpy as np
@@ -11,10 +11,10 @@ ActionType = TypeVar("ActionType")
 AgentID = TypeVar("AgentID")
 
 # deprecated
-ObsDict = dict[AgentID, ObsType]
+ObsDict = Dict[AgentID, ObsType]
 
 # deprecated
-ActionDict = dict[AgentID, ActionType]
+ActionDict = Dict[AgentID, ActionType]
 
 """
 Base environment definitions
