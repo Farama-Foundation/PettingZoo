@@ -64,7 +64,9 @@ for agent in env.agent_iter():
     clock.tick(env.metadata["render_fps"])
     observation, reward, termination, truncation, info = env.last()
 
-    if agent == manual_policy.agent:
+    if termination or truncation:
+        action =  None
+    elif agent == manual_policy.agent:
         # get user input (controls are WASD and space)
         action = manual_policy(observation, agent)
     else:
