@@ -266,7 +266,7 @@ class CooperativePong:
             if self.render_mode == "human":
                 self.screen = pygame.display.set_mode((self.s_width, self.s_height))
                 pygame.display.set_caption("Cooperative Pong")
-            self.draw()
+        self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
