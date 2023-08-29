@@ -57,11 +57,9 @@ from pettingzoo.butterfly import knights_archers_zombies_v10
 env = knights_archers_zombies_v10.env(render_mode="human")
 env.reset(seed=42)
 
-clock = pygame.time.Clock()
 manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
 for agent in env.agent_iter():
-    clock.tick(env.metadata["render_fps"])
     observation, reward, termination, truncation, info = env.last()
 
     if termination or truncation:
