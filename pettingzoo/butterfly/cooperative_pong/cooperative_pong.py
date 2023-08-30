@@ -147,6 +147,7 @@ class CooperativePong:
         render_mode=None,
         render_ratio=2,
         kernel_window_length=2,
+        render_fps=15,
     ):
         super().__init__()
 
@@ -211,6 +212,10 @@ class CooperativePong:
 
         self.reinit()
 
+        self.render_fps = render_fps
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
+
     def reinit(self):
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
         self.terminations = dict(zip(self.agents, [False] * len(self.agents)))
@@ -266,11 +271,12 @@ class CooperativePong:
             if self.render_mode == "human":
                 self.screen = pygame.display.set_mode((self.s_width, self.s_height))
                 pygame.display.set_caption("Cooperative Pong")
-            self.draw()
+        self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
             pygame.display.flip()
+            self.clock.tick(self.render_fps)
         return (
             np.transpose(observation, axes=(1, 0, 2))
             if self.render_mode == "rgb_array"
