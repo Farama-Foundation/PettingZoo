@@ -130,3 +130,4 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
 
             if len(live_agents) == 0:
                 break
+    print("Passed Parallel API test")

@@ -89,7 +89,6 @@ class CustomEnvironment(ParallelEnv):
         if self.timestep > 100:
             rewards = {"prisoner": 0, "guard": 0}
             truncations = {"prisoner": True, "guard": True}
-            self.agents = []
         self.timestep += 1
 
         # Get observations
@@ -104,6 +103,9 @@ class CustomEnvironment(ParallelEnv):
 
         # Get dummy infos (not used in this example)
         infos = {a: {} for a in self.agents}
+
+        if any(terminations.values()) or all(truncations.values()):
+            self.agents = []
 
         return observations, rewards, terminations, truncations, infos
 

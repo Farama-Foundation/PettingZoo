@@ -8,7 +8,7 @@ from gymnasium.spaces import Discrete, MultiDiscrete
 from pettingzoo import ParallelEnv
 
 
-class CustomEnvironment(ParallelEnv):
+class CustomActionMaskedEnvironment(ParallelEnv):
     metadata = {
         "name": "custom_environment_v0",
     }
