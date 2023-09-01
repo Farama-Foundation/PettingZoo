@@ -33,4 +33,4 @@ jobs:
           AutoROM -v
       - name: Documentation test
         run: |
-          pytest docs --markdown-docs -m markdown-docs --ignore=docs/_scripts --ignore=conf.py --ignore=docs/environments/ -n auto
+          pytest docs --markdown-docs -m markdown-docs

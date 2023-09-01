@@ -40,4 +40,4 @@ sphinx-autobuild -b dirhtml . _build
 
 ## Test the documentation
 The plugin [pytest-markdown-docs](https://github.com/modal-labs/pytest-markdown-docs) allows us to test our documentation to ensure that example code runs successfully. To test, run the following command:
-pytest docs --markdown-docs -m markdown-docs --ignore=docs/_scripts --ignore=conf.py --ignore=docs/environments/ -n auto
+pytest docs --markdown-docs -m markdown-docs

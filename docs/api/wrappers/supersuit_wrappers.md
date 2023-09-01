@@ -8,7 +8,7 @@ The [SuperSuit](https://github.com/Farama-Foundation/SuperSuit) companion packag
 
 To convert [space invaders](/environments/atari/space_invaders/) to a greyscale observation space and stack the last 4 frames:
 
-``` python notest
+``` python
 from pettingzoo.atari import space_invaders_v2
 from supersuit import color_reduction_v0, frame_stack_v1
 
