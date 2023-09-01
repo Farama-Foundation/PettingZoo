@@ -33,4 +33,4 @@ jobs:
           AutoROM -v
       - name: Documentation test
         run: |
-          pytest docs --markdown-docs -m markdown-docs
+          xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs
