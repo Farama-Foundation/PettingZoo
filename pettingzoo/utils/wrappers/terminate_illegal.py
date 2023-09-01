@@ -1,3 +1,4 @@
+# pyright reportGeneralTypeIssues=false
 from __future__ import annotations
 
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType
@@ -33,20 +34,22 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             self._prev_info = self.infos[self.agent_selection]
         return obs
 
-
-
     def step(self, action: ActionType) -> None:
         current_agent = self.agent_selection
         if self._prev_obs is None:
             self.observe(self.agent_selection)
         if isinstance(self._prev_obs, dict):
+            assert self._prev_obs is not None
             assert (
                 "action_mask" in self._prev_obs
             ), f"`action_mask` not found in dictionary observation: {self._prev_obs}. Action mask must either be in `observation['action_mask']` or `info['action_mask']` to use TerminateIllegalWrapper."
             _prev_action_mask = self._prev_obs["action_mask"]
 
         else:
-            assert ("action_mask" in self._prev_info), f"`action_mask` not found in info for non-dictionary observation: {self._prev_info}. Action mask must either be in observation['action_mask'] or info['action_mask'] to use TerminateIllegalWrapper."
+            assert self._prev_info is not None
+            assert (
+                "action_mask" in self._prev_info
+            ), f"`action_mask` not found in info for non-dictionary observation: {self._prev_info}. Action mask must either be in observation['action_mask'] or info['action_mask'] to use TerminateIllegalWrapper."
             _prev_action_mask = self._prev_info["action_mask"]
         self._prev_obs = None
         self._prev_info = None

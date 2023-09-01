@@ -1,3 +1,4 @@
+# pyright: reportGeneralTypeIssues=false
 import copy
 import warnings
 from collections import defaultdict

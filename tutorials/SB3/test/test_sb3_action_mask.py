@@ -118,9 +118,7 @@ def test_action_mask_hard(env_fn):
         env_fn, num_games=100, render_mode=None, **env_kwargs
     )
 
-    assert (
-        winrate > 0
-    ), "Policy should not perform better than 50% winrate"  # 0% for go
+    assert winrate > 0, "Policy should not perform better than 50% winrate"  # 0% for go
 
     # Watch two games (disabled by default)
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)

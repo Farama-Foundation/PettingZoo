@@ -41,7 +41,7 @@ while env.agents:
 
 
 To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon), wrapped with [TerminateIllegalWrapper](https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.TerminateIllegalWrapper):
-```python
+```python notest
 from shimmy import OpenSpielCompatibilityV0
 from pettingzoo.utils import TerminateIllegalWrapper
 

@@ -27,7 +27,9 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     """
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
-        assert isinstance(env, AECEnv), "OrderEnforcingWrapper is only compatible with AEC environments"
+        assert isinstance(
+            env, AECEnv
+        ), "OrderEnforcingWrapper is only compatible with AEC environments"
         self._has_reset = False
         self._has_rendered = False
         self._has_updated = False

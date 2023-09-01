@@ -101,7 +101,7 @@ while parallel_env.agents:
 
     Included PettingZoo wrappers currently do not support parallel environments, to use them you must convert your environment to AEC, apply the wrapper, and convert back to parallel.
 ```
-```python 
+```python
 from pettingzoo.utils import ClipOutOfBoundsWrapper
 from pettingzoo.sisl import multiwalker_v9
 from pettingzoo.utils import aec_to_parallel
