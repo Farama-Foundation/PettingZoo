@@ -130,6 +130,7 @@ class parallel_env(ParallelEnv):
         self.num_moves = 0
         observations = {agent: NONE for agent in self.agents}
         infos = {agent: {} for agent in self.agents}
+        self.state = observations
 
         return observations, infos
 
@@ -165,6 +166,7 @@ class parallel_env(ParallelEnv):
             self.agents[i]: int(actions[self.agents[1 - i]])
             for i in range(len(self.agents))
         }
+        self.state = observations
 
         # typically there won't be any information in the infos, but there must
         # still be an entry for each agent
