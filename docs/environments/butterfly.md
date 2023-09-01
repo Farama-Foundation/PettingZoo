@@ -50,7 +50,7 @@ env.close()
 ```
 
 To launch a [Knights Archers Zombies](/environments/butterfly/knights_archers_zombies/) environment with interactive user input (see [manual_policy.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py)):
-```python notest
+```python
 import pygame
 from pettingzoo.butterfly import knights_archers_zombies_v10
 
@@ -63,7 +63,7 @@ for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
 
     if termination or truncation:
-        action =  None
+        action = None
     elif agent == manual_policy.agent:
         # get user input (controls are WASD and space)
         action = manual_policy(observation, agent)

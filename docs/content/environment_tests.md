@@ -37,7 +37,7 @@ To have a properly reproducible environment that utilizes randomness, you need t
 
 The seed test takes in a function that creates a pettingzoo environment. For example
 
-``` python notest
+``` python
 from pettingzoo.test import seed_test, parallel_seed_test
 from pettingzoo.butterfly import pistonball_v6
 env_fn = pistonball_v6.env
@@ -72,13 +72,12 @@ max_cycles_test(env)
 ## Render Test
 
 The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode (only supports `'human'`, `'ansi'`, and `'rgb_array'` modes).
-
-``` python notest
+``` python
 from pettingzoo.test import render_test
 from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
+env_func = pistonball_v6.env
 #TODO TypeError: 'OrderEnforcingWrapper' object is not callable
-render_test(env)
+render_test(env_func)
 ```
 
 The render test method takes in an optional argument `custom_tests` that allows for additional tests in non-standard modes.
@@ -105,10 +104,9 @@ performance_benchmark(env)
 
 The save observation test is to visually inspect the observations of games with graphical observations to make sure they are what is intended. We have found that observations are a huge source of bugs in environments, so it is good to manually check them when possible. This test just tries to save the observations of all the agents. If it fails, then it just prints a warning. The output needs to be visually inspected for correctness.
 
-``` python notest
+``` python
 from pettingzoo.test import test_save_obs
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
-#TODO running test_save_obs creates multiple files each time doctests are run here
 test_save_obs(env)
 ```

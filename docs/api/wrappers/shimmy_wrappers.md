@@ -41,13 +41,12 @@ while env.agents:
 
 
 To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon):
-```python notest
-#TODO ImportError: cannot import name 'OpenspielCompatibilityV0' from 'shimmy'
-from shimmy import OpenspielCompatibilityV0
+```python
+from shimmy import OpenSpielCompatibilityV0
 import pyspiel
 
 env = pyspiel.load_game("backgammon")
-env = OpenspielCompatibilityV0(game=env, render_mode=None)
+env = OpenSpielCompatibilityV0(env=env, render_mode=None)
 
 env.reset()
 for agent in env.agent_iter():

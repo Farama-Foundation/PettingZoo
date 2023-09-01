@@ -35,16 +35,23 @@ right_paddle_speed=25, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 Environments can be interacted with using a similar interface to Gymnasium:
 
-``` python notest
+``` python
 from pettingzoo.butterfly import cooperative_pong_v5
 
-env = cooperative_pong_v5.env()
-env.reset()
+env = cooperative_pong_v5.env(render_mode="human")
+env.reset(seed=42)
+
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
-    action = env.action_space(agent).sample() # this is where you would insert your policy
-    #TODO ValueError: when an agent is dead, the only valid action is None
+
+    if termination or truncation:
+        action = None
+    else:
+        # this is where you would insert your policy
+        action = env.action_space(agent).sample()
+
     env.step(action)
+env.close()
 ```
 
 The commonly used methods are:

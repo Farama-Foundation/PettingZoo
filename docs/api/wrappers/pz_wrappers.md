@@ -66,10 +66,11 @@ To wrap a Parallel environment.
 ```python notest
 from pettingzoo.utils import CaptureStdoutWrapper
 from pettingzoo.butterfly import pistonball_v6
-parallel_env = pistonball_v6.env()
+
+parallel_env = pistonball_v6.parallel_env(render_mode="human")
+# TODO: parallel_env render_mode doesn't exist here
 parallel_env = CaptureStdoutWrapper(parallel_env)
 
-#TODO parallel_env.reset() returns None here
 observations, infos = parallel_env.reset()
 
 while parallel_env.agents:
@@ -78,7 +79,7 @@ while parallel_env.agents:
 ```
 
 To wrap an AEC environment:
-```python notest
+```python
 from pettingzoo.utils import TerminateIllegalWrapper
 from pettingzoo.classic import rps_v2
 env = rps_v2.env()
