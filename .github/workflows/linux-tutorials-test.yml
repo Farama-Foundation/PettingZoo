@@ -36,5 +36,4 @@ jobs:
           pip uninstall -y pettingzoo
           pip install -e $root_dir[testing]
           AutoROM -v
-#          for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
-          ls *.py | parallel xvfb-run -a -s "-screen 0 1024x768x24" python
+          for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
