@@ -48,6 +48,7 @@ testing = [
     "AutoROM",
     "pytest",
     "pytest-cov",
+    "pytest-xdist",
     "pre-commit",
 ]
 all = [
@@ -104,4 +105,4 @@ typeCheckingMode = "basic"
 reportMissingImports = false
 
 [tool.pytest.ini_options]
-addopts = [ "--ignore-glob=*/__init__.py" ]
+addopts = [ "--ignore-glob=*/__init__.py", "--ignore=tutorials" ]

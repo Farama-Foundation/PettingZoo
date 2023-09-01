@@ -26,5 +26,5 @@ jobs:
           AutoROM -v
       - name: Full Python tests
         run: |
-          pytest ./test/pytest_runner_test.py
-          pytest ./test/all_parameter_combs_test.py
+          pytest -v --cov=pettingzoo --cov-report term -n auto
+          

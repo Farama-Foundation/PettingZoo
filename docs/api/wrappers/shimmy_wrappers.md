@@ -40,13 +40,13 @@ while env.agents:
 ```
 
 
-To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon):
+To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon), wrapped with [TerminateIllegalWrapper](https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.TerminateIllegalWrapper):
 ```python
 from shimmy import OpenSpielCompatibilityV0
-import pyspiel
+from pettingzoo.utils import TerminateIllegalWrapper
 
-env = pyspiel.load_game("backgammon")
-env = OpenSpielCompatibilityV0(env=env, render_mode=None)
+env = OpenSpielCompatibilityV0(game_name="chess", render_mode=None)
+env = TerminateIllegalWrapper(env, illegal_reward=-1)
 
 env.reset()
 for agent in env.agent_iter():
@@ -63,7 +63,6 @@ for agent in env.agent_iter():
 To load a Melting Pot [prisoner's dilemma in the matrix](https://github.com/deepmind/meltingpot/blob/main/docs/substrate_scenario_details.md#prisoners-dilemma-in-the-matrix) substrate:
 
 ```python notest
-#TODO ImportError: Melting Pot or PettingZoo is not installed, run `pip install 'shimmy[melting-pot]' and install Melting Pot via https://github.com/deepmind/meltingpot#installation`
 from shimmy import MeltingPotCompatibilityV0
 env = MeltingPotCompatibilityV0(substrate_name="prisoners_dilemma_in_the_matrix__arena", render_mode="human")
 observations, infos = env.reset()

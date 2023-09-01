@@ -62,27 +62,11 @@ We wanted our pettingzoo environments to be both easy to use and easy to impleme
 
 You can apply these wrappers to your environment in a similar manner to the below examples:
 
-To wrap a Parallel environment.
-```python notest
-from pettingzoo.utils import CaptureStdoutWrapper
-from pettingzoo.butterfly import pistonball_v6
-
-parallel_env = pistonball_v6.parallel_env(render_mode="human")
-# TODO: parallel_env render_mode doesn't exist here
-parallel_env = CaptureStdoutWrapper(parallel_env)
-
-observations, infos = parallel_env.reset()
-
-while parallel_env.agents:
-    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
-    observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
-```
-
 To wrap an AEC environment:
 ```python
 from pettingzoo.utils import TerminateIllegalWrapper
-from pettingzoo.classic import rps_v2
-env = rps_v2.env()
+from pettingzoo.classic import tictactoe_v3
+env = tictactoe_v3.env()
 env = TerminateIllegalWrapper(env, illegal_reward=-1)
 
 env.reset()
@@ -92,11 +76,46 @@ for agent in env.agent_iter():
         action = None
     else:
         action = env.action_space(agent).sample()  # this is where you would insert your policy
-    #TODO RPS observe() returns an np.array instead of dict, triggering an assert statement in TerminateIllegalWrapper
     env.step(action)
 env.close()
 ```
 Note: Most AEC environments include TerminateIllegalWrapper in their initialization, so this code does not change the environment's behavior.
+
+To wrap a Parallel environment.
+```python
+from pettingzoo.utils import BaseParallelWrapper
+from pettingzoo.butterfly import pistonball_v6
+
+parallel_env = pistonball_v6.parallel_env(render_mode="human")
+parallel_env = BaseParallelWrapper(parallel_env)
+
+observations, infos = parallel_env.reset()
+
+while parallel_env.agents:
+    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
+    observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
+```
+
+```{eval-rst}
+.. warning::
+
+    Included PettingZoo wrappers currently do not support parallel environments, to use them you must convert your environment to AEC, apply the wrapper, and convert back to parallel.
+```
+```python 
+from pettingzoo.utils import ClipOutOfBoundsWrapper
+from pettingzoo.sisl import multiwalker_v9
+from pettingzoo.utils import aec_to_parallel
+
+parallel_env = multiwalker_v9.env(render_mode="human")
+parallel_env = ClipOutOfBoundsWrapper(parallel_env)
+parallel_env = aec_to_parallel(parallel_env)
+
+observations, infos = parallel_env.reset()
+
+while parallel_env.agents:
+    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
+    observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
+```
 
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers

@@ -8,6 +8,7 @@ class AssertOutOfBoundsWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     """Asserts if the action given to step is outside of the action space."""
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
+        assert isinstance(env, AECEnv), "AssertOutOfBoundsWrapper is only compatible with AEC environments"
         super().__init__(env)
 
     def step(self, action: ActionType) -> None:

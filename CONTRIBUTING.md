@@ -23,6 +23,7 @@ Contributing code is done through standard github methods:
 
 ### Considerations
 - Make sure existing tests pass (`pip install -e .[all]` and then run `pytest -v` -- may also need to `apt-get`/`brew` `install swig` and `AutoROM -v`)
+- Note: `pytest -v -n auto` 
 - Make sure your new code is properly tested and fully-covered
 - Any fixes to environments should include fixes to the appropriate documentation
 - Changes to environment functionality should be avoided when reasonable, and when they occur the environment version must be bumped.

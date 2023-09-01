@@ -18,29 +18,38 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         super().__init__(env)
         self._illegal_value = illegal_reward
         self._prev_obs = None
+        self._prev_info = None
 
     def reset(self, seed: int | None = None, options: dict | None = None) -> None:
         self._terminated = False
         self._prev_obs = None
+        self._prev_info = None
         super().reset(seed=seed, options=options)
 
     def observe(self, agent: AgentID) -> ObsType | None:
         obs = super().observe(agent)
         if agent == self.agent_selection:
             self._prev_obs = obs
+            self._prev_info = self.infos[self.agent_selection]
         return obs
+
+
 
     def step(self, action: ActionType) -> None:
         current_agent = self.agent_selection
         if self._prev_obs is None:
             self.observe(self.agent_selection)
-        assert self._prev_obs
-        assert isinstance(self._prev_obs, dict)
-        assert (
-            "action_mask" in self._prev_obs
-        ), "action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper"
-        _prev_action_mask = self._prev_obs["action_mask"]
+        if isinstance(self._prev_obs, dict):
+            assert (
+                "action_mask" in self._prev_obs
+            ), f"`action_mask` not found in dictionary observation: {self._prev_obs}. Action mask must either be in `observation['action_mask']` or `info['action_mask']` to use TerminateIllegalWrapper."
+            _prev_action_mask = self._prev_obs["action_mask"]
+
+        else:
+            assert ("action_mask" in self._prev_info), f"`action_mask` not found in info for non-dictionary observation: {self._prev_info}. Action mask must either be in observation['action_mask'] or info['action_mask'] to use TerminateIllegalWrapper."
+            _prev_action_mask = self._prev_info["action_mask"]
         self._prev_obs = None
+        self._prev_info = None
         if self._terminated and (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
@@ -56,6 +65,7 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             self.terminations = {d: True for d in self.agents}
             self.truncations = {d: True for d in self.agents}
             self._prev_obs = None
+            self._prev_info = None
             self.rewards = {d: 0 for d in self.truncations}
             self.rewards[current_agent] = float(self._illegal_value)
             self._accumulate_rewards()
