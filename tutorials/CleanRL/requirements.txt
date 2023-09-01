@@ -1,4 +1,4 @@
-pettingzoo[butterfly,atari,testing]>=1.23.1
+pettingzoo[butterfly,atari,testing]>=1.24.0
 SuperSuit>=3.9.0
 tensorboard>=2.11.2
 torch>=1.13.1

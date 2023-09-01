@@ -5,6 +5,11 @@ title: Environment Creation
 
 This documentation overviews creating new environments and relevant useful wrappers, utilities and tests included in PettingZoo designed for the creation of new environments.
 
+
+We will walk through the creation of a simple Rock-Paper-Scissors environment, with example code for both [AEC](/api/aec/) and [Parallel](/api/aec/) environments.
+
+See our [Custom Environment Tutorial](/tutorials/custom_environment/index) for a full walkthrough on creating custom environments, including complex environment logic and illegal action masking.
+
 ## Example Custom Environment
 
 This is a carefully commented version of the PettingZoo rock paper scissors environment.
@@ -14,10 +19,24 @@ This is a carefully commented version of the PettingZoo rock paper scissors envi
    :language: python
 ```
 
+To interact with your custom AEC environment, use the following code:
+
+```{eval-rst}
+.. literalinclude:: ../code_examples/aec_rps_usage.py
+   :language: python
+```
+
 ## Example Custom Parallel Environment
 
 ```{eval-rst}
 .. literalinclude:: ../code_examples/parallel_rps.py
+   :language: python
+```
+
+To interact with your custom parallel environment, use the following code:
+
+```{eval-rst}
+.. literalinclude:: ../code_examples/parallel_rps_usage.py
    :language: python
 ```
 

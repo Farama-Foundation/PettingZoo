@@ -1,10 +1,10 @@
 ---
-title: "Environment Creation"
+title: "Custom Environment Tutorial"
 ---
 
-# Environment Creation Tutorial
+# Custom Environment Tutorial
 
-These tutorials walk you though creating a custom environment from scratch, and are recommended as a starting point for anyone new to PettingZoo.
+These tutorials walk you though the full process of creating a custom environment from scratch, and are recommended as a starting point for anyone new to PettingZoo.
 
 1. [Project Structure](/tutorials/environmentcreation/1-project-structure.md)
 
@@ -13,6 +13,8 @@ These tutorials walk you though creating a custom environment from scratch, and 
 3. [Action Masking](/tutorials/environmentcreation/3-action-masking.md)
 
 4. [Testing Your Environment](/tutorials/environmentcreation/4-testing-your-environment.md)
+
+For a simpler example environment, including both [AEC](/api/aec/) and [Parallel](/api/aec/) implementations, see our [Environment Creation](/content/environment_creation/) documentation.
 
 
 ```{toctree}
