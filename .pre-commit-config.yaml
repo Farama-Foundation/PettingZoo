@@ -75,3 +75,7 @@ repos:
         additional_dependencies: ["pyright"]
         args:
           - --project=pyproject.toml
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.26.3
+    hooks:
+      - id: check-github-workflows
