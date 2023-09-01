@@ -71,5 +71,5 @@ This declaration tells the user that `knights_archers_zombies_v0` is deprecated 
 ``` python notest
 from pettingzoo.butterfly import knights_archers_zombies_v0
 knights_archers_zombies_v0.env()
-
+# pettingzoo.utils.deprecated_module.DeprecatedEnv: knights_archers_zombies_v0 is now deprecated, use knights_archers_zombies_v10 instead
 ```

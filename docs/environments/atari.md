@@ -92,11 +92,11 @@ pip install supersuit
 
 Here is some example usage for the Atari preprocessing:
 
-``` python notest
+``` python
 import supersuit
-from pettingzoo.atari import space_invaders_v1
+from pettingzoo.atari import space_invaders_v2
 
-env = space_invaders_v1.env()
+env = space_invaders_v2.env()
 
 # as per openai baseline's MaxAndSKip wrapper, maxes over the last 2 frames
 # to deal with frame flickering

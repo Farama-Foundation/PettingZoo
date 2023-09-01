@@ -27,7 +27,6 @@ To load a DeepMind Control [multi-agent soccer game](https://github.com/deepmind
 
 ```python notest
 from shimmy import DmControlMultiAgentCompatibilityV0
-#TODO ModuleNotFoundError: No module named 'dm_control'
 from dm_control.locomotion import soccer as dm_soccer
 
 env = dm_soccer.load(team_size=2)

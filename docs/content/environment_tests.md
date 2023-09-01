@@ -61,12 +61,10 @@ The second optional argument, `test_kept_state` allows the user to disable the s
 
 The max cycles test tests that the `max_cycles` environment argument exists and the resulting environment actually runs for the correct number of cycles. If your environment does not take a `max_cycles` argument, you should not run this test. The reason this test exists is that many off-by-one errors are possible when implementing `max_cycles`. An example test usage looks like:
 
-``` python notest
+``` python
 from pettingzoo.test import max_cycles_test
 from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
-#TODO AttributeError: 'OrderEnforcingWrapper' object has no attribute 'parallel_env'
-max_cycles_test(env)
+max_cycles_test(pistonball_v6)
 ```
 
 ## Render Test
@@ -76,7 +74,6 @@ The render test checks that rendering 1) does not crash and 2) produces output o
 from pettingzoo.test import render_test
 from pettingzoo.butterfly import pistonball_v6
 env_func = pistonball_v6.env
-#TODO TypeError: 'OrderEnforcingWrapper' object is not callable
 render_test(env_func)
 ```
 
