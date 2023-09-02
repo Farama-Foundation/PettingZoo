@@ -32,6 +32,10 @@ jobs:
           pip install -e .[testing]
           pip install supersuit shimmy
           AutoROM -v
+      - name: Install documentation dependencies
+        run: pip install -r docs/requirements.txt
+      - name: Generate environment docs
+        run: python docs/_scripts/gen_envs_mds.py
       - name: Documentation test
         run: |
           xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs
