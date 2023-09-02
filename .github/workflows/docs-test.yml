@@ -31,7 +31,7 @@ jobs:
           sudo apt-get install python3-opengl xvfb
           pip install -e .[all]
           pip install -e .[testing]
-          pip install supersuit shimmy
+          pip install supersuit shimmy pytest-split
           AutoROM -v
       - name: Install documentation dependencies
         run: pip install -r docs/requirements.txt
