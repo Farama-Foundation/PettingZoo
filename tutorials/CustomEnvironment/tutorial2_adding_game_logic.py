@@ -9,8 +9,8 @@ from pettingzoo import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
-    """
-    The metadata holds environment constants.
+    """The metadata holds environment constants.
+
     The "name" metadata allows the environment to be pretty printed.
     """
 
@@ -19,10 +19,9 @@ class CustomEnvironment(ParallelEnv):
     }
 
     def __init__(self):
-        """
-        The init method takes in environment arguments.
-        Should define the following attributes:
+        """The init method takes in environment arguments.
 
+        Should define the following attributes:
         - escape x and y coordinates
         - guard x and y coordinates
         - prisoner x and y coordinates
@@ -35,7 +34,6 @@ class CustomEnvironment(ParallelEnv):
 
         These attributes should not be changed after initialization.
         """
-
         self.escape_y = None
         self.escape_x = None
         self.guard_y = None
@@ -46,9 +44,9 @@ class CustomEnvironment(ParallelEnv):
         self.possible_agents = ["prisoner", "guard"]
 
     def reset(self, seed=None, options=None):
-        """
-        Reset needs to initialize the following attributes:
+        """Reset set the environment to a starting point.
 
+        It needs to initialize the following attributes:
         - agents
         - timestamp
         - prisoner x and y coordinates
@@ -59,7 +57,6 @@ class CustomEnvironment(ParallelEnv):
 
         And must set up the environment so that render(), step(), and observe() can be called without issues.
         """
-
         self.agents = copy(self.possible_agents)
         self.timestep = 0
 
@@ -87,10 +84,9 @@ class CustomEnvironment(ParallelEnv):
         return observations, infos
 
     def step(self, actions):
-        """
-        Takes in an action for the current agent (specified by agent_selection).
-        Needs to update:
+        """Takes in an action for the current agent (specified by agent_selection).
 
+        Needs to update:
         - prisoner x and y coordinates
         - guard x and y coordinates
         - terminations
@@ -101,7 +97,6 @@ class CustomEnvironment(ParallelEnv):
 
         And any internal state used by observe() or render()
         """
-
         # Execute actions
         prisoner_action = actions["prisoner"]
         guard_action = actions["guard"]

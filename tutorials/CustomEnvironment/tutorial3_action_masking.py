@@ -44,7 +44,7 @@ class CustomActionMaskedEnvironment(ParallelEnv):
         self.possible_agents = ["prisoner", "guard"]
 
     def reset(self, seed=None, options=None):
-        """Reset make the environment go back to a starting point.
+        """Reset set the environment to a starting point.
 
         It needs to initialize the following attributes:
         - agents
