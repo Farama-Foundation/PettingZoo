@@ -1,64 +1,62 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 ---
 name: Documentation tests
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  docs-test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.11']
-        group: [ 1, 2, 3, 4, 5, 6 ]
-    steps:
-      - uses: actions/checkout@v3
-      # - uses: openrndr/setup-opengl@v1.1
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          sudo apt-get install python3-opengl xvfb
-          pip install -e .[all]
-          pip install -e .[testing]
-          pip install supersuit shimmy pytest-split
-          AutoROM -v
-      - name: Install documentation dependencies
-        run: pip install -r docs/requirements.txt
-      - name: Generate environment docs
-        run: python docs/_scripts/gen_envs_mds.py
-      - name: Download durations from most recent GitHub workflow run
-        id: download-artifact
-        uses: dawidd6/action-download-artifact@v2
-      - name: Documentation test
-        run: |
-          xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --splits 6 --group ${{ matrix.group }} --store-durations --clean-durations
-      - name: Upload partial durations
-        uses: actions/upload-artifact@v3
-        with:
-          name: split-${{ matrix.group }}
-          path: .test_durations
-  upload-timings:
-    needs: docs-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-      - name: Combine test-durations
-        run: jq -s 'reduce inputs as $item ({}; . + $item)' .test_durations.* > .test_durations
-      - name: Upload final durations
-        uses: actions/upload-artifact@v3
-        with:
-          name: split-${{ matrix.group }}
-          path: .test_durations
+    docs-test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                group: [1, 2, 3, 4, 5, 6]
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Python 3.11
+              uses: actions/setup-python@v3
+              with:
+                  python-version: '3.11'
+            - name: Install dependencies
+              run: |
+                  sudo apt-get install python3-opengl xvfb
+                  pip install -e .[all]
+                  pip install -e .[testing]
+                  pip install supersuit shimmy pytest-split
+                  AutoROM -v
+            - name: Install documentation dependencies
+              run: pip install -r docs/requirements.txt
+            - name: Generate environment docs
+              run: python docs/_scripts/gen_envs_mds.py
+            - name: Download durations from most recent GitHub workflow run
+              id: download-artifact
+              uses: dawidd6/action-download-artifact@v2
+              with:
+                  if_no_artifact_found: warn
+            - name: Documentation test
+              run: |
+                  xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --splits 6 --group ${{ matrix.group }} --store-durations --clean-durations
+            - name: Upload partial durations
+              uses: actions/upload-artifact@v3
+              with:
+                  name: split-${{ matrix.group }}
+                  path: .test_durations
+    upload-timings:
+        needs: docs-test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Download artifacts
+              uses: actions/download-artifact@v3
+            - name: Combine test-durations
+              run: jq -s 'reduce inputs as $item ({}; . + $item)' .test_durations.* > .test_durations
+            - name: Upload final durations
+              uses: actions/upload-artifact@v3
+              with:
+                  name: split-${{ matrix.group }}
+                  path: .test_durations

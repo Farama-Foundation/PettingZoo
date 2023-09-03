@@ -1,29 +1,27 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 ---
 name: MacOS tests
 
 on:
-  push:
-    branches: [master]
+    push:
+        branches: [master]
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  macos-test:
-    runs-on: macos-11
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.8
-      - name: Install dependencies
-        run: |
-          pip install -e .[all]
-          pip install -e .[testing]
-          AutoROM -v
-      - name: Full Python tests
-        run: |
-          pytest -v --cov=pettingzoo --cov-report term
+    macos-test:
+        runs-on: macos-11
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Python 3.8
+              uses: actions/setup-python@v3
+              with:
+                  python-version: 3.8
+            - name: Install dependencies
+              run: |
+                  pip install -e .[all]
+                  pip install -e .[testing]
+                  AutoROM -v
+            - name: Full Python tests
+              run: |
+                  pytest -v --cov=pettingzoo --cov-report term
