@@ -384,7 +384,8 @@
           <article role="main">
             
             <h1>Source code for pettingzoo.utils.wrappers.terminate_illegal</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="c1"># pyright reportGeneralTypeIssues=false</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.env_logger</span> <span class="kn">import</span> <span class="n">EnvLogger</span>
@@ -406,29 +407,40 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_illegal_value</span> <span class="o">=</span> <span class="n">illegal_reward</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_terminated</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="n">obs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">obs</span>
 
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">current_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="s2">&quot;action_mask&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span>
-        <span class="p">),</span> <span class="s2">&quot;action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper&quot;</span>
-        <span class="n">_prev_action_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="s2">&quot;action_mask&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;`action_mask` not found in dictionary observation: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span><span class="si">}</span><span class="s2">. Action mask must either be in `observation[&#39;action_mask&#39;]` or `info[&#39;action_mask&#39;]` to use TerminateIllegalWrapper.&quot;</span>
+            <span class="n">_prev_action_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="s2">&quot;action_mask&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;`action_mask` not found in info for non-dictionary observation: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span><span class="si">}</span><span class="s2">. Action mask must either be in observation[&#39;action_mask&#39;] or info[&#39;action_mask&#39;] to use TerminateIllegalWrapper.&quot;</span>
+            <span class="n">_prev_action_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_terminated</span> <span class="ow">and</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -444,6 +456,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">current_agent</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_illegal_value</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span>

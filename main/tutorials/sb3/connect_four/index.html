@@ -615,7 +615,7 @@ sb3-contrib&gt;=2.0.0
     <span class="n">chess_v6</span><span class="p">,</span>
     <span class="n">gin_rummy_v4</span><span class="p">,</span>
     <span class="n">go_v5</span><span class="p">,</span>
-    <span class="n">hanabi_v4</span><span class="p">,</span>
+    <span class="n">hanabi_v5</span><span class="p">,</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>
     <span class="n">texas_holdem_no_limit_v6</span><span class="p">,</span>
     <span class="n">texas_holdem_v4</span><span class="p">,</span>
@@ -638,15 +638,15 @@ sb3-contrib&gt;=2.0.0
 <span class="c1"># More difficult environments which will likely take more training time</span>
 <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>  <span class="c1"># with 10x as many steps it gets higher total rewards (9 vs -9), 0.52 winrate, and 0.92 vs 0.83 total scores</span>
-    <span class="n">hanabi_v4</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
+    <span class="n">hanabi_v5</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
     <span class="n">tictactoe_v3</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, agent still loses every time (most likely an error somewhere)</span>
+    <span class="n">chess_v6</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
 <span class="p">]</span>
 
 <span class="c1"># Most difficult environments to train agents for (and longest games</span>
 <span class="c1"># TODO: test board_size to see if smaller go board is more easily solvable</span>
 <span class="n">HARD_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">chess_v6</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, 0.28 winrate even after 10x</span>
-    <span class="n">go_v5</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long</span>
+    <span class="n">go_v5</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, may be another issue causing poor performance</span>
 <span class="p">]</span>
 
 
@@ -727,9 +727,7 @@ sb3-contrib&gt;=2.0.0
         <span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
-    <span class="k">assert</span> <span class="p">(</span>
-        <span class="n">winrate</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
-    <span class="p">),</span> <span class="s2">&quot;Policy should not perform better than 50% winrate&quot;</span>  <span class="c1"># 28% for chess, 0% for go</span>
+    <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Policy should not perform better than 50% winrate&quot;</span>  <span class="c1"># 0% for go</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
     <span class="c1"># eval_action_mask(env_fn, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>

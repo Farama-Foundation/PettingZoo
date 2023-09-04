@@ -404,6 +404,9 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">env</span><span class="p">,</span> <span class="n">AECEnv</span>
+        <span class="p">),</span> <span class="s2">&quot;ClipOutOfBoundsWrapper is only compatible with AEC environments.&quot;</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">),</span> <span class="n">Box</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;possible_agents&quot;</span><span class="p">,</span> <span class="p">[])</span>
