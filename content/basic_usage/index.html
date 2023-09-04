@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Environment Creation" href="../environment_creation/" /><link rel="prev" title="&lt;no title&gt;" href="../../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/content/basic_usage.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19.dev1 -->
         <title>Basic Usage - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
@@ -298,11 +298,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/custom_environment/">Custom Environment Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Custom Environment Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -410,19 +410,32 @@
 </pre></div>
 </div>
 <p>Environments are generally highly configurable via arguments at creation, i.e.:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cooperative_pong</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">ball_speed</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">left_paddle_speed</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
-<span class="n">right_paddle_speed</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">is_cake_paddle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">bounce_randomness</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">cooperative_pong_v5</span>
+
+<span class="n">cooperative_pong_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">ball_speed</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">left_paddle_speed</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+<span class="n">right_paddle_speed</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">cake_paddle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">bounce_randomness</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="interacting-with-environments">
 <h2>Interacting With Environments<a class="headerlink" href="#interacting-with-environments" title="Link to this heading">#</a></h2>
 <p>Environments can be interacted with using a similar interface to Gymnasium:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">cooperative_pong_v5</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">cooperative_pong_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
     <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-    <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="c1"># this is where you would insert your policy</span>
+
+    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># this is where you would insert your policy</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
     <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The commonly used methods are:</p>
@@ -471,7 +484,9 @@
 <section id="unwrapping-an-environment">
 <h3>Unwrapping an environment<a class="headerlink" href="#unwrapping-an-environment" title="Link to this heading">#</a></h3>
 <p>If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the <code class="docutils literal notranslate"><span class="pre">.unwrapped</span></code> attribute. If the environment is already a base environment, the <code class="docutils literal notranslate"><span class="pre">.unwrapped</span></code> attribute will just return itself.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">()</span><span class="o">.</span><span class="n">unwrapped</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
+
+<span class="n">base_env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">()</span><span class="o">.</span><span class="n">unwrapped</span>
 </pre></div>
 </div>
 </section>
@@ -664,7 +679,7 @@
         })()
       </script>
 
-    <script src="../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../_static/documentation_options.js?v=6ada4f11"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=7660844c"></script>

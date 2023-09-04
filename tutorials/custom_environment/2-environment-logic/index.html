@@ -7,11 +7,11 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/custom_environment/2-environment-logic.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tutorial: Action Masking" href="../3-action-masking/" /><link rel="prev" title="Tutorial: Repository Structure" href="../1-project-structure/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic.html" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/custom_environment/2-environment-logic.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19.dev1 -->
         <title>Tutorial: Environment Logic - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
@@ -298,7 +298,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Environment Creation Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Custom Environment Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Custom Environment Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../1-project-structure/">Tutorial: Repository Structure</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Tutorial: Environment Logic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../3-action-masking/">Tutorial: Action Masking</a></li>
@@ -363,7 +363,7 @@
           </a>
           <div class="content-icon-container">
       <div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/environmentcreation/2-environment-logic.py" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/custom_environment/2-environment-logic.py" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -402,137 +402,13 @@
 <p>For this tutorial, we will be creating a two-player game consisting of a prisoner, trying to escape, and a guard, trying to catch the prisoner. This game will be played on a 7x7 grid, where:</p>
 <ul class="simple">
 <li><p>The prisoner starts in the top left corner,</p></li>
-<li><p>the guard starts in the bottom right corner,</p></li>
-<li><p>the escape door is randomly placed in the middle of the grid, and</p></li>
+<li><p>The guard starts in the bottom right corner,</p></li>
+<li><p>The escape door is randomly placed in the middle of the grid</p></li>
 <li><p>Both the prisoner and the guard can move in any of the four cardinal directions (up, down, left, right).</p></li>
 </ul>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Link to this heading">#</a></h2>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">/custom-environment/env/custom_environment.py</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">MultiDiscrete</span>
-
-<span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">ParallelEnv</span>
-
-
-<span class="k">class</span> <span class="nc">CustomEnvironment</span><span class="p">(</span><span class="n">ParallelEnv</span><span class="p">):</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;custom_environment_v0&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prisoner&quot;</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="mi">6</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="mi">6</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-
-        <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">a</span><span class="p">:</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="p">{}</span>
-
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
-        <span class="c1"># Execute actions</span>
-        <span class="n">prisoner_action</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="s2">&quot;prisoner&quot;</span><span class="p">]</span>
-        <span class="n">guard_action</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="s2">&quot;guard&quot;</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">if</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="c1"># Check termination conditions</span>
-        <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">:</span>
-            <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-            <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">:</span>
-            <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
-            <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-
-        <span class="c1"># Check truncation conditions (overwrites termination conditions)</span>
-        <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
-            <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-            <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="c1"># Get observations</span>
-        <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">a</span><span class="p">:</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
-        <span class="p">}</span>
-
-        <span class="c1"># Get dummy infos (not used in this example)</span>
-        <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span>
-
-    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-        <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;P&quot;</span>
-        <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;G&quot;</span>
-        <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">grid</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">MultiDiscrete</span><span class="p">([</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
-
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
 </section>
 </section>
 
@@ -694,7 +570,7 @@
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../../_static/documentation_options.js?v=6ada4f11"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>

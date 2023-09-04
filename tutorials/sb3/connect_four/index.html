@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Release Notes" href="../../../release_notes/" /><link rel="prev" title="SB3: PPO for Waterworld" href="../waterworld/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/sb3/connect_four.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19.dev1 -->
         <title>SB3: Action Masked PPO for Connect Four - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
@@ -298,11 +298,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../custom_environment/">Custom Environment Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Custom Environment Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_environment/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_environment/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_environment/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_environment/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -410,7 +410,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.23.1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.24.0
 stable-baselines3&gt;=2.0.0
 sb3-contrib&gt;=2.0.0
 </pre></div>
@@ -615,7 +615,7 @@ sb3-contrib&gt;=2.0.0
     <span class="n">chess_v6</span><span class="p">,</span>
     <span class="n">gin_rummy_v4</span><span class="p">,</span>
     <span class="n">go_v5</span><span class="p">,</span>
-    <span class="n">hanabi_v4</span><span class="p">,</span>
+    <span class="n">hanabi_v5</span><span class="p">,</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>
     <span class="n">texas_holdem_no_limit_v6</span><span class="p">,</span>
     <span class="n">texas_holdem_v4</span><span class="p">,</span>
@@ -638,15 +638,15 @@ sb3-contrib&gt;=2.0.0
 <span class="c1"># More difficult environments which will likely take more training time</span>
 <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>  <span class="c1"># with 10x as many steps it gets higher total rewards (9 vs -9), 0.52 winrate, and 0.92 vs 0.83 total scores</span>
-    <span class="n">hanabi_v4</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
+    <span class="n">hanabi_v5</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
     <span class="n">tictactoe_v3</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, agent still loses every time (most likely an error somewhere)</span>
+    <span class="n">chess_v6</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
 <span class="p">]</span>
 
 <span class="c1"># Most difficult environments to train agents for (and longest games</span>
 <span class="c1"># TODO: test board_size to see if smaller go board is more easily solvable</span>
 <span class="n">HARD_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">chess_v6</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, 0.28 winrate even after 10x</span>
-    <span class="n">go_v5</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long</span>
+    <span class="n">go_v5</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, may be another issue causing poor performance</span>
 <span class="p">]</span>
 
 
@@ -727,9 +727,7 @@ sb3-contrib&gt;=2.0.0
         <span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
-    <span class="k">assert</span> <span class="p">(</span>
-        <span class="n">winrate</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
-    <span class="p">),</span> <span class="s2">&quot;Policy should not perform better than 50% winrate&quot;</span>  <span class="c1"># 28% for chess, 0% for go</span>
+    <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Policy should not perform better than 50% winrate&quot;</span>  <span class="c1"># 0% for go</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
     <span class="c1"># eval_action_mask(env_fn, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
@@ -901,7 +899,7 @@ sb3-contrib&gt;=2.0.0
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../../_static/documentation_options.js?v=6ada4f11"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
