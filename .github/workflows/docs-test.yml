@@ -59,6 +59,7 @@ jobs:
                   find . -type f -name '.test_durations' -exec bash -c 'i=1; while [ -e "./test_durations_$i" ]; do i=$((i+1)); done; mv "$1" "./test_durations_$i";' _ {} \;
                   # Combine all test durations files
                   jq -s 'reduce inputs as $item ({}; . + $item)' .test_durations.* > .test_durations
+              continue-on-error: true
             - name: Upload final durations
               uses: actions/upload-artifact@v3
               with:
