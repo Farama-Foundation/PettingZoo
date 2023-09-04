@@ -9,11 +9,31 @@ from pettingzoo import ParallelEnv
 
 
 class CustomActionMaskedEnvironment(ParallelEnv):
+    """The metadata holds environment constants.
+
+    The "name" metadata allows the environment to be pretty printed.
+    """
+
     metadata = {
         "name": "custom_environment_v0",
     }
 
     def __init__(self):
+        """The init method takes in environment arguments.
+
+        Should define the following attributes:
+        - escape x and y coordinates
+        - guard x and y coordinates
+        - prisoner x and y coordinates
+        - timestamp
+        - possible_agents
+
+        Note: as of v1.18.1, the action_spaces and observation_spaces attributes are deprecated.
+        Spaces should be defined in the action_space() and observation_space() methods.
+        If these methods are not overridden, spaces will be inferred from self.observation_spaces/action_spaces, raising a warning.
+
+        These attributes should not be changed after initialization.
+        """
         self.escape_y = None
         self.escape_x = None
         self.guard_y = None
@@ -24,6 +44,19 @@ class CustomActionMaskedEnvironment(ParallelEnv):
         self.possible_agents = ["prisoner", "guard"]
 
     def reset(self, seed=None, options=None):
+        """Reset set the environment to a starting point.
+
+        It needs to initialize the following attributes:
+        - agents
+        - timestamp
+        - prisoner x and y coordinates
+        - guard x and y coordinates
+        - escape x and y coordinates
+        - observation
+        - infos
+
+        And must set up the environment so that render(), step(), and observe() can be called without issues.
+        """
         self.agents = copy(self.possible_agents)
         self.timestep = 0
 
@@ -52,6 +85,19 @@ class CustomActionMaskedEnvironment(ParallelEnv):
         return observations, infos
 
     def step(self, actions):
+        """Takes in an action for the current agent (specified by agent_selection).
+
+        Needs to update:
+        - prisoner x and y coordinates
+        - guard x and y coordinates
+        - terminations
+        - truncations
+        - rewards
+        - timestamp
+        - infos
+
+        And any internal state used by observe() or render()
+        """
         # Execute actions
         prisoner_action = actions["prisoner"]
         guard_action = actions["guard"]
@@ -95,6 +141,7 @@ class CustomActionMaskedEnvironment(ParallelEnv):
         elif self.guard_y == 6:
             guard_action_mask[3] = 0
 
+        # Action mask to prevent guard from going over escape cell
         if self.guard_x - 1 == self.escape_x:
             guard_action_mask[0] = 0
         elif self.guard_x + 1 == self.escape_x:
@@ -145,16 +192,23 @@ class CustomActionMaskedEnvironment(ParallelEnv):
         return observations, rewards, terminations, truncations, infos
 
     def render(self):
+        """Renders the environment."""
         grid = np.zeros((7, 7))
         grid[self.prisoner_y, self.prisoner_x] = "P"
         grid[self.guard_y, self.guard_x] = "G"
         grid[self.escape_y, self.escape_x] = "E"
         print(f"{grid} \n")
 
+    # Observation space should be defined here.
+    # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
+    # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return MultiDiscrete([7 * 7 - 1] * 3)
 
+    # Action space should be defined here.
+    # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(4)
