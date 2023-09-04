@@ -25,7 +25,7 @@ The [Shimmy](https://shimmy.farama.org/) package (`pip install shimmy`) allows c
 
 To load a DeepMind Control [multi-agent soccer game](https://github.com/deepmind/dm_control/blob/main/dm_control/locomotion/soccer/README.md):
 
-```python
+```python notest
 from shimmy import DmControlMultiAgentCompatibilityV0
 from dm_control.locomotion import soccer as dm_soccer
 
@@ -39,13 +39,13 @@ while env.agents:
 ```
 
 
-To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon):
-```python
-from shimmy import OpenspielCompatibilityV0
-import pyspiel
+To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon), wrapped with [TerminateIllegalWrapper](https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.TerminateIllegalWrapper):
+```python notest
+from shimmy import OpenSpielCompatibilityV0
+from pettingzoo.utils import TerminateIllegalWrapper
 
-env = pyspiel.load_game("backgammon")
-env = OpenspielCompatibilityV0(game=env, render_mode=None)
+env = OpenSpielCompatibilityV0(game_name="chess", render_mode=None)
+env = TerminateIllegalWrapper(env, illegal_reward=-1)
 
 env.reset()
 for agent in env.agent_iter():
@@ -61,7 +61,7 @@ for agent in env.agent_iter():
 
 To load a Melting Pot [prisoner's dilemma in the matrix](https://github.com/deepmind/meltingpot/blob/main/docs/substrate_scenario_details.md#prisoners-dilemma-in-the-matrix) substrate:
 
-```python
+```python notest
 from shimmy import MeltingPotCompatibilityV0
 env = MeltingPotCompatibilityV0(substrate_name="prisoners_dilemma_in_the_matrix__arena", render_mode="human")
 observations, infos = env.reset()

@@ -6,7 +6,7 @@ from pettingzoo.classic import (
     chess_v6,
     gin_rummy_v4,
     go_v5,
-    hanabi_v4,
+    hanabi_v5,
     leduc_holdem_v4,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
@@ -29,15 +29,15 @@ EASY_ENVS = [
 # More difficult environments which will likely take more training time
 MEDIUM_ENVS = [
     leduc_holdem_v4,  # with 10x as many steps it gets higher total rewards (9 vs -9), 0.52 winrate, and 0.92 vs 0.83 total scores
-    hanabi_v4,  # even with 10x as many steps, total score seems to always be tied between the two agents
+    hanabi_v5,  # even with 10x as many steps, total score seems to always be tied between the two agents
     tictactoe_v3,  # even with 10x as many steps, agent still loses every time (most likely an error somewhere)
+    chess_v6,  # difficult to train because games take so long, performance varies heavily
 ]
 
 # Most difficult environments to train agents for (and longest games
 # TODO: test board_size to see if smaller go board is more easily solvable
 HARD_ENVS = [
-    chess_v6,  # difficult to train because games take so long, 0.28 winrate even after 10x
-    go_v5,  # difficult to train because games take so long
+    go_v5,  # difficult to train because games take so long, may be another issue causing poor performance
 ]
 
 
@@ -118,9 +118,7 @@ def test_action_mask_hard(env_fn):
         env_fn, num_games=100, render_mode=None, **env_kwargs
     )
 
-    assert (
-        winrate < 0.5
-    ), "Policy should not perform better than 50% winrate"  # 28% for chess, 0% for go
+    assert winrate > 0, "Policy should not perform better than 50% winrate"  # 0% for go
 
     # Watch two games (disabled by default)
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)

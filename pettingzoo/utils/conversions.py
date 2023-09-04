@@ -124,6 +124,15 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
 
         self.metadata = aec_env.metadata
 
+        try:
+            self.render_mode = (
+                self.aec_env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
+            )
+        except AttributeError:
+            warnings.warn(
+                f"The base environment `{aec_env}` does not have a `render_mode` defined."
+            )
+
         # Not every environment has the .state_space attribute implemented
         try:
             self.state_space = self.aec_env.state_space
@@ -419,6 +428,15 @@ class turn_based_aec_to_parallel_wrapper(
             )
         except AttributeError:
             pass
+
+        try:
+            self.render_mode = (
+                self.aec_env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
+            )
+        except AttributeError:
+            warnings.warn(
+                f"The base environment `{aec_env}` does not have a `render_mode` defined."
+            )
 
     @property
     def unwrapped(self):

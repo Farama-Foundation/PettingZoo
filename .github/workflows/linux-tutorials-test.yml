@@ -1,38 +1,37 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 ---
 name: Tutorial tests
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  tutorial-test:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
-        tutorial: ['Tianshou', 'CustomEnvironment', 'CleanRL', 'SB3/kaz', 'SB3/waterworld', 'SB3/connect_four', 'SB3/test'] # TODO: add back Ray once next release after 2.6.2
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies and run tutorials
-        run: |
-          sudo apt-get install python3-opengl xvfb
-          export root_dir=$(pwd)
-          cd tutorials/${{ matrix.tutorial }}
-          pip install -r requirements.txt
-          pip uninstall -y pettingzoo
-          pip install -e $root_dir[testing]
-          AutoROM -v
-          for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
+    tutorial-test:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                python-version: ['3.8', '3.9', '3.10', '3.11']
+                tutorial: [Tianshou, CustomEnvironment, CleanRL, SB3/kaz, SB3/waterworld, SB3/connect_four, SB3/test]       # TODO: add back Ray once next release after 2.6.2
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v3
+              with:
+                  python-version: ${{ matrix.python-version }}
+            - name: Install dependencies and run tutorials
+              run: |
+                  sudo apt-get install python3-opengl xvfb parallel
+                  export PATH=/path/to/parallel:$PATH
+                  export root_dir=$(pwd)
+                  cd tutorials/${{ matrix.tutorial }}
+                  pip install -r requirements.txt
+                  pip uninstall -y pettingzoo
+                  pip install -e $root_dir[testing]
+                  AutoROM -v
+                  for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done

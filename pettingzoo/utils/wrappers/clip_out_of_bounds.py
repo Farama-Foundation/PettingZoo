@@ -16,6 +16,9 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
 
     def __init__(self, env: AECEnv):
         super().__init__(env)
+        assert isinstance(
+            env, AECEnv
+        ), "ClipOutOfBoundsWrapper is only compatible with AEC environments."
         assert all(
             isinstance(self.action_space(agent), Box)
             for agent in getattr(self, "possible_agents", [])

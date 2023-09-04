@@ -48,7 +48,9 @@ testing = [
     "AutoROM",
     "pytest",
     "pytest-cov",
+    "pytest-xdist",
     "pre-commit",
+    "pytest-markdown-docs"
 ]
 all = [
     "multi_agent_ale_py==0.1.11",
@@ -104,4 +106,4 @@ typeCheckingMode = "basic"
 reportMissingImports = false
 
 [tool.pytest.ini_options]
-addopts = [ "--ignore-glob=*/__init__.py" ]
+addopts = [ "--ignore-glob=*/__init__.py", "-n=auto", "--ignore=tutorials", "--ignore=docs/_scripts", "--ignore=conf.py"]

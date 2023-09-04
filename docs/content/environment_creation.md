@@ -87,7 +87,7 @@ from pettingzoo.utils.deprecated_module import DeprecatedModule
 knights_archers_zombies_v0 = DeprecatedModule("knights_archers_zombies", "v0", "v10")
 ```
 This declaration tells the user that `knights_archers_zombies_v0` is deprecated and `knights_archers_zombies_v10` should be used instead. In particular, it gives the following error:
-``` python
+``` python notest
 from pettingzoo.butterfly import knights_archers_zombies_v0
 knights_archers_zombies_v0.env()
 # pettingzoo.utils.deprecated_module.DeprecatedEnv: knights_archers_zombies_v0 is now deprecated, use knights_archers_zombies_v10 instead
