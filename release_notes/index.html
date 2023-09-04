@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="prev" title="SB3: Action Masked PPO for Connect Four" href="../tutorials/sb3/connect_four/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/release_notes/index.html" />
 
-    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19.dev1 -->
         <title>Release Notes - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=3e7f4c72" />
@@ -298,11 +298,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/custom_environment/">Custom Environment Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Custom Environment Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/custom_environment/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/custom_environment/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/custom_environment/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/custom_environment/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -395,6 +395,29 @@
             
             <section id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">#</a></h1>
+<section id="release-1-24-1">
+<h2>PettingZoo 1.24.1<a class="headerlink" href="#release-1-24-1" title="Link to this heading">#</a></h2>
+<p><em>Released on 2023-09-04 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.24.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.24.1/">PyPI</a></em></p>
+<h2>PettingZoo 1.24.0 Release Notes:</h2>
+<p>This is a hotfix release to fix compatibility issues with <a href="https://github.com/Farama-Foundation/Shimmy">Shimmy</a>, due to an unintentional typevar deletion.</p>
+<p>Other changes include: minor fixes to the <code>knights_archers_zombies</code> environment, improved CI testing (including using <a href="https://github.com/pytest-dev/pytest-xdist">pytest-xdist</a> to utilize parallelization), and new documentation testing using <a href="https://github.com/modal-labs/pytest-markdown-docs">pytest-markdown-docs</a>, ensuring that every codeblock in our documentation runs successfully--including environment usage scripts.</p>
+<p>Environment creation documentation has also improved and made more beginner-friendly. The <code>Environment Creation Tutorial</code> has also been renamed to <code>Custom Environment Tutorial</code>, to avoid confusion with the Getting Started section's <code>Environment Creation</code> page.</p>
+<h2>Bug Fixes</h2>
+<ul>
+<li>Add back ObsDict and ActionDict to env.py (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1867575768" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1077" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1077/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1077">#1077</a>)
+<ul>
+<li>These definitions were mistakenly removed in the previous release, apologies for the inconveniences</li>
+</ul>
+</li>
+<li>Fix rendering FPS and manual control script for knights_archers_zombies (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1870131901" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1080" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1080/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1080">#1080</a>)</li>
+<li>Clean up duplicated python tests, add additional parameter combination tests (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1863482709" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1074" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1074/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1074">#1074</a>)</li>
+</ul>
+<h2>Documentation Updates</h2>
+<ul>
+<li>Add doctesting for all codeblocks in documentation, including usage scripts (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1878069773" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1083" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1083/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1083">#1083</a>)</li>
+<li>Update environment creation tutorials (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1877957471" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1082" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1082/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1082">#1082</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1879045929" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1084" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1084/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1084">#1084</a>)</li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.24.0...1.24.1"><tt>1.24.0...1.24.1</tt></a></p></section>
 <section id="release-1-24-0">
 <h2>PettingZoo 1.24.0<a class="headerlink" href="#release-1-24-0" title="Link to this heading">#</a></h2>
 <p><em>Released on 2023-08-22 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.24.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.24.0/">PyPI</a></em></p>
@@ -1004,6 +1027,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#release-1-24-1">PettingZoo 1.24.1</a></li>
 <li><a class="reference internal" href="#release-1-24-0">PettingZoo 1.24.0</a></li>
 <li><a class="reference internal" href="#release-1-23-1">PettingZoo 1.23.1</a></li>
 <li><a class="reference internal" href="#release-1-23-0">PettingZoo 1.23.0</a></li>
@@ -1125,7 +1149,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         })()
       </script>
 
-    <script src="../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../_static/documentation_options.js?v=6ada4f11"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=7660844c"></script>

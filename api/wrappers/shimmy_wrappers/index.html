@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Utils" href="../../utils/" /><link rel="prev" title="Supersuit Wrappers" href="../supersuit_wrappers/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/wrappers/shimmy_wrappers.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19.dev1 -->
         <title>Shimmy Compatibility Wrappers - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
@@ -298,11 +298,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/custom_environment/">Custom Environment Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Custom Environment Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/custom_environment/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/custom_environment/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/custom_environment/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/custom_environment/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -439,12 +439,12 @@
     <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To load an OpenSpiel game of <a class="reference external" href="https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon">backgammon</a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shimmy</span> <span class="kn">import</span> <span class="n">OpenspielCompatibilityV0</span>
-<span class="kn">import</span> <span class="nn">pyspiel</span>
+<p>To load an OpenSpiel game of <a class="reference external" href="https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon">backgammon</a>, wrapped with <a class="reference external" href="https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.TerminateIllegalWrapper">TerminateIllegalWrapper</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shimmy</span> <span class="kn">import</span> <span class="n">OpenSpielCompatibilityV0</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">TerminateIllegalWrapper</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">pyspiel</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="s2">&quot;backgammon&quot;</span><span class="p">)</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">OpenspielCompatibilityV0</span><span class="p">(</span><span class="n">game</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">OpenSpielCompatibilityV0</span><span class="p">(</span><span class="n">game_name</span><span class="o">=</span><span class="s2">&quot;chess&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -658,7 +658,7 @@
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../../_static/documentation_options.js?v=6ada4f11"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>

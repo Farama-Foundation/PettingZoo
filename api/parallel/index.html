@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Wrappers" href="../wrappers/" /><link rel="prev" title="AEC API" href="../aec/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/parallel.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19.dev1 -->
         <title>Parallel API - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
@@ -298,11 +298,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/custom_environment/">Custom Environment Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Custom Environment Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -401,7 +401,7 @@
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
 <p><a class="reference internal" href="../../environments/butterfly/"><span class="doc std std-doc">PettingZoo Butterfly</span></a> provides standard examples of Parallel environments, such as <a class="reference internal" href="../../environments/butterfly/pistonball/"><span class="doc std std-doc">Pistonball</span></a>.</p>
-<p>We provide tutorials for creating two custom Parallel environments: <a class="reference external" href="https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment">Rock-Paper-Scissors (Parallel)</a>, and a simple <a class="reference internal" href="../../tutorials/environmentcreation/2-environment-logic/"><span class="doc std std-doc">gridworld environment</span></a></p>
+<p>We provide tutorials for creating two custom Parallel environments: <a class="reference external" href="https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment">Rock-Paper-Scissors (Parallel)</a>, and a simple <a class="reference internal" href="#/tutorials/environmentcreation/2-environment-logic/"><span class="xref myst">gridworld environment</span></a></p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
@@ -410,7 +410,7 @@
 <span class="n">parallel_env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
-<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+<span class="k">while</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
     <span class="c1"># this is where you would insert your policy</span>
     <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
 
@@ -731,7 +731,7 @@ centralized training decentralized execution methods like QMIX</p>
         })()
       </script>
 
-    <script src="../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../_static/documentation_options.js?v=6ada4f11"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=7660844c"></script>

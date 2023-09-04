@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Atari" href="../../environments/atari/" /><link rel="prev" title="Shimmy Compatibility Wrappers" href="../wrappers/shimmy_wrappers/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/utils.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19.dev1 -->
         <title>Utils - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
@@ -298,11 +298,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Environment Creation Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/custom_environment/">Custom Environment Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Custom Environment Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_environment/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -397,9 +397,9 @@
 <h1>Utils<a class="headerlink" href="#utils" title="Link to this heading">#</a></h1>
 <p>PettingZoo has an assortment of helper utilities which provide additional functionality for interacting with environments.</p>
 <p>Note: see also <a class="reference internal" href="../wrappers/pz_wrappers/"><span class="doc std std-doc">PettingZoo Wrappers</span></a>, which provide additional functionality for customizing environments.</p>
-<section id="average-total-reward">
-<h2>Average Total Reward<a class="headerlink" href="#average-total-reward" title="Link to this heading">#</a></h2>
-<dl class="py function" id="module-pettingzoo.utils.average_total_reward">
+<section id="module-pettingzoo.utils.average_total_reward">
+<span id="average-total-reward"></span><h2>Average Total Reward<a class="headerlink" href="#module-pettingzoo.utils.average_total_reward" title="Link to this heading">#</a></h2>
+<dl class="py function">
 <dt class="sig sig-object py" id="pettingzoo.utils.average_total_reward.average_total_reward">
 <span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.average_total_reward.</span></span><span class="sig-name descname"><span class="pre">average_total_reward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_episodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000000000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/average_total_reward/#average_total_reward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.average_total_reward.average_total_reward" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the average total reward over the episodes for AEC environments.</p>
@@ -419,9 +419,9 @@ games.</p>
 </div>
 <p>Where <code class="docutils literal notranslate"><span class="pre">max_episodes</span></code> and <code class="docutils literal notranslate"><span class="pre">max_steps</span></code> both limit the total number of evaluations (when the first is hit evaluation stops)</p>
 </section>
-<section id="observation-saving">
-<h2>Observation Saving<a class="headerlink" href="#observation-saving" title="Link to this heading">#</a></h2>
-<dl class="py function" id="module-pettingzoo.utils.save_observation">
+<section id="module-pettingzoo.utils.save_observation">
+<span id="observation-saving"></span><h2>Observation Saving<a class="headerlink" href="#module-pettingzoo.utils.save_observation" title="Link to this heading">#</a></h2>
+<dl class="py function">
 <dt class="sig sig-object py" id="pettingzoo.utils.save_observation.save_observation">
 <span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.save_observation.</span></span><span class="sig-name descname"><span class="pre">save_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AgentID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_agents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">os.getcwd()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/save_observation/#save_observation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.save_observation.save_observation" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -696,11 +696,11 @@ games.</p>
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Utils</a><ul>
-<li><a class="reference internal" href="#average-total-reward">Average Total Reward</a><ul>
+<li><a class="reference internal" href="#module-pettingzoo.utils.average_total_reward">Average Total Reward</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.average_total_reward.average_total_reward"><code class="docutils literal notranslate"><span class="pre">average_total_reward()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#observation-saving">Observation Saving</a><ul>
+<li><a class="reference internal" href="#module-pettingzoo.utils.save_observation">Observation Saving</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.save_observation.save_observation"><code class="docutils literal notranslate"><span class="pre">save_observation()</span></code></a></li>
 </ul>
 </li>
@@ -828,7 +828,7 @@ games.</p>
         })()
       </script>
 
-    <script src="../../_static/documentation_options.js?v=97aa7057"></script>
+    <script src="../../_static/documentation_options.js?v=6ada4f11"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=7660844c"></script>
