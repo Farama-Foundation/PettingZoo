@@ -395,6 +395,9 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Takes an environment which prints to terminal, and gives it an `ansi` render mode where it captures the terminal output and returns it as a string instead.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">env</span><span class="p">,</span> <span class="n">AECEnv</span>
+        <span class="p">),</span> <span class="s2">&quot;CaptureStdoutWrapper is only compatible with AEC environments&quot;</span>
         <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">&quot;render_mode&quot;</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Environment </span><span class="si">{</span><span class="n">env</span><span class="si">}</span><span class="s2"> has no render_mode.&quot;</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="n">env</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span>  <span class="c1"># pyright: ignore[reportGeneralTypeIssues]</span>
