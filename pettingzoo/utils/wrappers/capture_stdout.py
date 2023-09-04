@@ -7,6 +7,9 @@ class CaptureStdoutWrapper(BaseWrapper):
     """Takes an environment which prints to terminal, and gives it an `ansi` render mode where it captures the terminal output and returns it as a string instead."""
 
     def __init__(self, env: AECEnv):
+        assert isinstance(
+            env, AECEnv
+        ), "CaptureStdoutWrapper is only compatible with AEC environments"
         assert hasattr(env, "render_mode"), f"Environment {env} has no render_mode."
         assert (
             env.render_mode == "human"  # pyright: ignore[reportGeneralTypeIssues]

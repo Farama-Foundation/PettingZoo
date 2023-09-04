@@ -32,13 +32,13 @@ played card does not satisfy these conditions, a life token is placed. The game 
 Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.
 
 ``` python
-hanabi_v5.env(colors=5, rank=5, players=2, hand_size=5, max_information_tokens=8,
-max_life_tokens=3, observation_type="minimal")
+hanabi_v5.env(colors=5, ranks=5, players=2, hand_size=5, max_information_tokens=8,
+max_life_tokens=3, observation_type='minimal')
 ```
 
 `colors`: Number of colors the cards can take (affects size of deck)
 
-`rank`: Number of ranks the cards can take (affects size of deck)
+`ranks`: Number of ranks the cards can take (affects size of deck)
 
 `hand_size`: Size of player's hands. Standard game is (4 if players >= 4 else 5)
 
