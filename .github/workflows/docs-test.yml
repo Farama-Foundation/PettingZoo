@@ -33,6 +33,11 @@ jobs:
               run: pip install -r docs/requirements.txt
             - name: Generate environment docs
               run: python docs/_scripts/gen_envs_mds.py
+            - name: Download durations from most recent GitHub workflow run
+              id: download-artifact
+              uses: dawidd6/action-download-artifact@v2
+              with:
+                  if_no_artifact_found: warn
             - name: Documentation test
               run: |
-                  xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --splits 10 --group ${{ matrix.group }}
+                  xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --splits 10 --group ${{ matrix.group }} --durations-path test/.test_durations
