@@ -60,7 +60,7 @@ from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
 from pettingzoo.test import max_cycles_test, parallel_api_test
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.render_test import render_test
-from pettingzoo.test.seed_test import seed_test
+from pettingzoo.test.seed_test import parallel_seed_test, seed_test
 from pettingzoo.test.state_test import state_test
 
 parameterized_envs = [
@@ -367,10 +367,11 @@ def test_module(name, env_module, kwargs):
     if "classic/" not in name:
         parallel_api_test(env_module.parallel_env())
         max_cycles_test(env_module)
+        parallel_seed_test(lambda: env_module.parallel_env(**kwargs), 500)
 
-    # some atari environments fail this test, waterworld fails for certain seeds
+    # some atari environments fail this test
     if "atari/" not in name:
-        seed_test(lambda: env_module.env(**kwargs), 50)
+        seed_test(lambda: env_module.env(**kwargs), 500)
 
     render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))
 
