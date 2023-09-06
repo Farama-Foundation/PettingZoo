@@ -45,6 +45,7 @@ tutorials/tianshou/index
 tutorials/rllib/index
 tutorials/langchain/index
 tutorials/sb3/index
+tutorials/agilerl/index
 ```
 
 ```{toctree}
