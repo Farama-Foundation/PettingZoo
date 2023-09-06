@@ -1,3 +1,7 @@
+"""This tutorial shows how to train an MATD3 agent on the simple speaker listener multi-particle environment.
+
+Authors: Michael (https://github.com/mikepratt1), Nickua (https://github.com/nicku-a)
+"""
 import numpy as np
 import torch
 from agilerl.components.multi_agent_replay_buffer import MultiAgentReplayBuffer

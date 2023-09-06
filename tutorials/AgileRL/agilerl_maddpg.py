@@ -1,3 +1,7 @@
+"""This tutorial shows how to train an MADDPG agent on the space invaders atari environment.
+
+Authors: Michael (https://github.com/mikepratt1), Nickua (https://github.com/nicku-a)
+"""
 import numpy as np
 import supersuit as ss
 import torch
