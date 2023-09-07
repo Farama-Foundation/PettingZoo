@@ -7,7 +7,7 @@ These tutorials provide an introductory guide to using [AgileRL](https://github.
 
 ## AgileRL Overview
 
-AgileRL is a deep reinforcement learning framework focused on streamlining training for reinforcement learning models. Using [evolutionary hyper-parameter optimisation](https://agilerl.readthedocs.io/en/latest/api/hpo/index.html) (HPO), AgileRL allows users to train models significantly faster and more accurately when compared with traditional HPO techniques. Benchmarking for our multi-agent algorithms has shown up to 4x increase in return in a shorter time-frame when compared with implementations of the very same algorithms in other reinforcement learning libraries.
+AgileRL is a deep reinforcement learning framework focused on streamlining training for reinforcement learning models. Using [evolutionary hyper-parameter optimisation](https://agilerl.readthedocs.io/en/latest/api/hpo/index.html) (HPO), AgileRL allows users to train models significantly faster and more accurately when compared with traditional HPO techniques. AgileRL's multi-agent algorithms orchestrate the training of multiple agents at the same time, and benchmarking has shown up to 4x increase in return in a shorter time-frame when compared with implementations of the very same algorithms in other reinforcement learning libraries.
 
 For more information about AgileRL and what else the library has to offer, check out the [documentation](https://agilerl.readthedocs.io/en/latest/) and [GitHub repo](https://github.com/agilerl/agilerl).
 
@@ -21,7 +21,7 @@ For more information about AgileRL and what else the library has to offer, check
    :align: center
    :height: 400px
 
-   Fig1: Performance of trained MADDPG agents on 6 random episodes
+   Fig1: Performance of trained MADDPG algorithm on 6 random episodes
 ```
 
 ```{toctree}

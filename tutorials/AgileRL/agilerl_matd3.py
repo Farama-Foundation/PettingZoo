@@ -2,6 +2,8 @@
 
 Authors: Michael (https://github.com/mikepratt1), Nickua (https://github.com/nicku-a)
 """
+import os
+
 import numpy as np
 import torch
 from agilerl.components.multi_agent_replay_buffer import MultiAgentReplayBuffer
@@ -127,6 +129,7 @@ if __name__ == "__main__":
     eps_decay = 0.995  # Epsilon decay
     evo_epochs = 20  # Evolution frequency
     evo_loop = 1  # Number of evaluation episodes
+    elite = pop[0]  # Assign a placeholder "elite" agent
 
     # Training loop
     for idx_epi in trange(max_episodes):
@@ -210,3 +213,10 @@ if __name__ == "__main__":
             # Tournament selection and population mutation
             elite, pop = tournament.select(pop)
             pop = mutations.mutation(pop)
+
+    # Save the trained algorithm
+    path = "./models/MATD3"
+    filename = "MATD3_trained_agent.pt"
+    os.makedirs(path, exist_ok=True)
+    save_path = os.path.join(path, filename)
+    elite.saveCheckpoint(save_path)
