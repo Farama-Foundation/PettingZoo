@@ -33,35 +33,6 @@ jobs:
               run: pip install -r docs/requirements.txt
             - name: Generate environment docs
               run: python docs/_scripts/gen_envs_mds.py
-            - name: Download durations from most recent GitHub workflow run
-              id: download-artifact
-              uses: dawidd6/action-download-artifact@v2
-              with:
-                  if_no_artifact_found: warn
             - name: Documentation test
               run: |
-                  xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --splits 10 --group ${{ matrix.group }} --store-durations --clean-durations
-            - name: Upload partial durations
-              uses: actions/upload-artifact@v3
-              with:
-                  name: split-${{ matrix.group }}
-                  path: .test_durations
-    upload-timings:
-        needs: docs-test
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - name: Download artifacts
-              uses: actions/download-artifact@v3
-            - name: Combine test-durations
-              run: |
-                  # Move all test durations to same folder and append numbers
-                  find . -type f -name '.test_durations' -exec bash -c 'i=1; while [ -e "./test_durations_$i" ]; do i=$((i+1)); done; mv "$1" "./test_durations_$i";' _ {} \;
-                  # Combine all test durations files
-                  jq -s 'reduce inputs as $item ({}; . + $item)' .test_durations.* > .test_durations
-              continue-on-error: true
-            - name: Upload final durations
-              uses: actions/upload-artifact@v3
-              with:
-                  name: split-${{ matrix.group }}
-                  path: .test_durations
+                  xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --splits 10 --group ${{ matrix.group }} --durations-path test/.test_durations
