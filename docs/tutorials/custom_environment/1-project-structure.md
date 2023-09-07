@@ -41,7 +41,7 @@ Implementing these are outside the scope of this tutorial.
 The entirety of your environment logic is stored within `/custom-environment/env`
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/EnvironmentCreation/tutorial1_skeleton_creation.py
+.. literalinclude:: ../../../tutorials/CustomEnvironment/tutorial1_skeleton_creation.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
 ```

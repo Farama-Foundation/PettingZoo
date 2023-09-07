@@ -77,7 +77,7 @@ Note: action masking is optional, and can be implemented using either `observati
 * [Shimmy](https://shimmy.farama.org/)'s [OpenSpiel environments](https://shimmy.farama.org/environments/open_spiel/) stores action masks in the `info` dict:
   * `mask = info["action_mask"]`
 
-To implement action masking in a custom environment, see [Environment Creation: Action Masking](/tutorials/environmentcreation/3-action-masking/)
+To implement action masking in a custom environment, see [Custom Environment: Action Masking](/tutorials/custom_environment/3-action-masking/)
 
 For more information on action masking, see [A Closer Look at Invalid Action Masking in Policy Gradient Algorithms](https://arxiv.org/abs/2006.14171) (Huang, 2022)
 

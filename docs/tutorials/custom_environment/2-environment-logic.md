@@ -17,7 +17,7 @@ For this tutorial, we will be creating a two-player game consisting of a prisone
 ## Code
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/EnvironmentCreation/tutorial2_adding_game_logic.py
+.. literalinclude:: ../../../tutorials/CustomEnvironment/tutorial2_adding_game_logic.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
 ```

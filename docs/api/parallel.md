@@ -15,7 +15,7 @@ For a comparison with the AEC API, see [About AEC](https://pettingzoo.farama.org
 
 [PettingZoo Butterfly](/environments/butterfly/) provides standard examples of Parallel environments, such as [Pistonball](/environments/butterfly/pistonball).
 
-We provide tutorials for creating two custom Parallel environments: [Rock-Paper-Scissors (Parallel)](https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment), and a simple [gridworld environment](/tutorials/environmentcreation/2-environment-logic/)
+We provide tutorials for creating two custom Parallel environments: [Rock-Paper-Scissors (Parallel)](https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment), and a simple [gridworld environment](/tutorials/custom_environment/2-environment-logic/)
 
 ## Usage
 
