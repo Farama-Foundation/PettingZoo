@@ -13,7 +13,7 @@ Action masking is a more natural way of handling invalid actions than having an 
 ## Code
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/EnvironmentCreation/tutorial3_action_masking.py
+.. literalinclude:: ../../../tutorials/CustomEnvironment/tutorial3_action_masking.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
 ```
