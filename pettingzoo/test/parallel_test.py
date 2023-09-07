@@ -77,14 +77,13 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
             assert isinstance(truncated, dict)
             assert isinstance(info, dict)
 
-            agents_set = set(live_agents)
             keys = "observation reward terminated truncated info".split()
             vals = [obs, rew, terminated, truncated, info]
             for k, v in zip(keys, vals):
                 key_set = set(v.keys())
-                if key_set == agents_set:
+                if key_set == live_agents:
                     continue
-                if len(key_set) < len(agents_set):
+                if len(key_set) < len(live_agents):
                     warnings.warn(f"Live agent was not given {k}")
                 else:
                     warnings.warn(f"Agent was given {k} but was dead last turn")
