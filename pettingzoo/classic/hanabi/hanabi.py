@@ -412,17 +412,9 @@ class raw_env(AECEnv, EzPickle):
             observation: Optional list of integers of length self.observation_vector_dim, describing observations of
             current agent (agent_selection).
         """
-        # if seed is not None:
-        #     config = dict(seed=seed, **self._config)
-        #     self.hanabi_env = OpenSpielCompatibilityV0(
-        #         pyspiel.load_game("hanabi", config), render_mode=self.render_mode
-        #     )
-
         self.agents = self.possible_agents[:]
 
         self.hanabi_env.reset(seed=seed)
-
-        # if self.hanabi_env._env.num_distinct_actions() != self.hanabi_env.
 
         # Reset spaces
         self.action_spaces = {a: self.hanabi_env.action_space(a) for a in self.agents}
@@ -459,7 +451,7 @@ class raw_env(AECEnv, EzPickle):
 
         Returns:
             observation: Optional List of new observations of agent at turn after the action step is performed.
-            By default a list of integers, describing the logic state of the game from the view of the agent.
+            By default, a list of integers, describing the logic state of the game from the view of the agent.
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
         if (
@@ -468,19 +460,16 @@ class raw_env(AECEnv, EzPickle):
         ):
             return self._was_dead_step(action)
 
-        if action not in self.legal_moves:
-            raise ValueError(
-                "Illegal action. Please choose between legal actions, as documented in dict self.infos"
-            )
+        self.hanabi_env.step(action)
 
-        else:
-            self.hanabi_env.step(action)
+        self.agent_selection = self.hanabi_env.agent_selection
+        self.rewards = self.hanabi_env.rewards
+        self.terminations = self.hanabi_env.terminations
+        self.truncations = self.hanabi_env.truncations
+        self.infos = self.hanabi_env.infos
 
-            self.agent_selection = self.hanabi_env.agent_selection
-            self.rewards = self.hanabi_env.rewards
-            self.terminations = self.hanabi_env.terminations
-            self.truncations = self.hanabi_env.truncations
-            self.infos = self.hanabi_env.infos
+        if self.render_mode is not None:
+            self.render()
 
     def observe(self, agent_name: str):
         observation = self.hanabi_env.observe(agent_name)
