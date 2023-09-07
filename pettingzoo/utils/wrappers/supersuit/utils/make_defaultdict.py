@@ -1,8 +1,9 @@
 import warnings
 from collections import defaultdict
+from typing import Union
 
 
-def make_defaultdict(d: dict) -> defaultdict:
+def make_defaultdict(d: dict) -> Union[defaultdict, dict]:
     """
     Create a defaultdict with the same types as the input dictionary or return an empty dictionary.
 
@@ -10,7 +11,7 @@ def make_defaultdict(d: dict) -> defaultdict:
         d (dict): The input dictionary.
 
     Returns:
-        defaultdict: A defaultdict with the same types as the input dictionary.
+        defaultdict: A defaultdict with the same types as the input dictionary or a dict
 
     Note:
         If the input dictionary is empty, a warning is issued, and an empty dictionary is returned.
