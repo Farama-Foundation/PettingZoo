@@ -811,17 +811,9 @@
 <span class="sd">            observation: Optional list of integers of length self.observation_vector_dim, describing observations of</span>
 <span class="sd">            current agent (agent_selection).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># if seed is not None:</span>
-        <span class="c1">#     config = dict(seed=seed, **self._config)</span>
-        <span class="c1">#     self.hanabi_env = OpenSpielCompatibilityV0(</span>
-        <span class="c1">#         pyspiel.load_game(&quot;hanabi&quot;, config), render_mode=self.render_mode</span>
-        <span class="c1">#     )</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-
-        <span class="c1"># if self.hanabi_env._env.num_distinct_actions() != self.hanabi_env.</span>
 
         <span class="c1"># Reset spaces</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
@@ -861,7 +853,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            observation: Optional List of new observations of agent at turn after the action step is performed.</span>
-<span class="sd">            By default a list of integers, describing the logic state of the game from the view of the agent.</span>
+<span class="sd">            By default, a list of integers, describing the logic state of the game from the view of the agent.</span>
 <span class="sd">            Can be a returned as a descriptive dictionary, if as_vector=False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span>
@@ -870,19 +862,16 @@
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_was_dead_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">legal_moves</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Illegal action. Please choose between legal actions, as documented in dict self.infos&quot;</span>
-            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">agent_selection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">rewards</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">terminations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">truncations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">agent_selection</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">rewards</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">terminations</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">truncations</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="raw_env.observe">
