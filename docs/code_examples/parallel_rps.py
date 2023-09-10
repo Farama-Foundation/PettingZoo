@@ -61,23 +61,32 @@ class parallel_env(ParallelEnv):
         """
         The init method takes in environment arguments and should define the following attributes:
         - possible_agents
-        - action_spaces
-        - observation_spaces
+        - render_mode
+
+        Note: as of v1.18.1, the action_spaces and observation_spaces attributes are deprecated.
+        Spaces should be defined in the action_space() and observation_space() methods.
+        If these methods are not overridden, spaces will be inferred from self.observation_spaces/action_spaces, raising a warning.
+
         These attributes should not be changed after initialization.
         """
         self.possible_agents = ["player_" + str(r) for r in range(2)]
+
+        # optional: a mapping between agent name and ID
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
         self.render_mode = render_mode
 
-    # this cache ensures that same space object is returned for the same agent
-    # allows action space seeding to work as expected
+    # Observation space should be defined here.
+    # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
+    # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
+    # Action space should be defined here.
+    # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(3)
@@ -120,8 +129,10 @@ class parallel_env(ParallelEnv):
         self.agents = self.possible_agents[:]
         self.num_moves = 0
         observations = {agent: NONE for agent in self.agents}
+        infos = {agent: {} for agent in self.agents}
+        self.state = observations
 
-        return observations
+        return observations, infos
 
     def step(self, actions):
         """
@@ -155,6 +166,7 @@ class parallel_env(ParallelEnv):
             self.agents[i]: int(actions[self.agents[1 - i]])
             for i in range(len(self.agents))
         }
+        self.state = observations
 
         # typically there won't be any information in the infos, but there must
         # still be an entry for each agent

@@ -168,6 +168,7 @@ class World:  # multi-agent world
         for i, entity in enumerate(self.entities):
             if not entity.movable:
                 continue
+            entity.state.p_pos += entity.state.p_vel * self.dt
             entity.state.p_vel = entity.state.p_vel * (1 - self.damping)
             if p_force[i] is not None:
                 entity.state.p_vel += (p_force[i] / entity.mass) * self.dt
@@ -184,7 +185,6 @@ class World:  # multi-agent world
                         )
                         * entity.max_speed
                     )
-            entity.state.p_pos += entity.state.p_vel * self.dt
 
     def update_agent_state(self, agent):
         # set communication state (directly for now)

@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Simple Tag
 
@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.mpe import simple_tag_v2`                 |
+| Import             | `from pettingzoo.mpe import simple_tag_v3`                 |
 |--------------------|------------------------------------------------------------|
 | Actions            | Discrete/Continuous                                        |
 | Parallel API       | Yes                                                        |
@@ -45,7 +45,7 @@ Agent and adversary action space: `[no_action, move_left, move_right, move_down,
 ### Arguments
 
 ``` python
-simple_tag_v2.env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=25, continuous_actions=False)
+simple_tag_v3.env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=25, continuous_actions=False)
 ```
 
 
@@ -100,7 +100,7 @@ class raw_env(SimpleEnv, EzPickle):
             max_cycles=max_cycles,
             continuous_actions=continuous_actions,
         )
-        self.metadata["name"] = "simple_tag_v2"
+        self.metadata["name"] = "simple_tag_v3"
 
 
 env = make_env(raw_env)

@@ -1,0 +1,4 @@
+pettingzoo[sisl]>=1.24.0
+stable-baselines3>=2.0.0
+supersuit>=3.9.0
+pymunk

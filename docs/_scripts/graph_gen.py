@@ -3,7 +3,7 @@ import os
 import subprocess
 from collections import defaultdict
 
-from pettingzoo.test.all_modules import all_environments
+from pettingzoo.utils.all_modules import all_environments
 
 
 def generate_cycle_words(agents, is_classic):

@@ -5,20 +5,33 @@ title: Parallel
 
 # Parallel API
 
-In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via `<game>.parallel_env()`. This API is based around the paradigm of *Partially Observable Stochastic Games* (POSGs) and the details are similar to [RLLib's MultiAgent environment specification](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we allow for different observation and action spaces between the agents.
+In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via `<game>.parallel_env()`. This API is based around the paradigm of *Partially Observable Stochastic Games* (POSGs) and the details are similar to [RLlib's MultiAgent environment specification](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we allow for different observation and action spaces between the agents.
 
-## Example Usage
+For a comparison with the AEC API, see [About AEC](https://pettingzoo.farama.org/api/aec/#about-aec). For more information, see [*PettingZoo: A Standard API for Multi-Agent Reinforcement Learning*](https://arxiv.org/pdf/2009.14471.pdf).
+
+[PettingZoo Wrappers](/api/wrappers/pz_wrappers/) can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).
+
+## Examples
+
+[PettingZoo Butterfly](/environments/butterfly/) provides standard examples of Parallel environments, such as [Pistonball](/environments/butterfly/pistonball).
+
+We provide tutorials for creating two custom Parallel environments: [Rock-Paper-Scissors (Parallel)](https://pettingzoo.farama.org/content/environment_creation/#example-custom-parallel-environment), and a simple [gridworld environment](/tutorials/custom_environment/2-environment-logic/)
+
+## Usage
 
 Parallel environments can be interacted with as follows:
 
 ``` python
 from pettingzoo.butterfly import pistonball_v6
-parallel_env = pistonball_v6.parallel_env()
-observations = parallel_env.reset()
+parallel_env = pistonball_v6.parallel_env(render_mode="human")
+observations, infos = parallel_env.reset(seed=42)
 
-while env.agents:
-    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
+while parallel_env.agents:
+    # this is where you would insert your policy
+    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}
+
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
+parallel_env.close()
 ```
 
 ## ParallelEnv
@@ -66,7 +79,6 @@ while env.agents:
 
     .. automethod:: step
     .. automethod:: reset
-    .. automethod:: seed
     .. automethod:: render
     .. automethod:: close
     .. automethod:: state

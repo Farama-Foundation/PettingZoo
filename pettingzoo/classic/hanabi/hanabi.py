@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Hanabi
 
@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.classic import hanabi_v4` |
+| Import               | `from pettingzoo.classic import hanabi_v5` |
 |----------------------|--------------------------------------------|
 | Actions              | Discrete                                   |
 | Parallel API         | Yes                                        |
@@ -32,13 +32,13 @@ played card does not satisfy these conditions, a life token is placed. The game 
 Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.
 
 ``` python
-hanabi_v4.env(colors=5, rank=5, players=2, hand_size=5, max_information_tokens=8,
-max_life_tokens=3, observation_type=1)
+hanabi_v5.env(colors=5, ranks=5, players=2, hand_size=5, max_information_tokens=8,
+max_life_tokens=3, observation_type='minimal')
 ```
 
 `colors`: Number of colors the cards can take (affects size of deck)
 
-`rank`: Number of ranks the cards can take (affects size of deck)
+`ranks`: Number of ranks the cards can take (affects size of deck)
 
 `hand_size`: Size of player's hands. Standard game is (4 if players >= 4 else 5)
 
@@ -46,7 +46,11 @@ max_life_tokens=3, observation_type=1)
 
 `max_life_tokens`: Maximum number of life tokens (more tokens makes the game easier by allowing more information to be revealed)
 
-`observation_type`: 0: Minimal observation. 1: First-order common knowledge observation (default).
+`observation_type`:
+    "minimal": Minimal observation (what a human sees).
+    "card_knowledge": includes per-card knowledge of past hints, as well as simple inferred knowledge of the form
+        "this card is not red, because it was not revealed as red in a past".
+    "seer" shows all cards, including the player's own cards, regardless of what hints have been given.
 
 ### Observation Space
 
@@ -148,6 +152,7 @@ If an illegal action is taken, the game terminates and the one player that took 
 
 ### Version History
 
+* v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility (1.23.0)
 * v4: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v2: Fixed default parameters (1.4.2)
@@ -156,39 +161,17 @@ If an illegal action is taken, the game terminates and the one player that took 
 
 """
 
-from typing import Dict, List, Optional, Union
+from typing import List, Optional, Union
 
 import gymnasium
 import numpy as np
 from gymnasium import spaces
 from gymnasium.utils import EzPickle
+from shimmy.openspiel_compatibility import OpenSpielCompatibilityV0
 
 from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
-
-# importing Hanabi and throw error message if pypi package is not installed correctly.
-try:
-    from hanabi_learning_environment.rl_env import HanabiEnv
-
-except ModuleNotFoundError as e:
-    raise ImportError(
-        (
-            "Hanabi is not installed.\n",
-            "Run ´pip3 install hanabi_learning_environment´ from within your project environment.\n",
-            "Consult hanabi/README.md for detailed information.",
-        )
-    ) from e
-"""
-Wrapper class around Deepmind's Hanabi Learning Environment.
-"""
-
-
-class HanabiScorePenalty:
-    def __init__(self, env):
-        self.env = env
-
-    def __float__(self):
-        return -float(self.env.hanabi_env.state.score())
+from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
 
 
 def env(**kwargs):
@@ -200,18 +183,16 @@ def env(**kwargs):
     else:
         env = raw_env(**kwargs)
 
-    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=HanabiScorePenalty(env))
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
 
 class raw_env(AECEnv, EzPickle):
-    """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
-
     metadata = {
         "render_modes": ["human"],
-        "name": "hanabi_v4",
+        "name": "hanabi_v5",
         "is_parallelizable": False,
         "render_fps": 2,
     }
@@ -236,7 +217,7 @@ class raw_env(AECEnv, EzPickle):
         hand_size: int = 5,
         max_information_tokens: int = 8,
         max_life_tokens: int = 3,
-        observation_type: int = 1,
+        observation_type: str = "card_knowledge",
         random_start_player: bool = False,
         render_mode: Optional[str] = None,
     ):
@@ -249,9 +230,10 @@ class raw_env(AECEnv, EzPickle):
               - hand_size: int, Hand size in [2,5].
               - max_information_tokens: int, Number of information tokens (>=0).
               - max_life_tokens: int, Number of life tokens (>=1).
-              - observation_type: int.
-                    0: Minimal observation.
-                    1: First-order common knowledge observation.
+              - observation_type: str.
+                    "minimal"": Minimal observation.
+                    "card_knowledge": First-order common knowledge observation.
+                    "seer": Full information of all cards.
               - random_start_player: bool, Random start player.
 
         Common game configurations:
@@ -262,27 +244,29 @@ class raw_env(AECEnv, EzPickle):
                 "max_information_tokens": 8,
                 "max_life_tokens": 3,
                 "hand_size": (4 if players >= 4 else 5)
-                "observation_type": 1,
-                "hand_size": 2
+                "observation_type": "card_knowledge",
+                "hand_size": 2,
                 }
 
             Hanabi-Small : {
                 "colors": 2,
                 "ranks": 5,
                 "players": 2,
-                "max_information_tokens": 3
+                "max_information_tokens": 3,
                 "hand_size": 2,
-                "max_life_tokens": 1
-                "observation_type": 1}
+                "max_life_tokens": 1,
+                "observation_type": "card_knowledge",
+                }
 
             Hanabi-Very-Small : {
                 "colors": 1,
                 "ranks": 5,
                 "players": 2,
-                "max_information_tokens": 3
+                "max_information_tokens": 3,
                 "hand_size": 2,
-                "max_life_tokens": 1
-                "observation_type": 1}
+                "max_life_tokens": 1,
+                "observation_type": "card_knowledge",
+                }
 
         """
         EzPickle.__init__(
@@ -321,39 +305,30 @@ class raw_env(AECEnv, EzPickle):
             "observation_type": observation_type,
             "random_start_player": random_start_player,
         }
-        self.hanabi_env: HanabiEnv = HanabiEnv(config=self._config)
+        self.hanabi_env = OpenSpielCompatibilityV0(
+            game_name="hanabi", render_mode=render_mode, config=self._config
+        )
 
         # List of agent names
-        self.agents = [f"player_{i}" for i in range(self.hanabi_env.players)]
-        self.possible_agents = self.agents[:]
-
+        self.possible_agents = self.hanabi_env.possible_agents
         self.agent_selection: str
 
-        # Sets hanabi game to clean state and updates all internal dictionaries
-        self.reset()
-
-        # Set action_spaces and observation_spaces based on params in hanabi_env
         self.action_spaces = {
-            name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents
+            a: self.hanabi_env.action_space(a) for a in self.possible_agents
         }
         self.observation_spaces = {
-            player_name: spaces.Dict(
+            a: spaces.Dict(
                 {
-                    "observation": spaces.Box(
-                        low=0,
-                        high=1,
-                        shape=(self.hanabi_env.vectorized_observation_shape()[0],),
-                        dtype=np.float32,
-                    ),
+                    "observation": self.hanabi_env.observation_space(a),
                     "action_mask": spaces.Box(
                         low=0,
                         high=1,
-                        shape=(self.hanabi_env.num_moves(),),
+                        shape=(self.hanabi_env.action_space(a).n,),
                         dtype=np.int8,
                     ),
                 }
             )
-            for player_name in self.agents
+            for a in self.possible_agents
         }
 
         self.render_mode = render_mode
@@ -363,10 +338,6 @@ class raw_env(AECEnv, EzPickle):
 
     def action_space(self, agent):
         return self.action_spaces[agent]
-
-    def seed(self, seed=None):
-        config = dict(seed=seed, **self._config)
-        self.hanabi_env = HanabiEnv(config=config)
 
     @staticmethod
     def _raise_error_if_config_values_out_of_range(
@@ -414,22 +385,24 @@ class raw_env(AECEnv, EzPickle):
                 f"Config parameter {max_life_tokens} is out of bounds. See description in hanabi.py."
             )
 
-        elif not (0 <= observation_type <= 1):
+        elif not (observation_type in ["minimal", "card_knowledge", "seer"]):
             raise ValueError(
-                f"Config parameter {observation_type} is out of bounds. See description in hanabi.py."
+                f"Config parameter {observation_type} must be either 'minimal', 'card_knowledge', or 'seer'. See description in hanabi.py."
             )
 
     @property
     def observation_vector_dim(self):
-        return self.hanabi_env.vectorized_observation_shape()
+        return self.hanabi_env.observation_space(self.possible_agents[0]).shape
 
     @property
     def legal_moves(self) -> List[int]:
-        return self.infos[self.agent_selection]["legal_moves"]
+        mask = self.hanabi_env.infos[self.agent_selection]["action_mask"]
+        return [i for i in range(len(mask)) if mask[i] == 1]
 
     @property
     def all_moves(self) -> List[int]:
-        return list(range(0, self.hanabi_env.num_moves()))
+        mask = self.hanabi_env.infos[self.agent_selection]["action_mask"]
+        return [i for i in range(len(mask))]
 
     # ToDo: Fix Return value
     def reset(self, seed=None, options=None):
@@ -439,35 +412,37 @@ class raw_env(AECEnv, EzPickle):
             observation: Optional list of integers of length self.observation_vector_dim, describing observations of
             current agent (agent_selection).
         """
-        if seed is not None:
-            self.seed(seed=seed)
-
         self.agents = self.possible_agents[:]
-        # Reset underlying hanabi reinforcement learning environment
-        obs = self.hanabi_env.reset()
 
-        # Reset agent and agent_selection
-        self._reset_agents(player_number=obs["current_player"])
+        self.hanabi_env.reset(seed=seed)
 
-        self.rewards = {agent: 0 for agent in self.agents}
-        self._cumulative_rewards = {name: 0 for name in self.agents}
-        # Reset internal state
-        self._process_latest_observations(obs=obs)
+        # Reset spaces
+        self.action_spaces = {a: self.hanabi_env.action_space(a) for a in self.agents}
+        self.observation_spaces = {
+            a: spaces.Dict(
+                {
+                    "observation": self.hanabi_env.observation_space(a),
+                    "action_mask": spaces.Box(
+                        low=0,
+                        high=1,
+                        shape=(self.hanabi_env.action_space(a).n,),
+                        dtype=np.int8,
+                    ),
+                }
+            )
+            for a in self.agents
+        }
 
-    def _reset_agents(self, player_number: int):
-        """Rearrange self.agents as pyhanabi starts a different player after each reset()."""
-        # Shifts self.agents list as long order starting player is not according to player_number
-        while not self.agents[0] == "player_" + str(player_number):
-            self.agents = self.agents[1:] + [self.agents[0]]
+        self.rewards = self.hanabi_env.rewards
+        self._cumulative_rewards = self.hanabi_env._cumulative_rewards
+        self.agent_selection = self.hanabi_env.agent_selection
+        self.rewards = self.hanabi_env.rewards
+        self.terminations = self.hanabi_env.terminations
+        self.truncations = self.hanabi_env.truncations
+        self.infos = self.hanabi_env.infos
 
-        # Agent order list, on which the agent selector operates on.
         self._agent_selector = agent_selector(self.agents)
-
-        # Reset agent_selection
         self.agent_selection = self._agent_selector.reset()
-
-    def _step_agents(self):
-        self.agent_selection = self._agent_selector.next()
 
     def step(
         self, action: int, observe: bool = True, as_vector: bool = True
@@ -476,7 +451,7 @@ class raw_env(AECEnv, EzPickle):
 
         Returns:
             observation: Optional List of new observations of agent at turn after the action step is performed.
-            By default a list of integers, describing the logic state of the game from the view of the agent.
+            By default, a list of integers, describing the logic state of the game from the view of the agent.
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
         if (
@@ -484,68 +459,22 @@ class raw_env(AECEnv, EzPickle):
             or self.truncations[self.agent_selection]
         ):
             return self._was_dead_step(action)
-        action = int(action)
 
-        agent_on_turn = self.agent_selection
+        self.hanabi_env.step(action)
 
-        if action not in self.legal_moves:
-            raise ValueError(
-                "Illegal action. Please choose between legal actions, as documented in dict self.infos"
-            )
+        self.agent_selection = self.hanabi_env.agent_selection
+        self.rewards = self.hanabi_env.rewards
+        self.terminations = self.hanabi_env.terminations
+        self.truncations = self.hanabi_env.truncations
+        self.infos = self.hanabi_env.infos
 
-        else:
-            # Iterate agent_selection
-            self._step_agents()
-
-            # Apply action
-            all_observations, reward, done, _ = self.hanabi_env.step(action=action)
-
-            # Update internal state
-            self._process_latest_observations(
-                obs=all_observations, reward=reward, done=done
-            )
-
-            # sets current reward for 0 to initialize reward accumulation
-            self._cumulative_rewards[agent_on_turn] = 0
-            self._accumulate_rewards()
+        if self.render_mode is not None:
+            self.render()
 
     def observe(self, agent_name: str):
-        observation = (
-            np.array(self.infos[agent_name]["observations_vectorized"], np.float32)
-            if agent_name in self.infos
-            else np.zeros_like(self.observation_spaces[agent_name].low)
-        )
-
-        legal_moves = self.infos[agent_name]["legal_moves"]
-        action_mask = np.zeros(self.hanabi_env.num_moves(), "int8")
-        for i in legal_moves:
-            action_mask[i] = 1
-
-        return {"observation": observation, "action_mask": action_mask}
-
-    def _process_latest_observations(
-        self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False
-    ):
-        """Updates internal state."""
-        self.latest_observations = obs
-        self.rewards = {a: reward for a in self.agents}
-        self.terminations = {player_name: done for player_name in self.agents}
-        self.truncations = {player_name: done for player_name in self.agents}
-
-        # Here we have to deal with the player index with offset = 1
-        self.infos = {
-            player_name: dict(
-                legal_moves=self.latest_observations["player_observations"][
-                    int(player_name[-1])
-                ]["legal_moves_as_int"],
-                # legal_moves_as_dict=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves'],
-                observations_vectorized=self.latest_observations["player_observations"][
-                    int(player_name[-1])
-                ]["vectorized"],
-                # observations=self.latest_observations['player_observations'][int(player_name[-1])
-            )
-            for player_name in self.agents
-        }
+        observation = self.hanabi_env.observe(agent_name)
+        mask = self.infos[agent_name]["action_mask"]
+        return {"observation": observation, "action_mask": mask}
 
     def render(self):
         """Prints player's data.
@@ -557,17 +486,10 @@ class raw_env(AECEnv, EzPickle):
                 "You are calling render method without specifying any render mode."
             )
             return
-
-        player_data = self.latest_observations["player_observations"]
-        print(
-            "Active player:",
-            self.possible_agents[player_data[0]["current_player_offset"]],
-        )
-        for i, d in enumerate(player_data):
-            print(self.possible_agents[i])
-            print("========")
-            print(d["pyhanabi"])
-            print()
+        try:
+            self.hanabi_env.render()
+        except NotImplementedError:
+            return
 
     def close(self):
         pass

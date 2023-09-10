@@ -1,4 +1,9 @@
+from __future__ import annotations
+
+from typing import Callable
+
 import numpy as np
+from gymnasium.core import Env
 
 
 def collect_render_results(env):
@@ -22,7 +27,7 @@ def collect_render_results(env):
     return results
 
 
-def render_test(env_fn, custom_tests={}):
+def render_test(env_fn: Callable[[], Env], custom_tests={}):
     env = env_fn(render_mode="human")
     render_modes = env.metadata.get("render_modes")[:]
     assert (

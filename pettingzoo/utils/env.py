@@ -1,18 +1,20 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Dict, Iterable, Iterator, TypeVar
+from typing import Any, Dict, Generic, Iterable, Iterator, TypeVar
 
 import gymnasium.spaces
 import numpy as np
 
 ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
-AgentID = str
+AgentID = TypeVar("AgentID")
 
+# deprecated
 ObsDict = Dict[AgentID, ObsType]
-ActionDict = Dict[AgentID, ActionType]
 
+# deprecated
+ActionDict = Dict[AgentID, ActionType]
 
 """
 Base environment definitions
@@ -22,7 +24,7 @@ See docs/dev_docs.md for additional documentation and an example environment.
 """
 
 
-class AECEnv:
+class AECEnv(Generic[AgentID, ObsType, ActionType]):
     """The AECEnv steps agents one at a time.
 
     If you are unsure if you have implemented a AECEnv correctly, try running
@@ -71,14 +73,8 @@ class AECEnv:
         """Resets the environment to a starting state."""
         raise NotImplementedError
 
-    def seed(self, seed: int | None = None) -> None:
-        """Reseeds the environment (making the resulting environment deterministic)."""
-        raise NotImplementedError(
-            "Calling seed externally is deprecated; call reset(seed=seed) instead"
-        )
-
     # TODO: Remove `Optional` type below
-    def observe(self, agent: str) -> ObsType | None:
+    def observe(self, agent: AgentID) -> ObsType | None:
         """Returns the observation an agent currently can make.
 
         `last()` calls this function.
@@ -126,7 +122,7 @@ class AECEnv:
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent: str) -> gymnasium.spaces.Space:
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         """Takes in agent and returns the action space for that agent.
 
         MUST return the same value for the same agent name
@@ -196,7 +192,7 @@ class AECEnv:
             self.infos[agent],
         )
 
-    def _was_dead_step(self, action: None) -> None:
+    def _was_dead_step(self, action: ActionType) -> None:
         """Helper function that performs step() for dead agents.
 
         Does the following:
@@ -254,35 +250,35 @@ class AECEnv:
             return self.__class__.__name__
 
     @property
-    def unwrapped(self) -> AECEnv:
+    def unwrapped(self) -> AECEnv[AgentID, ObsType, ActionType]:
         return self
 
 
-class AECIterable(Iterable):
+class AECIterable(Iterable[AgentID], Generic[AgentID, ObsType, ActionType]):
     def __init__(self, env, max_iter):
         self.env = env
         self.max_iter = max_iter
 
-    def __iter__(self):
+    def __iter__(self) -> AECIterator[AgentID, ObsType, ActionType]:
         return AECIterator(self.env, self.max_iter)
 
 
-class AECIterator(Iterator):
-    def __init__(self, env, max_iter):
+class AECIterator(Iterator[AgentID], Generic[AgentID, ObsType, ActionType]):
+    def __init__(self, env: AECEnv[AgentID, ObsType, ActionType], max_iter: int):
         self.env = env
         self.iters_til_term = max_iter
 
-    def __next__(self):
+    def __next__(self) -> AgentID:
         if not self.env.agents or self.iters_til_term <= 0:
             raise StopIteration
         self.iters_til_term -= 1
         return self.env.agent_selection
 
-    def __iter__(self):
+    def __iter__(self) -> AECIterator[AgentID, ObsType, ActionType]:
         return self
 
 
-class ParallelEnv:
+class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
     """Parallel environment class.
 
     It steps every live agent at once. If you are unsure if you
@@ -303,23 +299,21 @@ class ParallelEnv:
         self,
         seed: int | None = None,
         options: dict | None = None,
-    ) -> ObsDict:
+    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict]]:
         """Resets the environment.
 
         And returns a dictionary of observations (keyed by the agent name)
         """
         raise NotImplementedError
 
-    def seed(self, seed=None):
-        """Reseeds the environment (making it deterministic)."""
-        raise NotImplementedError(
-            "Calling seed externally is deprecated; call reset(seed=seed) instead"
-        )
-
     def step(
-        self, actions: ActionDict
+        self, actions: dict[AgentID, ActionType]
     ) -> tuple[
-        ObsDict, dict[str, float], dict[str, bool], dict[str, bool], dict[str, dict]
+        dict[AgentID, ObsType],
+        dict[AgentID, float],
+        dict[AgentID, bool],
+        dict[AgentID, bool],
+        dict[AgentID, dict],
     ]:
         """Receives a dictionary of actions keyed by the agent name.
 

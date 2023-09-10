@@ -52,18 +52,21 @@ Install ROMs using [AutoROM](https://github.com/Farama-Foundation/AutoROM), or s
 
 ### Usage
 
-To launch a [Space Invaders](https://pettingzoo.farama.org/environments/atari/space_invaders/) environment with agents taking random actions:
-``` python
+To launch a [Space Invaders](/environments/atari/space_invaders/) environment with random agents:
+```python
 from pettingzoo.atari import space_invaders_v2
-env = space_invaders_v2.env(render_mode="human")
 
-env.reset()
+env = space_invaders_v2.env(render_mode="human")
+env.reset(seed=42)
+
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
+
     if termination or truncation:
         action = None
     else:
-        env.action_space(agent).sample()  # this is where you would insert your policy
+        action = env.action_space(agent).sample() # this is where you would insert your policy
+
     env.step(action)
 env.close()
 ```
@@ -91,9 +94,9 @@ Here is some example usage for the Atari preprocessing:
 
 ``` python
 import supersuit
-from pettingzoo.atari import space_invaders_v1
+from pettingzoo.atari import space_invaders_v2
 
-env = space_invaders_v1.env()
+env = space_invaders_v2.env()
 
 # as per openai baseline's MaxAndSKip wrapper, maxes over the last 2 frames
 # to deal with frame flickering

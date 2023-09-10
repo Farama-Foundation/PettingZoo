@@ -1,3 +1,5 @@
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 <p align="center">
     <img src="https://raw.githubusercontent.com/Farama-Foundation/PettingZoo/master/pettingzoo-text.png" width="500px"/>
 </p>
@@ -18,15 +20,17 @@ PettingZoo includes the following families of environments:
 
 ## Installation
 
-To install the pettingzoo base library, use `pip install pettingzoo`
+To install the base PettingZoo library: `pip install pettingzoo`.
 
-This does not include dependencies for all families of environments (there's a massive number, and some can be problematic to install on certain systems). You can install these dependencies for one family like `pip install pettingzoo[atari]` or use `pip install pettingzoo[all]` to install all dependencies.
+This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems).
 
-We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
+To install the dependencies for one family, use `pip install pettingzoo[atari]`, or use `pip install pettingzoo[all]` to install all dependencies.
+
+We support Python 3.8, 3.9, 3.10 and 3.11 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 ## Getting started
 
-For an introduction to PettingZoo, see [Basic Usage](https://pettingzoo.farama.org/content/basic_usage/). To create a new environment, see our [Environment Creation Tutorial](https://pettingzoo.farama.org/tutorials/environmentcreation/1-project-structure/) and [Custom Environment Examples](https://pettingzoo.farama.org/content/environment_creation/). 
+For an introduction to PettingZoo, see [Basic Usage](https://pettingzoo.farama.org/content/basic_usage/). To create a new environment, see our [Environment Creation Tutorial](https://pettingzoo.farama.org/tutorials/custom_environment/1-project-structure/) and [Custom Environment Examples](https://pettingzoo.farama.org/content/environment_creation/).
 For examples of training RL models using PettingZoo see our tutorials:
 * [CleanRL: Implementing PPO](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/):train multiple PPO agents in the [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment.
 * [Tianshou: Training Agents](https://pettingzoo.farama.org/tutorials/tianshou/intermediate/): train DQN agents in the [Tic-Tac-Toe](https://pettingzoo.farama.org/environments/classic/tictactoe/) environment.

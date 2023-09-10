@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Multiwalker
 
@@ -78,7 +78,7 @@ This table enumerates the observation space:
 
 ``` python
 multiwalker_v9.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
-terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
+terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)
 ```
 
 
@@ -166,15 +166,12 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
-        self.env.seed(seed)
-
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self.env._seed(seed=seed)
         self.env.reset()
         self.steps = 0
         self.agents = self.possible_agents[:]

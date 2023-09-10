@@ -41,11 +41,11 @@ The seed test takes in a function that creates a pettingzoo environment. For exa
 from pettingzoo.test import seed_test, parallel_seed_test
 from pettingzoo.butterfly import pistonball_v6
 env_fn = pistonball_v6.env
-seed_test(env_fn, num_cycles=10, test_kept_state=True)
+seed_test(env_fn, num_cycles=10)
 
 # or for parallel environments
 parallel_env_fn = pistonball_v6.parallel_env
-parallel_seed_test(parallel_env_fn, num_cycles=10, test_kept_state=True)
+parallel_seed_test(parallel_env_fn)
 ```
 
 Internally, there are two separate tests.
@@ -64,19 +64,17 @@ The max cycles test tests that the `max_cycles` environment argument exists and 
 ``` python
 from pettingzoo.test import max_cycles_test
 from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
-max_cycles_test(env)
+max_cycles_test(pistonball_v6)
 ```
 
 ## Render Test
 
 The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode (only supports `'human'`, `'ansi'`, and `'rgb_array'` modes).
-
 ``` python
 from pettingzoo.test import render_test
 from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
-render_test(env)
+env_func = pistonball_v6.env
+render_test(env_func)
 ```
 
 The render test method takes in an optional argument `custom_tests` that allows for additional tests in non-standard modes.

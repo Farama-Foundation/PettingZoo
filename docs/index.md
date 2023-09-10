@@ -39,10 +39,12 @@ environments/third_party_envs
 :hidden:
 :caption: Tutorials
 
-tutorials/environmentcreation/index
+tutorials/custom_environment/index
 tutorials/cleanrl/index
 tutorials/tianshou/index
 tutorials/rllib/index
+tutorials/langchain/index
+tutorials/sb3/index
 ```
 
 ```{toctree}
@@ -53,29 +55,14 @@ Github <https://github.com/Farama-Foundation/PettingZoo>
 release_notes/index
 Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/master/docs/>
 ```
-<style>
-h2 { 
-    padding-top: 10px;
-    padding-bottom: 20px;
-    font-size: 29px;
-    margin: 0;
-    overflow: auto;
-}
-.logo{
-  padding-left: 9%;
-  vertical-align:bottom;
-  padding-bottom: 0;
-  padding-top: 10px;
-}
-</style>
 
+```{project-logo} _static/img/pettingzoo-text.png
+:alt: PettingZoo Logo
+```
 
-<center>
-    <div class="logo">
-        <img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
-    </div>
-    <h2>An API standard for multi-agent reinforcement learning</h2>
-</center>
+```{project-heading}
+An API standard for multi-agent reinforcement learning.
+```
 
 ```{figure} _static/img/environments-demo.gif
     :width: 480px
@@ -84,6 +71,8 @@ h2 {
 
 **PettingZoo is a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.**
 PettingZoo includes a wide variety of reference environments, helpful utilities, and tools for creating your own custom environments.
+
+The [AEC API](/api/aec/) supports sequential turn based environments, while the [Parallel API](/api/parallel/) supports environments with simultaneous actions.
 
 Environments can be interacted with using a similar interface to [Gymnasium](https://gymnasium.farama.org):
 

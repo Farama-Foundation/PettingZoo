@@ -1,10 +1,17 @@
+from __future__ import annotations
+
 import os
+from typing import Any
 
 import gymnasium.spaces
 import numpy as np
 
+from pettingzoo.utils.env import AECEnv, AgentID, ParallelEnv
 
-def _check_observation_saveable(env, agent):
+
+def _check_observation_saveable(
+    env: AECEnv[AgentID, Any, Any] | ParallelEnv[AgentID, Any, Any], agent: AgentID
+) -> None:
     obs_space = env.observation_space(agent)
     assert isinstance(
         obs_space, gymnasium.spaces.Box
@@ -23,7 +30,12 @@ def _check_observation_saveable(env, agent):
 
 # save the observation of an agent. If agent not specified uses env selected agent. If all_agents
 # then all agents in environment observation recorded.
-def save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd()):
+def save_observation(
+    env: AECEnv[AgentID, Any, Any],
+    agent: AgentID | None = None,
+    all_agents: bool = False,
+    save_dir: str = os.getcwd(),
+) -> None:
     from PIL import Image
 
     if agent is None:
@@ -38,7 +50,11 @@ def save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd()):
         )
         os.makedirs(save_folder, exist_ok=True)
 
+        # Parallel envs don't have observe method
         observation = env.observe(a)
+        assert (
+            observation is not None
+        ), "Observation must be different than None to save as an image"
         rescaled = observation.astype(np.uint8)
         im = Image.fromarray(rescaled)
         fname = os.path.join(save_folder, str(a) + ".png")

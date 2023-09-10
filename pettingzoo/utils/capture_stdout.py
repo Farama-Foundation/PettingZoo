@@ -3,21 +3,23 @@ import sys
 
 
 class capture_stdout:
-    """Class allowing to capture stdout.
+    r"""Class allowing to capture stdout.
 
-    usage:
+    Example:
+        >>> from pettingzoo.utils.capture_stdout import capture_stdout
+        >>> with capture_stdout() as var:
+        ...     print("test")
+        ...     data = var.getvalue()
+        ...
+        >>> data
+        'test\n'
 
-    with capture_stdout() as var:
-        print("hithere")
-
-        # value of var will be "hithere"
-        data = var.getvalue()
     """
 
     def __init__(self):
         self.old_stdout = None
 
-    def __enter__(self):
+    def __enter__(self) -> io.StringIO:
         self.old_stdout = sys.stdout
         self.buff = io.StringIO()
         sys.stdout = self.buff

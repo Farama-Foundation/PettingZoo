@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from gymnasium.utils.env_checker import data_equivalence
 
 
@@ -114,15 +116,15 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
     env2.close()
 
 
-def seed_test(env_constructor, num_cycles=10):
+def seed_test(env_constructor, num_cycles=500):
     env1 = env_constructor()
     env2 = env_constructor()
 
-    check_environment_deterministic(env1, env2, 500)
+    check_environment_deterministic(env1, env2, num_cycles)
 
 
-def parallel_seed_test(parallel_env_fn):
+def parallel_seed_test(parallel_env_fn, num_cycles=500):
     env1 = parallel_env_fn()
     env2 = parallel_env_fn()
 
-    check_environment_deterministic_parallel(env1, env2, 500)
+    check_environment_deterministic_parallel(env1, env2, num_cycles)

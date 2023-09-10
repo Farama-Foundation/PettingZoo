@@ -3,6 +3,16 @@ title: API
 ---
 # Basic Usage
 
+## Installation
+
+To install the base PettingZoo library: `pip install pettingzoo`.
+
+This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems).
+
+To install the dependencies for one family, use `pip install pettingzoo[atari]`, or use `pip install pettingzoo[all]` to install all dependencies.
+
+We support Python 3.8, 3.9, 3.10 and 3.11 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
+
 ## Initializing Environments
 
 Using environments in PettingZoo is very similar to using them in Gymnasium. You initialize an environment via:
@@ -15,8 +25,10 @@ env = pistonball_v6.env()
 Environments are generally highly configurable via arguments at creation, i.e.:
 
 ``` python
-cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=False)
+from pettingzoo.butterfly import cooperative_pong_v5
+
+cooperative_pong_v5.env(ball_speed=18, left_paddle_speed=25,
+right_paddle_speed=25, cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
 
 ## Interacting With Environments
@@ -24,11 +36,22 @@ right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=Fa
 Environments can be interacted with using a similar interface to Gymnasium:
 
 ``` python
-env.reset()
+from pettingzoo.butterfly import cooperative_pong_v5
+
+env = cooperative_pong_v5.env(render_mode="human")
+env.reset(seed=42)
+
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
-    action = env.action_space(agent).sample() # this is where you would insert your policy
+
+    if termination or truncation:
+        action = None
+    else:
+        # this is where you would insert your policy
+        action = env.action_space(agent).sample()
+
     env.step(action)
+env.close()
 ```
 
 The commonly used methods are:
@@ -106,6 +129,8 @@ When an agent is terminated or truncated, it's removed from `agents`, so when th
 If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
 
 ``` python
+from pettingzoo.butterfly import knights_archers_zombies_v10
+
 base_env = knights_archers_zombies_v10.env().unwrapped
 ```
 

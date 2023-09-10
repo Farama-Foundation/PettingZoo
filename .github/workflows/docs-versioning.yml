@@ -1,64 +1,65 @@
+---
 name: Docs Versioning
 on:
-  push:
-    tags:
-      - 'v?*.*.*'
+    push:
+        tags:
+            - v?*.*.*
 permissions:
-  contents: write
+    contents: write
 jobs:
-  docs:
-    name: Generate Website for new version
-    runs-on: ubuntu-latest
-    env:
-      SPHINX_GITHUB_CHANGELOG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v3
+    docs:
+        name: Generate Website for new version
+        runs-on: ubuntu-latest
+        env:
+            SPHINX_GITHUB_CHANGELOG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        steps:
+            - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
-        with:
-            python-version: '3.9'
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
 
-      - name: Get tag
-        id: tag
-        uses: dawidd6/action-get-tag@v1
-        with:
-          strip_v: true
+            - name: Get tag
+              id: tag
+              uses: dawidd6/action-get-tag@v1
+              with:
+                  strip_v: true
 
-      - name: Install dependencies
-        run: pip install -r docs/requirements.txt
+            - name: Install dependencies
+              run: pip install -r docs/requirements.txt
 
-      - name: Install PettingZoo
-        run: pip install .
+            - name: Install PettingZoo
+              run: pip install .[all]
 
-      - name: Generate environment docs
-        run: python docs/_scripts/gen_envs_mds.py
+            - name: Generate environment docs
+              run: python docs/_scripts/gen_envs_mds.py
 
-      - name: Generate environments display
-        run: python docs/_scripts/gen_envs_display.py
+            - name: Generate environments display
+              run: python docs/_scripts/gen_envs_display.py
 
-      - name: Build
-        run: sphinx-build -b dirhtml -v docs _build
+            - name: Build
+              run: sphinx-build -b dirhtml -v docs _build
 
-      - name: Move 404
-        run: mv _build/404/index.html _build/404.html
+            - name: Move 404
+              run: mv _build/404/index.html _build/404.html
 
-      - name: Update 404 links
-        run: python docs/_scripts/move_404.py _build/404.html
+            - name: Update 404 links
+              run: python docs/_scripts/move_404.py _build/404.html
 
-      - name: Remove .doctrees
-        run: rm -r _build/.doctrees
+            - name: Remove .doctrees
+              run: rm -r _build/.doctrees
 
-      - name: Upload to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: _build
-          target-folder: ${{steps.tag.outputs.tag}}
-          clean: false
+            - name: Upload to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: _build
+                  target-folder: ${{steps.tag.outputs.tag}}
+                  clean: false
 
-      - name: Upload to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: _build
-          clean-exclude: |
-            *.*.*/
-            main
+            - name: Upload to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: _build
+                  clean-exclude: |
+                      *.*.*/
+                      main

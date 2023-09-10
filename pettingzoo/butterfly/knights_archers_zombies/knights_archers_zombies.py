@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Knights Archers Zombies ('KAZ')
 
@@ -276,13 +276,11 @@ class raw_env(AECEnv, EzPickle):
 
         # Game Status
         self.frames = 0
-        self.closed = False
-        self.has_reset = False
         self.render_mode = render_mode
-        self.render_on = False
+        self.screen = None
 
         # Game Constants
-        self.seed()
+        self._seed()
         self.spawn_rate = spawn_rate
         self.max_cycles = max_cycles
         self.pad_observation = pad_observation
@@ -359,11 +357,9 @@ class raw_env(AECEnv, EzPickle):
         )
         self.possible_agents = self.agents
 
-        # Initializing Pygame
-        pygame.init()
-        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
-        self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
-        pygame.display.set_caption("Knights, Archers, Zombies")
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
+
         self.left_wall = get_image(os.path.join("img", "left_wall.png"))
         self.right_wall = get_image(os.path.join("img", "right_wall.png"))
         self.right_wall_rect = self.right_wall.get_rect()
@@ -382,7 +378,7 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
     # Spawn Zombies at Random Location at every 100 iterations
@@ -509,7 +505,7 @@ class raw_env(AECEnv, EzPickle):
 
     def observe(self, agent):
         if not self.vector_state:
-            screen = pygame.surfarray.pixels3d(self.WINDOW)
+            screen = pygame.surfarray.pixels3d(self.screen)
 
             i = self.agent_name_mapping[agent]
             agent_obj = self.agent_list[i]
@@ -590,7 +586,7 @@ class raw_env(AECEnv, EzPickle):
     def state(self):
         """Returns an observation of the global environment."""
         if not self.vector_state:
-            state = pygame.surfarray.pixels3d(self.WINDOW).copy()
+            state = pygame.surfarray.pixels3d(self.screen).copy()
             state = np.rot90(state, k=3)
             state = np.fliplr(state)
         else:
@@ -738,7 +734,8 @@ class raw_env(AECEnv, EzPickle):
             # Spawning Zombies at Random Location at every 100 iterations
             self.spawn_zombie()
 
-            self.draw()
+            if self.screen is not None:
+                self.draw()
 
             self.check_game_end()
             self.frames += 1
@@ -780,28 +777,22 @@ class raw_env(AECEnv, EzPickle):
         if self.render_mode == "human":
             self.render()
 
-    def enable_render(self):
-        self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
-        # self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
-        self.render_on = True
-        self.draw()
-
     def draw(self):
-        self.WINDOW.fill((66, 40, 53))
-        self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
-        self.WINDOW.blit(self.right_wall, self.right_wall_rect)
-        self.WINDOW.blit(self.floor_patch1, (500, 500))
-        self.WINDOW.blit(self.floor_patch2, (900, 30))
-        self.WINDOW.blit(self.floor_patch3, (150, 430))
-        self.WINDOW.blit(self.floor_patch4, (300, 50))
-        self.WINDOW.blit(self.floor_patch1, (1000, 250))
+        self.screen.fill((66, 40, 53))
+        self.screen.blit(self.left_wall, self.left_wall.get_rect())
+        self.screen.blit(self.right_wall, self.right_wall_rect)
+        self.screen.blit(self.floor_patch1, (500, 500))
+        self.screen.blit(self.floor_patch2, (900, 30))
+        self.screen.blit(self.floor_patch3, (150, 430))
+        self.screen.blit(self.floor_patch4, (300, 50))
+        self.screen.blit(self.floor_patch1, (1000, 250))
 
         # draw all the sprites
-        self.zombie_list.draw(self.WINDOW)
+        self.zombie_list.draw(self.screen)
         for agent in self.agent_list:
-            agent.weapons.draw(self.WINDOW)
-        self.archer_list.draw(self.WINDOW)
-        self.knight_list.draw(self.WINDOW)
+            agent.weapons.draw(self.screen)
+        self.archer_list.draw(self.screen)
+        self.knight_list.draw(self.screen)
 
     def render(self):
         if self.render_mode is None:
@@ -810,13 +801,23 @@ class raw_env(AECEnv, EzPickle):
             )
             return
 
-        if not self.render_on and self.render_mode == "human":
-            # sets self.render_on to true and initializes display
-            self.enable_render()
+        if self.screen is None:
+            pygame.init()
 
-        observation = np.array(pygame.surfarray.pixels3d(self.WINDOW))
+            if self.render_mode == "human":
+                self.screen = pygame.display.set_mode(
+                    [const.SCREEN_WIDTH, const.SCREEN_HEIGHT]
+                )
+                pygame.display.set_caption("Knights, Archers, Zombies")
+            elif self.render_mode == "rgb_array":
+                self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+
+        self.draw()
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
             pygame.display.flip()
+            self.clock.tick(self.metadata["render_fps"])
         return (
             np.transpose(observation, axes=(1, 0, 2))
             if self.render_mode == "rgb_array"
@@ -824,14 +825,9 @@ class raw_env(AECEnv, EzPickle):
         )
 
     def close(self):
-        if not self.closed:
-            self.closed = True
-            if self.render_on:
-                # self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
-                self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
-                self.render_on = False
-                pygame.event.pump()
-                pygame.display.quit()
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def check_game_end(self):
         # Zombie reaches the End of the Screen
@@ -897,13 +893,15 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-        self.draw()
+        if self.render_mode is not None:
+            self.render()
+        else:
+            self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         self.frames = 0
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
-        self.has_reset = True
+            self._seed(seed=seed)
         self.agents = self.possible_agents
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()

@@ -4,9 +4,9 @@ title: "Tianshou: CLI and Logging"
 
 # Tianshou: CLI and Logging
 
-This tutorial is a full example using Tianshou to train a [Deep Q-Network](https://tianshou.readthedocs.io/en/master/tutorials/dqn.html) (DQN) on the [Tic-Tac-Toe](https://pettingzoo.farama.org/environments/classic/tictactoe/) environment.
+This tutorial is a full example using Tianshou to train a [Deep Q-Network](https://tianshou.readthedocs.io/en/master/tutorials/dqn.html) (DQN) agent on the [Tic-Tac-Toe](/environments/classic/tictactoe/) environment.
 
-It extends the code from [Training Agents](https://pettingzoo.farama.org/tutorials/tianshou/intermediate/) to add CLI (using [argparse](https://docs.python.org/3/library/argparse.html)) and logging (using Tianshou's [Logger](https://tianshou.readthedocs.io/en/master/tutorials/logger.html)). 
+It extends the code from [Training Agents](/tutorials/tianshou/intermediate/) to add CLI (using [argparse](https://docs.python.org/3/library/argparse.html)) and logging (using Tianshou's [Logger](https://tianshou.readthedocs.io/en/master/tutorials/logger.html)).
 
 
 ## Environment Setup

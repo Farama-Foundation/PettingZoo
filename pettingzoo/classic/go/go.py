@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 r"""
 # Go
 
@@ -106,14 +106,15 @@ For example, you would use action `4` to place a stone on the board at the (0,3)
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import os
-from typing import Optional
 
 import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.go import coords, go_base
@@ -139,7 +140,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "go_v5",
@@ -148,8 +149,13 @@ class raw_env(AECEnv):
     }
 
     def __init__(
-        self, board_size: int = 19, komi: float = 7.5, render_mode: Optional[str] = None
+        self,
+        board_size: int = 19,
+        komi: float = 7.5,
+        render_mode: str | None = None,
+        screen_height: int | None = 800,
     ):
+        EzPickle.__init__(self, board_size, komi, render_mode, screen_height)
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
         super().__init__()
@@ -159,7 +165,6 @@ class raw_env(AECEnv):
 
         self.agents = ["black_0", "white_0"]
         self.possible_agents = self.agents[:]
-        self.has_reset = False
 
         self.screen = None
 
@@ -191,6 +196,10 @@ class raw_env(AECEnv):
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
         self.render_mode = render_mode
+        self.screen_width = self.screen_height = screen_height
+
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -307,7 +316,6 @@ class raw_env(AECEnv):
             self.render()
 
     def reset(self, seed=None, options=None):
-        self.has_reset = True
         self._go = go_base.Position(board=None, komi=self._komi)
 
         self.agents = self.possible_agents[:]
@@ -333,22 +341,21 @@ class raw_env(AECEnv):
             )
             return
 
-        screen_width = 1026
-        screen_height = 1026
-
         if self.screen is None:
+            pygame.init()
+
             if self.render_mode == "human":
-                pygame.init()
-                self.screen = pygame.display.set_mode((screen_width, screen_height))
+                self.screen = pygame.display.set_mode(
+                    (self.screen_width, self.screen_height)
+                )
+                pygame.display.set_caption("Go")
             else:
-                self.screen = pygame.Surface((screen_width, screen_height))
-        if self.render_mode == "human":
-            pygame.event.get()
+                self.screen = pygame.Surface((self.screen_width, self.screen_height))
 
         size = go_base.N
 
         # Load and scale all of the necessary images
-        tile_size = (screen_width) / size
+        tile_size = self.screen_width / size
 
         black_stone = get_image(os.path.join("img", "GoBlackPiece.png"))
         black_stone = pygame.transform.scale(
@@ -416,6 +423,7 @@ class raw_env(AECEnv):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
@@ -426,4 +434,6 @@ class raw_env(AECEnv):
         )
 
     def close(self):
-        pass
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None

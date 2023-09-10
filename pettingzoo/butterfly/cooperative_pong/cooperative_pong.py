@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Cooperative Pong
 
@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import cooperative_pong_v4` |
+| Import               | `from pettingzoo.butterfly import cooperative_pong_v5` |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -37,7 +37,7 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 ### Arguments
 
 ``` python
-cooperative_pong_v4.env(ball_speed=9, left_paddle_speed=12,
+cooperative_pong_v5.env(ball_speed=9, left_paddle_speed=12,
 right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False, max_reward=100, off_screen_penalty=-10)
 ```
 
@@ -147,6 +147,7 @@ class CooperativePong:
         render_mode=None,
         render_ratio=2,
         kernel_window_length=2,
+        render_fps=15,
     ):
         super().__init__()
 
@@ -158,10 +159,7 @@ class CooperativePong:
 
         # Display screen
         self.s_width, self.s_height = 960 // render_ratio, 560 // render_ratio
-        self.screen = pygame.Surface(
-            (self.s_width, self.s_height)
-        )  # (960, 720) # (640, 480) # (100, 200)
-        self.area = self.screen.get_rect()
+        self.area = pygame.Rect(0, 0, self.s_width, self.s_height)
         self.max_reward = max_reward
         self.off_screen_penalty = off_screen_penalty
 
@@ -185,7 +183,7 @@ class CooperativePong:
         )
 
         self.render_mode = render_mode
-        self.renderOn = False
+        self.screen = None
 
         # set speed
         self.speed = [ball_speed, left_paddle_speed, right_paddle_speed]
@@ -213,6 +211,10 @@ class CooperativePong:
         self.randomizer = randomizer
 
         self.reinit()
+
+        self.render_fps = render_fps
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
     def reinit(self):
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
@@ -246,18 +248,17 @@ class CooperativePong:
 
         self.reinit()
 
-        self.draw()
+        # Pygame surface required even for render_mode == None, as observations are taken from pixel values
+        # Observe
+        if self.render_mode != "human":
+            self.screen = pygame.Surface((self.s_width, self.s_height))
+
+        self.render()
 
     def close(self):
-        if self.renderOn:
-            pygame.event.pump()
-            pygame.display.quit()
-            self.renderOn = False
-
-    def enable_render(self):
-        self.screen = pygame.display.set_mode(self.screen.get_size())
-        self.renderOn = True
-        self.draw()
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def render(self):
         if self.render_mode is None:
@@ -266,13 +267,16 @@ class CooperativePong:
             )
             return
 
-        if not self.renderOn and self.render_mode == "human":
-            # sets self.renderOn to true and initializes display
-            self.enable_render()
+        if self.screen is None:
+            if self.render_mode == "human":
+                self.screen = pygame.display.set_mode((self.s_width, self.s_height))
+                pygame.display.set_caption("Cooperative Pong")
+        self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
             pygame.display.flip()
+            self.clock.tick(self.render_fps)
         return (
             np.transpose(observation, axes=(1, 0, 2))
             if self.render_mode == "rgb_array"
@@ -335,9 +339,7 @@ class CooperativePong:
                     self.truncations[ag] = self.truncate
                     self.infos[ag] = {}
 
-        if self.renderOn:
-            pygame.event.pump()
-        self.draw()
+        self.render()
 
 
 def env(**kwargs):
@@ -364,9 +366,8 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, **kwargs)
         self._kwargs = kwargs
 
-        self.seed()
+        self._seed()
 
-        self.render_mode = self.env.render_mode
         self.agents = self.env.agents[:]
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
@@ -384,6 +385,9 @@ class raw_env(AECEnv, EzPickle):
 
         self.score = self.env.score
 
+        self.render_mode = self.env.render_mode
+        self.screen = None
+
     def observation_space(self, agent):
         return self.observation_spaces[agent]
 
@@ -393,13 +397,13 @@ class raw_env(AECEnv, EzPickle):
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.env.reset()
         self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()

@@ -2,10 +2,11 @@ import os
 import random
 import subprocess
 import sys
-from test.all_modules import all_environments
 
 import numpy as np
 from PIL import Image
+
+from pettingzoo.utils.all_modules import all_environments
 
 
 def generate_data(nameline, module):

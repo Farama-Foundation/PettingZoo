@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Connect Four
 
@@ -57,6 +57,7 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import os
 
@@ -64,6 +65,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -82,15 +84,15 @@ def get_image(path):
     return sfc
 
 
-def env(render_mode=None):
-    env = raw_env(render_mode=render_mode)
+def env(**kwargs):
+    env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "connect_four_v3",
@@ -98,7 +100,8 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self, render_mode=None):
+    def __init__(self, render_mode: str | None = None, screen_scaling: int = 9):
+        EzPickle.__init__(self, render_mode, screen_scaling)
         super().__init__()
         # 6 rows x 7 columns
         # blank space = 0
@@ -107,6 +110,7 @@ class raw_env(AECEnv):
         # flat representation in row major order
         self.screen = None
         self.render_mode = render_mode
+        self.screen_scaling = screen_scaling
 
         self.board = [0] * (6 * 7)
 
@@ -125,6 +129,9 @@ class raw_env(AECEnv):
             )
             for i in self.agents
         }
+
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
     # Key
     # ----
@@ -194,9 +201,8 @@ class raw_env(AECEnv):
         elif all(x in [1, 2] for x in self.board):
             # once either play wins or there is a draw, game over, both players are done
             self.terminations = {i: True for i in self.agents}
-        else:
-            # no winner yet
-            self.agent_selection = next_agent
+
+        self.agent_selection = next_agent
 
         self._accumulate_rewards()
 
@@ -225,15 +231,17 @@ class raw_env(AECEnv):
             )
             return
 
-        screen_width = 1287
-        screen_height = 1118
-        if self.render_mode == "human":
-            if self.screen is None:
-                pygame.init()
+        screen_width = 99 * self.screen_scaling
+        screen_height = 86 / 99 * screen_width
+
+        if self.screen is None:
+            pygame.init()
+
+            if self.render_mode == "human":
+                pygame.display.set_caption("Connect Four")
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.event.get()
-        elif self.screen is None:
-            self.screen = pygame.Surface((screen_width, screen_height))
+            elif self.render_mode == "rgb_array":
+                self.screen = pygame.Surface((screen_width, screen_height))
 
         # Load and scale all of the necessary images
         tile_size = (screen_width * (91 / 99)) / 7
@@ -276,6 +284,7 @@ class raw_env(AECEnv):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
@@ -287,8 +296,6 @@ class raw_env(AECEnv):
 
     def close(self):
         if self.screen is not None:
-            import pygame
-
             pygame.quit()
             self.screen = None
 

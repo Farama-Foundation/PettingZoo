@@ -1,7 +1,24 @@
+from __future__ import annotations
+
 import gymnasium
 import numpy as np
 
 from pettingzoo.utils import save_observation
+
+try:
+    """Allows doctests to be run using pytest"""
+    import pytest
+
+    from pettingzoo.test.example_envs import generated_agents_env_v0
+
+    @pytest.fixture
+    def env():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env
+
+except ModuleNotFoundError:
+    pass
 
 
 def check_save_obs(env):

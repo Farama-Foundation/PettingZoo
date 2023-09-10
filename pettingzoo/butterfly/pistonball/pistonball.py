@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Pistonball
 
@@ -271,9 +271,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.frames = 0
 
-        self.has_reset = False
-        self.closed = False
-        self.seed()
+        self._seed()
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -281,7 +279,7 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
@@ -306,6 +304,7 @@ class raw_env(AECEnv, EzPickle):
 
     def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        pygame.display.set_caption("Pistonball")
 
         self.renderOn = True
         # self.screen.blit(self.background, (0, 0))
@@ -313,13 +312,9 @@ class raw_env(AECEnv, EzPickle):
         self.draw()
 
     def close(self):
-        if not self.closed:
-            self.closed = True
-            if self.renderOn:
-                self.screen = pygame.Surface((self.screen_width, self.screen_height))
-                self.renderOn = False
-                pygame.event.pump()
-                pygame.display.quit()
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def add_walls(self):
         top_left = (self.wall_width, self.wall_width)
@@ -394,7 +389,7 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed)
+            self._seed(seed)
         self.space = pymunk.Space(threaded=False)
         self.add_walls()
         # self.space.threads = 2
@@ -479,7 +474,6 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
 
-        self.has_reset = True
         self.terminate = False
         self.truncate = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
@@ -537,6 +531,8 @@ class raw_env(AECEnv, EzPickle):
             x_pos += self.piston_width
 
     def draw(self):
+        if self.render_mode is None:
+            return
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
             # self.screen.blit(self.background, (0, 0))
