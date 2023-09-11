@@ -102,10 +102,10 @@ if __name__ == "__main__":
             frames.append(_label_with_episode_number(frame, episode_num=ep))
 
             # Take action in environment
-            state, reward, done, truncation, info = env.step(action)
+            state, reward, termination, truncation, info = env.step(action)
 
             # Stop episode if any agents have terminated
-            if any(truncation.values()) or any(done.values()):
+            if any(truncation.values()) or any(termination.values()):
                 break
 
             # Save agent's reward for this step in this episode
@@ -124,11 +124,11 @@ if __name__ == "__main__":
         print("Episodic Reward: ", rewards[-1])
         for agent_id, reward_list in indi_agent_rewards.items():
             print(f"{agent_id} reward: {reward_list[-1]}")
-        env.close()
+    env.close()
 
-        # Save the gif to specified path
-        gif_path = "./videos/"
-        os.makedirs(gif_path, exist_ok=True)
-        imageio.mimwrite(
-            os.path.join("./videos/", "speaker_listener.gif"), frames, duration=10
-        )
+    # Save the gif to specified path
+    gif_path = "./videos/"
+    os.makedirs(gif_path, exist_ok=True)
+    imageio.mimwrite(
+        os.path.join("./videos/", "speaker_listener.gif"), frames, duration=10
+    )

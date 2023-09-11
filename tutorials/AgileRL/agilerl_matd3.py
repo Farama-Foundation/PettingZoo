@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
             for _ in range(max_steps):
                 action = agent.getAction(state, epsilon)  # Get next action from agent
-                next_state, reward, done, truncation, _ = env.step(
+                next_state, reward, termination, truncation, _ = env.step(
                     action
                 )  # Act in environment
 
@@ -157,11 +157,11 @@ if __name__ == "__main__":
                     }
 
                 # Stop episode if any agents have terminated
-                if any(truncation.values()) or any(done.values()):
+                if any(truncation.values()) or any(termination.values()):
                     break
 
                 # Save experiences to replay buffer
-                memory.save2memory(state, action, reward, next_state, done)
+                memory.save2memory(state, action, reward, next_state, termination)
 
                 # Collect the reward
                 for agent_id, r in reward.items():
