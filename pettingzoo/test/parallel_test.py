@@ -114,10 +114,11 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
                     agent
                 ), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
 
-            # we make a copy of live_agents because live_agents changes during iteration
-            for agent in set(live_agents):
-                if terminated[agent] or truncated[agent]:
-                    live_agents.remove(agent)
+            agents_to_remove = {
+                agent for agent in live_agents
+                if terminated[agent] or truncated[agent]
+            }
+            live_agents -= agents_to_remove
 
             assert (
                 set(par_env.agents) == live_agents
