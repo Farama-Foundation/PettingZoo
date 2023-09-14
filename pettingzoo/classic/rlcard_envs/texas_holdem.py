@@ -177,11 +177,11 @@ class raw_env(RLCardBase, EzPickle):
         if self.screen is None:
             pygame.init()
 
-        if self.render_mode == "human":
-            self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.display.set_caption("Texas Hold'em")
-        else:
-            self.screen = pygame.Surface((screen_width, screen_height))
+            if self.render_mode == "human":
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
+                pygame.display.set_caption("Texas Hold'em")
+            else:
+                self.screen = pygame.Surface((screen_width, screen_height))
 
         # Setup dimensions for card size and setup for colors
         tile_size = screen_height * 2 / 10
@@ -422,6 +422,7 @@ class raw_env(RLCardBase, EzPickle):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
