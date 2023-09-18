@@ -168,11 +168,11 @@ class raw_env(RLCardBase, EzPickle):
         if self.screen is None:
             pygame.init()
 
-        if self.render_mode == "human":
-            self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.display.set_caption("Leduc Hold'em")
-        else:
-            self.screen = pygame.Surface((screen_width, screen_height))
+            if self.render_mode == "human":
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
+                pygame.display.set_caption("Leduc Hold'em")
+            else:
+                self.screen = pygame.Surface((screen_width, screen_height))
 
         # Setup dimensions for card size and setup for colors
         tile_size = screen_height * 2 / 10
