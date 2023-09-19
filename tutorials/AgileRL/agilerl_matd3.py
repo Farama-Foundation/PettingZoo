@@ -48,7 +48,9 @@ if __name__ == "__main__":
         state_dim = [env.observation_space(agent).n for agent in env.agents]
         one_hot = True
     except Exception:
-        state_dim = [env.observation_space(agent)['observation'].shape for agent in env.agents]
+        state_dim = [
+            env.observation_space(agent)["observation"].shape for agent in env.agents
+        ]
         one_hot = False
     try:
         action_dim = [env.action_space(agent).n for agent in env.agents]
