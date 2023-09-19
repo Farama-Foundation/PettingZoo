@@ -1,0 +1,165 @@
+{
+    "os": "Linux-5.15.90.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "heartbeatAt": "2023-09-19T15:21:16.233847",
+    "startedAt": "2023-09-19T15:21:14.809563",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/Dev/PettingZoo/tutorials/AgileRL/agilerl_dqn.py",
+    "codePath": "tutorials/AgileRL/agilerl_dqn.py",
+    "git": {
+        "remote": "https://github.com/nicku-a/PettingZoo",
+        "commit": "6c33934d72555531538704c632378b47ba35f983"
+    },
+    "email": "nickua@btinternet.com",
+    "root": "/home/Dev/PettingZoo",
+    "host": "AgileRL-NUA",
+    "username": "root",
+    "executable": "/usr/bin/python3",
+    "cpu_count": 12,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 2495.998,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2495.998,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "total": 1006.853931427002,
+        "used": 249.26499938964844
+    },
+    "gpu": "NVIDIA RTX A3000 12GB Laptop GPU",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA RTX A3000 12GB Laptop GPU",
+            "memory_total": 12884901888
+        }
+    ],
+    "memory": {
+        "total": 15.425281524658203
+    }
+}

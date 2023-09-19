@@ -1,0 +1,59 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.13.10
+    framework: huggingface
+    huggingface_version: 4.30.0
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.10.12
+    start_time: 1695136578.011879
+    t:
+      1:
+      - 1
+      - 11
+      - 49
+      - 55
+      2:
+      - 1
+      - 11
+      - 49
+      - 55
+      3:
+      - 13
+      - 16
+      - 23
+      4: 3.10.12
+      5: 0.13.10
+      6: 4.30.0
+      8:
+      - 5
+algo:
+  desc: null
+  value: Evo HPO DQN
+batch_size:
+  desc: null
+  value: 128
+env:
+  desc: null
+  value: Connect Four
+gamma:
+  desc: null
+  value: 0.99
+learn_step:
+  desc: null
+  value: 2
+lr:
+  desc: null
+  value: 0.001
+memory_size:
+  desc: null
+  value: 10000
+pop_size:
+  desc: null
+  value: 6
+tau:
+  desc: null
+  value: 0.01
