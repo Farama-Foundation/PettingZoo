@@ -73,6 +73,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         """Resets the environment to a starting state."""
         raise NotImplementedError
 
+    # TODO: Remove `Optional` type below
     def observe(self, agent: AgentID) -> ObsType | None:
         """Returns the observation an agent currently can make.
 
