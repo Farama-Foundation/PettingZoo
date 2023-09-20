@@ -1,8 +1,8 @@
 import copy
-from pettingzoo.utils.env import AECEnv
+
+from pettingzoo.utils.env import ActionType, AECEnv
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
-from pettingzoo.utils.env import ActionType
 
 class MultiEpisodeEnv(BaseWrapper):
     """Creates a new environment using the base environment that runs for `num_episodes` before truncating.

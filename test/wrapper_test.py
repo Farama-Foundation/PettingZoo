@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import pytest
+
+from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.classic import texas_holdem_no_limit_v6
 from pettingzoo.utils.wrappers import MultiEpisodeEnv, MultiEpisodeParallelEnv
-from pettingzoo.butterfly import pistonball_v6
+
 
 @pytest.mark.parametrize(("num_episodes"), [1, 2, 3, 4, 5, 6])
 def test_multi_episode_env_wrapper(num_episodes: int) -> None:
@@ -34,7 +36,10 @@ def test_multi_episode_env_wrapper(num_episodes: int) -> None:
 
     env.close()
 
-    assert (steps == num_episodes * 5), f"Expected to have 5 steps per episode, got {steps / num_episodes}."
+    assert (
+        steps == num_episodes * 5
+    ), f"Expected to have 5 steps per episode, got {steps / num_episodes}."
+
 
 @pytest.mark.parametrize(("num_episodes"), [1, 2, 3, 4, 5, 6])
 def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
@@ -59,4 +64,6 @@ def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
 
     env.close()
 
-    assert (steps == num_episodes * 125), f"Expected to have 125 steps per episode, got {steps / num_episodes}."
+    assert (
+        steps == num_episodes * 125
+    ), f"Expected to have 125 steps per episode, got {steps / num_episodes}."

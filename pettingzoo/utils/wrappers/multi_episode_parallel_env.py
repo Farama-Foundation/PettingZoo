@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import copy
 
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
-from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 
 class MultiEpisodeParallelEnv(BaseParallelWrapper):
     """Creates a new environment using the base environment that runs for `num_episodes` before truncating.
