@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 from pettingzoo.classic import texas_holdem_no_limit_v6
 from pettingzoo.utils.wrappers import MultiEpisodeEnv, MultiEpisodeParallelEnv
