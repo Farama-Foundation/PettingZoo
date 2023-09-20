@@ -13,8 +13,6 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
     This is useful for creating evaluation environments.
     When there are no more valid agents in the underlying environment, the environment is automatically reset.
     When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
-    All `termination` and `truncation` signals are consumed internally, and the wrapped environment only
-    returns a `truncation` signal after `num_episodes` have been run.
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
     """
 
@@ -65,8 +63,6 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
 
         When there are no more valid agents in the underlying environment, the environment is automatically reset.
         When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
-        All `termination` and `truncation` signals are consumed internally, and the wrapped environment only
-        returns a `truncation` signal after `num_episodes` have been run.
         The result of this wrapper is that the environment is no longer Markovian around the environment reset.
 
         Args:

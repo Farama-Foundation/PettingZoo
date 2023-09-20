@@ -9,7 +9,7 @@ class MultiEpisodeEnv(BaseWrapper):
 
     This is useful for creating evaluation environments.
     When there are no more valid agents in the underlying environment, the environment is automatically reset.
-    After `num_episodes` have been run internally, all agents automatically truncate.
+    After `num_episodes` have been run internally, the environment terminates normally.
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
     """
 
@@ -47,7 +47,8 @@ class MultiEpisodeEnv(BaseWrapper):
 
         This is useful for creating evaluation environments.
         When there are no more valid agents in the underlying environment, the environment is automatically reset.
-        After `num_episodes` have been run internally, all agents automatically truncate.
+        After `num_episodes` have been run internally, the environment terminates normally.
+        The result of this wrapper is that the environment is no longer Markovian around the environment reset.
 
         Args:
             action (ActionType): action
