@@ -11,7 +11,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
     """Creates a new environment using the base environment that runs for `num_episodes` before truncating.
 
     This is useful for creating evaluation environments.
-    When any agent in the environment terminates or truncates, the entire environment is reset silently.
+    When there are no more valid agents in the underlying environment, the environment is automatically reset.
     When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
     All `termination` and `truncation` signals are consumed internally, and the wrapped environment only
     returns a `truncation` signal after `num_episodes` have been run.
@@ -63,7 +63,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
     ]:
         """Steps the environment.
 
-        When any agent in the environment terminates or truncates, the entire environment is reset silently.
+        When there are no more valid agents in the underlying environment, the environment is automatically reset.
         When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
         All `termination` and `truncation` signals are consumed internally, and the wrapped environment only
         returns a `truncation` signal after `num_episodes` have been run.
