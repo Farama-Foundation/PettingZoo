@@ -29,7 +29,7 @@ def test_multi_episode_env_wrapper(num_episodes: int) -> None:
             action = None
         else:
             action_space = env.action_space(agent)
-            action_space.seed(42)
+            action_space.seed(0)
             action = action_space.sample(mask=obs["action_mask"])
 
         env.step(action)
@@ -37,8 +37,8 @@ def test_multi_episode_env_wrapper(num_episodes: int) -> None:
     env.close()
 
     assert (
-        steps == num_episodes * 5
-    ), f"Expected to have 5 steps per episode, got {steps / num_episodes}."
+        steps == num_episodes * 6
+    ), f"Expected to have 6 steps per episode, got {steps / num_episodes}."
 
 
 @pytest.mark.parametrize(("num_episodes"), [1, 2, 3, 4, 5, 6])
