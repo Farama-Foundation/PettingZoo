@@ -333,7 +333,6 @@ class MultiWalkerEnv:
         self._seed()
         self.setup()
         self.screen = None
-        self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
         self.last_obs = [None for _ in range(self.n_walkers)]
@@ -359,14 +358,11 @@ class MultiWalkerEnv:
             BipedalWalker(self.world, init_x=sx, init_y=init_y, seed=self.seed_val)
             for sx in self.start_x
         ]
-        self.num_agents = len(self.walkers)
         self.observation_space = [agent.observation_space for agent in self.walkers]
         self.action_space = [agent.action_space for agent in self.walkers]
 
         self.package_scale = self.n_walkers / 1.75
         self.package_length = PACKAGE_LENGTH / SCALE * self.package_scale
-
-        self.total_agents = self.n_walkers
 
         self.prev_shaping = np.zeros(self.n_walkers)
         self.prev_package_shaping = 0.0
@@ -534,7 +530,7 @@ class MultiWalkerEnv:
         )
 
     def get_last_dones(self):
-        return dict(zip(self.agent_list, self.last_dones))
+        return dict(zip(list(range(self.n_walkers)), self.last_dones))
 
     def get_last_obs(self):
         return dict(
@@ -692,6 +688,7 @@ class MultiWalkerEnv:
         self.surf = pygame.transform.flip(self.surf, False, True)
         self.screen.blit(self.surf, (-self.scroll * render_scale - offset, 0))
         if self.render_mode == "human":
+            pygame.event.pump()  # macos pygame window popup fix
             pygame.display.flip()
         elif self.render_mode == "rgb_array":
             return np.transpose(
