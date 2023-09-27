@@ -28,7 +28,7 @@ class MultiEpisodeEnv(BaseWrapper):
         Args:
             env (AECEnv): env
             num_episodes (int): num_episodes
-            starting_utility (float | None): starting_utility
+            starting_utility (Optional[float]): starting_utility
         """
         assert isinstance(
             env, AECEnv
@@ -75,7 +75,7 @@ class MultiEpisodeEnv(BaseWrapper):
         if self._starting_utility:
             for agent in self.agents:
                 self._agent_utilities[agent] = (
-                    self._agent_utilities[agent] - self.rewards[agent]
+                    self._agent_utilities[agent] + self.rewards[agent]
                 )
 
                 if self._agent_utilities[agent] <= 0:

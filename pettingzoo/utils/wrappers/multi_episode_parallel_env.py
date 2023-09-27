@@ -28,7 +28,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
         Args:
             env (AECEnv): the base environment
             num_episodes (int): the number of episodes to run the underlying environment
-            starting_utility (float | None): starting_utility
+            starting_utility (Optional[float]): starting_utility
         """
         super().__init__(env)
         assert isinstance(
@@ -92,7 +92,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
         # handle agent utilities if any
         if self._starting_utility:
             self._agent_utilities = {
-                u[a] - r[a] for u, r, a in zip(self._agent_utilities, rew, self.agents)
+                u[a] + r[a] for u, r, a in zip(self._agent_utilities, rew, self.agents)
             }
             # termination only depends on available utility now
             term = {agent: u <= 0 for agent, u in zip(term, self._agent_utilities)}
