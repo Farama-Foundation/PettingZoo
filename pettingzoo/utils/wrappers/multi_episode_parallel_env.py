@@ -13,14 +13,22 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
     When there are no more valid agents in the underlying environment, the environment is automatically reset.
     When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
+
+    When `starting_utility` is used, all agents start with a base amount of health points (think of this as poker chips).
+    Whenever the agent gets a negative reward, this value is subtracted from starting utility.
+    Whenever the agent gets a positive reward, it is added to the starting utility.
+    Agents which run out of starting utility are terminated.
     """
 
-    def __init__(self, env: ParallelEnv, num_episodes: int):
+    def __init__(
+        self, env: ParallelEnv, num_episodes: int, starting_utility: float | None = None
+    ):
         """__init__.
 
         Args:
             env (AECEnv): the base environment
             num_episodes (int): the number of episodes to run the underlying environment
+            starting_utility (float | None): starting_utility
         """
         super().__init__(env)
         assert isinstance(
@@ -28,6 +36,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
         ), "MultiEpisodeEnv is only compatible with ParallelEnv environments."
 
         self._num_episodes = num_episodes
+        self._starting_utility = starting_utility
 
     def reset(
         self, seed: int | None = None, options: dict | None = None
@@ -46,6 +55,8 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
         self._seed = copy.deepcopy(seed)
         self._options = copy.deepcopy(options)
         self._episodes_elapsed = 1
+        if self._starting_utility:
+            self._agent_utilities = {a: self._starting_utility for a in self.agents}
 
         return obs, info
 
@@ -77,7 +88,17 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
             ]:
         """
         obs, rew, term, trunc, info = super().step(actions)
-        term = {agent: False for agent in term}
+
+        # handle agent utilities if any
+        if self._starting_utility:
+            self._agent_utilities = {
+                u[a] - r[a] for u, r, a in zip(self._agent_utilities, rew, self.agents)
+            }
+            # termination only depends on available utility now
+            term = {agent: u <= 0 for agent, u in zip(term, self._agent_utilities)}
+        else:
+            term = {agent: False for agent in term}
+
         trunc = {agent: False for agent in term}
 
         if self.agents:

@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from pettingzoo.butterfly import pistonball_v6
-from pettingzoo.classic import texas_holdem_no_limit_v6
+from pettingzoo.classic import texas_holdem_no_limit_v7
 from pettingzoo.utils.wrappers import MultiEpisodeEnv, MultiEpisodeParallelEnv
 
 
@@ -16,7 +16,7 @@ def test_multi_episode_env_wrapper(num_episodes: int) -> None:
     Args:
         num_episodes: number of episodes to run the MultiEpisodeEnv
     """
-    env = texas_holdem_no_limit_v6.env(num_players=3)
+    env = texas_holdem_no_limit_v7.env(num_players=3)
     env = MultiEpisodeEnv(env, num_episodes=num_episodes)
     env.reset(seed=42)
 

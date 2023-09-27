@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import texas_holdem_no_limit_v6` |
+| Import             | `from pettingzoo.classic import texas_holdem_no_limit_v7` |
 |--------------------|-----------------------------------------------------------|
 | Actions            | Discrete                                                  |
 | Parallel API       | Yes                                                       |
@@ -29,7 +29,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-ho
 ### Arguments
 
 ``` python
-texas_holdem_no_limit_v6.env(num_players=2)
+texas_holdem_no_limit_v7.env(num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.
@@ -79,6 +79,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 ### Version History
 
+* v7: Added multiround option (1.x)
 * v6: Upgrade to RLCard 1.0.5, fixes to the action space as ACPC (1.12.0)
 * v5: Upgrade to RLCard 1.0.4, fixes to rewards with greater than 2 players (1.11.1)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
@@ -121,17 +122,30 @@ def get_font(path, size):
 
 
 def env(**kwargs):
+    # optionally chained games with number of chips
+    num_rounds = kwargs.pop("num_rounds", False)
+    num_chips = kwargs.pop("num_chips", False)
+    assert bool(num_rounds) == bool(
+        num_chips
+    ), f"If `num_rounds` is used, `num_chips` must also be declared, got {num_rounds=}, {num_chips=}"
+
     env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
+
+    if num_rounds:
+        env = wrappers.MultiEpisodeEnv(
+            env, num_episodes=num_rounds, starting_utility=num_chips
+        )
+
     return env
 
 
 class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "texas_holdem_no_limit_v6",
+        "name": "texas_holdem_no_limit_v7",
         "is_parallelizable": False,
         "render_fps": 1,
     }

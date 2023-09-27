@@ -37,8 +37,8 @@ from pettingzoo.classic import (
     hanabi_v5,
     leduc_holdem_v4,
     rps_v2,
-    texas_holdem_no_limit_v6,
-    texas_holdem_v4,
+    texas_holdem_no_limit_v7,
+    texas_holdem_v5,
     tictactoe_v3,
 )
 from pettingzoo.mpe import (
@@ -93,8 +93,8 @@ all_environments = {
     "classic/connect_four_v3": connect_four_v3,
     "classic/tictactoe_v3": tictactoe_v3,
     "classic/leduc_holdem_v4": leduc_holdem_v4,
-    "classic/texas_holdem_v4": texas_holdem_v4,
-    "classic/texas_holdem_no_limit_v6": texas_holdem_no_limit_v6,
+    "classic/texas_holdem_v5": texas_holdem_v5,
+    "classic/texas_holdem_no_limit_v7": texas_holdem_no_limit_v7,
     "classic/gin_rummy_v4": gin_rummy_v4,
     "classic/go_v5": go_v5,
     "classic/hanabi_v5": hanabi_v5,

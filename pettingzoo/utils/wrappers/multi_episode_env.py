@@ -13,14 +13,22 @@ class MultiEpisodeEnv(BaseWrapper):
     When there are no more valid agents in the underlying environment, the environment is automatically reset.
     After `num_episodes` have been run internally, the environment terminates normally.
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
+
+    When `starting_utility` is used, all agents start with a base amount of health points (think of this as poker chips).
+    Whenever the agent gets a negative reward, this value is subtracted from starting utility.
+    Whenever the agent gets a positive reward, it is added to the starting utility.
+    Agents which run out of starting utility are terminated.
     """
 
-    def __init__(self, env: AECEnv, num_episodes: int):
+    def __init__(
+        self, env: AECEnv, num_episodes: int, starting_utility: float | None = None
+    ):
         """__init__.
 
         Args:
             env (AECEnv): env
             num_episodes (int): num_episodes
+            starting_utility (float | None): starting_utility
         """
         assert isinstance(
             env, AECEnv
@@ -28,6 +36,7 @@ class MultiEpisodeEnv(BaseWrapper):
         super().__init__(env)
 
         self._num_episodes = num_episodes
+        self._starting_utility = starting_utility
 
     def reset(self, seed: int | None = None, options: dict | None = None) -> None:
         """reset.
@@ -39,10 +48,12 @@ class MultiEpisodeEnv(BaseWrapper):
         Returns:
             None:
         """
+        super().reset(seed=seed, options=options)
         self._episodes_elapsed = 1
         self._seed = copy.deepcopy(seed)
         self._options = copy.deepcopy(options)
-        super().reset(seed=seed, options=options)
+        if self._starting_utility:
+            self._agent_utilities = {a: self._starting_utility for a in self.agents}
 
     def step(self, action: ActionType) -> None:
         """Steps the underlying environment for `num_episodes`.
@@ -59,6 +70,18 @@ class MultiEpisodeEnv(BaseWrapper):
             None:
         """
         super().step(action)
+
+        # adjust utilities if this param is enabled
+        if self._starting_utility:
+            for agent in self.agents:
+                self._agent_utilities[agent] = (
+                    self._agent_utilities[agent] - self.rewards[agent]
+                )
+
+                if self._agent_utilities[agent] <= 0:
+                    self.terminations[agent] = True
+
+        # if we still have agents, don't need to do anything
         if self.agents:
             return
 

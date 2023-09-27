@@ -48,9 +48,9 @@ def tic_tac_toe():
 
 
 def texas_holdem_no_limit():
-    from pettingzoo.classic import texas_holdem_no_limit_v6
+    from pettingzoo.classic import texas_holdem_no_limit_v7
 
-    env = texas_holdem_no_limit_v6.env(num_players=4, render_mode="human")
+    env = texas_holdem_no_limit_v7.env(num_players=4, render_mode="human")
     agents = {
         name: ActionMaskAgent(name=name, model=ChatOpenAI(temperature=0.2), env=env)
         for name in env.possible_agents

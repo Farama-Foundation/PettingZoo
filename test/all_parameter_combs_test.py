@@ -41,8 +41,8 @@ from pettingzoo.classic import (
     hanabi_v5,
     leduc_holdem_v4,
     rps_v2,
-    texas_holdem_no_limit_v6,
-    texas_holdem_v4,
+    texas_holdem_no_limit_v7,
+    texas_holdem_v5,
     tictactoe_v3,
 )
 from pettingzoo.mpe import (
@@ -156,11 +156,21 @@ parameterized_envs = [
         ),
     ],
     ["classic/leduc_holdem_v4", leduc_holdem_v4, dict()],
-    ["classic/texas_holdem_v4", texas_holdem_v4, dict(num_players=3)],
-    ["classic/texas_holdem_v4", texas_holdem_v4, dict(num_players=4)],
-    ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, dict()],
-    ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, dict(num_players=3)],
-    ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, dict(num_players=4)],
+    ["classic/texas_holdem_v5", texas_holdem_v5, dict(num_players=3)],
+    ["classic/texas_holdem_v5", texas_holdem_v5, dict(num_players=4)],
+    [
+        "classic/texas_holdem_v5",
+        texas_holdem_v5,
+        dict(num_players=4, num_rounds=3, num_chips=5),
+    ],
+    ["classic/texas_holdem_no_limit_v7", texas_holdem_no_limit_v7, dict()],
+    ["classic/texas_holdem_no_limit_v7", texas_holdem_no_limit_v7, dict(num_players=3)],
+    ["classic/texas_holdem_no_limit_v7", texas_holdem_no_limit_v7, dict(num_players=4)],
+    [
+        "classic/texas_holdem_no_limit_v7",
+        texas_holdem_no_limit_v7,
+        dict(num_players=4, num_rounds=3, num_chips=5),
+    ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,

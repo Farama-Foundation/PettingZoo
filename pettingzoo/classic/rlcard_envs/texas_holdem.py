@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import texas_holdem_v4` |
+| Import             | `from pettingzoo.classic import texas_holdem_v5` |
 |--------------------|--------------------------------------------------|
 | Actions            | Discrete                                         |
 | Parallel API       | Yes                                              |
@@ -25,10 +25,13 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 ## Arguments
 
 ``` python
-texas_holdem_v4.env(num_players=2)
+texas_holdem_v5.env(num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.
+`num_rounds`: Sets the environment to run for a number of rounds before terminating. If this is set, `num_chips` must also be set.
+`num_chips`: Defines the amount of starting chips that each agent in the game has, this must be used in conjunction with num_rounds.
+
 
 ### Observation Space
 
@@ -69,6 +72,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 ### Version History
 
+* v5: Added multiround option (1.x)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
@@ -108,17 +112,30 @@ def get_font(path, size):
 
 
 def env(**kwargs):
+    # optionally chained games with number of chips
+    num_rounds = kwargs.pop("num_rounds", False)
+    num_chips = kwargs.pop("num_chips", False)
+    assert bool(num_rounds) == bool(
+        num_chips
+    ), f"If `num_rounds` is used, `num_chips` must also be declared, got {num_rounds=}, {num_chips=}"
+
     env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
+
+    if num_rounds:
+        env = wrappers.MultiEpisodeEnv(
+            env, num_episodes=num_rounds, starting_utility=num_chips
+        )
+
     return env
 
 
 class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "texas_holdem_v4",
+        "name": "texas_holdem_v5",
         "is_parallelizable": False,
         "render_fps": 1,
     }
