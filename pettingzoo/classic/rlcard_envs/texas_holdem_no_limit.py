@@ -79,7 +79,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 ### Version History
 
-* v7: Added multiround option (1.x)
+* v7: Added multiround option (1.24.2)
 * v6: Upgrade to RLCard 1.0.5, fixes to the action space as ACPC (1.12.0)
 * v5: Upgrade to RLCard 1.0.4, fixes to rewards with greater than 2 players (1.11.1)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)

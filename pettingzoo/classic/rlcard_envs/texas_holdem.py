@@ -72,7 +72,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 ### Version History
 
-* v5: Added multiround option (1.x)
+* v5: Added multiround option (1.24.2)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
