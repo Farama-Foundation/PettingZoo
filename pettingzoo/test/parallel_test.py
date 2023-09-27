@@ -49,8 +49,9 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
 
         assert isinstance(obs, dict)
         assert isinstance(infos, dict)
-        assert set(obs.keys()) == (set(par_env.agents))
-        assert set(infos.keys()) == (set(par_env.agents))
+        # Note: obs and info dicts must contain all AgentIDs, but can also have other additional keys (e.g., "common")
+        assert set(par_env.agents).issubset(set(obs.keys()))
+        assert set(par_env.agents).issubset(set(infos.keys()))
         terminated = {agent: False for agent in par_env.agents}
         truncated = {agent: False for agent in par_env.agents}
         live_agents = set(par_env.agents[:])
