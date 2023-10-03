@@ -104,16 +104,17 @@ if __name__ == "__main__":
             # Take action in environment
             state, reward, termination, truncation, info = env.step(action)
 
-            # Stop episode if any agents have terminated
-            if any(truncation.values()) or any(termination.values()):
-                break
-
             # Save agent's reward for this step in this episode
             for agent_id, r in reward.items():
                 agent_reward[agent_id] += r
 
             # Determine total score for the episode and then append to rewards list
             score = sum(agent_reward.values())
+
+            # Stop episode if any agents have terminated
+            if any(truncation.values()) or any(termination.values()):
+                break
+
         rewards.append(score)
 
         # Record agent specific episodic reward

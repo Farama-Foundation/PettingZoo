@@ -19,7 +19,7 @@ from pettingzoo.classic import connect_four_v3
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("===== AgileRL Self-play Agent Demo =====")
+    print("===== AgileRL Self-play Agent Demo - DQN =====")
 
     # Define the network configuration
     NET_CONFIG = {
@@ -34,14 +34,14 @@ if __name__ == "__main__":
         "DOUBLE": True,  # Use double Q-learning
         # Swap image channels dimension from last to first [H, W, C] -> [C, H, W]
         "BATCH_SIZE": 128,  # Batch size
-        "LR": 1e-2,  # Learning rate
+        "LR": 1e-3,  # Learning rate
         "GAMMA": 0.99,  # Discount factor
         "MEMORY_SIZE": 10000,  # Max memory buffer size
         "LEARN_STEP": 2,  # Learning frequency
         "TAU": 0.01,  # For soft update of target parameters
     }
 
-    # Define the space invaders environment as a parallel environment
+    # Define the connect four environment
     env = connect_four_v3.env()
     env.reset()
 
@@ -148,9 +148,10 @@ if __name__ == "__main__":
     )
 
     total_steps = 0
+    pbar = trange(max_episodes)
 
     # Training loop
-    for idx_epi in trange(max_episodes):
+    for idx_epi in pbar:
         for agent in pop:  # Loop through population
             env.reset()  # Reset environment at start of episode
             observation, reward, done, truncation, _ = env.last()
@@ -286,16 +287,31 @@ if __name__ == "__main__":
                 agent.fitness.append(mean_fit)
                 fitnesses.append(mean_fit)
 
-            # print(f"Episode {idx_epi + 1}/{max_episodes}")
-            # print(f'Fitnesses: {["%.2f" % fitness for fitness in fitnesses]}')
-            # print(
-            #     f'100 fitness avgs: {["%.2f" % np.mean(agent.fitness[-100:]) for agent in pop]}'
-            # )
+            fitness = ["%.2f" % fitness for fitness in fitnesses]
+            avg_fitness = ["%.2f" % np.mean(agent.fitness[-100:]) for agent in pop]
+            avg_score = ["%.2f" % np.mean(agent.scores[-100:]) for agent in pop]
+            agents = [agent.index for agent in pop]
+            num_steps = [agent.steps[-1] for agent in pop]
+            muts = [agent.mut for agent in pop]
+            pbar.update(0)
+
+            print(
+                f"""
+                --- Epoch {idx_epi + 1} ---
+                Fitness:\t\t{fitness}
+                100 fitness avgs:\t{avg_fitness}
+                100 score avgs:\t\t{avg_score}
+                Agents:\t\t\t{agents}
+                Steps:\t\t\t{num_steps}
+                Mutations:\t\t\t{muts}
+                """,
+                end="\r",
+            )
 
             wandb.log(
                 {
                     "global_step": total_steps,
-                    "eval/mean_reward": np.mean(fitnesses),
+                    "eval/mean_fitness": np.mean(fitnesses),
                     "eval/best_fitness": np.max(fitnesses),
                 }
             )
