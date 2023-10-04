@@ -7,12 +7,12 @@ import argparse
 import os
 
 import numpy as np
-import ray
-from ray.rllib.algorithms.algorithm import Algorithm
-from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
-from ray.rllib.models import ModelCatalog
-from ray.tune.registry import register_env
-from rllib_leduc_holdem import TorchMaskedActions
+# import ray
+# from ray.rllib.algorithms.algorithm import Algorithm
+# from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
+# from ray.rllib.models import ModelCatalog
+# from ray.tune.registry import register_env
+# from rllib_leduc_holdem import TorchMaskedActions
 
 from pettingzoo.classic import leduc_holdem_v4
 
@@ -27,6 +27,11 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+
+
+if args.checkpoint_path is None:
+    print("The following arguments are required: --checkpoint-path")
+    exit(0)
 
 checkpoint_path = os.path.expanduser(args.checkpoint_path)
 

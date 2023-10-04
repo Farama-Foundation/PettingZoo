@@ -29,6 +29,10 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+if args.checkpoint_path is None:
+    print("The following arguments are required: --checkpoint-path")
+    exit(0)
+
 checkpoint_path = os.path.expanduser(args.checkpoint_path)
 
 ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
