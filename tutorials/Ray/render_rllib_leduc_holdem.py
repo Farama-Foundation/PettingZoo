@@ -7,12 +7,12 @@ import argparse
 import os
 
 import numpy as np
-# import ray
-# from ray.rllib.algorithms.algorithm import Algorithm
-# from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
-# from ray.rllib.models import ModelCatalog
-# from ray.tune.registry import register_env
-# from rllib_leduc_holdem import TorchMaskedActions
+import ray
+from ray.rllib.algorithms.algorithm import Algorithm
+from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
+from ray.rllib.models import ModelCatalog
+from ray.tune.registry import register_env
+from rllib_leduc_holdem import TorchMaskedActions
 
 from pettingzoo.classic import leduc_holdem_v4
 
