@@ -689,7 +689,7 @@ class MultiWalkerEnv:
         self.screen.blit(self.surf, (-self.scroll * render_scale - offset, 0))
         if self.render_mode == "human":
             pygame.event.pump()
-            pygame.display.flip()
+            pygame.display.update()
         elif self.render_mode == "rgb_array":
             return np.transpose(
                 np.array(pygame.surfarray.pixels3d(self.screen)), axes=(1, 0, 2)
