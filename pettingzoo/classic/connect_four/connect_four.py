@@ -283,10 +283,9 @@ class raw_env(AECEnv, EzPickle):
                 )
 
         if self.render_mode == "human":
+            pygame.event.pump()
             pygame.display.update()
             self.clock.tick(self.metadata["render_fps"])
-            pygame.display.flip()
-            pygame.event.pump()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 

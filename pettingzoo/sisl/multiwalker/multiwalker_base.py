@@ -688,7 +688,7 @@ class MultiWalkerEnv:
         self.surf = pygame.transform.flip(self.surf, False, True)
         self.screen.blit(self.surf, (-self.scroll * render_scale - offset, 0))
         if self.render_mode == "human":
-            pygame.event.pump()  # macos pygame window popup fix
+            pygame.event.pump()
             pygame.display.flip()
         elif self.render_mode == "rgb_array":
             return np.transpose(
