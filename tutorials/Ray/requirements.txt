@@ -1,7 +1,6 @@
 PettingZoo[classic,butterfly]>=1.24.0
 Pillow>=9.4.0
-# note: currently requires nightly release, see https://docs.ray.io/en/latest/ray-overview/installation.html#daily-releases-nightlies
-ray[rllib]>2.6.3
+ray[rllib]>=2.7.0
 SuperSuit>=3.9.0
 torch>=1.13.1
 tensorflow-probability>=0.19.0
