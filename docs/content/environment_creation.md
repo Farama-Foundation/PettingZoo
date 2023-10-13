@@ -6,7 +6,7 @@ title: Environment Creation
 This documentation overviews creating new environments and relevant useful wrappers, utilities and tests included in PettingZoo designed for the creation of new environments.
 
 
-We will walk through the creation of a simple Rock-Paper-Scissors environment, with example code for both [AEC](/api/aec/) and [Parallel](/api/aec/) environments.
+We will walk through the creation of a simple Rock-Paper-Scissors environment, with example code for both [AEC](/api/aec/) and [Parallel](/api/parallel/) environments.
 
 See our [Custom Environment Tutorial](/tutorials/custom_environment/index) for a full walkthrough on creating custom environments, including complex environment logic and illegal action masking.
 
