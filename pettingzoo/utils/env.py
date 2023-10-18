@@ -182,7 +182,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
     ) -> tuple[ObsType | None, float, bool, bool, dict[str, Any]]:
         """Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)."""
         agent = self.agent_selection
-        assert agent
+        assert agent is not None
         observation = self.observe(agent) if observe else None
         return (
             observation,
