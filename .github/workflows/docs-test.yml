@@ -13,9 +13,6 @@ permissions:
 jobs:
     docs-test:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         steps:
             - uses: actions/checkout@v3
             - name: Set up Python 3.11
@@ -35,4 +32,4 @@ jobs:
               run: python docs/_scripts/gen_envs_mds.py
             - name: Documentation test
               run: |
-                  xvfb-run -s "-screen 0 1024x768x24" pytest test/test_codeblocks.py --splits 10 --group ${{ matrix.group }}
+                  xvfb-run -s "-screen 0 1024x768x24" pytest test/test_codeblocks.py
