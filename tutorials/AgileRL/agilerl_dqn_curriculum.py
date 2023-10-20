@@ -281,7 +281,13 @@ class CurriculumEnv:
 
 
 class Opponent:
-    """Connect 4 opponent to train and/or evaluate against."""
+    """Connect 4 opponent to train and/or evaluate against.
+
+    :param env: Environment to learn in
+    :type env: PettingZoo-style environment
+    :param difficulty: Difficulty level of opponent, 'random', 'weak' or 'strong'
+    :type difficulty: str
+    """
 
     def __init__(self, env, difficulty):
         self.env = env.env
@@ -298,6 +304,7 @@ class Opponent:
         self.top = [0] * self.num_cols
 
     def update_top(self):
+        """Updates self.top, a list which tracks the row on top of the highest piece in each column."""
         board = np.array(self.env.env.board).reshape(self.num_rows, self.num_cols)
         non_zeros = np.where(board != 0)
         rows, cols = non_zeros
@@ -313,12 +320,26 @@ class Opponent:
         self.top = top
 
     def random_opponent(self, action_mask, last_opp_move=None, block_vert_coef=1):
+        """Takes move for random opponent. If the lesson aims to randomly block vertical wins with a higher probability, this is done here too.
+
+        :param action_mask: Mask of legal actions: 1=legal, 0=illegal
+        :type action_mask: List
+        :param last_opp_move: Most recent action taken by agent against this opponent
+        :type last_opp_move: int
+        :param block_vert_coef: How many times more likely to block vertically
+        :type block_vert_coef: float
+        """
         if last_opp_move is not None:
             action_mask[last_opp_move] *= block_vert_coef
         action = random.choices(list(range(self.num_cols)), action_mask)[0]
         return action
 
     def weak_rule_based_opponent(self, player):
+        """Takes move for weak rule-based opponent.
+
+        :param player: Player who we are checking, 0 or 1
+        :type player: int
+        """
         self.update_top()
         max_length = -1
         for action in range(self.num_cols):
@@ -332,6 +353,11 @@ class Opponent:
         return best_action
 
     def strong_rule_based_opponent(self, player):
+        """Takes move for strong rule-based opponent.
+
+        :param player: Player who we are checking, 0 or 1
+        :type player: int
+        """
         self.update_top()
         winning_action = None  # take winning move
         for action in range(self.num_cols):
@@ -356,6 +382,15 @@ class Opponent:
         return self.weak_rule_based_opponent(player)  # take best possible move
 
     def outcome(self, action, player, return_length=False):
+        """Takes move for weak rule-based opponent.
+
+        :param action: Action to take in environment
+        :type action: int
+        :param player: Player who we are checking, 0 or 1
+        :type player: int
+        :param return_length: Return length of outcomes, defaults to False
+        :type player: bool, optional
+        """
         if not (self.top[action] < self.num_rows):  # action column is full
             return (False, None, None) + ((None,) if return_length else ())
 

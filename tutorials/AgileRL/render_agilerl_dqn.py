@@ -168,7 +168,7 @@ if __name__ == "__main__":
 
     env.close()
 
-    frames = resize_frames(frames, 0.3)
+    frames = resize_frames(frames, 0.5)
 
     # Save the gif to specified path
     gif_path = "./videos/"
