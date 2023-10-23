@@ -1,6 +1,6 @@
-"""This tutorial shows how to train a Rainbow DQN agent on the connect four environment.
+"""This tutorial shows how to train a DQN agent on the connect four environment, using curriculum learning and self play.
 
-Authors: Nick (https://github.com/nicku-a)
+Author: Nick (https://github.com/nicku-a)
 """
 import copy
 import os
@@ -312,11 +312,11 @@ class Opponent:
         for col in range(board.shape[1]):
             column_pieces = rows[cols == col]
             if len(column_pieces) > 0:
-                top[col] = np.min(column_pieces)
+                top[col] = np.min(column_pieces) - 1
             else:
-                top[col] = 0
+                top[col] = 5
         full_columns = np.all(board != 0, axis=0)
-        top[full_columns] = 7
+        top[full_columns] = 6
         self.top = top
 
     def random_opponent(self, action_mask, last_opp_move=None, block_vert_coef=1):
@@ -342,14 +342,17 @@ class Opponent:
         """
         self.update_top()
         max_length = -1
+        best_actions = []
         for action in range(self.num_cols):
             possible, reward, ended, lengths = self.outcome(
                 action, player, return_length=True
             )
             if possible and lengths.sum() > max_length:
-                best_action = action
+                best_actions = []
                 max_length = lengths.sum()
-
+            if possible and lengths.sum() == max_length:
+                best_actions.append(action)
+        best_action = random.choice(best_actions)
         return best_action
 
     def strong_rule_based_opponent(self, player):
@@ -359,24 +362,24 @@ class Opponent:
         :type player: int
         """
         self.update_top()
-        winning_action = None  # take winning move
+
+        winning_actions = []
         for action in range(self.num_cols):
             possible, reward, ended = self.outcome(action, player)
             if possible and ended:
-                winning_action = action
-                break
-
-        if winning_action is not None:
+                winning_actions.append(action)
+        if len(winning_actions) > 0:
+            winning_action = random.choice(winning_actions)
             return winning_action
 
-        loss_avoiding_action = None
+        opp = 1 if player == 0 else 0
+        loss_avoiding_actions = []
         for action in range(self.num_cols):
-            possible, reward, ended = self.outcome(action, player)
+            possible, reward, ended = self.outcome(action, opp)
             if possible and ended:
-                loss_avoiding_action = action
-                break
-
-        if loss_avoiding_action is not None:
+                loss_avoiding_actions.append(action)
+        if len(loss_avoiding_actions) > 0:
+            loss_avoiding_action = random.choice(loss_avoiding_actions)
             return loss_avoiding_action
 
         return self.weak_rule_based_opponent(player)  # take best possible move
@@ -429,7 +432,17 @@ class Opponent:
             (a, np.zeros_like(a[:, :, :1])), axis=-1
         )  # padding with zeros to compute length
         lengths = np.argmin(b, -1)
-        ended = np.any(np.greater_equal(np.sum(lengths, 1), self.length - 1))
+
+        ended = False
+        # check if winnable in any direction
+        for both_dir in board_values:
+            # |2x3|
+            line = np.concatenate((both_dir[0][::-1], [piece], both_dir[1]))
+            if "".join(map(str, [piece] * self.length)) in "".join(map(str, line)):
+                ended = True
+                break
+
+        # ended = np.any(np.greater_equal(np.sum(lengths, 1), self.length - 1))
         draw = True
         for c, v in enumerate(self.top):
             draw &= (v == self.num_rows) if c != col else (v == (self.num_rows - 1))
@@ -444,7 +457,7 @@ if __name__ == "__main__":
     print("===== AgileRL Curriculum Learning Demo =====")
 
     # Load lesson for curriculum
-    with open("./curriculums/connect_four/lesson3.yaml") as file:
+    with open("./curriculums/connect_four/lesson2.yaml") as file:
         LESSON = yaml.safe_load(file)
 
     # Define the network configuration
@@ -465,7 +478,7 @@ if __name__ == "__main__":
         "DOUBLE": True,
         # Swap image channels dimension from last to first [H, W, C] -> [C, H, W]
         "BATCH_SIZE": 256,  # Batch size
-        "LR": 1e-5,  # Learning rate
+        "LR": 1e-3,  # Learning rate
         "GAMMA": 0.99,  # Discount factor
         "MEMORY_SIZE": 100000,  # Max memory buffer size
         "LEARN_STEP": 1,  # Learning frequency
@@ -497,8 +510,8 @@ if __name__ == "__main__":
     # Warp the environment in the curriculum learning wrapper
     env = CurriculumEnv(env, LESSON)
 
-    # Pre-process dimensions for pytorch layers
-    # We will use self-play, so we only need to worry about the state dim of a single agent
+    # Pre-process dimensions for PyTorch layers
+    # We only need to worry about the state dim of a single agent
     # We flatten the 6x7x2 observation as input to the agent"s neural network
     state_dim = np.moveaxis(np.zeros(state_dim[0]), [-1], [-3]).shape
     action_dim = action_dim[0]
@@ -730,6 +743,7 @@ if __name__ == "__main__":
                         # Player 1"s turn
                         p1_action_mask = observation["action_mask"]
                         p1_state = np.moveaxis(observation["observation"], [-1], [-3])
+                        # Swap pieces so that the agent always sees the board from the same perspective
                         p1_state[[0, 1], :, :] = p1_state[[0, 1], :, :]
                         p1_state_flipped = np.expand_dims(np.flip(p1_state, 2), 0)
                         p1_state = np.expand_dims(p1_state, 0)

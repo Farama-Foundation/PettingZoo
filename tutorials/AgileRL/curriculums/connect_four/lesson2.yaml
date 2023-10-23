@@ -1,7 +1,7 @@
 ---
 # Connect Four Lesson 2
 # Train against random agent: 'random', weak opponent: 'weak', strong opponent: 'strong', or use self-play: 'self'
-opponent: strong
+opponent: weak
 opponent_pool_size:       # Size of opponent pool for self-play
 opponent_upgrade:       # Epoch frequency to update opponent pool
 eval_opponent: strong  # 'random', 'weak' or 'strong'
@@ -15,7 +15,7 @@ agent_warm_up: 0  # Number of epochs to warm up agent by training on random expe
 block_vert_coef: 5  # How many times more likely to block vertically
 rewards:  # Rewards for different outcomes
     win: 1
-    vertical_win: 0.7
+    vertical_win: 1
     three_in_row: 0.01
     opp_three_in_row: -0.01
     lose: -1

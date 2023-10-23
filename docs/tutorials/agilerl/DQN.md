@@ -31,237 +31,118 @@ To follow this tutorial, you will need to install the dependencies shown below. 
 ### Curriculum learning and self-play using DQN on Connect Four
 The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with AgileRL. If you have any questions, please feel free to ask in the [Discord server](https://discord.com/invite/eB8HyTA2ux).
 
-This is a complicated tutorial, and so we will go through it in stages. The full code can be found at the end of this section.
+This is a complicated tutorial, and so we will go through it in stages. The [full code](#full-training-code) can be found at the end of this section. Although much of this tutorial contains content specific to the Connect Four environment, it serves to demonstrate how techniques can be applied more generally to other problems.
 
-First, we need to set up and modify our environment to enable curriculum learning. To do this, we create a ```CurriculumEnv``` class that acts as a wrapper on top of our Connect Four environment and enables us to alter the reward to guide the training of our agent. This uses configs that we can use to determine the lesson (more on these configs below).
+### Imports
+Importing the following packages, functions and classes will enable us to run the tutorial.
+```python
+import copy
+import os
+import random
+from collections import deque
+from datetime import datetime
+
+import numpy as np
+import torch
+import wandb
+import yaml
+from agilerl.components.replay_buffer import ReplayBuffer
+from agilerl.hpo.mutation import Mutations
+from agilerl.hpo.tournament import TournamentSelection
+from agilerl.utils.utils import initialPopulation
+from tqdm import trange
+
+from pettingzoo.classic import connect_four_v3
+```
+
+### Curriculum Learning
+First, we need to set up and modify our environment to enable curriculum learning. Curriculum learning is enabled by changing the environment that the agent trains in. This can be implemented by changing what happens when certain actions are taken - altering the next observation returned by the environment, or more simply by altering the reward. First, we will change the reward. By default, Connect Four uses the following rewards:
+
+* Win = +1
+* Lose = -1
+* Play continues = 0
+
+To help guide our agent, we can introduce rewards for other outcomes in the environment, such as a small reward for placing 3 pieces in a row, or a small negative reward when the opponent manages the same feat. We can also use reward shaping to encourage our agent to explore more. In Connect Four, if playing against a random opponent, an easy way to win is to always play in the same column. An agent may find success doing this, and therefore not learn other, more sophisticated strategies that can help it win against better opponents. We may therefore elect to reward vertical wins slightly less than horizontal or diagonal wins, to encourage the agent to try winning in different ways. An example reward system could be defined as follows:
+
+* Win (horizontal or diagonal) = +1
+* Win (vertical) = +0.8
+* Three in a row = +0.05
+* Opponent three in a row = -0.05
+* Lose = -1
+* Play continues = 0
+
+#### Config files
+
+It is best to use YAML config files to define the lessons in our curriculum and easily change and keep track of our settings. The first two lessons in our curriculum can be defined as follows:
+
+```{eval-rst}
+.. literalinclude:: ../../../tutorials/AgileRL/curriculums/connect_four/lesson1.yaml
+   :language: yaml
+```
+
+```{eval-rst}
+.. literalinclude:: ../../../tutorials/AgileRL/curriculums/connect_four/lesson2.yaml
+   :language: yaml
+```
+
+To implement our curriculum, we create a ```CurriculumEnv``` class that acts as a wrapper on top of our Connect Four environment and enables us to alter the reward to guide the training of our agent. This uses the configs that we set up to define the lesson.
 
 ```python
-class CurriculumEnv:
-    """Wrapper around environment to modify reward for curriculum learning.
 
-    :param env: Environment to learn in
-    :type env: PettingZoo-style environment
-    :param lesson: Lesson settings for curriculum learning
-    :type lesson: dict
-    """
-    def __init__(self, env, lesson):
-        self.env = env
-        self.lesson = lesson
+```
 
-    def fill_replay_buffer(self, memory):
-        """Fill the replay buffer with experiences collected by taking random actions in the environment.
+When defining the different lessons in our curriculum, we can increase the difficulty of our task by modifying environment observations for our agent - in Connect Four, we can increase the skill level of our opponent. By progressively doing this, we can help our agent improve. We can change our rewards between lessons too; for example, we may wish to reward wins in all directions equally once we have learned to beat a random agent and now wish to train against a harder opponent. In this tutorial, an ```Opponent``` class is implemented to provide different levels of difficulty for training our agent.
 
-        :param memory: Experience replay buffer
-        :type memory: AgileRL experience replay buffer
-        """
-        print("Filling replay buffer ...")
-        while len(memory) < memory.memory_size:
-            self.reset()  # Reset environment at start of episode
-            observation, reward, done, truncation, _ = self.last()
+```python
 
-            # Randomly decide whether agent will go first or second
-            if random.random() > 0.5:
-                opponent_first = False
-            else:
-                opponent_first = True
+```
 
-            p1_state, p1_state_flipped, p1_action, p1_next_state, p1_next_state_flipped = None, None, None, None, None
-            done, truncation = False, False
+### General setup
 
-            while not (done or truncation):
-                # Player 0's turn
-                p0_action_mask = observation["action_mask"]
-                p0_state = np.moveaxis(observation["observation"], [-1], [-3])
-                p0_state_flipped = np.expand_dims(np.flip(p0_state, 2), 0)
-                p0_state = np.expand_dims(p0_state, 0)
-                p0_action = self.env.action_space("player_0").sample(p0_action_mask)
-                self.step(p0_action)  # Act in environment
-                observation, env_reward, done, truncation, _ = self.last()
-                p0_next_state = np.moveaxis(observation["observation"], [-1], [-3])
-                p0_next_state_flipped = np.expand_dims(np.flip(p0_next_state, 2), 0)
-                p0_next_state = np.expand_dims(p0_next_state, 0)
+Before we go any further in this tutorial, it would be helpful to define and set up everything remaining we need for training.
 
-                if done or truncation:
-                    reward = self.reward(done=True, player=0)
-                    memory.save2memoryVectEnvs(
-                        np.concatenate((p0_state, p1_state, p0_state_flipped, p1_state_flipped)),
-                        [p0_action, p1_action, 6-p0_action, 6-p1_action],
-                        [reward, LESSON["rewards"]["lose"], reward, LESSON["rewards"]["lose"]],
-                        np.concatenate((p0_next_state, p1_next_state, p0_next_state_flipped, p1_next_state_flipped)),
-                        [done, done, done, done],
-                    )
-                else:  # Play continues
-                    if p1_state is not None:
-                        reward = self.reward(done=False, player=0)
-                        memory.save2memoryVectEnvs(
-                            np.concatenate((p1_state, p1_state_flipped)),
-                            [p1_action, 6-p1_action],
-                            [reward, reward],
-                            np.concatenate((p1_next_state, p1_next_state_flipped)),
-                            [done, done],
-                            )
+```python
 
-                    # Player 1's turn
-                    p1_action_mask = observation["action_mask"]
-                    p1_state = np.moveaxis(observation["observation"], [-1], [-3])
-                    p1_state[[0, 1], :, :] = p1_state[[0, 1], :, :]
-                    p1_state_flipped = np.expand_dims(np.flip(p1_state, 2), 0)
-                    p1_state = np.expand_dims(p1_state, 0)
-                    p1_action = self.env.action_space("player_1").sample(p1_action_mask)
-                    self.step(p1_action)  # Act in environment
-                    observation, env_reward, done, truncation, _ = self.last()
-                    p1_next_state = np.moveaxis(observation["observation"], [-1], [-3])
-                    p1_next_state[[0, 1], :, :] = p1_next_state[[0, 1], :, :]
-                    p1_next_state_flipped = np.expand_dims(np.flip(p1_next_state, 2), 0)
-                    p1_next_state = np.expand_dims(p1_next_state, 0)
+```
 
-                    if done or truncation:
-                        reward = self.reward(done=True, player=1)
-                        memory.save2memoryVectEnvs(
-                            np.concatenate((p0_state, p1_state, p0_state_flipped, p1_state_flipped)),
-                            [p0_action, p1_action, 6-p0_action, 6-p1_action],
-                            [LESSON["rewards"]["lose"], reward, LESSON["rewards"]["lose"], reward],
-                            np.concatenate((p0_next_state, p1_next_state, p0_next_state_flipped, p1_next_state_flipped)),
-                            [done, done, done, done],
-                        )
+As part of the curriculum, we may choose to fill the replay buffer with random experiences, and also train on these offline.
 
-                    else:  # Play continues
-                        reward = self.reward(done=False, player=1)
-                        memory.save2memoryVectEnvs(
-                            np.concatenate((p0_state, p0_state_flipped)),
-                            [p0_action, 6-p0_action],
-                            [reward, reward],
-                            np.concatenate((p0_next_state, p0_next_state_flipped)),
-                            [done, done],
-                        )
-        print("Replay buffer warmed up.")
-        return memory
+```python
+```
 
-    def check_winnable(self, lst, piece):
-        """Checks if four pieces in a row represent a winnable opportunity, e.g. [1, 1, 1, 0] or [2, 0, 2, 2]
+### Self-play
 
-        :param lst: List of pieces in row
-        :type lst: List
-        :param piece: Player piece we are checking (1 or 2)
-        :type piece: int
-        """
-        return lst.count(piece) == 3 and lst.count(0) == 1
+In this tutorial, we use self-play as the final lesson in our curriculum. By iteratively improving our agent and making it learn to win against itself, we can allow it to discover new strategies and achieve higher performance. The weights of our pretrained agent from an earlier lesson can be loaded to the population as follows:
+```python
 
-    def check_vertical_win(self, player):
-        """"Checks if a win is vertical.
+```
 
-        :param player: Player who we are checking, 0 or 1
-        :type player: int
-        """
-        board = np.array(self.env.env.board).reshape(6, 7)
-        piece = player + 1
+To train against an old version of our agent, we create a pool of opponents. At training time, we randomly select an opponent from this pool. At regular intervals, we update the opponent pool by removing the oldest opponent and adding a copy of the latest version of our agent. This provides a balance between training against an increasingly difficult opponent and providing variety in the moves an opponent might make.
 
-        column_count = 7
-        row_count = 6
+```python
 
-        # Check vertical locations for win
-        for c in range(column_count):
-            for r in range(row_count - 3):
-                if (
-                    board[r][c] == piece
-                    and board[r + 1][c] == piece
-                    and board[r + 2][c] == piece
-                    and board[r + 3][c] == piece
-                ):
-                    return True
-        return False
+```
 
-    def check_three_in_row(self, player):
-        """"Checks if there are three pieces in a row and a blank space next, or two pieces - blank - piece.
+### Training loop
 
-        :param player: Player who we are checking, 0 or 1
-        :type player: int
-        """
-        board = np.array(self.env.env.board).reshape(6, 7)
-        piece = player + 1
+The Connect Four training loop must take into account that the agent only takes an action every other interaction with the environment (the opponent takes alternating turns). This must be considered when saving transitions to the replay buffer. Equally, we must wait for the outcome of the next player's turn before determining what the reward should be for a transition. This is not a true Markov Decision Process for this reason, but we can still train a reinforcement learning agent reasonably successfully in these non-stationary conditions.
 
-        # Check horizontal locations
-        column_count = 7
-        row_count = 6
-        three_in_row_count = 0
+At regular intervals, we evaluate the performance, or 'fitness',  of the agents in our population, and do an evolutionary step. Those which perform best are more likely to become members of the next generation, and the hyperparameters and neural architectures of agents in the population are mutated. This evolution allows us to optimize hyperparameters and maximise the performance of our agents in a single training run.
 
-        # Check vertical locations
-        for c in range(column_count):
-            for r in range(row_count - 3):
-                if self.check_winnable(board[r:r+4, c].tolist(), piece):
-                    three_in_row_count += 1
-
-        # Check horizontal locations
-        for r in range(row_count):
-            for c in range(column_count - 3):
-                if self.check_winnable(board[r, c:c+4].tolist(), piece):
-                    three_in_row_count += 1
-
-        # Check positively sloped diagonals
-        for c in range(column_count - 3):
-            for r in range(row_count - 3):
-                if self.check_winnable([
-                                        board[r, c],
-                                        board[r+1, c+1],
-                                        board[r+2, c+2],
-                                        board[r+3, c+3]
-                                       ], piece):
-                    three_in_row_count += 1
-
-        # Check negatively sloped diagonals
-        for c in range(column_count - 3):
-            for r in range(3, row_count):
-                if self.check_winnable([
-                                        board[r, c],
-                                        board[r-1, c+1],
-                                        board[r-2, c+2],
-                                        board[r-3, c+3]
-                                       ], piece):
-                    three_in_row_count += 1
-
-        return three_in_row_count
-
-    def reward(self, done, player):
-        """Processes and returns reward from environment according to lesson criteria.
-
-        :param done: Environment has terminated
-        :type done: bool
-        :param player: Player who we are checking, 0 or 1
-        :type player: int
-        """
-        if done:
-            reward = self.lesson["rewards"]["vertical_win"] if self.check_vertical_win(player) else self.lesson["rewards"]["win"]
-        else:
-            agent_three_count = self.check_three_in_row(1-player)
-            opp_three_count = self.check_three_in_row(player)
-            if (agent_three_count + opp_three_count) == 0:
-                reward = self.lesson["rewards"]["play_continues"]
-            else:
-                reward = self.lesson["rewards"]["three_in_row"] * agent_three_count + self.lesson["rewards"]["opp_three_in_row"] * opp_three_count
-        return reward
-
-    def last(self):
-        """Wrapper around PettingZoo env last method"""
-        return self.env.last()
-
-    def step(self, action):
-        """Wrapper around PettingZoo env step method"""
-        self.env.step(action)
-
-    def reset(self):
-        """Wrapper around PettingZoo env reset method"""
-        self.env.reset()
+```python
 ```
 
 
+### Watch the trained agents play
+The following code allows you to load your saved DQN agent from the previous training block, test the agent's performance, and then visualise a number of episodes as a gif.
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/AgileRL/agilerl_dqn_curriculum.py
+.. literalinclude:: ../../../tutorials/AgileRL/render_agilerl_dqn.py
    :language: python
 ```
 
-### Watch the trained agents play
-The following code allows you to load your saved MADDPG alogorithm from the previous training block, test the algorithms performance, and then visualise a number of episodes as a gif.
+### Full training code
+
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/AgileRL/render_agilerl_maddpg.py
+.. literalinclude:: ../../../tutorials/AgileRL/agilerl_dqn_curriculum.py
    :language: python
 ```
