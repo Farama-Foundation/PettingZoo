@@ -50,7 +50,7 @@ from agilerl.components.replay_buffer import ReplayBuffer
 from agilerl.hpo.mutation import Mutations
 from agilerl.hpo.tournament import TournamentSelection
 from agilerl.utils.utils import initialPopulation
-from tqdm import trange
+from tqdm import tqdm, trange
 
 from pettingzoo.classic import connect_four_v3
 ```
@@ -73,17 +73,34 @@ To help guide our agent, we can introduce rewards for other outcomes in the envi
 
 #### Config files
 
-It is best to use YAML config files to define the lessons in our curriculum and easily change and keep track of our settings. The first two lessons in our curriculum can be defined as follows:
+It is best to use YAML config files to define the lessons in our curriculum and easily change and keep track of our settings. The first three lessons in our curriculum can be defined as follows:
 
-```{eval-rst}
-.. literalinclude:: ../../../tutorials/AgileRL/curriculums/connect_four/lesson1.yaml
-   :language: yaml
-```
+<details>
+   <summary>Lesson 1</summary>
 
-```{eval-rst}
-.. literalinclude:: ../../../tutorials/AgileRL/curriculums/connect_four/lesson2.yaml
-   :language: yaml
-```
+   ```{eval-rst}
+   .. literalinclude:: ../../../tutorials/AgileRL/curriculums/connect_four/lesson1.yaml
+      :language: yaml
+   ```
+</details>
+
+<details>
+   <summary>Lesson 2</summary>
+
+   ```{eval-rst}
+   .. literalinclude:: ../../../tutorials/AgileRL/curriculums/connect_four/lesson2.yaml
+      :language: yaml
+   ```
+</details>
+
+<details>
+   <summary>Lesson 3</summary>
+
+   ```{eval-rst}
+   .. literalinclude:: ../../../tutorials/AgileRL/curriculums/connect_four/lesson3.yaml
+      :language: yaml
+   ```
+</details><br>
 
 To implement our curriculum, we create a ```CurriculumEnv``` class that acts as a wrapper on top of our Connect Four environment and enables us to alter the reward to guide the training of our agent. This uses the configs that we set up to define the lesson.
 

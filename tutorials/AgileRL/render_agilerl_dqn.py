@@ -47,7 +47,7 @@ def resize_frames(frames, fraction):
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    opponent_difficulty = "strong"  # random, weak, strong or self
+    opponent_difficulty = "weak"  # random, weak, strong or self
 
     env = connect_four_v3.env(render_mode="rgb_array")
     env.reset()
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     )
 
     # Load the saved algorithm into the DQN object
-    path = "./models/DQN/lesson2_trained_agent.pt"
+    path = "./models/DQN/lesson4_trained_agent.pt"
     dqn.loadCheckpoint(path)
 
     # Create opponent
