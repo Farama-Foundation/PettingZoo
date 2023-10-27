@@ -44,6 +44,12 @@ class CurriculumEnv:
 
         pbar = tqdm(total=memory.memory_size)
         while len(memory) < memory.memory_size:
+            # Randomly decide whether random player will go first or second
+            if random.random() > 0.5:
+                opponent_first = False
+            else:
+                opponent_first = True
+
             mem_full = len(memory)
             self.reset()  # Reset environment at start of episode
             observation, reward, done, truncation, _ = self.last()
@@ -63,13 +69,15 @@ class CurriculumEnv:
                 p0_state = np.moveaxis(observation["observation"], [-1], [-3])
                 p0_state_flipped = np.expand_dims(np.flip(p0_state, 2), 0)
                 p0_state = np.expand_dims(p0_state, 0)
-                if self.lesson["warm_up_opponent"] == "random":
-                    p0_action = opponent.getAction(
-                        p0_action_mask, p1_action, self.lesson["block_vert_coef"]
-                    )
+                if opponent_first:
+                    p0_action = self.env.action_space("player_0").sample(p0_action_mask)
                 else:
-                    p0_action = opponent.getAction(player=0)
-                p0_action = self.env.action_space("player_0").sample(p0_action_mask)
+                    if self.lesson["warm_up_opponent"] == "random":
+                        p0_action = opponent.getAction(
+                            p0_action_mask, p1_action, self.lesson["block_vert_coef"]
+                        )
+                    else:
+                        p0_action = opponent.getAction(player=0)
                 self.step(p0_action)  # Act in environment
                 observation, env_reward, done, truncation, _ = self.last()
                 p0_next_state = np.moveaxis(observation["observation"], [-1], [-3])
@@ -101,7 +109,7 @@ class CurriculumEnv:
                     )
                 else:  # Play continues
                     if p1_state is not None:
-                        reward = self.reward(done=False, player=0)
+                        reward = self.reward(done=False, player=1)
                         memory.save2memoryVectEnvs(
                             np.concatenate((p1_state, p1_state_flipped)),
                             [p1_action, 6 - p1_action],
@@ -116,12 +124,17 @@ class CurriculumEnv:
                     p1_state[[0, 1], :, :] = p1_state[[0, 1], :, :]
                     p1_state_flipped = np.expand_dims(np.flip(p1_state, 2), 0)
                     p1_state = np.expand_dims(p1_state, 0)
-                    if self.lesson["warm_up_opponent"] == "random":
-                        p1_action = opponent.getAction(
-                            p1_action_mask, p0_action, LESSON["block_vert_coef"]
+                    if not opponent_first:
+                        p1_action = self.env.action_space("player_1").sample(
+                            p1_action_mask
                         )
                     else:
-                        p1_action = opponent.getAction(player=1)
+                        if self.lesson["warm_up_opponent"] == "random":
+                            p1_action = opponent.getAction(
+                                p1_action_mask, p0_action, LESSON["block_vert_coef"]
+                            )
+                        else:
+                            p1_action = opponent.getAction(player=1)
                     self.step(p1_action)  # Act in environment
                     observation, env_reward, done, truncation, _ = self.last()
                     p1_next_state = np.moveaxis(observation["observation"], [-1], [-3])
@@ -154,7 +167,7 @@ class CurriculumEnv:
                         )
 
                     else:  # Play continues
-                        reward = self.reward(done=False, player=1)
+                        reward = self.reward(done=False, player=0)
                         memory.save2memoryVectEnvs(
                             np.concatenate((p0_state, p0_state_flipped)),
                             [p0_action, 6 - p0_action],
@@ -162,6 +175,7 @@ class CurriculumEnv:
                             np.concatenate((p0_next_state, p0_next_state_flipped)),
                             [done, done],
                         )
+
             pbar.update(len(memory) - mem_full)
         pbar.close()
         print("Replay buffer warmed up.")
@@ -472,7 +486,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("===== AgileRL Curriculum Learning Demo =====")
 
-    for lesson_number in [3, 4]:
+    for lesson_number in range(4):
         # Load lesson for curriculum
         with open(f"./curriculums/connect_four/lesson{lesson_number}.yaml") as file:
             LESSON = yaml.safe_load(file)
@@ -545,25 +559,6 @@ if __name__ == "__main__":
             device=device,
         )
 
-        if LESSON["pretrained_path"] is not None:
-            for agent in pop:
-                # Load pretrained checkpoint
-                agent.loadCheckpoint(LESSON["pretrained_path"])
-                # Reinit optimizer for new task
-                agent.lr = INIT_HP["LR"]
-                agent.optimizer = torch.optim.Adam(
-                    agent.actor.parameters(), lr=agent.lr
-                )
-
-        if LESSON["opponent"] == "self":
-            # Create initial pool of opponents
-            opponent_pool = deque(maxlen=LESSON["opponent_pool_size"])
-            for _ in range(LESSON["opponent_pool_size"]):
-                opp = copy.deepcopy(pop[0])
-                opp.actor.load_state_dict(pop[0].actor.state_dict())
-                opp.actor.eval()
-                opponent_pool.append(opp)
-
         # Configure the replay buffer
         field_names = ["state", "action", "reward", "next_state", "done"]
         memory = ReplayBuffer(
@@ -572,67 +567,6 @@ if __name__ == "__main__":
             field_names=field_names,  # Field names to store in memory
             device=device,
         )
-
-        # Perform buffer and agent warmups if desired
-        if LESSON["buffer_warm_up"]:
-            warm_up_opponent = Opponent(env, difficulty=LESSON["warm_up_opponent"])
-            memory = env.fill_replay_buffer(
-                memory, warm_up_opponent
-            )  # Fill replay buffer with random actions
-            if LESSON["agent_warm_up"] > 0:
-                wandb.init(
-                    # set the wandb project where this run will be logged
-                    project="AgileRL",
-                    name="{}-EvoHPO-{}-{}Opposition-Warmup-{}".format(
-                        "connect_four_v3",
-                        INIT_HP["ALGO"],
-                        LESSON["warm_up_opponent"],
-                        datetime.now().strftime("%m%d%Y%H%M%S"),
-                    ),
-                    # track hyperparameters and run metadata
-                    config={
-                        "algo": "Evo HPO Rainbow DQN",
-                        "env": "connect_four_v3",
-                        "INIT_HP": INIT_HP,
-                        "lesson": LESSON,
-                    },
-                )
-                print("Warming up agents ...")
-                agent = pop[0]
-                # Train on randomly collected samples
-                for epoch in trange(LESSON["agent_warm_up"]):
-                    experiences = memory.sample(agent.batch_size)
-                    states, actions, rewards, next_states, dones = experiences
-                    actions = torch.nn.functional.one_hot(actions).squeeze().float()
-                    pred_actions = agent.actor(states)
-                    loss = agent.criterion(pred_actions, actions)
-                    agent.optimizer.zero_grad()
-                    loss.backward()
-                    agent.optimizer.step()
-                    if (epoch + 1) % 5000 == 0:
-                        wandb.log({"warm_up_loss": loss.item(), "epoch": epoch + 1})
-                wandb.finish()
-                agent.actor_target = copy.deepcopy(agent.actor)
-                pop = [agent.clone() for _ in pop]
-                elite = agent
-                print("Agent population warmed up.")
-
-        # # Perform buffer and agent warmups if desired
-        # if LESSON["buffer_warm_up"]:
-        #     warm_up_opponent = Opponent(env, difficulty=LESSON["warm_up_opponent"])
-        #     memory = env.fill_replay_buffer(
-        #         memory, warm_up_opponent
-        #     )  # Fill replay buffer with random actions
-        #     if LESSON["agent_warm_up"] > 0:
-        #         print("Warming up agents ...")
-        #         agent = pop[0]
-        #         # Train on randomly collected samples
-        #         for epoch in trange(LESSON["agent_warm_up"]):
-        #             experiences = memory.sample(agent.batch_size)
-        #             agent.learn(experiences)
-        #         pop = [agent.clone() for _ in pop]
-        #         elite = agent
-        #         print("Agent population warmed up.")
 
         # Instantiate a tournament selection object (used for HPO)
         tournament = TournamentSelection(
@@ -680,6 +614,42 @@ if __name__ == "__main__":
         eps_end = 0.1  # Final epsilon value
         eps_decay = 0.9998  # Epsilon decays
         opp_update_counter = 0
+
+        if LESSON["pretrained_path"] is not None:
+            for agent in pop:
+                # Load pretrained checkpoint
+                agent.loadCheckpoint(LESSON["pretrained_path"])
+                # Reinit optimizer for new task
+                agent.lr = INIT_HP["LR"]
+                agent.optimizer = torch.optim.Adam(
+                    agent.actor.parameters(), lr=agent.lr
+                )
+
+        if LESSON["opponent"] == "self":
+            # Create initial pool of opponents
+            opponent_pool = deque(maxlen=LESSON["opponent_pool_size"])
+            for _ in range(LESSON["opponent_pool_size"]):
+                opp = copy.deepcopy(pop[0])
+                opp.actor.load_state_dict(pop[0].actor.state_dict())
+                opp.actor.eval()
+                opponent_pool.append(opp)
+
+        # Perform buffer and agent warmups if desired
+        if LESSON["buffer_warm_up"]:
+            warm_up_opponent = Opponent(env, difficulty=LESSON["warm_up_opponent"])
+            memory = env.fill_replay_buffer(
+                memory, warm_up_opponent
+            )  # Fill replay buffer with transitions
+            if LESSON["agent_warm_up"] > 0:
+                print("Warming up agents ...")
+                agent = pop[0]
+                # Train on randomly collected samples
+                for epoch in trange(LESSON["agent_warm_up"]):
+                    experiences = memory.sample(agent.batch_size)
+                    agent.learn(experiences)
+                pop = [agent.clone() for _ in pop]
+                elite = agent
+                print("Agent population warmed up.")
 
         if max_episodes > 0:
             wandb.init(
@@ -808,7 +778,7 @@ if __name__ == "__main__":
                             )
                         else:  # Play continues
                             if p1_state is not None:
-                                reward = env.reward(done=False, player=0)
+                                reward = env.reward(done=False, player=1)
                                 memory.save2memoryVectEnvs(
                                     np.concatenate((p1_state, p1_state_flipped)),
                                     [p1_action, 6 - p1_action],
@@ -901,7 +871,7 @@ if __name__ == "__main__":
                                 )
 
                             else:  # Play continues
-                                reward = env.reward(done=False, player=1)
+                                reward = env.reward(done=False, player=0)
                                 memory.save2memoryVectEnvs(
                                     np.concatenate((p0_state, p0_state_flipped)),
                                     [p0_action, 6 - p0_action],
