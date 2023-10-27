@@ -486,7 +486,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("===== AgileRL Curriculum Learning Demo =====")
 
-    for lesson_number in range(4):
+    for lesson_number in range(1, 5):
         # Load lesson for curriculum
         with open(f"./curriculums/connect_four/lesson{lesson_number}.yaml") as file:
             LESSON = yaml.safe_load(file)
