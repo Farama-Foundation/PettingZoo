@@ -2,6 +2,7 @@
 
 These tutorials provide an introductory guide to using [AgileRL](https://github.com/AgileRL/AgileRL) with PettingZoo. AgileRL's multi-agent algorithms make use of the PettingZoo parallel API and allow users to train multiple-agents in parallel in both competitive and co-operative environments. This tutorial includes the following:
 
+* [DQN](DQN.md): _Train a DQN agent to play Connect Four through curriculum learning and self-play_
 * [MADDPG](MADDPG.md): _Train an MADDPG agent to play multi-agent atari games_
 * [MATD3](MATD3.md): _Train an MATD3 agent to play multi-particle-environment games_
 
@@ -28,6 +29,7 @@ For more information about AgileRL and what else the library has to offer, check
 :hidden:
 :caption: AgileRL
 
+DQN
 MADDPG
 MATD3
 ```
