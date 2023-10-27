@@ -522,6 +522,7 @@ if __name__ == "__main__":
             "NUM_ATOMS": 51,  # Unit number of support
             "V_MIN": 0.0,  # Minimum value of support
             "V_MAX": 200.0,  # Maximum value of support
+            "WANDB": False,  # Use Weights and Biases tracking
         }
 
         # Define the connect four environment
@@ -614,6 +615,7 @@ if __name__ == "__main__":
         eps_end = 0.1  # Final epsilon value
         eps_decay = 0.9998  # Epsilon decays
         opp_update_counter = 0
+        wb = INIT_HP["WANDB"]
 
         if LESSON["pretrained_path"] is not None:
             for agent in pop:
@@ -652,23 +654,24 @@ if __name__ == "__main__":
                 print("Agent population warmed up.")
 
         if max_episodes > 0:
-            wandb.init(
-                # set the wandb project where this run will be logged
-                project="AgileRL",
-                name="{}-EvoHPO-{}-{}Opposition-CNN-{}".format(
-                    "connect_four_v3",
-                    INIT_HP["ALGO"],
-                    LESSON["opponent"],
-                    datetime.now().strftime("%m%d%Y%H%M%S"),
-                ),
-                # track hyperparameters and run metadata
-                config={
-                    "algo": "Evo HPO Rainbow DQN",
-                    "env": "connect_four_v3",
-                    "INIT_HP": INIT_HP,
-                    "lesson": LESSON,
-                },
-            )
+            if wb:
+                wandb.init(
+                    # set the wandb project where this run will be logged
+                    project="AgileRL",
+                    name="{}-EvoHPO-{}-{}Opposition-CNN-{}".format(
+                        "connect_four_v3",
+                        INIT_HP["ALGO"],
+                        LESSON["opponent"],
+                        datetime.now().strftime("%m%d%Y%H%M%S"),
+                    ),
+                    # track hyperparameters and run metadata
+                    config={
+                        "algo": "Evo HPO Rainbow DQN",
+                        "env": "connect_four_v3",
+                        "INIT_HP": INIT_HP,
+                        "lesson": LESSON,
+                    },
+                )
 
         total_steps = 0
         total_episodes = 0
@@ -1019,26 +1022,28 @@ if __name__ == "__main__":
                     for index, action in enumerate(eval_actions_hist)
                 }
 
-                wandb_dict = {
-                    "global_step": total_steps,
-                    "train/mean_score": np.mean(agent.scores[-episodes_per_epoch:]),
-                    "train/mean_turns_per_game": mean_turns,
-                    "train/epsilon": epsilon,
-                    "train/opponent_updates": opp_update_counter,
-                    "eval/mean_fitness": np.mean(fitnesses),
-                    "eval/best_fitness": np.max(fitnesses),
-                    "eval/mean_turns_per_game": eval_turns,
-                }
-                wandb_dict.update(train_actions_dict)
-                wandb_dict.update(eval_actions_dict)
-                wandb.log(wandb_dict)
+                if wb:
+                    wandb_dict = {
+                        "global_step": total_steps,
+                        "train/mean_score": np.mean(agent.scores[-episodes_per_epoch:]),
+                        "train/mean_turns_per_game": mean_turns,
+                        "train/epsilon": epsilon,
+                        "train/opponent_updates": opp_update_counter,
+                        "eval/mean_fitness": np.mean(fitnesses),
+                        "eval/best_fitness": np.max(fitnesses),
+                        "eval/mean_turns_per_game": eval_turns,
+                    }
+                    wandb_dict.update(train_actions_dict)
+                    wandb_dict.update(eval_actions_dict)
+                    wandb.log(wandb_dict)
 
                 # Tournament selection and population mutation
                 elite, pop = tournament.select(pop)
                 pop = mutations.mutation(pop)
 
         if max_episodes > 0:
-            wandb.finish()
+            if wb:
+                wandb.finish()
 
         # Save the trained agent
         save_path = LESSON["save_path"]
