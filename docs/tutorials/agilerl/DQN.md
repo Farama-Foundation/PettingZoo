@@ -1177,6 +1177,9 @@ elite.saveCheckpoint(save_path)
 print(f"Elite agent saved to '{save_path}'.")
 ```
 
+### Trained model weights
+Trained model weights are provided at ```PettingZoo/tutorials/AgileRL/models```. Take a look, train against these models, and see if you can beat them!
+
 
 ### Watch the trained agents play
 The following code allows you to load your saved DQN agent from the previous training block, test the agent's performance, and then visualise a number of episodes as a gif.
