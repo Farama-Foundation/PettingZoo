@@ -28,6 +28,9 @@ def _label_with_episode_number(frame, episode_num, frame_no, p):
     if p == 2:
         player = "Player 2"
         color = (100, 255, 150)
+    if p is None:
+        player = "Self-play"
+        color = (255, 255, 255)
     drawer.text((700, 5), f"Agent: {player}", fill=color, font=font)
     return im
 
@@ -47,7 +50,7 @@ def resize_frames(frames, fraction):
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    path = "./models/DQN/lesson4_trained_agent_og.pt"  # Path to saved agent checkpoint
+    path = "./models/DQN/lesson3_trained_agent.pt"  # Path to saved agent checkpoint
 
     env = connect_four_v3.env(render_mode="rgb_array")
     env.reset()
@@ -104,6 +107,8 @@ if __name__ == "__main__":
             else:
                 opponent_first = True
                 p = 2
+            if opponent_difficulty == "self":
+                p = None
             env.reset()  # Reset environment at start of episode
             frame = env.render()
             frames.append(
