@@ -33,9 +33,9 @@ jobs:
                       platform: manylinux_x86_64
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Set up Python
-              uses: actions/setup-python@v2
+              uses: actions/setup-python@v4
               with:
                   python-version: 3.x
             - name: Install dependencies

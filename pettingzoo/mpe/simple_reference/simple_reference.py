@@ -14,7 +14,7 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | Actions            | Discrete/Continuous                              |
 | Parallel API       | Yes                                              |
 | Manual Control     | No                                               |
-| Agents             | `agents= [adversary_0, agent_0,agent_1]`         |
+| Agents             | `agents= [agent_0, agent_1]`                     |
 | Agents             | 3                                                |
 | Action Shape       | (5)                                              |
 | Action Values      | Discrete(5)/Box(0.0, 1.0, (5))                   |
