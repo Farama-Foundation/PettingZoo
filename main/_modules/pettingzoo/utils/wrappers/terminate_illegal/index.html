@@ -424,7 +424,10 @@
         <span class="n">obs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="n">obs</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_prev_info</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">obs</span>
 
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
