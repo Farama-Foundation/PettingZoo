@@ -265,6 +265,7 @@ class SimpleEnv(AECEnv):
     def enable_render(self, mode="human"):
         if not self.renderOn and mode == "human":
             self.screen = pygame.display.set_mode(self.screen.get_size())
+            self.clock = pygame.time.Clock()
             self.renderOn = True
 
     def render(self):
@@ -282,6 +283,7 @@ class SimpleEnv(AECEnv):
             return np.transpose(observation, axes=(1, 0, 2))
         elif self.render_mode == "human":
             pygame.display.flip()
+            self.clock.tick(self.metadata["render_fps"])
             return
 
     def draw(self):
