@@ -178,7 +178,7 @@ if __name__ == "__main__":
                     break
 
                 # Save experiences to replay buffer
-                memory.save2memory(state, action, reward, next_state, termination)
+                memory.save2memory(state, cont_actions, reward, next_state, termination)
 
                 # Collect the reward
                 for agent_id, r in reward.items():
