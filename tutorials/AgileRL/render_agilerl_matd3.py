@@ -90,12 +90,28 @@ if __name__ == "__main__":
 
     # Test loop for inference
     for ep in range(episodes):
-        state, _ = env.reset()
+        state, info = env.reset()
         agent_reward = {agent_id: 0 for agent_id in agent_ids}
         score = 0
         for _ in range(max_steps):
-            # Get action
-            action = matd3.getAction(state, epsilon=0)
+            agent_mask = info["agent_mask"] if "agent_mask" in info.keys() else None
+            env_defined_actions = (
+                info["env_defined_actions"]
+                if "env_defined_actions" in info.keys()
+                else None
+            )
+
+            # Get next action from agent
+            cont_actions, discrete_action = matd3.getAction(
+                state,
+                epsilon=0,
+                agent_mask=agent_mask,
+                env_defined_actions=env_defined_actions,
+            )
+            if matd3.discrete_actions:
+                action = discrete_action
+            else:
+                action = cont_actions
 
             # Save the frame for this step and append to frames list
             frame = env.render()

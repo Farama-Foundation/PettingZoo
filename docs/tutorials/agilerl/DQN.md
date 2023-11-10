@@ -1244,6 +1244,8 @@ The following code allows you to load your saved DQN agent from the previous tra
 <details>
    <summary>Full training code</summary>
 
+   > Please note that on line 612 ``max_episodes`` is set to 10 to allow fast testing of this tutorial code. This line can be deleted, and the line below it uncommented, to use the number of episodes set in the config files.
+
    ```{eval-rst}
    .. literalinclude:: ../../../tutorials/AgileRL/agilerl_dqn_curriculum.py
       :language: python

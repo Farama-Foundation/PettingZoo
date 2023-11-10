@@ -606,7 +606,12 @@ if __name__ == "__main__":
 
         # Define training loop parameters
         episodes_per_epoch = 10
-        max_episodes = LESSON["max_train_episodes"]  # Total episodes
+
+        # ! NOTE: Uncomment the max_episodes line below to change the number of training episodes. ! #
+        # It is deliberately set low to allow testing to ensure this tutorial is sound.
+        max_episodes = 10
+        # max_episodes = LESSON["max_train_episodes"]  # Total episodes
+
         max_steps = 500  # Maximum steps to take in each episode
         evo_epochs = 20  # Evolution frequency
         evo_loop = 50  # Number of evaluation episodes
