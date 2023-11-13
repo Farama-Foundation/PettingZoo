@@ -46,7 +46,7 @@ testing = [
     "pynput",
     "pytest",
     "AutoROM",
-    "pytest==6.2.5",
+    "pytest",
     "pytest-cov",
     "pytest-xdist",
     "pre-commit",
