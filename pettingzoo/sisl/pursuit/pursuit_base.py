@@ -417,7 +417,8 @@ class Pursuit:
         new_observation = np.copy(observation)
         del observation
         if self.render_mode == "human":
-            pygame.display.flip()
+            pygame.event.pump()
+            pygame.display.update()
         return (
             np.transpose(new_observation, axes=(1, 0, 2))
             if self.render_mode == "rgb_array"

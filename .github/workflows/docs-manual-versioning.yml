@@ -22,49 +22,37 @@ jobs:
         env:
             SPHINX_GITHUB_CHANGELOG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               if: inputs.commit == ''
-
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               if: inputs.commit != ''
               with:
                   ref: ${{ inputs.commit }}
-
             - uses: actions/setup-python@v4
               with:
-                  python-version: '3.9'
-
+                  python-version: '3.11'
             - name: Install dependencies
               run: pip install -r docs/requirements.txt
-
             - name: Install PettingZoo
               run: pip install .[all]
-
             - name: Generate environment docs
               run: python docs/_scripts/gen_envs_mds.py
-
             - name: Generate environments display
               run: python docs/_scripts/gen_envs_display.py
-
             - name: Build
               run: sphinx-build -b dirhtml -v docs _build
-
             - name: Move 404
               run: mv _build/404/index.html _build/404.html
-
             - name: Update 404 links
               run: python docs/_scripts/move_404.py _build/404.html
-
             - name: Remove .doctrees
               run: rm -r _build/.doctrees
-
             - name: Upload to GitHub Pages
               uses: JamesIves/github-pages-deploy-action@v4
               with:
                   folder: _build
                   target-folder: ${{ inputs.version }}
                   clean: false
-
             - name: Upload to GitHub Pages
               uses: JamesIves/github-pages-deploy-action@v4
               if: inputs.latest

@@ -31,7 +31,10 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         obs = super().observe(agent)
         if agent == self.agent_selection:
             self._prev_obs = obs
-            self._prev_info = self.infos[self.agent_selection]
+            if self.agent_selection in self.infos:
+                self._prev_info = self.infos[self.agent_selection]
+            else:
+                self._prev_info = {}
         return obs
 
     def step(self, action: ActionType) -> None:
