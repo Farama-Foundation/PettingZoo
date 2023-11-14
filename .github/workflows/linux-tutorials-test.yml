@@ -17,11 +17,11 @@ jobs:
             fail-fast: false
             matrix:
                 python-version: ['3.8', '3.9', '3.10', '3.11']
-                tutorial: [Tianshou, CustomEnvironment, CleanRL, SB3/kaz, SB3/waterworld, SB3/connect_four, SB3/test, AgileRL]       # TODO: add back Ray once next release after 2.6.2
+                tutorial: [Tianshou, CustomEnvironment, CleanRL, SB3/kaz, SB3/waterworld, SB3/connect_four, SB3/test, AgileRL]  # TODO: add back Ray once next release after 2.6.2
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Set up Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v3
+              uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies and run tutorials
