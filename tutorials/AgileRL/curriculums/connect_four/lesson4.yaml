@@ -1,0 +1,23 @@
+---
+# Connect Four Lesson 4
+# Train against random agent: 'random', weak opponent: 'weak', strong opponent: 'strong', or use self-play: 'self'
+opponent: self
+opponent_pool_size: 6  # Size of opponent pool for self-play
+opponent_upgrade: 6000  # Epoch frequency to update opponent pool
+eval_opponent: strong  # 'random', 'weak' or 'strong'
+pretrained_path: models/DQN/lesson3_trained_agent.pt  # Path to pretrained model weights
+save_path: models/DQN/lesson4_trained_agent.pt  # Path to save trained model
+max_train_episodes: 600000  # Maximum number of training episodes in environment
+
+## Game specific:
+buffer_warm_up: false  # Fill replay buffer with random experiences
+warm_up_opponent:       # Difficulty level of warm up experiences
+agent_warm_up: 0  # Number of epochs to warm up agent by training on random experiences
+block_vert_coef: 1  # How many times more likely to block vertically if playing random opponent
+rewards:  # Rewards for different outcomes
+    win: 1
+    vertical_win: 1
+    three_in_row: 0.01
+    opp_three_in_row: -0.01
+    lose: -1
+    play_continues: 0

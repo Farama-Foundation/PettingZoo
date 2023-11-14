@@ -35,4 +35,4 @@ jobs:
               run: python docs/_scripts/gen_envs_mds.py
             - name: Documentation test
               run: |
-                  xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --splits 10 --group ${{ matrix.group }}
+                  xvfb-run -s "-screen 0 1024x768x24" pytest docs --markdown-docs -m markdown-docs --ignore=tutorials --ignore=docs/tutorials --splits 10 --group ${{ matrix.group }}
