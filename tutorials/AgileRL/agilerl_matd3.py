@@ -16,7 +16,7 @@ from pettingzoo.mpe import simple_speaker_listener_v4
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("===== AgileRL Online Multi-Agent Demo =====")
+    print("===== AgileRL MATD3 Demo =====")
 
     # Define the network configuration
     NET_CONFIG = {

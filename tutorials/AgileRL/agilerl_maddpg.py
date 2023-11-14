@@ -17,7 +17,7 @@ from pettingzoo.atari import space_invaders_v2
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("===== AgileRL Online Multi-Agent Demo =====")
+    print("===== AgileRL MADDPG Demo =====")
 
     # Define the network configuration
     NET_CONFIG = {
