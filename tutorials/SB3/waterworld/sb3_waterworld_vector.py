@@ -78,8 +78,8 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
         for agent in env.agent_iter():
             obs, reward, termination, truncation, info = env.last()
 
-            for agent in env.agents:
-                rewards[agent] += env.rewards[agent]
+            for a in env.agents:
+                rewards[a] += env.rewards[a]
             if termination or truncation:
                 break
             else:
