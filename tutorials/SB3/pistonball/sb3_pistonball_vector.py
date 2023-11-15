@@ -99,8 +99,8 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
             obs, reward, termination, truncation, info = env.last()
 
             if termination or truncation:
-                for agent in env.agents:
-                    rewards[agent] += env.rewards[agent]
+                for a in env.agents:
+                    rewards[a] += env.rewards[a]
                 break
             else:
                 act = model.predict(obs, deterministic=True)[0]
