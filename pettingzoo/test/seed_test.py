@@ -47,8 +47,17 @@ def check_environment_deterministic(env1, env2, num_cycles):
         if termination1 or truncation1:
             break
 
-        mask1 = obs1.get("action_mask") if isinstance(obs1, dict) else None
-        mask2 = obs2.get("action_mask") if isinstance(obs2, dict) else None
+        mask1 = (
+            obs1.get("action_mask")
+            if (isinstance(obs1, dict) and "action_mask" in obs1)
+            else (info1.get("action_mask") if "action_mask" in info1 else None)
+        )
+        mask2 = (
+            obs2.get("action_mask")
+            if (isinstance(obs2, dict) and "action_mask" in obs2)
+            else (info2.get("action_mask") if "action_mask" in info2 else None)
+        )
+
         assert data_equivalence(mask1, mask2), f"Incorrect action mask: {mask1} {mask2}"
 
         action1 = env1.action_space(agent1).sample(mask1)
