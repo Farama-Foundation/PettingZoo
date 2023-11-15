@@ -59,7 +59,9 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
         obs_space = gymnasium.spaces.Dict(
             {
                 "observation": gymnasium.spaces.Box(low=0, high=1, shape=(obs_size,)),
-                "action_mask": gymnasium.spaces.Box(low=0, high=1, shape=(num_actions,), dtype=np.int8),
+                "action_mask": gymnasium.spaces.Box(
+                    low=0, high=1, shape=(num_actions,), dtype=np.int8
+                ),
             }
         )
         act_space = gymnasium.spaces.Discrete(num_actions)

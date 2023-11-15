@@ -75,7 +75,11 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
         self.rewards[agent] = 0
         self._cumulative_rewards[agent] = 0
         num_actions = self._act_spaces[type].n
-        self.infos[agent] = {"action_mask": np.eye(num_actions)[self.np_random.choice(num_actions)].astype(np.int8)}
+        self.infos[agent] = {
+            "action_mask": np.eye(num_actions)[
+                self.np_random.choice(num_actions)
+            ].astype(np.int8)
+        }
         return agent
 
     def reset(self, seed=None, options=None):
@@ -152,7 +156,11 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
         # Sample info action mask randomly
         type = self.agent_selection.split("_")[0]
         num_actions = self._act_spaces[type].n
-        self.infos[self.agent_selection] = {"action_mask": np.eye(num_actions)[self.np_random.choice(num_actions)].astype(np.int8)}
+        self.infos[self.agent_selection] = {
+            "action_mask": np.eye(num_actions)[
+                self.np_random.choice(num_actions)
+            ].astype(np.int8)
+        }
 
         # Cycle agents
         self.agent_selection = self._agent_selector.next()

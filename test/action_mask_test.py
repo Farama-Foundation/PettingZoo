@@ -1,13 +1,22 @@
 from typing import Type
 
 import pytest
+
+from pettingzoo.test import api_test, seed_test
+from pettingzoo.test.example_envs import (
+    generated_agents_env_action_mask_info_v0,
+    generated_agents_env_action_mask_obs_v0,
+)
 from pettingzoo.utils.env import AECEnv
 
-from pettingzoo.test import seed_test, api_test
 
-from pettingzoo.test.example_envs import generated_agents_env_action_mask_obs_v0, generated_agents_env_action_mask_info_v0
-
-@pytest.mark.parametrize("env_constructor", [generated_agents_env_action_mask_info_v0.env, generated_agents_env_action_mask_obs_v0.env])
+@pytest.mark.parametrize(
+    "env_constructor",
+    [
+        generated_agents_env_action_mask_info_v0.env,
+        generated_agents_env_action_mask_obs_v0.env,
+    ],
+)
 def test_action_mask(env_constructor: Type[AECEnv]):
     """Test that environments function deterministically in cases where action mask is in observation, or in info."""
     seed_test(env_constructor)
@@ -32,5 +41,3 @@ def test_action_mask(env_constructor: Type[AECEnv]):
             action = env.action_space(agent).sample(mask)
         env.step(action)
     env.close()
-
-
