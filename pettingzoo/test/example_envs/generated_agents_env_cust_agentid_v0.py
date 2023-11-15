@@ -146,6 +146,10 @@ class raw_env(AECEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
 
         self._accumulate_rewards()
         self._deads_step_first()
+
+        # Cycle agents
+        self.agent_selection = self._agent_selector.next()
+
         if self.render_mode == "human":
             self.render()
 
