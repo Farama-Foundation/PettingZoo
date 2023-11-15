@@ -528,8 +528,8 @@ supersuit&gt;=3.9.0
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
             <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
 
-            <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
-                <span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+                <span class="n">rewards</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
                 <span class="k">break</span>
