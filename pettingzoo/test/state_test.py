@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pettingzoo.utils.env import ParallelEnv, AECEnv
+from pettingzoo.utils.env import AECEnv, ParallelEnv
 
 """Tests that the environment's state() and state_space() methods work as expected."""
 import warnings
@@ -161,7 +161,7 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
             )
 
 
-def test_parallel_env(parallel_env: ParallelEnv, seed: int | None = None):
+def test_parallel_env(parallel_env: ParallelEnv, seed: int | None = 0):
     parallel_env.reset(seed=seed)
 
     assert isinstance(
