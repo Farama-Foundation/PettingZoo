@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pettingzoo.utils.env import AECEnv, ParallelEnv
+
 """Tests that the environment's state() and state_space() methods work as expected."""
 import warnings
 
@@ -99,9 +101,9 @@ def test_state_space(env):
             ), "Environment's state_space.high and state_space have different shapes"
 
 
-def test_state(env, num_cycles):
+def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
     graphical_envs = ["knights_archers_zombies_v10"]
-    env.reset()
+    env.reset(seed=seed)
     state_0 = env.state()
     for agent in env.agent_iter(env.num_agents * num_cycles):
         observation, reward, terminated, truncated, info = env.last(observe=False)
@@ -159,8 +161,8 @@ def test_state(env, num_cycles):
             )
 
 
-def test_parallel_env(parallel_env):
-    parallel_env.reset()
+def test_parallel_env(parallel_env: ParallelEnv, seed: int | None = 0):
+    parallel_env.reset(seed=seed)
 
     assert isinstance(
         parallel_env.state_space, gymnasium.spaces.Space
