@@ -131,7 +131,10 @@ class raw_env(AECEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
 
                     agent = self.add_agent(type)
                     if len(self.agents) >= 20:
-                        self.terminations[self.np_random.choice(self.agents)] = True
+                        # Randomly terminate one of the agents
+                        self.terminations[
+                            self.agents[self.np_random.choice(len(self.agents))]
+                        ] = True
 
         if self._agent_selector.is_last():
             self.num_steps += 1
