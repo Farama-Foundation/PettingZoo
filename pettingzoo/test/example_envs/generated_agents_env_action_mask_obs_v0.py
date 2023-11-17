@@ -10,6 +10,7 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 def env():
     env = raw_env()
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
@@ -55,7 +56,14 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
         type_id = len(self.types)
         num_actions = self.np_random.integers(3, 10)
         obs_size = self.np_random.integers(10, 50)
-        obs_space = gymnasium.spaces.Box(low=0, high=1, shape=(obs_size,))
+        obs_space = gymnasium.spaces.Dict(
+            {
+                "observation": gymnasium.spaces.Box(low=0, high=1, shape=(obs_size,)),
+                "action_mask": gymnasium.spaces.Box(
+                    low=0, high=1, shape=(num_actions,), dtype=np.int8
+                ),
+            }
+        )
         act_space = gymnasium.spaces.Discrete(num_actions)
         new_type = f"type{type_id}"
         self.types.append(new_type)
