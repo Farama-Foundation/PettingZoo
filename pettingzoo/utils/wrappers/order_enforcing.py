@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
 import warnings
+from typing import Any
 
 import numpy as np
 
@@ -72,7 +72,6 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         else:
             warnings.warn("Accessing an attribute that is not part of the PZ API.")
             return getattr(self.env, value)
-            
 
     def render(self) -> None | np.ndarray | str | list:
         if not self._has_reset:
