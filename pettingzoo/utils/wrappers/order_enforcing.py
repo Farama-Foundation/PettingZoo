@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+import warnings
 
 import numpy as np
 
@@ -69,9 +70,9 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         }:
             raise AttributeError(f"{value} cannot be accessed before reset")
         else:
-            raise AttributeError(
-                f"'{type(self).__name__}' object has no attribute '{value}'"
-            )
+            warnings.warn("Accessing an attribute that is not part of the PZ API.")
+            return getattr(self.env, value)
+            
 
     def render(self) -> None | np.ndarray | str | list:
         if not self._has_reset:
