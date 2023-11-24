@@ -171,7 +171,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def _seed(self, seed=None):
         if seed is None:
-            _, seed = seeding.np_random()
+            self.np_random, seed = seeding.np_random()
+        else:
+            self.np_random, seed = seeding.np_random(seed)
         self.ale.setInt(b"random_seed", seed)
         self.ale.loadROM(self.rom_path)
         self.ale.setMode(self.mode)
