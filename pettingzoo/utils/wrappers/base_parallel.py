@@ -8,7 +8,14 @@ from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 
 class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
     def __init__(self, env: ParallelEnv[AgentID, ObsType, ActionType]):
+        super().__init__()
         self.env = env
+
+    def __getattr__(self, name: str):
+        """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
+        if name.startswith("_"):
+            raise AttributeError(f"accessing private attribute '{name}' is prohibited")
+        return getattr(self.env, name)
 
     def reset(
         self, seed: int | None = None, options: dict | None = None

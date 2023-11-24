@@ -120,6 +120,7 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         try:
             self.possible_agents = aec_env.possible_agents
         except AttributeError:
+            print("attr error")
             pass
 
         self.metadata = aec_env.metadata

@@ -23,7 +23,10 @@ def test_multi_episode_env_wrapper(num_episodes: int) -> None:
     steps = 0
     for agent in env.agent_iter():
         steps += 1
+        print(steps)
         obs, rew, term, trunc, info = env.last()
+        print(env.agents)
+        print(term, trunc)
 
         if term or trunc:
             action = None

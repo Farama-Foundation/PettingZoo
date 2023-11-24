@@ -20,7 +20,7 @@ class BaseWrapper(AECEnv[AgentID, ObsType, ActionType]):
 
     def __getattr__(self, name: str) -> Any:
         """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
-        if name.startswith("_"):
+        if name.startswith("_") and name != "_cumulative_rewards":
             raise AttributeError(f"accessing private attribute '{name}' is prohibited")
         return getattr(self.env, name)
 
