@@ -115,7 +115,6 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     def reset(self, seed: int | None = None, options: dict | None = None) -> None:
         self._has_reset = True
         self._has_updated = True
-        print("Reset has been called")
         super().reset(seed=seed, options=options)
 
     def __str__(self) -> str:
