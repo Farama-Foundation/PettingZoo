@@ -123,7 +123,7 @@ if __name__ == "__main__":
     tune.run(
         alg_name,
         name="DQN",
-        stop={"timesteps_total": 10000000},
+        stop={"timesteps_total": 10000000 if not os.environ.get("CI") else 50000},
         checkpoint_freq=10,
         config=config.to_dict(),
     )
