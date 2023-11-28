@@ -59,13 +59,13 @@ class MultiEpisodeEnv(BaseWrapper):
             None:
         """
         super().step(action)
-        if self.agents:
+        if self.env.agents:
             return
 
         # if we've crossed num_episodes, truncate all agents
         # and let the environment terminate normally
         if self._episodes_elapsed >= self._num_episodes:
-            self.truncations = {agent: True for agent in self.agents}
+            self.env.unwrapped.truncations = {agent: True for agent in self.env.agents}
             return
 
         # if no more agents and haven't had enough episodes,
@@ -73,8 +73,6 @@ class MultiEpisodeEnv(BaseWrapper):
         self._episodes_elapsed += 1
         self._seed = self._seed + 1 if self._seed else None
         super().reset(seed=self._seed, options=self._options)
-        self.truncations = {agent: False for agent in self.agents}
-        self.terminations = {agent: False for agent in self.agents}
 
     def __str__(self) -> str:
         """__str__.
