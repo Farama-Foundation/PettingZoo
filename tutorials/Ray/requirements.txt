@@ -1,4 +1,4 @@
-PettingZoo[classic,butterfly]>=1.24.0
+PettingZoo[classic]>=1.24.0
 Pillow>=9.4.0
 ray[rllib]==2.7.0
 SuperSuit>=3.9.0
