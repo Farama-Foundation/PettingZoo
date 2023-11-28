@@ -45,7 +45,10 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         elif value == "render_mode" and hasattr(self.env, "render_mode"):
             return self.env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
         elif value == "possible_agents":
-            EnvLogger.error_possible_agents_attribute_missing("possible_agents")
+            try:
+                return self.env.possible_agents
+            except AttributeError:
+                EnvLogger.error_possible_agents_attribute_missing("possible_agents")
         elif value == "observation_spaces":
             raise AttributeError(
                 "The base environment does not have an possible_agents attribute. Use the environments `observation_space` method instead"
@@ -58,20 +61,22 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             raise AttributeError(
                 "agent_order has been removed from the API. Please consider using agent_iter instead."
             )
-        elif value in {
-            "rewards",
-            "terminations",
-            "truncations",
-            "infos",
-            "agent_selection",
-            "num_agents",
-            "agents",
-        }:
+        elif (
+            value
+            in {
+                "rewards",
+                "terminations",
+                "truncations",
+                "infos",
+                "agent_selection",
+                "num_agents",
+                "agents",
+            }
+            and not self._has_reset
+        ):
             raise AttributeError(f"{value} cannot be accessed before reset")
         else:
-            raise AttributeError(
-                f"'{type(self).__name__}' object has no attribute '{value}'"
-            )
+            return super().__getattr__(value)
 
     def render(self) -> None | np.ndarray | str | list:
         if not self._has_reset:

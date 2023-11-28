@@ -169,9 +169,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self._screen = None
         self._seed(seed)
 
-    def _seed(self, seed=None):
-        if seed is None:
-            _, seed = seeding.np_random()
+    def _seed(self, seed):
+        self.np_random, seed = seeding.np_random(seed)
         self.ale.setInt(b"random_seed", seed)
         self.ale.loadROM(self.rom_path)
         self.ale.setMode(self.mode)
@@ -179,6 +178,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
     def reset(self, seed=None, options=None):
         if seed is not None:
             self._seed(seed=seed)
+        else:
+            self.np_random, seed = seeding.np_random()
         self.ale.reset_game()
         self.agents = self.possible_agents[:]
         self.terminations = {agent: False for agent in self.possible_agents}
