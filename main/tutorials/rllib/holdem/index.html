@@ -409,7 +409,7 @@
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic,butterfly]&gt;=1.24.0
 Pillow&gt;=9.4.0
-ray[rllib]&gt;=2.7.0
+ray[rllib]==2.7.0
 SuperSuit&gt;=3.9.0
 torch&gt;=1.13.1
 tensorflow-probability&gt;=0.19.0
@@ -546,7 +546,7 @@ tensorflow-probability&gt;=0.19.0
     <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="n">alg_name</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DQN&quot;</span><span class="p">,</span>
-        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">10000000</span><span class="p">},</span>
+        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">10000000</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">50000</span><span class="p">},</span>
         <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
     <span class="p">)</span>
