@@ -439,7 +439,10 @@
         <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;render_mode&quot;</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="s2">&quot;render_mode&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render_mode</span>  <span class="c1"># pyright: ignore[reportGeneralTypeIssues]</span>
         <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;possible_agents&quot;</span><span class="p">:</span>
-            <span class="n">EnvLogger</span><span class="o">.</span><span class="n">error_possible_agents_attribute_missing</span><span class="p">(</span><span class="s2">&quot;possible_agents&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">EnvLogger</span><span class="o">.</span><span class="n">error_possible_agents_attribute_missing</span><span class="p">(</span><span class="s2">&quot;possible_agents&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;observation_spaces&quot;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
                 <span class="s2">&quot;The base environment does not have an possible_agents attribute. Use the environments `observation_space` method instead&quot;</span>
@@ -452,20 +455,22 @@
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
                 <span class="s2">&quot;agent_order has been removed from the API. Please consider using agent_iter instead.&quot;</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">{</span>
-            <span class="s2">&quot;rewards&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;terminations&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;truncations&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;infos&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;agent_selection&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;num_agents&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;agents&quot;</span><span class="p">,</span>
-        <span class="p">}:</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">value</span>
+            <span class="ow">in</span> <span class="p">{</span>
+                <span class="s2">&quot;rewards&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;terminations&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;truncations&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;infos&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;agent_selection&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;num_agents&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;agents&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span>
+        <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> cannot be accessed before reset&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; object has no attribute &#39;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-            <span class="p">)</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span><span class="p">:</span>
