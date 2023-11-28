@@ -103,7 +103,7 @@ if __name__ == "__main__":
             },
             policy_mapping_fn=(lambda agent_id, *args, **kwargs: agent_id),
         )
-        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
+        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")), num_cpus=4)
         .debugging(
             log_level="DEBUG"
         )  # TODO: change to ERROR to match pistonball example

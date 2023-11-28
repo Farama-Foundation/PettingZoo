@@ -92,7 +92,7 @@ if __name__ == "__main__":
         )
         .debugging(log_level="ERROR")
         .framework(framework="torch")
-        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
+        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")), num_cpus=4)
     )
 
     tune.run(
