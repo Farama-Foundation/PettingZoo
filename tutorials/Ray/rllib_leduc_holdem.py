@@ -69,7 +69,7 @@ class TorchMaskedActions(DQNTorchModel):
 
 
 if __name__ == "__main__":
-    ray.init()
+    ray.init(num_cpus=4)
 
     alg_name = "DQN"
     ModelCatalog.register_custom_model("pa_model", TorchMaskedActions)
@@ -103,7 +103,7 @@ if __name__ == "__main__":
             },
             policy_mapping_fn=(lambda agent_id, *args, **kwargs: agent_id),
         )
-        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")), num_cpus=4)
+        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
         .debugging(
             log_level="DEBUG"
         )  # TODO: change to ERROR to match pistonball example
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     tune.run(
         alg_name,
         name="DQN",
-        stop={"timesteps_total": 10000000 if not os.environ.get("CI") else 1000},
+        stop={"timesteps_total": 10000000 if not os.environ.get("CI") else 5000},
         checkpoint_freq=10,
         config=config.to_dict(),
     )

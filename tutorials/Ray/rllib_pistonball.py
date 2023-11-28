@@ -66,7 +66,7 @@ def env_creator(args):
 
 
 if __name__ == "__main__":
-    ray.init()
+    ray.init(num_cpus=4)
 
     env_name = "pistonball_v6"
 
@@ -92,13 +92,13 @@ if __name__ == "__main__":
         )
         .debugging(log_level="ERROR")
         .framework(framework="torch")
-        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")), num_cpus=4)
+        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
     )
 
     tune.run(
         "PPO",
         name="PPO",
-        stop={"timesteps_total": 5000000 if not os.environ.get("CI") else 1000},
+        stop={"timesteps_total": 5000000 if not os.environ.get("CI") else 5000},
         checkpoint_freq=10,
         local_dir="~/ray_results/" + env_name,
         config=config.to_dict(),
