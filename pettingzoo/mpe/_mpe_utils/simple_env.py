@@ -205,8 +205,9 @@ class SimpleEnv(AECEnv):
             agent.action.u = np.zeros(self.world.dim_p)
             if self.continuous_actions:
                 # Process continuous action as in OpenAI MPE
-                agent.action.u[0] += action[0][1] - action[0][2]
-                agent.action.u[1] += action[0][3] - action[0][4]
+                # Note: this ordering preserves the same movement direction as in the discrete case
+                agent.action.u[0] += action[0][2] - action[0][1]
+                agent.action.u[1] += action[0][4] - action[0][3]
             else:
                 # process discrete action
                 if action[0] == 1:
