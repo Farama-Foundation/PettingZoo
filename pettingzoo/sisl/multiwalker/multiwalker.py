@@ -239,3 +239,17 @@ class raw_env(AECEnv, EzPickle):
 
         if self.render_mode == "human":
             self.render()
+
+    def state(self):
+        all_walker_obs = self.env.get_last_obs()
+        all_walker_obs = np.array(list(all_walker_obs.values())).flatten()
+        package_obs = np.array(
+            [
+                self.env.package.position.x,
+                self.env.package.position.y,
+                self.env.package.angle,
+            ]
+        )
+        global_state = np.concatenate((all_walker_obs, package_obs))
+
+        return global_state
