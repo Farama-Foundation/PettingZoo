@@ -165,7 +165,7 @@ class raw_env(AECEnv, EzPickle):
             low=-np.float32(np.inf),
             high=+np.float32(np.inf),
             shape=(
-                3 * 24 + 3,
+                self.env.n_walkers * 24 + 3,
             ),  # 24 is the observation space of each walker, 3 is the package observation space
             dtype=np.float32,
         )
