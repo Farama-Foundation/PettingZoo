@@ -120,7 +120,6 @@ terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)
 """
 
 import numpy as np
-from gymnasium import spaces
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
@@ -161,14 +160,7 @@ class raw_env(AECEnv, EzPickle):
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
-        self.state_space = spaces.Box(
-            low=-np.float32(np.inf),
-            high=+np.float32(np.inf),
-            shape=(
-                self.env.n_walkers * 24 + 3,
-            ),  # 24 is the observation space of each walker, 3 is the package observation space
-            dtype=np.float32,
-        )
+        self.state_space = self.env.state_space
         self.steps = 0
 
     def observation_space(self, agent):
@@ -199,6 +191,9 @@ class raw_env(AECEnv, EzPickle):
 
     def render(self):
         return self.env.render()
+
+    def state(self):
+        return self.env.state()
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
@@ -248,17 +243,3 @@ class raw_env(AECEnv, EzPickle):
 
         if self.render_mode == "human":
             self.render()
-
-    def state(self):
-        all_walker_obs = self.env.get_last_obs()
-        all_walker_obs = np.array(list(all_walker_obs.values())).flatten()
-        package_obs = np.array(
-            [
-                self.env.package.position.x,
-                self.env.package.position.y,
-                self.env.package.angle,
-            ]
-        )
-        global_state = np.concatenate((all_walker_obs, package_obs)).astype(np.float32)
-
-        return global_state
