@@ -120,6 +120,7 @@ terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)
 """
 
 import numpy as np
+from gymnasium import spaces
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
@@ -160,6 +161,14 @@ class raw_env(AECEnv, EzPickle):
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
+        self.state_space = spaces.Box(
+            low=-np.float32(np.inf),
+            high=+np.float32(np.inf),
+            shape=(
+                self.env.n_walkers * 24 + 3,
+            ),  # 24 is the observation space of each walker, 3 is the package observation space
+            dtype=np.float32,
+        )
         self.steps = 0
 
     def observation_space(self, agent):
