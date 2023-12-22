@@ -165,7 +165,7 @@ class raw_env(AECEnv, EzPickle):
             low=-np.float32(np.inf),
             high=+np.float32(np.inf),
             shape=(
-                self.env.n_walkers * 24 + 3,
+                3 * 24 + 3,
             ),  # 24 is the observation space of each walker, 3 is the package observation space
             dtype=np.float32,
         )
@@ -259,6 +259,6 @@ class raw_env(AECEnv, EzPickle):
                 self.env.package.angle,
             ]
         )
-        global_state = np.concatenate((all_walker_obs, package_obs))
+        global_state = np.concatenate((all_walker_obs, package_obs)).astype(np.float32)
 
         return global_state
