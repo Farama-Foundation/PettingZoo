@@ -160,6 +160,7 @@ class raw_env(AECEnv, EzPickle):
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
+        self.state_space = self.env.state_space
         self.steps = 0
 
     def observation_space(self, agent):
@@ -190,6 +191,9 @@ class raw_env(AECEnv, EzPickle):
 
     def render(self):
         return self.env.render()
+
+    def state(self):
+        return self.env.state()
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
