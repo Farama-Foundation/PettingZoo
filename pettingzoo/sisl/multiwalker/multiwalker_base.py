@@ -360,6 +360,14 @@ class MultiWalkerEnv:
         ]
         self.observation_space = [agent.observation_space for agent in self.walkers]
         self.action_space = [agent.action_space for agent in self.walkers]
+        self.state_space = spaces.Box(
+            low=-np.float32(np.inf),
+            high=+np.float32(np.inf),
+            shape=(
+                self.n_walkers * 24 + 3,
+            ),  # 24 is the observation space of each walker, 3 is the package observation space
+            dtype=np.float32,
+        )
 
         self.package_scale = self.n_walkers / 1.75
         self.package_length = PACKAGE_LENGTH / SCALE * self.package_scale
@@ -544,6 +552,20 @@ class MultiWalkerEnv:
         o = self.last_obs[agent]
         o = np.array(o, dtype=np.float32)
         return o
+
+    def state(self):
+        all_walker_obs = self.get_last_obs()
+        all_walker_obs = np.array(list(all_walker_obs.values())).flatten()
+        package_obs = np.array(
+            [
+                self.package.position.x,
+                self.package.position.y,
+                self.package.angle,
+            ]
+        )
+        global_state = np.concatenate((all_walker_obs, package_obs)).astype(np.float32)
+
+        return global_state
 
     def render(self, close=False):
         if close:
