@@ -81,6 +81,13 @@ Modernized clone of the [Breakout](https://en.wikipedia.org/wiki/Breakout_(video
 
 PettingZoo interface for CARLA Autonomous Driving simulator.
 
+### [MATS Gym](https://github.com/AutonomousDrivingExaminer/mats-gym)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/AutonomousDrivingExaminer/mats-gym)]()
+
+A multi-agent traffic scenario environment for CARLA that supports [ScenarioRunner](https://github.com/carla-simulator/scenario_runner), [OpenScenario](https://www.asam.net/standards/detail/openscenario/) and [Scenic](https://github.com/BerkeleyLearnVerify/Scenic) scenario descriptions. It is also compatible with the [CARLA Autonomous Driving Challenge](https://leaderboard.carla.org/challenge/).
+
 ### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.1-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
