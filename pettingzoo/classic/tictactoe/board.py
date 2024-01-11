@@ -50,8 +50,8 @@ class Board:
 
     # returns:
     # -1 for no winner
-    # 0 -- agent 0 wins
-    # 1 -- agent 1 wins
+    # 1 -- agent 0 wins
+    # 2 -- agent 1 wins
     def check_for_winner(self):
         winner = -1
         for combination in self.winning_combinations:
