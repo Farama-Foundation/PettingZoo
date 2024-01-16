@@ -45,7 +45,7 @@ The Atari environments are based off the [Arcade Learning Environment](https://g
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
-pip install pettingzoo[atari]
+pip install 'pettingzoo[atari]'
 ````
 
 Install ROMs using [AutoROM](https://github.com/Farama-Foundation/AutoROM), or specify the path to your Atari rom using the `rom_path` argument (see [Common Parameters](#common-parameters)).

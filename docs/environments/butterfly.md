@@ -29,7 +29,7 @@ Environments are highly configurable via arguments specified in their respective
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
-pip install pettingzoo[butterfly]
+pip install 'pettingzoo[butterfly]'
 ````
 
 ### Usage

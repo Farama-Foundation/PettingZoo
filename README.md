@@ -24,7 +24,7 @@ To install the base PettingZoo library: `pip install pettingzoo`.
 
 This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems).
 
-To install the dependencies for one family, use `pip install pettingzoo[atari]`, or use `pip install pettingzoo[all]` to install all dependencies.
+To install the dependencies for one family, use `pip install 'pettingzoo[atari]'`, or use `pip install 'pettingzoo[all]'` to install all dependencies.
 
 We support Python 3.8, 3.9, 3.10 and 3.11 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
