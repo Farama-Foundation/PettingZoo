@@ -31,7 +31,7 @@ These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
-pip install pettingzoo[mpe]
+pip install 'pettingzoo[mpe]'
 ````
 
 ### Usage

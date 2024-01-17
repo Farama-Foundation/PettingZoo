@@ -23,7 +23,7 @@ The SISL environments are a set of three cooperative multi-agent benchmark envir
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
-pip install pettingzoo[sisl]
+pip install 'pettingzoo[sisl]'
 ````
 
 ### Usage
