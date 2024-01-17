@@ -6,6 +6,7 @@ from pettingzoo.sisl import sisl_environments
 
 all_prefixes = ["atari", "classic", "butterfly", "mpe", "sisl"]
 
+# environments which have manual policy scripts, allowing interactive play
 manual_environments = {
     "butterfly/knights_archers_zombies",
     "butterfly/pistonball",
