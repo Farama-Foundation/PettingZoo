@@ -557,6 +557,7 @@
         <span class="c1"># spaces</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state_space</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>
 
 <div class="viewcode-block" id="raw_env.observation_space">
@@ -601,6 +602,12 @@
 <a class="viewcode-back" href="../../../../../environments/sisl/multiwalker/#pettingzoo.sisl.multiwalker.multiwalker.raw_env.render">[docs]</a>
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="raw_env.state">
+<a class="viewcode-back" href="../../../../../environments/sisl/multiwalker/#pettingzoo.sisl.multiwalker.multiwalker.raw_env.state">[docs]</a>
+    <span class="k">def</span> <span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="raw_env.observe">
@@ -775,7 +782,7 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=b63b089a"></script>
+    <script src="../../../../../_static/documentation_options.js?v=4b4b37dc"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/furo.js?v=7660844c"></script>
