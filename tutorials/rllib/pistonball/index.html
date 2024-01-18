@@ -400,7 +400,7 @@
           </div>
           <article role="main">
             
-            <section id="rllib-ppo-for-pistonball">
+            <section class="tex2jax_ignore mathjax_ignore" id="rllib-ppo-for-pistonball">
 <h1>RLlib: PPO for Pistonball<a class="headerlink" href="#rllib-ppo-for-pistonball" title="Link to this heading">#</a></h1>
 <p>This tutorial shows how to train <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo">Proximal Policy Optimization</a> (PPO) agents on the <a class="reference internal" href="../../../environments/butterfly/pistonball/"><span class="doc std std-doc">Pistonball</span></a> environment (<a class="reference internal" href="../../../api/parallel/"><span class="doc std std-doc">Parallel</span></a>).</p>
 <p>After training, run the provided code to watch your trained agent play vs itself. See the <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-saving-and-loading-algos-and-policies.html">documentation</a> for more information.</p>
@@ -409,7 +409,7 @@
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic,butterfly]&gt;=1.24.0
 Pillow&gt;=9.4.0
-ray[rllib]&gt;=2.7.0
+ray[rllib]==2.7.0
 SuperSuit&gt;=3.9.0
 torch&gt;=1.13.1
 tensorflow-probability&gt;=0.19.0
@@ -521,7 +521,7 @@ tensorflow-probability&gt;=0.19.0
     <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="s2">&quot;PPO&quot;</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;PPO&quot;</span><span class="p">,</span>
-        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">5000000</span><span class="p">},</span>
+        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">5000000</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">50000</span><span class="p">},</span>
         <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="n">local_dir</span><span class="o">=</span><span class="s2">&quot;~/ray_results/&quot;</span> <span class="o">+</span> <span class="n">env_name</span><span class="p">,</span>
         <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
@@ -823,7 +823,7 @@ tensorflow-probability&gt;=0.19.0
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=b63b089a"></script>
+    <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>

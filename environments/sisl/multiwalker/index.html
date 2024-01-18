@@ -392,7 +392,7 @@
             <div class="farama-env-icon-container">
               <img class="farama-env-icon" src="../../../_static/img/icons/sisl/multiwalker.png">
             </div>
-            <section id="multiwalker">
+            <section class="tex2jax_ignore mathjax_ignore" id="multiwalker">
 <h1>Multiwalker<a class="headerlink" href="#multiwalker" title="Link to this heading">#</a></h1>
 <figure class="align-default" id="id1">
 <a class="reference internal image-reference" href="../../../_images/sisl_multiwalker.gif"><img alt="../../../_images/sisl_multiwalker.gif" src="../../../_images/sisl_multiwalker.gif" style="width: 140px;" /></a>
@@ -684,6 +684,13 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.sisl.multiwalker.multiwalker.raw_env.state">
+<span class="sig-name descname"><span class="pre">state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/multiwalker/multiwalker/#raw_env.state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.multiwalker.multiwalker.raw_env.state" title="Link to this definition">#</a></dt>
+<dd><p>State returns a global view of the environment.</p>
+<p>It is appropriate for centralized training decentralized execution methods like QMIX</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.sisl.multiwalker.multiwalker.raw_env.step">
 <span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/multiwalker/multiwalker/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.multiwalker.multiwalker.raw_env.step" title="Link to this definition">#</a></dt>
 <dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
@@ -700,18 +707,20 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
         <footer>
           
           <div class="related-pages">
-            <a class="next-page" href="../pursuit/">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Pursuit</div>
-              </div>
+            
+            <a class="prev-page" href="../">
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SISL</div>
+                
+              </div>
             </a>
-            
           </div>
           <div class="bottom-of-page">
             <div class="left-details">
@@ -770,6 +779,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 <li><a class="reference internal" href="#pettingzoo.sisl.multiwalker.multiwalker.raw_env.observe"><code class="docutils literal notranslate"><span class="pre">raw_env.observe()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.sisl.multiwalker.multiwalker.raw_env.render"><code class="docutils literal notranslate"><span class="pre">raw_env.render()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.sisl.multiwalker.multiwalker.raw_env.reset"><code class="docutils literal notranslate"><span class="pre">raw_env.reset()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.sisl.multiwalker.multiwalker.raw_env.state"><code class="docutils literal notranslate"><span class="pre">raw_env.state()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.sisl.multiwalker.multiwalker.raw_env.step"><code class="docutils literal notranslate"><span class="pre">raw_env.step()</span></code></a></li>
 </ul>
 </li>
@@ -861,7 +871,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=b63b089a"></script>
+    <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>

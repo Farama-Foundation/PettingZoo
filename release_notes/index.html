@@ -399,8 +399,37 @@
           </div>
           <article role="main">
             
-            <section id="release-notes">
+            <section class="tex2jax_ignore mathjax_ignore" id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">#</a></h1>
+<section id="release-1-24-3">
+<h2>PettingZoo 1.24.3<a class="headerlink" href="#release-1-24-3" title="Link to this heading">#</a></h2>
+<p><em>Released on 2024-01-18 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.24.3">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.24.3/">PyPI</a></em></p>
+<h2>PettingZoo 1.24.3 Release Notes:</h2>
+<p>This is a minor release with some minor bugfixes, improvements, documentation updates. Most notably, we have added a <code>state</code> function to the multiwalker env, and fixed a bug causing wrappers to clear custom attributes from underlying environments, see <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2009324099" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1140" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1140/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1140">#1140</a> for more information.</p>
+<p>We have also added a dictionary, mapping from env name to env modules for each environment type, accessible as follows: <code>from pettingzoo.mpe import mpe_environments</code>. These mapping are combined to make a list of all environments: <code>from pettingzoo.utils.all_modules import all_environments</code>, both mappings containing keys such as <code>mpe/simple_adversary_v3</code>. For more information, see <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2087055402" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1155" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1155/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1155">#1155</a></p>
+<h2>New Features and Improvements</h2>
+<ul>
+<li>feature/provide access to wrapped attr (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2009324099" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1140" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1140/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1140">#1140</a>)</li>
+<li>Adding state function to multiwalker (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2054098098" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1149" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1149/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1149">#1149</a>)</li>
+<li>Add mappings from env name to env module (e.g., <code>mpe_environments</code>) in addition to <code>all_environments</code> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2087055402" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1155" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1155/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1155">#1155</a>)</li>
+</ul>
+<h2>Bug Fixes</h2>
+<ul>
+<li>Fix ray requirements for tutorial (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2007246497" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1139" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1139/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1139">#1139</a>)</li>
+<li>Fix MPE SimpleEnv continuous actions to move in the same direction as discrete case (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2029363337" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1144" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1144/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1144">#1144</a>)</li>
+</ul>
+<h2>Documentation Updates</h2>
+<ul>
+<li>Add MATS Gym to 3rd party env list (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2070783362" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1152" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1152/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1152">#1152</a>)</li>
+<li>Fix the comments for check_for_winner (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2052642169" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1148" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1148/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1148">#1148</a>)</li>
+<li>Include AgileRL tutorials in tutorials list in README.md (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1998813100" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1137" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1137/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1137">#1137</a>)</li>
+<li>Added single quotes around pip install arguments with square brackets (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2081495336" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1153" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1153/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1153">#1153</a>)</li>
+<li>Add single quotes around all pip install extras (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2085050678" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1154" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1154/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1154">#1154</a>)</li>
+</ul>
+<h2>Contributors</h2>
+<p>This release includes contributions from: <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/elliottower/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/elliottower">@elliottower</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ffelten/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ffelten">@ffelten</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/axelbr/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/axelbr">@axelbr</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/shahofblah/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/shahofblah">@shahofblah</a>, <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/helpingstar/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/helpingstar">@helpingstar</a> and <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/nicku-a/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/nicku-a">@nicku-a</a></p>
+<p>Many thanks to our contributors, as well as many past contributors who have made this possible. We would also like to thank everyone who has helped out with bug reports or feature suggestions, which are critical to our development. We are always welcoming new contributors, if you are interested please join our Discord server at <a href="https://discord.gg/nhvKkYa6qX" rel="nofollow">https://discord.gg/nhvKkYa6qX</a></p>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.24.2...1.24.3"><tt>1.24.2...1.24.3</tt></a></p></section>
 <section id="release-1-24-2">
 <h2>PettingZoo 1.24.2<a class="headerlink" href="#release-1-24-2" title="Link to this heading">#</a></h2>
 <p><em>Released on 2023-11-16 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.24.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.24.2/">PyPI</a></em></p>
@@ -1080,6 +1109,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#release-1-24-3">PettingZoo 1.24.3</a></li>
 <li><a class="reference internal" href="#release-1-24-2">PettingZoo 1.24.2</a></li>
 <li><a class="reference internal" href="#release-1-24-1">PettingZoo 1.24.1</a></li>
 <li><a class="reference internal" href="#release-1-24-0">PettingZoo 1.24.0</a></li>
@@ -1203,7 +1233,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         })()
       </script>
 
-    <script src="../_static/documentation_options.js?v=b63b089a"></script>
+    <script src="../_static/documentation_options.js?v=4b4b37dc"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=7660844c"></script>
