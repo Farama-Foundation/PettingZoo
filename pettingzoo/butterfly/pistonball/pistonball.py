@@ -621,7 +621,8 @@ class raw_env(AECEnv, EzPickle):
         action = np.asarray(action)
         agent = self.agent_selection
         if self.continuous:
-            self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action)
+            # action is a 1 item numpy array, move_piston expects a scalar
+            self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action[0])
         else:
             self.move_piston(
                 self.pistonList[self.agent_name_mapping[agent]], action - 1
