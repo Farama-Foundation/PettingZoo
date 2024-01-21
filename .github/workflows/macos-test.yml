@@ -10,7 +10,11 @@ permissions:
 
 jobs:
     macos-test:
-        runs-on: macos-11
+        runs-on: ${{ matrix.os }}
+        strategy:
+          matrix:
+            # Big Sur, Monterey, and Ventura (M1)
+            os: [macos-11, macos-12, macos-13-xlarge]
         steps:
             - uses: actions/checkout@v4
             - name: Set up Python 3.11
