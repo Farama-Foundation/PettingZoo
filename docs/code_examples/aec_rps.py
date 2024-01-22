@@ -75,10 +75,14 @@ class raw_env(AECEnv):
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
 
+        # we want to define the spaces as fixed objects so we can seed them
+        self._observation_spaces = {agent: Discrete(4) for agent in self.possible_agents}
+        self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
+
         # observation and action spaces are defined as functions which take in an agent id
         # and returns the relevant spaces.
-        self.observation_space = lambda agent: Discrete(4)
-        self.action_space = lambda agent: Discrete(3)
+        self.observation_space = lambda agent: self.observation_spaces[agent]
+        self.action_space = lambda agent: self.action_spaces[agent]
         self.render_mode = render_mode
 
     def render(self):
