@@ -81,8 +81,8 @@ class raw_env(AECEnv):
 
         # observation and action spaces are defined as functions which take in an agent id
         # and returns the relevant spaces.
-        self.observation_space = lambda agent: self.observation_spaces[agent]
-        self.action_space = lambda agent: self.action_spaces[agent]
+        self.observation_space = lambda agent: self._observation_spaces[agent]
+        self.action_space = lambda agent: self._action_spaces[agent]
         self.render_mode = render_mode
 
     def render(self):
