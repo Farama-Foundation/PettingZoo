@@ -1,5 +1,3 @@
-import functools
-
 import gymnasium
 from gymnasium.spaces import Discrete
 
@@ -77,7 +75,9 @@ class parallel_env(ParallelEnv):
         )
 
         # we want to define the spaces as fixed objects so we can seed them
-        self._observation_spaces = {agent: Discrete(4) for agent in self.possible_agents}
+        self._observation_spaces = {
+            agent: Discrete(4) for agent in self.possible_agents
+        }
         self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
 
         # observation and action spaces are defined as functions which take in an agent id
