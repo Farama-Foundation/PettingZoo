@@ -85,7 +85,6 @@ In any given turn, an agent can choose from one of 18 actions.
 """
 
 import os
-import warnings
 from glob import glob
 
 from pettingzoo.atari.base_atari_env import (
@@ -102,10 +101,6 @@ avaliable_versions = {
 
 
 def raw_env(game_version="robbers", visibilty_level=0, **kwargs):
-    if game_version == "robbers" and visibilty_level == 0:
-        warnings.warn(
-            "maze_craze has different versions of the game via the `game_version` argument, consider overriding."
-        )
     assert (
         game_version in avaliable_versions
     ), f"`game_version` parameter must be one of {avaliable_versions.keys()}"
