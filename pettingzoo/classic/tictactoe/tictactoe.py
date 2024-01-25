@@ -99,11 +99,8 @@ def get_font(path, size):
     return font
 
 
-def env(render_mode=None):
-    internal_render_mode = render_mode if render_mode != "ansi" else "human"
-    env = raw_env(render_mode=internal_render_mode)
-    if render_mode == "ansi":
-        env = wrappers.CaptureStdoutWrapper(env)
+def env(**kwargs):
+    env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
