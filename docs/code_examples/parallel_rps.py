@@ -1,6 +1,7 @@
 import functools
 
 import gymnasium
+import numpy as np
 from gymnasium.spaces import Discrete
 
 from pettingzoo import ParallelEnv
@@ -83,6 +84,7 @@ class parallel_env(ParallelEnv):
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
+        # Discrete(4) means an integer in range(0, 4)
         return Discrete(4)
 
     # Action space should be defined here.
@@ -128,7 +130,8 @@ class parallel_env(ParallelEnv):
         """
         self.agents = self.possible_agents[:]
         self.num_moves = 0
-        observations = {agent: NONE for agent in self.agents}
+        # the observations should be numpy arrays even if there is only one value
+        observations = {agent: np.array(NONE) for agent in self.agents}
         infos = {agent: {} for agent in self.agents}
         self.state = observations
 
@@ -161,9 +164,11 @@ class parallel_env(ParallelEnv):
         env_truncation = self.num_moves >= NUM_ITERS
         truncations = {agent: env_truncation for agent in self.agents}
 
-        # current observation is just the other player's most recent action
+        # Current observation is just the other player's most recent action
+        # This is converted to a numpy value of type int to match the type
+        # that we declared in observation_space()
         observations = {
-            self.agents[i]: int(actions[self.agents[1 - i]])
+            self.agents[i]: np.array(actions[self.agents[1 - i]], dtype=np.int_)
             for i in range(len(self.agents))
         }
         self.state = observations
