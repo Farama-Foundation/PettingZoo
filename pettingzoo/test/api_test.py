@@ -383,6 +383,36 @@ def test_rewards_terminations_truncations(env, agent_0):
         test_reward(env.rewards[agent])
 
 
+def _test_observation_space_compatibility(expected, seen, context) -> None:
+    """Ensure observation's dtypes are same as in observation_space.
+
+    This tests that the dtypes of the spaces are the same.
+    The function will recursively check observation dicts to ensure that
+    all components have the same dtype as declared in the observation space.
+
+    Args:
+        expected: Observation space that is expected.
+        seen: The observation actually seen.
+        context: A list of all the dict keys that led to the current
+          observations. This enables a more helpful error message if
+          an assert fails. The initial call should have an empty list.
+    """
+    if isinstance(expected, gymnasium.spaces.Dict):
+        for key in expected.keys():
+            if not context and key != "observation":
+                # For the top level, we only care about the 'observation' key.
+                continue
+            # note: a previous test (expected.contains(seen)) ensures that
+            # the two dicts have the same keys.
+            _test_observation_space_compatibility(
+                expected[key], seen[key], context + [key]
+            )
+    else:
+        assert (
+            expected.dtype == seen.dtype
+        ), f"dtype for observation at [{']['.join(context)}] is {seen.dtype}, but observation space specifies {expected.dtype}."
+
+
 def play_test(env, observation_0, num_cycles):
     """
     plays through environment and does dynamic checks to make
@@ -466,13 +496,10 @@ def play_test(env, observation_0, num_cycles):
             prev_observe
         ), "Out of bounds observation: " + str(prev_observe)
 
-        if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
-            assert env.observation_space(agent).dtype == prev_observe.dtype
-        elif isinstance(env.observation_space(agent), gymnasium.spaces.Dict):
-            assert (
-                env.observation_space(agent)["observation"].dtype
-                == prev_observe["observation"].dtype
-            )
+        _test_observation_space_compatibility(
+            env.observation_space(agent), prev_observe, context=[]
+        )
+
         test_observation(prev_observe, observation_0, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
