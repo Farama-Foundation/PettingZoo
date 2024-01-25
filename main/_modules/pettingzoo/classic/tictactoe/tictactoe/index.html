@@ -493,11 +493,8 @@
 
 <div class="viewcode-block" id="env">
 <a class="viewcode-back" href="../../../../../environments/classic/tictactoe/#pettingzoo.classic.tictactoe.tictactoe.env">[docs]</a>
-<span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">internal_render_mode</span> <span class="o">=</span> <span class="n">render_mode</span> <span class="k">if</span> <span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">&quot;ansi&quot;</span> <span class="k">else</span> <span class="s2">&quot;human&quot;</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">internal_render_mode</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;ansi&quot;</span><span class="p">:</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">CaptureStdoutWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
