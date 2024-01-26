@@ -10,7 +10,7 @@ from pettingzoo.utils import parallel_to_aec, wrappers
 ROCK = 0
 PAPER = 1
 SCISSORS = 2
-NONE = 3
+NO_MOVE = 3
 MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
 REWARD_MAP = {
@@ -131,7 +131,7 @@ class parallel_env(ParallelEnv):
         self.agents = self.possible_agents[:]
         self.num_moves = 0
         # the observations should be numpy arrays even if there is only one value
-        observations = {agent: np.array(NONE) for agent in self.agents}
+        observations = {agent: np.array(NO_MOVE) for agent in self.agents}
         infos = {agent: {} for agent in self.agents}
         self.state = observations
 
@@ -168,7 +168,7 @@ class parallel_env(ParallelEnv):
         # This is converted to a numpy value of type int to match the type
         # that we declared in observation_space()
         observations = {
-            self.agents[i]: np.array(actions[self.agents[1 - i]], dtype=np.int_)
+            self.agents[i]: np.array(actions[self.agents[1 - i]], dtype=np.int64)
             for i in range(len(self.agents))
         }
         self.state = observations
