@@ -37,7 +37,9 @@ def deprecated_handler(
         # It wasn't able to find this module
         # You should do your deprecation notice here.
         if not is_env(env_name):
-            raise ImportError(f"cannot import name '{env_name}' from '{module_name}'")
+            raise AttributeError(
+                f"cannot import name '{env_name}' from '{module_name}'"
+            )
         name, version = env_name.rsplit("_v")
 
         for loader, alt_env_name, is_pkg in pkgutil.iter_modules(module_path):
@@ -47,7 +49,7 @@ def deprecated_handler(
                     if int(alt_version) > int(version):
                         return DeprecatedModule(name, version, alt_version)
                     else:
-                        raise ImportError(
+                        raise AttributeError(
                             f"cannot import name '{env_name}' from '{module_name}'"
                         )
 
