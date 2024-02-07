@@ -50,7 +50,7 @@ testing = [
     "pytest-cov",
     "pytest-xdist",
     "pre-commit",
-    "pytest-markdown-docs"
+    "pytest-markdown-docs>=0.5.0"
 ]
 all = [
     "multi_agent_ale_py==0.1.11",
