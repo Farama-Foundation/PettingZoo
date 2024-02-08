@@ -14,6 +14,8 @@ These tutorials walk you though the full process of creating a custom environmen
 
 4. [Testing Your Environment](/tutorials/custom_environment/4-testing-your-environment.md)
 
+5. [Adding visualization with pygame and a simple random policy](/tutorials/custom_environment/6-adding-visualization.md)
+
 For a simpler example environment, including both [AEC](/api/aec/) and [Parallel](/api/aec/) implementations, see our [Environment Creation](/content/environment_creation/) documentation.
 
 
@@ -25,4 +27,5 @@ For a simpler example environment, including both [AEC](/api/aec/) and [Parallel
 2-environment-logic
 3-action-masking
 4-testing-your-environment
+6-adding-visualization
 ```
