@@ -1,8 +1,8 @@
-import pygame
-import numpy as np
 import random
 
-from custom_environment import CustomEnvironment, CustomActionMaskedEnvironment
+import numpy as np
+import pygame
+from custom_environment import CustomActionMaskedEnvironment, CustomEnvironment
 
 
 class PygameVisualizer:
