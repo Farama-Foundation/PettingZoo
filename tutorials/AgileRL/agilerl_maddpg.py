@@ -23,8 +23,8 @@ if __name__ == "__main__":
     NET_CONFIG = {
         "arch": "cnn",  # Network architecture
         "h_size": [32, 32],  # Network hidden size
-        "c_size": [3, 32],  # CNN channel size
-        "k_size": [(1, 3, 3), (1, 3, 3)],  # CNN kernel size
+        "c_size": [32, 32],  # CNN channel size
+        "k_size": [3, 3],  # CNN kernel size
         "s_size": [2, 2],  # CNN stride size
         "normalize": True,  # Normalize image from range [0,255] to [0,1]
     }
