@@ -1,40 +1,26 @@
 from __future__ import annotations
 
-import warnings
-
 import gymnasium.spaces
 import numpy as np
-from gymnasium.utils import seeding
 
 from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 
 
 class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
     def __init__(self, env: ParallelEnv[AgentID, ObsType, ActionType]):
+        super().__init__()
         self.env = env
 
-        self.metadata = env.metadata
-        try:
-            self.possible_agents = env.possible_agents
-        except AttributeError:
-            pass
-
-        # Not every environment has the .state_space attribute implemented
-        try:
-            self.state_space = (
-                self.env.state_space  # pyright: ignore[reportGeneralTypeIssues]
-            )
-        except AttributeError:
-            pass
+    def __getattr__(self, name: str):
+        """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
+        if name.startswith("_"):
+            raise AttributeError(f"accessing private attribute '{name}' is prohibited")
+        return getattr(self.env, name)
 
     def reset(
         self, seed: int | None = None, options: dict | None = None
     ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict]]:
-        self.np_random, _ = seeding.np_random(seed)
-
-        res, info = self.env.reset(seed=seed, options=options)
-        self.agents = self.env.agents
-        return res, info
+        return self.env.reset(seed=seed, options=options)
 
     def step(
         self, actions: dict[AgentID, ActionType]
@@ -45,9 +31,7 @@ class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         dict[AgentID, bool],
         dict[AgentID, dict],
     ]:
-        res = self.env.step(actions)
-        self.agents = self.env.agents
-        return res
+        return self.env.step(actions)
 
     def render(self) -> None | np.ndarray | str | list:
         return self.env.render()
@@ -61,32 +45,6 @@ class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
 
     def state(self) -> np.ndarray:
         return self.env.state()
-
-    @property
-    def observation_spaces(self) -> dict[AgentID, gymnasium.spaces.Space]:
-        warnings.warn(
-            "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
-        )
-        try:
-            return {
-                agent: self.observation_space(agent) for agent in self.possible_agents
-            }
-        except AttributeError as e:
-            raise AttributeError(
-                "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"
-            ) from e
-
-    @property
-    def action_spaces(self) -> dict[AgentID, gymnasium.spaces.Space]:
-        warnings.warn(
-            "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
-        )
-        try:
-            return {agent: self.action_space(agent) for agent in self.possible_agents}
-        except AttributeError as e:
-            raise AttributeError(
-                "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
-            ) from e
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self.env.observation_space(agent)

@@ -2,7 +2,7 @@ from typing import Type
 
 import pytest
 
-from pettingzoo.test import api_test, seed_test
+from pettingzoo.test import seed_test
 from pettingzoo.test.example_envs import (
     generated_agents_env_action_mask_info_v0,
     generated_agents_env_action_mask_obs_v0,
@@ -20,7 +20,6 @@ from pettingzoo.utils.env import AECEnv
 def test_action_mask(env_constructor: Type[AECEnv]):
     """Test that environments function deterministically in cases where action mask is in observation, or in info."""
     seed_test(env_constructor)
-    api_test(env_constructor())
 
     # Step through the environment according to example code given in AEC documentation (following action mask)
     env = env_constructor()

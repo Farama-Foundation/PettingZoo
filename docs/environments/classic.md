@@ -31,7 +31,7 @@ Classic environments represent implementations of popular turn-based human games
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
-pip install pettingzoo[classic]
+pip install 'pettingzoo[classic]'
 ````
 
 ### Usage
