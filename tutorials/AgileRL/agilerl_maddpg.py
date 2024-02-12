@@ -36,7 +36,8 @@ if __name__ == "__main__":
         # Swap image channels dimension from last to first [H, W, C] -> [C, H, W]
         "CHANNELS_LAST": True,
         "BATCH_SIZE": 8,  # Batch size
-        "LR": 0.01,  # Learning rate
+        "LR_ACTOR": 0.001,  # Actor learning rate
+        "LR_CRITIC": 0.01,  # Critic learning rate
         "GAMMA": 0.95,  # Discount factor
         "MEMORY_SIZE": 10000,  # Max memory buffer size
         "LEARN_STEP": 5,  # Learning frequency
