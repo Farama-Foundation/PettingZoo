@@ -80,10 +80,14 @@ render_test(env_func)
 The render test method takes in an optional argument `custom_tests` that allows for additional tests in non-standard modes.
 
 ``` python
+from pettingzoo.test import render_test
+from pettingzoo.butterfly import pistonball_v6
+env_func = pistonball_v6.env
+
 custom_tests = {
-    "svg": lambda render_result: return isinstance(render_result, str)
+    "svg": lambda render_result: isinstance(render_result, str)
 }
-render_test(env, custom_tests=custom_tests)
+render_test(env_func, custom_tests=custom_tests)
 ```
 
 ## Performance Benchmark Test
