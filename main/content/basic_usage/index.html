@@ -508,7 +508,8 @@
 <section id="raw-environments">
 <h2>Raw Environments<a class="headerlink" href="#raw-environments" title="Link to this heading">#</a></h2>
 <p>Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the <code class="docutils literal notranslate"><span class="pre">raw_env()</span></code> constructor contained within each module:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">raw_env</span><span class="p">(</span><span class="o">&lt;</span><span class="n">environment</span> <span class="n">parameters</span><span class="o">&gt;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">environment_parameters</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># any parameters to pass to the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">environment_parameters</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

@@ -777,7 +777,10 @@
 <section id="common-parameters">
 <h2>Common Parameters<a class="headerlink" href="#common-parameters" title="Link to this heading">#</a></h2>
 <p>All the Atari environments have the following environment parameters:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">atari_game</span><span class="o">&gt;.</span><span class="n">env</span><span class="p">(</span><span class="n">obs_type</span><span class="o">=</span><span class="s1">&#39;rgb_image&#39;</span><span class="p">,</span> <span class="n">full_action_space</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">auto_rom_install_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># using space invaders as an example, but replace with any atari game</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">space_invaders_v2</span>
+
+<span class="n">space_invaders_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">obs_type</span><span class="o">=</span><span class="s1">&#39;rgb_image&#39;</span><span class="p">,</span> <span class="n">full_action_space</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">auto_rom_install_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">obs_type</span></code>:  There are three possible values for this parameter:</p>
