@@ -121,7 +121,10 @@ env = supersuit.frame_stack_v1(env, 4)
 All the Atari environments have the following environment parameters:
 
 ``` python
-<atari_game>.env(obs_type='rgb_image', full_action_space=True, max_cycles=100000, auto_rom_install_path=None)
+# using space invaders as an example, but replace with any atari game
+from pettingzoo.atari import space_invaders_v2
+
+space_invaders_v2.env(obs_type='rgb_image', full_action_space=True, max_cycles=100000, auto_rom_install_path=None)
 ```
 
 `obs_type`:  There are three possible values for this parameter:

@@ -132,6 +132,7 @@ knights_archers_zombies_v10.env(
   vector_state=True,
   use_typemasks=False,
   sequence_space=False,
+)
 ```
 
 `spawn_rate`:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
