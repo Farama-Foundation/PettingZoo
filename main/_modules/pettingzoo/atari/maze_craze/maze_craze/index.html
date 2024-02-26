@@ -477,7 +477,6 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
 
 <span class="kn">from</span> <span class="nn">pettingzoo.atari.base_atari_env</span> <span class="kn">import</span> <span class="p">(</span>
@@ -496,10 +495,6 @@
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/atari/maze_craze/#pettingzoo.atari.maze_craze.maze_craze.raw_env">[docs]</a>
 <span class="k">def</span> <span class="nf">raw_env</span><span class="p">(</span><span class="n">game_version</span><span class="o">=</span><span class="s2">&quot;robbers&quot;</span><span class="p">,</span> <span class="n">visibilty_level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">game_version</span> <span class="o">==</span> <span class="s2">&quot;robbers&quot;</span> <span class="ow">and</span> <span class="n">visibilty_level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;maze_craze has different versions of the game via the `game_version` argument, consider overriding.&quot;</span>
-        <span class="p">)</span>
     <span class="k">assert</span> <span class="p">(</span>
         <span class="n">game_version</span> <span class="ow">in</span> <span class="n">avaliable_versions</span>
     <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;`game_version` parameter must be one of </span><span class="si">{</span><span class="n">avaliable_versions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
