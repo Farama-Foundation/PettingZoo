@@ -14,7 +14,7 @@ These tutorials walk you though the full process of creating a custom environmen
 
 4. [Testing Your Environment](/tutorials/custom_environment/4-testing-your-environment.md)
 
-For a simpler example environment, including both [AEC](/api/aec/) and [Parallel](/api/aec/) implementations, see our [Environment Creation](/content/environment_creation/) documentation.
+For a simpler example environment, including both [AEC](/api/aec/) and [Parallel](/api/parallel/) implementations, see our [Environment Creation](/content/environment_creation/) documentation.
 
 
 ```{toctree}
