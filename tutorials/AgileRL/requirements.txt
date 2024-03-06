@@ -1,4 +1,4 @@
-agilerl>=0.1.20
+agilerl>=0.1.21
 pettingzoo[classic,atari,mpe]>=1.23.1
 SuperSuit>=3.9.0
 torch>=2.0.1
