@@ -224,9 +224,9 @@ class raw_env(AECEnv, EzPickle):
             # once either play wins or there is a draw, game over, both players are done
             self.terminations = {i: True for i in self.agents}
             self._accumulate_rewards()
-
-        # Switch selection to next agents
-        self.agent_selection = next_agent
+        else:
+            # If no one has won, switch selection to next agents
+            self.agent_selection = next_agent
 
         if self.render_mode == "human":
             self.render()
