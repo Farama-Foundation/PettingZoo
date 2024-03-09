@@ -196,8 +196,6 @@ class raw_env(AECEnv, EzPickle):
             or self.truncations[self.agent_selection]
         ):
             return self._was_dead_step(action)
-        # check if input action is a valid move (0 == empty spot)
-        assert self.board.squares[action] == 0, "played illegal move"
         # play turn
         self.board.play_turn(self.agents.index(self.agent_selection), action)
 

@@ -1,3 +1,10 @@
+class BadTicTacToeMoveException(Exception):
+    """Exception raised when a bad move is made on TicTacToe board."""
+
+    def __init__(self, message="Bad TicTacToe move"):
+        super().__init__(message)
+
+
 class Board:
     def __init__(self):
         # internally self.board.squares holds a flat representation of tic tac toe board
@@ -19,9 +26,22 @@ class Board:
         self.calculate_winners()
 
     def play_turn(self, agent, pos):
-        # if spot is empty
+        """Place a mark by the agent in the spot given.
+
+        The following are required for a move to be valid:
+        * The agent must be a known agent (either 0 or 1).
+        * The spot must be be empty.
+        * The spot must be in the board (integer: 0 <= spot <= 8)
+
+        If any of those are not true, a BadTicTacToeMoveException
+        will be raised.
+        """
+        if pos < 0 or pos > 8:
+            raise BadTicTacToeMoveException("Invalid move location")
+        if agent != 0 and agent != 1:
+            raise BadTicTacToeMoveException("Invalid agent")
         if self.squares[pos] != 0:
-            return
+            raise BadTicTacToeMoveException("Location is not empty")
         if agent == 0:
             self.squares[pos] = 1
         elif agent == 1:
