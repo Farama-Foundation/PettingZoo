@@ -48,11 +48,9 @@ class Board:
             raise BadTicTacToeMoveException("Invalid agent")
         if self.squares[pos] != 0:
             raise BadTicTacToeMoveException("Location is not empty")
-        if agent == 0:
-            self.squares[pos] = 1
-        elif agent == 1:
-            self.squares[pos] = 2
-        return
+
+        # agent is [0, 1]. board values are stored as [1, 2].
+        self.squares[pos] = agent + 1
 
     def check_for_winner(self):
         """Return the winning player (1 or 2), or -1 if no winner."""
@@ -68,13 +66,14 @@ class Board:
     def check_game_over(self):
         winner = self.check_for_winner()
 
-        if winner == -1 and all(square in [1, 2] for square in self.squares):
-            # tie
+        if winner in [1, 2]:
             return True
-        elif winner in [1, 2]:
+
+        # check for tie (all spots occupied)
+        if 0 not in self.squares:
             return True
-        else:
-            return False
+
+        return False
 
     def __str__(self):
         return str(self.squares)
