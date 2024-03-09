@@ -54,21 +54,16 @@ class Board:
             self.squares[pos] = 2
         return
 
-    # returns:
-    # -1 for no winner
-    # 1 -- agent 0 wins
-    # 2 -- agent 1 wins
     def check_for_winner(self):
-        winner = -1
-        for combination in self.winning_combinations:
-            states = []
-            for index in combination:
-                states.append(self.squares[index])
-            if all(x == 1 for x in states):
-                winner = 1
-            if all(x == 2 for x in states):
-                winner = 2
-        return winner
+        """Return the winning player (1 or 2), or -1 if no winner."""
+        for indices in self.winning_combinations:
+            states = [self.squares[idx] for idx in indices]
+            if states == [1, 1, 1]:
+                return 1
+            if states == [2, 2, 2]:
+                return 2
+        # no winner found
+        return -1
 
     def check_game_over(self):
         winner = self.check_for_winner()
