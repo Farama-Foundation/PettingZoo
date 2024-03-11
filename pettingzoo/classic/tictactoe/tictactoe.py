@@ -238,7 +238,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
-        if self.screen is None:
+        if self.render_mode is not None and self.screen is None:
             pygame.init()
 
         if self.render_mode == "human":
@@ -246,7 +246,7 @@ class raw_env(AECEnv, EzPickle):
                 (self.screen_height, self.screen_height)
             )
             pygame.display.set_caption("Tic-Tac-Toe")
-        else:
+        elif self.render_mode == "rgb_array":
             self.screen = pygame.Surface((self.screen_height, self.screen_height))
 
     def close(self):
