@@ -141,10 +141,10 @@ class raw_env(AECEnv, EzPickle):
         self.rewards = {i: 0 for i in self.agents}
         self.terminations = {i: False for i in self.agents}
         self.truncations = {i: False for i in self.agents}
-        self.infos = {i: {"legal_moves": list(range(0, 9))} for i in self.agents}
+        self.infos = {i: {} for i in self.agents}
 
         self._agent_selector = agent_selector(self.agents)
-        self.agent_selection = self._agent_selector.reset()
+        self.agent_selection = self._agent_selector.next()
 
         self.render_mode = render_mode
         self.screen_height = screen_height
@@ -202,9 +202,6 @@ class raw_env(AECEnv, EzPickle):
         # play turn
         self.board.play_turn(self.agents.index(self.agent_selection), action)
 
-        # update infos
-        # list of valid actions (indexes in board)
-        # next_agent = self.agents[(self.agents.index(self.agent_selection) + 1) % len(self.agents)]
         next_agent = self._agent_selector.next()
 
         status = self.board.game_status()
@@ -239,7 +236,6 @@ class raw_env(AECEnv, EzPickle):
         self.infos = {i: {} for i in self.agents}
         # selects the first agent
         self._agent_selector.reinit(self.agents)
-        self._agent_selector.reset()
         self.agent_selection = self._agent_selector.reset()
 
         if self.screen is None:
