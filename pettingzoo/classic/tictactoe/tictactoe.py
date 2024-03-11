@@ -79,7 +79,7 @@ from gymnasium import spaces
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
-from pettingzoo.classic.tictactoe.board import Board
+from pettingzoo.classic.tictactoe.board import TTT_GAME_NOT_OVER, TTT_TIE, Board
 from pettingzoo.utils import agent_selector, wrappers
 
 
@@ -207,20 +207,15 @@ class raw_env(AECEnv, EzPickle):
         # next_agent = self.agents[(self.agents.index(self.agent_selection) + 1) % len(self.agents)]
         next_agent = self._agent_selector.next()
 
-        if self.board.check_game_over():
-            winner = self.board.check_for_winner()
-
-            if winner == -1:
-                # tie
+        status = self.board.game_status()
+        if status != TTT_GAME_NOT_OVER:
+            if status == TTT_TIE:
                 pass
-            elif winner == 1:
-                # agent 0 won
-                self.rewards[self.agents[0]] += 1
-                self.rewards[self.agents[1]] -= 1
             else:
-                # agent 1 won
-                self.rewards[self.agents[1]] += 1
-                self.rewards[self.agents[0]] -= 1
+                winner = status  # either TTT_PLAYER1_WIN or TTT_PLAYER2_WIN
+                loser = winner ^ 1  # 0 -> 1; 1 -> 0
+                self.rewards[self.agents[winner]] += 1
+                self.rewards[self.agents[loser]] -= 1
 
             # once either play wins or there is a draw, game over, both players are done
             self.terminations = {i: True for i in self.agents}

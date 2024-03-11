@@ -5,6 +5,12 @@ class BadTicTacToeMoveException(Exception):
         super().__init__(message)
 
 
+TTT_PLAYER1_WIN = 0
+TTT_PLAYER2_WIN = 1
+TTT_TIE = -1
+TTT_GAME_NOT_OVER = -2
+
+
 class Board:
     # indices of the winning lines: vertical(x3), horizontal(x3), diagonal(x2)
     winning_combinations = [
@@ -31,6 +37,10 @@ class Board:
         # player 1 -- 2
         self.squares = [0] * 9
 
+    @property
+    def _n_empty_squares(self):
+        return self.squares.count(0)
+
     def reset(self):
         """Remove all marks from the board."""
         self.squares = [0] * 9
@@ -56,28 +66,20 @@ class Board:
         # agent is [0, 1]. board values are stored as [1, 2].
         self.squares[pos] = agent + 1
 
-    def check_for_winner(self):
-        """Return the winning player (1 or 2), or -1 if no winner."""
+    def game_status(self):
+        """Return status (winner, TTT_TIE if no winner, or TTT_GAME_NOT_OVER)."""
+        # need at least 5 moves to win
+        if self._n_empty_squares > 4:
+            return TTT_GAME_NOT_OVER
         for indices in self.winning_combinations:
             states = [self.squares[idx] for idx in indices]
             if states == [1, 1, 1]:
-                return 1
+                return TTT_PLAYER1_WIN
             if states == [2, 2, 2]:
-                return 2
-        # no winner found
-        return -1
-
-    def check_game_over(self):
-        winner = self.check_for_winner()
-
-        if winner in [1, 2]:
-            return True
-
-        # check for tie (all spots occupied)
-        if 0 not in self.squares:
-            return True
-
-        return False
+                return TTT_PLAYER2_WIN
+        if self._n_empty_squares == 0:
+            return TTT_TIE
+        return TTT_GAME_NOT_OVER
 
     def __str__(self):
         return str(self.squares)
