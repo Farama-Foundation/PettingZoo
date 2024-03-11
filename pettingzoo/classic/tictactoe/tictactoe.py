@@ -168,26 +168,29 @@ class raw_env(AECEnv, EzPickle):
         cur_player = self.possible_agents.index(agent)
         opp_player = (cur_player + 1) % 2
 
-        cur_p_board = np.equal(board_vals, cur_player + 1)
-        opp_p_board = np.equal(board_vals, opp_player + 1)
+        observation = np.empty((3, 3, 2), dtype=np.int8)
+        observation[:, :, 0] = np.equal(board_vals, cur_player + 1)
+        observation[:, :, 1] = np.equal(board_vals, opp_player + 1)
 
-        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
-        legal_moves = self._legal_moves() if agent == self.agent_selection else []
-
-        action_mask = np.zeros(9, "int8")
-        for i in legal_moves:
-            action_mask[i] = 1
+        action_mask = self._get_mask(agent)
 
         return {"observation": observation, "action_mask": action_mask}
+
+    def _get_mask(self, agent):
+        action_mask = np.zeros(9, dtype=np.int8)
+
+        if agent == self.agent_selection:
+            for i, value in enumerate(self.board.squares):
+                if value == 0:
+                    action_mask[i] = 1
+
+        return action_mask
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
 
     def action_space(self, agent):
         return self.action_spaces[agent]
-
-    def _legal_moves(self):
-        return [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action):
