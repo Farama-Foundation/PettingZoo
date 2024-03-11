@@ -31,6 +31,10 @@ class Board:
         # player 1 -- 2
         self.squares = [0] * 9
 
+    def reset(self):
+        """Remove all marks from the board."""
+        self.squares = [0] * 9
+
     def play_turn(self, agent, pos):
         """Place a mark by the agent in the spot given.
 

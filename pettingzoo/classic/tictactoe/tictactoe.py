@@ -231,7 +231,7 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, seed=None, options=None):
         # reset environment
-        self.board = Board()
+        self.board.reset()
 
         self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
