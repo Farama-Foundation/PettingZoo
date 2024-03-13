@@ -4,6 +4,8 @@ name: MacOS tests
 on:
     push:
         branches: [master]
+    pull_request:
+        branches: [master]
 
 permissions:
     contents: read
@@ -22,6 +24,9 @@ jobs:
                   pip install -e .[all]
                   pip install -e .[testing]
                   AutoROM -v
+            - name: Set dummy SDL video driver
+              run: |
+                  export SDL_AUDIODRIVER=dummy
             - name: Full Python tests
               run: |
                   pytest -v --cov=pettingzoo --cov-report term
