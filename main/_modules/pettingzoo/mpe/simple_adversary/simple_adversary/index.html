@@ -420,7 +420,7 @@
 <span class="sd">target landmark, but negatively rewarded based on how close the adversary is to the target landmark. The adversary is rewarded based on distance to the target, but it doesn&#39;t know which landmark is the target landmark. All rewards are unscaled Euclidean distance (see main MPE documentation for</span>
 <span class="sd">average distance). This means good agents have to learn to &#39;split up&#39; and cover all landmarks to deceive the adversary.</span>
 
-<span class="sd">Agent observation space: `[self_pos, self_vel, goal_rel_position, landmark_rel_position, other_agent_rel_positions]`</span>
+<span class="sd">Agent observation space: `[goal_rel_position, landmark_rel_position, other_agent_rel_positions]`</span>
 
 <span class="sd">Adversary observation space: `[landmark_rel_position, other_agents_rel_positions]`</span>
 
