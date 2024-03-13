@@ -433,7 +433,8 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==0.1.19
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl&gt;=0.1.21; python_version &gt;= &#39;3.9&#39;
+agilerl==0.1.20; python_version &lt; &#39;3.9&#39;
 pettingzoo[classic,atari,mpe]&gt;=1.23.1
 SuperSuit&gt;=3.9.0
 torch&gt;=2.0.1
@@ -478,8 +479,8 @@ wandb&gt;=0.13.10
     <span class="n">NET_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;arch&quot;</span><span class="p">:</span> <span class="s2">&quot;cnn&quot;</span><span class="p">,</span>  <span class="c1"># Network architecture</span>
         <span class="s2">&quot;h_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>  <span class="c1"># Network hidden size</span>
-        <span class="s2">&quot;c_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>  <span class="c1"># CNN channel size</span>
-        <span class="s2">&quot;k_size&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>  <span class="c1"># CNN kernel size</span>
+        <span class="s2">&quot;c_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>  <span class="c1"># CNN channel size</span>
+        <span class="s2">&quot;k_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>  <span class="c1"># CNN kernel size</span>
         <span class="s2">&quot;s_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>  <span class="c1"># CNN stride size</span>
         <span class="s2">&quot;normalize&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Normalize image from range [0,255] to [0,1]</span>
     <span class="p">}</span>
@@ -491,7 +492,8 @@ wandb&gt;=0.13.10
         <span class="c1"># Swap image channels dimension from last to first [H, W, C] -&gt; [C, H, W]</span>
         <span class="s2">&quot;CHANNELS_LAST&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="s2">&quot;BATCH_SIZE&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># Batch size</span>
-        <span class="s2">&quot;LR&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># Learning rate</span>
+        <span class="s2">&quot;LR_ACTOR&quot;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>  <span class="c1"># Actor learning rate</span>
+        <span class="s2">&quot;LR_CRITIC&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># Critic learning rate</span>
         <span class="s2">&quot;GAMMA&quot;</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span>  <span class="c1"># Discount factor</span>
         <span class="s2">&quot;MEMORY_SIZE&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>  <span class="c1"># Max memory buffer size</span>
         <span class="s2">&quot;LEARN_STEP&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="c1"># Learning frequency</span>
