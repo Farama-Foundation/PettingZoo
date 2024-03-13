@@ -31,7 +31,7 @@ jobs:
                   AutoROM -v
             - name: Set dummy SDL video driver
               run: |
-                  export SDL_AUDIODRIVER=dummy
+                  export SDL_VIDEODRIVER=dummy
             - name: Full Python tests
               run: |
                   pytest -v --cov=pettingzoo --cov-report term
