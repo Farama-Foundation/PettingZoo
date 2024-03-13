@@ -83,3 +83,6 @@ class Board:
 
     def __str__(self):
         return str(self.squares)
+
+    def legal_moves(self):
+        return [i for i, mark in enumerate(self.squares) if mark == 0]

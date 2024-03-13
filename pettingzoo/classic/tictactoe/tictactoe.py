@@ -180,9 +180,8 @@ class raw_env(AECEnv, EzPickle):
         action_mask = np.zeros(9, dtype=np.int8)
 
         if agent == self.agent_selection:
-            for i, value in enumerate(self.board.squares):
-                if value == 0:
-                    action_mask[i] = 1
+            for i in self.board.legal_moves():
+                action_mask[i] = 1
 
         return action_mask
 
