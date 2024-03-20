@@ -89,7 +89,7 @@ from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.butterfly.pistonball.manual_policy import ManualPolicy
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import AgentSelector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 _image_library = {}
@@ -180,7 +180,7 @@ class raw_env(AECEnv, EzPickle):
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.n_pistons))))
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
 
         self.observation_spaces = dict(
             zip(

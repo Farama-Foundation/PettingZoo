@@ -5,7 +5,7 @@ import numpy as np
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def env():
@@ -107,7 +107,7 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
         # seed observation and action spaces

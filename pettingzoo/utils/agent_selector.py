@@ -3,14 +3,14 @@ from __future__ import annotations
 from typing import Any
 
 
-class agent_selector:
+class AgentSelector:
     """Outputs an agent in the given order whenever agent_select is called.
 
     Can reinitialize to a new order.
 
     Example:
-        >>> from pettingzoo.utils import agent_selector
-        >>> agent_selector = agent_selector(agent_order=["player1", "player2"])
+        >>> from pettingzoo.utils import AgentSelector
+        >>> agent_selector = AgentSelector(agent_order=["player1", "player2"])
         >>> agent_selector.reset()
         'player1'
         >>> agent_selector.next()
@@ -52,8 +52,8 @@ class agent_selector:
         """Check if the current agent is the first agent in the cycle."""
         return self.selected_agent == self.agent_order[0]
 
-    def __eq__(self, other: agent_selector) -> bool:
-        if not isinstance(other, agent_selector):
+    def __eq__(self, other: AgentSelector) -> bool:
+        if not isinstance(other, AgentSelector):
             return NotImplemented
 
         return (

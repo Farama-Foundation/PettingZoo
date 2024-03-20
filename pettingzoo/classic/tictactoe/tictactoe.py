@@ -80,7 +80,7 @@ from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.tictactoe.board import Board
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import AgentSelector, wrappers
 
 
 def get_image(path):
@@ -143,7 +143,7 @@ class raw_env(AECEnv, EzPickle):
         self.truncations = {i: False for i in self.agents}
         self.infos = {i: {"legal_moves": list(range(0, 9))} for i in self.agents}
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
         self.render_mode = render_mode

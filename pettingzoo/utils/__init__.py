@@ -1,4 +1,4 @@
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 from pettingzoo.utils.average_total_reward import average_total_reward
 from pettingzoo.utils.conversions import (
     aec_to_parallel,
