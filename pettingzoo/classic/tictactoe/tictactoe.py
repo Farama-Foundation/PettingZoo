@@ -198,10 +198,8 @@ class raw_env(AECEnv, EzPickle):
             or self.truncations[self.agent_selection]
         ):
             return self._was_dead_step(action)
-        # play turn
-        self.board.play_turn(self.agents.index(self.agent_selection), action)
 
-        next_agent = self._agent_selector.next()
+        self.board.play_turn(self.agents.index(self.agent_selection), action)
 
         status = self.board.game_status()
         if status != TTT_GAME_NOT_OVER:
@@ -217,8 +215,8 @@ class raw_env(AECEnv, EzPickle):
             self.terminations = {i: True for i in self.agents}
             self._accumulate_rewards()
         else:
-            # If no one has won, switch selection to next agents
-            self.agent_selection = next_agent
+            # If the game is still going, switch selection to next agent
+            self.agent_selection = self._agent_selector.next()
 
         if self.render_mode == "human":
             self.render()
