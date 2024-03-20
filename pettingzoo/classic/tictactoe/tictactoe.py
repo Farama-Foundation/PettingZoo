@@ -12,7 +12,7 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Import             | `from pettingzoo.classic import tictactoe_v3` |
 |--------------------|-----------------------------------------------|
 | Actions            | Discrete                                      |
-| Parallel API       | Yes                                           |
+| Parallel API       | No                                            |
 | Manual Control     | No                                            |
 | Agents             | `agents= ['player_1', 'player_2']`            |
 | Agents             | 2                                             |
