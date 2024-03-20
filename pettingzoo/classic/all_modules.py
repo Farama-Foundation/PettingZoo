@@ -8,14 +8,14 @@ from pettingzoo.classic import (
     rps_v2,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
-    tictactoe_v3,
+    tictactoe_v4,
 )
 
 classic_environments = {
     "classic/chess_v6": chess_v6,
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
-    "classic/tictactoe_v3": tictactoe_v3,
+    "classic/tictactoe_v4": tictactoe_v4,
     "classic/leduc_holdem_v4": leduc_holdem_v4,
     "classic/texas_holdem_v4": texas_holdem_v4,
     "classic/texas_holdem_no_limit_v6": texas_holdem_no_limit_v6,

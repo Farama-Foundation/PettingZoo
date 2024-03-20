@@ -10,7 +10,7 @@ from pettingzoo.classic import (
     leduc_holdem_v4,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
-    tictactoe_v3,
+    tictactoe_v4,
 )
 
 pytest.importorskip("stable_baselines3")
@@ -30,7 +30,7 @@ EASY_ENVS = [
 MEDIUM_ENVS = [
     leduc_holdem_v4,  # with 10x as many steps it gets higher total rewards (9 vs -9), 0.52 winrate, and 0.92 vs 0.83 total scores
     hanabi_v5,  # even with 10x as many steps, total score seems to always be tied between the two agents
-    tictactoe_v3,  # even with 10x as many steps, agent still loses every time (most likely an error somewhere)
+    tictactoe_v4,  # even with 10x as many steps, agent still loses every time (most likely an error somewhere)
     chess_v6,  # difficult to train because games take so long, performance varies heavily
 ]
 
