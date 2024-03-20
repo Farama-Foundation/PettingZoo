@@ -12,6 +12,35 @@ TTT_GAME_NOT_OVER = -2
 
 
 class Board:
+    """Board for a TicTacToe Game.
+
+    This tracks the position and identity of marks on the game board
+    and allows checking for a winner.
+
+    Example of usage:
+
+    import random
+    board = Board()
+
+    # random legal moves - for example purposes
+    def choose_move(board_obj: Board) -> int:
+        legal_moves = [i for i, mark in enumerate(board_obj.squares) if mark == 0]
+        return random.choice(legal_moves)
+
+    player = 0
+    while True:
+        move = choose_move(board)
+        board.play_turn(player, move)
+        status = board.game_status()
+        if status != TTT_GAME_NOT_OVER:
+            if status in [TTT_PLAYER1_WIN, TTT_PLAYER2_WIN]:
+                print(f"player {status} won")
+            else:  # status == TTT_TIE
+                print("Tie Game")
+            break
+        player = player ^ 1  # swaps between players 0 and 1
+    """
+
     # indices of the winning lines: vertical(x3), horizontal(x3), diagonal(x2)
     winning_combinations = [
         (0, 1, 2),
@@ -25,20 +54,18 @@ class Board:
     ]
 
     def __init__(self):
-        # internally self.board.squares holds a flat representation of tic tac toe board
-        # where an empty board is [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        # where indexes are column wise order
+        # self.squares holds a flat representation of the tic tac toe board.
+        # an empty board is [0, 0, 0, 0, 0, 0, 0, 0, 0].
+        # player 1's squares are marked 1, while player 2's are marked 2.
+        # mapping of the flat indices to the 3x3 grid is as follows:
         # 0 3 6
         # 1 4 7
         # 2 5 8
-
-        # empty -- 0
-        # player 0 -- 1
-        # player 1 -- 2
         self.squares = [0] * 9
 
     @property
     def _n_empty_squares(self):
+        """The current number of empty squares on the board."""
         return self.squares.count(0)
 
     def reset(self):
@@ -49,7 +76,7 @@ class Board:
         """Place a mark by the agent in the spot given.
 
         The following are required for a move to be valid:
-        * The agent must be a known agent (either 0 or 1).
+        * The agent must be a known agent ID (either 0 or 1).
         * The spot must be be empty.
         * The spot must be in the board (integer: 0 <= spot <= 8)
 
@@ -82,4 +109,5 @@ class Board:
         return str(self.squares)
 
     def legal_moves(self):
+        """Return list of legal moves (as flat indices for spaces on the board)."""
         return [i for i, mark in enumerate(self.squares) if mark == 0]

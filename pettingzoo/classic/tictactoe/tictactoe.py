@@ -84,6 +84,7 @@ from pettingzoo.utils import agent_selector, wrappers
 
 
 def get_image(path):
+    """Return a pygame image loaded from the given path."""
     from os import path as os_path
 
     cwd = os_path.dirname(__file__)
@@ -92,6 +93,7 @@ def get_image(path):
 
 
 def get_font(path, size):
+    """Return a pygame font loaded from the given path."""
     from os import path as os_path
 
     cwd = os_path.dirname(__file__)
@@ -153,22 +155,14 @@ class raw_env(AECEnv, EzPickle):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-    # Key
-    # ----
-    # blank space = 0
-    # agent 0 = 1
-    # agent 1 = 2
-    # An observation is list of lists, where each list represents a row
-    #
-    # [[0,0,2]
-    #  [1,2,1]
-    #  [2,1,0]]
     def observe(self, agent):
         board_vals = np.array(self.board.squares).reshape(3, 3)
         cur_player = self.possible_agents.index(agent)
         opp_player = (cur_player + 1) % 2
 
         observation = np.empty((3, 3, 2), dtype=np.int8)
+        # this will give a copy of the board that is 1 for player 1's
+        # marks and zero for every other square, whether empty or not.
         observation[:, :, 0] = np.equal(board_vals, cur_player + 1)
         observation[:, :, 1] = np.equal(board_vals, opp_player + 1)
 
@@ -179,6 +173,8 @@ class raw_env(AECEnv, EzPickle):
     def _get_mask(self, agent):
         action_mask = np.zeros(9, dtype=np.int8)
 
+        # Per the documentation, the mask of any agent other than the
+        # currently selected one is all zeros.
         if agent == self.agent_selection:
             for i in self.board.legal_moves():
                 action_mask[i] = 1
@@ -222,7 +218,6 @@ class raw_env(AECEnv, EzPickle):
             self.render()
 
     def reset(self, seed=None, options=None):
-        # reset environment
         self.board.reset()
 
         self.agents = self.possible_agents[:]
