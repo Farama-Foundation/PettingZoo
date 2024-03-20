@@ -68,9 +68,6 @@ class Board:
 
     def game_status(self):
         """Return status (winner, TTT_TIE if no winner, or TTT_GAME_NOT_OVER)."""
-        # need at least 5 moves to win
-        if self._n_empty_squares > 4:
-            return TTT_GAME_NOT_OVER
         for indices in self.winning_combinations:
             states = [self.squares[idx] for idx in indices]
             if states == [1, 1, 1]:
