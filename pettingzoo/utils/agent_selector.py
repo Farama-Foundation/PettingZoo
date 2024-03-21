@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+from warnings import warn
 
 
 class AgentSelector:
@@ -61,3 +62,12 @@ class AgentSelector:
             and self._current_agent == other._current_agent
             and self.selected_agent == other.selected_agent
         )
+
+
+class agent_selector(AgentSelector):
+    def __init__(self, *args, **kwargs):
+        warn(
+            "agent_selector is deprecated, please use AgentSelector",
+            DeprecationWarning,
+        )
+        super().__init__(*args, **kwargs)
