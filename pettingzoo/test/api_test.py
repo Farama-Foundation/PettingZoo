@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 import warnings
 from collections import defaultdict
+from typing import Any
 
 import gymnasium
 import numpy as np
@@ -383,7 +384,11 @@ def test_rewards_terminations_truncations(env, agent_0):
         test_reward(env.rewards[agent])
 
 
-def _test_observation_space_compatibility(expected, seen, context) -> None:
+def _test_observation_space_compatibility(
+    expected: gymnasium.spaces.Space[Any],
+    seen: gymnasium.spaces.Space[Any] | dict,
+    context: list[str],
+) -> None:
     """Ensure observation's dtypes are same as in observation_space.
 
     This tests that the dtypes of the spaces are the same.
@@ -402,12 +407,18 @@ def _test_observation_space_compatibility(expected, seen, context) -> None:
             if not context and key != "observation":
                 # For the top level, we only care about the 'observation' key.
                 continue
+            # We know a dict is expected. Anything else is an error.
+            assert isinstance(
+                seen, dict
+            ), f"observation at [{']['.join(context)}] is {seen.dtype}, but expected dict."
+
             # note: a previous test (expected.contains(seen)) ensures that
             # the two dicts have the same keys.
             _test_observation_space_compatibility(
                 expected[key], seen[key], context + [key]
             )
     else:
+        # done recursing, now the actual space types should match
         assert (
             expected.dtype == seen.dtype
         ), f"dtype for observation at [{']['.join(context)}] is {seen.dtype}, but observation space specifies {expected.dtype}."
