@@ -1,10 +1,3 @@
-class BadTicTacToeMoveException(Exception):
-    """Exception raised when a bad move is made on TicTacToe board."""
-
-    def __init__(self, message="Bad TicTacToe move"):
-        super().__init__(message)
-
-
 TTT_PLAYER1_WIN = 0
 TTT_PLAYER2_WIN = 1
 TTT_TIE = -1
@@ -80,15 +73,11 @@ class Board:
         * The spot must be be empty.
         * The spot must be in the board (integer: 0 <= spot <= 8)
 
-        If any of those are not true, a BadTicTacToeMoveException
-        will be raised.
+        If any of those are not true, an assertion will fail.
         """
-        if pos < 0 or pos > 8:
-            raise BadTicTacToeMoveException("Invalid move location")
-        if agent != 0 and agent != 1:
-            raise BadTicTacToeMoveException("Invalid agent")
-        if self.squares[pos] != 0:
-            raise BadTicTacToeMoveException("Location is not empty")
+        assert pos >= 0 and pos <= 8, "Invalid move location"
+        assert agent in [0, 1], "Invalid agent"
+        assert self.squares[pos] == 0, "Location is not empty"
 
         # agent is [0, 1]. board values are stored as [1, 2].
         self.squares[pos] = agent + 1
