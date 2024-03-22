@@ -65,6 +65,8 @@ class AgentSelector:
 
 
 class agent_selector(AgentSelector):
+    """Deprecated version of AgentSelector. Use that instead."""
+
     def __init__(self, *args, **kwargs):
         warn(
             "agent_selector is deprecated, please use AgentSelector",
