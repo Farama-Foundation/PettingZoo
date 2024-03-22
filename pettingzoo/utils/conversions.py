@@ -4,7 +4,7 @@ import warnings
 from collections import defaultdict
 from typing import Callable, Dict, Optional
 
-from pettingzoo.utils import agent_selector
+from pettingzoo.utils import AgentSelector
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 
@@ -309,7 +309,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self._actions: Dict[AgentID, Optional[ActionType]] = {
             agent: None for agent in self.agents
         }
-        self._agent_selector = agent_selector(self._live_agents)
+        self._agent_selector = AgentSelector(self._live_agents)
         self.agent_selection = self._agent_selector.reset()
         self.terminations = {agent: False for agent in self.agents}
         self.truncations = {agent: False for agent in self.agents}
@@ -377,7 +377,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
             ]
 
             if len(self.env.agents):
-                self._agent_selector = agent_selector(self.env.agents)
+                self._agent_selector = AgentSelector(self.env.agents)
                 self.agent_selection = self._agent_selector.reset()
 
             self._deads_step_first()

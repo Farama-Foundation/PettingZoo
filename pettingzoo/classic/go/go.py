@@ -119,7 +119,7 @@ from gymnasium.utils import EzPickle
 from pettingzoo import AECEnv
 from pettingzoo.classic.go import coords, go_base
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def get_image(path):
@@ -191,7 +191,7 @@ class raw_env(AECEnv, EzPickle):
             [spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)]
         )
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
 
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 

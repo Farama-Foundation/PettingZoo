@@ -116,7 +116,7 @@ from gymnasium.utils import EzPickle
 from pettingzoo import AECEnv
 from pettingzoo.classic.chess import chess_utils
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def env(**kwargs):
@@ -144,7 +144,7 @@ class raw_env(AECEnv, EzPickle):
         self.agents = [f"player_{i}" for i in range(2)]
         self.possible_agents = self.agents[:]
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {
@@ -238,7 +238,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.board = chess.Board()
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
         self.rewards = {name: 0 for name in self.agents}
