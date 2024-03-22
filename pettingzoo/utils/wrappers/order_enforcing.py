@@ -26,14 +26,16 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     * warn on calling step after environment is terminated or truncated
     """
 
+    _local_vars = ["_has_reset", "_has_rendered", "_has_updated"]
+
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
         assert isinstance(
             env, AECEnv
         ), "OrderEnforcingWrapper is only compatible with AEC environments"
+        super().__init__(env)
         self._has_reset = False
         self._has_rendered = False
         self._has_updated = False
-        super().__init__(env)
 
     def __getattr__(self, value: str) -> Any:
         """Raises an error message when data is gotten from the env.

@@ -13,6 +13,8 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         illegal_reward: number that is the value of the player making an illegal move.
     """
 
+    _local_vars = ["_prev_obs", "_prev_info", "_terminated", "_illegal_value"]
+
     def __init__(
         self, env: AECEnv[AgentID, ObsType, ActionType], illegal_reward: float
     ):

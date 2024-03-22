@@ -15,6 +15,8 @@ class MultiEpisodeEnv(BaseWrapper):
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
     """
 
+    _local_vars = ["_num_episodes", "_episodes_elapsed", "_seed", "_options"]
+
     def __init__(self, env: AECEnv, num_episodes: int):
         """__init__.
 
