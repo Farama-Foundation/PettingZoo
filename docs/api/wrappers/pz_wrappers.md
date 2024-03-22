@@ -65,8 +65,8 @@ You can apply these wrappers to your environment in a similar manner to the belo
 To wrap an AEC environment:
 ```python
 from pettingzoo.utils import TerminateIllegalWrapper
-from pettingzoo.classic import tictactoe_v3
-env = tictactoe_v3.env()
+from pettingzoo.classic import tictactoe_v4
+env = tictactoe_v4.env()
 env = TerminateIllegalWrapper(env, illegal_reward=-1)
 
 env.reset()
