@@ -112,16 +112,16 @@ def test_tictactoe_bad_move() -> None:
     board = Board()
     # 1) move out of bounds should be rejected
     for outside_space in [-1, 9]:
-        with pytest.raises(AssertionError):
+        with pytest.raises(AssertionError, match="Invalid move location"):
             board.play_turn(0, outside_space)
 
     # 2) move by unknown agent should be rejected
     for unknown_agent in [-1, 2]:
-        with pytest.raises(AssertionError):
+        with pytest.raises(AssertionError, match="Invalid agent"):
             board.play_turn(unknown_agent, 0)
 
     # 3) move in occupied space by either agent should be rejected
     board.play_turn(0, 4)  # this is fine
     for agent in [0, 1]:
-        with pytest.raises(AssertionError):
+        with pytest.raises(AssertionError, match="Location is not empty"):
             board.play_turn(agent, 4)  # repeating move is not valid
