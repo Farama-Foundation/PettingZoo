@@ -387,7 +387,7 @@ def test_rewards_terminations_truncations(env, agent_0):
 def _test_observation_space_compatibility(
     expected: gymnasium.spaces.Space[Any],
     seen: gymnasium.spaces.Space[Any] | dict,
-    context: list[str],
+    recursed_keys: list[str],
 ) -> None:
     """Ensure observation's dtypes are same as in observation_space.
 
@@ -398,30 +398,30 @@ def _test_observation_space_compatibility(
     Args:
         expected: Observation space that is expected.
         seen: The observation actually seen.
-        context: A list of all the dict keys that led to the current
+        recursed_keys: A list of all the dict keys that led to the current
           observations. This enables a more helpful error message if
           an assert fails. The initial call should have an empty list.
     """
     if isinstance(expected, gymnasium.spaces.Dict):
         for key in expected.keys():
-            if not context and key != "observation":
+            if not recursed_keys and key != "observation":
                 # For the top level, we only care about the 'observation' key.
                 continue
             # We know a dict is expected. Anything else is an error.
             assert isinstance(
                 seen, dict
-            ), f"observation at [{']['.join(context)}] is {seen.dtype}, but expected dict."
+            ), f"observation at [{']['.join(recursed_keys)}] is {seen.dtype}, but expected dict."
 
             # note: a previous test (expected.contains(seen)) ensures that
             # the two dicts have the same keys.
             _test_observation_space_compatibility(
-                expected[key], seen[key], context + [key]
+                expected[key], seen[key], recursed_keys + [key]
             )
     else:
         # done recursing, now the actual space types should match
         assert (
             expected.dtype == seen.dtype
-        ), f"dtype for observation at [{']['.join(context)}] is {seen.dtype}, but observation space specifies {expected.dtype}."
+        ), f"dtype for observation at [{']['.join(recursed_keys)}] is {seen.dtype}, but observation space specifies {expected.dtype}."
 
 
 def play_test(env, observation_0, num_cycles):
@@ -508,7 +508,7 @@ def play_test(env, observation_0, num_cycles):
         ), "Out of bounds observation: " + str(prev_observe)
 
         _test_observation_space_compatibility(
-            env.observation_space(agent), prev_observe, context=[]
+            env.observation_space(agent), prev_observe, recursed_keys=[]
         )
 
         test_observation(prev_observe, observation_0, str(env.unwrapped))
