@@ -504,26 +504,26 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-center"><p><img src="https://render.githubusercontent.com/render/math?math=0 \ldots (N-1)"></p></td>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(0 \ldots (N-1)\)</span></p></td>
 <td><p>Place a stone on the 1st row of the board.<br><em><code class="docutils literal notranslate"><span class="pre">0</span></code>: (0,0), <code class="docutils literal notranslate"><span class="pre">1</span></code>: (0,1), …, <code class="docutils literal notranslate"><span class="pre">N-1</span></code>: (0,N-1)</em></p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p><img src="https://render.githubusercontent.com/render/math?math=N \ldots (2N- 1)"></p></td>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(N \ldots (2N- 1)\)</span></p></td>
 <td><p>Place a stone on the 2nd row of the board.<br><em><code class="docutils literal notranslate"><span class="pre">N</span></code>: (1,0), <code class="docutils literal notranslate"><span class="pre">N+1</span></code>: (1,1), …, <code class="docutils literal notranslate"><span class="pre">2N-1</span></code>: (1,N-1)</em></p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>…</p></td>
 <td><p>…</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p><img src="https://render.githubusercontent.com/render/math?math=N^2-N \ldots N^2-1"></p></td>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\((N^2-N) \ldots (N^2-1)\)</span></p></td>
 <td><p>Place a stone on the Nth row of the board.<br><em><code class="docutils literal notranslate"><span class="pre">N^2-N</span></code>: (N-1,0), <code class="docutils literal notranslate"><span class="pre">N^2-N+1</span></code>: (N-1,1), …, <code class="docutils literal notranslate"><span class="pre">N^2-1</span></code>: (N-1,N-1)</em></p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p><img src="https://render.githubusercontent.com/render/math?math=N^2"></p></td>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(N^2\)</span></p></td>
 <td><p>Pass</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>For example, you would use action <code class="docutils literal notranslate"><span class="pre">4</span></code> to place a stone on the board at the (0,3) location or action <code class="docutils literal notranslate"><span class="pre">N^2</span></code> to pass. You can transform a non-pass action <code class="docutils literal notranslate"><span class="pre">a</span></code> back into its 2D (x,y) coordinate by computing <code class="docutils literal notranslate"><span class="pre">(a//N,</span> <span class="pre">a%N)</span></code> The total action space is
-<img src="https://render.githubusercontent.com/render/math?math=N^2 %2B 1">.</p>
+<p>For example, you would use action <code class="docutils literal notranslate"><span class="pre">4</span></code> to place a stone on the board at the (0,3) location or action <code class="docutils literal notranslate"><span class="pre">N^2</span></code> to pass. You can transform a non-pass action <code class="docutils literal notranslate"><span class="pre">a</span></code> back into its 2D (x,y) coordinate by computing <code class="docutils literal notranslate"><span class="pre">(a//N,</span> <span class="pre">a%N)</span></code>. The total action space is
+<span class="math notranslate nohighlight">\(N^2+1\)</span>.</p>
 </section>
 <section id="rewards">
 <h2>Rewards<a class="headerlink" href="#rewards" title="Link to this heading">#</a></h2>
@@ -834,6 +834,8 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script>
 
