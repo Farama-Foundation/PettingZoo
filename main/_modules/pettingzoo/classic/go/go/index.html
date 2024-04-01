@@ -511,7 +511,7 @@
 <span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">AECEnv</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.classic.go</span> <span class="kn">import</span> <span class="n">coords</span><span class="p">,</span> <span class="n">go_base</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">wrappers</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils.agent_selector</span> <span class="kn">import</span> <span class="n">agent_selector</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.agent_selector</span> <span class="kn">import</span> <span class="n">AgentSelector</span>
 
 
 <span class="k">def</span> <span class="nf">get_image</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -588,7 +588,7 @@
             <span class="p">[</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_agents</span><span class="p">)]</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">board_history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 

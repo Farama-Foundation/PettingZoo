@@ -586,7 +586,7 @@
 <span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.players</span> <span class="kn">import</span> <span class="n">Archer</span><span class="p">,</span> <span class="n">Knight</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.weapons</span> <span class="kn">import</span> <span class="n">Arrow</span><span class="p">,</span> <span class="n">Sword</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.zombie</span> <span class="kn">import</span> <span class="n">Zombie</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">agent_selector</span><span class="p">,</span> <span class="n">wrappers</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">AgentSelector</span><span class="p">,</span> <span class="n">wrappers</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.conversions</span> <span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">dont_write_bytecode</span> <span class="o">=</span> <span class="kc">True</span>
@@ -767,7 +767,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">floor_patch3</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;patch3.png&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floor_patch4</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;patch4.png&quot;</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reinit</span><span class="p">()</span>
 
 <div class="viewcode-block" id="raw_env.observation_space">

@@ -414,7 +414,7 @@
 <span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Discrete</span>
 
 <span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">AECEnv</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">agent_selector</span><span class="p">,</span> <span class="n">wrappers</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">AgentSelector</span><span class="p">,</span> <span class="n">wrappers</span>
 
 <span class="n">ROCK</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">PAPER</span> <span class="o">=</span> <span class="mi">1</span>
@@ -565,9 +565,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">observations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">NONE</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Our agent_selector utility allows easy cyclic stepping through the agents list.</span>
+<span class="sd">        Our AgentSelector utility allows easy cyclic stepping through the agents list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
@@ -878,11 +878,11 @@
 <p>The utils directory also contain some classes which are only helpful for developing new environments. These are documented below.</p>
 <section id="agent-selector">
 <h3>Agent selector<a class="headerlink" href="#agent-selector" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">agent_selector</span></code> class steps through agents in a cycle</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">AgentSelector</span></code> class steps through agents in a cycle</p>
 <p>It can be used as follows to cycle through the list of agents:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">agent_selector</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">AgentSelector</span>
 <span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;agent_1&quot;</span><span class="p">,</span> <span class="s2">&quot;agent_2&quot;</span><span class="p">,</span> <span class="s2">&quot;agent_3&quot;</span><span class="p">]</span>
-<span class="n">selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="n">agents</span><span class="p">)</span>
+<span class="n">selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="n">agents</span><span class="p">)</span>
 <span class="n">agent_selection</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="c1"># agent_selection will be &quot;agent_1&quot;</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>

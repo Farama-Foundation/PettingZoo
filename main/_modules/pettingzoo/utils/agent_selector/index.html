@@ -393,18 +393,19 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 
-<div class="viewcode-block" id="agent_selector">
-<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.agent_selector">[docs]</a>
-<span class="k">class</span> <span class="nc">agent_selector</span><span class="p">:</span>
+<div class="viewcode-block" id="AgentSelector">
+<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.AgentSelector">[docs]</a>
+<span class="k">class</span> <span class="nc">AgentSelector</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Outputs an agent in the given order whenever agent_select is called.</span>
 
 <span class="sd">    Can reinitialize to a new order.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; from pettingzoo.utils import agent_selector</span>
-<span class="sd">        &gt;&gt;&gt; agent_selector = agent_selector(agent_order=[&quot;player1&quot;, &quot;player2&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; from pettingzoo.utils import AgentSelector</span>
+<span class="sd">        &gt;&gt;&gt; agent_selector = AgentSelector(agent_order=[&quot;player1&quot;, &quot;player2&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; agent_selector.reset()</span>
 <span class="sd">        &#39;player1&#39;</span>
 <span class="sd">        &gt;&gt;&gt; agent_selector.next()</span>
@@ -421,8 +422,8 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_order</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reinit</span><span class="p">(</span><span class="n">agent_order</span><span class="p">)</span>
 
-<div class="viewcode-block" id="agent_selector.reinit">
-<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.agent_selector.reinit">[docs]</a>
+<div class="viewcode-block" id="AgentSelector.reinit">
+<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.AgentSelector.reinit">[docs]</a>
     <span class="k">def</span> <span class="nf">reinit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_order</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reinitialize to a new order.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_order</span> <span class="o">=</span> <span class="n">agent_order</span>
@@ -430,16 +431,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">selected_agent</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
-<div class="viewcode-block" id="agent_selector.reset">
-<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.agent_selector.reset">[docs]</a>
+<div class="viewcode-block" id="AgentSelector.reset">
+<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.AgentSelector.reset">[docs]</a>
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset to the original order.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reinit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_order</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="agent_selector.next">
-<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.agent_selector.next">[docs]</a>
+<div class="viewcode-block" id="AgentSelector.next">
+<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.AgentSelector.next">[docs]</a>
     <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the next agent.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_current_agent</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_agent</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_order</span><span class="p">)</span>
@@ -447,22 +448,22 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_agent</span></div>
 
 
-<div class="viewcode-block" id="agent_selector.is_last">
-<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.agent_selector.is_last">[docs]</a>
+<div class="viewcode-block" id="AgentSelector.is_last">
+<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.AgentSelector.is_last">[docs]</a>
     <span class="k">def</span> <span class="nf">is_last</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the current agent is the last agent in the cycle.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_order</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="agent_selector.is_first">
-<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.agent_selector.is_first">[docs]</a>
+<div class="viewcode-block" id="AgentSelector.is_first">
+<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.AgentSelector.is_first">[docs]</a>
     <span class="k">def</span> <span class="nf">is_first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the current agent is the first agent in the cycle.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">agent_selector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">agent_selector</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">AgentSelector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">AgentSelector</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
 
         <span class="k">return</span> <span class="p">(</span>
@@ -470,6 +471,20 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_agent</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_current_agent</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_agent</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">selected_agent</span>
         <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="agent_selector">
+<a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.agent_selector.agent_selector">[docs]</a>
+<span class="k">class</span> <span class="nc">agent_selector</span><span class="p">(</span><span class="n">AgentSelector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deprecated version of AgentSelector. Use that instead.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;agent_selector is deprecated, please use AgentSelector&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 </pre></div>
           </article>

@@ -517,7 +517,7 @@
 <span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">AECEnv</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.sisl.multiwalker.multiwalker_base</span> <span class="kn">import</span> <span class="n">FPS</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.sisl.multiwalker.multiwalker_base</span> <span class="kn">import</span> <span class="n">MultiWalkerEnv</span> <span class="k">as</span> <span class="n">_env</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">agent_selector</span><span class="p">,</span> <span class="n">wrappers</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">AgentSelector</span><span class="p">,</span> <span class="n">wrappers</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.conversions</span> <span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
 
 
@@ -553,7 +553,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">n_walkers</span><span class="p">)))</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="c1"># spaces</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">))</span>

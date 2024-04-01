@@ -464,15 +464,15 @@ games.</p>
 <section id="agent-selector">
 <h2>Agent Selector<a class="headerlink" href="#agent-selector" title="Link to this heading">#</a></h2>
 <p>The agent selector utility allows for easy cycling of agents in an AEC environment. At any time it can be reset or reinitialized with a new order, allowing for changes in turn order or handling a dynamic number of agents (see <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights-Archers-Zombies</a> for an example of spawning/killing agents)</p>
-<p>Note: while many PettingZoo environments use agent_selector to manage agent cycling internally, it is not intended to be used externally when interacting with an environment. Instead, use <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">agent</span> <span class="pre">in</span> <span class="pre">env.agent_iter()</span></code> (see <a class="reference external" href="https://pettingzoo.farama.org/api/aec/#usage">AEC API Usage</a>).</p>
+<p>Note: while many PettingZoo environments use AgentSelector to manage agent cycling internally, it is not intended to be used externally when interacting with an environment. Instead, use <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">agent</span> <span class="pre">in</span> <span class="pre">env.agent_iter()</span></code> (see <a class="reference external" href="https://pettingzoo.farama.org/api/aec/#usage">AEC API Usage</a>).</p>
 <dl class="py class" id="module-pettingzoo.utils.agent_selector">
-<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.agent_selector">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.agent_selector.</span></span><span class="sig-name descname"><span class="pre">agent_selector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#agent_selector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.agent_selector" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.AgentSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.agent_selector.</span></span><span class="sig-name descname"><span class="pre">AgentSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#AgentSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.AgentSelector" title="Link to this definition">#</a></dt>
 <dd><p>Outputs an agent in the given order whenever agent_select is called.</p>
 <p>Can reinitialize to a new order.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">agent_selector</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="n">agent_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;player1&quot;</span><span class="p">,</span> <span class="s2">&quot;player2&quot;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">AgentSelector</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="n">agent_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;player1&quot;</span><span class="p">,</span> <span class="s2">&quot;player2&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">agent_selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="go">&#39;player1&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">agent_selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
@@ -487,35 +487,41 @@ games.</p>
 </pre></div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.agent_selector.is_first">
-<span class="sig-name descname"><span class="pre">is_first</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#agent_selector.is_first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.agent_selector.is_first" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.AgentSelector.is_first">
+<span class="sig-name descname"><span class="pre">is_first</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#AgentSelector.is_first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.AgentSelector.is_first" title="Link to this definition">#</a></dt>
 <dd><p>Check if the current agent is the first agent in the cycle.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.agent_selector.is_last">
-<span class="sig-name descname"><span class="pre">is_last</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#agent_selector.is_last"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.agent_selector.is_last" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.AgentSelector.is_last">
+<span class="sig-name descname"><span class="pre">is_last</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#AgentSelector.is_last"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.AgentSelector.is_last" title="Link to this definition">#</a></dt>
 <dd><p>Check if the current agent is the last agent in the cycle.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.agent_selector.next">
-<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#agent_selector.next"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.agent_selector.next" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.AgentSelector.next">
+<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#AgentSelector.next"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.AgentSelector.next" title="Link to this definition">#</a></dt>
 <dd><p>Get the next agent.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.agent_selector.reinit">
-<span class="sig-name descname"><span class="pre">reinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#agent_selector.reinit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.agent_selector.reinit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.AgentSelector.reinit">
+<span class="sig-name descname"><span class="pre">reinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#AgentSelector.reinit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.AgentSelector.reinit" title="Link to this definition">#</a></dt>
 <dd><p>Reinitialize to a new order.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.agent_selector.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#agent_selector.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.agent_selector.reset" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.AgentSelector.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#AgentSelector.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.AgentSelector.reset" title="Link to this definition">#</a></dt>
 <dd><p>Reset to the original order.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.agent_selector.agent_selector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.agent_selector.</span></span><span class="sig-name descname"><span class="pre">agent_selector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pettingzoo/utils/agent_selector/#agent_selector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.agent_selector.agent_selector" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated version of AgentSelector. Use that instead.</p>
 </dd></dl>
 
 </section>
@@ -715,14 +721,15 @@ games.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#agent-selector">Agent Selector</a><ul>
-<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.agent_selector"><code class="docutils literal notranslate"><span class="pre">agent_selector</span></code></a><ul>
-<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.agent_selector.is_first"><code class="docutils literal notranslate"><span class="pre">agent_selector.is_first()</span></code></a></li>
-<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.agent_selector.is_last"><code class="docutils literal notranslate"><span class="pre">agent_selector.is_last()</span></code></a></li>
-<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.agent_selector.next"><code class="docutils literal notranslate"><span class="pre">agent_selector.next()</span></code></a></li>
-<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.agent_selector.reinit"><code class="docutils literal notranslate"><span class="pre">agent_selector.reinit()</span></code></a></li>
-<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.agent_selector.reset"><code class="docutils literal notranslate"><span class="pre">agent_selector.reset()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.AgentSelector"><code class="docutils literal notranslate"><span class="pre">AgentSelector</span></code></a><ul>
+<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.AgentSelector.is_first"><code class="docutils literal notranslate"><span class="pre">AgentSelector.is_first()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.AgentSelector.is_last"><code class="docutils literal notranslate"><span class="pre">AgentSelector.is_last()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.AgentSelector.next"><code class="docutils literal notranslate"><span class="pre">AgentSelector.next()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.AgentSelector.reinit"><code class="docutils literal notranslate"><span class="pre">AgentSelector.reinit()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.AgentSelector.reset"><code class="docutils literal notranslate"><span class="pre">AgentSelector.reset()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#pettingzoo.utils.agent_selector.agent_selector"><code class="docutils literal notranslate"><span class="pre">agent_selector</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#envlogger">EnvLogger</a><ul>
