@@ -9,7 +9,7 @@ from gymnasium.utils import seeding
 from pettingzoo import AECEnv
 from pettingzoo.mpe._mpe_utils.core import Agent
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -75,7 +75,7 @@ class SimpleEnv(AECEnv):
             agent.name: idx for idx, agent in enumerate(self.world.agents)
         }
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
 
         # set spaces
         self.action_spaces = dict()
