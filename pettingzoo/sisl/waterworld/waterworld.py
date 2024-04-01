@@ -141,7 +141,7 @@ from gymnasium.utils import EzPickle
 from pettingzoo import AECEnv
 from pettingzoo.sisl.waterworld.waterworld_base import FPS
 from pettingzoo.sisl.waterworld.waterworld_base import WaterworldBase as _env
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import AgentSelector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
@@ -171,7 +171,7 @@ class raw_env(AECEnv, EzPickle):
         self.agents = ["pursuer_" + str(r) for r in range(self.env.num_agents)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
 
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))

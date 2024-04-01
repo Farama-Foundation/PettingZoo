@@ -69,7 +69,7 @@ from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def get_image(path):
@@ -220,7 +220,7 @@ class raw_env(AECEnv, EzPickle):
         self.truncations = {i: False for i in self.agents}
         self.infos = {i: {} for i in self.agents}
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
 
         self.agent_selection = self._agent_selector.reset()
 

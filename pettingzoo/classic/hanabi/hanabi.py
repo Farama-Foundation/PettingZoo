@@ -171,7 +171,7 @@ from shimmy.openspiel_compatibility import OpenSpielCompatibilityV0
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def env(**kwargs):
@@ -441,7 +441,7 @@ class raw_env(AECEnv, EzPickle):
         self.truncations = self.hanabi_env.truncations
         self.infos = self.hanabi_env.infos
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
     def step(
