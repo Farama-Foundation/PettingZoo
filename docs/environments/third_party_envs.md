@@ -57,6 +57,12 @@ CookingZoo: a gym-cooking derivative to simulate a complex cooking environment.
 
 A library for doing reinforcement learning using [Crazyflie](https://www.bitcraze.io/products/crazyflie-2-1/) drones.
 
+### [DSSE: Drone Swarm Search Environment](https://github.com/pfeinsper/drone-swarm-search)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
+![GitHub stars](https://img.shields.io/github/stars/pfeinsper/drone-swarm-search)
+
+A single and multi-agent environment to train swarms of drones for maritme search.
+
 
 ### [PettingZoo Dilemma Envs](https://github.com/tianyu-z/pettingzoo_dilemma_envs)
 
