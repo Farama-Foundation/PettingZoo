@@ -61,7 +61,7 @@ A library for doing reinforcement learning using [Crazyflie](https://www.bitcraz
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
 ![GitHub stars](https://img.shields.io/github/stars/pfeinsper/drone-swarm-search)
 
-A single and multi-agent environment to train swarms of drones for maritme search.
+A single and multi-agent environment to train swarms of drones for maritime search.
 
 
 ### [PettingZoo Dilemma Envs](https://github.com/tianyu-z/pettingzoo_dilemma_envs)
