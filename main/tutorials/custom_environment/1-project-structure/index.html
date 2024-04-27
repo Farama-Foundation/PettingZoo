@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tutorial: Environment Logic" href="../2-environment-logic/" /><link rel="prev" title="Custom Environment Tutorial" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/custom_environment/1-project-structure.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.3.7 and Furo 2023.08.19.dev1 -->
         <title>Tutorial: Repository Structure - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
@@ -401,15 +401,15 @@
           <article role="main">
             
             <section class="tex2jax_ignore mathjax_ignore" id="tutorial-repository-structure">
-<h1>Tutorial: Repository Structure<a class="headerlink" href="#tutorial-repository-structure" title="Link to this heading">#</a></h1>
+<h1>Tutorial: Repository Structure<a class="headerlink" href="#tutorial-repository-structure" title="Link to this heading">¶</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>Welcome to the first of four short tutorials, guiding you through the process of creating your own PettingZoo environment, from conception to deployment.</p>
 <p>We will be creating a parallel environment, meaning that each agent acts simultaneously.</p>
 <p>Before thinking about the environment logic, we should understand the structure of environment repositories.</p>
 </section>
 <section id="tree-structure">
-<h2>Tree structure<a class="headerlink" href="#tree-structure" title="Link to this heading">#</a></h2>
+<h2>Tree structure<a class="headerlink" href="#tree-structure" title="Link to this heading">¶</a></h2>
 <p>Environment repositories are usually laid out using the following structure:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Custom-Environment
 ├── custom-environment
@@ -427,7 +427,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">/requirements.txt</span></code> is a file used to keep track of your environment dependencies. At the very least, <code class="docutils literal notranslate"><span class="pre">pettingzoo</span></code> should be in there. <strong>Please version control all your dependencies via <code class="docutils literal notranslate"><span class="pre">==</span></code></strong>.</p></li>
 </ul>
 <section id="advanced-additional-optional-files">
-<h3>Advanced: Additional (optional) files<a class="headerlink" href="#advanced-additional-optional-files" title="Link to this heading">#</a></h3>
+<h3>Advanced: Additional (optional) files<a class="headerlink" href="#advanced-additional-optional-files" title="Link to this heading">¶</a></h3>
 <p>The above file structure is minimal. A more deployment-ready environment would include</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">/docs/</span></code> for documentation,</p></li>
@@ -439,10 +439,10 @@
 </section>
 </section>
 <section id="skeleton-code">
-<h2>Skeleton code<a class="headerlink" href="#skeleton-code" title="Link to this heading">#</a></h2>
+<h2>Skeleton code<a class="headerlink" href="#skeleton-code" title="Link to this heading">¶</a></h2>
 <p>The entirety of your environment logic is stored within <code class="docutils literal notranslate"><span class="pre">/custom-environment/env</span></code></p>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">/custom-environment/env/custom_environment.py</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="code-block-caption"><span class="caption-text">/custom-environment/env/custom_environment.py</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">ParallelEnv</span>
 
 
@@ -637,7 +637,7 @@
       </script>
 
     <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     

@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Simple" href="simple/" /><link rel="prev" title="Tic Tac Toe" href="../classic/tictactoe/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/mpe.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.3.7 and Furo 2023.08.19.dev1 -->
         <title>MPE - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
@@ -400,138 +400,20 @@
           <article role="main">
             
             <section class="tex2jax_ignore mathjax_ignore" id="mpe">
-<h1>MPE<a class="headerlink" href="#mpe" title="Link to this heading">#</a></h1>
+<h1>MPE<a class="headerlink" href="#mpe" title="Link to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-
-<!DOCTYPE html>
-<html>
-    <body>
-        <div class="env-grid">
-            
-            <a href="simple_adversary">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_adversary.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple Adversary</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple_crypto">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_crypto.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple Crypto</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple_push">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_push.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple Push</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple_reference">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_reference.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple Reference</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple_speaker_listener">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_speaker_listener.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple Speaker Listener</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple_spread">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_spread.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple Spread</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple_tag">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_tag.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple Tag</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple_world_comm">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple_world_comm.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple World Comm</span>
-                    </div>
-                </div>
-            </a>
-    
-
-            <a href="simple">
-                <div class="env-grid__cell">
-                    <div class="cell__image-container">
-                        <img src="../../_images/mpe_simple.gif">
-                    </div>
-                    <div class="cell__title">
-                        <span>Simple</span>
-                    </div>
-                </div>
-            </a>
-    
-        </div>
-        
-    </body>
-</html>
-    
-<p>Multi Particle Environments (MPE) are a set of communication oriented environment where particle agents can (sometimes) move, communicate, see each other, push each other around, and interact with fixed landmarks.</p>
+    :file: mpe/list.html<p>Multi Particle Environments (MPE) are a set of communication oriented environment where particle agents can (sometimes) move, communicate, see each other, push each other around, and interact with fixed landmarks.</p>
 <p>These environments are from <a class="reference external" href="https://github.com/openai/multiagent-particle-envs">OpenAI’s MPE</a> codebase, with several minor fixes, mostly related to making the action space discrete by default, making the rewards consistent and cleaning up the observation space of certain environments.</p>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>The unique dependencies for this set of environments can be installed via:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;pettingzoo[mpe]&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <p>To launch a <a class="reference internal" href="simple_tag/"><span class="doc std std-doc">Simple Tag</span></a> environment with random agents:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.mpe</span> <span class="kn">import</span> <span class="n">simple_tag_v3</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">simple_tag_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">)</span>
@@ -551,12 +433,12 @@
 </div>
 </section>
 <section id="types-of-environments">
-<h2>Types of Environments<a class="headerlink" href="#types-of-environments" title="Link to this heading">#</a></h2>
+<h2>Types of Environments<a class="headerlink" href="#types-of-environments" title="Link to this heading">¶</a></h2>
 <p>The Simple Adversary, Simple Crypto, Simple Push, Simple Tag, and Simple World Comm environments are adversarial (a “good” agent being rewarded means an “adversary” agent is punished and vice versa, though not always in a perfectly zero-sum manner). In most of these environments, there are “good” agents rendered in green and an “adversary” team rendered in red.</p>
 <p>The Simple Reference, Simple Speaker Listener, and Simple Spread environments are cooperative in nature (agents must work together to achieve their goals, and received a mixture of rewards based on their own success and the success of the other agents).</p>
 </section>
 <section id="key-concepts">
-<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading">#</a></h2>
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Landmarks</strong>: Landmarks are static circular features of the environment that cannot be controlled. In some environments, like Simple, they are destinations that affect the rewards of the agents depending on how close the agents are to them. In other environments, they can be obstacles that block the motion of the agents. These are described in more detail in the documentation for each environment.</p></li>
 <li><p><strong>Visibility</strong>: When an agent is visible to a another agent, that other agent’s observation contains the first agent’s relative position (and in Simple World Comm and Simple Tag, the first agent’s velocity). If an agent is temporarily hidden (only possible in Simple World Comm) then the agent’s position and velocity is set to zero.</p></li>
@@ -566,16 +448,16 @@
 </ul>
 </section>
 <section id="termination">
-<h2>Termination<a class="headerlink" href="#termination" title="Link to this heading">#</a></h2>
+<h2>Termination<a class="headerlink" href="#termination" title="Link to this heading">¶</a></h2>
 <p>The game terminates after the number of cycles specified by the <code class="docutils literal notranslate"><span class="pre">max_cycles</span></code> environment argument is executed. The default for all environments is 25 cycles, as in the original OpenAI source code.</p>
 </section>
 <section id="observation-space">
-<h2>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">#</a></h2>
+<h2>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">¶</a></h2>
 <p>The observation space of an agent is a vector generally composed of the agent’s position and velocity, other agents’ relative positions and velocities, landmarks’ relative positions, landmarks’ and agents’ types, and communications received from other agents. The exact form of this is detailed in the environments’ documentation.</p>
 <p>If an agent cannot see or observe the communication of a second agent, then the second agent is not included in the first’s observation space, resulting in different agents having different observation space sizes in certain environments.</p>
 </section>
 <section id="action-space">
-<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">#</a></h2>
+<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">¶</a></h2>
 <p>Note: <a class="reference external" href="https://github.com/openai/multiagent-particle-envs">OpenAI’s MPE</a> uses continuous action spaces by default.</p>
 <p>Discrete action space (Default):</p>
 <p>The action space is a discrete action space representing the combinations of movements and communications an agent can perform. Agents that can move can choose between the 4 cardinal directions or do nothing. Agents that can communicate choose between 2 and 10 environment-dependent communication options, which broadcast a message to all agents that can hear it.</p>
@@ -583,11 +465,11 @@
 <p>The action space is a continuous action space representing the movements and communication an agent can perform. Agents that can move can input a velocity between 0.0 and 1.0 in each of the four cardinal directions, where opposing velocities e.g. left and right are summed together. Agents that can communicate can output a continuous value over each communication channel in the environment which they have access to.</p>
 </section>
 <section id="rendering">
-<h2>Rendering<a class="headerlink" href="#rendering" title="Link to this heading">#</a></h2>
+<h2>Rendering<a class="headerlink" href="#rendering" title="Link to this heading">¶</a></h2>
 <p>Rendering displays the scene in a window that automatically grows if agents wander beyond its border. Communication is rendered at the bottom of the scene. The <code class="docutils literal notranslate"><span class="pre">render()</span></code> method also returns the pixel map of the rendered area.</p>
 </section>
 <section id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">#</a></h2>
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">¶</a></h2>
 <p>The MPE environments were originally described in the following work:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">mordatch2017emergence</span><span class="p">,</span>
   <span class="n">title</span><span class="o">=</span><span class="p">{</span><span class="n">Emergence</span> <span class="n">of</span> <span class="n">Grounded</span> <span class="n">Compositional</span> <span class="n">Language</span> <span class="ow">in</span> <span class="n">Multi</span><span class="o">-</span><span class="n">Agent</span> <span class="n">Populations</span><span class="p">},</span>
@@ -764,7 +646,7 @@
       </script>
 
     <script src="../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=7660844c"></script>
     
