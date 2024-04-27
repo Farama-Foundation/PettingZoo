@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Stable-Baselines3 Tutorial" href="../../sb3/" /><link rel="prev" title="LangChain Tutorial" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/langchain/langchain.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.3.7 and Furo 2023.08.19.dev1 -->
         <title>LangChain: Creating LLM agents - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
@@ -401,14 +401,14 @@
           <article role="main">
             
             <section class="tex2jax_ignore mathjax_ignore" id="langchain-creating-llm-agents">
-<h1>LangChain: Creating LLM agents<a class="headerlink" href="#langchain-creating-llm-agents" title="Link to this heading">#</a></h1>
+<h1>LangChain: Creating LLM agents<a class="headerlink" href="#langchain-creating-llm-agents" title="Link to this heading">¶</a></h1>
 <p>This tutorial will demonstrate how to use LangChain to create LLM agents that can interact with PettingZoo environments.</p>
 <p>This tutorial was created from LangChain’s documentation: <a class="reference external" href="https://python.langchain.com/en/latest/use_cases/agent_simulations/petting_zoo.html">Simulated Environment: PettingZoo</a>.</p>
 <blockquote>
 <div><p>For many applications of LLM agents, the environment is real (internet, database, REPL, etc). However, we can also define agents to interact in simulated environments like text-based games. This is an example of how to create a simple agent-environment interaction loop with PettingZoo.</p>
 </div></blockquote>
 <section id="environment-setup">
-<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
+<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]
 langchain
@@ -418,7 +418,7 @@ tenacity
 </div>
 </section>
 <section id="environment-loop">
-<h2>Environment Loop<a class="headerlink" href="#environment-loop" title="Link to this heading">#</a></h2>
+<h2>Environment Loop<a class="headerlink" href="#environment-loop" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
@@ -442,7 +442,7 @@ tenacity
 </div>
 </section>
 <section id="gymnasium-agent">
-<h2>Gymnasium Agent<a class="headerlink" href="#gymnasium-agent" title="Link to this heading">#</a></h2>
+<h2>Gymnasium Agent<a class="headerlink" href="#gymnasium-agent" title="Link to this heading">¶</a></h2>
 <p>Here we reproduce the same <code class="docutils literal notranslate"><span class="pre">GymnasiumAgent</span></code> defined from the <a class="reference external" href="https://python.langchain.com/en/latest/use_cases/agent_simulations/gymnasium.html">LangChain Gymnasium example</a>. If after multiple retries it does not take a valid action, it simply takes a random action.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tenacity</span>
 <span class="kn">from</span> <span class="nn">langchain.output_parsers</span> <span class="kn">import</span> <span class="n">RegexParser</span>
@@ -531,7 +531,7 @@ tenacity
 </div>
 </section>
 <section id="pettingzoo-agent">
-<h2>PettingZoo Agent<a class="headerlink" href="#pettingzoo-agent" title="Link to this heading">#</a></h2>
+<h2>PettingZoo Agent<a class="headerlink" href="#pettingzoo-agent" title="Link to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code> extends the <code class="docutils literal notranslate"><span class="pre">GymnasiumAgent</span></code> to the multi-agent setting. The main differences are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code> takes in a <code class="docutils literal notranslate"><span class="pre">name</span></code> argument to identify it among multiple agents</p></li>
@@ -557,7 +557,7 @@ tenacity
 </pre></div>
 </div>
 <section id="rock-paper-scissors">
-<h3>Rock-Paper-Scissors<a class="headerlink" href="#rock-paper-scissors" title="Link to this heading">#</a></h3>
+<h3>Rock-Paper-Scissors<a class="headerlink" href="#rock-paper-scissors" title="Link to this heading">¶</a></h3>
 <p>We can now run a simulation of a multi-agent rock, paper, scissors game using the <code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rock_paper_scissors</span><span class="p">():</span>
     <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">rps_v2</span>
@@ -638,7 +638,7 @@ Action: None
 </section>
 </section>
 <section id="action-masking-agent">
-<h2>Action Masking Agent<a class="headerlink" href="#action-masking-agent" title="Link to this heading">#</a></h2>
+<h2>Action Masking Agent<a class="headerlink" href="#action-masking-agent" title="Link to this heading">¶</a></h2>
 <p>Some <code class="docutils literal notranslate"><span class="pre">PettingZoo</span></code> environments provide an <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> to tell the agent which actions are valid. The <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code> subclasses <code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code> to use information from the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> to select actions.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">collections</span>
 
@@ -673,7 +673,7 @@ Action: None
 </pre></div>
 </div>
 <section id="tic-tac-toe">
-<h3>Tic-Tac-Toe<a class="headerlink" href="#tic-tac-toe" title="Link to this heading">#</a></h3>
+<h3>Tic-Tac-Toe<a class="headerlink" href="#tic-tac-toe" title="Link to this heading">¶</a></h3>
 <p>Here is an example of a Tic-Tac-Toe game that uses the <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tic_tac_toe</span><span class="p">():</span>
     <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">tictactoe_v3</span>
@@ -914,7 +914,7 @@ Action: None
 </div>
 </section>
 <section id="texas-holdem-no-limit">
-<h3>Texas Holdem’ No Limit<a class="headerlink" href="#texas-holdem-no-limit" title="Link to this heading">#</a></h3>
+<h3>Texas Holdem’ No Limit<a class="headerlink" href="#texas-holdem-no-limit" title="Link to this heading">¶</a></h3>
 <p>Here is an example of a Texas Hold’em No Limit game that uses the <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
     <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
@@ -1087,7 +1087,7 @@ Action: None
 </section>
 </section>
 <section id="full-code">
-<h2>Full Code<a class="headerlink" href="#full-code" title="Link to this heading">#</a></h2>
+<h2>Full Code<a class="headerlink" href="#full-code" title="Link to this heading">¶</a></h2>
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with LangChain. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">langchain.chat_models</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
 <span class="kn">from</span> <span class="nn">pettingzoo_agent</span> <span class="kn">import</span> <span class="n">PettingZooAgent</span>
@@ -1328,7 +1328,7 @@ Action: None
       </script>
 
     <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     

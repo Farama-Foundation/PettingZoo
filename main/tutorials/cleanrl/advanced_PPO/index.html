@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tianshou Tutorial" href="../../tianshou/" /><link rel="prev" title="CleanRL: Implementing PPO" href="../implementing_PPO/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/cleanrl/advanced_PPO.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.3.7 and Furo 2023.08.19.dev1 -->
         <title>CleanRL: Advanced PPO - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
@@ -401,12 +401,12 @@
           <article role="main">
             
             <section class="tex2jax_ignore mathjax_ignore" id="cleanrl-advanced-ppo">
-<h1>CleanRL: Advanced PPO<a class="headerlink" href="#cleanrl-advanced-ppo" title="Link to this heading">#</a></h1>
+<h1>CleanRL: Advanced PPO<a class="headerlink" href="#cleanrl-advanced-ppo" title="Link to this heading">¶</a></h1>
 <p>This tutorial shows how to train <a class="reference external" href="https://docs.cleanrl.dev/rl-algorithms/ppo/">PPO</a> agents on <a class="reference internal" href="../../../environments/butterfly/pistonball/"><span class="doc std std-doc">Atari</span></a> environments (<a class="reference internal" href="../../../api/parallel/"><span class="doc std std-doc">Parallel</span></a>).
 This is a full training script including CLI, logging and integration with <a class="reference external" href="https://www.tensorflow.org/tensorboard">TensorBoard</a> and <a class="reference external" href="https://wandb.ai/">WandB</a> for experiment tracking.</p>
 <p>This tutorial is mirrored from <a class="reference external" href="https://github.com/vwxyzjn/cleanrl">CleanRL</a>’s examples. Full documentation and experiment results can be found at <a class="reference external" href="https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy">https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy</a></p>
 <section id="environment-setup">
-<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
+<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly,atari,testing]&gt;=1.24.0
 SuperSuit&gt;=3.9.0
@@ -417,7 +417,7 @@ torch&gt;=1.13.1
 <p>Then, install ROMs using <a class="reference external" href="https://github.com/Farama-Foundation/AutoROM">AutoROM</a>, or specify the path to your Atari rom using the <code class="docutils literal notranslate"><span class="pre">rom_path</span></code> argument (see <a class="reference internal" href="#/environments/atari/#common-parameters"><span class="xref myst">Common Parameters</span></a>).</p>
 </section>
 <section id="code">
-<h2>Code<a class="headerlink" href="#code" title="Link to this heading">#</a></h2>
+<h2>Code<a class="headerlink" href="#code" title="Link to this heading">¶</a></h2>
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with CleanRL. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>, or create an issue on <a class="reference external" href="https://github.com/vwxyzjn/cleanrl/issues">CleanRL’s GitHub</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Advanced training script adapted from CleanRL&#39;s repository: https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_pettingzoo_ma_atari.py.</span>
 
@@ -957,7 +957,7 @@ torch&gt;=1.13.1
       </script>
 
     <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     

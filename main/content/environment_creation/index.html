@@ -11,7 +11,7 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Testing Environments" href="../environment_tests/" /><link rel="prev" title="Basic Usage" href="../basic_usage/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/content/environment_creation.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.3.7 and Furo 2023.08.19.dev1 -->
         <title>Environment Creation - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
@@ -400,12 +400,12 @@
           <article role="main">
             
             <section class="tex2jax_ignore mathjax_ignore" id="environment-creation">
-<h1>Environment Creation<a class="headerlink" href="#environment-creation" title="Link to this heading">#</a></h1>
+<h1>Environment Creation<a class="headerlink" href="#environment-creation" title="Link to this heading">¶</a></h1>
 <p>This documentation overviews creating new environments and relevant useful wrappers, utilities and tests included in PettingZoo designed for the creation of new environments.</p>
 <p>We will walk through the creation of a simple Rock-Paper-Scissors environment, with example code for both <a class="reference internal" href="../../api/aec/"><span class="doc std std-doc">AEC</span></a> and <a class="reference internal" href="../../api/parallel/"><span class="doc std std-doc">Parallel</span></a> environments.</p>
 <p>See our <a class="reference internal" href="../../tutorials/custom_environment/"><span class="doc std std-doc">Custom Environment Tutorial</span></a> for a full walkthrough on creating custom environments, including complex environment logic and illegal action masking.</p>
 <section id="example-custom-environment">
-<h2>Example Custom Environment<a class="headerlink" href="#example-custom-environment" title="Link to this heading">#</a></h2>
+<h2>Example Custom Environment<a class="headerlink" href="#example-custom-environment" title="Link to this heading">¶</a></h2>
 <p>This is a carefully commented version of the PettingZoo rock paper scissors environment.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functools</span>
 
@@ -656,7 +656,7 @@
 </div>
 </section>
 <section id="example-custom-parallel-environment">
-<h2>Example Custom Parallel Environment<a class="headerlink" href="#example-custom-parallel-environment" title="Link to this heading">#</a></h2>
+<h2>Example Custom Parallel Environment<a class="headerlink" href="#example-custom-parallel-environment" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functools</span>
 
 <span class="kn">import</span> <span class="nn">gymnasium</span>
@@ -860,7 +860,7 @@
 </div>
 </section>
 <section id="using-wrappers">
-<h2>Using Wrappers<a class="headerlink" href="#using-wrappers" title="Link to this heading">#</a></h2>
+<h2>Using Wrappers<a class="headerlink" href="#using-wrappers" title="Link to this heading">¶</a></h2>
 <p>A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides <a class="reference internal" href="#/api/pz_wrappers"><span class="xref myst">wrappers to convert environments</span></a> back and forth between the AEC API and the Parallel API and a set of simple <a class="reference internal" href="#/api/pz_wrappers"><span class="xref myst">utility wrappers</span></a> which provide input validation and other convenient reusable logic. PettingZoo also includes <a class="reference internal" href="#/api/supersuit_wrappers"><span class="xref myst">wrappers</span></a> via the SuperSuit companion package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">supersuit</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">ClipOutOfBoundsWrapper</span>
@@ -873,11 +873,11 @@
 </div>
 </section>
 <section id="developer-utils">
-<h2>Developer Utils<a class="headerlink" href="#developer-utils" title="Link to this heading">#</a></h2>
+<h2>Developer Utils<a class="headerlink" href="#developer-utils" title="Link to this heading">¶</a></h2>
 <p>The utils directory contains a few functions which are helpful for debugging environments. These are documented in the API docs.</p>
 <p>The utils directory also contain some classes which are only helpful for developing new environments. These are documented below.</p>
 <section id="agent-selector">
-<h3>Agent selector<a class="headerlink" href="#agent-selector" title="Link to this heading">#</a></h3>
+<h3>Agent selector<a class="headerlink" href="#agent-selector" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">AgentSelector</span></code> class steps through agents in a cycle</p>
 <p>It can be used as follows to cycle through the list of agents:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">AgentSelector</span>
@@ -892,7 +892,7 @@
 </div>
 </section>
 <section id="deprecated-module">
-<h3>Deprecated Module<a class="headerlink" href="#deprecated-module" title="Link to this heading">#</a></h3>
+<h3>Deprecated Module<a class="headerlink" href="#deprecated-module" title="Link to this heading">¶</a></h3>
 <p>The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.</p>
 <p>For example, when the user tries to import the <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v0</span></code> environment, they import the following variable (defined in <code class="docutils literal notranslate"><span class="pre">pettingzoo/butterfly/__init__.py</span></code>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils.deprecated_module</span> <span class="kn">import</span> <span class="n">DeprecatedModule</span>
@@ -1074,7 +1074,7 @@
       </script>
 
     <script src="../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=7660844c"></script>
     
