@@ -466,9 +466,23 @@ sb3-contrib&gt;=2.0.0
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">),</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like step function, returning observation, reward, termination, truncation, info.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like step function, returning observation, reward, termination, truncation, info.</span>
+
+<span class="sd">        The observation is for the next agent (used to determine the next action), while the remaining</span>
+<span class="sd">        items are for the agent that just acted (used to understand what just happened).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
+
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
+        <span class="n">next_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">next_agent</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span><span class="p">[</span><span class="n">current_agent</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="n">current_agent</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="n">current_agent</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">current_agent</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return only raw observation, removing action mask.&quot;&quot;&quot;</span>
@@ -638,14 +652,14 @@ sb3-contrib&gt;=2.0.0
 <span class="n">EASY_ENVS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">gin_rummy_v4</span><span class="p">,</span>
     <span class="n">texas_holdem_no_limit_v6</span><span class="p">,</span>  <span class="c1"># texas holdem human rendered game ends instantly, but with random actions it works fine</span>
-    <span class="n">texas_holdem_v4</span><span class="p">,</span>
+    <span class="n">tictactoe_v3</span><span class="p">,</span>
+    <span class="n">leduc_holdem_v4</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="c1"># More difficult environments which will likely take more training time</span>
 <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">leduc_holdem_v4</span><span class="p">,</span>  <span class="c1"># with 10x as many steps it gets higher total rewards (9 vs -9), 0.52 winrate, and 0.92 vs 0.83 total scores</span>
     <span class="n">hanabi_v5</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
-    <span class="n">tictactoe_v3</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, agent still loses every time (most likely an error somewhere)</span>
+    <span class="n">texas_holdem_v4</span><span class="p">,</span>  <span class="c1"># this performs poorly with updates to SB3 wrapper</span>
     <span class="n">chess_v6</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
 <span class="p">]</span>
 
@@ -665,8 +679,7 @@ sb3-contrib&gt;=2.0.0
 
     <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="c1"># Leduc Hold`em takes slightly longer to outperform random</span>
-    <span class="n">steps</span> <span class="o">=</span> <span class="mi">8192</span> <span class="k">if</span> <span class="n">env_fn</span> <span class="o">!=</span> <span class="n">leduc_holdem_v4</span> <span class="k">else</span> <span class="mi">8192</span> <span class="o">*</span> <span class="mi">4</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="mi">8192</span> <span class="o">*</span> <span class="mi">4</span>
 
     <span class="c1"># Train a model against itself (takes ~2 minutes on GPU)</span>
     <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
