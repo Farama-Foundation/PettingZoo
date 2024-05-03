@@ -79,7 +79,7 @@ from pettingzoo.butterfly.cooperative_pong.cake_paddle import CakePaddle
 from pettingzoo.butterfly.cooperative_pong.manual_policy import ManualPolicy
 from pettingzoo.butterfly.cooperative_pong.paddle import Paddle
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 FPS = 15
@@ -370,7 +370,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.agents = self.env.agents[:]
         self.possible_agents = self.agents[:]
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))

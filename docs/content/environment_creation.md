@@ -62,14 +62,14 @@ The utils directory also contain some classes which are only helpful for develop
 
 ### Agent selector
 
-The `agent_selector` class steps through agents in a cycle
+The `AgentSelector` class steps through agents in a cycle
 
 It can be used as follows to cycle through the list of agents:
 
 ```python
-from pettingzoo.utils import agent_selector
+from pettingzoo.utils import AgentSelector
 agents = ["agent_1", "agent_2", "agent_3"]
-selector = agent_selector(agents)
+selector = AgentSelector(agents)
 agent_selection = selector.reset()
 # agent_selection will be "agent_1"
 for i in range(100):
