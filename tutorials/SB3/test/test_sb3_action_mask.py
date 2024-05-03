@@ -91,7 +91,7 @@ def test_action_mask_medium(env_fn):
 
     assert (
         winrate < 0.75
-    ), "Policy should not perform better than 75% winrate"  # 30-40% for leduc, 0% for hanabi, 0% for tic-tac-toe
+    ), "Policy should not perform better than 75% winrate"  # 30-40% for leduc, 0% for hanabi
 
     # Watch two games (disabled by default)
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)
