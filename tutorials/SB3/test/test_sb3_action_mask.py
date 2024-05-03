@@ -10,7 +10,7 @@ from pettingzoo.classic import (
     leduc_holdem_v4,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
-    tictactoe_v4,
+    tictactoe_v3,
 )
 
 pytest.importorskip("stable_baselines3")
@@ -24,7 +24,7 @@ EASY_ENVS = [
     gin_rummy_v4,
     texas_holdem_no_limit_v6,  # texas holdem human rendered game ends instantly, but with random actions it works fine
     texas_holdem_v4,
-    tictactoe_v4,
+    tictactoe_v3,
 ]
 
 # More difficult environments which will likely take more training time
@@ -52,7 +52,7 @@ def test_action_mask_easy(env_fn):
 
     steps = 8192
     # These take slightly longer to outperform random
-    if env_fn in [leduc_holdem_v4, tictactoe_v4]:
+    if env_fn in [leduc_holdem_v4, tictactoe_v3]:
         steps *= 4
 
     # Train a model against itself (takes ~2 minutes on GPU)

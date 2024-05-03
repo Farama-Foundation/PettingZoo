@@ -73,7 +73,7 @@ env_obs_dicts = [
     "go_v5",
     "chess_v6",
     "connect_four_v3",
-    "tictactoe_v4",
+    "tictactoe_v3",
     "gin_rummy_v4",
 ]
 env_graphical_obs = ["knights_archers_zombies_v10"]
@@ -96,7 +96,7 @@ env_obs_space = [
     "knights_archers_zombies_v10",
     "chess_v6",
     "connect_four_v3",
-    "tictactoe_v4",
+    "tictactoe_v3",
     "gin_rummy_v4",
 ]
 env_diff_agent_obs_size = [

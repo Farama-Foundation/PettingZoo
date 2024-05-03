@@ -43,7 +43,7 @@ from pettingzoo.classic import (
     rps_v2,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
-    tictactoe_v4,
+    tictactoe_v3,
 )
 from pettingzoo.mpe import (
     simple_adversary_v3,
@@ -104,7 +104,7 @@ parameterized_envs = [
     ["classic/connect_four_v3", connect_four_v3, dict()],
     ["classic/rps_v2", rps_v2, dict()],
     ["classic/chess_v6", chess_v6, dict()],
-    ["classic/tictactoe_v4", tictactoe_v4, dict()],
+    ["classic/tictactoe_v3", tictactoe_v3, dict()],
     ["classic/gin_rummy_v4", gin_rummy_v4, dict()],
     ["classic/gin_rummy_v4", gin_rummy_v4, dict(opponents_hand_visible=True)],
     ["mpe/simple_v3", simple_v3, dict(max_cycles=50)],

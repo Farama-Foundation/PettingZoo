@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import tictactoe_v4` |
+| Import             | `from pettingzoo.classic import tictactoe_v3` |
 |--------------------|-----------------------------------------------|
 | Actions            | Discrete                                      |
 | Parallel API       | Yes                                           |
@@ -112,7 +112,7 @@ def env(**kwargs):
 class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "tictactoe_v4",
+        "name": "tictactoe_v3",
         "is_parallelizable": False,
         "render_fps": 1,
     }

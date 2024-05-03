@@ -26,7 +26,7 @@ from tianshou.utils import TensorboardLogger
 from tianshou.utils.net.common import Net
 from torch.utils.tensorboard import SummaryWriter
 
-from pettingzoo.classic import tictactoe_v4
+from pettingzoo.classic import tictactoe_v3
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -146,7 +146,7 @@ def get_agents(
 
 
 def get_env(render_mode=None):
-    return PettingZooEnv(tictactoe_v4.env(render_mode=render_mode))
+    return PettingZooEnv(tictactoe_v3.env(render_mode=render_mode))
 
 
 def train_agent(

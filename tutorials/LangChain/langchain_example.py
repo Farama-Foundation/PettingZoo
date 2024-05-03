@@ -37,9 +37,9 @@ def rock_paper_scissors():
 
 
 def tic_tac_toe():
-    from pettingzoo.classic import tictactoe_v4
+    from pettingzoo.classic import tictactoe_v3
 
-    env = tictactoe_v4.env(render_mode="human")
+    env = tictactoe_v3.env(render_mode="human")
     agents = {
         name: ActionMaskAgent(name=name, model=ChatOpenAI(temperature=0.2), env=env)
         for name in env.possible_agents
