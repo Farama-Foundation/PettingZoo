@@ -36,32 +36,8 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         super().__init__(env)
 
     def __getattr__(self, value: str) -> Any:
-        """Raises an error message when data is gotten from the env.
-
-        Should only be gotten after reset
-        """
-        if value == "unwrapped":
-            return self.env.unwrapped
-        elif value == "render_mode" and hasattr(self.env, "render_mode"):
-            return self.env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
-        elif value == "possible_agents":
-            try:
-                return self.env.possible_agents
-            except AttributeError:
-                EnvLogger.error_possible_agents_attribute_missing("possible_agents")
-        elif value == "observation_spaces":
-            raise AttributeError(
-                "The base environment does not have an possible_agents attribute. Use the environments `observation_space` method instead"
-            )
-        elif value == "action_spaces":
-            raise AttributeError(
-                "The base environment does not have an possible_agents attribute. Use the environments `action_space` method instead"
-            )
-        elif value == "agent_order":
-            raise AttributeError(
-                "agent_order has been removed from the API. Please consider using agent_iter instead."
-            )
-        elif (
+        """Raises an error if certain data is accessed before reset."""
+        if (
             value
             in {
                 "rewards",
