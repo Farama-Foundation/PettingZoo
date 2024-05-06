@@ -33,7 +33,6 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             env, AECEnv
         ), "OrderEnforcingWrapper is only compatible with AEC environments"
         self._has_reset = False
-        self._has_rendered = False
         self._has_updated = False
         super().__init__(env)
 
@@ -59,7 +58,6 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     def render(self) -> None | np.ndarray | str | list:
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
-        self._has_rendered = True
         return super().render()
 
     def step(self, action: ActionType) -> None:
