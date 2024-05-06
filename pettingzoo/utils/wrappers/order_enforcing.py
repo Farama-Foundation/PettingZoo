@@ -19,11 +19,13 @@ from pettingzoo.utils.wrappers.base import BaseWrapper
 class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     """Checks if function calls or attribute access are in a disallowed order.
 
-    * error on getting rewards, terminations, truncations, infos, agent_selection before reset
-    * error on calling step, observe before reset
-    * error on iterating without stepping or resetting environment.
-    * warn on calling close before render or reset
-    * warn on calling step after environment is terminated or truncated
+    The following are raised:
+    * AttributeError if any of the following are accessed before reset():
+      rewards, terminations, truncations, infos, agent_selection,
+      num_agents, agents.
+    * An error if any of the following are called before reset:
+      render(), step(), observe(), state(), agent_iter()
+    * A warning if step() is called when there are no agents remaining.
     """
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
