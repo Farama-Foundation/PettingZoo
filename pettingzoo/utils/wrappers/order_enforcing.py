@@ -52,8 +52,7 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             and not self._has_reset
         ):
             raise AttributeError(f"{value} cannot be accessed before reset")
-        else:
-            return super().__getattr__(value)
+        return super().__getattr__(value)
 
     def render(self) -> None | np.ndarray | str | list:
         if not self._has_reset:
@@ -66,7 +65,6 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         elif not self.agents:
             self._has_updated = True
             EnvLogger.warn_step_after_terminated_truncated()
-            return None
         else:
             self._has_updated = True
             super().step(action)
@@ -100,8 +98,7 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
                 if self.__class__ is OrderEnforcingWrapper
                 else f"{type(self).__name__}<{str(self.env)}>"
             )
-        else:
-            return repr(self)
+        return repr(self)
 
 
 class AECOrderEnforcingIterable(AECIterable[AgentID, ObsType, ActionType]):
