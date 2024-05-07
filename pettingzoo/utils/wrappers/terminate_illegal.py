@@ -59,7 +59,7 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
-            self._was_dead_step(action)
+            self.env.unwrapped._was_dead_step(action)
         elif (
             not self.terminations[self.agent_selection]
             and not self.truncations[self.agent_selection]
@@ -71,8 +71,8 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             self.env.unwrapped.truncations = {d: True for d in self.agents}
             self.env.unwrapped.rewards = {d: 0 for d in self.truncations}
             self.env.unwrapped.rewards[current_agent] = float(self._illegal_value)
-            self._accumulate_rewards()
-            self._deads_step_first()
+            self.env.unwrapped._accumulate_rewards()
+            self.env.unwrapped._deads_step_first()
             self._terminated = True
         else:
             super().step(action)
