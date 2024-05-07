@@ -20,6 +20,7 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         self._illegal_value = illegal_reward
         self._prev_obs = None
         self._prev_info = None
+        self._terminated = False  # terminated by an illegal move
 
     def reset(self, seed: int | None = None, options: dict | None = None) -> None:
         self._terminated = False
