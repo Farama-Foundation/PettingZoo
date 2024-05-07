@@ -110,22 +110,15 @@ class AECOrderEnforcingIterator(AECIterator[AgentID, ObsType, ActionType]):
     def __init__(
         self, env: OrderEnforcingWrapper[AgentID, ObsType, ActionType], max_iter: int
     ):
-        assert hasattr(
-            env, "_has_updated"
+        assert isinstance(
+            env, OrderEnforcingWrapper
         ), "env must be wrapped by OrderEnforcingWrapper"
-        # this is set during the super call to init, so setting it here
-        # is redundant. However, it silences pyright errors because it tells
-        # pyright that self.env is an OrderEnforcingWrapper (which may not be
-        # strictly true, but it should have OrderEnforcingWrapper somewhere
-        # in the wrapper list). This might be better handled by Protocols,
-        # but this approach works.
-        self.env = env  # silence pyright errors
         super().__init__(env, max_iter)
 
     def __next__(self) -> AgentID:
         agent = super().__next__()
         assert (
-            self.env._has_updated
+            self.env._has_updated  # pyright: ignore[reportGeneralTypeIssues]
         ), "need to call step() or reset() in a loop over `agent_iter`"
-        self.env._has_updated = False
+        self.env._has_updated = False  # pyright: ignore[reportGeneralTypeIssues]
         return agent
