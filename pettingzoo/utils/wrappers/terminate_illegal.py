@@ -1,4 +1,3 @@
-# pyright reportGeneralTypeIssues=false
 from __future__ import annotations
 
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType
@@ -60,7 +59,7 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
-            self._was_dead_step(action)  # pyright: ignore[reportGeneralTypeIssues]
+            self._was_dead_step(action)
         elif (
             not self.terminations[self.agent_selection]
             and not self.truncations[self.agent_selection]
