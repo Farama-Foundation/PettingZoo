@@ -43,7 +43,6 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         if self._prev_obs is None:
             self.observe(self.agent_selection)
         if isinstance(self._prev_obs, dict):
-            assert self._prev_obs is not None
             assert (
                 "action_mask" in self._prev_obs
             ), f"`action_mask` not found in dictionary observation: {self._prev_obs}. Action mask must either be in `observation['action_mask']` or `info['action_mask']` to use TerminateIllegalWrapper."
@@ -71,8 +70,6 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             self.env.unwrapped._cumulative_rewards[self.agent_selection] = 0
             self.env.unwrapped.terminations = {d: True for d in self.agents}
             self.env.unwrapped.truncations = {d: True for d in self.agents}
-            self._prev_obs = None
-            self._prev_info = None
             self.env.unwrapped.rewards = {d: 0 for d in self.truncations}
             self.env.unwrapped.rewards[current_agent] = float(self._illegal_value)
             self._accumulate_rewards()
