@@ -12,6 +12,14 @@ lastpage:
 ## Environments using the latest versions of PettingZoo
 *Due to a very recent major release of PettingZoo, there are currently few contributed third-party environments. If you'd like to contribute one, please reach out on [Discord](https://discord.gg/nHg2JRN489).*
 
+### [PredPreyGrass](https://github.com/doesburg11/PredPreyGrass)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/doesburg11/PredPreyGrass)]()
+
+Predator-Prey-Grass gridworld environment using PettingZoo, with dynamic deletion and spawning of partially observant agents.
+
+
 ### [Sumo-RL](https://github.com/LucasAlegre/sumo-rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.2-blue)]()
