@@ -237,7 +237,7 @@ class raw_env(AECEnv, EzPickle):
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
         self.time_penalty = time_penalty
         # TODO: this was a bad idea and the logic this uses should be removed at some point
-        self.local_ratio = 0
+        self.local_ratio = 0.25 # Temporary fix
         self.ball_mass = ball_mass
         self.ball_friction = ball_friction
         self.ball_elasticity = ball_elasticity
