@@ -12,7 +12,7 @@ from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import AgentSelector
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-DYNAMIC_RESCALING = False
+DYNAMIC_RESCALING = True
 
 
 def make_env(raw_env):
