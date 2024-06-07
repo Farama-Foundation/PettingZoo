@@ -12,6 +12,7 @@ from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import AgentSelector
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+DYNAMIC_RESCALING = False
 
 
 def make_env(raw_env):
@@ -116,6 +117,11 @@ class SimpleEnv(AECEnv):
             dtype=np.float32,
         )
 
+        # Get the original cam_range
+        # This will be used to scale the rendering
+        all_poses = [entity.state.p_pos for entity in self.world.entities]
+        self.original_cam_range = np.max(np.abs(np.array(all_poses)))
+        
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
@@ -295,6 +301,10 @@ class SimpleEnv(AECEnv):
         all_poses = [entity.state.p_pos for entity in self.world.entities]
         cam_range = np.max(np.abs(np.array(all_poses)))
 
+        # The scaling factor is used for dynamic rescaling of the rendering - a.k.a Zoom In/Zoom Out effect
+        # The 0.9 is a factor to keep the entities from appearing "too" out-of-bounds
+        scaling_factor = 0.9 * self.original_cam_range / cam_range
+
         # update geometry and text positions
         text_line = 0
         for e, entity in enumerate(self.world.entities):
@@ -309,11 +319,18 @@ class SimpleEnv(AECEnv):
             y = (y / cam_range) * self.height // 2 * 0.9
             x += self.width // 2
             y += self.height // 2
+
+            # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
+            if DYNAMIC_RESCALING:
+                radius = entity.size * 350 * scaling_factor
+            else:
+                radius = entity.size * 350
+
             pygame.draw.circle(
-                self.screen, entity.color * 200, (x, y), entity.size * 350
-            )  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
+                self.screen, entity.color * 200, (x, y), radius
+            )  
             pygame.draw.circle(
-                self.screen, (0, 0, 0), (x, y), entity.size * 350, 1
+                self.screen, (0, 0, 0), (x, y), radius, 1
             )  # borders
             assert (
                 0 < x < self.width and 0 < y < self.height
