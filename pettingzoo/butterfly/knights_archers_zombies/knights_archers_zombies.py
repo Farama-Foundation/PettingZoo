@@ -132,6 +132,7 @@ knights_archers_zombies_v10.env(
   vector_state=True,
   use_typemasks=False,
   sequence_space=False,
+)
 ```
 
 `spawn_rate`:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
@@ -193,7 +194,7 @@ from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 from pettingzoo.butterfly.knights_archers_zombies.src.players import Archer, Knight
 from pettingzoo.butterfly.knights_archers_zombies.src.weapons import Arrow, Sword
 from pettingzoo.butterfly.knights_archers_zombies.src.zombie import Zombie
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import AgentSelector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 sys.dont_write_bytecode = True
@@ -369,7 +370,7 @@ class raw_env(AECEnv, EzPickle):
         self.floor_patch3 = get_image(os.path.join("img", "patch3.png"))
         self.floor_patch4 = get_image(os.path.join("img", "patch4.png"))
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.reinit()
 
     def observation_space(self, agent):

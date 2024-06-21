@@ -165,7 +165,7 @@ Base class which is used by [CaptureStdoutWrapper](https://pettingzoo.farama.org
 
 The agent selector utility allows for easy cycling of agents in an AEC environment. At any time it can be reset or reinitialized with a new order, allowing for changes in turn order or handling a dynamic number of agents (see [Knights-Archers-Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) for an example of spawning/killing agents)
 
-Note: while many PettingZoo environments use agent_selector to manage agent cycling internally, it is not intended to be used externally when interacting with an environment. Instead, use `for agent in env.agent_iter()` (see [AEC API Usage](https://pettingzoo.farama.org/api/aec/#usage)).
+Note: while many PettingZoo environments use AgentSelector to manage agent cycling internally, it is not intended to be used externally when interacting with an environment. Instead, use `for agent in env.agent_iter()` (see [AEC API Usage](https://pettingzoo.farama.org/api/aec/#usage)).
 
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils

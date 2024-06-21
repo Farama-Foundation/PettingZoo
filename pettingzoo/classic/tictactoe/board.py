@@ -1,79 +1,102 @@
+TTT_PLAYER1_WIN = 0
+TTT_PLAYER2_WIN = 1
+TTT_TIE = -1
+TTT_GAME_NOT_OVER = -2
+
+
 class Board:
+    """Board for a TicTacToe Game.
+
+    This tracks the position and identity of marks on the game board
+    and allows checking for a winner.
+
+    Example of usage:
+
+    import random
+    board = Board()
+
+    # random legal moves - for example purposes
+    def choose_move(board_obj: Board) -> int:
+        legal_moves = [i for i, mark in enumerate(board_obj.squares) if mark == 0]
+        return random.choice(legal_moves)
+
+    player = 0
+    while True:
+        move = choose_move(board)
+        board.play_turn(player, move)
+        status = board.game_status()
+        if status != TTT_GAME_NOT_OVER:
+            if status in [TTT_PLAYER1_WIN, TTT_PLAYER2_WIN]:
+                print(f"player {status} won")
+            else:  # status == TTT_TIE
+                print("Tie Game")
+            break
+        player = player ^ 1  # swaps between players 0 and 1
+    """
+
+    # indices of the winning lines: vertical(x3), horizontal(x3), diagonal(x2)
+    winning_combinations = [
+        (0, 1, 2),
+        (3, 4, 5),
+        (6, 7, 8),
+        (0, 3, 6),
+        (1, 4, 7),
+        (2, 5, 8),
+        (0, 4, 8),
+        (2, 4, 6),
+    ]
+
     def __init__(self):
-        # internally self.board.squares holds a flat representation of tic tac toe board
-        # where an empty board is [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        # where indexes are column wise order
+        # self.squares holds a flat representation of the tic tac toe board.
+        # an empty board is [0, 0, 0, 0, 0, 0, 0, 0, 0].
+        # player 1's squares are marked 1, while player 2's are marked 2.
+        # mapping of the flat indices to the 3x3 grid is as follows:
         # 0 3 6
         # 1 4 7
         # 2 5 8
-
-        # empty -- 0
-        # player 0 -- 1
-        # player 1 -- 2
         self.squares = [0] * 9
 
-        # precommute possible winning combinations
-        self.calculate_winners()
+    @property
+    def _n_empty_squares(self):
+        """The current number of empty squares on the board."""
+        return self.squares.count(0)
 
-    def setup(self):
-        self.calculate_winners()
+    def reset(self):
+        """Remove all marks from the board."""
+        self.squares = [0] * 9
 
     def play_turn(self, agent, pos):
-        # if spot is empty
-        if self.squares[pos] != 0:
-            return
-        if agent == 0:
-            self.squares[pos] = 1
-        elif agent == 1:
-            self.squares[pos] = 2
-        return
+        """Place a mark by the agent in the spot given.
 
-    def calculate_winners(self):
-        winning_combinations = []
-        indices = [x for x in range(0, 9)]
+        The following are required for a move to be valid:
+        * The agent must be a known agent ID (either 0 or 1).
+        * The spot must be be empty.
+        * The spot must be in the board (integer: 0 <= spot <= 8)
 
-        # Vertical combinations
-        winning_combinations += [
-            tuple(indices[i : (i + 3)]) for i in range(0, len(indices), 3)
-        ]
+        If any of those are not true, an assertion will fail.
+        """
+        assert pos >= 0 and pos <= 8, "Invalid move location"
+        assert agent in [0, 1], "Invalid agent"
+        assert self.squares[pos] == 0, "Location is not empty"
 
-        # Horizontal combinations
-        winning_combinations += [
-            tuple(indices[x] for x in range(y, len(indices), 3)) for y in range(0, 3)
-        ]
+        # agent is [0, 1]. board values are stored as [1, 2].
+        self.squares[pos] = agent + 1
 
-        # Diagonal combinations
-        winning_combinations.append(tuple(x for x in range(0, len(indices), 4)))
-        winning_combinations.append(tuple(x for x in range(2, len(indices) - 1, 2)))
-
-        self.winning_combinations = winning_combinations
-
-    # returns:
-    # -1 for no winner
-    # 1 -- agent 0 wins
-    # 2 -- agent 1 wins
-    def check_for_winner(self):
-        winner = -1
-        for combination in self.winning_combinations:
-            states = []
-            for index in combination:
-                states.append(self.squares[index])
-            if all(x == 1 for x in states):
-                winner = 1
-            if all(x == 2 for x in states):
-                winner = 2
-        return winner
-
-    def check_game_over(self):
-        winner = self.check_for_winner()
-
-        if winner == -1 and all(square in [1, 2] for square in self.squares):
-            # tie
-            return True
-        elif winner in [1, 2]:
-            return True
-        else:
-            return False
+    def game_status(self):
+        """Return status (winner, TTT_TIE if no winner, or TTT_GAME_NOT_OVER)."""
+        for indices in self.winning_combinations:
+            states = [self.squares[idx] for idx in indices]
+            if states == [1, 1, 1]:
+                return TTT_PLAYER1_WIN
+            if states == [2, 2, 2]:
+                return TTT_PLAYER2_WIN
+        if self._n_empty_squares == 0:
+            return TTT_TIE
+        return TTT_GAME_NOT_OVER
 
     def __str__(self):
         return str(self.squares)
+
+    def legal_moves(self):
+        """Return list of legal moves (as flat indices for spaces on the board)."""
+        return [i for i, mark in enumerate(self.squares) if mark == 0]

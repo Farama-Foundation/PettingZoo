@@ -22,10 +22,10 @@ if __name__ == "__main__":
     # Define the network configuration
     NET_CONFIG = {
         "arch": "cnn",  # Network architecture
-        "h_size": [32, 32],  # Network hidden size
-        "c_size": [3, 32],  # CNN channel size
-        "k_size": [(1, 3, 3), (1, 3, 3)],  # CNN kernel size
-        "s_size": [2, 2],  # CNN stride size
+        "hidden_size": [32, 32],  # Network hidden size
+        "channel_size": [32, 32],  # CNN channel size
+        "kernel_size": [3, 3],  # CNN kernel size
+        "stride_size": [2, 2],  # CNN stride size
         "normalize": True,  # Normalize image from range [0,255] to [0,1]
     }
 
@@ -36,7 +36,8 @@ if __name__ == "__main__":
         # Swap image channels dimension from last to first [H, W, C] -> [C, H, W]
         "CHANNELS_LAST": True,
         "BATCH_SIZE": 8,  # Batch size
-        "LR": 0.01,  # Learning rate
+        "LR_ACTOR": 0.001,  # Actor learning rate
+        "LR_CRITIC": 0.01,  # Critic learning rate
         "GAMMA": 0.95,  # Discount factor
         "MEMORY_SIZE": 10000,  # Max memory buffer size
         "LEARN_STEP": 5,  # Learning frequency

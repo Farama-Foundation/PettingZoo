@@ -81,14 +81,14 @@ Similar to the observation space, the action space is dependent on the board siz
 
 |                          Action ID                           | Description                                                  |
 | :----------------------------------------------------------: | ------------------------------------------------------------ |
-| <img src="https://render.githubusercontent.com/render/math?math=0 \ldots (N-1)"> | Place a stone on the 1st row of the board.<br>_`0`: (0,0), `1`: (0,1), ..., `N-1`: (0,N-1)_ |
-| <img src="https://render.githubusercontent.com/render/math?math=N \ldots (2N- 1)"> | Place a stone on the 2nd row of the board.<br>_`N`: (1,0), `N+1`: (1,1), ..., `2N-1`: (1,N-1)_ |
+| $0 \ldots (N-1)$ | Place a stone on the 1st row of the board.<br>_`0`: (0,0), `1`: (0,1), ..., `N-1`: (0,N-1)_ |
+| $N \ldots (2N- 1)$ | Place a stone on the 2nd row of the board.<br>_`N`: (1,0), `N+1`: (1,1), ..., `2N-1`: (1,N-1)_ |
 |                             ...                              | ...                                                          |
-| <img src="https://render.githubusercontent.com/render/math?math=N^2-N \ldots N^2-1"> | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
-| <img src="https://render.githubusercontent.com/render/math?math=N^2"> | Pass                                                         |
+| $(N^2-N) \ldots (N^2-1)$ | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
+| $N^2$ | Pass                                                         |
 
-For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. You can transform a non-pass action `a` back into its 2D (x,y) coordinate by computing `(a//N, a%N)` The total action space is
-<img src="https://render.githubusercontent.com/render/math?math=N^2 %2B 1">.
+For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. You can transform a non-pass action `a` back into its 2D (x,y) coordinate by computing `(a//N, a%N)`. The total action space is
+$N^2+1$.
 
 ### Rewards
 
@@ -119,7 +119,7 @@ from gymnasium.utils import EzPickle
 from pettingzoo import AECEnv
 from pettingzoo.classic.go import coords, go_base
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def get_image(path):
@@ -191,7 +191,7 @@ class raw_env(AECEnv, EzPickle):
             [spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)]
         )
 
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
 
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 

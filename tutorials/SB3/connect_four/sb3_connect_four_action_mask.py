@@ -37,9 +37,23 @@ class SB3ActionMaskWrapper(pettingzoo.utils.BaseWrapper):
         return self.observe(self.agent_selection), {}
 
     def step(self, action):
-        """Gymnasium-like step function, returning observation, reward, termination, truncation, info."""
+        """Gymnasium-like step function, returning observation, reward, termination, truncation, info.
+
+        The observation is for the next agent (used to determine the next action), while the remaining
+        items are for the agent that just acted (used to understand what just happened).
+        """
+        current_agent = self.agent_selection
+
         super().step(action)
-        return super().last()
+
+        next_agent = self.agent_selection
+        return (
+            self.observe(next_agent),
+            self._cumulative_rewards[current_agent],
+            self.terminations[current_agent],
+            self.truncations[current_agent],
+            self.infos[current_agent],
+        )
 
     def observe(self, agent):
         """Return only raw observation, removing action mask."""

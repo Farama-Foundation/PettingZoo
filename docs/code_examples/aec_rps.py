@@ -3,7 +3,7 @@ import numpy as np
 from gymnasium.spaces import Discrete
 
 from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import AgentSelector, wrappers
 
 ROCK = 0
 PAPER = 1
@@ -145,9 +145,9 @@ class raw_env(AECEnv):
         self.observations = {agent: NONE for agent in self.agents}
         self.num_moves = 0
         """
-        Our agent_selector utility allows easy cyclic stepping through the agents list.
+        Our AgentSelector utility allows easy cyclic stepping through the agents list.
         """
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.next()
 
     def step(self, action):

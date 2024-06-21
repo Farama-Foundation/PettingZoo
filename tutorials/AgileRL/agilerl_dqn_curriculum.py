@@ -494,10 +494,10 @@ if __name__ == "__main__":
         # Define the network configuration
         NET_CONFIG = {
             "arch": "cnn",  # Network architecture
-            "h_size": [64, 64],  # Actor hidden size
-            "c_size": [128],  # CNN channel size
-            "k_size": [4],  # CNN kernel size
-            "s_size": [1],  # CNN stride size
+            "hidden_size": [64, 64],  # Actor hidden size
+            "channel_size": [128],  # CNN channel size
+            "kernel_size": [4],  # CNN kernel size
+            "stride_size": [1],  # CNN stride size
             "normalize": False,  # Normalize image from range [0,255] to [0,1]
         }
 

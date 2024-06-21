@@ -1,4 +1,5 @@
 import gymnasium
+import numpy as np
 from gymnasium.spaces import Discrete
 
 from pettingzoo import ParallelEnv
@@ -7,7 +8,7 @@ from pettingzoo.utils import parallel_to_aec, wrappers
 ROCK = 0
 PAPER = 1
 SCISSORS = 2
-NONE = 3
+NO_MOVE = 3
 MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
 REWARD_MAP = {
@@ -74,17 +75,20 @@ class parallel_env(ParallelEnv):
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
 
-        # we want to define the spaces as fixed objects so we can seed them
-        self._observation_spaces = {
-            agent: Discrete(4) for agent in self.possible_agents
-        }
-        self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
+    # Observation space should be defined here.
+    # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
+    # If your spaces change over time, remove this line (disable caching).
+    @functools.lru_cache(maxsize=None)
+    def observation_space(self, agent):
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
+        # Discrete(4) means an integer in range(0, 4)
+        return Discrete(4)
 
-        # observation and action spaces are defined as functions which take in an agent id
-        # and returns the relevant spaces.
-        self.observation_space = lambda agent: self._observation_spaces[agent]
-        self.action_space = lambda agent: self._action_spaces[agent]
-        self.render_mode = render_mode
+    # Action space should be defined here.
+    # If your spaces change over time, remove this line (disable caching).
+    @functools.lru_cache(maxsize=None)
+    def action_space(self, agent):
+        return Discrete(3)
 
     def render(self):
         """
@@ -123,7 +127,8 @@ class parallel_env(ParallelEnv):
         """
         self.agents = self.possible_agents[:]
         self.num_moves = 0
-        observations = {agent: NONE for agent in self.agents}
+        # the observations should be numpy arrays even if there is only one value
+        observations = {agent: np.array(NO_MOVE) for agent in self.agents}
         infos = {agent: {} for agent in self.agents}
         self.state = observations
 
@@ -156,9 +161,11 @@ class parallel_env(ParallelEnv):
         env_truncation = self.num_moves >= NUM_ITERS
         truncations = {agent: env_truncation for agent in self.agents}
 
-        # current observation is just the other player's most recent action
+        # Current observation is just the other player's most recent action
+        # This is converted to a numpy value of type int to match the type
+        # that we declared in observation_space()
         observations = {
-            self.agents[i]: int(actions[self.agents[1 - i]])
+            self.agents[i]: np.array(actions[self.agents[1 - i]], dtype=np.int64)
             for i in range(len(self.agents))
         }
         self.state = observations
