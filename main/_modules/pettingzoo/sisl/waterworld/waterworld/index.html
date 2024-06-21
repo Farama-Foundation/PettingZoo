@@ -425,7 +425,7 @@
 <span class="sd">poison respectively. The number of features per sensor is 8 by default with `speed_features` enabled, or 5 if `speed_features` is turned off. Therefore with `speed_features` enabled, the observation shape takes the full form of `(8 × n_sensors) + 2`. Elements of the observation vector take on</span>
 <span class="sd">values in the range [-1, 1].</span>
 
-<span class="sd">For example, by default there are 5 agents (purple), 5 food targets (red) and 10 poison targets (green). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring entities (food and poison targets) resulting in 242 element vector of computed values about the</span>
+<span class="sd">For example, by default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring entities (food and poison targets) resulting in 242 element vector of computed values about the</span>
 <span class="sd">environment for the observation space. These values represent the distances and speeds sensed by each sensor on the archea. Sensors that do not sense any objects within their range report 0 for speed and 1 for distance.</span>
 
 <span class="sd">This has been fixed from the reference environments to keep items floating off screen and being lost forever.</span>
