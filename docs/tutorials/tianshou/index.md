@@ -21,7 +21,7 @@ It boasts a large number of algorithms and high quality software engineering sta
 
 ## Examples using PettingZoo
 
-* [Multi-Agent RL](https://tianshou.readthedocs.io/en/master/tutorials/tictactoe.html)
+* [Multi-Agent RL](https://tianshou.org/en/master/01_tutorials/04_tictactoe.html)
 
 ## Architecture
 
