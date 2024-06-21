@@ -422,11 +422,11 @@
 <span class="sd">In particular, the good agents reward, is -5 for every collision with an adversary, -2 x bound by the `bound` function described in simple_tag, +2 for every collision with a food, and -0.05 x minimum distance to any food. The adversarial agents are rewarded +5 for collisions and -0.1 x minimum</span>
 <span class="sd">distance to a good agent. s</span>
 
-<span class="sd">Good agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities, self_in_forest]`</span>
+<span class="sd">Good agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, self_in_forest, other_agent_velocities]`</span>
 
 <span class="sd">Normal adversary observations:`[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities, self_in_forest, leader_comm]`</span>
 
-<span class="sd">Adversary leader observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities, leader_comm]`</span>
+<span class="sd">Adversary leader observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities, self_in_forest, leader_comm]`</span>
 
 <span class="sd">*Note that when the forests prevent an agent from being seen, the observation of that agents relative position is set to (0,0).*</span>
 

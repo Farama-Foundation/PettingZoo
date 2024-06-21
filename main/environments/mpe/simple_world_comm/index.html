@@ -447,9 +447,9 @@
 other adversaries to help coordinate the chase. By default, there are 2 good agents, 3 adversaries, 1 obstacles, 2 foods, and 2 forests.</p>
 <p>In particular, the good agents reward, is -5 for every collision with an adversary, -2 x bound by the <code class="docutils literal notranslate"><span class="pre">bound</span></code> function described in simple_tag, +2 for every collision with a food, and -0.05 x minimum distance to any food. The adversarial agents are rewarded +5 for collisions and -0.1 x minimum
 distance to a good agent. s</p>
-<p>Good agent observations: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">self_pos,</span> <span class="pre">landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions,</span> <span class="pre">other_agent_velocities,</span> <span class="pre">self_in_forest]</span></code></p>
+<p>Good agent observations: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">self_pos,</span> <span class="pre">landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions,</span> <span class="pre">self_in_forest,</span> <span class="pre">other_agent_velocities]</span></code></p>
 <p>Normal adversary observations:<code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">self_pos,</span> <span class="pre">landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions,</span> <span class="pre">other_agent_velocities,</span> <span class="pre">self_in_forest,</span> <span class="pre">leader_comm]</span></code></p>
-<p>Adversary leader observations: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">self_pos,</span> <span class="pre">landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions,</span> <span class="pre">other_agent_velocities,</span> <span class="pre">leader_comm]</span></code></p>
+<p>Adversary leader observations: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">self_pos,</span> <span class="pre">landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions,</span> <span class="pre">other_agent_velocities,</span> <span class="pre">self_in_forest,</span> <span class="pre">leader_comm]</span></code></p>
 <p><em>Note that when the forests prevent an agent from being seen, the observation of that agents relative position is set to (0,0).</em></p>
 <p>Good agent action space: <code class="docutils literal notranslate"><span class="pre">[no_action,</span> <span class="pre">move_left,</span> <span class="pre">move_right,</span> <span class="pre">move_down,</span> <span class="pre">move_up]</span></code></p>
 <p>Normal adversary action space: <code class="docutils literal notranslate"><span class="pre">[no_action,</span> <span class="pre">move_left,</span> <span class="pre">move_right,</span> <span class="pre">move_down,</span> <span class="pre">move_up]</span></code></p>
@@ -538,7 +538,19 @@ distance to a good agent. s</p>
                 <use href="#svg-arrow-right"></use>
               </svg>
             </a>
-            
+            <a class="prev-page" href="../simple_tag/">
+              <svg class="furo-related-icon">
+                <use href="#svg-arrow-right"></use>
+              </svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Simple Tag</div>
+                
+              </div>
+            </a>
           </div>
           <div class="bottom-of-page">
             <div class="left-details">
