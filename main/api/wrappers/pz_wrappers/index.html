@@ -548,12 +548,16 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.OrderEnforcingWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">OrderEnforcingWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/order_enforcing/#OrderEnforcingWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper" title="Link to this definition">¶</a></dt>
 <dd><p>Checks if function calls or attribute access are in a disallowed order.</p>
+<p>The following are raised:
+* AttributeError if any of the following are accessed before reset():</p>
+<blockquote>
+<div><p>rewards, terminations, truncations, infos, agent_selection,
+num_agents, agents.</p>
+</div></blockquote>
 <ul class="simple">
-<li><p>error on getting rewards, terminations, truncations, infos, agent_selection before reset</p></li>
-<li><p>error on calling step, observe before reset</p></li>
-<li><p>error on iterating without stepping or resetting environment.</p></li>
-<li><p>warn on calling close before render or reset</p></li>
-<li><p>warn on calling step after environment is terminated or truncated</p></li>
+<li><p>An error if any of the following are called before reset:
+render(), step(), observe(), state(), agent_iter()</p></li>
+<li><p>A warning if step() is called when there are no agents remaining.</p></li>
 </ul>
 </dd></dl>
 
