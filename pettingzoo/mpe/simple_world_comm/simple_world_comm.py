@@ -93,6 +93,7 @@ class raw_env(SimpleEnv, EzPickle):
         num_forests=2,
         continuous_actions=False,
         render_mode=None,
+        dynamic_rescaling=False,
     ):
         EzPickle.__init__(
             self,
@@ -116,6 +117,7 @@ class raw_env(SimpleEnv, EzPickle):
             render_mode=render_mode,
             max_cycles=max_cycles,
             continuous_actions=continuous_actions,
+            dynamic_rescaling=dynamic_rescaling,
         )
         self.metadata["name"] = "simple_world_comm_v3"
 

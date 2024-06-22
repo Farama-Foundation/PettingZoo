@@ -68,6 +68,7 @@ class raw_env(SimpleEnv, EzPickle):
         max_cycles=25,
         continuous_actions=False,
         render_mode=None,
+        dynamic_rescaling=False,
     ):
         EzPickle.__init__(
             self,
@@ -90,6 +91,7 @@ class raw_env(SimpleEnv, EzPickle):
             max_cycles=max_cycles,
             continuous_actions=continuous_actions,
             local_ratio=local_ratio,
+            dynamic_rescaling=dynamic_rescaling,
         )
         self.metadata["name"] = "simple_spread_v3"
 

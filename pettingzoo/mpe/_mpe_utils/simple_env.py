@@ -12,7 +12,6 @@ from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import AgentSelector
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-DYNAMIC_RESCALING = True
 
 
 def make_env(raw_env):
@@ -43,6 +42,7 @@ class SimpleEnv(AECEnv):
         render_mode=None,
         continuous_actions=False,
         local_ratio=None,
+        dynamic_rescaling=False,
     ):
         super().__init__()
 
@@ -67,6 +67,7 @@ class SimpleEnv(AECEnv):
         self.world = world
         self.continuous_actions = continuous_actions
         self.local_ratio = local_ratio
+        self.dynamic_rescaling = dynamic_rescaling
 
         self.scenario.reset_world(self.world, self.np_random)
 
@@ -321,7 +322,7 @@ class SimpleEnv(AECEnv):
             y += self.height // 2
 
             # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
-            if DYNAMIC_RESCALING:
+            if self.dynamic_rescaling:
                 radius = entity.size * 350 * scaling_factor
             else:
                 radius = entity.size * 350

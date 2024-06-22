@@ -64,7 +64,7 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 class raw_env(SimpleEnv, EzPickle):
     def __init__(
-        self, local_ratio=0.5, max_cycles=25, continuous_actions=False, render_mode=None
+        self, local_ratio=0.5, max_cycles=25, continuous_actions=False, render_mode=None, dynamic_rescaling=False
     ):
         EzPickle.__init__(
             self,
@@ -86,6 +86,7 @@ class raw_env(SimpleEnv, EzPickle):
             max_cycles=max_cycles,
             continuous_actions=continuous_actions,
             local_ratio=local_ratio,
+            dynamic_rescaling=dynamic_rescaling,
         )
         self.metadata["name"] = "simple_reference_v3"
 
