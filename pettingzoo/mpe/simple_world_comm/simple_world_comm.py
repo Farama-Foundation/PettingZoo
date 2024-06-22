@@ -52,7 +52,7 @@ Adversary leader continuous action space: `[no_action, move_left, move_right, mo
 
 ``` python
 simple_world_comm_v3.env(num_good=2, num_adversaries=4, num_obstacles=1,
-                num_food=2, max_cycles=25, num_forests=2, continuous_actions=False)
+                num_food=2, max_cycles=25, num_forests=2, continuous_actions=False, dynamic_rescaling=False)
 ```
 
 
@@ -70,6 +70,8 @@ simple_world_comm_v3.env(num_good=2, num_adversaries=4, num_obstacles=1,
 `num_forests`: number of forests that can hide agents inside from being seen
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+
+`dynamic_rescaling`: Whether to rescale the size of agents and landmarks based on the screen size
 
 """
 

@@ -45,7 +45,7 @@ For Bob and Eve, their communication is checked to be the 1 bit of information t
 ### Arguments
 
 ``` python
-simple_crypto_v3.env(max_cycles=25, continuous_actions=False)
+simple_crypto_v3.env(max_cycles=25, continuous_actions=False, dynamic_rescaling=False)
 ```
 
 
@@ -53,6 +53,8 @@ simple_crypto_v3.env(max_cycles=25, continuous_actions=False)
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+
+`dynamic_rescaling`: Whether to rescale the size of agents and landmarks based on the screen size
 
 """
 

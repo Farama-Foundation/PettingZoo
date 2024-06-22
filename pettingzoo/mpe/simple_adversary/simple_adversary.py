@@ -39,7 +39,7 @@ Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ``` python
-simple_adversary_v3.env(N=2, max_cycles=25, continuous_actions=False)
+simple_adversary_v3.env(N=2, max_cycles=25, continuous_actions=False, dynamic_rescaling=False)
 ```
 
 
@@ -49,6 +49,8 @@ simple_adversary_v3.env(N=2, max_cycles=25, continuous_actions=False)
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+
+`dynamic_rescaling`: Whether to rescale the size of agents and landmarks based on the screen size
 
 """
 
