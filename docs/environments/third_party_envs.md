@@ -12,6 +12,12 @@ lastpage:
 ## Environments using the latest versions of PettingZoo
 *Due to a very recent major release of PettingZoo, there are currently few contributed third-party environments. If you'd like to contribute one, please reach out on [Discord](https://discord.gg/nHg2JRN489).*
 
+### [gfootball-gymnasium-pettingzoo](https://github.com/xihuai18/gfootball-gymnasium-pettingzoo)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/xihuai18/gfootball-gymnasium-pettingzoo)]()
+
+Google Research Football ([GRF](https://github.com/google-research/football)) with Gymnasium and PettingZoo Compatibility.
+
 ### [Sumo-RL](https://github.com/LucasAlegre/sumo-rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.2-blue)]()
