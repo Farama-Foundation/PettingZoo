@@ -66,7 +66,12 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 class raw_env(SimpleEnv, EzPickle):
     def __init__(
-        self, local_ratio=0.5, max_cycles=25, continuous_actions=False, render_mode=None, dynamic_rescaling=False
+        self,
+        local_ratio=0.5,
+        max_cycles=25,
+        continuous_actions=False,
+        render_mode=None,
+        dynamic_rescaling=False,
     ):
         EzPickle.__init__(
             self,

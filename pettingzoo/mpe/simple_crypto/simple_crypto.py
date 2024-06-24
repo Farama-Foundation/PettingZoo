@@ -75,7 +75,13 @@ adversary to goal. Adversary is rewarded for its distance to the goal.
 
 
 class raw_env(SimpleEnv, EzPickle):
-    def __init__(self, max_cycles=25, continuous_actions=False, render_mode=None, dynamic_rescaling=False):
+    def __init__(
+        self,
+        max_cycles=25,
+        continuous_actions=False,
+        render_mode=None,
+        dynamic_rescaling=False,
+    ):
         EzPickle.__init__(
             self,
             max_cycles=max_cycles,

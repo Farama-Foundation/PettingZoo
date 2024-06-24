@@ -122,7 +122,7 @@ class SimpleEnv(AECEnv):
         # This will be used to scale the rendering
         all_poses = [entity.state.p_pos for entity in self.world.entities]
         self.original_cam_range = np.max(np.abs(np.array(all_poses)))
-        
+
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
@@ -327,12 +327,8 @@ class SimpleEnv(AECEnv):
             else:
                 radius = entity.size * 350
 
-            pygame.draw.circle(
-                self.screen, entity.color * 200, (x, y), radius
-            )  
-            pygame.draw.circle(
-                self.screen, (0, 0, 0), (x, y), radius, 1
-            )  # borders
+            pygame.draw.circle(self.screen, entity.color * 200, (x, y), radius)
+            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), radius, 1)  # borders
             assert (
                 0 < x < self.width and 0 < y < self.height
             ), f"Coordinates {(x, y)} are out of bounds."
