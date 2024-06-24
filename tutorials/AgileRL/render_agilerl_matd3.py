@@ -3,10 +3,10 @@ import os
 import imageio
 import numpy as np
 import torch
-from agilerl.algorithms.matd3 import MATD3
+from pettingzoo.mpe import simple_speaker_listener_v4
 from PIL import Image, ImageDraw
 
-from pettingzoo.mpe import simple_speaker_listener_v4
+from agilerl.algorithms.matd3 import MATD3
 
 
 # Define function to return image
@@ -55,22 +55,9 @@ if __name__ == "__main__":
     n_agents = env.num_agents
     agent_ids = env.agents
 
-    # Instantiate an MADDPG object
-    matd3 = MATD3(
-        state_dim,
-        action_dim,
-        one_hot,
-        n_agents,
-        agent_ids,
-        max_action,
-        min_action,
-        discrete_actions,
-        device=device,
-    )
-
-    # Load the saved algorithm into the MADDPG object
+    # Load the saved agent
     path = "./models/MATD3/MATD3_trained_agent.pt"
-    matd3.loadCheckpoint(path)
+    matd3 = MATD3.load(path, device)
 
     # Define test loop parameters
     episodes = 10  # Number of episodes to test agent on
@@ -102,9 +89,9 @@ if __name__ == "__main__":
             )
 
             # Get next action from agent
-            cont_actions, discrete_action = matd3.getAction(
+            cont_actions, discrete_action = matd3.get_action(
                 state,
-                epsilon=0,
+                training=False,
                 agent_mask=agent_mask,
                 env_defined_actions=env_defined_actions,
             )
