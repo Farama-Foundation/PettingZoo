@@ -3,10 +3,10 @@ import os
 import imageio
 import numpy as np
 import torch
-from pettingzoo.mpe import simple_speaker_listener_v4
+from agilerl.algorithms.matd3 import MATD3
 from PIL import Image, ImageDraw
 
-from agilerl.algorithms.matd3 import MATD3
+from pettingzoo.mpe import simple_speaker_listener_v4
 
 
 # Define function to return image

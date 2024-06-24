@@ -3,11 +3,11 @@ import os
 import imageio
 import numpy as np
 import torch
+from agilerl.algorithms.dqn import DQN
 from agilerl_dqn_curriculum import Opponent, transform_and_flip
-from pettingzoo.classic import connect_four_v3
 from PIL import Image, ImageDraw, ImageFont
 
-from agilerl.algorithms.dqn import DQN
+from pettingzoo.classic import connect_four_v3
 
 
 # Define function to return image

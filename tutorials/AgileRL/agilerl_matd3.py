@@ -7,14 +7,14 @@ import os
 
 import numpy as np
 import torch
-from pettingzoo.mpe import simple_speaker_listener_v4
-from tqdm import trange
-
 from agilerl.components.multi_agent_replay_buffer import MultiAgentReplayBuffer
 from agilerl.hpo.mutation import Mutations
 from agilerl.hpo.tournament import TournamentSelection
 from agilerl.utils.utils import create_population
 from agilerl.wrappers.pettingzoo_wrappers import PettingZooVectorizationParallelWrapper
+from tqdm import trange
+
+from pettingzoo.mpe import simple_speaker_listener_v4
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

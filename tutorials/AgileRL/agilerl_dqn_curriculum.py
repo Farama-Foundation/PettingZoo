@@ -13,13 +13,13 @@ import numpy as np
 import torch
 import wandb
 import yaml
-from pettingzoo.classic import connect_four_v3
-from tqdm import tqdm, trange
-
 from agilerl.components.replay_buffer import ReplayBuffer
 from agilerl.hpo.mutation import Mutations
 from agilerl.hpo.tournament import TournamentSelection
 from agilerl.utils.utils import create_population
+from tqdm import tqdm, trange
+
+from pettingzoo.classic import connect_four_v3
 
 
 class CurriculumEnv:
@@ -835,9 +835,13 @@ if __name__ == "__main__":
                                 train_actions_hist[p1_action] += 1
 
                             env.step(p1_action)  # Act in environment
-                            observation, cumulative_reward, done, truncation, _ = (
-                                env.last()
-                            )
+                            (
+                                observation,
+                                cumulative_reward,
+                                done,
+                                truncation,
+                                _,
+                            ) = env.last()
                             p1_next_state, p1_next_state_flipped = transform_and_flip(
                                 observation, player=1
                             )
@@ -938,9 +942,13 @@ if __name__ == "__main__":
                         rewards = []
                         for i in range(evo_loop):
                             env.reset()  # Reset environment at start of episode
-                            observation, cumulative_reward, done, truncation, _ = (
-                                env.last()
-                            )
+                            (
+                                observation,
+                                cumulative_reward,
+                                done,
+                                truncation,
+                                _,
+                            ) = env.last()
 
                             player = -1  # Tracker for which player"s turn it is
 
@@ -994,9 +1002,13 @@ if __name__ == "__main__":
                                         eval_actions_hist[action] += 1
 
                                 env.step(action)  # Act in environment
-                                observation, cumulative_reward, done, truncation, _ = (
-                                    env.last()
-                                )
+                                (
+                                    observation,
+                                    cumulative_reward,
+                                    done,
+                                    truncation,
+                                    _,
+                                ) = env.last()
 
                                 if (player > 0 and opponent_first) or (
                                     player < 0 and not opponent_first
@@ -1021,7 +1033,7 @@ if __name__ == "__main__":
                     f"    Train Mean Score: {np.mean(agent.scores[-episodes_per_epoch:])}   Train Mean Turns: {mean_turns}   Eval Mean Fitness: {np.mean(fitnesses)}   Eval Best Fitness: {np.max(fitnesses)}   Eval Mean Turns: {eval_turns}   Total Steps: {total_steps}"
                 )
                 pbar.update(0)
-                
+
                 if wb:
                     # Format action histograms for visualisation
                     train_actions_hist = [

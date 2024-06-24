@@ -4,10 +4,10 @@ import imageio
 import numpy as np
 import supersuit as ss
 import torch
-from pettingzoo.atari import space_invaders_v2
+from agilerl.algorithms.maddpg import MADDPG
 from PIL import Image, ImageDraw
 
-from agilerl.algorithms.maddpg import MADDPG
+from pettingzoo.atari import space_invaders_v2
 
 
 # Define function to return image

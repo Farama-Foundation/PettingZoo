@@ -8,14 +8,14 @@ import os
 import numpy as np
 import supersuit as ss
 import torch
-from pettingzoo.atari import space_invaders_v2
-from tqdm import trange
-
 from agilerl.components.multi_agent_replay_buffer import MultiAgentReplayBuffer
 from agilerl.hpo.mutation import Mutations
 from agilerl.hpo.tournament import TournamentSelection
 from agilerl.utils.utils import create_population
 from agilerl.wrappers.pettingzoo_wrappers import PettingZooVectorizationParallelWrapper
+from tqdm import trange
+
+from pettingzoo.atari import space_invaders_v2
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
