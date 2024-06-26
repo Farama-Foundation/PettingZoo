@@ -40,7 +40,7 @@ Agent continuous action space: `[no_action, move_left, move_right, move_down, mo
 
 
 ``` python
-simple_reference_v3.env(local_ratio=0.5, max_cycles=25, continuous_actions=False)
+simple_reference_v3.env(local_ratio=0.5, max_cycles=25, continuous_actions=False, dynamic_rescaling=False)
 ```
 
 
@@ -50,6 +50,8 @@ simple_reference_v3.env(local_ratio=0.5, max_cycles=25, continuous_actions=False
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+
+`dynamic_rescaling`: Whether to rescale the size of agents and landmarks based on the screen size
 
 """
 
@@ -64,7 +66,12 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 class raw_env(SimpleEnv, EzPickle):
     def __init__(
-        self, local_ratio=0.5, max_cycles=25, continuous_actions=False, render_mode=None
+        self,
+        local_ratio=0.5,
+        max_cycles=25,
+        continuous_actions=False,
+        render_mode=None,
+        dynamic_rescaling=False,
     ):
         EzPickle.__init__(
             self,
@@ -86,6 +93,7 @@ class raw_env(SimpleEnv, EzPickle):
             max_cycles=max_cycles,
             continuous_actions=continuous_actions,
             local_ratio=local_ratio,
+            dynamic_rescaling=dynamic_rescaling,
         )
         self.metadata["name"] = "simple_reference_v3"
 
