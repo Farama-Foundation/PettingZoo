@@ -429,7 +429,7 @@
 <span class="sd">### Arguments</span>
 
 <span class="sd">``` python</span>
-<span class="sd">simple_speaker_listener_v4.env(max_cycles=25, continuous_actions=False)</span>
+<span class="sd">simple_speaker_listener_v4.env(max_cycles=25, continuous_actions=False, dynamic_rescaling=False)</span>
 <span class="sd">```</span>
 
 
@@ -437,6 +437,8 @@
 <span class="sd">`max_cycles`:  number of frames (a step for each agent) until game terminates</span>
 
 <span class="sd">`continuous_actions`: Whether agent action spaces are discrete(default) or continuous</span>
+
+<span class="sd">`dynamic_rescaling`: Whether to rescale the size of agents and landmarks based on the screen size</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -452,7 +454,13 @@
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/mpe/simple_speaker_listener/#pettingzoo.mpe.simple_speaker_listener.simple_speaker_listener.raw_env">[docs]</a>
 <span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">SimpleEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">continuous_actions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">max_cycles</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+        <span class="n">continuous_actions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dynamic_rescaling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">max_cycles</span><span class="o">=</span><span class="n">max_cycles</span><span class="p">,</span>
@@ -468,6 +476,7 @@
             <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span>
             <span class="n">max_cycles</span><span class="o">=</span><span class="n">max_cycles</span><span class="p">,</span>
             <span class="n">continuous_actions</span><span class="o">=</span><span class="n">continuous_actions</span><span class="p">,</span>
+            <span class="n">dynamic_rescaling</span><span class="o">=</span><span class="n">dynamic_rescaling</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;simple_speaker_listener_v4&quot;</span></div>
 
