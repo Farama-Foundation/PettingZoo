@@ -18,7 +18,7 @@ lastpage:
 
 Google Research Football ([GRF](https://github.com/google-research/football)) with Gymnasium and PettingZoo Compatibility.
 
-### [SMAC and SMACv2 with latest PettingZoo APIs]
+### [SMAC and SMACv2 with latest PettingZoo APIs](https://github.com/xihuai18/SMAC-PettingZoo)
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/xihuai18/gfootball-gymnasium-pettingzoo)]()
 
