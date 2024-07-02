@@ -1,4 +1,3 @@
-import functools
 import random
 from copy import copy
 
@@ -42,6 +41,13 @@ class CustomEnvironment(ParallelEnv):
         self.prisoner_x = None
         self.timestep = None
         self.possible_agents = ["prisoner", "guard"]
+
+        self._observation_spaces = {
+            agent: MultiDiscrete([7 * 7] * 3) for agent in self.possible_agents
+        }
+        self.observation_space = lambda agent: self._observation_spaces[agent]
+        self._action_spaces = {agent: Discrete(4) for agent in self.possible_agents}
+        self.action_space = lambda agent: self._action_spaces[agent]
 
     def reset(self, seed=None, options=None):
         """Reset set the environment to a starting point.
@@ -162,17 +168,3 @@ class CustomEnvironment(ParallelEnv):
         grid[self.guard_y, self.guard_x] = "G"
         grid[self.escape_y, self.escape_x] = "E"
         print(f"{grid} \n")
-
-    # Observation space should be defined here.
-    # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
-    # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
-    def observation_space(self, agent):
-        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
-        return MultiDiscrete([7 * 7] * 3)
-
-    # Action space should be defined here.
-    # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
-    def action_space(self, agent):
-        return Discrete(4)

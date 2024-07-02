@@ -1,5 +1,3 @@
-import functools
-
 import gymnasium
 import numpy as np
 from gymnasium.spaces import Discrete
@@ -75,26 +73,17 @@ class raw_env(AECEnv):
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
 
-        # optional: we can define the observation and action spaces here as attributes to be used in their corresponding methods
-        self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
+        # we want to define the spaces as fixed objects so we can seed them
         self._observation_spaces = {
             agent: Discrete(4) for agent in self.possible_agents
         }
+        self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
+
+        # observation and action spaces are defined as functions which take in an agent id
+        # and returns the relevant spaces.
+        self.observation_space = lambda agent: self._observation_spaces[agent]
+        self.action_space = lambda agent: self._action_spaces[agent]
         self.render_mode = render_mode
-
-    # Observation space should be defined here.
-    # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
-    # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
-    def observation_space(self, agent):
-        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
-        return Discrete(4)
-
-    # Action space should be defined here.
-    # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
-    def action_space(self, agent):
-        return Discrete(3)
 
     def render(self):
         """
