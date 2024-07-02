@@ -313,6 +313,8 @@ class WaterworldBase:
 
     def add_handlers(self):
         # Collision handlers for pursuers v.s. evaders & poisons
+        self.handlers = []
+
         for pursuer in self.pursuers:
             for obj in self.evaders:
                 self.handlers.append(
