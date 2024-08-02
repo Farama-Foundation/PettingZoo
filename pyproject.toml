@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     'Intended Audience :: Science/Research',
     'Topic :: Scientific/Engineering :: Artificial Intelligence',
 ]
@@ -31,34 +32,34 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 # Update dependencies in `all` if any are added or removed
-atari = ["multi_agent_ale_py==0.1.11", "pygame==2.3.0"]
+atari = ["multi_agent_ale_py>=0.1.11", "pygame>=2.3.0"]
 classic = [
-    "chess==1.9.4",
-    "rlcard==1.0.5",
-    "pygame==2.3.0",
+    "chess>=1.9.4",
+    "rlcard>=1.0.5",
+    "pygame>=2.3.0",
     "shimmy[openspiel]>=1.2.0"
 ]
-butterfly = ["pygame==2.3.0", "pymunk==6.2.0"]
-mpe = ["pygame==2.3.0"]
-sisl = ["pygame==2.3.0", "pymunk==6.2.0", "box2d-py==2.3.5", "scipy>=1.4.1"]
+butterfly = ["pygame>=2.3.0", "pymunk>=6.2.0"]
+mpe = ["pygame>=2.3.0"]
+sisl = ["pygame>=2.3.0", "pymunk>=6.2.0", "box2d-py>=2.3.5", "scipy>=1.4.1"]
 other = ["pillow>=8.0.1"]
 testing = [
-    "pynput==1.7.6",
-    "pytest==8.0.0",
-    "AutoROM==0.6.1",
-    "pytest-cov==4.1.0",
-    "pytest-xdist==3.5.0",
-    "pre-commit==3.5.0",
-    "pytest-markdown-docs==0.5.0"
+    "pynput>=1.7.6",
+    "pytest>=8.0.0",
+    "AutoROM>=0.6.1",
+    "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.5.0",
+    "pre-commit>=3.5.0",
+    "pytest-markdown-docs>=0.5.0"
 ]
 all = [
-    "multi_agent_ale_py==0.1.11",
-    "pygame==2.3.0",
-    "chess==1.9.4",
+    "multi_agent_ale_py>=0.1.11",
+    "pygame>=2.3.0",
+    "chess>=1.9.4",
     "rlcard==1.0.5",
     "shimmy[openspiel]>=1.2.0",
-    "pymunk==6.2.0",
-    "box2d-py==2.3.5",
+    "pymunk>=6.2.0",
+    "box2d-py>=2.3.5",
     "scipy>=1.4.1",
     "pillow>=8.0.1",
 ]
