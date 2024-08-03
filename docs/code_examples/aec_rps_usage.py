@@ -1,4 +1,4 @@
-import aec_rps
+from . import aec_rps
 
 env = aec_rps.env(render_mode="human")
 env.reset(seed=42)
