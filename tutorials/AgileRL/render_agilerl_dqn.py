@@ -4,7 +4,7 @@ import imageio
 import numpy as np
 import torch
 from agilerl.algorithms.dqn import DQN
-from agilerl_dqn_curriculum import Opponent
+from agilerl_dqn_curriculum import Opponent, transform_and_flip
 from PIL import Image, ImageDraw, ImageFont
 
 from pettingzoo.classic import connect_four_v3
@@ -68,16 +68,8 @@ if __name__ == "__main__":
     state_dim = np.zeros(state_dim[0]).flatten().shape
     action_dim = action_dim[0]
 
-    # Instantiate an DQN object
-    dqn = DQN(
-        state_dim,
-        action_dim,
-        one_hot,
-        device=device,
-    )
-
-    # Load the saved algorithm into the DQN object
-    dqn.loadCheckpoint(path)
+    # Load the saved agent
+    dqn = DQN.load(path, device)
 
     for opponent_difficulty in ["random", "weak", "strong", "self"]:
         # Create opponent
@@ -120,38 +112,35 @@ if __name__ == "__main__":
             for idx_step in range(max_steps):
                 action_mask = observation["action_mask"]
                 if player < 0:
-                    state = np.moveaxis(observation["observation"], [-1], [-3])
-                    state = np.expand_dims(state, 0)
+                    state, _ = transform_and_flip(observation, player=0)
                     if opponent_first:
                         if opponent_difficulty == "self":
-                            action = opponent.getAction(
+                            action = opponent.get_action(
                                 state, epsilon=0, action_mask=action_mask
                             )[0]
                         elif opponent_difficulty == "random":
-                            action = opponent.getAction(action_mask)
+                            action = opponent.get_action(action_mask)
                         else:
-                            action = opponent.getAction(player=0)
+                            action = opponent.get_action(player=0)
                     else:
-                        action = dqn.getAction(
+                        action = dqn.get_action(
                             state, epsilon=0, action_mask=action_mask
                         )[
                             0
                         ]  # Get next action from agent
                 if player > 0:
-                    state = np.moveaxis(observation["observation"], [-1], [-3])
-                    state[[0, 1], :, :] = state[[0, 1], :, :]
-                    state = np.expand_dims(state, 0)
+                    state, _ = transform_and_flip(observation, player=1)
                     if not opponent_first:
                         if opponent_difficulty == "self":
-                            action = opponent.getAction(
+                            action = opponent.get_action(
                                 state, epsilon=0, action_mask=action_mask
                             )[0]
                         elif opponent_difficulty == "random":
-                            action = opponent.getAction(action_mask)
+                            action = opponent.get_action(action_mask)
                         else:
-                            action = opponent.getAction(player=1)
+                            action = opponent.get_action(player=1)
                     else:
-                        action = dqn.getAction(
+                        action = dqn.get_action(
                             state, epsilon=0, action_mask=action_mask
                         )[
                             0
