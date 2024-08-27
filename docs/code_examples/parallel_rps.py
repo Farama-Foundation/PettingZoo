@@ -1,5 +1,3 @@
-import functools
-
 import gymnasium
 import numpy as np
 from gymnasium.spaces import Discrete
@@ -76,7 +74,6 @@ class parallel_env(ParallelEnv):
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
-        self.render_mode = render_mode
 
     # Observation space should be defined here.
     # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
