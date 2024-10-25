@@ -55,22 +55,9 @@ if __name__ == "__main__":
     n_agents = env.num_agents
     agent_ids = env.agents
 
-    # Instantiate an MADDPG object
-    matd3 = MATD3(
-        state_dim,
-        action_dim,
-        one_hot,
-        n_agents,
-        agent_ids,
-        max_action,
-        min_action,
-        discrete_actions,
-        device=device,
-    )
-
-    # Load the saved algorithm into the MADDPG object
+    # Load the saved agent
     path = "./models/MATD3/MATD3_trained_agent.pt"
-    matd3.loadCheckpoint(path)
+    matd3 = MATD3.load(path, device)
 
     # Define test loop parameters
     episodes = 10  # Number of episodes to test agent on
@@ -94,19 +81,9 @@ if __name__ == "__main__":
         agent_reward = {agent_id: 0 for agent_id in agent_ids}
         score = 0
         for _ in range(max_steps):
-            agent_mask = info["agent_mask"] if "agent_mask" in info.keys() else None
-            env_defined_actions = (
-                info["env_defined_actions"]
-                if "env_defined_actions" in info.keys()
-                else None
-            )
-
             # Get next action from agent
-            cont_actions, discrete_action = matd3.getAction(
-                state,
-                epsilon=0,
-                agent_mask=agent_mask,
-                env_defined_actions=env_defined_actions,
+            cont_actions, discrete_action = matd3.get_action(
+                state, training=False, infos=info
             )
             if matd3.discrete_actions:
                 action = discrete_action
@@ -118,7 +95,9 @@ if __name__ == "__main__":
             frames.append(_label_with_episode_number(frame, episode_num=ep))
 
             # Take action in environment
-            state, reward, termination, truncation, info = env.step(action)
+            state, reward, termination, truncation, info = env.step(
+                {agent: a.squeeze() for agent, a in action.items()}
+            )
 
             # Save agent's reward for this step in this episode
             for agent_id, r in reward.items():
