@@ -73,11 +73,6 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 PettingZoo keeps strict versioning for reproducibility reasons. All environments end in a suffix like "\_v0".  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
-## Project Maintainers
-Project Manager: [Elliot Tower](https://github.com/elliottower/)
-
-Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
-
 ## Citation
 
 To cite this project in publication, please use
