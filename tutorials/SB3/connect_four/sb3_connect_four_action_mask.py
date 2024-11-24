@@ -8,15 +8,14 @@ Author: Elliot (https://github.com/elliottower)
 import glob
 import os
 import time
-import gymnasium as gym
 
+import gymnasium as gym
 from sb3_contrib import MaskablePPO
 from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
 from sb3_contrib.common.wrappers import ActionMasker
 
 import pettingzoo.utils
 from pettingzoo.classic import connect_four_v3
-
 
 
 class SB3ActionMaskWrapper(pettingzoo.utils.BaseWrapper):
@@ -176,10 +175,11 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
 
 
 if __name__ == "__main__":
-
     if gym.__version__ > "0.29.1":
-        raise ImportError(f"This script requires gymnasium version 0.29.1 or lower, but you have version {gym.__version__}.")
-    
+        raise ImportError(
+            f"This script requires gymnasium version 0.29.1 or lower, but you have version {gym.__version__}."
+        )
+
     env_fn = connect_four_v3
 
     env_kwargs = {}
