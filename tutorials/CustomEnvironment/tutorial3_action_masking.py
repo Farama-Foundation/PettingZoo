@@ -193,7 +193,7 @@ class CustomActionMaskedEnvironment(ParallelEnv):
 
     def render(self):
         """Renders the environment."""
-        grid = np.zeros((7, 7))
+        grid = np.zeros((8, 8), dtype=object)
         grid[self.prisoner_y, self.prisoner_x] = "P"
         grid[self.guard_y, self.guard_x] = "G"
         grid[self.escape_y, self.escape_x] = "E"
