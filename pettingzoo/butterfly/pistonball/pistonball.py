@@ -24,14 +24,17 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | State Values         | (0, 255)                                             |
 
 
-This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating the vertically moving pistons. Each piston agent's observation is an RGB image of the two pistons (or the wall) next to the agent and the space above them. Every
-piston can be acted on in any given time. The action space in discrete mode is 0 to move down, 1 to stay still, and 2 to move up. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons are raised or lowered by. Continuous actions are scaled by a factor
-of 4, so that in both the discrete and continuous action space, the action 1 will move a piston 4 pixels up, and -1 will move pistons 4 pixels down.
+This is a physics based cooperative game where the goal is to move the ball to the left-wall of the game border by activating the vertically moving pistons. To achieve an optimal policy for the environment, pistons must learn highly coordinated emergent behavior.
 
-Accordingly, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent gets a reward that is a combination of how much the ball moved left overall and how much the ball moved left if it was close to the piston (i.e. movement the piston
-contributed to). A piston is considered close to the ball if it is directly below any part of the ball. Balancing the ratio between these local and global rewards appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times
-the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100, plus the `time_penalty` (default -0.1). For each piston, the reward is `local_ratio` * local_reward + (1-`local_ratio`) * global_reward. The local reward is
-applied to pistons surrounding the ball while the global reward is provided to all pistons.
+**Observations**: Each piston-agent's observation is an RGB image encompassing the piston, its immediate neighbors (either two pistons or a piston and left/right-wall) and the space above them (which may show the ball).
+
+**Actions**: Every piston can be acted on at each time step. In discrete mode, the action space is 0 to move down by 4 pixels, 1 to stay still, and 2 to move up by 4 pixels. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons
+are lowered or raised by. Continuous actions are scaled by a factor of 4, so that in both the discrete and continuous action space, the action 1 will move pistons 4 pixels up, and -1 will move pistons 4 pixels down.
+
+**Rewards**: The same reward is provided to each agent based on how much the ball moved left in the last time-step plus a constant time-penalty. Specifically, there are three components to the distance reward. First, the x-distance in pixels travelled by the ball towards
+the left-wall in the last time-step (moving right would provide a negative reward). Second, a scaling factor of 100. Third, a division by the distance in pixels between the ball at the start of the time-step and the left-wall. That final division component means moving
+one unit left when close to the wall is far more valuable than moving one unit left when far from the wall. There is also a configurable time-penalty (default: -0.1)  added to the distance-based reward at each time-step. For example, if the ball does not move in a
+time-step, the reward will be -0.1 not 0. This is to incentivize solving the game faster.
 
 Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as in the game Angry Birds.
 
