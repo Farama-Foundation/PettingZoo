@@ -402,6 +402,10 @@
             
             <section class="tex2jax_ignore mathjax_ignore" id="sb3-action-masked-ppo-for-connect-four">
 <h1>SB3: Action Masked PPO for Connect Four<a class="headerlink" href="#sb3-action-masked-ppo-for-connect-four" title="Link to this heading">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently, this tutorial doesn’t work with versions of gymnasium&gt;0.29.1. We are looking into fixing it but it might take some time.</p>
+</div>
 <p>This tutorial shows how to train a agents using Maskable <a class="reference external" href="https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html">Proximal Policy Optimization</a> (PPO) on the <a class="reference internal" href="../../../environments/classic/chess/"><span class="doc std std-doc">Connect Four</span></a> environment (<a class="reference internal" href="../../../api/aec/"><span class="doc std std-doc">AEC</span></a>).</p>
 <p>It creates a custom Wrapper to convert to a <a class="reference external" href="https://gymnasium.farama.org/">Gymnasium</a>-like environment which is compatible with <a class="reference external" href="https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html">SB3 action masking</a>.</p>
 <p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">documentation</a> for more information).</p>
@@ -419,6 +423,7 @@
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.24.0
 stable-baselines3&gt;=2.0.0
 sb3-contrib&gt;=2.0.0
+gymnasium&lt;=0.29.1
 </pre></div>
 </div>
 </section>
@@ -438,6 +443,7 @@ sb3-contrib&gt;=2.0.0
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
+<span class="kn">import</span> <span class="nn">gymnasium</span> <span class="k">as</span> <span class="nn">gym</span>
 <span class="kn">from</span> <span class="nn">sb3_contrib</span> <span class="kn">import</span> <span class="n">MaskablePPO</span>
 <span class="kn">from</span> <span class="nn">sb3_contrib.common.maskable.policies</span> <span class="kn">import</span> <span class="n">MaskableActorCriticPolicy</span>
 <span class="kn">from</span> <span class="nn">sb3_contrib.common.wrappers</span> <span class="kn">import</span> <span class="n">ActionMasker</span>
@@ -603,6 +609,11 @@ sb3-contrib&gt;=2.0.0
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">gym</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;</span> <span class="s2">&quot;0.29.1&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;This script requires gymnasium version 0.29.1 or lower, but you have version </span><span class="si">{</span><span class="n">gym</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">env_fn</span> <span class="o">=</span> <span class="n">connect_four_v3</span>
 
     <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
