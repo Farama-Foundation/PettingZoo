@@ -87,3 +87,6 @@ To cite this project in publication, please use
   year={2021}
 }
 ```
+## Project Maintainers
+- Project Manager: [David Gerard](https://github.com/David-GERARD) - `david.gerard.23@ucl.ac.uk`.
+- Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
