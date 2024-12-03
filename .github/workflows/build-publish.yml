@@ -20,9 +20,6 @@ jobs:
             matrix:
                 include:
                     - os: ubuntu-latest
-                      python: 38
-                      platform: manylinux_x86_64
-                    - os: ubuntu-latest
                       python: 39
                       platform: manylinux_x86_64
                     - os: ubuntu-latest
@@ -33,6 +30,9 @@ jobs:
                       platform: manylinux_x86_64
                     - os: ubuntu-latest
                       python: 312
+                      platform: manylinux_x86_64
+                    - os: ubuntu-latest
+                      python: 313
                       platform: manylinux_x86_64
 
         steps:
