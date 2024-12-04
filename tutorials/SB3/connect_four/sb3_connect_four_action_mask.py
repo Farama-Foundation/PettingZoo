@@ -9,6 +9,7 @@ import glob
 import os
 import time
 
+import gymnasium as gym
 from sb3_contrib import MaskablePPO
 from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
 from sb3_contrib.common.wrappers import ActionMasker
@@ -37,9 +38,23 @@ class SB3ActionMaskWrapper(pettingzoo.utils.BaseWrapper):
         return self.observe(self.agent_selection), {}
 
     def step(self, action):
-        """Gymnasium-like step function, returning observation, reward, termination, truncation, info."""
+        """Gymnasium-like step function, returning observation, reward, termination, truncation, info.
+
+        The observation is for the next agent (used to determine the next action), while the remaining
+        items are for the agent that just acted (used to understand what just happened).
+        """
+        current_agent = self.agent_selection
+
         super().step(action)
-        return super().last()
+
+        next_agent = self.agent_selection
+        return (
+            self.observe(next_agent),
+            self._cumulative_rewards[current_agent],
+            self.terminations[current_agent],
+            self.truncations[current_agent],
+            self.infos[current_agent],
+        )
 
     def observe(self, agent):
         """Return only raw observation, removing action mask."""
@@ -160,6 +175,11 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
 
 
 if __name__ == "__main__":
+    if gym.__version__ > "0.29.1":
+        raise ImportError(
+            f"This script requires gymnasium version 0.29.1 or lower, but you have version {gym.__version__}."
+        )
+
     env_fn = connect_four_v3
 
     env_kwargs = {}

@@ -62,20 +62,6 @@ class EnvLogger:
         )
 
     @staticmethod
-    def warn_close_unrendered_env() -> None:
-        """Warns: ``[WARNING]: Called close on an unrendered environment.``."""
-        EnvLogger._generic_warning(
-            "[WARNING]: Called close on an unrendered environment."
-        )
-
-    @staticmethod
-    def warn_close_before_reset() -> None:
-        """Warns: ``[WARNING]: reset() needs to be called before close.``."""
-        EnvLogger._generic_warning(
-            "[WARNING]: reset() needs to be called before close."
-        )
-
-    @staticmethod
     def warn_on_illegal_move() -> None:
         """Warns: ``[WARNING]: Illegal move made, game terminating with current player losing.``."""
         EnvLogger._generic_warning(

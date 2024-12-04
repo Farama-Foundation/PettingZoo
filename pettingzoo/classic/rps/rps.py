@@ -121,7 +121,7 @@ from gymnasium.spaces import Discrete
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import AgentSelector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
@@ -419,7 +419,7 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, seed=None, options=None):
         self.agents = self.possible_agents[:]
-        self._agent_selector = agent_selector(self.agents)
+        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}

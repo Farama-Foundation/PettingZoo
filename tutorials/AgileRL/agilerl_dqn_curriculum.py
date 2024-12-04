@@ -2,6 +2,7 @@
 
 Author: Nick (https://github.com/nicku-a)
 """
+
 import copy
 import os
 import random
@@ -15,7 +16,7 @@ import yaml
 from agilerl.components.replay_buffer import ReplayBuffer
 from agilerl.hpo.mutation import Mutations
 from agilerl.hpo.tournament import TournamentSelection
-from agilerl.utils.utils import initialPopulation
+from agilerl.utils.utils import create_population
 from tqdm import tqdm, trange
 
 from pettingzoo.classic import connect_four_v3
@@ -66,27 +67,25 @@ class CurriculumEnv:
             while not (done or truncation):
                 # Player 0's turn
                 p0_action_mask = observation["action_mask"]
-                p0_state = np.moveaxis(observation["observation"], [-1], [-3])
-                p0_state_flipped = np.expand_dims(np.flip(p0_state, 2), 0)
-                p0_state = np.expand_dims(p0_state, 0)
+                p0_state, p0_state_flipped = transform_and_flip(observation, player=0)
                 if opponent_first:
                     p0_action = self.env.action_space("player_0").sample(p0_action_mask)
                 else:
                     if self.lesson["warm_up_opponent"] == "random":
-                        p0_action = opponent.getAction(
+                        p0_action = opponent.get_action(
                             p0_action_mask, p1_action, self.lesson["block_vert_coef"]
                         )
                     else:
-                        p0_action = opponent.getAction(player=0)
+                        p0_action = opponent.get_action(player=0)
                 self.step(p0_action)  # Act in environment
                 observation, env_reward, done, truncation, _ = self.last()
-                p0_next_state = np.moveaxis(observation["observation"], [-1], [-3])
-                p0_next_state_flipped = np.expand_dims(np.flip(p0_next_state, 2), 0)
-                p0_next_state = np.expand_dims(p0_next_state, 0)
+                p0_next_state, p0_next_state_flipped = transform_and_flip(
+                    observation, player=0
+                )
 
                 if done or truncation:
                     reward = self.reward(done=True, player=0)
-                    memory.save2memoryVectEnvs(
+                    memory.save_to_memory_vect_envs(
                         np.concatenate(
                             (p0_state, p1_state, p0_state_flipped, p1_state_flipped)
                         ),
@@ -110,7 +109,7 @@ class CurriculumEnv:
                 else:  # Play continues
                     if p1_state is not None:
                         reward = self.reward(done=False, player=1)
-                        memory.save2memoryVectEnvs(
+                        memory.save_to_memory_vect_envs(
                             np.concatenate((p1_state, p1_state_flipped)),
                             [p1_action, 6 - p1_action],
                             [reward, reward],
@@ -120,31 +119,29 @@ class CurriculumEnv:
 
                     # Player 1's turn
                     p1_action_mask = observation["action_mask"]
-                    p1_state = np.moveaxis(observation["observation"], [-1], [-3])
-                    p1_state[[0, 1], :, :] = p1_state[[0, 1], :, :]
-                    p1_state_flipped = np.expand_dims(np.flip(p1_state, 2), 0)
-                    p1_state = np.expand_dims(p1_state, 0)
+                    p1_state, p1_state_flipped = transform_and_flip(
+                        observation, player=1
+                    )
                     if not opponent_first:
                         p1_action = self.env.action_space("player_1").sample(
                             p1_action_mask
                         )
                     else:
                         if self.lesson["warm_up_opponent"] == "random":
-                            p1_action = opponent.getAction(
+                            p1_action = opponent.get_action(
                                 p1_action_mask, p0_action, LESSON["block_vert_coef"]
                             )
                         else:
-                            p1_action = opponent.getAction(player=1)
+                            p1_action = opponent.get_action(player=1)
                     self.step(p1_action)  # Act in environment
                     observation, env_reward, done, truncation, _ = self.last()
-                    p1_next_state = np.moveaxis(observation["observation"], [-1], [-3])
-                    p1_next_state[[0, 1], :, :] = p1_next_state[[0, 1], :, :]
-                    p1_next_state_flipped = np.expand_dims(np.flip(p1_next_state, 2), 0)
-                    p1_next_state = np.expand_dims(p1_next_state, 0)
+                    p1_next_state, p1_next_state_flipped = transform_and_flip(
+                        observation, player=1
+                    )
 
                     if done or truncation:
                         reward = self.reward(done=True, player=1)
-                        memory.save2memoryVectEnvs(
+                        memory.save_to_memory_vect_envs(
                             np.concatenate(
                                 (p0_state, p1_state, p0_state_flipped, p1_state_flipped)
                             ),
@@ -168,7 +165,7 @@ class CurriculumEnv:
 
                     else:  # Play continues
                         reward = self.reward(done=False, player=0)
-                        memory.save2memoryVectEnvs(
+                        memory.save_to_memory_vect_envs(
                             np.concatenate((p0_state, p0_state_flipped)),
                             [p0_action, 6 - p0_action],
                             [reward, reward],
@@ -323,11 +320,11 @@ class Opponent:
         self.env = env.env
         self.difficulty = difficulty
         if self.difficulty == "random":
-            self.getAction = self.random_opponent
+            self.get_action = self.random_opponent
         elif self.difficulty == "weak":
-            self.getAction = self.weak_rule_based_opponent
+            self.get_action = self.weak_rule_based_opponent
         else:
-            self.getAction = self.strong_rule_based_opponent
+            self.get_action = self.strong_rule_based_opponent
         self.num_cols = 7
         self.num_rows = 6
         self.length = 4
@@ -482,6 +479,25 @@ class Opponent:
         return (True, reward, ended) + ((lengths,) if return_length else ())
 
 
+def transform_and_flip(observation, player):
+    """Transforms and flips observation for input to agent's neural network.
+
+    :param observation: Observation to preprocess
+    :type observation: dict[str, np.ndarray]
+    :param player: Player, 0 or 1
+    :type player: int
+    """
+    state = observation["observation"]
+    # Pre-process dimensions for PyTorch (N, C, H, W)
+    state = np.moveaxis(state, [-1], [-3])
+    if player == 1:
+        # Swap pieces so that the agent always sees the board from the same perspective
+        state[[0, 1], :, :] = state[[1, 0], :, :]
+    state_flipped = np.expand_dims(np.flip(state, 2), 0)
+    state = np.expand_dims(state, 0)
+    return state, state_flipped
+
+
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("===== AgileRL Curriculum Learning Demo =====")
@@ -522,7 +538,6 @@ if __name__ == "__main__":
             "NUM_ATOMS": 51,  # Unit number of support
             "V_MIN": 0.0,  # Minimum value of support
             "V_MAX": 200.0,  # Maximum value of support
-            "WANDB": False,  # Use Weights and Biases tracking
         }
 
         # Define the connect four environment
@@ -549,7 +564,7 @@ if __name__ == "__main__":
         action_dim = action_dim[0]
 
         # Create a population ready for evolutionary hyper-parameter optimisation
-        pop = initialPopulation(
+        pop = create_population(
             INIT_HP["ALGO"],
             state_dim,
             action_dim,
@@ -563,7 +578,6 @@ if __name__ == "__main__":
         # Configure the replay buffer
         field_names = ["state", "action", "reward", "next_state", "done"]
         memory = ReplayBuffer(
-            action_dim=action_dim,  # Number of agent actions
             memory_size=INIT_HP["MEMORY_SIZE"],  # Max replay buffer size
             field_names=field_names,  # Field names to store in memory
             device=device,
@@ -574,8 +588,8 @@ if __name__ == "__main__":
             tournament_size=2,  # Tournament selection size
             elitism=True,  # Elitism in tournament selection
             population_size=INIT_HP["POPULATION_SIZE"],  # Population size
-            evo_step=1,
-        )  # Evaluate using last N fitness scores
+            eval_loop=1,  # Evaluate using last N fitness scores
+        )
 
         # Instantiate a mutations object (used for HPO)
         mutations = Mutations(
@@ -606,12 +620,7 @@ if __name__ == "__main__":
 
         # Define training loop parameters
         episodes_per_epoch = 10
-
-        # ! NOTE: Uncomment the max_episodes line below to change the number of training episodes. ! #
-        # It is deliberately set low to allow testing to ensure this tutorial is sound.
-        max_episodes = 10
-        # max_episodes = LESSON["max_train_episodes"]  # Total episodes
-
+        max_episodes = LESSON["max_train_episodes"]  # Total episodes
         max_steps = 500  # Maximum steps to take in each episode
         evo_epochs = 20  # Evolution frequency
         evo_loop = 50  # Number of evaluation episodes
@@ -620,12 +629,11 @@ if __name__ == "__main__":
         eps_end = 0.1  # Final epsilon value
         eps_decay = 0.9998  # Epsilon decays
         opp_update_counter = 0
-        wb = INIT_HP["WANDB"]
 
         if LESSON["pretrained_path"] is not None:
             for agent in pop:
                 # Load pretrained checkpoint
-                agent.loadCheckpoint(LESSON["pretrained_path"])
+                agent.load_checkpoint(LESSON["pretrained_path"])
                 # Reinit optimizer for new task
                 agent.lr = INIT_HP["LR"]
                 agent.optimizer = torch.optim.Adam(
@@ -659,24 +667,23 @@ if __name__ == "__main__":
                 print("Agent population warmed up.")
 
         if max_episodes > 0:
-            if wb:
-                wandb.init(
-                    # set the wandb project where this run will be logged
-                    project="AgileRL",
-                    name="{}-EvoHPO-{}-{}Opposition-CNN-{}".format(
-                        "connect_four_v3",
-                        INIT_HP["ALGO"],
-                        LESSON["opponent"],
-                        datetime.now().strftime("%m%d%Y%H%M%S"),
-                    ),
-                    # track hyperparameters and run metadata
-                    config={
-                        "algo": "Evo HPO Rainbow DQN",
-                        "env": "connect_four_v3",
-                        "INIT_HP": INIT_HP,
-                        "lesson": LESSON,
-                    },
-                )
+            wandb.init(
+                # set the wandb project where this run will be logged
+                project="AgileRL",
+                name="{}-EvoHPO-{}-{}Opposition-CNN-{}".format(
+                    "connect_four_v3",
+                    INIT_HP["ALGO"],
+                    LESSON["opponent"],
+                    datetime.now().strftime("%m%d%Y%H%M%S"),
+                ),
+                # track hyperparameters and run metadata
+                config={
+                    "algo": "Evo HPO Rainbow DQN",
+                    "env": "connect_four_v3",
+                    "INIT_HP": INIT_HP,
+                    "lesson": LESSON,
+                },
+            )
 
         total_steps = 0
         total_episodes = 0
@@ -689,7 +696,7 @@ if __name__ == "__main__":
             for agent in pop:  # Loop through population
                 for episode in range(episodes_per_epoch):
                     env.reset()  # Reset environment at start of episode
-                    observation, env_reward, done, truncation, _ = env.last()
+                    observation, cumulative_reward, done, truncation, _ = env.last()
 
                     (
                         p1_state,
@@ -718,23 +725,23 @@ if __name__ == "__main__":
                     for idx_step in range(max_steps):
                         # Player 0"s turn
                         p0_action_mask = observation["action_mask"]
-                        p0_state = np.moveaxis(observation["observation"], [-1], [-3])
-                        p0_state_flipped = np.expand_dims(np.flip(p0_state, 2), 0)
-                        p0_state = np.expand_dims(p0_state, 0)
+                        p0_state, p0_state_flipped = transform_and_flip(
+                            observation, player=0
+                        )
 
                         if opponent_first:
                             if LESSON["opponent"] == "self":
-                                p0_action = opponent.getAction(
+                                p0_action = opponent.get_action(
                                     p0_state, 0, p0_action_mask
                                 )[0]
                             elif LESSON["opponent"] == "random":
-                                p0_action = opponent.getAction(
+                                p0_action = opponent.get_action(
                                     p0_action_mask, p1_action, LESSON["block_vert_coef"]
                                 )
                             else:
-                                p0_action = opponent.getAction(player=0)
+                                p0_action = opponent.get_action(player=0)
                         else:
-                            p0_action = agent.getAction(
+                            p0_action = agent.get_action(
                                 p0_state, epsilon, p0_action_mask
                             )[
                                 0
@@ -742,23 +749,18 @@ if __name__ == "__main__":
                             train_actions_hist[p0_action] += 1
 
                         env.step(p0_action)  # Act in environment
-                        observation, env_reward, done, truncation, _ = env.last()
-                        p0_next_state = np.moveaxis(
-                            observation["observation"], [-1], [-3]
+                        observation, cumulative_reward, done, truncation, _ = env.last()
+                        p0_next_state, p0_next_state_flipped = transform_and_flip(
+                            observation, player=0
                         )
-                        p0_next_state_flipped = np.expand_dims(
-                            np.flip(p0_next_state, 2), 0
-                        )
-                        p0_next_state = np.expand_dims(p0_next_state, 0)
-
                         if not opponent_first:
-                            score += env_reward
+                            score = cumulative_reward
                         turns += 1
 
                         # Check if game is over (Player 0 win)
                         if done or truncation:
                             reward = env.reward(done=True, player=0)
-                            memory.save2memoryVectEnvs(
+                            memory.save_to_memory_vect_envs(
                                 np.concatenate(
                                     (
                                         p0_state,
@@ -787,7 +789,7 @@ if __name__ == "__main__":
                         else:  # Play continues
                             if p1_state is not None:
                                 reward = env.reward(done=False, player=1)
-                                memory.save2memoryVectEnvs(
+                                memory.save_to_memory_vect_envs(
                                     np.concatenate((p1_state, p1_state_flipped)),
                                     [p1_action, 6 - p1_action],
                                     [reward, reward],
@@ -799,29 +801,25 @@ if __name__ == "__main__":
 
                             # Player 1"s turn
                             p1_action_mask = observation["action_mask"]
-                            p1_state = np.moveaxis(
-                                observation["observation"], [-1], [-3]
+                            p1_state, p1_state_flipped = transform_and_flip(
+                                observation, player=1
                             )
-                            # Swap pieces so that the agent always sees the board from the same perspective
-                            p1_state[[0, 1], :, :] = p1_state[[0, 1], :, :]
-                            p1_state_flipped = np.expand_dims(np.flip(p1_state, 2), 0)
-                            p1_state = np.expand_dims(p1_state, 0)
 
                             if not opponent_first:
                                 if LESSON["opponent"] == "self":
-                                    p1_action = opponent.getAction(
+                                    p1_action = opponent.get_action(
                                         p1_state, 0, p1_action_mask
                                     )[0]
                                 elif LESSON["opponent"] == "random":
-                                    p1_action = opponent.getAction(
+                                    p1_action = opponent.get_action(
                                         p1_action_mask,
                                         p0_action,
                                         LESSON["block_vert_coef"],
                                     )
                                 else:
-                                    p1_action = opponent.getAction(player=1)
+                                    p1_action = opponent.get_action(player=1)
                             else:
-                                p1_action = agent.getAction(
+                                p1_action = agent.get_action(
                                     p1_state, epsilon, p1_action_mask
                                 )[
                                     0
@@ -829,24 +827,25 @@ if __name__ == "__main__":
                                 train_actions_hist[p1_action] += 1
 
                             env.step(p1_action)  # Act in environment
-                            observation, env_reward, done, truncation, _ = env.last()
-                            p1_next_state = np.moveaxis(
-                                observation["observation"], [-1], [-3]
+                            (
+                                observation,
+                                cumulative_reward,
+                                done,
+                                truncation,
+                                _,
+                            ) = env.last()
+                            p1_next_state, p1_next_state_flipped = transform_and_flip(
+                                observation, player=1
                             )
-                            p1_next_state[[0, 1], :, :] = p1_next_state[[0, 1], :, :]
-                            p1_next_state_flipped = np.expand_dims(
-                                np.flip(p1_next_state, 2), 0
-                            )
-                            p1_next_state = np.expand_dims(p1_next_state, 0)
 
                             if opponent_first:
-                                score += env_reward
+                                score = cumulative_reward
                             turns += 1
 
                             # Check if game is over (Player 1 win)
                             if done or truncation:
                                 reward = env.reward(done=True, player=1)
-                                memory.save2memoryVectEnvs(
+                                memory.save_to_memory_vect_envs(
                                     np.concatenate(
                                         (
                                             p0_state,
@@ -880,7 +879,7 @@ if __name__ == "__main__":
 
                             else:  # Play continues
                                 reward = env.reward(done=False, player=0)
-                                memory.save2memoryVectEnvs(
+                                memory.save_to_memory_vect_envs(
                                     np.concatenate((p0_state, p0_state_flipped)),
                                     [p0_action, 6 - p0_action],
                                     [reward, reward],
@@ -935,7 +934,13 @@ if __name__ == "__main__":
                         rewards = []
                         for i in range(evo_loop):
                             env.reset()  # Reset environment at start of episode
-                            observation, reward, done, truncation, _ = env.last()
+                            (
+                                observation,
+                                cumulative_reward,
+                                done,
+                                truncation,
+                                _,
+                            ) = env.last()
 
                             player = -1  # Tracker for which player"s turn it is
 
@@ -955,42 +960,52 @@ if __name__ == "__main__":
                                 if player < 0:
                                     if opponent_first:
                                         if LESSON["eval_opponent"] == "random":
-                                            action = opponent.getAction(action_mask)
+                                            action = opponent.get_action(action_mask)
                                         else:
-                                            action = opponent.getAction(player=0)
+                                            action = opponent.get_action(player=0)
                                     else:
                                         state = np.moveaxis(
                                             observation["observation"], [-1], [-3]
                                         )
                                         state = np.expand_dims(state, 0)
-                                        action = agent.getAction(state, 0, action_mask)[
+                                        action = agent.get_action(
+                                            state, 0, action_mask
+                                        )[
                                             0
                                         ]  # Get next action from agent
                                         eval_actions_hist[action] += 1
                                 if player > 0:
                                     if not opponent_first:
                                         if LESSON["eval_opponent"] == "random":
-                                            action = opponent.getAction(action_mask)
+                                            action = opponent.get_action(action_mask)
                                         else:
-                                            action = opponent.getAction(player=1)
+                                            action = opponent.get_action(player=1)
                                     else:
                                         state = np.moveaxis(
                                             observation["observation"], [-1], [-3]
                                         )
-                                        state[[0, 1], :, :] = state[[0, 1], :, :]
+                                        state[[0, 1], :, :] = state[[1, 0], :, :]
                                         state = np.expand_dims(state, 0)
-                                        action = agent.getAction(state, 0, action_mask)[
+                                        action = agent.get_action(
+                                            state, 0, action_mask
+                                        )[
                                             0
                                         ]  # Get next action from agent
                                         eval_actions_hist[action] += 1
 
                                 env.step(action)  # Act in environment
-                                observation, reward, done, truncation, _ = env.last()
+                                (
+                                    observation,
+                                    cumulative_reward,
+                                    done,
+                                    truncation,
+                                    _,
+                                ) = env.last()
 
                                 if (player > 0 and opponent_first) or (
                                     player < 0 and not opponent_first
                                 ):
-                                    score += reward
+                                    score = cumulative_reward
 
                                 eval_turns += 1
 
@@ -1027,31 +1042,29 @@ if __name__ == "__main__":
                     for index, action in enumerate(eval_actions_hist)
                 }
 
-                if wb:
-                    wandb_dict = {
-                        "global_step": total_steps,
-                        "train/mean_score": np.mean(agent.scores[-episodes_per_epoch:]),
-                        "train/mean_turns_per_game": mean_turns,
-                        "train/epsilon": epsilon,
-                        "train/opponent_updates": opp_update_counter,
-                        "eval/mean_fitness": np.mean(fitnesses),
-                        "eval/best_fitness": np.max(fitnesses),
-                        "eval/mean_turns_per_game": eval_turns,
-                    }
-                    wandb_dict.update(train_actions_dict)
-                    wandb_dict.update(eval_actions_dict)
-                    wandb.log(wandb_dict)
+                wandb_dict = {
+                    "global_step": total_steps,
+                    "train/mean_score": np.mean(agent.scores[-episodes_per_epoch:]),
+                    "train/mean_turns_per_game": mean_turns,
+                    "train/epsilon": epsilon,
+                    "train/opponent_updates": opp_update_counter,
+                    "eval/mean_fitness": np.mean(fitnesses),
+                    "eval/best_fitness": np.max(fitnesses),
+                    "eval/mean_turns_per_game": eval_turns,
+                }
+                wandb_dict.update(train_actions_dict)
+                wandb_dict.update(eval_actions_dict)
+                wandb.log(wandb_dict)
 
                 # Tournament selection and population mutation
                 elite, pop = tournament.select(pop)
                 pop = mutations.mutation(pop)
 
         if max_episodes > 0:
-            if wb:
-                wandb.finish()
+            wandb.finish()
 
         # Save the trained agent
         save_path = LESSON["save_path"]
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        elite.saveCheckpoint(save_path)
+        elite.save_checkpoint(save_path)
         print(f"Elite agent saved to '{save_path}'.")
