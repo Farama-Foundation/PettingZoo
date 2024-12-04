@@ -1,4 +1,4 @@
-agilerl==1.0.16; python_version >= '3.10'
+agilerl==0.1.22; python_version >= '3.9'
 pettingzoo[classic,atari,mpe]>=1.23.1
 SuperSuit>=3.9.0
 torch>=2.0.1
