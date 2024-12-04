@@ -24,19 +24,18 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | State Values         | (0, 255)                                             |
 
 
-This is a physics based cooperative game where the goal is to move the ball to the left-wall of the game border by activating the vertically moving pistons. To achieve an optimal policy for the environment, pistons must learn highly coordinated emergent behavior.
+This is a physics based cooperative game where the goal is to move the ball to the left-wall of the game border by activating the vertically moving pistons. To achieve an optimal policy for the environment, pistons must learn highly coordinated behavior.
 
 **Observations**: Each piston-agent's observation is an RGB image encompassing the piston, its immediate neighbors (either two pistons or a piston and left/right-wall) and the space above them (which may show the ball).
 
 **Actions**: Every piston can be acted on at each time step. In discrete mode, the action space is 0 to move down by 4 pixels, 1 to stay still, and 2 to move up by 4 pixels. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons
-are lowered or raised by. Continuous actions are scaled by a factor of 4, so that in both the discrete and continuous action space, the action 1 will move pistons 4 pixels up, and -1 will move pistons 4 pixels down.
+are lowered or raised by. Continuous actions are scaled by a factor of 4 to allow for matching the distance travelled in discrete mode, e.g. an action of -1 moves the piston down 4 pixels.
 
-**Rewards**: The same reward is provided to each agent based on how much the ball moved left in the last time-step plus a constant time-penalty. Specifically, there are three components to the distance reward. First, the x-distance in pixels travelled by the ball towards
-the left-wall in the last time-step (moving right would provide a negative reward). Second, a scaling factor of 100. Third, a division by the distance in pixels between the ball at the start of the time-step and the left-wall. That final division component means moving
-one unit left when close to the wall is far more valuable than moving one unit left when far from the wall. There is also a configurable time-penalty (default: -0.1)  added to the distance-based reward at each time-step. For example, if the ball does not move in a
-time-step, the reward will be -0.1 not 0. This is to incentivize solving the game faster.
+**Rewards**: The same reward is provided to each agent based on how much the ball moved left in the last time-step (moving right results in a negative reward) plus a constant time-penalty. The distance component is the percentage of the initial total distance (i.e. at game-start)
+to the left-wall travelled in the past timestep. For example, if the ball began the game 300 pixels away from the wall, began the time-step 180 pixels away and finished the time-step 175 pixels away, the distance reward would be 100 * 5/300 = 1.7. There is also a configurable
+time-penalty (default: -0.1)  added to the distance-based reward at each time-step. For example, if the ball does not move in a time-step, the reward will be -0.1 not 0. This is to incentivize solving the game faster.
 
-Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as in the game Angry Birds.
+Pistonball uses the chipmunk physics engine, so the physics are about as realistic as in the game Angry Birds.
 
 Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* move the piston in the vertical direction.
 
@@ -94,8 +93,6 @@ from pettingzoo import AECEnv
 from pettingzoo.butterfly.pistonball.manual_policy import ManualPolicy
 from pettingzoo.utils import AgentSelector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-_image_library = {}
 
 FPS = 20
 
@@ -239,8 +236,7 @@ class raw_env(AECEnv, EzPickle):
         )
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
         self.time_penalty = time_penalty
-        # TODO: this was a bad idea and the logic this uses should be removed at some point
-        self.local_ratio = 0
+
         self.ball_mass = ball_mass
         self.ball_friction = ball_friction
         self.ball_elasticity = ball_elasticity
@@ -466,8 +462,8 @@ class raw_env(AECEnv, EzPickle):
                 -6 * math.pi, 6 * math.pi
             )
 
-        self.lastX = int(self.ball.position[0] - self.ball_radius)
-        self.distance = self.lastX - self.wall_width
+        self.ball_prev_pos = self._get_ball_position()
+        self.distance_to_wall_at_game_start = self.ball_prev_pos - self.wall_width
 
         self.draw_background()
         self.draw()
@@ -566,30 +562,6 @@ class raw_env(AECEnv, EzPickle):
             )
         self.draw_pistons()
 
-    def get_nearby_pistons(self):
-        # first piston = leftmost
-        nearby_pistons = []
-        ball_pos = int(self.ball.position[0] - self.ball_radius)
-        closest = abs(self.pistonList[0].position.x - ball_pos)
-        closest_piston_index = 0
-        for i in range(self.n_pistons):
-            next_distance = abs(self.pistonList[i].position.x - ball_pos)
-            if next_distance < closest:
-                closest = next_distance
-                closest_piston_index = i
-
-        if closest_piston_index > 0:
-            nearby_pistons.append(closest_piston_index - 1)
-        nearby_pistons.append(closest_piston_index)
-        if closest_piston_index < self.n_pistons - 1:
-            nearby_pistons.append(closest_piston_index + 1)
-
-        return nearby_pistons
-
-    def get_local_reward(self, prev_position, curr_position):
-        local_reward = 0.5 * (prev_position - curr_position)
-        return local_reward
-
     def render(self):
         if self.render_mode is None:
             gymnasium.logger.warn(
@@ -613,6 +585,18 @@ class raw_env(AECEnv, EzPickle):
             else None
         )
 
+    def _get_ball_position(self) -> int:
+        """Return the leftmost x-position of the ball.
+
+        That leftmost x-position is generally referred to and treated as the 
+        balls' position in this class. If the ball extends beyond the leftmost 
+        wall, return the position of that wall-edge.
+        """
+        ball_position = int(self.ball.position[0] - self.ball_radius)
+        # Check if the ball is touching/within the left-most wall.
+        clipped_ball_position = max(self.wall_width, ball_position)
+        return clipped_ball_position
+
     def step(self, action):
         if (
             self.terminations[self.agent_selection]
@@ -633,30 +617,31 @@ class raw_env(AECEnv, EzPickle):
 
         self.space.step(self.dt)
         if self._agent_selector.is_last():
-            ball_min_x = int(self.ball.position[0] - self.ball_radius)
-            ball_next_x = (
-                self.ball.position[0]
-                - self.ball_radius
-                + self.ball.velocity[0] * self.dt
-            )
-            if ball_next_x <= self.wall_width + 1:
+            ball_curr_pos = self._get_ball_position()
+
+            # A rough, first-order prediction (i.e. velocity-only) of the balls next position.
+            # The physics environment may bounce the ball off the wall in the next time-step
+            # without us first registering that win-condition.
+            ball_predicted_next_pos = ball_curr_pos + self.ball.velocity[0] * self.dt
+            # Include a single-pixel fudge-factor for the approximation.
+            if ball_predicted_next_pos <= self.wall_width + 1:
                 self.terminate = True
-            # ensures that the ball can't pass through the wall
-            ball_min_x = max(self.wall_width, ball_min_x)
+
             self.draw()
-            local_reward = self.get_local_reward(self.lastX, ball_min_x)
-            # Opposite order due to moving right to left
-            global_reward = (100 / self.distance) * (self.lastX - ball_min_x)
+
+            # The negative one is included since the x-axis increases from left-to-right. And, if the x
+            # position decreases we want the reward to be positive, since the ball would have gotten closer
+            # to the left-wall.
+            reward = (
+                -1
+                * (ball_curr_pos - self.ball_prev_pos)
+                * (100 / self.distance_to_wall_at_game_start)
+            )
             if not self.terminate:
-                global_reward += self.time_penalty
-            total_reward = [
-                global_reward * (1 - self.local_ratio)
-            ] * self.n_pistons  # start with global reward
-            local_pistons_to_reward = self.get_nearby_pistons()
-            for index in local_pistons_to_reward:
-                total_reward[index] += local_reward * self.local_ratio
-            self.rewards = dict(zip(self.agents, total_reward))
-            self.lastX = ball_min_x
+                reward += self.time_penalty
+
+            self.rewards = {agent: reward for agent in self.agents}
+            self.ball_prev_pos = ball_curr_pos
             self.frames += 1
         else:
             self._clear_rewards()
