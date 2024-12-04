@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 name = "pettingzoo"
 description = "Gymnasium for multi-agent reinforcement learning."
 readme = "README.md"
-requires-python = ">= 3.9"
+requires-python = ">= 3.9, <3.13"
 authors = [{ name = "Farama Foundation", email = "contact@farama.org" }]
 license = { text = "MIT License" }
 keywords = ["Reinforcement Learning", "game", "RL", "AI", "gymnasium"]
@@ -20,7 +20,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
     'Intended Audience :: Science/Research',
     'Topic :: Scientific/Engineering :: Artificial Intelligence',
 ]
