@@ -9,4 +9,4 @@ gymnasium>=0.28.1
 imageio>=2.31.1
 Pillow>=9.5.0
 PyYAML>=5.4.1
-wandb>=0.13.10
+wandb>=0.16.0
