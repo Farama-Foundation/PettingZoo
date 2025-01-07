@@ -31,7 +31,8 @@ jobs:
                   export PATH=/path/to/parallel:$PATH
                   export root_dir=$(pwd)
                   cd tutorials/${{ matrix.tutorial }}
-                  pip install $(grep -ivE "pettingzoo" requirements.txt)
+                  grep -ivE "pettingzoo" requirements.txt > _requirements.txt
+                  pip install -r _requirements.txt
                   pip install -e $root_dir[all]
                   pip install -e $root_dir[testing]
                   AutoROM -v
@@ -56,7 +57,8 @@ jobs:
                   export PATH=/path/to/parallel:$PATH
                   export root_dir=$(pwd)
                   cd tutorials/${{ matrix.tutorial }}
-                  pip install $(grep -ivE "pettingzoo" requirements.txt)
+                  grep -ivE "pettingzoo" requirements.txt > _requirements.txt
+                  pip install -r _requirements.txt
                   pip install -e $root_dir[all]
                   pip install -e $root_dir[testing]
                   AutoROM -v

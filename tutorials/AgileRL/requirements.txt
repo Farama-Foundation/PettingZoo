@@ -1,4 +1,4 @@
-agilerl==0.1.22
+agilerl==0.1.22; python_version >= '3.9'
 pettingzoo[classic,atari,mpe]>=1.23.1
 SuperSuit>=3.9.0
 torch>=2.0.1
@@ -9,4 +9,3 @@ gymnasium>=0.28.1
 imageio>=2.31.1
 Pillow>=9.5.0
 PyYAML>=5.4.1
-wandb>=0.16.0
