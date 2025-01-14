@@ -93,7 +93,7 @@ if __name__ == "__main__":
             full_env_names = [
                 full_name
                 for full_name in all_environments.keys()
-                if env_name in full_name
+                if env_name == full_name.split("/")[1][0: full_name.rfind("_")]
             ]
             env_name_version = full_env_names[0].split("/")[1]
             if env_type == "classic" and env_name != "rps":
