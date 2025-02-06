@@ -62,7 +62,8 @@ Importing the following packages, functions and classes will enable us to run th
    from agilerl.components.replay_buffer import ReplayBuffer
    from agilerl.hpo.mutation import Mutations
    from agilerl.hpo.tournament import TournamentSelection
-   from agilerl.utils.utils import initialPopulation
+   from agilerl.utils.utils import create_population, observation_space_channels_to_first
+   from agilerl.algorithms.core.wrappers import OptimizerWrapper
    from tqdm import tqdm, trange
 
    from pettingzoo.classic import connect_four_v3
@@ -174,11 +175,11 @@ To implement our curriculum, we create a ```CurriculumEnv``` class that acts as 
                      p0_action = self.env.action_space("player_0").sample(p0_action_mask)
                   else:
                      if self.lesson["warm_up_opponent"] == "random":
-                        p0_action = opponent.getAction(
+                        p0_action = opponent.get_action(
                               p0_action_mask, p1_action, self.lesson["block_vert_coef"]
                         )
                      else:
-                        p0_action = opponent.getAction(player=0)
+                        p0_action = opponent.get_action(player=0)
                   self.step(p0_action)  # Act in environment
                   observation, env_reward, done, truncation, _ = self.last()
                   p0_next_state = np.moveaxis(observation["observation"], [-1], [-3])
@@ -231,11 +232,11 @@ To implement our curriculum, we create a ```CurriculumEnv``` class that acts as 
                         )
                      else:
                         if self.lesson["warm_up_opponent"] == "random":
-                              p1_action = opponent.getAction(
+                              p1_action = opponent.get_action(
                                  p1_action_mask, p0_action, LESSON["block_vert_coef"]
                               )
                         else:
-                              p1_action = opponent.getAction(player=1)
+                              p1_action = opponent.get_action(player=1)
                      self.step(p1_action)  # Act in environment
                      observation, env_reward, done, truncation, _ = self.last()
                      p1_next_state = np.moveaxis(observation["observation"], [-1], [-3])
@@ -431,11 +432,11 @@ When defining the different lessons in our curriculum, we can increase the diffi
          self.env = env.env
          self.difficulty = difficulty
          if self.difficulty == "random":
-            self.getAction = self.random_opponent
+            self.get_action = self.random_opponent
          elif self.difficulty == "weak":
-            self.getAction = self.weak_rule_based_opponent
+            self.get_action = self.weak_rule_based_opponent
          else:
-            self.getAction = self.strong_rule_based_opponent
+            self.get_action = self.strong_rule_based_opponent
          self.num_cols = 7
          self.num_rows = 6
          self.length = 4
@@ -611,12 +612,11 @@ Before we go any further in this tutorial, it would be helpful to define and set
 
    # Define the network configuration
    NET_CONFIG = {
-      "arch": "cnn",  # Network architecture
-      "hidden_size": [64, 64],  # Actor hidden size
+      "encoder_config": {
       "channel_size": [128],  # CNN channel size
       "kernel_size": [4],  # CNN kernel size
       "stride_size": [1],  # CNN stride size
-      "normalize": False,  # Normalize image from range [0,255] to [0,1]
+      }
    }
 
    # Define the initial hyperparameters
@@ -648,32 +648,31 @@ Before we go any further in this tutorial, it would be helpful to define and set
    env.reset()
 
    # Configure the algo input arguments
-   state_dim = [
-      env.observation_space(agent)["observation"].shape for agent in env.agents
-   ]
-   one_hot = False
-   action_dim = [env.action_space(agent).n for agent in env.agents]
-   INIT_HP["DISCRETE_ACTIONS"] = True
-   INIT_HP["MAX_ACTION"] = None
-   INIT_HP["MIN_ACTION"] = None
+   observation_spaces = [env.observation_space(agent)["observation"] for agent in env.agents]
+   action_spaces = [env.action_space(agent) for agent in env.agents]
 
    # Warp the environment in the curriculum learning wrapper
    env = CurriculumEnv(env, LESSON)
 
-   # Pre-process dimensions for PyTorch layers
-   # We only need to worry about the state dim of a single agent
-   # We flatten the 6x7x2 observation as input to the agent"s neural network
-   state_dim = np.moveaxis(np.zeros(state_dim[0]), [-1], [-3]).shape
-   action_dim = action_dim[0]
+   # RL hyperparameters configuration for mutation during training
+    hp_config = HyperparameterConfig(
+        lr = RLParameter(min=1e-4, max=1e-2),
+        learn_step = RLParameter(min=1, max=120, dtype=int),
+        batch_size = RLParameter(
+            min=8, max=64, dtype=int
+            )
+    )
 
    # Create a population ready for evolutionary hyper-parameter optimisation
-   pop = initialPopulation(
+   observation_space = observation_space_channels_to_first(observation_spaces[0])
+   action_space = action_spaces[0]
+   pop = create_population(
       INIT_HP["ALGO"],
-      state_dim,
-      action_dim,
-      one_hot,
+      observation_space,
+      action_space,
       NET_CONFIG,
       INIT_HP,
+      hp_config=hp_config,
       population_size=INIT_HP["POPULATION_SIZE"],
       device=device,
    )
@@ -697,27 +696,13 @@ Before we go any further in this tutorial, it would be helpful to define and set
 
    # Instantiate a mutations object (used for HPO)
    mutations = Mutations(
-      algo=INIT_HP["ALGO"],
       no_mutation=0.2,  # Probability of no mutation
       architecture=0,  # Probability of architecture mutation
       new_layer_prob=0.2,  # Probability of new layer mutation
       parameters=0.2,  # Probability of parameter mutation
       activation=0,  # Probability of activation function mutation
       rl_hp=0.2,  # Probability of RL hyperparameter mutation
-      rl_hp_selection=[
-            "lr",
-            "learn_step",
-            "batch_size",
-      ],  # RL hyperparams selected for mutation
       mutation_sd=0.1,  # Mutation strength
-      # Define search space for each hyperparameter
-      min_lr=0.0001,
-      max_lr=0.01,
-      min_learn_step=1,
-      max_learn_step=120,
-      min_batch_size=8,
-      max_batch_size=64,
-      arch=NET_CONFIG["arch"],  # MLP or CNN
       rand_seed=1,
       device=device,
    )
@@ -774,11 +759,15 @@ In this tutorial, we use self-play as the final lesson in our curriculum. By ite
    if LESSON["pretrained_path"] is not None:
       for agent in pop:
             # Load pretrained checkpoint
-            agent.loadCheckpoint(LESSON["pretrained_path"])
+            agent.load_checkpoint(LESSON["pretrained_path"])
             # Reinit optimizer for new task
             agent.lr = INIT_HP["LR"]
-            agent.optimizer = torch.optim.Adam(
-               agent.actor.parameters(), lr=agent.lr
+            agent.optimizer = OptimizerWrapper(
+               torch.optim.Adam
+               networks=agent.actor,
+               lr=agent.lr,
+               network_names=agent.optimizer.network_names,
+               lr_name=agent.optimizer.lr_name
             )
    ```
 </details>
@@ -889,17 +878,17 @@ At regular intervals, we evaluate the performance, or 'fitness',  of the agents 
 
                   if opponent_first:
                         if LESSON["opponent"] == "self":
-                           p0_action = opponent.getAction(
+                           p0_action = opponent.get_action(
                               p0_state, 0, p0_action_mask
                            )[0]
                         elif LESSON["opponent"] == "random":
-                           p0_action = opponent.getAction(
+                           p0_action = opponent.get_action(
                               p0_action_mask, p1_action, LESSON["block_vert_coef"]
                            )
                         else:
-                           p0_action = opponent.getAction(player=0)
+                           p0_action = opponent.get_action(player=0)
                   else:
-                        p0_action = agent.getAction(
+                        p0_action = agent.get_action(
                            p0_state, epsilon, p0_action_mask
                         )[
                            0
@@ -974,19 +963,19 @@ At regular intervals, we evaluate the performance, or 'fitness',  of the agents 
 
                         if not opponent_first:
                            if LESSON["opponent"] == "self":
-                              p1_action = opponent.getAction(
+                              p1_action = opponent.get_action(
                                     p1_state, 0, p1_action_mask
                               )[0]
                            elif LESSON["opponent"] == "random":
-                              p1_action = opponent.getAction(
+                              p1_action = opponent.get_action(
                                     p1_action_mask,
                                     p0_action,
                                     LESSON["block_vert_coef"],
                               )
                            else:
-                              p1_action = opponent.getAction(player=1)
+                              p1_action = opponent.get_action(player=1)
                         else:
-                           p1_action = agent.getAction(
+                           p1_action = agent.get_action(
                               p1_state, epsilon, p1_action_mask
                            )[
                               0
@@ -1120,31 +1109,31 @@ At regular intervals, we evaluate the performance, or 'fitness',  of the agents 
                            if player < 0:
                               if opponent_first:
                                     if LESSON["eval_opponent"] == "random":
-                                       action = opponent.getAction(action_mask)
+                                       action = opponent.get_action(action_mask)
                                     else:
-                                       action = opponent.getAction(player=0)
+                                       action = opponent.get_action(player=0)
                               else:
                                     state = np.moveaxis(
                                        observation["observation"], [-1], [-3]
                                     )
                                     state = np.expand_dims(state, 0)
-                                    action = agent.getAction(state, 0, action_mask)[
+                                    action = agent.get_action(state, 0, action_mask)[
                                        0
                                     ]  # Get next action from agent
                                     eval_actions_hist[action] += 1
                            if player > 0:
                               if not opponent_first:
                                     if LESSON["eval_opponent"] == "random":
-                                       action = opponent.getAction(action_mask)
+                                       action = opponent.get_action(action_mask)
                                     else:
-                                       action = opponent.getAction(player=1)
+                                       action = opponent.get_action(player=1)
                               else:
                                     state = np.moveaxis(
                                        observation["observation"], [-1], [-3]
                                     )
                                     state[[0, 1], :, :] = state[[0, 1], :, :]
                                     state = np.expand_dims(state, 0)
-                                    action = agent.getAction(state, 0, action_mask)[
+                                    action = agent.get_action(state, 0, action_mask)[
                                        0
                                     ]  # Get next action from agent
                                     eval_actions_hist[action] += 1
