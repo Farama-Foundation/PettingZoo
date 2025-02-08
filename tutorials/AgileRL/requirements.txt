@@ -1,3 +1,6 @@
+# Enforce Python version constraint
+python_version < '3.12'
+
 agilerl==0.1.22; python_version >= '3.9'
 pettingzoo[classic,atari,mpe]>=1.23.1
 SuperSuit>=3.9.0
