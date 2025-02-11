@@ -27,7 +27,11 @@ jobs:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies and run tutorials
               run: |
-                  sudo apt-get install python3-opengl xvfb parallel
+                  sudo apt-get install python3-opengl xvfb parallel cmake swig zlib1g-dev
+                  git clone --depth=1 https://github.com/Farama-Foundation/Multi-Agent-ALE.git
+                  cd ./Multi-Agent-ALE
+                  python setup.py install
+                  cd ..
                   export PATH=/path/to/parallel:$PATH
                   export root_dir=$(pwd)
                   cd tutorials/${{ matrix.tutorial }}
@@ -52,7 +56,11 @@ jobs:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies and run tutorials
               run: |
-                  sudo apt-get install python3-opengl xvfb parallel
+                  sudo apt-get install python3-opengl xvfb parallel cmake swig zlib1g-dev
+                  git clone --depth=1 https://github.com/Farama-Foundation/Multi-Agent-ALE.git
+                  cd ./Multi-Agent-ALE
+                  python setup.py install
+                  cd ..
                   export PATH=/path/to/parallel:$PATH
                   export root_dir=$(pwd)
                   cd tutorials/${{ matrix.tutorial }}
