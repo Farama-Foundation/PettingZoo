@@ -22,7 +22,8 @@ Contributing code is done through standard github methods:
 4. Submit a pull request. It will be reviewed by maintainers and they'll give feedback or make requests as applicable
 
 ### Considerations
-- Make sure existing tests pass (`pip install -e .[testing,all]` and then run `pytest -v` -- may also need to `apt-get`/`brew` `install swig` and `AutoROM -v`)
+- Make sure existing tests pass (`pip install -e ".[testing,all]"` and then run `pytest -v` -- may also need to `apt-get`/`brew` `install swig` and `AutoROM -v`)
+  - If you're having trouble installing `multi-agent-ale-py` due to cmake not being found even after installing cmake, you may need to install it manually. See [here](https://github.com/Farama-Foundation/Multi-Agent-ALE/issues/22#issuecomment-2439913989) for details.
 - Make sure your new code is properly tested and fully-covered
 - Any fixes to environments should include fixes to the appropriate documentation
 - Changes to environment functionality should be avoided when reasonable, and when they occur the environment version must be bumped.
