@@ -11,7 +11,7 @@ This does not include dependencies for all families of environments (some enviro
 
 To install the dependencies for one family, use `pip install 'pettingzoo[atari]'`, or use `pip install 'pettingzoo[all]'` to install all dependencies.
 
-We support Python 3.8, 3.9, 3.10 and 3.11 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
+We support and maintain PettingZoo for Python 3.9, 3.10, 3.11, and 3.12 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 ## Initializing Environments
 
