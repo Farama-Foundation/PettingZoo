@@ -87,6 +87,7 @@ To cite this project in publication, please use
   year={2021}
 }
 ```
+
 ## Project Maintainers
 - Project Manager: [David Gerard](https://github.com/David-GERARD) - `david.gerard.23@ucl.ac.uk`
 - Maintainer: [Albert Han](https://github.com/yjhan96) - `yjhan96@gmail.com`.
