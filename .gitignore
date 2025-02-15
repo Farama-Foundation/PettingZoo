@@ -84,6 +84,7 @@ ipython_config.py
 
 # MacOS specific
 */.DS_Store
+.DS_Store
 
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is

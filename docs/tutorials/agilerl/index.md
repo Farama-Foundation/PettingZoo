@@ -12,6 +12,13 @@ AgileRL is a deep reinforcement learning framework focused on streamlining train
 
 For more information about AgileRL and what else the library has to offer, check out the [documentation](https://agilerl.readthedocs.io/en/latest/) and [GitHub repo](https://github.com/agilerl/agilerl).
 
+```{eval-rst}
+.. warning::
+
+   AgileRL only supports versions of python <3.12.
+
+```
+
 ## Examples using PettingZoo
 
 * [MADDPG for co-operation: simple speaker listener environment](https://agilerl.readthedocs.io/en/latest/multi_agent_training/index.html)

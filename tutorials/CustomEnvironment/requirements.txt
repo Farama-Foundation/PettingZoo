@@ -1,1 +1,2 @@
-pettingzoo==1.24.0
+numpy>=1.21.0
+pettingzoo>=1.24.0
