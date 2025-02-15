@@ -94,9 +94,6 @@ The [_Agent Environment Cycle_](https://arxiv.org/abs/2009.13051) (AEC) model wa
 
 In an AEC environment, agents act sequentially, receiving updated observations and rewards before taking an action. The environment updates after each agent's step, making it a natural way of representing sequential games such as Chess. The AEC model is flexible enough to handle any type of game that multi-agent RL can consider.
 
-with the underlying environment updating after each agent's step. Agents receive updated observations and rewards at the beginning of their turn. The environment is updated after every step,
-This is a natural way of representing sequential games such as Chess and Go.
-
 ```{figure} /_static/img/aec_cycle_figure.png
     :width: 480px
     :name: The AEC diagram of Chess
