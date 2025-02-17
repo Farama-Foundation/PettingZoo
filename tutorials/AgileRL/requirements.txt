@@ -1,10 +1,5 @@
-agilerl==0.1.22; python_version >= '3.9' and python_version < '3.12'
-# agileRL doesn't currently support gymnasium version greater
-# than 0.28.1, so we can only run with an older version of
-# pettingzoo. Fix this once agileRL can support newer
-# gymnasium version.
-pettingzoo[classic,atari,mpe]>=1.23.1,<=1.24.3
-AutoROM>=0.6.1
+agilerl==2.0.2; python_version >= '3.9' and python_version < '3.12'
+pettingzoo[classic,atari,mpe]>=1.23.1
 SuperSuit>=3.9.0
 torch>=2.0.1
 numpy>=1.24.2
