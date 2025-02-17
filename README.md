@@ -1,7 +1,7 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Farama-Foundation/PettingZoo/master/pettingzoo-text.png" width="500px"/>
+    <a href = "https://pettingzoo.farama.org/" target = "_blank"><img src="https://raw.githubusercontent.com/Farama-Foundation/PettingZoo/master/pettingzoo-text.png" width="500px"/> </a>
 </p>
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium](https://github.com/Farama-Foundation/Gymnasium).
@@ -26,7 +26,7 @@ This does not include dependencies for all families of environments (some enviro
 
 To install the dependencies for one family, use `pip install 'pettingzoo[atari]'`, or use `pip install 'pettingzoo[all]'` to install all dependencies.
 
-We support Python 3.8, 3.9, 3.10 and 3.11 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
+We support and maintain PettingZoo for Python 3.9, 3.10, 3.11, and 3.12 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 Note: Some Linux distributions may require manual installation of `cmake`, `swig`, or `zlib1g-dev` (e.g., `sudo apt install cmake swig zlib1g-dev`)
 
@@ -87,6 +87,8 @@ To cite this project in publication, please use
   year={2021}
 }
 ```
+
 ## Project Maintainers
-- Project Manager: [David Gerard](https://github.com/David-GERARD) - `david.gerard.23@ucl.ac.uk`.
+- Project Manager: [David Gerard](https://github.com/David-GERARD) - `david.gerard.23@ucl.ac.uk`
+- Maintainer: [Albert Han](https://github.com/yjhan96) - `yjhan96@gmail.com`.
 - Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
