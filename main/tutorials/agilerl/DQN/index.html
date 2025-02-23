@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>AgileRL: Implementing DQN - Curriculum Learning and Self-play - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -443,7 +443,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==0.1.22; python_version &gt;= &#39;3.9&#39;
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==0.1.22; python_version &gt;= &#39;3.9&#39; and python_version &lt; &#39;3.12&#39;
 pettingzoo[classic,atari,mpe]&gt;=1.23.1
 SuperSuit&gt;=3.9.0
 torch&gt;=2.0.1
@@ -454,7 +454,6 @@ gymnasium&gt;=0.28.1
 imageio&gt;=2.31.1
 Pillow&gt;=9.5.0
 PyYAML&gt;=5.4.1
-wandb&gt;=0.13.10
 </pre></div>
 </div>
 </section>
@@ -470,23 +469,23 @@ wandb&gt;=0.13.10
 <p>Importing the following packages, functions and classes will enable us to run the tutorial.</p>
 <details>
    <summary>Imports</summary>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">wandb</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">agilerl.components.replay_buffer</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span>
-<span class="kn">from</span> <span class="nn">agilerl.hpo.mutation</span> <span class="kn">import</span> <span class="n">Mutations</span>
-<span class="kn">from</span> <span class="nn">agilerl.hpo.tournament</span> <span class="kn">import</span> <span class="n">TournamentSelection</span>
-<span class="kn">from</span> <span class="nn">agilerl.utils.utils</span> <span class="kn">import</span> <span class="n">initialPopulation</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wandb</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.components.replay_buffer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReplayBuffer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.hpo.mutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mutations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.hpo.tournament</span><span class="w"> </span><span class="kn">import</span> <span class="n">TournamentSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">initialPopulation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
 </pre></div>
 </div>
 </details>
@@ -598,7 +597,7 @@ wandb&gt;=0.13.10
 <p>To implement our curriculum, we create a <code class="docutils literal notranslate"><span class="pre">CurriculumEnv</span></code> class that acts as a wrapper on top of our Connect Four environment and enables us to alter the reward to guide the training of our agent. This uses the configs that we set up to define the lesson.</p>
 <details>
    <summary>CurriculumEnv</summary>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CurriculumEnv</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CurriculumEnv</span><span class="p">:</span>
 <span class="w">   </span><span class="sd">&quot;&quot;&quot;Wrapper around environment to modify reward for curriculum learning.</span>
 
 <span class="sd">   :param env: Environment to learn in</span>
@@ -607,11 +606,11 @@ wandb&gt;=0.13.10
 <span class="sd">   :type lesson: dict</span>
 <span class="sd">   &quot;&quot;&quot;</span>
 
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">lesson</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">lesson</span><span class="p">):</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">lesson</span> <span class="o">=</span> <span class="n">lesson</span>
 
-   <span class="k">def</span> <span class="nf">fill_replay_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">opponent</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">fill_replay_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">opponent</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Fill the replay buffer with experiences collected by taking random actions in the environment.</span>
 
 <span class="sd">      :param memory: Experience replay buffer</span>
@@ -758,7 +757,7 @@ wandb&gt;=0.13.10
       <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Replay buffer warmed up.&quot;</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">memory</span>
 
-   <span class="k">def</span> <span class="nf">check_winnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lst</span><span class="p">,</span> <span class="n">piece</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">check_winnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lst</span><span class="p">,</span> <span class="n">piece</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Checks if four pieces in a row represent a winnable opportunity, e.g. [1, 1, 1, 0] or [2, 0, 2, 2].</span>
 
 <span class="sd">      :param lst: List of pieces in row</span>
@@ -768,7 +767,7 @@ wandb&gt;=0.13.10
 <span class="sd">      &quot;&quot;&quot;</span>
       <span class="k">return</span> <span class="n">lst</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">piece</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">lst</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 
-   <span class="k">def</span> <span class="nf">check_vertical_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">check_vertical_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Checks if a win is vertical.</span>
 
 <span class="sd">      :param player: Player who we are checking, 0 or 1</span>
@@ -792,7 +791,7 @@ wandb&gt;=0.13.10
                   <span class="k">return</span> <span class="kc">True</span>
       <span class="k">return</span> <span class="kc">False</span>
 
-   <span class="k">def</span> <span class="nf">check_three_in_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">check_three_in_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Checks if there are three pieces in a row and a blank space next, or two pieces - blank - piece.</span>
 
 <span class="sd">      :param player: Player who we are checking, 0 or 1</span>
@@ -848,7 +847,7 @@ wandb&gt;=0.13.10
 
       <span class="k">return</span> <span class="n">three_in_row_count</span>
 
-   <span class="k">def</span> <span class="nf">reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Processes and returns reward from environment according to lesson criteria.</span>
 
 <span class="sd">      :param done: Environment has terminated</span>
@@ -874,15 +873,15 @@ wandb&gt;=0.13.10
                <span class="p">)</span>
       <span class="k">return</span> <span class="n">reward</span>
 
-   <span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Wrapper around PettingZoo env last method.&quot;&quot;&quot;</span>
       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
 
-   <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Wrapper around PettingZoo env step method.&quot;&quot;&quot;</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-   <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Wrapper around PettingZoo env reset method.&quot;&quot;&quot;</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 </pre></div>
@@ -891,7 +890,7 @@ wandb&gt;=0.13.10
 <p>When defining the different lessons in our curriculum, we can increase the difficulty of our task by modifying environment observations for our agent - in Connect Four, we can increase the skill level of our opponent. By progressively doing this, we can help our agent improve. We can change our rewards between lessons too; for example, we may wish to reward wins in all directions equally once we have learned to beat a random agent and now wish to train against a harder opponent. In this tutorial, an <code class="docutils literal notranslate"><span class="pre">Opponent</span></code> class is implemented to provide different levels of difficulty for training our agent.</p>
 <details>
    <summary>Opponent</summary>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Opponent</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Opponent</span><span class="p">:</span>
 <span class="w">   </span><span class="sd">&quot;&quot;&quot;Connect 4 opponent to train and/or evaluate against.</span>
 
 <span class="sd">   :param env: Environment to learn in</span>
@@ -900,7 +899,7 @@ wandb&gt;=0.13.10
 <span class="sd">   :type difficulty: str</span>
 <span class="sd">   &quot;&quot;&quot;</span>
 
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">):</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">env</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">difficulty</span> <span class="o">=</span> <span class="n">difficulty</span>
       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">difficulty</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
@@ -914,7 +913,7 @@ wandb&gt;=0.13.10
       <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">4</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span>
 
-   <span class="k">def</span> <span class="nf">update_top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">update_top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Updates self.top, a list which tracks the row on top of the highest piece in each column.&quot;&quot;&quot;</span>
       <span class="n">board</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">board</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span><span class="p">)</span>
       <span class="n">non_zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">board</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
@@ -930,7 +929,7 @@ wandb&gt;=0.13.10
       <span class="n">top</span><span class="p">[</span><span class="n">full_columns</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">top</span>
 
-   <span class="k">def</span> <span class="nf">random_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_mask</span><span class="p">,</span> <span class="n">last_opp_move</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">block_vert_coef</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">random_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_mask</span><span class="p">,</span> <span class="n">last_opp_move</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">block_vert_coef</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Takes move for random opponent. If the lesson aims to randomly block vertical wins with a higher probability, this is done here too.</span>
 
 <span class="sd">      :param action_mask: Mask of legal actions: 1=legal, 0=illegal</span>
@@ -945,7 +944,7 @@ wandb&gt;=0.13.10
       <span class="n">action</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span><span class="p">)),</span> <span class="n">action_mask</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
       <span class="k">return</span> <span class="n">action</span>
 
-   <span class="k">def</span> <span class="nf">weak_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">weak_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Takes move for weak rule-based opponent.</span>
 
 <span class="sd">      :param player: Player who we are checking, 0 or 1</span>
@@ -966,7 +965,7 @@ wandb&gt;=0.13.10
       <span class="n">best_action</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">best_actions</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">best_action</span>
 
-   <span class="k">def</span> <span class="nf">strong_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">strong_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Takes move for strong rule-based opponent.</span>
 
 <span class="sd">      :param player: Player who we are checking, 0 or 1</span>
@@ -995,7 +994,7 @@ wandb&gt;=0.13.10
 
       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weak_rule_based_opponent</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>  <span class="c1"># take best possible move</span>
 
-   <span class="k">def</span> <span class="nf">outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">return_length</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">return_length</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;Takes move for weak rule-based opponent.</span>
 
 <span class="sd">      :param action: Action to take in environment</span>
@@ -1711,20 +1710,20 @@ wandb&gt;=0.13.10
 <p>The following code allows you to load your saved DQN agent from the previous training block, test the agent’s performance, and then visualise a number of episodes as a gif.</p>
 <details>
    <summary>Render trained agents</summary>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">imageio</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">agilerl.algorithms.dqn</span> <span class="kn">import</span> <span class="n">DQN</span>
-<span class="kn">from</span> <span class="nn">agilerl_dqn_curriculum</span> <span class="kn">import</span> <span class="n">Opponent</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">imageio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.algorithms.dqn</span><span class="w"> </span><span class="kn">import</span> <span class="n">DQN</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl_dqn_curriculum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Opponent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
 
 
 <span class="c1"># Define function to return image</span>
-<span class="k">def</span> <span class="nf">_label_with_episode_number</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">episode_num</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_label_with_episode_number</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">episode_num</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
     <span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
     <span class="n">drawer</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
     <span class="n">text_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
@@ -1749,7 +1748,7 @@ wandb&gt;=0.13.10
 
 
 <span class="c1"># Resizes frames to make file size smaller</span>
-<span class="k">def</span> <span class="nf">resize_frames</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">fraction</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">resize_frames</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">fraction</span><span class="p">):</span>
     <span class="n">resized_frames</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
         <span class="n">new_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">fraction</span><span class="p">)</span>
@@ -1926,26 +1925,26 @@ wandb&gt;=0.13.10
 
 <span class="sd">Author: Nick (https://github.com/nicku-a)</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">wandb</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">agilerl.components.replay_buffer</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span>
-<span class="kn">from</span> <span class="nn">agilerl.hpo.mutation</span> <span class="kn">import</span> <span class="n">Mutations</span>
-<span class="kn">from</span> <span class="nn">agilerl.hpo.tournament</span> <span class="kn">import</span> <span class="n">TournamentSelection</span>
-<span class="kn">from</span> <span class="nn">agilerl.utils.utils</span> <span class="kn">import</span> <span class="n">initialPopulation</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wandb</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.components.replay_buffer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReplayBuffer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.hpo.mutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mutations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.hpo.tournament</span><span class="w"> </span><span class="kn">import</span> <span class="n">TournamentSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">initialPopulation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
 
 
-<span class="k">class</span> <span class="nc">CurriculumEnv</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CurriculumEnv</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper around environment to modify reward for curriculum learning.</span>
 
 <span class="sd">    :param env: Environment to learn in</span>
@@ -1954,11 +1953,11 @@ wandb&gt;=0.13.10
 <span class="sd">    :type lesson: dict</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">lesson</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">lesson</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lesson</span> <span class="o">=</span> <span class="n">lesson</span>
 
-    <span class="k">def</span> <span class="nf">fill_replay_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">opponent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_replay_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">opponent</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill the replay buffer with experiences collected by taking random actions in the environment.</span>
 
 <span class="sd">        :param memory: Experience replay buffer</span>
@@ -2105,7 +2104,7 @@ wandb&gt;=0.13.10
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Replay buffer warmed up.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">memory</span>
 
-    <span class="k">def</span> <span class="nf">check_winnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lst</span><span class="p">,</span> <span class="n">piece</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_winnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lst</span><span class="p">,</span> <span class="n">piece</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if four pieces in a row represent a winnable opportunity, e.g. [1, 1, 1, 0] or [2, 0, 2, 2].</span>
 
 <span class="sd">        :param lst: List of pieces in row</span>
@@ -2115,7 +2114,7 @@ wandb&gt;=0.13.10
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">lst</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">piece</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">lst</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 
-    <span class="k">def</span> <span class="nf">check_vertical_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_vertical_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a win is vertical.</span>
 
 <span class="sd">        :param player: Player who we are checking, 0 or 1</span>
@@ -2139,7 +2138,7 @@ wandb&gt;=0.13.10
                     <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">check_three_in_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_three_in_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if there are three pieces in a row and a blank space next, or two pieces - blank - piece.</span>
 
 <span class="sd">        :param player: Player who we are checking, 0 or 1</span>
@@ -2195,7 +2194,7 @@ wandb&gt;=0.13.10
 
         <span class="k">return</span> <span class="n">three_in_row_count</span>
 
-    <span class="k">def</span> <span class="nf">reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Processes and returns reward from environment according to lesson criteria.</span>
 
 <span class="sd">        :param done: Environment has terminated</span>
@@ -2221,20 +2220,20 @@ wandb&gt;=0.13.10
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">reward</span>
 
-    <span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around PettingZoo env last method.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around PettingZoo env step method.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around PettingZoo env reset method.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 
-<span class="k">class</span> <span class="nc">Opponent</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Opponent</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Connect 4 opponent to train and/or evaluate against.</span>
 
 <span class="sd">    :param env: Environment to learn in</span>
@@ -2243,7 +2242,7 @@ wandb&gt;=0.13.10
 <span class="sd">    :type difficulty: str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">difficulty</span> <span class="o">=</span> <span class="n">difficulty</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">difficulty</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
@@ -2257,7 +2256,7 @@ wandb&gt;=0.13.10
         <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span>
 
-    <span class="k">def</span> <span class="nf">update_top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates self.top, a list which tracks the row on top of the highest piece in each column.&quot;&quot;&quot;</span>
         <span class="n">board</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">board</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span><span class="p">)</span>
         <span class="n">non_zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">board</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
@@ -2273,7 +2272,7 @@ wandb&gt;=0.13.10
         <span class="n">top</span><span class="p">[</span><span class="n">full_columns</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">top</span>
 
-    <span class="k">def</span> <span class="nf">random_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_mask</span><span class="p">,</span> <span class="n">last_opp_move</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">block_vert_coef</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_mask</span><span class="p">,</span> <span class="n">last_opp_move</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">block_vert_coef</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes move for random opponent. If the lesson aims to randomly block vertical wins with a higher probability, this is done here too.</span>
 
 <span class="sd">        :param action_mask: Mask of legal actions: 1=legal, 0=illegal</span>
@@ -2288,7 +2287,7 @@ wandb&gt;=0.13.10
         <span class="n">action</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span><span class="p">)),</span> <span class="n">action_mask</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">action</span>
 
-    <span class="k">def</span> <span class="nf">weak_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weak_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes move for weak rule-based opponent.</span>
 
 <span class="sd">        :param player: Player who we are checking, 0 or 1</span>
@@ -2309,7 +2308,7 @@ wandb&gt;=0.13.10
         <span class="n">best_action</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">best_actions</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">best_action</span>
 
-    <span class="k">def</span> <span class="nf">strong_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">strong_rule_based_opponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes move for strong rule-based opponent.</span>
 
 <span class="sd">        :param player: Player who we are checking, 0 or 1</span>
@@ -2338,7 +2337,7 @@ wandb&gt;=0.13.10
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weak_rule_based_opponent</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>  <span class="c1"># take best possible move</span>
 
-    <span class="k">def</span> <span class="nf">outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">return_length</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">return_length</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes move for weak rule-based opponent.</span>
 
 <span class="sd">        :param action: Action to take in environment</span>

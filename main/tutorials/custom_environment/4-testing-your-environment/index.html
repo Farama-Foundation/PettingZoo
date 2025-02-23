@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Tutorial: Testing Your Environment - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -412,10 +412,10 @@
 <p>Relative importing is used for simplicity, and assumes your custom environment is in the same directory. If your test is in another location (e.g., a root-level <code class="docutils literal notranslate"><span class="pre">/test/</span></code> directory), it is recommended to import using absolute path.</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">/custom-environment/env/custom_environment.py</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tutorial2_adding_game_logic</span> <span class="kn">import</span> <span class="n">CustomEnvironment</span>
-<span class="kn">from</span> <span class="nn">tutorial3_action_masking</span> <span class="kn">import</span> <span class="n">CustomActionMaskedEnvironment</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tutorial2_adding_game_logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomEnvironment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tutorial3_action_masking</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomActionMaskedEnvironment</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">parallel_api_test</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_api_test</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">CustomEnvironment</span><span class="p">()</span>

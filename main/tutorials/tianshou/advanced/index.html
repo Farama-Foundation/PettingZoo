@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Tianshou: CLI and Logging - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -428,27 +428,27 @@ tianshou==0.5.0
 <span class="sd">git+https://github.com/thu-ml/tianshou</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">gymnasium</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Collector</span><span class="p">,</span> <span class="n">VectorReplayBuffer</span>
-<span class="kn">from</span> <span class="nn">tianshou.env</span> <span class="kn">import</span> <span class="n">DummyVectorEnv</span>
-<span class="kn">from</span> <span class="nn">tianshou.env.pettingzoo_env</span> <span class="kn">import</span> <span class="n">PettingZooEnv</span>
-<span class="kn">from</span> <span class="nn">tianshou.policy</span> <span class="kn">import</span> <span class="n">BasePolicy</span><span class="p">,</span> <span class="n">DQNPolicy</span><span class="p">,</span> <span class="n">MultiAgentPolicyManager</span><span class="p">,</span> <span class="n">RandomPolicy</span>
-<span class="kn">from</span> <span class="nn">tianshou.trainer</span> <span class="kn">import</span> <span class="n">offpolicy_trainer</span>
-<span class="kn">from</span> <span class="nn">tianshou.utils</span> <span class="kn">import</span> <span class="n">TensorboardLogger</span>
-<span class="kn">from</span> <span class="nn">tianshou.utils.net.common</span> <span class="kn">import</span> <span class="n">Net</span>
-<span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collector</span><span class="p">,</span> <span class="n">VectorReplayBuffer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">DummyVectorEnv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.env.pettingzoo_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">PettingZooEnv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasePolicy</span><span class="p">,</span> <span class="n">DQNPolicy</span><span class="p">,</span> <span class="n">MultiAgentPolicyManager</span><span class="p">,</span> <span class="n">RandomPolicy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.trainer</span><span class="w"> </span><span class="kn">import</span> <span class="n">offpolicy_trainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">TensorboardLogger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.utils.net.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">Net</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.tensorboard</span><span class="w"> </span><span class="kn">import</span> <span class="n">SummaryWriter</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">tictactoe_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">tictactoe_v3</span>
 
 
-<span class="k">def</span> <span class="nf">get_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--seed&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1626</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--eps-test&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
@@ -510,12 +510,12 @@ tianshou==0.5.0
     <span class="k">return</span> <span class="n">parser</span>
 
 
-<span class="k">def</span> <span class="nf">get_args</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_args</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_known_args</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">get_agents</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_agents</span><span class="p">(</span>
     <span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">(),</span>
     <span class="n">agent_learn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">agent_opponent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -564,11 +564,11 @@ tianshou==0.5.0
     <span class="k">return</span> <span class="n">policy</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span>
 
 
-<span class="k">def</span> <span class="nf">get_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">train_agent</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_agent</span><span class="p">(</span>
     <span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">(),</span>
     <span class="n">agent_learn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">agent_opponent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -606,7 +606,7 @@ tianshou==0.5.0
     <span class="n">logger</span> <span class="o">=</span> <span class="n">TensorboardLogger</span><span class="p">(</span><span class="n">writer</span><span class="p">)</span>
 
     <span class="c1"># ======== callback functions used during training =========</span>
-    <span class="k">def</span> <span class="nf">save_best_fn</span><span class="p">(</span><span class="n">policy</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_best_fn</span><span class="p">(</span><span class="n">policy</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;model_save_path&quot;</span><span class="p">):</span>
             <span class="n">model_save_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">model_save_path</span>
         <span class="k">else</span><span class="p">:</span>
@@ -617,16 +617,16 @@ tianshou==0.5.0
             <span class="n">policy</span><span class="o">.</span><span class="n">policies</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">model_save_path</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">stop_fn</span><span class="p">(</span><span class="n">mean_rewards</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stop_fn</span><span class="p">(</span><span class="n">mean_rewards</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">mean_rewards</span> <span class="o">&gt;=</span> <span class="n">args</span><span class="o">.</span><span class="n">win_rate</span>
 
-    <span class="k">def</span> <span class="nf">train_fn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_fn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">):</span>
         <span class="n">policy</span><span class="o">.</span><span class="n">policies</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">eps_train</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">test_fn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_fn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">):</span>
         <span class="n">policy</span><span class="o">.</span><span class="n">policies</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">eps_test</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">reward_metric</span><span class="p">(</span><span class="n">rews</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reward_metric</span><span class="p">(</span><span class="n">rews</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">rews</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># trainer</span>
@@ -653,7 +653,7 @@ tianshou==0.5.0
 
 
 <span class="c1"># ======== a test function that tests a pre-trained agent ======</span>
-<span class="k">def</span> <span class="nf">watch</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">watch</span><span class="p">(</span>
     <span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">(),</span>
     <span class="n">agent_learn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">agent_opponent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>

@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>SB3: Action Masked PPO for Connect Four - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -439,23 +439,23 @@ gymnasium&lt;=0.29.1
 
 <span class="sd">Author: Elliot (https://github.com/elliottower)</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kn">import</span> <span class="nn">gymnasium</span> <span class="k">as</span> <span class="nn">gym</span>
-<span class="kn">from</span> <span class="nn">sb3_contrib</span> <span class="kn">import</span> <span class="n">MaskablePPO</span>
-<span class="kn">from</span> <span class="nn">sb3_contrib.common.maskable.policies</span> <span class="kn">import</span> <span class="n">MaskableActorCriticPolicy</span>
-<span class="kn">from</span> <span class="nn">sb3_contrib.common.wrappers</span> <span class="kn">import</span> <span class="n">ActionMasker</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gym</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sb3_contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaskablePPO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sb3_contrib.common.maskable.policies</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaskableActorCriticPolicy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sb3_contrib.common.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionMasker</span>
 
-<span class="kn">import</span> <span class="nn">pettingzoo.utils</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pettingzoo.utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
 
 
-<span class="k">class</span> <span class="nc">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">pettingzoo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseWrapper</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">pettingzoo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseWrapper</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper to allow PettingZoo environments to be used with SB3 illegal action masking.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like reset function which assigns obs/action spaces to be the same for each agent.</span>
 
 <span class="sd">        This is required as SB3 is designed for single-agent RL and doesn&#39;t expect obs/action spaces to be functions</span>
@@ -471,7 +471,7 @@ gymnasium&lt;=0.29.1
         <span class="c1"># Return initial observation, info (PettingZoo AEC envs do not by default)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">),</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like step function, returning observation, reward, termination, truncation, info.</span>
 
 <span class="sd">        The observation is for the next agent (used to determine the next action), while the remaining</span>
@@ -490,23 +490,23 @@ gymnasium&lt;=0.29.1
             <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">current_agent</span><span class="p">],</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return only raw observation, removing action mask.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">action_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">action_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Separate function used in order to access the action mask.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">mask_fn</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mask_fn</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
     <span class="c1"># Do whatever you&#39;d like in this function to return the action mask</span>
     <span class="c1"># for the current env. In this example, we assume the env has a</span>
     <span class="c1"># helpful method we can rely on.</span>
     <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">action_mask</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Train a single model to play as each agent in a zero-sum game environment using invalid action masking.&quot;&quot;&quot;</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
@@ -535,7 +535,7 @@ gymnasium&lt;=0.29.1
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
     <span class="c1"># Evaluate a trained agent vs a random agent</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
@@ -640,9 +640,9 @@ gymnasium&lt;=0.29.1
 <p>This code yields decent results on simpler environments like <a class="reference internal" href="../../../environments/classic/connect_four/"><span class="doc std std-doc">Connect Four</span></a>, while more difficult environments such as <a class="reference internal" href="../../../environments/classic/chess/"><span class="doc std std-doc">Chess</span></a> or <a class="reference internal" href="../../../environments/classic/hanabi/"><span class="doc std std-doc">Hanabi</span></a> will likely take much more training time and hyperparameter tuning.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Tests that action masking code works properly with all PettingZoo classic environments.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">chess_v6</span><span class="p">,</span>
     <span class="n">gin_rummy_v4</span><span class="p">,</span>
     <span class="n">go_v5</span><span class="p">,</span>
@@ -682,8 +682,8 @@ gymnasium&lt;=0.29.1
 
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_fn&quot;</span><span class="p">,</span> <span class="n">EASY_ENVS</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">test_action_mask_easy</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_easy</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
         <span class="n">train_action_mask</span><span class="p">,</span>
     <span class="p">)</span>
@@ -713,8 +713,8 @@ gymnasium&lt;=0.29.1
 <span class="c1">#     reason=&quot;training is compute intensive and hyperparameters have not been tuned, disabled for CI&quot;</span>
 <span class="c1"># )</span>
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_fn&quot;</span><span class="p">,</span> <span class="n">MEDIUM_ENVS</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">test_action_mask_medium</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_medium</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
         <span class="n">train_action_mask</span><span class="p">,</span>
     <span class="p">)</span>
@@ -741,8 +741,8 @@ gymnasium&lt;=0.29.1
 <span class="c1">#     reason=&quot;training is compute intensive and hyperparameters have not been tuned, disabled for CI&quot;</span>
 <span class="c1"># )</span>
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_fn&quot;</span><span class="p">,</span> <span class="n">HARD_ENVS</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">test_action_mask_hard</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_hard</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
         <span class="n">train_action_mask</span><span class="p">,</span>
     <span class="p">)</span>
