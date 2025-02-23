@@ -3,6 +3,7 @@ name: Build Documentation website
 on:
     push:
         branches: [master]
+    workflow_dispatch:
 permissions:
     contents: write
 jobs:
