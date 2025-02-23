@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>AgileRL: Implementing MADDPG - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -433,7 +433,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==0.1.22; python_version &gt;= &#39;3.9&#39;
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==0.1.22; python_version &gt;= &#39;3.9&#39; and python_version &lt; &#39;3.12&#39;
 pettingzoo[classic,atari,mpe]&gt;=1.23.1
 SuperSuit&gt;=3.9.0
 torch&gt;=2.0.1
@@ -444,7 +444,6 @@ gymnasium&gt;=0.28.1
 imageio&gt;=2.31.1
 Pillow&gt;=9.5.0
 PyYAML&gt;=5.4.1
-wandb&gt;=0.13.10
 </pre></div>
 </div>
 </section>
@@ -457,18 +456,18 @@ wandb&gt;=0.13.10
 
 <span class="sd">Authors: Michael (https://github.com/mikepratt1), Nick (https://github.com/nicku-a)</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">supersuit</span> <span class="k">as</span> <span class="nn">ss</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">agilerl.components.multi_agent_replay_buffer</span> <span class="kn">import</span> <span class="n">MultiAgentReplayBuffer</span>
-<span class="kn">from</span> <span class="nn">agilerl.hpo.mutation</span> <span class="kn">import</span> <span class="n">Mutations</span>
-<span class="kn">from</span> <span class="nn">agilerl.hpo.tournament</span> <span class="kn">import</span> <span class="n">TournamentSelection</span>
-<span class="kn">from</span> <span class="nn">agilerl.utils.utils</span> <span class="kn">import</span> <span class="n">initialPopulation</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">trange</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">supersuit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ss</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.components.multi_agent_replay_buffer</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiAgentReplayBuffer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.hpo.mutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mutations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.hpo.tournament</span><span class="w"> </span><span class="kn">import</span> <span class="n">TournamentSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">initialPopulation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">trange</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">space_invaders_v2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">space_invaders_v2</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
@@ -714,20 +713,20 @@ wandb&gt;=0.13.10
 <section id="watch-the-trained-agents-play">
 <h3>Watch the trained agents play<a class="headerlink" href="#watch-the-trained-agents-play" title="Link to this heading">¶</a></h3>
 <p>The following code allows you to load your saved MADDPG alogorithm from the previous training block, test the algorithms performance, and then visualise a number of episodes as a gif.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">imageio</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">supersuit</span> <span class="k">as</span> <span class="nn">ss</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">agilerl.algorithms.maddpg</span> <span class="kn">import</span> <span class="n">MADDPG</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">imageio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">supersuit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ss</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.algorithms.maddpg</span><span class="w"> </span><span class="kn">import</span> <span class="n">MADDPG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">space_invaders_v2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">space_invaders_v2</span>
 
 
 <span class="c1"># Define function to return image</span>
-<span class="k">def</span> <span class="nf">_label_with_episode_number</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">episode_num</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_label_with_episode_number</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">episode_num</span><span class="p">):</span>
     <span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
 
     <span class="n">drawer</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>

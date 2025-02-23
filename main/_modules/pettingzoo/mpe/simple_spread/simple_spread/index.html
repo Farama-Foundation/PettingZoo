@@ -12,9 +12,9 @@
 
     <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>pettingzoo.mpe.simple_spread.simple_spread - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -445,19 +445,19 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">gymnasium.utils</span> <span class="kn">import</span> <span class="n">EzPickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">EzPickle</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.mpe._mpe_utils.core</span> <span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Landmark</span><span class="p">,</span> <span class="n">World</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.mpe._mpe_utils.scenario</span> <span class="kn">import</span> <span class="n">BaseScenario</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.mpe._mpe_utils.simple_env</span> <span class="kn">import</span> <span class="n">SimpleEnv</span><span class="p">,</span> <span class="n">make_env</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils.conversions</span> <span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.mpe._mpe_utils.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Landmark</span><span class="p">,</span> <span class="n">World</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.mpe._mpe_utils.scenario</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseScenario</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.mpe._mpe_utils.simple_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleEnv</span><span class="p">,</span> <span class="n">make_env</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.conversions</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
 
 
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/mpe/simple_spread/#pettingzoo.mpe.simple_spread.simple_spread.raw_env">[docs]</a>
-<span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">SimpleEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">SimpleEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
         <span class="n">local_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -497,8 +497,8 @@
 <span class="n">parallel_env</span> <span class="o">=</span> <span class="n">parallel_wrapper_fn</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">Scenario</span><span class="p">(</span><span class="n">BaseScenario</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">make_world</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Scenario</span><span class="p">(</span><span class="n">BaseScenario</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_world</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
         <span class="n">world</span> <span class="o">=</span> <span class="n">World</span><span class="p">()</span>
         <span class="c1"># set any world properties first</span>
         <span class="n">world</span><span class="o">.</span><span class="n">dim_c</span> <span class="o">=</span> <span class="mi">2</span>
@@ -520,7 +520,7 @@
             <span class="n">landmark</span><span class="o">.</span><span class="n">movable</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">world</span>
 
-    <span class="k">def</span> <span class="nf">reset_world</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">np_random</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_world</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">np_random</span><span class="p">):</span>
         <span class="c1"># random properties for agents</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">agents</span><span class="p">):</span>
             <span class="n">agent</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">])</span>
@@ -536,7 +536,7 @@
             <span class="n">landmark</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">p_pos</span> <span class="o">=</span> <span class="n">np_random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">world</span><span class="o">.</span><span class="n">dim_p</span><span class="p">)</span>
             <span class="n">landmark</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">p_vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">dim_p</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">benchmark_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">benchmark_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
         <span class="n">rew</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">collisions</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">occupied_landmarks</span> <span class="o">=</span> <span class="mi">0</span>
@@ -557,13 +557,13 @@
                     <span class="n">collisions</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">rew</span><span class="p">,</span> <span class="n">collisions</span><span class="p">,</span> <span class="n">min_dists</span><span class="p">,</span> <span class="n">occupied_landmarks</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">is_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent1</span><span class="p">,</span> <span class="n">agent2</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent1</span><span class="p">,</span> <span class="n">agent2</span><span class="p">):</span>
         <span class="n">delta_pos</span> <span class="o">=</span> <span class="n">agent1</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">p_pos</span> <span class="o">-</span> <span class="n">agent2</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">p_pos</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">delta_pos</span><span class="p">)))</span>
         <span class="n">dist_min</span> <span class="o">=</span> <span class="n">agent1</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">agent2</span><span class="o">.</span><span class="n">size</span>
         <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">dist_min</span> <span class="k">else</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
         <span class="c1"># Agents are rewarded based on minimum agent distance to each landmark, penalized for collisions</span>
         <span class="n">rew</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">collide</span><span class="p">:</span>
@@ -571,7 +571,7 @@
                 <span class="n">rew</span> <span class="o">-=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_collision</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span> <span class="ow">and</span> <span class="n">a</span> <span class="o">!=</span> <span class="n">agent</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rew</span>
 
-    <span class="k">def</span> <span class="nf">global_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">global_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
         <span class="n">rew</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">lm</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">landmarks</span><span class="p">:</span>
             <span class="n">dists</span> <span class="o">=</span> <span class="p">[</span>
@@ -581,7 +581,7 @@
             <span class="n">rew</span> <span class="o">-=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dists</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rew</span>
 
-    <span class="k">def</span> <span class="nf">observation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
         <span class="c1"># get positions of all entities in this agent&#39;s reference frame</span>
         <span class="n">entity_pos</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">landmarks</span><span class="p">:</span>  <span class="c1"># world.entities:</span>

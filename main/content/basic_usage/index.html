@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Basic Usage - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -406,17 +406,17 @@
 <p>To install the base PettingZoo library: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pettingzoo</span></code>.</p>
 <p>This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems).</p>
 <p>To install the dependencies for one family, use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'pettingzoo[atari]'</span></code>, or use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'pettingzoo[all]'</span></code> to install all dependencies.</p>
-<p>We support Python 3.8, 3.9, 3.10 and 3.11 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.</p>
+<p>We support and maintain PettingZoo for Python 3.9, 3.10, 3.11, and 3.12 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.</p>
 </section>
 <section id="initializing-environments">
 <h2>Initializing Environments<a class="headerlink" href="#initializing-environments" title="Link to this heading">¶</a></h2>
 <p>Using environments in PettingZoo is very similar to using them in Gymnasium. You initialize an environment via:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Environments are generally highly configurable via arguments at creation, i.e.:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">cooperative_pong_v5</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">cooperative_pong_v5</span>
 
 <span class="n">cooperative_pong_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">ball_speed</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">left_paddle_speed</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
 <span class="n">right_paddle_speed</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">cake_paddle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">bounce_randomness</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -426,7 +426,7 @@
 <section id="interacting-with-environments">
 <h2>Interacting With Environments<a class="headerlink" href="#interacting-with-environments" title="Link to this heading">¶</a></h2>
 <p>Environments can be interacted with using a similar interface to Gymnasium:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">cooperative_pong_v5</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">cooperative_pong_v5</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">cooperative_pong_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -490,7 +490,7 @@
 <section id="unwrapping-an-environment">
 <h3>Unwrapping an environment<a class="headerlink" href="#unwrapping-an-environment" title="Link to this heading">¶</a></h3>
 <p>If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the <code class="docutils literal notranslate"><span class="pre">.unwrapped</span></code> attribute. If the environment is already a base environment, the <code class="docutils literal notranslate"><span class="pre">.unwrapped</span></code> attribute will just return itself.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
 
 <span class="n">base_env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">()</span><span class="o">.</span><span class="n">unwrapped</span>
 </pre></div>

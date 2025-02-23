@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>LangChain: Creating LLM agents - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -419,7 +419,7 @@ tenacity
 </section>
 <section id="environment-loop">
 <h2>Environment Loop<a class="headerlink" href="#environment-loop" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -444,17 +444,17 @@ tenacity
 <section id="gymnasium-agent">
 <h2>Gymnasium Agent<a class="headerlink" href="#gymnasium-agent" title="Link to this heading">¶</a></h2>
 <p>Here we reproduce the same <code class="docutils literal notranslate"><span class="pre">GymnasiumAgent</span></code> defined from the <a class="reference external" href="https://python.langchain.com/en/latest/use_cases/agent_simulations/gymnasium.html">LangChain Gymnasium example</a>. If after multiple retries it does not take a valid action, it simply takes a random action.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tenacity</span>
-<span class="kn">from</span> <span class="nn">langchain.output_parsers</span> <span class="kn">import</span> <span class="n">RegexParser</span>
-<span class="kn">from</span> <span class="nn">langchain.schema</span> <span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tenacity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain.output_parsers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegexParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
 
 
-<span class="k">class</span> <span class="nc">GymnasiumAgent</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GymnasiumAgent</span><span class="p">:</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_docs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_docs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="vm">__doc__</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">docs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_docs</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -483,17 +483,17 @@ tenacity
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="nf">random_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">action</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">docs</span><span class="p">),</span>
             <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instructions</span><span class="p">),</span>
         <span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">term</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">trunc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">term</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">trunc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ret</span> <span class="o">+=</span> <span class="n">rew</span>
 
         <span class="n">obs_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
@@ -506,13 +506,13 @@ tenacity
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">obs_message</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">obs_message</span>
 
-    <span class="k">def</span> <span class="nf">_act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">act_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">act_message</span><span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">act_message</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">&quot;action&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">action</span>
 
-    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="n">tenacity</span><span class="o">.</span><span class="n">Retrying</span><span class="p">(</span>
                 <span class="n">stop</span><span class="o">=</span><span class="n">tenacity</span><span class="o">.</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
@@ -537,21 +537,21 @@ tenacity
 <li><p><code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code> takes in a <code class="docutils literal notranslate"><span class="pre">name</span></code> argument to identify it among multiple agents</p></li>
 <li><p>the function <code class="docutils literal notranslate"><span class="pre">get_docs</span></code> is implemented differently because the <code class="docutils literal notranslate"><span class="pre">PettingZoo</span></code> repo structure is structured differently from the <code class="docutils literal notranslate"><span class="pre">Gymnasium</span></code> repo</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
 
-<span class="kn">from</span> <span class="nn">gymnasium_agent</span> <span class="kn">import</span> <span class="n">GymnasiumAgent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium_agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">GymnasiumAgent</span>
 
 
-<span class="k">class</span> <span class="nc">PettingZooAgent</span><span class="p">(</span><span class="n">GymnasiumAgent</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PettingZooAgent</span><span class="p">(</span><span class="n">GymnasiumAgent</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_docs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_docs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-    <span class="k">def</span> <span class="nf">random_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">action</span>
 </pre></div>
@@ -559,8 +559,8 @@ tenacity
 <section id="rock-paper-scissors">
 <h3>Rock-Paper-Scissors<a class="headerlink" href="#rock-paper-scissors" title="Link to this heading">¶</a></h3>
 <p>We can now run a simulation of a multi-agent rock, paper, scissors game using the <code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rock_paper_scissors</span><span class="p">():</span>
-    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">rps_v2</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rock_paper_scissors</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">rps_v2</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
@@ -640,33 +640,33 @@ Action: None
 <section id="action-masking-agent">
 <h2>Action Masking Agent<a class="headerlink" href="#action-masking-agent" title="Link to this heading">¶</a></h2>
 <p>Some <code class="docutils literal notranslate"><span class="pre">PettingZoo</span></code> environments provide an <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> to tell the agent which actions are valid. The <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code> subclasses <code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code> to use information from the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> to select actions.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">collections</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
 
-<span class="kn">from</span> <span class="nn">langchain.schema</span> <span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
-<span class="kn">from</span> <span class="nn">pettingzoo_agent</span> <span class="kn">import</span> <span class="n">PettingZooAgent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo_agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">PettingZooAgent</span>
 
 
-<span class="k">class</span> <span class="nc">ActionMaskAgent</span><span class="p">(</span><span class="n">PettingZooAgent</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ActionMaskAgent</span><span class="p">(</span><span class="n">PettingZooAgent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obs_buffer</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">random_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_buffer</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">action</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">docs</span><span class="p">),</span>
             <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instructions</span><span class="p">),</span>
         <span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">term</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">trunc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">term</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">trunc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obs_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">valid_action_instruction</span> <span class="o">=</span> <span class="s2">&quot;Generate a valid action given by the indices of the `action_mask` that are not 0, according to the action formatting rules.&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">valid_action_instruction</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_act</span><span class="p">()</span>
@@ -675,8 +675,8 @@ Action: None
 <section id="tic-tac-toe">
 <h3>Tic-Tac-Toe<a class="headerlink" href="#tic-tac-toe" title="Link to this heading">¶</a></h3>
 <p>Here is an example of a Tic-Tac-Toe game that uses the <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tic_tac_toe</span><span class="p">():</span>
-    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">tictactoe_v3</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tic_tac_toe</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">tictactoe_v3</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
@@ -916,8 +916,8 @@ Action: None
 <section id="texas-holdem-no-limit">
 <h3>Texas Holdem’ No Limit<a class="headerlink" href="#texas-holdem-no-limit" title="Link to this heading">¶</a></h3>
 <p>Here is an example of a Texas Hold’em No Limit game that uses the <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
-    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">texas_holdem_no_limit_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
@@ -1089,13 +1089,13 @@ Action: None
 <section id="full-code">
 <h2>Full Code<a class="headerlink" href="#full-code" title="Link to this heading">¶</a></h2>
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with LangChain. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">langchain.chat_models</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
-<span class="kn">from</span> <span class="nn">pettingzoo_agent</span> <span class="kn">import</span> <span class="n">PettingZooAgent</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain.chat_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo_agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">PettingZooAgent</span>
 
-<span class="kn">from</span> <span class="nn">action_masking_agent</span> <span class="kn">import</span> <span class="n">ActionMaskAgent</span>  <span class="c1"># isort: skip</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">action_masking_agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionMaskAgent</span>  <span class="c1"># isort: skip</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1116,8 +1116,8 @@ Action: None
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">rock_paper_scissors</span><span class="p">():</span>
-    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">rps_v2</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rock_paper_scissors</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">rps_v2</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
@@ -1127,8 +1127,8 @@ Action: None
     <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">tic_tac_toe</span><span class="p">():</span>
-    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">tictactoe_v3</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tic_tac_toe</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">tictactoe_v3</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
@@ -1138,8 +1138,8 @@ Action: None
     <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
-    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">texas_holdem_no_limit_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>

@@ -12,9 +12,9 @@
 
     <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -568,26 +568,26 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">repeat</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">repeat</span>
 
-<span class="kn">import</span> <span class="nn">gymnasium</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pygame</span>
-<span class="kn">import</span> <span class="nn">pygame.gfxdraw</span>
-<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">Sequence</span>
-<span class="kn">from</span> <span class="nn">gymnasium.utils</span> <span class="kn">import</span> <span class="n">EzPickle</span><span class="p">,</span> <span class="n">seeding</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame.gfxdraw</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.spaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">EzPickle</span><span class="p">,</span> <span class="n">seeding</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">AECEnv</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.manual_policy</span> <span class="kn">import</span> <span class="n">ManualPolicy</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.img</span> <span class="kn">import</span> <span class="n">get_image</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.players</span> <span class="kn">import</span> <span class="n">Archer</span><span class="p">,</span> <span class="n">Knight</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.weapons</span> <span class="kn">import</span> <span class="n">Arrow</span><span class="p">,</span> <span class="n">Sword</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.zombie</span> <span class="kn">import</span> <span class="n">Zombie</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">AgentSelector</span><span class="p">,</span> <span class="n">wrappers</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils.conversions</span> <span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">AECEnv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.knights_archers_zombies.manual_policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManualPolicy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.knights_archers_zombies.src</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.img</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.players</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archer</span><span class="p">,</span> <span class="n">Knight</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.weapons</span><span class="w"> </span><span class="kn">import</span> <span class="n">Arrow</span><span class="p">,</span> <span class="n">Sword</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.knights_archers_zombies.src.zombie</span><span class="w"> </span><span class="kn">import</span> <span class="n">Zombie</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentSelector</span><span class="p">,</span> <span class="n">wrappers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.conversions</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">dont_write_bytecode</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -597,7 +597,7 @@
 
 <div class="viewcode-block" id="env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.env">[docs]</a>
-<span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -610,7 +610,7 @@
 
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env">[docs]</a>
-<span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;knights_archers_zombies_v10&quot;</span><span class="p">,</span>
@@ -619,7 +619,7 @@
         <span class="s2">&quot;has_manual_policy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">spawn_rate</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">num_archers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -772,21 +772,21 @@
 
 <div class="viewcode-block" id="raw_env.observation_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observation_space">[docs]</a>
-    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="raw_env.action_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.action_space">[docs]</a>
-    <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">np_random</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seeding</span><span class="o">.</span><span class="n">np_random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="c1"># Spawn Zombies at Random Location at every 100 iterations</span>
-    <span class="k">def</span> <span class="nf">spawn_zombie</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spawn_zombie</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_zombies</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">zombie_spawn_rate</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">zombie</span> <span class="o">=</span> <span class="n">Zombie</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np_random</span><span class="p">)</span>
@@ -799,7 +799,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">zombie_spawn_rate</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># actuate weapons</span>
-    <span class="k">def</span> <span class="nf">action_weapon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">action_weapon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">is_knight</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">weapon_timeout</span> <span class="o">&gt;</span> <span class="n">const</span><span class="o">.</span><span class="n">SWORD_TIMEOUT</span><span class="p">:</span>
@@ -814,7 +814,7 @@
                         <span class="n">agent</span><span class="o">.</span><span class="n">weapons</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Arrow</span><span class="p">(</span><span class="n">agent</span><span class="p">))</span>
 
     <span class="c1"># move weapons</span>
-    <span class="k">def</span> <span class="nf">update_weapons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_weapons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_list</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">weapons</span><span class="p">):</span>
                 <span class="n">weapon</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
@@ -823,7 +823,7 @@
                     <span class="n">agent</span><span class="o">.</span><span class="n">weapons</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">weapon</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_active_arrows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_active_arrows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">num_arrows</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">is_archer</span><span class="p">:</span>
@@ -831,7 +831,7 @@
         <span class="k">return</span> <span class="n">num_arrows</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_active_swords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_active_swords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">num_swords</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">is_knight</span><span class="p">:</span>
@@ -839,7 +839,7 @@
         <span class="k">return</span> <span class="n">num_swords</span>
 
     <span class="c1"># Zombie Kills the Knight (also remove the sword)</span>
-    <span class="k">def</span> <span class="nf">zombit_hit_knight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">zombit_hit_knight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">zombie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="p">:</span>
             <span class="n">zombie_knight_list</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">spritecollide</span><span class="p">(</span>
                 <span class="n">zombie</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">knight_list</span><span class="p">,</span> <span class="kc">True</span>
@@ -855,7 +855,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">knight_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">knight</span><span class="p">)</span>
 
     <span class="c1"># Zombie Kills the Archer</span>
-    <span class="k">def</span> <span class="nf">zombie_hit_archer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">zombie_hit_archer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">zombie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="p">:</span>
             <span class="n">zombie_archer_list</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">spritecollide</span><span class="p">(</span>
                 <span class="n">zombie</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">archer_list</span><span class="p">,</span> <span class="kc">True</span>
@@ -868,7 +868,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">kill_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">archer</span><span class="o">.</span><span class="n">agent_name</span><span class="p">)</span>
 
     <span class="c1"># Zombie Kills the Sword</span>
-    <span class="k">def</span> <span class="nf">sword_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sword_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">knight</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">knight_list</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">sword</span> <span class="ow">in</span> <span class="n">knight</span><span class="o">.</span><span class="n">weapons</span><span class="p">:</span>
                 <span class="n">zombie_sword_list</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">spritecollide</span><span class="p">(</span>
@@ -880,7 +880,7 @@
                     <span class="n">sword</span><span class="o">.</span><span class="n">knight</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="c1"># Zombie Kills the Arrow</span>
-    <span class="k">def</span> <span class="nf">arrow_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">arrow_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">is_archer</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">arrow</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">weapons</span><span class="p">):</span>
@@ -895,21 +895,21 @@
                         <span class="n">arrow</span><span class="o">.</span><span class="n">archer</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="c1"># Zombie reaches the End of the Screen</span>
-    <span class="k">def</span> <span class="nf">zombie_endscreen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">zombie_list</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">zombie_endscreen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">zombie_list</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">zombie</span> <span class="ow">in</span> <span class="n">zombie_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">zombie</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">ZOMBIE_Y_SPEED</span><span class="p">:</span>
                 <span class="n">run</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">run</span>
 
     <span class="c1"># Zombie Kills all Players</span>
-    <span class="k">def</span> <span class="nf">zombie_all_players</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">knight_list</span><span class="p">,</span> <span class="n">archer_list</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">zombie_all_players</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">knight_list</span><span class="p">,</span> <span class="n">archer_list</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">knight_list</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">archer_list</span><span class="p">:</span>
             <span class="n">run</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">run</span>
 
 <div class="viewcode-block" id="raw_env.observe">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observe">[docs]</a>
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
             <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
 
@@ -992,7 +992,7 @@
 
 <div class="viewcode-block" id="raw_env.state">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.state">[docs]</a>
-    <span class="k">def</span> <span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an observation of the global environment.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1004,7 +1004,7 @@
         <span class="k">return</span> <span class="n">state</span></div>
 
 
-    <span class="k">def</span> <span class="nf">get_vector_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_vector_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">state</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">typemask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
 
@@ -1084,7 +1084,7 @@
 
 <div class="viewcode-block" id="raw_env.step">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.step">[docs]</a>
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="c1"># check if the particular agent is done</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -1190,7 +1190,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">66</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">53</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_wall</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_wall</span><span class="o">.</span><span class="n">get_rect</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_wall</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_wall_rect</span><span class="p">)</span>
@@ -1209,7 +1209,7 @@
 
 <div class="viewcode-block" id="raw_env.render">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.render">[docs]</a>
-    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
@@ -1242,20 +1242,20 @@
 
 <div class="viewcode-block" id="raw_env.close">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.close">[docs]</a>
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-    <span class="k">def</span> <span class="nf">check_game_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_game_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Zombie reaches the End of the Screen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zombie_endscreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="p">)</span>
 
         <span class="c1"># Zombie Kills all Players</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zombie_all_players</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">knight_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">archer_list</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">reinit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reinit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Dictionaries for holding new players and their weapons</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">archer_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">knight_dict</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1320,7 +1320,7 @@
 
 <div class="viewcode-block" id="raw_env.reset">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reset">[docs]</a>
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span>
