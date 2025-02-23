@@ -588,8 +588,8 @@ class raw_env(AECEnv, EzPickle):
     def _get_ball_position(self) -> int:
         """Return the leftmost x-position of the ball.
 
-        That leftmost x-position is generally referred to and treated as the 
-        balls' position in this class. If the ball extends beyond the leftmost 
+        That leftmost x-position is generally referred to and treated as the
+        balls' position in this class. If the ball extends beyond the leftmost
         wall, return the position of that wall-edge.
         """
         ball_position = int(self.ball.position[0] - self.ball_radius)
