@@ -76,10 +76,8 @@ class raw_env(AECEnv):
         )
 
         # optional: we can define the observation and action spaces here as attributes to be used in their corresponding methods
-        self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
-        self._observation_spaces = {
-            agent: Discrete(4) for agent in self.possible_agents
-        }
+        self.action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
+        self.observation_spaces = {agent: Discrete(4) for agent in self.possible_agents}
         self.render_mode = render_mode
 
     # Observation space should be defined here.
@@ -88,13 +86,13 @@ class raw_env(AECEnv):
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
-        return Discrete(4)
+        return self.observation_spaces[agent]
 
     # Action space should be defined here.
     # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
-        return Discrete(3)
+        return self.action_spaces[agent]
 
     def render(self):
         """
