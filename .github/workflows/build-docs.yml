@@ -8,7 +8,7 @@ permissions:
 jobs:
     docs:
         name: Generate Website
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         env:
             SPHINX_GITHUB_CHANGELOG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         steps:
