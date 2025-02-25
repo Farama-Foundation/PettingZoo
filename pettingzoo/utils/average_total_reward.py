@@ -34,7 +34,9 @@ def average_total_reward(
             if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
-                action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
+                actions = np.flatnonzero(obs["action_mask"]).tolist()
+                assert not isinstance(actions, int)
+                action = random.choice(actions)
             else:
                 action = env.action_space(agent).sample()
             env.step(action)
