@@ -58,9 +58,6 @@ jobs:
                   export PATH=/path/to/parallel:$PATH
                   export root_dir=$(pwd)
                   cd tutorials/${{ matrix.tutorial }}
-                  grep -ivE "pettingzoo" requirements.txt > _requirements.txt
-                  pip install -r _requirements.txt
-                  pip install -e $root_dir[all]
-                  pip install -e $root_dir[testing]
+                  pip install -r requirements.txt
                   AutoROM -v
                   for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
