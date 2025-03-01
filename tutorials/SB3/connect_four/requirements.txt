@@ -1,7 +1,3 @@
-# This tutorial requires gymnasium version 0.29.1 or lower, but pettingzoo
-# 1.24.4 and above now requires gymnasium version 1.0.0 or higher. Thus,
-# we set an upper limit of pettingzoo version to 1.24.3 until the tutorial
-# gets updated.
 pettingzoo[classic]>=1.24.0
 stable-baselines3>=2.0.0
 sb3-contrib>=2.0.0
