@@ -57,6 +57,9 @@ jobs:
                   export PATH=/path/to/parallel:$PATH
                   export root_dir=$(pwd)
                   cd tutorials/${{ matrix.tutorial }}
+                  # Unlike above workflow, we pip install directly from the requirements.txt file
+                  # because we need to install a specific version of pettingzoo until agileRL
+                  # updates its gymnasium dependency version.
                   pip install -r requirements.txt
                   AutoROM -v
                   for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
