@@ -5,6 +5,7 @@ For more information about invalid action masking in SB3, see https://sb3-contri
 
 Author: Elliot (https://github.com/elliottower)
 """
+
 import glob
 import os
 import time
@@ -18,7 +19,9 @@ import pettingzoo.utils
 from pettingzoo.classic import connect_four_v3
 
 
-class SB3ActionMaskWrapper(pettingzoo.utils.BaseWrapper):
+# To pass into other gymnasium wrappers, we need to ensure that pettingzoo's wrappper
+# can also be a gymnasium Env. Thus, we subclass under gym.Env as well.
+class SB3ActionMaskWrapper(pettingzoo.utils.BaseWrapper, gym.Env):
     """Wrapper to allow PettingZoo environments to be used with SB3 illegal action masking."""
 
     def reset(self, seed=None, options=None):
@@ -175,11 +178,6 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
 
 
 if __name__ == "__main__":
-    if gym.__version__ > "0.29.1":
-        raise ImportError(
-            f"This script requires gymnasium version 0.29.1 or lower, but you have version {gym.__version__}."
-        )
-
     env_fn = connect_four_v3
 
     env_kwargs = {}
