@@ -434,7 +434,12 @@
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==0.1.22; python_version &gt;= &#39;3.9&#39; and python_version &lt; &#39;3.12&#39;
-pettingzoo[classic,atari,mpe]&gt;=1.23.1
+# agileRL doesn&#39;t currently support gymnasium version greater
+# than 0.28.1, so we can only run with an older version of
+# pettingzoo. Fix this once agileRL can support newer
+# gymnasium version.
+pettingzoo[classic,atari,mpe]&gt;=1.23.1,&lt;=1.24.3
+AutoROM&gt;=0.6.1
 SuperSuit&gt;=3.9.0
 torch&gt;=2.0.1
 numpy&gt;=1.24.2
