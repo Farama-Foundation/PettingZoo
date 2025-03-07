@@ -423,7 +423,6 @@
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.24.0
 stable-baselines3&gt;=2.0.0
 sb3-contrib&gt;=2.0.0
-gymnasium&lt;=0.29.1
 </pre></div>
 </div>
 </section>
@@ -439,6 +438,7 @@ gymnasium&lt;=0.29.1
 
 <span class="sd">Author: Elliot (https://github.com/elliottower)</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
@@ -452,7 +452,9 @@ gymnasium&lt;=0.29.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">pettingzoo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseWrapper</span><span class="p">):</span>
+<span class="c1"># To pass into other gymnasium wrappers, we need to ensure that pettingzoo&#39;s wrappper</span>
+<span class="c1"># can also be a gymnasium Env. Thus, we subclass under gym.Env as well.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">pettingzoo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseWrapper</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper to allow PettingZoo environments to be used with SB3 illegal action masking.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -609,11 +611,6 @@ gymnasium&lt;=0.29.1
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">gym</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;</span> <span class="s2">&quot;0.29.1&quot;</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;This script requires gymnasium version 0.29.1 or lower, but you have version </span><span class="si">{</span><span class="n">gym</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">.&quot;</span>
-        <span class="p">)</span>
-
     <span class="n">env_fn</span> <span class="o">=</span> <span class="n">connect_four_v3</span>
 
     <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
