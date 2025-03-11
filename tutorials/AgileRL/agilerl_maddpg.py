@@ -9,14 +9,14 @@ from copy import deepcopy
 import numpy as np
 import supersuit as ss
 import torch
-from pettingzoo.atari import space_invaders_v2
-from tqdm import trange
-
 from agilerl.algorithms.core.registry import HyperparameterConfig, RLParameter
 from agilerl.components.multi_agent_replay_buffer import MultiAgentReplayBuffer
 from agilerl.utils.algo_utils import obs_channels_to_first
 from agilerl.utils.utils import create_population, observation_space_channels_to_first
 from agilerl.vector.pz_async_vec_env import AsyncPettingZooVecEnv
+from tqdm import trange
+
+from pettingzoo.atari import space_invaders_v2
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -132,7 +132,6 @@ if __name__ == "__main__":
             }
 
         for idx_step in range(training_steps // num_envs):
-
             # Get next action from agent
             cont_actions, discrete_action = agent.get_action(
                 states=state, training=True, infos=info
