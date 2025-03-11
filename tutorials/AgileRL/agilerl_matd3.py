@@ -7,9 +7,6 @@ import os
 
 import numpy as np
 import torch
-from pettingzoo.mpe import simple_speaker_listener_v4
-from tqdm import trange
-
 from agilerl.algorithms.core.registry import HyperparameterConfig, RLParameter
 from agilerl.components.multi_agent_replay_buffer import MultiAgentReplayBuffer
 from agilerl.hpo.mutation import Mutations
@@ -17,6 +14,9 @@ from agilerl.hpo.tournament import TournamentSelection
 from agilerl.utils.algo_utils import obs_channels_to_first
 from agilerl.utils.utils import create_population, observation_space_channels_to_first
 from agilerl.vector.pz_async_vec_env import AsyncPettingZooVecEnv
+from tqdm import trange
+
+from pettingzoo.mpe import simple_speaker_listener_v4
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -147,9 +147,10 @@ if __name__ == "__main__":
                 }
 
             for idx_step in range(evo_steps // num_envs):
-
                 # Get next action from agent
-                cont_actions, discrete_action = agent.get_action(state, training=True, infos=info)
+                cont_actions, discrete_action = agent.get_action(
+                    state, training=True, infos=info
+                )
 
                 if agent.discrete_actions:
                     action = discrete_action

@@ -46,7 +46,7 @@ if __name__ == "__main__":
         observation_spaces=observation_spaces,
         action_spaces=action_spaces,
         agent_ids=agent_ids,
-        device=device
+        device=device,
     )
 
     # Load the saved algorithm into the MADDPG object

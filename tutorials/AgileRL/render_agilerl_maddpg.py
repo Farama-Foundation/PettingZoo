@@ -4,11 +4,10 @@ import imageio
 import numpy as np
 import supersuit as ss
 import torch
-from PIL import Image, ImageDraw
-
 from agilerl.algorithms.maddpg import MADDPG
-from agilerl.utils.utils import observation_space_channels_to_first
 from agilerl.utils.algo_utils import obs_channels_to_first
+from agilerl.utils.utils import observation_space_channels_to_first
+from PIL import Image, ImageDraw
 
 from pettingzoo.atari import space_invaders_v2
 
@@ -51,7 +50,9 @@ if __name__ == "__main__":
 
     # Pre-process image dimensions for pytorch convolutional layers
     if channels_last:
-        observation_spaces = [observation_space_channels_to_first(space) for space in observation_spaces]
+        observation_spaces = [
+            observation_space_channels_to_first(space) for space in observation_spaces
+        ]
 
     # Append number of agents and agent IDs to the initial hyperparameter dictionary
     n_agents = env.num_agents
@@ -87,8 +88,7 @@ if __name__ == "__main__":
         for _ in range(max_steps):
             if channels_last:
                 state = {
-                    agent_id: obs_channels_to_first(s)
-                    for agent_id, s in state.items()
+                    agent_id: obs_channels_to_first(s) for agent_id, s in state.items()
                 }
 
             agent_mask = info["agent_mask"] if "agent_mask" in info.keys() else None
