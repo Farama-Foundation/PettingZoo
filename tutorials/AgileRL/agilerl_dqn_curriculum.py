@@ -13,16 +13,16 @@ import numpy as np
 import torch
 import wandb
 import yaml
-from pettingzoo.classic import connect_four_v3
-from tqdm import tqdm, trange
-
-from agilerl.algorithms.core.wrappers import OptimizerWrapper
 from agilerl.algorithms.core.registry import HyperparameterConfig, RLParameter
+from agilerl.algorithms.core.wrappers import OptimizerWrapper
 from agilerl.components.replay_buffer import ReplayBuffer
 from agilerl.hpo.mutation import Mutations
 from agilerl.hpo.tournament import TournamentSelection
 from agilerl.utils.algo_utils import obs_channels_to_first
 from agilerl.utils.utils import create_population, observation_space_channels_to_first
+from tqdm import tqdm, trange
+
+from pettingzoo.classic import connect_four_v3
 
 
 class CurriculumEnv:
@@ -544,6 +544,7 @@ if __name__ == "__main__":
             "NUM_ATOMS": 51,  # Unit number of support
             "V_MIN": 0.0,  # Minimum value of support
             "V_MAX": 200.0,  # Maximum value of support
+            "WANDB": False,  # Use Weights & Biases
         }
 
         # Define the connect four environment
@@ -638,7 +639,7 @@ if __name__ == "__main__":
                     networks=agent.actor,
                     lr=agent.lr,
                     network_names=agent.optimizer.network_names,
-                    lr_name=agent.optimizer.lr_name
+                    lr_name=agent.optimizer.lr_name,
                 )
 
         if LESSON["opponent"] == "self":
@@ -667,7 +668,7 @@ if __name__ == "__main__":
                 elite = agent
                 print("Agent population warmed up.")
 
-        if max_episodes > 0:
+        if max_episodes > 0 and INIT_HP["WANDB"]:
             wandb.init(
                 # set the wandb project where this run will be logged
                 project="AgileRL",
@@ -828,9 +829,13 @@ if __name__ == "__main__":
                                 train_actions_hist[p1_action] += 1
 
                             env.step(p1_action)  # Act in environment
-                            observation, cumulative_reward, done, truncation, _ = (
-                                env.last()
-                            )
+                            (
+                                observation,
+                                cumulative_reward,
+                                done,
+                                truncation,
+                                _,
+                            ) = env.last()
                             p1_next_state, p1_next_state_flipped = transform_and_flip(
                                 observation, player=1
                             )
@@ -931,9 +936,13 @@ if __name__ == "__main__":
                         rewards = []
                         for i in range(evo_loop):
                             env.reset()  # Reset environment at start of episode
-                            observation, cumulative_reward, done, truncation, _ = (
-                                env.last()
-                            )
+                            (
+                                observation,
+                                cumulative_reward,
+                                done,
+                                truncation,
+                                _,
+                            ) = env.last()
 
                             player = -1  # Tracker for which player"s turn it is
 
@@ -987,9 +996,13 @@ if __name__ == "__main__":
                                         eval_actions_hist[action] += 1
 
                                 env.step(action)  # Act in environment
-                                observation, cumulative_reward, done, truncation, _ = (
-                                    env.last()
-                                )
+                                (
+                                    observation,
+                                    cumulative_reward,
+                                    done,
+                                    truncation,
+                                    _,
+                                ) = env.last()
 
                                 if (player > 0 and opponent_first) or (
                                     player < 0 and not opponent_first
