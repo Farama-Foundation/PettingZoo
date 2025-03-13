@@ -62,12 +62,12 @@ Using [Google DeepMind](https://www.deepmind.com/)'s [MuZero](https://en.wikiped
 
 CookingZoo: a gym-cooking derivative to simulate a complex cooking environment.
 
-### [Box Jump](https://github.com/DavidRother/gym-cooking)
+### [Box Jump](https://github.com/zzbuzzard/boxjump)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/zzbuzzard/boxjump)]()
 
-Box Jump is a fully co-operative 2D physics-based MARL environment in which agents jump on top of each other to build a tower.
+Box Jump is a fully co-operative, 2D physics-based MARL environment in which agents jump on top of each other to build a tower.
 
 ### [Crazy-RL](https://github.com/ffelten/CrazyRL)
 
