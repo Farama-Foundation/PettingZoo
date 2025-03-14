@@ -1,7 +1,7 @@
-from . import parallel_rps
+import parallel_rps
 
 env = parallel_rps.parallel_env(render_mode="human")
-observations, infos = env.reset()
+observations, infos = env.reset(seed=42)
 
 while env.agents:
     # this is where you would insert your policy
