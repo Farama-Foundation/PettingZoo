@@ -3,6 +3,7 @@ import functools
 import gymnasium
 import numpy as np
 from gymnasium.spaces import Discrete
+from gymnasium.utils import seeding
 
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import parallel_to_aec, wrappers
@@ -91,7 +92,7 @@ class parallel_env(ParallelEnv):
     # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
-        return Discrete(3)
+        return Discrete(3, seed=self.np_random_seed)
 
     def render(self):
         """
@@ -128,6 +129,8 @@ class parallel_env(ParallelEnv):
         hands that are played.
         Returns the observations for each agent
         """
+        if seed is not None:
+            self.np_random, self.np_random_seed = seeding.np_random(seed)
         self.agents = self.possible_agents[:]
         self.num_moves = 0
         # the observations should be numpy arrays even if there is only one value
