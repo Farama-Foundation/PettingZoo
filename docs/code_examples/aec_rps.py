@@ -3,6 +3,7 @@ import functools
 import gymnasium
 import numpy as np
 from gymnasium.spaces import Discrete
+from gymnasium.utils import seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import AgentSelector, wrappers
@@ -94,7 +95,8 @@ class raw_env(AECEnv):
     # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
-        return Discrete(3)
+        # We can seed the action space to make the environment deterministic.
+        return Discrete(3, seed=self.np_random_seed)
 
     def render(self):
         """
@@ -146,6 +148,8 @@ class raw_env(AECEnv):
         can be called without issues.
         Here it sets up the state dictionary which is used by step() and the observations dictionary which is used by step() and observe()
         """
+        if seed is not None:
+            self.np_random, self.np_random_seed = seeding.np_random(seed)
         self.agents = self.possible_agents[:]
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
