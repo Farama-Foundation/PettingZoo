@@ -148,6 +148,7 @@ class raw_env(AECEnv):
         can be called without issues.
         Here it sets up the state dictionary which is used by step() and the observations dictionary which is used by step() and observe()
         """
+        # Unlike gymnasium's Env, the environment is responsible for setting the random seed explicitly.
         if seed is not None:
             self.np_random, self.np_random_seed = seeding.np_random(seed)
         self.agents = self.possible_agents[:]
