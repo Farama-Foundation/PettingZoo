@@ -1,4 +1,4 @@
-import parallel_rps
+from . import parallel_rps
 
 env = parallel_rps.parallel_env(render_mode="human")
 observations, infos = env.reset(seed=42)
