@@ -7,12 +7,10 @@ import copy
 import os
 import random
 from collections import deque
-from datetime import datetime
 from typing import List, Optional, Tuple
 
 import numpy as np
 import torch
-import wandb
 import yaml
 from agilerl.algorithms import DQN
 from agilerl.algorithms.core import OptimizerWrapper
@@ -701,25 +699,6 @@ if __name__ == "__main__":
                 pop = [agent.clone() for _ in pop]
                 elite = agent
                 print("Agent population warmed up.")
-
-        if max_episodes > 0:
-            wandb.init(
-                # set the wandb project where this run will be logged
-                project="AgileRL",
-                name="{}-EvoHPO-{}-{}Opposition-CNN-{}".format(
-                    "connect_four_v3",
-                    INIT_HP["ALGO"],
-                    LESSON["opponent"],
-                    datetime.now().strftime("%m%d%Y%H%M%S"),
-                ),
-                # track hyperparameters and run metadata
-                config={
-                    "algo": "Evo HPO Rainbow DQN",
-                    "env": "connect_four_v3",
-                    "INIT_HP": INIT_HP,
-                    "lesson": LESSON,
-                },
-            )
 
         total_steps = 0
         total_episodes = 0
