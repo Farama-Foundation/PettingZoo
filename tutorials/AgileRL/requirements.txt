@@ -1,4 +1,4 @@
-agilerl==2.0.2; python_version >= '3.10' and python_version < '3.12'
+agilerl==2.2.0; python_version >= '3.10' and python_version < '3.12'
 pettingzoo[classic,atari,mpe]>=1.23.1
 AutoROM>=0.6.1
 SuperSuit>=3.9.0
