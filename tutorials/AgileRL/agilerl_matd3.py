@@ -1,6 +1,6 @@
 """This tutorial shows how to train an MATD3 agent on the simple speaker listener multi-particle environment.
 
-Authors: Michael (https://github.com/mikepratt1), Nickua (https://github.com/nicku-a)
+Authors: Michael (https://github.com/mikepratt1), Nickua (https://github.com/nicku-a), Jaime (https://github.com/jaimesabalbermudez)
 """
 
 import os

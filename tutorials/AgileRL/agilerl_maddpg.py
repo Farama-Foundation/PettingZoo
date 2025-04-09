@@ -1,6 +1,6 @@
 """This tutorial shows how to train an MADDPG agent on the space invaders atari environment.
 
-Authors: Michael (https://github.com/mikepratt1), Nick (https://github.com/nicku-a)
+Authors: Michael (https://github.com/mikepratt1), Nick (https://github.com/nicku-a), Jaime (https://github.com/jaimesabalbermudez)
 """
 
 import os
