@@ -134,7 +134,7 @@ if __name__ == "__main__":
         for idx_step in range(training_steps // num_envs):
             # Get next action from agent
             cont_actions, discrete_action = agent.get_action(
-                states=state, training=True, infos=info
+                obs=state, training=True, infos=info
             )
             if agent.discrete_actions:
                 action = discrete_action
