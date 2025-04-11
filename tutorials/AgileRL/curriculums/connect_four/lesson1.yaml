@@ -12,7 +12,7 @@ max_train_episodes: 0  # Maximum number of training episodes in environment
 ## Game specific:
 buffer_warm_up: true  # Fill replay buffer with random experiences
 warm_up_opponent: random  # Difficulty level of warm up experiences
-agent_warm_up: 30000  # Number of epochs to warm up agent by training on random experiences
+agent_warm_up: 3000  # Number of epochs to warm up agent by training on random experiences
 block_vert_coef: 4  # How many times more likely to block vertically
 rewards:  # Rewards for different outcomes
     win: 1
