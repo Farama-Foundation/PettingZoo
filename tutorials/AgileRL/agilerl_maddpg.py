@@ -25,7 +25,7 @@ if __name__ == "__main__":
     NET_CONFIG = {
         "encoder_config": {
             "channel_size": [32, 32],  # CNN channel size
-            "kernel_size": [3, 3],  # CNN kernel size
+            "kernel_size": [1, 1],  # CNN kernel size
             "stride_size": [2, 2],  # CNN stride size
         },
         "head_config": {"hidden_size": [32, 32]},  # Actor head hidden size

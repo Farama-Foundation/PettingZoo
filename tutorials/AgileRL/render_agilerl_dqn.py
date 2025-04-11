@@ -4,6 +4,7 @@ import imageio
 import numpy as np
 import torch
 from agilerl.algorithms.dqn import DQN
+from agilerl.utils.utils import observation_space_channels_to_first
 from agilerl_dqn_curriculum import Opponent
 from PIL import Image, ImageDraw, ImageFont
 
@@ -63,7 +64,7 @@ if __name__ == "__main__":
 
     # Instantiate an DQN object
     dqn = DQN(
-        observation_space=observation_spaces[0],
+        observation_space=observation_space_channels_to_first(observation_spaces[0]),
         action_space=action_spaces[0],
         device=device,
     )

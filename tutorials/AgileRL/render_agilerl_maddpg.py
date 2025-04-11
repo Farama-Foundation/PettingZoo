@@ -111,6 +111,7 @@ if __name__ == "__main__":
             frames.append(_label_with_episode_number(frame, episode_num=ep))
 
             # Take action in environment
+            action = {agent_id: a[0] for agent_id, a in action.items()}
             state, reward, termination, truncation, info = env.step(action)
 
             # Save agent's reward for this step in this episode
