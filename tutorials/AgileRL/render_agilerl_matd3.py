@@ -34,43 +34,24 @@ if __name__ == "__main__":
         continuous_actions=True, render_mode="rgb_array"
     )
     env.reset()
-    try:
-        state_dim = [env.observation_space(agent).n for agent in env.agents]
-        one_hot = True
-    except Exception:
-        state_dim = [env.observation_space(agent).shape for agent in env.agents]
-        one_hot = False
-    try:
-        action_dim = [env.action_space(agent).n for agent in env.agents]
-        discrete_actions = True
-        max_action = None
-        min_action = None
-    except Exception:
-        action_dim = [env.action_space(agent).shape[0] for agent in env.agents]
-        discrete_actions = False
-        max_action = [env.action_space(agent).high for agent in env.agents]
-        min_action = [env.action_space(agent).low for agent in env.agents]
+
+    observation_spaces = [env.observation_space(agent) for agent in env.agents]
+    action_spaces = [env.action_space(agent) for agent in env.agents]
 
     # Append number of agents and agent IDs to the initial hyperparameter dictionary
-    n_agents = env.num_agents
     agent_ids = env.agents
 
     # Instantiate an MADDPG object
     matd3 = MATD3(
-        state_dim,
-        action_dim,
-        one_hot,
-        n_agents,
-        agent_ids,
-        max_action,
-        min_action,
-        discrete_actions,
+        observation_spaces=observation_spaces,
+        action_spaces=action_spaces,
+        agent_ids=agent_ids,
         device=device,
     )
 
     # Load the saved algorithm into the MADDPG object
     path = "./models/MATD3/MATD3_trained_agent.pt"
-    matd3.loadCheckpoint(path)
+    matd3.load_checkpoint(path)
 
     # Define test loop parameters
     episodes = 10  # Number of episodes to test agent on
@@ -102,12 +83,8 @@ if __name__ == "__main__":
             )
 
             # Get next action from agent
-            cont_actions, discrete_action = matd3.getAction(
-                state,
-                epsilon=0,
-                agent_mask=agent_mask,
-                env_defined_actions=env_defined_actions,
-            )
+            cont_actions, discrete_action = matd3.get_action(state, training=False)
+
             if matd3.discrete_actions:
                 action = discrete_action
             else:
@@ -118,6 +95,7 @@ if __name__ == "__main__":
             frames.append(_label_with_episode_number(frame, episode_num=ep))
 
             # Take action in environment
+            action = {agent_id: action[agent_id].reshape(-1) for agent_id in agent_ids}
             state, reward, termination, truncation, info = env.step(action)
 
             # Save agent's reward for this step in this episode
@@ -141,6 +119,7 @@ if __name__ == "__main__":
         print("Episodic Reward: ", rewards[-1])
         for agent_id, reward_list in indi_agent_rewards.items():
             print(f"{agent_id} reward: {reward_list[-1]}")
+
     env.close()
 
     # Save the gif to specified path
