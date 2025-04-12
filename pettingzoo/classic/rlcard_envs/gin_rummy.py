@@ -122,23 +122,8 @@ from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.action_event import GinAction, KnockAction
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
+from pettingzoo.classic.rlcard_envs.rlcard_utils import get_image, get_font
 from pettingzoo.utils import wrappers
-
-
-def get_image(path):
-    from os import path as os_path
-
-    cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + "/" + path)
-    return image
-
-
-def get_font(path, size):
-    from os import path as os_path
-
-    cwd = os_path.dirname(__file__)
-    font = pygame.font.Font((cwd + "/" + path), size)
-    return font
 
 
 def env(**kwargs):

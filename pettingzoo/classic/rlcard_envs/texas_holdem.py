@@ -86,25 +86,10 @@ import pygame
 from gymnasium.utils import EzPickle
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
+from pettingzoo.classic.rlcard_envs.rlcard_utils import get_image, get_font
 from pettingzoo.utils import wrappers
 
 # Pixel art from Mariia Khmelnytska (https://www.123rf.com/photo_104453049_stock-vector-pixel-art-playing-cards-standart-deck-vector-set.html)
-
-
-def get_image(path):
-    from os import path as os_path
-
-    cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + "/" + path)
-    return image
-
-
-def get_font(path, size):
-    from os import path as os_path
-
-    cwd = os_path.dirname(__file__)
-    font = pygame.font.Font((cwd + "/" + path), size)
-    return font
 
 
 def env(**kwargs):
