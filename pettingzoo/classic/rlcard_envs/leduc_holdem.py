@@ -120,12 +120,6 @@ class raw_env(RLCardBase, EzPickle):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-    def step(self, action):
-        super().step(action)
-
-        if self.render_mode == "human":
-            self.render()
-
     def render(self):
         if self.render_mode is None:
             gymnasium.logger.warn(
