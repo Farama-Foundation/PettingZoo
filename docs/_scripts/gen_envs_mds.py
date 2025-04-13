@@ -54,6 +54,7 @@ if __name__ == "__main__":
                     not os.path.isdir(os.path.join(env_type_path, "rlcard_envs", i))
                     and i != "__init__.py"
                     and i != "rlcard_base.py"
+                    and i != "rlcard_utils.py"
                 ):
                     envs_list.append(os.path.join("rlcard_envs", i[:-3]))
             envs_list = sorted(envs_list)
