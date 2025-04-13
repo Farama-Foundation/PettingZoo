@@ -114,6 +114,9 @@ class raw_env(RLCardBase, EzPickle):
         "render_fps": 1,
     }
 
+    game_name = "limit-holdem"
+    obs_shape = (72,)
+
     def __init__(
         self,
         num_players: int = 2,
@@ -121,9 +124,10 @@ class raw_env(RLCardBase, EzPickle):
         screen_height: int | None = 1000,
     ):
         EzPickle.__init__(self, num_players, render_mode, screen_height)
-        super().__init__("limit-holdem", num_players, (72,))
+        super().__init__(self.game_name, num_players, self.obs_shape)
         self.render_mode = render_mode
         self.screen_height = screen_height
+        self.caption = "Texas Hold'em"
 
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
@@ -146,7 +150,7 @@ class raw_env(RLCardBase, EzPickle):
 
             if self.render_mode == "human":
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-                pygame.display.set_caption("Texas Hold'em")
+                pygame.display.set_caption(self.caption)
             else:
                 self.screen = pygame.Surface((screen_width, screen_height))
 
