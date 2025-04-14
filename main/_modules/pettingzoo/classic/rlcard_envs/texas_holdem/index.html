@@ -478,25 +478,16 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">EzPickle</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic.rlcard_envs.rlcard_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">RLCardBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic.rlcard_envs.rlcard_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">calculate_height</span><span class="p">,</span>
+    <span class="n">calculate_offset</span><span class="p">,</span>
+    <span class="n">calculate_width</span><span class="p">,</span>
+    <span class="n">get_font</span><span class="p">,</span>
+    <span class="n">get_image</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrappers</span>
 
 <span class="c1"># Pixel art from Mariia Khmelnytska (https://www.123rf.com/photo_104453049_stock-vector-pixel-art-playing-cards-standart-deck-vector-set.html)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_image</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">os_path</span>
-
-    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os_path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">image</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_font</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">os_path</span>
-
-    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os_path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-    <span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">((</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">font</span>
 
 
 <div class="viewcode-block" id="env">
@@ -520,6 +511,9 @@
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
 
+    <span class="n">game_name</span> <span class="o">=</span> <span class="s2">&quot;limit-holdem&quot;</span>
+    <span class="n">obs_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">72</span><span class="p">,)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
@@ -527,21 +521,13 @@
         <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_players</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;limit-holdem&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="p">,</span> <span class="p">(</span><span class="mi">72</span><span class="p">,))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_name</span><span class="p">,</span> <span class="n">num_players</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_shape</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">=</span> <span class="n">screen_height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caption</span> <span class="o">=</span> <span class="s2">&quot;Texas Hold&#39;em&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
-
-<div class="viewcode-block" id="raw_env.step">
-<a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.step">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
-
 
 <div class="viewcode-block" id="raw_env.render">
 <a class="viewcode-back" href="../../../../../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.render">[docs]</a>
@@ -551,24 +537,6 @@
                 <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
             <span class="p">)</span>
             <span class="k">return</span>
-
-        <span class="k">def</span><span class="w"> </span><span class="nf">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span>
-                <span class="p">(</span>
-                    <span class="n">screen_width</span>
-                    <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">33</span> <span class="o">/</span> <span class="mi">616</span><span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="k">def</span><span class="w"> </span><span class="nf">calculate_offset</span><span class="p">(</span><span class="n">hand</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span>
-                <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hand</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">23</span> <span class="o">/</span> <span class="mi">56</span><span class="p">))</span> <span class="o">-</span> <span class="p">((</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="mi">23</span> <span class="o">/</span> <span class="mi">28</span><span class="p">))</span>
-            <span class="p">)</span>
-
-        <span class="k">def</span><span class="w"> </span><span class="nf">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="n">divisor</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">multiplier</span> <span class="o">*</span> <span class="n">screen_height</span> <span class="o">/</span> <span class="n">divisor</span> <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="n">offset</span><span class="p">)</span>
 
         <span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
         <span class="n">screen_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
@@ -581,7 +549,7 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Texas Hold&#39;em&quot;</span><span class="p">)</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">caption</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
 
@@ -619,7 +587,13 @@
                         <span class="n">card_img</span><span class="p">,</span>
                         <span class="p">(</span>
                             <span class="p">(</span>
-                                <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                                <span class="n">calculate_width</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span>
+                                    <span class="n">screen_width</span><span class="p">,</span>
+                                    <span class="n">i</span><span class="p">,</span>
+                                    <span class="n">tile_size</span><span class="p">,</span>
+                                    <span class="n">tile_scale</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+                                <span class="p">)</span>
                                 <span class="o">-</span> <span class="n">calculate_offset</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;hand&quot;</span><span class="p">],</span> <span class="n">j</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">)</span>
                                 <span class="o">-</span> <span class="n">tile_size</span>
                                 <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
@@ -635,7 +609,13 @@
                         <span class="n">card_img</span><span class="p">,</span>
                         <span class="p">(</span>
                             <span class="p">(</span>
-                                <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                                <span class="n">calculate_width</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span>
+                                    <span class="n">screen_width</span><span class="p">,</span>
+                                    <span class="n">i</span><span class="p">,</span>
+                                    <span class="n">tile_size</span><span class="p">,</span>
+                                    <span class="n">tile_scale</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+                                <span class="p">)</span>
                                 <span class="o">-</span> <span class="n">calculate_offset</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;hand&quot;</span><span class="p">],</span> <span class="n">j</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">)</span>
                                 <span class="o">-</span> <span class="n">tile_size</span>
                                 <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
@@ -703,7 +683,13 @@
                             <span class="n">chip_img</span><span class="p">,</span>
                             <span class="p">(</span>
                                 <span class="p">(</span>
-                                    <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                                    <span class="n">calculate_width</span><span class="p">(</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span>
+                                        <span class="n">screen_width</span><span class="p">,</span>
+                                        <span class="n">i</span><span class="p">,</span>
+                                        <span class="n">tile_size</span><span class="p">,</span>
+                                        <span class="n">tile_scale</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+                                    <span class="p">)</span>
                                     <span class="o">+</span> <span class="n">tile_size</span>
                                     <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
                                     <span class="o">*</span> <span class="p">(</span>
@@ -721,7 +707,13 @@
                             <span class="n">chip_img</span><span class="p">,</span>
                             <span class="p">(</span>
                                 <span class="p">(</span>
-                                    <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                                    <span class="n">calculate_width</span><span class="p">(</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span>
+                                        <span class="n">screen_width</span><span class="p">,</span>
+                                        <span class="n">i</span><span class="p">,</span>
+                                        <span class="n">tile_size</span><span class="p">,</span>
+                                        <span class="n">tile_scale</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+                                    <span class="p">)</span>
                                     <span class="o">+</span> <span class="n">tile_size</span>
                                     <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
                                     <span class="o">*</span> <span class="p">(</span>
@@ -740,7 +732,13 @@
             <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">calculate_width</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span>
+                            <span class="n">screen_width</span><span class="p">,</span>
+                            <span class="n">i</span><span class="p">,</span>
+                            <span class="n">tile_size</span><span class="p">,</span>
+                            <span class="n">tile_scale</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+                        <span class="p">)</span>
                         <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">20</span><span class="p">))</span>
                         <span class="o">+</span> <span class="n">tile_size</span>
                         <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
@@ -752,7 +750,13 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="n">calculate_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">calculate_width</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span>
+                            <span class="n">screen_width</span><span class="p">,</span>
+                            <span class="n">i</span><span class="p">,</span>
+                            <span class="n">tile_size</span><span class="p">,</span>
+                            <span class="n">tile_scale</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+                        <span class="p">)</span>
                         <span class="o">+</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">20</span><span class="p">))</span>
                         <span class="o">+</span> <span class="n">tile_size</span>
                         <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
