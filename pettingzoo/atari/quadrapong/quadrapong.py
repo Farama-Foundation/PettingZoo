@@ -64,15 +64,17 @@ In any given turn, an agent can choose from one of 6 actions.
 
 import os
 from glob import glob
+from typing import Any
 
 from pettingzoo.atari.base_atari_env import (
+    AtariAECEnv,
     BaseAtariEnv,
     base_env_wrapper_fn,
     parallel_wrapper_fn,
 )
 
 
-def raw_env(**kwargs):
+def raw_env(**kwargs: Any) -> AtariAECEnv:
     mode = 33
     num_players = 4
     name = os.path.basename(__file__).split(".")[0]
