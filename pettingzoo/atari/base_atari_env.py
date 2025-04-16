@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any, NewType, TypeAlias, cast
+from typing import Any, NewType, cast
 
 import gymnasium
 import multi_agent_ale_py  # type: ignore[import-untyped]
@@ -28,8 +28,8 @@ __all__ = [
 AgentID = NewType("AgentID", str)
 ObsType = NewType("ObsType", npt.NDArray[np.integer])
 ActionType = NewType("ActionType", int)
-AtariAECEnv: TypeAlias = AECEnv[AgentID, ObsType, ActionType]
-StateType: TypeAlias = npt.NDArray[np.int8]
+AtariAECEnv = AECEnv[AgentID, ObsType, ActionType]
+StateType = npt.NDArray[np.int8]
 
 
 def base_env_wrapper_fn(
