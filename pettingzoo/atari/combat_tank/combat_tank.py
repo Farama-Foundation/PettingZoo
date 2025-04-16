@@ -85,15 +85,22 @@ In any given turn, an agent can choose from one of 18 actions.
 import os
 import warnings
 from glob import glob
+from typing import Any
 
 from pettingzoo.atari.base_atari_env import (
+    AtariAECEnv,
     BaseAtariEnv,
     base_env_wrapper_fn,
     parallel_wrapper_fn,
 )
 
 
-def raw_env(has_maze=True, is_invisible=False, billiard_hit=True, **kwargs):
+def raw_env(
+    has_maze: bool = True,
+    is_invisible: bool = False,
+    billiard_hit: bool = True,
+    **kwargs: Any,
+) -> AtariAECEnv:
     if has_maze is False and is_invisible is False and billiard_hit is False:
         warnings.warn(
             "combat_tank has interesting parameters to consider overriding including is_invisible, billiard_hit and has_maze"

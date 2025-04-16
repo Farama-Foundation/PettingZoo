@@ -1,12 +1,16 @@
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any, NewType, TypeAlias, cast
 
 import gymnasium
-import multi_agent_ale_py
+import multi_agent_ale_py  # type: ignore[import-untyped]
 import numpy as np
+import numpy.typing as npt
 import pygame
 from gymnasium import spaces
 from gymnasium.utils import EzPickle, seeding
 
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
@@ -19,9 +23,17 @@ __all__ = [
     "ParallelAtariEnv",
 ]
 
+AgentID = NewType("AgentID", str)
+ObsType = NewType("ObsType", npt.NDArray[np.integer])
+ActionType = NewType("ActionType", int)
+AtariAECEnv: TypeAlias = AECEnv[AgentID, ObsType, ActionType]
+StateType: TypeAlias = npt.NDArray[np.int8]
 
-def base_env_wrapper_fn(raw_env_fn):
-    def env_fn(**kwargs):
+
+def base_env_wrapper_fn(
+    raw_env_fn: Callable[..., AtariAECEnv]
+) -> Callable[..., AtariAECEnv]:
+    def env_fn(**kwargs: Any) -> AtariAECEnv:
         env = raw_env_fn(**kwargs)
         env = wrappers.AssertOutOfBoundsWrapper(env)
         env = wrappers.OrderEnforcingWrapper(env)
@@ -30,24 +42,24 @@ def base_env_wrapper_fn(raw_env_fn):
     return env_fn
 
 
-def BaseAtariEnv(**kwargs):
+def BaseAtariEnv(**kwargs: Any) -> AtariAECEnv:
     return parallel_to_aec_wrapper(ParallelAtariEnv(**kwargs))
 
 
-class ParallelAtariEnv(ParallelEnv, EzPickle):
+class ParallelAtariEnv(ParallelEnv[AgentID, ObsType, ActionType], EzPickle):
     def __init__(
         self,
-        game,
-        num_players,
-        mode_num=None,
-        seed=None,
-        obs_type="rgb_image",
-        full_action_space=False,
-        env_name=None,
-        max_cycles=100000,
-        render_mode=None,
-        auto_rom_install_path=None,
-    ):
+        game: str,
+        num_players: int,
+        mode_num: int | None = None,
+        seed: int | None = None,
+        obs_type: str = "rgb_image",
+        full_action_space: bool = False,
+        env_name: str | None = None,
+        max_cycles: int = 100000,
+        render_mode: str | None = None,
+        auto_rom_install_path: str | None = None,
+    ) -> None:
         """Initializes the `ParallelAtariEnv` class.
 
         Frameskip should be either a tuple (indicating a random range to
@@ -130,7 +142,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
         if full_action_space:
             action_size = 18
-            action_mapping = np.arange(action_size)
+            action_mapping: npt.NDArray[np.int32] = np.arange(action_size)
         else:
             action_mapping = self.ale.getMinimalActionSet()
             action_size = len(action_mapping)
@@ -155,7 +167,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             )
 
         player_names = ["first", "second", "third", "fourth"]
-        self.agents = [f"{player_names[n]}_0" for n in range(num_players)]
+        self.agents = [AgentID(f"{player_names[n]}_0") for n in range(num_players)]
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {
@@ -166,16 +178,18 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             agent: observation_space for agent in self.possible_agents
         }
 
-        self._screen = None
+        self._screen: pygame.Surface | None = None
         self._seed(seed)
 
-    def _seed(self, seed):
+    def _seed(self, seed: int | None) -> None:
         self.np_random, seed = seeding.np_random(seed)
         self.ale.setInt(b"random_seed", seed)
         self.ale.loadROM(self.rom_path)
         self.ale.setMode(self.mode)
 
-    def reset(self, seed=None, options=None):
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, Any]]:
         if seed is not None:
             self._seed(seed=seed)
         else:
@@ -186,26 +200,40 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.frame = 0
 
         obs = self._observe()
-        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
+        infos: dict[AgentID, dict[str, Any]] = {
+            agent: {} for agent in self.possible_agents if agent in self.agents
+        }
         return {agent: obs for agent in self.agents}, infos
 
-    def observation_space(self, agent):
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.action_spaces[agent]
 
-    def _observe(self):
+    def _observe(self) -> ObsType:
         if self.obs_type == "ram":
             bytes = self.ale.getRAM()
-            return bytes
+            return cast(ObsType, bytes)
         elif self.obs_type == "rgb_image":
-            return self.ale.getScreenRGB()
+            return cast(ObsType, self.ale.getScreenRGB())
         elif self.obs_type == "grayscale_image":
-            return self.ale.getScreenGrayscale()
+            return cast(ObsType, self.ale.getScreenGrayscale())
+        else:
+            raise ValueError(
+                "obs_type must  either be 'ram' or 'rgb_image' or 'grayscale_image'"
+            )
 
-    def step(self, action_dict):
-        actions = np.zeros(self.max_num_agents, dtype=np.int32)
+    def step(
+        self, action_dict: dict[AgentID, ActionType]
+    ) -> tuple[
+        dict[AgentID, ObsType],
+        dict[AgentID, float],
+        dict[AgentID, bool],
+        dict[AgentID, bool],
+        dict[AgentID, dict[str, Any]],
+    ]:
+        actions: npt.NDArray[np.int32] = np.zeros(self.max_num_agents, dtype=np.int32)
         for i, agent in enumerate(self.possible_agents):
             if agent in action_dict:
                 actions[i] = action_dict[agent]
@@ -233,25 +261,27 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             for agent, rew in zip(self.possible_agents, rewards)
             if agent in self.agents
         }
-        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
+        infos: dict[AgentID, dict[str, Any]] = {
+            agent: {} for agent in self.possible_agents if agent in self.agents
+        }
         self.agents = [agent for agent in self.agents if not terminations[agent]]
 
         if self.render_mode == "human":
             self.render()
         return observations, rewards, terminations, truncations, infos
 
-    def render(self):
+    def render(self) -> npt.NDArray[np.integer] | None:
         if self.render_mode is None:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         assert (
             self.render_mode in self.metadata["render_modes"]
         ), f"{self.render_mode} is not a valid render mode"
         (screen_width, screen_height) = self.ale.getScreenDims()
-        image = self.ale.getScreenRGB()
+        image = cast(npt.NDArray[np.int8], self.ale.getScreenRGB())
         if self.render_mode == "human":
             zoom_factor = 4
             if self._screen is None:
@@ -273,13 +303,14 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             pygame.display.flip()
         elif self.render_mode == "rgb_array":
             return image
+        return None
 
-    def close(self):
+    def close(self) -> None:
         if self._screen is not None:
             pygame.quit()
             self._screen = None
 
-    def clone_state(self):
+    def clone_state(self) -> StateType:
         """Clone emulator state w/o system state.
 
         Restoring this state will *not* give an identical environment.
@@ -287,27 +318,27 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         see `{clone,restore}_full_state()`.
         """
         state_ref = self.ale.cloneState()
-        state = self.ale.encodeState(state_ref)
+        state = cast(StateType, self.ale.encodeState(state_ref))
         self.ale.deleteState(state_ref)
         return state
 
-    def restore_state(self, state):
+    def restore_state(self, state: StateType) -> None:
         """Restore emulator state w/o system state."""
         state_ref = self.ale.decodeState(state)
         self.ale.restoreState(state_ref)
         self.ale.deleteState(state_ref)
 
-    def clone_full_state(self):
+    def clone_full_state(self) -> StateType:
         """Clone emulator state w/ system state including pseudorandomness.
 
         Restoring this state will give an identical environment.
         """
         state_ref = self.ale.cloneSystemState()
-        state = self.ale.encodeState(state_ref)
+        state = cast(StateType, self.ale.encodeState(state_ref))
         self.ale.deleteState(state_ref)
         return state
 
-    def restore_full_state(self, state):
+    def restore_full_state(self, state: StateType) -> None:
         """Restore emulator state w/ system state including pseudorandomness."""
         state_ref = self.ale.decodeState(state)
         self.ale.restoreSystemState(state_ref)

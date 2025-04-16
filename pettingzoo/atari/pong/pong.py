@@ -69,8 +69,10 @@ In any given turn, an agent can choose from one of 6 actions.
 
 import os
 from glob import glob
+from typing import Any
 
 from pettingzoo.atari.base_atari_env import (
+    AtariAECEnv,
     BaseAtariEnv,
     base_env_wrapper_fn,
     parallel_wrapper_fn,
@@ -99,7 +101,9 @@ avaliable_4p_versions = {
 }
 
 
-def raw_env(num_players=2, game_version="classic", **kwargs):
+def raw_env(
+    num_players: int = 2, game_version: str = "classic", **kwargs: Any
+) -> AtariAECEnv:
     assert num_players == 2 or num_players == 4, "pong only supports 2 or 4 players"
     versions = avaliable_2p_versions if num_players == 2 else avaliable_4p_versions
     assert (
