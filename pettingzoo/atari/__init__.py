@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from types import ModuleType
 
 from pettingzoo.utils.deprecated_module import DeprecatedModule, deprecated_handler
