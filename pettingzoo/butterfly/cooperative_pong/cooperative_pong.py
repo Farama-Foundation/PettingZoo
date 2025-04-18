@@ -89,10 +89,6 @@ FPS = 15
 __all__ = ["ManualPolicy", "env", "raw_env", "parallel_env"]
 
 
-def deg_to_rad(deg):
-    return deg * np.pi / 180
-
-
 def get_flat_shape(width, height, kernel_window_length=2):
     return int(width * height / (kernel_window_length * kernel_window_length))
 
@@ -111,14 +107,14 @@ def get_valid_angle(randomizer):
     # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
     ver_deg_range = 25
     hor_deg_range = 10
-    a1 = deg_to_rad(90 - ver_deg_range)
-    b1 = deg_to_rad(90 + ver_deg_range)
-    a2 = deg_to_rad(270 - ver_deg_range)
-    b2 = deg_to_rad(270 + ver_deg_range)
-    c1 = deg_to_rad(180 - hor_deg_range)
-    d1 = deg_to_rad(180 + hor_deg_range)
-    c2 = deg_to_rad(360 - hor_deg_range)
-    d2 = deg_to_rad(0 + hor_deg_range)
+    a1 = np.radians(90 - ver_deg_range)
+    b1 = np.radians(90 + ver_deg_range)
+    a2 = np.radians(270 - ver_deg_range)
+    b2 = np.radians(270 + ver_deg_range)
+    c1 = np.radians(180 - hor_deg_range)
+    d1 = np.radians(180 + hor_deg_range)
+    c2 = np.radians(360 - hor_deg_range)
+    d2 = np.radians(0 + hor_deg_range)
 
     angle = 0
     while (
