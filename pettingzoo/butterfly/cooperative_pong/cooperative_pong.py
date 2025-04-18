@@ -403,11 +403,6 @@ class raw_env(AECEnv, EzPickle):
             self._was_dead_step(action)
             return
         agent = self.agent_selection
-        if not self.action_spaces[agent].contains(action):
-            raise Exception(
-                "Action for agent {} must be in Discrete({})."
-                "It is currently {}".format(agent, self.action_spaces[agent].n, action)
-            )
 
         self.env.step(action, agent)
         # select next agent and observe
