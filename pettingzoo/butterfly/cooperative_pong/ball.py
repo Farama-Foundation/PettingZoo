@@ -34,16 +34,16 @@ def change_speed_angle(
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, randomizer, dims, speed, bounce_randomness=False):
-        self.surf = pygame.Surface(dims)
-        self.surf.fill((255, 255, 255))
-        self.rect = self.surf.get_rect()
-        self.speed_val = speed
-        self.speed = [
-            self.speed_val * np.cos(np.pi / 4),
-            self.speed_val * np.sin(np.pi / 4),
+        self._surf = pygame.Surface(dims)
+        self._surf.fill((255, 255, 255))
+        self._rect = self._surf.get_rect()
+        self._speed_val = speed
+        self._speed = [
+            self._speed_val * np.cos(np.pi / 4),
+            self._speed_val * np.sin(np.pi / 4),
         ]
-        self.bounce_randomness = bounce_randomness
-        self.randomizer = randomizer
+        self._bounce_randomness = bounce_randomness
+        self._randomizer = randomizer
         self._out_of_bounds = False
 
     def reset(self, center: tuple[int, int], angle: float) -> None:
@@ -56,10 +56,10 @@ class Ball(pygame.sprite.Sprite):
           center: the new center of the ball
           angle: the angle of the motion - used to set speed components.
         """
-        self.rect.center = center
-        self.speed = [
-            self.speed_val * np.cos(angle),
-            self.speed_val * np.sin(angle),
+        self._rect.center = center
+        self._speed = [
+            self._speed_val * np.cos(angle),
+            self._speed_val * np.sin(angle),
         ]
         self._out_of_bounds = False
 
@@ -69,40 +69,41 @@ class Ball(pygame.sprite.Sprite):
 
     def update2(self, area, p0, p1):
         # move ball rect
-        self.rect.x += self.speed[0]
-        self.rect.y += self.speed[1]
+        self._rect.x += self._speed[0]
+        self._rect.y += self._speed[1]
 
-        if not area.contains(self.rect):
+        if not area.contains(self._rect):
             # bottom wall
-            if self.rect.bottom > area.bottom:
-                self.rect.bottom = area.bottom
-                self.speed[1] = -self.speed[1]
+            if self._rect.bottom > area.bottom:
+                self._rect.bottom = area.bottom
+                self._speed[1] = -self._speed[1]
             # top wall
-            elif self.rect.top < area.top:
-                self.rect.top = area.top
-                self.speed[1] = -self.speed[1]
+            elif self._rect.top < area.top:
+                self._rect.top = area.top
+                self._speed[1] = -self._speed[1]
 
         # after bouncing back from the top/bottom, if it is still out of
         # bounds, it is because it went out the left or right. No need to
         # finish the update.
-        if not area.contains(self.rect):
+        if not area.contains(self._rect):
             self._out_of_bounds = True
             return None
 
         # Do ball and paddle collide?
-        if self.rect.center[0] < area.center[0]:  # ball in left half of screen
-            is_collision, self.rect, self.speed = p0.process_collision(
-                self.rect, self.speed, 1
+        if self._rect.center[0] < area.center[0]:  # ball in left half of screen
+            is_collision, self._rect, self._speed = p0.process_collision(
+                self._rect, self._speed, 1
             )
         else:  # ball in right half
-            is_collision, self.rect, self.speed = p1.process_collision(
-                self.rect, self.speed, 2
+            is_collision, self._rect, self._speed = p1.process_collision(
+                self._rect, self._speed, 2
             )
 
         # add randomness if there was a collision (if requested)
-        if is_collision and self.bounce_randomness:
-            delta_angle = get_small_random_value(self.randomizer)
-            self.speed = change_speed_angle(self.speed, delta_angle)
+        if is_collision and self._bounce_randomness:
+            delta_angle = get_small_random_value(self._randomizer)
+            self._speed = change_speed_angle(self._speed, delta_angle)
 
-    def draw(self, screen):
-        screen.blit(self.surf, self.rect)
+    def draw(self, screen: pygame.Surface) -> None:
+        """Draw the ball on the given surface."""
+        screen.blit(self._surf, self._rect)

@@ -35,7 +35,7 @@ def test_bounds() -> None:
             ball.update2(area, p0, p1)
             terminate = ball.is_out_of_bounds()
 
-            in_bounds = ball.rect.x >= 0 and ball.rect.x <= width - ball_dims[1]
+            in_bounds = ball._rect.x >= 0 and ball._rect.x <= width - ball_dims[1]
             if not terminate and not in_bounds:
                 assert (
                     False
@@ -48,7 +48,7 @@ def test_bounce_randomness() -> None:
     """Confirm that the speed remains constant with bounce randomness enabled."""
 
     def calc_speed(ball: Ball) -> float:
-        return math.sqrt(ball.speed[0] ** 2 + ball.speed[1] ** 2)
+        return math.sqrt(ball._speed[0] ** 2 + ball._speed[1] ** 2)
 
     # make ball size, screen size, ball speed match env default
     render_ratio = 2
