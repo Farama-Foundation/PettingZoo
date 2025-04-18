@@ -52,7 +52,7 @@ cooperative_pong_v6.env(
 )
 ```
 
-`ball_speed`: Speed of ball (in pixels)
+`ball_speed`: Speed of ball (in pixels). Note that if the ball speed is set too high, it is possible for it to move through the paddle and out of bounds.
 
 `left_paddle_speed`: Speed of left paddle (in pixels)
 
@@ -180,7 +180,9 @@ class CooperativePong:
 
         Args:
             randomizer: Random generator
-            ball_speed: Speed of ball (in pixels)
+            ball_speed: Speed of ball (in pixels) If the ball speed is set too
+              high, it is possible for it to move through the paddle and out of
+              bounds. A warning will be printed in this case.
             left_paddle_speed: Speed of left paddle (in pixels)
             right_paddle_speed: Speed of right paddle (in pixels)
             cake_paddle: If True, the right paddle cakes the shape of a
@@ -244,6 +246,12 @@ class CooperativePong:
         else:
             r_paddle_dims = (20 // render_ratio, 100 // render_ratio)
             self.p1 = Paddle(r_paddle_dims, right_paddle_speed, "right")
+
+        if ball_speed > l_paddle_dims[0] or ball_speed > r_paddle_dims[0]:
+            gymnasium.logger.warn(
+                "Ball speed is larger than width of the paddle. This can cause the ball "
+                "to move through the paddle, leading to incorrect behavior."
+            )
 
         self.agents = [AgentID("paddle_0"), AgentID("paddle_1")]
 
