@@ -1,6 +1,9 @@
 from enum import Enum
+from typing import Literal
 
 import pygame
+
+ActionType = Literal[0, 1, 2]
 
 
 class PaddleLocation(Enum):
@@ -18,28 +21,50 @@ paddle_location_mapping = {
 
 
 class Paddle(pygame.sprite.Sprite):
-    def __init__(self, dims, speed, location):
+    """A flat paddle for the pong game."""
+
+    def __init__(
+        self, dims: tuple[int, int], speed: float, location: Literal["left", "right"]
+    ) -> None:
+        """Initialize the Paddle object.
+
+        The paddle needs to be placed in the proper location by calling
+        reset() prior to use.
+
+        Args:
+            dims: the dimensions of the paddle.
+            speed: the speed the paddle will move at
+            location: the location of the paddle, either "left" or "right"
+        """
         self._side = paddle_location_mapping[location]
         self.rects = [pygame.Rect((0, 0), dims)]
         self._speed = speed
 
     def reset(self, area: pygame.Rect, speed: float) -> None:
-        """Resets the speed and location for a new game."""
+        """Resets the speed and location for a new game.
+
+        The paddle is placed on the proper edge of the given
+        area, centered vertically. The speed is set the the
+        given value.
+
+        Args:
+            area: the screen to place the paddle in
+            speed: the new speed of the paddle
+        """
         self._speed = speed
         if self._side == PaddleLocation.PADDLE_LEFT:
             self.rects[0].midleft = area.midleft
         else:
             self.rects[0].midright = area.midright
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface) -> None:
         for rect in self.rects:
             pygame.draw.rect(screen, (255, 255, 255), rect)
 
-    def update(self, area, action) -> None:
-        # action: 0 - do nothing, 1 - up, 2 - down
+    def update(self, area: pygame.Rect, action: ActionType) -> None:
         if action == 0:
             return
-        movepos = [0, 0]
+        movepos = [0.0, 0.0]
         if action == 1:
             movepos[1] = -self._speed
         elif action == 2:
@@ -79,6 +104,22 @@ class Paddle(pygame.sprite.Sprite):
     def _process_collision_with_rect(
         self, rect: pygame.Rect, b_rect: pygame.Rect, b_speed: list[float]
     ) -> tuple[bool, pygame.Rect, list[float]]:
+        """Apply a collision with part of the paddle.
+
+        A new speed and position of the ball is calculated based on the details
+        of the collision.
+
+        Args:
+            rect: the rect for the part of the paddle to check
+            b_rect: the ball's Rect object, giving its position
+            b_speed: the ball's x,y speed components
+
+        Returns:
+            A tuple giving the following:
+              True if the ball collided with the rect
+              the ball's new Rect object, giving its position
+              the ball's new x,y speed components
+        """
         # handle collision from left or right
         if self._side == PaddleLocation.PADDLE_LEFT and b_rect.left < rect.right:
             b_rect.left = rect.right

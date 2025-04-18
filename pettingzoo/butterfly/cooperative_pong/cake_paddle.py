@@ -1,10 +1,14 @@
+from typing import Literal
+
 import pygame
 
 from pettingzoo.butterfly.cooperative_pong.paddle import Paddle, PaddleLocation
 
 
 class CakePaddle(Paddle):
-    def __init__(self, dims, speed, location):
+    def __init__(
+        self, dims: tuple[int, int], speed: float, location: Literal["left", "right"]
+    ) -> None:
         super().__init__(dims, speed, location)
 
         if self._side == PaddleLocation.PADDLE_LEFT:

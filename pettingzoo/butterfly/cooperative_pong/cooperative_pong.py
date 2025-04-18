@@ -69,15 +69,17 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 """
 
+from typing import Any, Literal, NewType, cast
+
 import gymnasium
 import numpy as np
+import numpy.typing as npt
 import pygame
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.butterfly.cooperative_pong.ball import Ball
 from pettingzoo.butterfly.cooperative_pong.cake_paddle import CakePaddle
-from pettingzoo.butterfly.cooperative_pong.manual_policy import ManualPolicy
 from pettingzoo.butterfly.cooperative_pong.paddle import Paddle
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import AgentSelector
@@ -86,10 +88,16 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 FPS = 15
 
 
-__all__ = ["ManualPolicy", "env", "raw_env", "parallel_env"]
+__all__ = ["env", "raw_env", "parallel_env"]
 
 
-def get_valid_angle(randomizer):
+AgentID = NewType("AgentID", str)
+ObsType = NewType("ObsType", npt.NDArray[np.integer])
+ActionType = Literal[0, 1, 2]
+StateType = NewType("StateType", npt.NDArray[np.integer])
+
+
+def get_valid_angle(randomizer: np.random.Generator) -> float:
     # generates an angle in [0, 2*np.pi) that
     # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range)
     # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
@@ -104,7 +112,7 @@ def get_valid_angle(randomizer):
     c2 = np.radians(360 - hor_deg_range)
     d2 = np.radians(0 + hor_deg_range)
 
-    angle = 0
+    angle = 0.0
     while (
         (a1 < angle < b1)
         or (a2 < angle < b2)
@@ -120,19 +128,19 @@ def get_valid_angle(randomizer):
 class CooperativePong:
     def __init__(
         self,
-        randomizer,
-        ball_speed=9,
-        left_paddle_speed=12,
-        right_paddle_speed=12,
-        cake_paddle=True,
-        max_cycles=900,
-        bounce_randomness=False,
-        max_reward=100,
-        off_screen_penalty=-10,
-        render_mode=None,
-        render_ratio=2,
-        render_fps=15,
-    ):
+        randomizer: np.random.Generator,
+        ball_speed: float = 9,
+        left_paddle_speed: float = 12,
+        right_paddle_speed: float = 12,
+        cake_paddle: bool = True,
+        max_cycles: int = 900,
+        bounce_randomness: bool = False,
+        max_reward: float = 100,
+        off_screen_penalty: float = -10,
+        render_mode: str | None = None,
+        render_ratio: int = 2,
+        render_fps: int = 15,
+    ) -> None:
         super().__init__()
 
         pygame.init()
@@ -162,7 +170,7 @@ class CooperativePong:
         )
 
         self.render_mode = render_mode
-        self.screen = None
+        self.screen: pygame.Surface | None = None
 
         # set speed
         self.speed = [ball_speed, left_paddle_speed, right_paddle_speed]
@@ -174,12 +182,12 @@ class CooperativePong:
         self.p0 = Paddle(l_paddle_dims, left_paddle_speed, "left")
         if cake_paddle:
             r_paddle_dims = (30 // render_ratio, 120 // render_ratio)
-            self.p1 = CakePaddle(r_paddle_dims, right_paddle_speed, "right")
+            self.p1: Paddle = CakePaddle(r_paddle_dims, right_paddle_speed, "right")
         else:
             r_paddle_dims = (20 // render_ratio, 100 // render_ratio)
             self.p1 = Paddle(r_paddle_dims, right_paddle_speed, "right")
 
-        self.agents = ["paddle_0", "paddle_1"]
+        self.agents = [AgentID("paddle_0"), AgentID("paddle_1")]
 
         self.ball = Ball(
             randomizer,
@@ -195,14 +203,16 @@ class CooperativePong:
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-    def reinit(self):
+    def reinit(self) -> None:
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
         self.terminations = dict(zip(self.agents, [False] * len(self.agents)))
         self.truncations = dict(zip(self.agents, [False] * len(self.agents)))
-        self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
-        self.score = 0
+        self.infos: dict[AgentID, dict[str, Any]] = dict(
+            zip(self.agents, [{}] * len(self.agents))
+        )
+        self.score = 0.0
 
-    def reset(self, seed=None, options=None):
+    def reset(self) -> None:
         # reset ball and paddle init conditions
         # set the direction to an angle between [0, 2*np.pi)
         angle = get_valid_angle(self.randomizer)
@@ -225,22 +235,23 @@ class CooperativePong:
 
         self.render()
 
-    def close(self):
+    def close(self) -> None:
         if self.screen is not None:
             pygame.quit()
             self.screen = None
 
-    def render(self):
+    def render(self) -> npt.NDArray[np.integer] | None:
         if self.render_mode is None:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         if self.screen is None:
             if self.render_mode == "human":
                 self.screen = pygame.display.set_mode((self.s_width, self.s_height))
                 pygame.display.set_caption("Cooperative Pong")
+        assert self.screen is not None
         self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
@@ -253,28 +264,31 @@ class CooperativePong:
             else None
         )
 
-    def observe(self):
+    def observe(self) -> ObsType:
+        assert self.screen is not None
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         observation = np.rot90(
             observation, k=3
         )  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
-        return observation
+        return cast(ObsType, observation)
 
-    def state(self):
+    def state(self) -> StateType:
         """Returns an observation of the global environment."""
+        assert self.screen is not None
         state = pygame.surfarray.pixels3d(self.screen).copy()
         state = np.rot90(state, k=3)
         state = np.fliplr(state)
-        return state
+        return cast(StateType, state)
 
-    def draw(self):
+    def draw(self) -> None:
+        assert self.screen is not None
         pygame.draw.rect(self.screen, (0, 0, 0), self.area)
         self.p0.draw(self.screen)
         self.p1.draw(self.screen)
         self.ball.draw(self.screen)
 
-    def step(self, action, agent):
+    def step(self, action: ActionType, agent: AgentID) -> None:
         # update p0, p1 accordingly
         # action: 0: do nothing,
         # action: 1: p[i] move up
@@ -292,7 +306,7 @@ class CooperativePong:
 
                 # do the miscellaneous stuff after the last agent has moved
                 # reward is the length of time ball is in play
-                reward = 0
+                reward = 0.0
                 # ball is out-of-bounds
                 if self.ball.is_out_of_bounds():
                     self.terminate = True
@@ -314,17 +328,17 @@ class CooperativePong:
         self.render()
 
 
-def env(**kwargs):
-    env = raw_env(**kwargs)
-    env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.OrderEnforcingWrapper(env)
-    return env
+def env(**kwargs: Any) -> AECEnv[AgentID, ObsType, ActionType]:
+    aec_env: AECEnv[AgentID, ObsType, ActionType] = raw_env(**kwargs)
+    aec_env = wrappers.AssertOutOfBoundsWrapper(aec_env)
+    aec_env = wrappers.OrderEnforcingWrapper(aec_env)
+    return aec_env
 
 
 parallel_env = parallel_wrapper_fn(env)
 
 
-class raw_env(AECEnv, EzPickle):
+class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "cooperative_pong_v6",
@@ -333,7 +347,7 @@ class raw_env(AECEnv, EzPickle):
         "has_manual_policy": True,
     }
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         EzPickle.__init__(self, **kwargs)
         self._kwargs = kwargs
 
@@ -348,7 +362,7 @@ class raw_env(AECEnv, EzPickle):
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.state_space = self.env.state_space
 
-        self.observations = {}
+        self.observations: dict[AgentID, ObsType] = {}
         self.rewards = self.env.rewards
         self.terminations = self.env.terminations
         self.truncations = self.env.truncations
@@ -357,19 +371,20 @@ class raw_env(AECEnv, EzPickle):
         self.score = self.env.score
 
         self.render_mode = self.env.render_mode
-        self.screen = None
 
-    def observation_space(self, agent):
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.action_spaces[agent]
 
-    def _seed(self, seed=None):
+    def _seed(self, seed: int | None = None) -> None:
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
-    def reset(self, seed=None, options=None):
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
         if seed is not None:
             self._seed(seed=seed)
         self.env.reset()
@@ -381,21 +396,21 @@ class raw_env(AECEnv, EzPickle):
         self.truncations = self.env.truncations
         self.infos = self.env.infos
 
-    def observe(self, agent):
+    def observe(self, agent: AgentID) -> ObsType:
         obs = self.env.observe()
         return obs
 
-    def state(self):
+    def state(self) -> StateType:
         state = self.env.state()
         return state
 
-    def close(self):
+    def close(self) -> None:
         self.env.close()
 
-    def render(self):
+    def render(self) -> npt.NDArray[np.integer] | None:
         return self.env.render()
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]

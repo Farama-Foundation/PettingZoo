@@ -3,15 +3,15 @@ import math
 import numpy as np
 import pygame
 
+from pettingzoo.butterfly.cooperative_pong.paddle import Paddle
+
 
 def get_small_random_value(randomizer: np.random.Generator) -> float:
     """Returns a random value in [-1/100, 1/100) from the given generator."""
     return 2 * (1 / 100.0) * randomizer.random() - (1 / 100.0)
 
 
-def change_speed_angle(
-    speed: list[float, float], delta_angle: float
-) -> list[float, float]:
+def change_speed_angle(speed: list[float], delta_angle: float) -> list[float]:
     """Change angle, but not magnitude of speed.
 
     Args:
@@ -33,7 +33,13 @@ def change_speed_angle(
 
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, randomizer, dims, speed, bounce_randomness=False):
+    def __init__(
+        self,
+        randomizer: np.random.Generator,
+        dims: tuple[int, int],
+        speed: float,
+        bounce_randomness: bool = False,
+    ) -> None:
         self._surf = pygame.Surface(dims)
         self._surf.fill((255, 255, 255))
         self._rect = self._surf.get_rect()
@@ -67,7 +73,7 @@ class Ball(pygame.sprite.Sprite):
         """Return True if the ball is out of bounds."""
         return self._out_of_bounds
 
-    def update2(self, area, p0, p1):
+    def update2(self, area: pygame.Rect, p0: Paddle, p1: Paddle) -> None:
         # move ball rect
         self._rect.x += self._speed[0]
         self._rect.y += self._speed[1]
@@ -102,6 +108,8 @@ class Ball(pygame.sprite.Sprite):
         if is_collision and self._bounce_randomness:
             delta_angle = get_small_random_value(self._randomizer)
             self._speed = change_speed_angle(self._speed, delta_angle)
+
+        return None
 
     def draw(self, screen: pygame.Surface) -> None:
         """Draw the ball on the given surface."""
