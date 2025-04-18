@@ -12,7 +12,7 @@ on:
         branches: [master]
     pull_request:
         paths:
-            - '.github/workflows/build-publish.yml'
+            - .github/workflows/build-publish.yml
     release:
         types: [published]
 
@@ -21,7 +21,7 @@ jobs:
         name: Build sdist and wheel
         runs-on: ubuntu-latest
         permissions:
-            contents: read                      
+            contents: read
         steps:
             - uses: actions/checkout@v4
             - name: Set up Python
