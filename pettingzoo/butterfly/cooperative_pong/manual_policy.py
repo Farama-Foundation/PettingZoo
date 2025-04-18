@@ -1,3 +1,4 @@
+"""A manual policy for CoooperativePong and script to run it."""
 import pygame
 
 from pettingzoo import AECEnv
@@ -9,12 +10,24 @@ from pettingzoo.butterfly.cooperative_pong.cooperative_pong import (
 
 
 class ManualPolicy:
+    """Manual Policy for CooperativePong.
+
+    See the game's documentation for details.
+    """
+
     def __init__(
         self,
         env: AECEnv[AgentID, ObsType, ActionType],
         agent_id: int = 0,
         show_obs: bool = False,
     ) -> None:
+        """Initializes the manual policy.
+
+        Args:
+            env: the environment to apply the policy to
+            agent_id: the index of the agent to manually control
+            show_obs: whether to show observations (not implemented yet)
+        """
         self.env = env
         self.agent_id = agent_id
         self.agent = self.env.agents[self.agent_id]
@@ -30,6 +43,18 @@ class ManualPolicy:
             self.action_mapping[pygame.K_s] = 2
 
     def __call__(self, observation: ObsType, agent: AgentID) -> ActionType:
+        """Apply the manual policy.
+
+        This will move the paddle based on keyboard input.
+        The observation is currently ignored.
+
+        Args:
+            observation: the current observation
+            agent: the agent ID to act on
+
+        Returns:
+            An action based on the policy
+        """
         # only trigger when we are the correct agent
         assert (
             agent == self.agent

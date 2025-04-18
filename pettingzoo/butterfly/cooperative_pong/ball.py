@@ -1,3 +1,5 @@
+"""Ball for a Cooperative Pong game."""
+
 import math
 
 import numpy as np
@@ -14,12 +16,15 @@ def get_small_random_value(randomizer: np.random.Generator) -> float:
 def change_speed_angle(speed: list[float], delta_angle: float) -> list[float]:
     """Change angle, but not magnitude of speed.
 
+    The takes an existing veloctiy and returns a new velocity with the
+    direction changed but the magnitude the same.
+
     Args:
-      speed: the speed in x,y coordinates
-      delta_angle: change in angle to apply (in radians)
+        speed: the speed in x,y coordinates
+        delta_angle: change in angle to apply (in radians)
 
     Returns:
-      the new speed in x,y coordinates
+        A list with the new speed x,y components
     """
     magnitude = math.sqrt(speed[0] ** 2 + speed[1] ** 2)
     current_angle_rad = math.atan2(speed[1], speed[0])
@@ -33,6 +38,11 @@ def change_speed_angle(speed: list[float], delta_angle: float) -> list[float]:
 
 
 class Ball(pygame.sprite.Sprite):
+    """The ball in a Cooperative Pong Game.
+
+    If desired, the ball bounces off objects with a small randomness in angle.
+    """
+
     def __init__(
         self,
         randomizer: np.random.Generator,
@@ -40,6 +50,17 @@ class Ball(pygame.sprite.Sprite):
         speed: float,
         bounce_randomness: bool = False,
     ) -> None:
+        """Initializes a new Ball.
+
+        The position defaults to (0,0) and should be set via reset() prior to
+        being used.
+
+        Args:
+            randomizer: numpy randomizer to use for bounces
+            dims: the size of the ball
+            speed: the magnitude of the ball's speed
+            bounce_randomness: whether to add speed randomness in bounces
+        """
         self._surf = pygame.Surface(dims)
         self._surf.fill((255, 255, 255))
         self._rect = self._surf.get_rect()
@@ -59,8 +80,8 @@ class Ball(pygame.sprite.Sprite):
         ball's motion is set to the given angle.
 
         Args:
-          center: the new center of the ball
-          angle: the angle of the motion - used to set speed components.
+            center: the new center of the ball
+            angle: the direction of ball's velocity (radians).
         """
         self._rect.center = center
         self._speed = [
@@ -74,6 +95,17 @@ class Ball(pygame.sprite.Sprite):
         return self._out_of_bounds
 
     def update2(self, area: pygame.Rect, p0: Paddle, p1: Paddle) -> None:
+        """Update the ball position.
+
+        The ball bounces off paddles and the top and bottom walls.
+        If the ball exits left or right, it is marked as out of
+        bounds.
+
+        Args:
+            area: The area of the screen
+            p0: The left paddle
+            p1: The right paddle
+        """
         # move ball rect
         self._rect.x += self._speed[0]
         self._rect.y += self._speed[1]

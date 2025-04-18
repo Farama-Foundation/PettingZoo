@@ -1,3 +1,5 @@
+"""A paddle with a non-flat surface."""
+
 from typing import Literal
 
 import pygame
@@ -6,6 +8,8 @@ from pettingzoo.butterfly.cooperative_pong.paddle import Paddle, PaddleLocation
 
 
 class CakePaddle(Paddle):
+    """Paddle with a tiered, wedding cake like shape."""
+
     def __init__(
         self, dims: tuple[int, int], speed: float, location: Literal["left", "right"]
     ) -> None:
@@ -24,7 +28,6 @@ class CakePaddle(Paddle):
         self.rects.append(pygame.Rect((0, 0), dims4))
 
     def reset(self, area: pygame.Rect, speed: float) -> None:
-        """Resets the speed and location for a new game."""
         super().reset(area, speed)
         # move the rest of the paddle parts to stay lined up
         self.rects[1].midright = self.rects[0].midleft

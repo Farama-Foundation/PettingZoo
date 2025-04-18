@@ -17,28 +17,39 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | Agents               | `agents= ['paddle_0', 'paddle_1']`                     |
 | Agents               | 2                                                      |
 | Action Shape         | Discrete(3)                                            |
-| Action Values        | [0, 1]                                                 |
+| Action Values        | [0, 1, 2]                                              |
 | Observation Shape    | (280, 480, 3)                                          |
 | Observation Values   | [0, 255]                                               |
-| State Shape          | (560, 960, 3)                                          |
+| State Shape          | (280, 480, 3)                                          |
 | State Values         | (0, 255)                                               |
 
 
 Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that
 moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default.
-The observation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, each agent receives a reward of `max_reward / max_cycles` (default 0.11) at each timestep. Otherwise, each agent receives a reward of
-`off_screen_penalty` (default -10) and the game ends.
+The observation space of each agent is the entire screen. There are three possible actions for the agents (_move up/down_ or do nothing). If the ball stays within bounds, each agent receives a reward of `max_reward / max_cycles` (default 0.11) at each timestep. Otherwise, each agent receives a
+reward of `off_screen_penalty` (default -10) and the game ends.
 
 
 ### Manual Control
 
-Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP' and 'DOWN' arrow keys.
+Move the left paddle using the 'W' and 'S' keys. (Move the right paddle using 'UP' and 'DOWN' arrow keys - not currently working)
 
 ### Arguments
 
 ``` python
-cooperative_pong_v6.env(ball_speed=9, left_paddle_speed=12,
-right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False, max_reward=100, off_screen_penalty=-10)
+cooperative_pong_v6.env(
+    ball_speed = 9,
+    left_paddle_speed = 12,
+    right_paddle_speed = 12,
+    cake_paddle = True,
+    max_cycles = 900,
+    bounce_randomness = False,
+    max_reward = 100,
+    off_screen_penalty = -10,
+    render_mode = None,
+    render_ratio = 2,
+    render_fps = 15,
+)
 ```
 
 `ball_speed`: Speed of ball (in pixels)
@@ -49,13 +60,20 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 `cake_paddle`: If True, the right paddle cakes the shape of a 4 tiered wedding cake
 
-`max_cycles`:  after max_cycles steps all agents will return done
+`max_cycles`: After max_cycles steps all agents will return done
 
 `bounce_randomness`: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.
 
-`max_reward`:  Total reward given to each agent over max_cycles timesteps
+`max_reward`: Total reward given to each agent over max_cycles timesteps
 
-`off_screen_penalty`:  Negative reward penalty for each agent if the ball goes off the screen
+`off_screen_penalty`: Negative reward penalty for each agent if the ball goes off the screen
+
+`render_mode`: Render mode for the env (either None, "human", or "rgb_array")
+
+`render_ratio`: Scaling ratio for rendering the screen (controls display size, larger value gives smaller screen)
+
+`render_fps`: Speed that the game is run (in frames per second, higher values give faster game)
+
 
 ### Version History
 
@@ -98,9 +116,24 @@ StateType = NewType("StateType", npt.NDArray[np.integer])
 
 
 def get_valid_angle(randomizer: np.random.Generator) -> float:
-    # generates an angle in [0, 2*np.pi) that
-    # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range)
-    # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
+    """Generate an initial angle for the ball's motion.
+
+    This generates an angle in [0, 2*np.pi) that excludes the following
+    angle ranges (given in degrees):
+    (90 +- ver_deg_range)
+    (270 +- ver_deg_range)
+    (180 +- hor_deg_range)
+    (0 +- hor_deg_range)
+
+    for the default values of ver_deg_range = 25 and hor_deg_range = 10:
+    (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
+
+    Args:
+        randomizer: The random generator to use in generating the angle
+
+    Returns:
+        The angle generated (radians)
+    """
     ver_deg_range = 25
     hor_deg_range = 10
     a1 = np.radians(90 - ver_deg_range)
@@ -126,6 +159,8 @@ def get_valid_angle(randomizer: np.random.Generator) -> float:
 
 
 class CooperativePong:
+    """The base env for Cooperative Pong."""
+
     def __init__(
         self,
         randomizer: np.random.Generator,
@@ -141,6 +176,29 @@ class CooperativePong:
         render_ratio: int = 2,
         render_fps: int = 15,
     ) -> None:
+        """Initializes the CooperativePong game.
+
+        Args:
+            randomizer: Random generator
+            ball_speed: Speed of ball (in pixels)
+            left_paddle_speed: Speed of left paddle (in pixels)
+            right_paddle_speed: Speed of right paddle (in pixels)
+            cake_paddle: If True, the right paddle cakes the shape of a
+              4 tiered wedding cake
+            max_cycles: After max_cycles steps all agents will return done
+            bounce_randomness: If True, each collision of the ball with the
+              paddles adds a small random angle to the direction of the ball,
+              with the speed of the ball remaining unchanged.
+            max_reward: Total reward given to each agent over max_cycles timesteps
+            off_screen_penalty: Negative reward penalty for each agent if the ball
+              goes off the screen
+            render_mode: Render mode for the env (either None, "human", or
+              "rgb_array")
+            render_ratio: Scaling ratio for rendering the screen (controls display
+              size, larger value gives smaller screen)
+            render_fps: Speed that the game is run (in frames per second, higher
+              values give faster game)
+        """
         super().__init__()
 
         pygame.init()
@@ -204,6 +262,7 @@ class CooperativePong:
             self.clock = pygame.time.Clock()
 
     def reinit(self) -> None:
+        """Reinitialize datastructures."""
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
         self.terminations = dict(zip(self.agents, [False] * len(self.agents)))
         self.truncations = dict(zip(self.agents, [False] * len(self.agents)))
@@ -213,6 +272,7 @@ class CooperativePong:
         self.score = 0.0
 
     def reset(self) -> None:
+        """Reset the env for a new run."""
         # reset ball and paddle init conditions
         # set the direction to an angle between [0, 2*np.pi)
         angle = get_valid_angle(self.randomizer)
@@ -236,11 +296,23 @@ class CooperativePong:
         self.render()
 
     def close(self) -> None:
+        """Close the pygame window, if open."""
         if self.screen is not None:
             pygame.quit()
             self.screen = None
 
     def render(self) -> npt.NDArray[np.integer] | None:
+        """Render the current state.
+
+        The result of this call depends on the render_mode:
+        * None: a warning in printed and nothing else is done
+        * "human": the image is displayed in a Pygame window
+        * "rgb_array": an numeric array of the screen is returned
+
+        Returns:
+            If render_mode is "rgb_array", an array of the screen
+            image as integers is returned. Otherwise, None is returned.
+        """
         if self.render_mode is None:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
@@ -265,6 +337,7 @@ class CooperativePong:
         )
 
     def observe(self) -> ObsType:
+        """Return the current screen as an array."""
         assert self.screen is not None
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         observation = np.rot90(
@@ -282,6 +355,7 @@ class CooperativePong:
         return cast(StateType, state)
 
     def draw(self) -> None:
+        """Draw the paddles and ball on the screen."""
         assert self.screen is not None
         pygame.draw.rect(self.screen, (0, 0, 0), self.area)
         self.p0.draw(self.screen)
@@ -289,6 +363,24 @@ class CooperativePong:
         self.ball.draw(self.screen)
 
     def step(self, action: ActionType, agent: AgentID) -> None:
+        """Update the env based on the action of the given agent.
+
+        This will move the paddles and ball as appropriate and determine
+        the new state as a result.
+        When agent is the first player:
+        * the rewards are zeroed
+        * the left paddle (player 1) is moved
+        When agent is the second player:
+        * the right paddle (player 2) is moved
+        * the ball is moved
+        * the state (terminated/truncated/running) is determined
+        * the reward/score is calculated
+        * all datastructures are updated
+
+        Args:
+            action: the action to take
+            agent: which agent is acting
+        """
         # update p0, p1 accordingly
         # action: 0: do nothing,
         # action: 1: p[i] move up
@@ -329,6 +421,7 @@ class CooperativePong:
 
 
 def env(**kwargs: Any) -> AECEnv[AgentID, ObsType, ActionType]:
+    """Creates the wrapped environment."""
     aec_env: AECEnv[AgentID, ObsType, ActionType] = raw_env(**kwargs)
     aec_env = wrappers.AssertOutOfBoundsWrapper(aec_env)
     aec_env = wrappers.OrderEnforcingWrapper(aec_env)
@@ -339,6 +432,8 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
+    """The CooperativePong AEC environment."""
+
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "cooperative_pong_v6",
@@ -348,6 +443,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     }
 
     def __init__(self, **kwargs: Any) -> None:
+        """Initialize the environment."""
         EzPickle.__init__(self, **kwargs)
         self._kwargs = kwargs
 
@@ -373,18 +469,25 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.render_mode = self.env.render_mode
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
+        """Return the observation space for the given agent."""
         return self.observation_spaces[agent]
 
     def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
+        """Return the action space for the given agent."""
         return self.action_spaces[agent]
 
     def _seed(self, seed: int | None = None) -> None:
+        """Seed the random number generator.
+
+        This also creates the underlying environment.
+        """
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
     def reset(
         self, seed: int | None = None, options: dict[str, Any] | None = None
     ) -> None:
+        """Reset the environment."""
         if seed is not None:
             self._seed(seed=seed)
         self.env.reset()
@@ -397,20 +500,25 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.infos = self.env.infos
 
     def observe(self, agent: AgentID) -> ObsType:
+        """Return the observation for the given agent."""
         obs = self.env.observe()
         return obs
 
     def state(self) -> StateType:
+        """Return the state for the environment."""
         state = self.env.state()
         return state
 
     def close(self) -> None:
+        """Close the renderer."""
         self.env.close()
 
     def render(self) -> npt.NDArray[np.integer] | None:
+        """Render the current state of the environment."""
         return self.env.render()
 
     def step(self, action: ActionType) -> None:
+        """Take a step of the environment."""
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
