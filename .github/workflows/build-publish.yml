@@ -3,7 +3,6 @@
 # For more information see:
 #   - https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 #   - https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
-#
 
 name: build-publish
 
