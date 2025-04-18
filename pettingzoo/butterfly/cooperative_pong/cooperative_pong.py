@@ -59,7 +59,7 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 ### Version History
 
-* v6: Fixed incorrect termination condition (1.25.5)
+* v6: Fixed incorrect termination condition and random bounce behaviour (1.25.5)
 * v5: Fixed ball teleporting bugs
 * v4: Added max_reward and off_screen_penalty arguments and changed default, fixed glitch where ball would occasionally teleport, reward redesign (1.14.0)
 * v3: Change observation space to include entire screen (1.10.0)

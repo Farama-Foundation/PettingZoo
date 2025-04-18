@@ -1,6 +1,9 @@
 """Test that Ball behaves correctly."""
 
+import math
+
 import pygame
+import pytest
 from gymnasium.utils import seeding
 
 from pettingzoo.butterfly.cooperative_pong.ball import Ball
@@ -41,5 +44,55 @@ def test_bounds() -> None:
                 break
 
 
+def test_bounce_randomness() -> None:
+    """Confirm that the speed remains constant with bounce randomness enabled."""
+
+    def calc_speed(ball: Ball) -> float:
+        return math.sqrt(ball.speed[0] ** 2 + ball.speed[1] ** 2)
+
+    # make ball size, screen size, ball speed match env default
+    render_ratio = 2
+    width, height = 960 // render_ratio, 560 // render_ratio
+    ball_dims = (20 // render_ratio, 20 // render_ratio)
+    ball_speed = 9
+
+    area = pygame.Rect((0, 0, width, height))
+
+    # paddles are tall enough to cover entire side
+    # and wide enough that the ball can't move through them
+    p0 = Paddle((ball_speed + 5, height), 0)
+    p1 = Paddle((ball_speed + 5, height), 0)
+    p0.rect.midleft = area.midleft
+    p1.rect.midright = area.midright
+
+    randomizer, _ = seeding.np_random(seed=11)
+
+    ball = Ball(randomizer, ball_dims, ball_speed, bounce_randomness=True)
+    ball.reset(area.center, get_valid_angle(randomizer))
+
+    initial_speed = pytest.approx(calc_speed(ball))
+    for _ in range(10000):
+        ball.update2(area, p0, p1)
+        terminate = ball.is_out_of_bounds()
+
+        current_speed = calc_speed(ball)
+        assert initial_speed == current_speed, "Ball speed changed unexpectedly"
+
+        if terminate:
+            # the paddles occupy the entire side walls, so it should not be
+            # possible for a ball to pass by. So a termination should never
+            # happen if everything is working properly. Things to check:
+            # 1) did the height of the paddles above get changed to not be
+            #    the full height of the screen?
+            # 2) did the width of the paddles get changed to be less than
+            #    the total speed (plus a small buffer)?
+            # 3) did something get added to limit the number of steps?
+            #    If so, check that it impacts this test code and that the
+            #    number of steps run here is less than than limit.
+            # 4) something is wrong with the paddle/ball to allow the ball to
+            #    bypass a paddle or terminate without the ball hitting a wall.
+            assert False, "Unknown error in test (seed test code)"
+
+
 if __name__ == "__main__":
-    test_bounds()
+    test_bounce_randomness()

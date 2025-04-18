@@ -1,10 +1,35 @@
+import math
+
 import numpy as np
 import pygame
 
 
-def get_small_random_value(randomizer):
-    # generates a small random value between [0, 1/100)
-    return (1 / 100) * randomizer.random()
+def get_small_random_value(randomizer: np.random.Generator) -> float:
+    """Returns a random value in [-1/100, 1/100) from the given generator."""
+    return 2 * (1 / 100.0) * randomizer.random() - (1 / 100.0)
+
+
+def change_speed_angle(
+    speed: list[float, float], delta_angle: float
+) -> list[float, float]:
+    """Change angle, but not magnitude of speed.
+
+    Args:
+      speed: the speed in x,y coordinates
+      delta_angle: change in angle to apply (in radians)
+
+    Returns:
+      the new speed in x,y coordinates
+    """
+    magnitude = math.sqrt(speed[0] ** 2 + speed[1] ** 2)
+    current_angle_rad = math.atan2(speed[1], speed[0])
+
+    new_angle_rad = current_angle_rad + delta_angle
+
+    new_x = magnitude * math.cos(new_angle_rad)
+    new_y = magnitude * math.sin(new_angle_rad)
+
+    return [new_x, new_y]
 
 
 class Ball(pygame.sprite.Sprite):
@@ -63,32 +88,20 @@ class Ball(pygame.sprite.Sprite):
             self._out_of_bounds = True
             return None
 
-        # Do ball and bat collide?
-        # add some randomness
-        r_val = 0
-        if self.bounce_randomness:
-            r_val = get_small_random_value(self.randomizer)
-
-        # ball in left half of screen
-        if self.rect.center[0] < area.center[0]:
+        # Do ball and paddle collide?
+        if self.rect.center[0] < area.center[0]:  # ball in left half of screen
             is_collision, self.rect, self.speed = p0.process_collision(
                 self.rect, self.speed, 1
             )
-            if is_collision:
-                self.speed = [
-                    self.speed[0] + np.sign(self.speed[0]) * r_val,
-                    self.speed[1] + np.sign(self.speed[1]) * r_val,
-                ]
-        # ball in right half
-        else:
+        else:  # ball in right half
             is_collision, self.rect, self.speed = p1.process_collision(
                 self.rect, self.speed, 2
             )
-            if is_collision:
-                self.speed = [
-                    self.speed[0] + np.sign(self.speed[0]) * r_val,
-                    self.speed[1] + np.sign(self.speed[1]) * r_val,
-                ]
+
+        # add randomness if there was a collision (if requested)
+        if is_collision and self.bounce_randomness:
+            delta_angle = get_small_random_value(self.randomizer)
+            self.speed = change_speed_angle(self.speed, delta_angle)
 
     def draw(self, screen):
         # screen.blit(self.surf, self.rect)
