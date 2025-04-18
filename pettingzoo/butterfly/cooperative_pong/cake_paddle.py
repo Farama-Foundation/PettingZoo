@@ -16,7 +16,7 @@ class CakePaddle(pygame.sprite.Sprite):
 
         self.speed = speed
 
-    def reset(self, seed=None, options=None):
+    def reset(self):
         # self.rect is set from env class
         self.rect2.midright = self.rect.midleft
         self.rect3.midright = self.rect2.midleft
