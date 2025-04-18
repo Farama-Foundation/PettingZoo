@@ -13,8 +13,8 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect()
         self.speed_val = speed
         self.speed = [
-            int(self.speed_val * np.cos(np.pi / 4)),
-            int(self.speed_val * np.sin(np.pi / 4)),
+            self.speed_val * np.cos(np.pi / 4),
+            self.speed_val * np.sin(np.pi / 4),
         ]
         self.bounce_randomness = bounce_randomness
         self.randomizer = randomizer
@@ -32,8 +32,8 @@ class Ball(pygame.sprite.Sprite):
         """
         self.rect.center = center
         self.speed = [
-            int(self.speed_val * np.cos(angle)),
-            int(self.speed_val * np.sin(angle)),
+            self.speed_val * np.cos(angle),
+            self.speed_val * np.sin(angle),
         ]
         self._out_of_bounds = False
 
