@@ -17,8 +17,6 @@ class Ball(pygame.sprite.Sprite):
             int(self.speed_val * np.sin(np.pi / 4)),
         ]
         self.bounce_randomness = bounce_randomness
-        self.done = False
-        self.hit = False
         self.randomizer = randomizer
 
     def update2(self, area, p0, p1):
@@ -38,7 +36,6 @@ class Ball(pygame.sprite.Sprite):
             # right or left walls
             else:
                 return True
-                self.speed[0] = -self.speed[0]
 
         else:
             # Do ball and bat collide?
