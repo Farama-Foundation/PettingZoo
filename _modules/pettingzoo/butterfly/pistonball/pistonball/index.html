@@ -10,11 +10,11 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/butterfly/pistonball/pistonball.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/butterfly/pistonball/pistonball.html" />
 
-    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>pettingzoo.butterfly.pistonball.pistonball - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -416,16 +416,18 @@
 <span class="sd">| State Values         | (0, 255)                                             |</span>
 
 
-<span class="sd">This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating the vertically moving pistons. Each piston agent&#39;s observation is an RGB image of the two pistons (or the wall) next to the agent and the space above them. Every</span>
-<span class="sd">piston can be acted on in any given time. The action space in discrete mode is 0 to move down, 1 to stay still, and 2 to move up. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons are raised or lowered by. Continuous actions are scaled by a factor</span>
-<span class="sd">of 4, so that in both the discrete and continuous action space, the action 1 will move a piston 4 pixels up, and -1 will move pistons 4 pixels down.</span>
+<span class="sd">This is a physics based cooperative game where the goal is to move the ball to the left-wall of the game border by activating the vertically moving pistons. To achieve an optimal policy for the environment, pistons must learn highly coordinated behavior.</span>
 
-<span class="sd">Accordingly, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent gets a reward that is a combination of how much the ball moved left overall and how much the ball moved left if it was close to the piston (i.e. movement the piston</span>
-<span class="sd">contributed to). A piston is considered close to the ball if it is directly below any part of the ball. Balancing the ratio between these local and global rewards appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times</span>
-<span class="sd">the change in the ball&#39;s x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100, plus the `time_penalty` (default -0.1). For each piston, the reward is `local_ratio` * local_reward + (1-`local_ratio`) * global_reward. The local reward is</span>
-<span class="sd">applied to pistons surrounding the ball while the global reward is provided to all pistons.</span>
+<span class="sd">**Observations**: Each piston-agent&#39;s observation is an RGB image encompassing the piston, its immediate neighbors (either two pistons or a piston and left/right-wall) and the space above them (which may show the ball).</span>
 
-<span class="sd">Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as in the game Angry Birds.</span>
+<span class="sd">**Actions**: Every piston can be acted on at each time step. In discrete mode, the action space is 0 to move down by 4 pixels, 1 to stay still, and 2 to move up by 4 pixels. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons</span>
+<span class="sd">are lowered or raised by. Continuous actions are scaled by a factor of 4 to allow for matching the distance travelled in discrete mode, e.g. an action of -1 moves the piston down 4 pixels.</span>
+
+<span class="sd">**Rewards**: The same reward is provided to each agent based on how much the ball moved left in the last time-step (moving right results in a negative reward) plus a constant time-penalty. The distance component is the percentage of the initial total distance (i.e. at game-start)</span>
+<span class="sd">to the left-wall travelled in the past timestep. For example, if the ball began the game 300 pixels away from the wall, began the time-step 180 pixels away and finished the time-step 175 pixels away, the distance reward would be 100 * 5/300 = 1.7. There is also a configurable</span>
+<span class="sd">time-penalty (default: -0.1)  added to the distance-based reward at each time-step. For example, if the ball does not move in a time-step, the reward will be -0.1 not 0. This is to incentivize solving the game faster.</span>
+
+<span class="sd">Pistonball uses the chipmunk physics engine, so the physics are about as realistic as in the game Angry Birds.</span>
 
 <span class="sd">Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* move the piston in the vertical direction.</span>
 
@@ -470,29 +472,27 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
-<span class="kn">import</span> <span class="nn">gymnasium</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pygame</span>
-<span class="kn">import</span> <span class="nn">pymunk</span>
-<span class="kn">import</span> <span class="nn">pymunk.pygame_util</span>
-<span class="kn">from</span> <span class="nn">gymnasium.utils</span> <span class="kn">import</span> <span class="n">EzPickle</span><span class="p">,</span> <span class="n">seeding</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymunk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymunk.pygame_util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">EzPickle</span><span class="p">,</span> <span class="n">seeding</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">AECEnv</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly.pistonball.manual_policy</span> <span class="kn">import</span> <span class="n">ManualPolicy</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">agent_selector</span><span class="p">,</span> <span class="n">wrappers</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils.conversions</span> <span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
-
-<span class="n">_image_library</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">AECEnv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.pistonball.manual_policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManualPolicy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentSelector</span><span class="p">,</span> <span class="n">wrappers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.conversions</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
 
 <span class="n">FPS</span> <span class="o">=</span> <span class="mi">20</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ManualPolicy&quot;</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">,</span> <span class="s2">&quot;parallel_env&quot;</span><span class="p">,</span> <span class="s2">&quot;raw_env&quot;</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">get_image</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">os_path</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_image</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">os_path</span>
 
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os_path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
@@ -503,7 +503,7 @@
 
 <div class="viewcode-block" id="env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.env">[docs]</a>
-<span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">continuous</span><span class="p">:</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">ClipOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -519,7 +519,7 @@
 
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env">[docs]</a>
-<span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;pistonball_v6&quot;</span><span class="p">,</span>
@@ -528,7 +528,7 @@
         <span class="s2">&quot;has_manual_policy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_pistons</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">time_penalty</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
@@ -577,7 +577,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;piston_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_pistons</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_pistons</span><span class="p">))))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="nb">zip</span><span class="p">(</span>
@@ -633,8 +633,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recentPistons</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># Set of pistons that have touched the ball recently</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_penalty</span> <span class="o">=</span> <span class="n">time_penalty</span>
-        <span class="c1"># TODO: this was a bad idea and the logic this uses should be removed at some point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">local_ratio</span> <span class="o">=</span> <span class="mi">0</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">ball_mass</span> <span class="o">=</span> <span class="n">ball_mass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ball_friction</span> <span class="o">=</span> <span class="n">ball_friction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ball_elasticity</span> <span class="o">=</span> <span class="n">ball_elasticity</span>
@@ -672,22 +671,22 @@
 
 <div class="viewcode-block" id="raw_env.observation_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.observation_space">[docs]</a>
-    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="raw_env.action_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.action_space">[docs]</a>
-    <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">np_random</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seeding</span><span class="o">.</span><span class="n">np_random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
 <div class="viewcode-block" id="raw_env.observe">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.observe">[docs]</a>
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="n">observation</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
         <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
         <span class="c1"># Set x bounds to include 40px left and 40px right of piston</span>
@@ -703,7 +702,7 @@
 
 <div class="viewcode-block" id="raw_env.state">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.state">[docs]</a>
-    <span class="k">def</span> <span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an observation of the global environment.&quot;&quot;&quot;</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -711,7 +710,7 @@
         <span class="k">return</span> <span class="n">state</span></div>
 
 
-    <span class="k">def</span> <span class="nf">enable_render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enable_render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">))</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Pistonball&quot;</span><span class="p">)</span>
 
@@ -722,13 +721,13 @@
 
 <div class="viewcode-block" id="raw_env.close">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.close">[docs]</a>
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-    <span class="k">def</span> <span class="nf">add_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">top_left</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">)</span>
         <span class="n">top_right</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">)</span>
         <span class="n">bot_left</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">)</span>
@@ -748,7 +747,7 @@
             <span class="n">wall</span><span class="o">.</span><span class="n">friction</span> <span class="o">=</span> <span class="mf">0.64</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">add_ball</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">b_mass</span><span class="p">,</span> <span class="n">b_friction</span><span class="p">,</span> <span class="n">b_elasticity</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_ball</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">b_mass</span><span class="p">,</span> <span class="n">b_friction</span><span class="p">,</span> <span class="n">b_elasticity</span><span class="p">):</span>
         <span class="n">mass</span> <span class="o">=</span> <span class="n">b_mass</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="mi">40</span>
         <span class="n">inertia</span> <span class="o">=</span> <span class="n">pymunk</span><span class="o">.</span><span class="n">moment_for_circle</span><span class="p">(</span><span class="n">mass</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
@@ -763,7 +762,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">body</span>
 
-    <span class="k">def</span> <span class="nf">add_piston</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_piston</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="n">piston</span> <span class="o">=</span> <span class="n">pymunk</span><span class="o">.</span><span class="n">Body</span><span class="p">(</span><span class="n">body_type</span><span class="o">=</span><span class="n">pymunk</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">KINEMATIC</span><span class="p">)</span>
         <span class="n">piston</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
         <span class="n">segment</span> <span class="o">=</span> <span class="n">pymunk</span><span class="o">.</span><span class="n">Segment</span><span class="p">(</span>
@@ -777,8 +776,8 @@
         <span class="n">space</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">piston</span><span class="p">,</span> <span class="n">segment</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">piston</span>
 
-    <span class="k">def</span> <span class="nf">move_piston</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">piston</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">cap</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">move_piston</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">piston</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">cap</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
             <span class="n">maximum_piston_y</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
                 <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span>
@@ -801,7 +800,7 @@
 
 <div class="viewcode-block" id="raw_env.reset">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.reset">[docs]</a>
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="n">pymunk</span><span class="o">.</span><span class="n">Space</span><span class="p">(</span><span class="n">threaded</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -877,8 +876,8 @@
                 <span class="o">-</span><span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">lastX</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball_radius</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastX</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ball_prev_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ball_position</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_wall_at_game_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball_prev_pos</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">draw_background</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
@@ -899,7 +898,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
-    <span class="k">def</span> <span class="nf">draw_background</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_background</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">outer_walls</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
             <span class="mi">0</span><span class="p">,</span>  <span class="c1"># Left</span>
             <span class="mi">0</span><span class="p">,</span>  <span class="c1"># Top</span>
@@ -918,7 +917,7 @@
         <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="n">inner_wall_color</span><span class="p">,</span> <span class="n">inner_walls</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">draw_pistons</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">draw_pistons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_pistons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">piston_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">159</span><span class="p">,</span> <span class="mi">221</span><span class="p">)</span>
         <span class="n">x_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span>
         <span class="k">for</span> <span class="n">piston</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pistonList</span><span class="p">:</span>
@@ -945,7 +944,7 @@
             <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="n">piston_color</span><span class="p">,</span> <span class="n">body_rect</span><span class="p">)</span>
             <span class="n">x_pos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">piston_width</span>
 
-    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="c1"># redraw the background image if ball goes outside valid position</span>
@@ -978,33 +977,9 @@
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">draw_pistons</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">get_nearby_pistons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># first piston = leftmost</span>
-        <span class="n">nearby_pistons</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">ball_pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball_radius</span><span class="p">)</span>
-        <span class="n">closest</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pistonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">ball_pos</span><span class="p">)</span>
-        <span class="n">closest_piston_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_pistons</span><span class="p">):</span>
-            <span class="n">next_distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pistonList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">ball_pos</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">next_distance</span> <span class="o">&lt;</span> <span class="n">closest</span><span class="p">:</span>
-                <span class="n">closest</span> <span class="o">=</span> <span class="n">next_distance</span>
-                <span class="n">closest_piston_index</span> <span class="o">=</span> <span class="n">i</span>
-
-        <span class="k">if</span> <span class="n">closest_piston_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">nearby_pistons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">closest_piston_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">nearby_pistons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">closest_piston_index</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">closest_piston_index</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_pistons</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">nearby_pistons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">closest_piston_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">nearby_pistons</span>
-
-    <span class="k">def</span> <span class="nf">get_local_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prev_position</span><span class="p">,</span> <span class="n">curr_position</span><span class="p">):</span>
-        <span class="n">local_reward</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">prev_position</span> <span class="o">-</span> <span class="n">curr_position</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">local_reward</span>
-
 <div class="viewcode-block" id="raw_env.render">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.render">[docs]</a>
-    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
@@ -1028,9 +1003,21 @@
         <span class="p">)</span></div>
 
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_ball_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the leftmost x-position of the ball.</span>
+
+<span class="sd">        That leftmost x-position is generally referred to and treated as the</span>
+<span class="sd">        balls&#39; position in this class. If the ball extends beyond the leftmost</span>
+<span class="sd">        wall, return the position of that wall-edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ball_position</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball_radius</span><span class="p">)</span>
+        <span class="c1"># Check if the ball is touching/within the left-most wall.</span>
+        <span class="n">clipped_ball_position</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">,</span> <span class="n">ball_position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">clipped_ball_position</span>
+
 <div class="viewcode-block" id="raw_env.step">
 <a class="viewcode-back" href="../../../../../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.step">[docs]</a>
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -1041,7 +1028,8 @@
         <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">continuous</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">move_piston</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pistonList</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span><span class="p">[</span><span class="n">agent</span><span class="p">]],</span> <span class="n">action</span><span class="p">)</span>
+            <span class="c1"># action is a 1 item numpy array, move_piston expects a scalar</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_piston</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pistonList</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span><span class="p">[</span><span class="n">agent</span><span class="p">]],</span> <span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">move_piston</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pistonList</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span><span class="p">[</span><span class="n">agent</span><span class="p">]],</span> <span class="n">action</span> <span class="o">-</span> <span class="mi">1</span>
@@ -1049,30 +1037,31 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">is_last</span><span class="p">():</span>
-            <span class="n">ball_min_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball_radius</span><span class="p">)</span>
-            <span class="n">ball_next_x</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball_radius</span>
-                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">ball_next_x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ball_curr_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ball_position</span><span class="p">()</span>
+
+            <span class="c1"># A rough, first-order prediction (i.e. velocity-only) of the balls next position.</span>
+            <span class="c1"># The physics environment may bounce the ball off the wall in the next time-step</span>
+            <span class="c1"># without us first registering that win-condition.</span>
+            <span class="n">ball_predicted_next_pos</span> <span class="o">=</span> <span class="n">ball_curr_pos</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+            <span class="c1"># Include a single-pixel fudge-factor for the approximation.</span>
+            <span class="k">if</span> <span class="n">ball_predicted_next_pos</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="c1"># ensures that the ball can&#39;t pass through the wall</span>
-            <span class="n">ball_min_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">,</span> <span class="n">ball_min_x</span><span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-            <span class="n">local_reward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_local_reward</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastX</span><span class="p">,</span> <span class="n">ball_min_x</span><span class="p">)</span>
-            <span class="c1"># Opposite order due to moving right to left</span>
-            <span class="n">global_reward</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastX</span> <span class="o">-</span> <span class="n">ball_min_x</span><span class="p">)</span>
+
+            <span class="c1"># The negative one is included since the x-axis increases from left-to-right. And, if the x</span>
+            <span class="c1"># position decreases we want the reward to be positive, since the ball would have gotten closer</span>
+            <span class="c1"># to the left-wall.</span>
+            <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="o">-</span><span class="mi">1</span>
+                <span class="o">*</span> <span class="p">(</span><span class="n">ball_curr_pos</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ball_prev_pos</span><span class="p">)</span>
+                <span class="o">*</span> <span class="p">(</span><span class="mi">100</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_wall_at_game_start</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span><span class="p">:</span>
-                <span class="n">global_reward</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_penalty</span>
-            <span class="n">total_reward</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">global_reward</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_ratio</span><span class="p">)</span>
-            <span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_pistons</span>  <span class="c1"># start with global reward</span>
-            <span class="n">local_pistons_to_reward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nearby_pistons</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">local_pistons_to_reward</span><span class="p">:</span>
-                <span class="n">total_reward</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="n">local_reward</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_ratio</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="n">total_reward</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lastX</span> <span class="o">=</span> <span class="n">ball_min_x</span>
+                <span class="n">reward</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_penalty</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">reward</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ball_prev_pos</span> <span class="o">=</span> <span class="n">ball_curr_pos</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_clear_rewards</span><span class="p">()</span>
@@ -1217,8 +1206,8 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/documentation_options.js?v=d48881cd"></script>
+    <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/furo.js?v=7660844c"></script>
     

@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tic Tac Toe" href="../tictactoe/" /><link rel="prev" title="Texas Hold’em No Limit" href="../texas_holdem_no_limit/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/classic/texas_holdem.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Texas Hold’em - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -393,9 +393,10 @@
               <img class="farama-env-icon" src="../../../_static/img/icons/classic/texas_holdem.png">
             </div>
             <section class="tex2jax_ignore mathjax_ignore" id="texas-hold-em">
-<h1>Texas Hold’em<a class="headerlink" href="#texas-hold-em" title="Link to this heading">#</a></h1>
+<h1>Texas Hold’em<a class="headerlink" href="#texas-hold-em" title="Link to this heading">¶</a></h1>
 <figure class="align-default" id="texas-holdem">
-<a class="reference internal image-reference" href="../../../_images/classic_texas_holdem.gif"><img alt="../../../_images/classic_texas_holdem.gif" src="../../../_images/classic_texas_holdem.gif" style="width: 140px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/classic_texas_holdem.gif"><img alt="../../../_images/classic_texas_holdem.gif" src="../../../_images/classic_texas_holdem.gif" style="width: 140px;" />
+</a>
 </figure>
 <p>This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.</p>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -437,13 +438,13 @@
 </table>
 </div>
 <section id="arguments">
-<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">#</a></h2>
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">texas_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">num_players</span></code>: Sets the number of players in the game. Minimum is 2.</p>
 <section id="observation-space">
-<h3>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">#</a></h3>
+<h3>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">¶</a></h3>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
 <p>The main observation space is a vector of 72 boolean integers. The first 52 entries depict the current player’s hand plus any community cards as follows</p>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -482,13 +483,13 @@
 </table>
 </div>
 <section id="legal-actions-mask">
-<h4>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Link to this heading">#</a></h4>
+<h4>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Link to this heading">¶</a></h4>
 <p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one
 whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
 </section>
 </section>
 <section id="action-space">
-<h3>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">#</a></h3>
+<h3>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">¶</a></h3>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -514,7 +515,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 </div>
 </section>
 <section id="rewards">
-<h3>Rewards<a class="headerlink" href="#rewards" title="Link to this heading">#</a></h3>
+<h3>Rewards<a class="headerlink" href="#rewards" title="Link to this heading">¶</a></h3>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -531,7 +532,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 </div>
 </section>
 <section id="version-history">
-<h3>Version History<a class="headerlink" href="#version-history" title="Link to this heading">#</a></h3>
+<h3>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>v4: Upgrade to RLCard 1.0.3 (1.11.0)</p></li>
 <li><p>v3: Fixed bug in arbitrary calls to observe() (1.8.0)</p></li>
@@ -542,10 +543,10 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 </section>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
-<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">texas_holdem_v4</span>
+<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">texas_holdem_v4</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">texas_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -568,30 +569,23 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 </section>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.classic.rlcard_envs.texas_holdem.env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.rlcard_envs.texas_holdem.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/rlcard_envs/texas_holdem/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.rlcard_envs.texas_holdem.env" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.rlcard_envs.texas_holdem.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/rlcard_envs/texas_holdem/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.rlcard_envs.texas_holdem.env" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.classic.rlcard_envs.texas_holdem.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.rlcard_envs.texas_holdem.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/rlcard_envs/texas_holdem/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.rlcard_envs.texas_holdem.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/rlcard_envs/texas_holdem/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env" title="Link to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/rlcard_envs/texas_holdem/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/rlcard_envs/texas_holdem/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.render" title="Link to this definition">¶</a></dt>
 <dd><p>Renders the environment as specified by self.render_mode.</p>
 <p>Render mode can be <cite>human</cite> to display a window.
 Other render modes in the default environments are <cite>‘rgb_array’</cite>
 which returns a numpy array and is supported by all environments outside of classic,
 and <cite>‘ansi’</cite> which returns the strings printed (specific to classic environments).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/rlcard_envs/texas_holdem/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.step" title="Link to this definition">#</a></dt>
-<dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
-<p>Automatically switches control to the next agent.</p>
 </dd></dl>
 
 </dd></dl>
@@ -687,7 +681,6 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 <li><a class="reference internal" href="#pettingzoo.classic.rlcard_envs.texas_holdem.env"><code class="docutils literal notranslate"><span class="pre">env</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env"><code class="docutils literal notranslate"><span class="pre">raw_env</span></code></a><ul>
 <li><a class="reference internal" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.render"><code class="docutils literal notranslate"><span class="pre">raw_env.render()</span></code></a></li>
-<li><a class="reference internal" href="#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env.step"><code class="docutils literal notranslate"><span class="pre">raw_env.step()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -778,8 +771,8 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=d48881cd"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     

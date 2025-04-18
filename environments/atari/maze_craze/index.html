@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Othello" href="../othello/" /><link rel="prev" title="Mario Bros" href="../mario_bros/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/atari/maze_craze.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Maze Craze - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -393,9 +393,10 @@
               <img class="farama-env-icon" src="../../../_static/img/icons/atari/maze_craze.png">
             </div>
             <section class="tex2jax_ignore mathjax_ignore" id="maze-craze">
-<h1>Maze Craze<a class="headerlink" href="#maze-craze" title="Link to this heading">#</a></h1>
+<h1>Maze Craze<a class="headerlink" href="#maze-craze" title="Link to this heading">¶</a></h1>
 <figure class="align-default" id="id1">
-<a class="reference internal image-reference" href="../../../_images/atari_maze_craze.gif"><img alt="../../../_images/atari_maze_craze.gif" src="../../../_images/atari_maze_craze.gif" style="width: 140px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/atari_maze_craze.gif"><img alt="../../../_images/atari_maze_craze.gif" src="../../../_images/atari_maze_craze.gif" style="width: 140px;" />
+</a>
 </figure>
 <p>This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.</p>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -447,7 +448,7 @@ create one wall at a time, when you create a new one, the old one disappears.</p
 <p>The first player to leave the maze scores +1, the other player scores -1 (unless that other player has already been captured in Robbers mode).</p>
 <p><a class="reference external" href="https://atariage.com/manual_html_page.php?SoftwareLabelID=295">Official Maze craze manual</a>. Note that the table of modes has some inaccuracies. In particular, game mode 12 has Blockade enabled, not mode 11.</p>
 <section id="environment-parameters">
-<h2>Environment parameters<a class="headerlink" href="#environment-parameters" title="Link to this heading">#</a></h2>
+<h2>Environment parameters<a class="headerlink" href="#environment-parameters" title="Link to this heading">¶</a></h2>
 <p>Some environment parameters are common to all Atari environments and are described in the <a class="reference internal" href="../"><span class="doc std std-doc">base Atari documentation</span></a>.</p>
 <p>Parameters specific to Maze Craze are</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">maze_craze_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">game_version</span><span class="o">=</span><span class="s2">&quot;robbers&quot;</span><span class="p">,</span> <span class="n">visibilty_level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -457,7 +458,7 @@ create one wall at a time, when you create a new one, the old one disappears.</p
 <p><code class="docutils literal notranslate"><span class="pre">visibilty_level</span></code>:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.</p>
 </section>
 <section id="action-space">
-<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">#</a></h2>
+<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">¶</a></h2>
 <p>In any given turn, an agent can choose from one of 18 actions.</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
@@ -526,7 +527,7 @@ create one wall at a time, when you create a new one, the old one disappears.</p
 </div>
 </section>
 <section id="version-history">
-<h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">#</a></h2>
+<h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>v3: Minimal Action Space (1.18.0)</p></li>
 <li><p>v2: Breaking changes to entire API (1.4.0)</p></li>
@@ -535,10 +536,10 @@ create one wall at a time, when you create a new one, the old one disappears.</p
 </ul>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
-<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">maze_craze_v3</span>
+<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">maze_craze_v3</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">maze_craze_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -559,8 +560,8 @@ create one wall at a time, when you create a new one, the old one disappears.</p
 </div>
 </section>
 <section id="parallel">
-<h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">maze_craze_v3</span>
+<h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">maze_craze_v3</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">maze_craze_v3</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -577,10 +578,10 @@ create one wall at a time, when you create a new one, the old one disappears.</p
 </section>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.atari.maze_craze.maze_craze.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.atari.maze_craze.maze_craze.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'robbers'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visibilty_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/atari/maze_craze/maze_craze/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.atari.maze_craze.maze_craze.raw_env" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.atari.maze_craze.maze_craze.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'robbers'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visibilty_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/atari/maze_craze/maze_craze/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.atari.maze_craze.maze_craze.raw_env" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -754,8 +755,8 @@ create one wall at a time, when you create a new one, the old one disappears.</p
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=d48881cd"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     

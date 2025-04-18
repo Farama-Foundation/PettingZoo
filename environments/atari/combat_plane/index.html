@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Combat: Tank" href="../combat_tank/" /><link rel="prev" title="Boxing" href="../boxing/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/atari/combat_plane.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.2.6 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Combat: Plane - PettingZoo Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -393,9 +393,10 @@
               <img class="farama-env-icon" src="../../../_static/img/icons/atari/combat_plane.png">
             </div>
             <section class="tex2jax_ignore mathjax_ignore" id="combat-plane">
-<h1>Combat: Plane<a class="headerlink" href="#combat-plane" title="Link to this heading">#</a></h1>
+<h1>Combat: Plane<a class="headerlink" href="#combat-plane" title="Link to this heading">¶</a></h1>
 <figure class="align-default" id="id1">
-<a class="reference internal image-reference" href="../../../_images/atari_combat_plane.gif"><img alt="../../../_images/atari_combat_plane.gif" src="../../../_images/atari_combat_plane.gif" style="width: 140px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/atari_combat_plane.gif"><img alt="../../../_images/atari_combat_plane.gif" src="../../../_images/atari_combat_plane.gif" style="width: 140px;" />
+</a>
 </figure>
 <p>This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.</p>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -446,7 +447,7 @@ you score a point.</p>
 <p>Whenever you score a point, you are rewarded +1 and your opponent is penalized -1.</p>
 <p><a class="reference external" href="https://atariage.com/manual_html_page.php?SoftwareID=935">Official Combat manual</a></p>
 <section id="environment-parameters">
-<h2>Environment parameters<a class="headerlink" href="#environment-parameters" title="Link to this heading">#</a></h2>
+<h2>Environment parameters<a class="headerlink" href="#environment-parameters" title="Link to this heading">¶</a></h2>
 <p>Some environment parameters are common to all Atari environments and are described in the <a class="reference internal" href="../"><span class="doc std std-doc">base Atari documentation</span></a>.</p>
 <p>Parameters specific to combat-plane are</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">combat_plane_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">game_version</span><span class="o">=</span><span class="s2">&quot;jet&quot;</span><span class="p">,</span> <span class="n">guided_missile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -456,7 +457,7 @@ you score a point.</p>
 <p><code class="docutils literal notranslate"><span class="pre">guided_missile</span></code>:  Whether the missile can be directed after being fired, or whether it is on a fixed path.</p>
 </section>
 <section id="action-space">
-<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">#</a></h2>
+<h2>Action Space<a class="headerlink" href="#action-space" title="Link to this heading">¶</a></h2>
 <p>In any given turn, an agent can choose from one of 18 actions.</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
@@ -525,7 +526,7 @@ you score a point.</p>
 </div>
 </section>
 <section id="version-history">
-<h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">#</a></h2>
+<h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>v2: Minimal Action Space (1.18.0)</p></li>
 <li><p>v1: Breaking changes to entire API (1.4.0)</p></li>
@@ -533,10 +534,10 @@ you score a point.</p>
 </ul>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
-<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">combat_plane_v2</span>
+<h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">combat_plane_v2</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">combat_plane_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -557,8 +558,8 @@ you score a point.</p>
 </div>
 </section>
 <section id="parallel">
-<h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.atari</span> <span class="kn">import</span> <span class="n">combat_plane_v2</span>
+<h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">combat_plane_v2</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">combat_plane_v2</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -575,10 +576,10 @@ you score a point.</p>
 </section>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.atari.combat_plane.combat_plane.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.atari.combat_plane.combat_plane.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bi-plane'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guided_missile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/atari/combat_plane/combat_plane/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.atari.combat_plane.combat_plane.raw_env" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.atari.combat_plane.combat_plane.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bi-plane'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guided_missile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/atari/combat_plane/combat_plane/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.atari.combat_plane.combat_plane.raw_env" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -752,8 +753,8 @@ you score a point.</p>
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4b4b37dc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=d48881cd"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
     
