@@ -20,8 +20,7 @@ paddle_location_mapping = {
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, dims, speed, location):
         self._side = paddle_location_mapping[location]
-        self.surf = pygame.Surface(dims)
-        self.rects = [self.surf.get_rect()]
+        self.rects = [pygame.Rect((0, 0), dims)]
         self._speed = speed
 
     def reset(self, area: pygame.Rect, speed: float) -> None:
@@ -96,8 +95,7 @@ class Paddle(pygame.sprite.Sprite):
             and b_speed[1] > 0
         ):
             b_rect.bottom = rect.top
-            if b_speed[1] > 0:
-                b_speed[1] *= -1
+            b_speed[1] *= -1
         # handle collision from bottom
         elif (
             b_rect.top < rect.bottom
@@ -105,6 +103,5 @@ class Paddle(pygame.sprite.Sprite):
             and b_speed[1] < 0
         ):
             b_rect.top = rect.bottom - 1
-            if b_speed[1] < 0:
-                b_speed[1] *= -1
+            b_speed[1] *= -1
         return True, b_rect, b_speed

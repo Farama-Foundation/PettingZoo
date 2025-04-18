@@ -89,18 +89,6 @@ FPS = 15
 __all__ = ["ManualPolicy", "env", "raw_env", "parallel_env"]
 
 
-def get_flat_shape(width, height, kernel_window_length=2):
-    return int(width * height / (kernel_window_length * kernel_window_length))
-
-
-def original_obs_shape(screen_width, screen_height, kernel_window_length=2):
-    return (
-        int(screen_height * 2 / kernel_window_length),
-        int(screen_width * 2 / (kernel_window_length)),
-        1,
-    )
-
-
 def get_valid_angle(randomizer):
     # generates an angle in [0, 2*np.pi) that
     # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range)
@@ -143,7 +131,6 @@ class CooperativePong:
         off_screen_penalty=-10,
         render_mode=None,
         render_ratio=2,
-        kernel_window_length=2,
         render_fps=15,
     ):
         super().__init__()
@@ -152,7 +139,6 @@ class CooperativePong:
         self.num_agents = 2
 
         self.render_ratio = render_ratio
-        self.kernel_window_length = kernel_window_length
 
         # Display screen
         self.s_width, self.s_height = 960 // render_ratio, 560 // render_ratio
@@ -164,13 +150,9 @@ class CooperativePong:
         self.action_space = [
             gymnasium.spaces.Discrete(3) for _ in range(self.num_agents)
         ]
-        original_shape = original_obs_shape(
-            self.s_width, self.s_height, kernel_window_length=kernel_window_length
-        )
-        original_color_shape = (original_shape[0], original_shape[1], 3)
         self.observation_space = [
             gymnasium.spaces.Box(
-                low=0, high=255, shape=(original_color_shape), dtype=np.uint8
+                low=0, high=255, shape=(self.s_height, self.s_width, 3), dtype=np.uint8
             )
             for _ in range(self.num_agents)
         ]
@@ -197,9 +179,8 @@ class CooperativePong:
             r_paddle_dims = (20 // render_ratio, 100 // render_ratio)
             self.p1 = Paddle(r_paddle_dims, right_paddle_speed, "right")
 
-        self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
+        self.agents = ["paddle_0", "paddle_1"]
 
-        # ball
         self.ball = Ball(
             randomizer,
             (20 // render_ratio, 20 // render_ratio),
@@ -344,7 +325,6 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):
-    # class env(MultiAgentEnv):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "cooperative_pong_v6",
@@ -363,11 +343,11 @@ class raw_env(AECEnv, EzPickle):
         self.possible_agents = self.agents[:]
         self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
-        # spaces
+
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.state_space = self.env.state_space
-        # dicts
+
         self.observations = {}
         self.rewards = self.env.rewards
         self.terminations = self.env.terminations
@@ -384,9 +364,6 @@ class raw_env(AECEnv, EzPickle):
 
     def action_space(self, agent):
         return self.action_spaces[agent]
-
-    # def convert_to_dict(self, list_of_list):
-    #     return dict(zip(self.agents, list_of_list))
 
     def _seed(self, seed=None):
         self.randomizer, seed = seeding.np_random(seed)

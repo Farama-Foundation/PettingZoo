@@ -10,17 +10,14 @@ class CakePaddle(Paddle):
         if self._side == PaddleLocation.PADDLE_LEFT:
             raise ValueError("CakePaddle does not support left paddle")
 
-        # surf is the right most block, they go to the left as numbers increase
+        # add remaining parts of the paddle
+        # rects[0] is on the right, they go to the left as index increase
         dims2 = dims[0], dims[1] * 2 // 3
-        self.surf2 = pygame.Surface(dims2)
         dims3 = dims[0], dims[1] * 1 // 3
-        self.surf3 = pygame.Surface(dims3)
         dims4 = dims[0], dims[1] // 12
-        self.surf4 = pygame.Surface(dims4)
-
-        self.rects.append(self.surf2.get_rect())
-        self.rects.append(self.surf3.get_rect())
-        self.rects.append(self.surf4.get_rect())
+        self.rects.append(pygame.Rect((0, 0), dims2))
+        self.rects.append(pygame.Rect((0, 0), dims3))
+        self.rects.append(pygame.Rect((0, 0), dims4))
 
     def reset(self, area: pygame.Rect, speed: float) -> None:
         """Resets the speed and location for a new game."""
