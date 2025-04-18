@@ -32,7 +32,7 @@ reward of `off_screen_penalty` (default -10) and the game ends.
 
 ### Manual Control
 
-Move the left paddle using the 'W' and 'S' keys. (Move the right paddle using 'UP' and 'DOWN' arrow keys - not currently working)
+Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP' and 'DOWN' arrow keys.
 
 ### Arguments
 

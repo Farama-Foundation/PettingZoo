@@ -35,12 +35,16 @@ class ManualPolicy:
         # TO-DO: show current agent observation if this is True
         self.show_obs = show_obs
 
-        # action mappings for all agents are the same
-        if True:
-            self.default_action: ActionType = 0
-            self.action_mapping: dict[int, ActionType] = dict()
+        self.default_action: ActionType = 0
+        self.action_mapping: dict[int, ActionType] = {}
+
+        # action mappings
+        if agent_id == 0:
             self.action_mapping[pygame.K_w] = 1
             self.action_mapping[pygame.K_s] = 2
+        elif agent_id == 1:
+            self.action_mapping[pygame.K_UP] = 1
+            self.action_mapping[pygame.K_DOWN] = 2
 
     def __call__(self, observation: ObsType, agent: AgentID) -> ActionType:
         """Apply the manual policy.
@@ -83,20 +87,31 @@ class ManualPolicy:
 if __name__ == "__main__":
     from pettingzoo.butterfly import cooperative_pong_v6
 
+    # which agents will be controlled by manual policies
+    MANUAL_AGENTS = [0, 1]
+
     env = cooperative_pong_v6.env(render_mode="human")
     env.reset()
 
+    # this allows holding down a key for continuous motion. Only a single
+    # key will be registered at a time.
+    pygame.key.set_repeat(True)
+
     clock = pygame.time.Clock()
-    manual_policy = cooperative_pong_v6.ManualPolicy(env)
+
+    manual_policies: dict[AgentID, cooperative_pong_v6.ManualPolicy] = {}
+    for agent_id in MANUAL_AGENTS:
+        new_policy = cooperative_pong_v6.ManualPolicy(env, agent_id)
+        manual_policies[new_policy.agent] = new_policy
 
     for agent in env.agent_iter():
         clock.tick(env.metadata["render_fps"])
 
         observation, reward, termination, truncation, info = env.last()
 
-        if agent == manual_policy.agent:
+        if agent in manual_policies:
             assert observation is not None
-            action = manual_policy(observation, agent)
+            action = manual_policies[agent](observation, agent)
         else:
             action = env.action_space(agent).sample()
 
