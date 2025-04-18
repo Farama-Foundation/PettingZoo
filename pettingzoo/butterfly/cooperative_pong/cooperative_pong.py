@@ -188,15 +188,14 @@ class CooperativePong:
         self.max_cycles = max_cycles
 
         # paddles
-        self.p0 = Paddle(
-            (20 // render_ratio, 80 // render_ratio), left_paddle_speed, "left"
-        )
+        l_paddle_dims = (20 // render_ratio, 80 // render_ratio)
+        self.p0 = Paddle(l_paddle_dims, left_paddle_speed, "left")
         if cake_paddle:
-            self.p1 = CakePaddle(right_paddle_speed, render_ratio=render_ratio)
+            r_paddle_dims = (30 // render_ratio, 120 // render_ratio)
+            self.p1 = CakePaddle(r_paddle_dims, right_paddle_speed, "right")
         else:
-            self.p1 = Paddle(
-                (20 // render_ratio, 100 // render_ratio), right_paddle_speed, "right"
-            )
+            r_paddle_dims = (20 // render_ratio, 100 // render_ratio)
+            self.p1 = Paddle(r_paddle_dims, right_paddle_speed, "right")
 
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
@@ -228,12 +227,8 @@ class CooperativePong:
         angle = get_valid_angle(self.randomizer)
         self.ball.reset(center=self.area.center, angle=angle)
 
-        self.p0.rect.midleft = self.area.midleft
-        self.p1.rect.midright = self.area.midright
-        self.p0.reset()
-        self.p1.reset()
-        self.p0.speed = self.speed[1]
-        self.p1.speed = self.speed[2]
+        self.p0.reset(self.area, self.speed[1])
+        self.p1.reset(self.area, self.speed[2])
 
         self.terminate = False
         self.truncate = False

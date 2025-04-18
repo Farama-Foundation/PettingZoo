@@ -62,8 +62,8 @@ def test_bounce_randomness() -> None:
     # and wide enough that the ball can't move through them
     p0 = Paddle((ball_speed + 5, height), 0, "left")
     p1 = Paddle((ball_speed + 5, height), 0, "right")
-    p0.rect.midleft = area.midleft
-    p1.rect.midright = area.midright
+    p0.rects[0].midleft = area.midleft
+    p1.rects[0].midright = area.midright
 
     randomizer, _ = seeding.np_random(seed=11)
 
