@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import cooperative_pong_v5` |
+| Import               | `from pettingzoo.butterfly import cooperative_pong_v6` |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -37,7 +37,7 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 ### Arguments
 
 ``` python
-cooperative_pong_v5.env(ball_speed=9, left_paddle_speed=12,
+cooperative_pong_v6.env(ball_speed=9, left_paddle_speed=12,
 right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False, max_reward=100, off_screen_penalty=-10)
 ```
 
@@ -59,6 +59,7 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 ### Version History
 
+* v6: Fixed incorrect termination condition (1.25.5)
 * v5: Fixed ball teleporting bugs
 * v4: Added max_reward and off_screen_penalty arguments and changed default, fixed glitch where ball would occasionally teleport, reward redesign (1.14.0)
 * v3: Change observation space to include entire screen (1.10.0)
@@ -313,16 +314,18 @@ class CooperativePong:
             # do the rest if not terminated
             if not self.terminate:
                 # update ball position
-                self.terminate = self.ball.update2(self.area, self.p0, self.p1)
+                self.ball.update2(self.area, self.p0, self.p1)
 
                 # do the miscellaneous stuff after the last agent has moved
                 # reward is the length of time ball is in play
                 reward = 0
                 # ball is out-of-bounds
-                if self.terminate:
+                if self.ball.is_out_of_bounds():
+                    self.terminate = True
                     reward = self.off_screen_penalty
                     self.score += reward
-                if not self.terminate:
+                else:
+                    self.terminate = False
                     self.num_frames += 1
                     reward = self.max_reward / self.max_cycles
                     self.score += reward
@@ -351,7 +354,7 @@ class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "cooperative_pong_v5",
+        "name": "cooperative_pong_v6",
         "is_parallelizable": True,
         "render_fps": FPS,
         "has_manual_policy": True,

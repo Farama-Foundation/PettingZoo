@@ -18,6 +18,7 @@ class Ball(pygame.sprite.Sprite):
         ]
         self.bounce_randomness = bounce_randomness
         self.randomizer = randomizer
+        self._out_of_bounds = False
 
     def reset(self, center: tuple[int, int], angle: float) -> None:
         """Reset speed and position of ball.
@@ -34,6 +35,11 @@ class Ball(pygame.sprite.Sprite):
             int(self.speed_val * np.cos(angle)),
             int(self.speed_val * np.sin(angle)),
         ]
+        self._out_of_bounds = False
+
+    def is_out_of_bounds(self) -> bool:
+        """Return True if the ball is out of bounds."""
+        return self._out_of_bounds
 
     def update2(self, area, p0, p1):
         # move ball rect
@@ -49,39 +55,40 @@ class Ball(pygame.sprite.Sprite):
             elif self.rect.top < area.top:
                 self.rect.top = area.top
                 self.speed[1] = -self.speed[1]
-            # right or left walls
-            else:
-                return True
 
+        # after bouncing back from the top/bottom, if it is still out of
+        # bounds, it is because it went out the left or right. No need to
+        # finish the update.
+        if not area.contains(self.rect):
+            self._out_of_bounds = True
+            return None
+
+        # Do ball and bat collide?
+        # add some randomness
+        r_val = 0
+        if self.bounce_randomness:
+            r_val = get_small_random_value(self.randomizer)
+
+        # ball in left half of screen
+        if self.rect.center[0] < area.center[0]:
+            is_collision, self.rect, self.speed = p0.process_collision(
+                self.rect, self.speed, 1
+            )
+            if is_collision:
+                self.speed = [
+                    self.speed[0] + np.sign(self.speed[0]) * r_val,
+                    self.speed[1] + np.sign(self.speed[1]) * r_val,
+                ]
+        # ball in right half
         else:
-            # Do ball and bat collide?
-            # add some randomness
-            r_val = 0
-            if self.bounce_randomness:
-                r_val = get_small_random_value(self.randomizer)
-
-            # ball in left half of screen
-            if self.rect.center[0] < area.center[0]:
-                is_collision, self.rect, self.speed = p0.process_collision(
-                    self.rect, self.speed, 1
-                )
-                if is_collision:
-                    self.speed = [
-                        self.speed[0] + np.sign(self.speed[0]) * r_val,
-                        self.speed[1] + np.sign(self.speed[1]) * r_val,
-                    ]
-            # ball in right half
-            else:
-                is_collision, self.rect, self.speed = p1.process_collision(
-                    self.rect, self.speed, 2
-                )
-                if is_collision:
-                    self.speed = [
-                        self.speed[0] + np.sign(self.speed[0]) * r_val,
-                        self.speed[1] + np.sign(self.speed[1]) * r_val,
-                    ]
-
-        return False
+            is_collision, self.rect, self.speed = p1.process_collision(
+                self.rect, self.speed, 2
+            )
+            if is_collision:
+                self.speed = [
+                    self.speed[0] + np.sign(self.speed[0]) * r_val,
+                    self.speed[1] + np.sign(self.speed[1]) * r_val,
+                ]
 
     def draw(self, screen):
         # screen.blit(self.surf, self.rect)

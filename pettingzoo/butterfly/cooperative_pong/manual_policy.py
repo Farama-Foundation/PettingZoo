@@ -48,13 +48,13 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import cooperative_pong_v5
+    from pettingzoo.butterfly import cooperative_pong_v6
 
-    env = cooperative_pong_v5.env(render_mode="human")
+    env = cooperative_pong_v6.env(render_mode="human")
     env.reset()
 
     clock = pygame.time.Clock()
-    manual_policy = cooperative_pong_v5.ManualPolicy(env)
+    manual_policy = cooperative_pong_v6.ManualPolicy(env)
 
     for agent in env.agent_iter():
         clock.tick(env.metadata["render_fps"])
