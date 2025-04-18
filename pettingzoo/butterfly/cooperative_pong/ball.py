@@ -19,6 +19,22 @@ class Ball(pygame.sprite.Sprite):
         self.bounce_randomness = bounce_randomness
         self.randomizer = randomizer
 
+    def reset(self, center: tuple[int, int], angle: float) -> None:
+        """Reset speed and position of ball.
+
+        The ball is centered on the given position and the direction of the
+        ball's motion is set to the given angle.
+
+        Args:
+          center: the new center of the ball
+          angle: the angle of the motion - used to set speed components.
+        """
+        self.rect.center = center
+        self.speed = [
+            int(self.speed_val * np.cos(angle)),
+            int(self.speed_val * np.sin(angle)),
+        ]
+
     def update2(self, area, p0, p1):
         # move ball rect
         self.rect.x += self.speed[0]

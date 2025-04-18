@@ -225,14 +225,9 @@ class CooperativePong:
 
     def reset(self, seed=None, options=None):
         # reset ball and paddle init conditions
-        self.ball.rect.center = self.area.center
         # set the direction to an angle between [0, 2*np.pi)
         angle = get_valid_angle(self.randomizer)
-        # angle = deg_to_rad(89)
-        self.ball.speed = [
-            int(self.ball.speed_val * np.cos(angle)),
-            int(self.ball.speed_val * np.sin(angle)),
-        ]
+        self.ball.reset(center=self.area.center, angle=angle)
 
         self.p0.rect.midleft = self.area.midleft
         self.p1.rect.midright = self.area.midright
