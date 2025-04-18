@@ -35,6 +35,7 @@ def change_speed_angle(
 class Ball(pygame.sprite.Sprite):
     def __init__(self, randomizer, dims, speed, bounce_randomness=False):
         self.surf = pygame.Surface(dims)
+        self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect()
         self.speed_val = speed
         self.speed = [
@@ -104,5 +105,4 @@ class Ball(pygame.sprite.Sprite):
             self.speed = change_speed_angle(self.speed, delta_angle)
 
     def draw(self, screen):
-        # screen.blit(self.surf, self.rect)
-        pygame.draw.rect(screen, (255, 255, 255), self.rect)
+        screen.blit(self.surf, self.rect)
