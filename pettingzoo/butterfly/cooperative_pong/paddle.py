@@ -1,8 +1,25 @@
+from enum import Enum
+
 import pygame
 
 
+class PaddleLocation(Enum):
+    """The location of the paddle."""
+
+    PADDLE_LEFT = 1
+    PADDLE_RIGHT = 2
+
+
+# map side to an index
+paddle_location_mapping = {
+    "left": PaddleLocation.PADDLE_LEFT,
+    "right": PaddleLocation.PADDLE_RIGHT,
+}
+
+
 class Paddle(pygame.sprite.Sprite):
-    def __init__(self, dims, speed):
+    def __init__(self, dims, speed, location):
+        self._side = paddle_location_mapping[location]
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
         self.speed = speed
@@ -27,7 +44,7 @@ class Paddle(pygame.sprite.Sprite):
             if area.contains(newpos):
                 self.rect = newpos
 
-    def process_collision(self, b_rect, b_speed, paddle_type):
+    def process_collision(self, b_rect, b_speed):
         """Process a collision.
 
         Args:
@@ -44,11 +61,13 @@ class Paddle(pygame.sprite.Sprite):
         if not self.rect.colliderect(b_rect):
             return False, b_rect, b_speed
         # handle collision from left or right
-        if paddle_type == 1 and b_rect.left < self.rect.right:
+        if self._side == PaddleLocation.PADDLE_LEFT and b_rect.left < self.rect.right:
             b_rect.left = self.rect.right
             if b_speed[0] < 0:
                 b_speed[0] *= -1
-        elif paddle_type == 2 and b_rect.right > self.rect.left:
+        elif (
+            self._side == PaddleLocation.PADDLE_RIGHT and b_rect.right > self.rect.left
+        ):
             b_rect.right = self.rect.left
             if b_speed[0] > 0:
                 b_speed[0] *= -1

@@ -91,13 +91,12 @@ class Ball(pygame.sprite.Sprite):
 
         # Do ball and paddle collide?
         if self._rect.center[0] < area.center[0]:  # ball in left half of screen
-            is_collision, self._rect, self._speed = p0.process_collision(
-                self._rect, self._speed, 1
-            )
+            paddle = p0
         else:  # ball in right half
-            is_collision, self._rect, self._speed = p1.process_collision(
-                self._rect, self._speed, 2
-            )
+            paddle = p1
+        is_collision, self._rect, self._speed = paddle.process_collision(
+            self._rect, self._speed
+        )
 
         # add randomness if there was a collision (if requested)
         if is_collision and self._bounce_randomness:

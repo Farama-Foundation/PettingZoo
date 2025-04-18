@@ -21,8 +21,8 @@ def test_bounds() -> None:
     ball_speed = 9
 
     area = pygame.Rect((0, 0, width, height))
-    p0 = Paddle((4, 4), 0)
-    p1 = Paddle((4, 4), 0)
+    p0 = Paddle((4, 4), 0, "left")
+    p1 = Paddle((4, 4), 0, "right")
 
     n_tests = 10000
     for seed in range(n_tests):
@@ -60,8 +60,8 @@ def test_bounce_randomness() -> None:
 
     # paddles are tall enough to cover entire side
     # and wide enough that the ball can't move through them
-    p0 = Paddle((ball_speed + 5, height), 0)
-    p1 = Paddle((ball_speed + 5, height), 0)
+    p0 = Paddle((ball_speed + 5, height), 0, "left")
+    p1 = Paddle((ball_speed + 5, height), 0, "right")
     p0.rect.midleft = area.midleft
     p1.rect.midright = area.midright
 

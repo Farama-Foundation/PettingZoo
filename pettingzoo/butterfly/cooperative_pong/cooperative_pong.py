@@ -188,12 +188,14 @@ class CooperativePong:
         self.max_cycles = max_cycles
 
         # paddles
-        self.p0 = Paddle((20 // render_ratio, 80 // render_ratio), left_paddle_speed)
+        self.p0 = Paddle(
+            (20 // render_ratio, 80 // render_ratio), left_paddle_speed, "left"
+        )
         if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed, render_ratio=render_ratio)
         else:
             self.p1 = Paddle(
-                (20 // render_ratio, 100 // render_ratio), right_paddle_speed
+                (20 // render_ratio, 100 // render_ratio), right_paddle_speed, "right"
             )
 
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
