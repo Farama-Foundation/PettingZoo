@@ -87,6 +87,8 @@ cooperative_pong_v6.env(
 
 """
 
+from __future__ import annotations
+
 from typing import Any, Literal, NewType, cast
 
 import gymnasium
