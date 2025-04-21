@@ -186,12 +186,15 @@ knights_archers_zombies_v10.env(
 
 """
 
+from __future__ import annotations
+
 import os
 import sys
 from itertools import repeat
 
 import gymnasium
 import numpy as np
+import numpy.typing as npt
 import pygame
 import pygame.gfxdraw
 from gymnasium.spaces import Box, Discrete, Sequence
@@ -213,6 +216,10 @@ sys.dont_write_bytecode = True
 __all__ = ["env", "parallel_env", "raw_env"]
 
 
+AgentID = str
+ObsTypeVector = npt.NDArray[np.float64]
+ObsTypeImage = npt.NDArray[np.uint8]
+ObsType = ObsTypeImage | ObsTypeVector
 ActionType = int
 
 
@@ -505,85 +512,91 @@ class raw_env(AECEnv, EzPickle):
                         self.zombie_list.remove(zombie)
                         arrow.archer.score += 1
 
-    def observe(self, agent):
-        if not self.vector_state:
-            screen = pygame.surfarray.pixels3d(self.screen)
+    def _observe_image(self, agent: AgentID) -> ObsTypeImage:
+        """Return observation for given agent as an image based observation."""
+        screen = pygame.surfarray.pixels3d(self.screen)
 
-            i = self.agent_name_mapping[agent]
-            agent_obj = self.agent_list[i]
-            agent_position = (agent_obj.rect.x, agent_obj.rect.y)
+        i = self.agent_name_mapping[agent]
+        agent_obj = self.agent_list[i]
+        agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
-            if not agent_obj.alive:
-                cropped = np.zeros((512, 512, 3), dtype=np.uint8)
-            else:
-                min_x = agent_position[0] - 256
-                max_x = agent_position[0] + 256
-                min_y = agent_position[1] - 256
-                max_y = agent_position[1] + 256
-                lower_y_bound = max(min_y, 0)
-                upper_y_bound = min(max_y, const.SCREEN_HEIGHT)
-                lower_x_bound = max(min_x, 0)
-                upper_x_bound = min(max_x, const.SCREEN_WIDTH)
-                startx = lower_x_bound - min_x
-                starty = lower_y_bound - min_y
-                endx = 512 + upper_x_bound - max_x
-                endy = 512 + upper_y_bound - max_y
-                cropped = np.zeros_like(self.observation_spaces[agent].low)
-                cropped[startx:endx, starty:endy, :] = screen[
-                    lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
-                ]
+        obs = np.zeros(self.observation_spaces[agent].shape, dtype=np.uint8)
+        if agent_obj.alive:
+            min_x = agent_position[0] - 256
+            max_x = agent_position[0] + 256
+            min_y = agent_position[1] - 256
+            max_y = agent_position[1] + 256
+            lower_y_bound = max(min_y, 0)
+            upper_y_bound = min(max_y, const.SCREEN_HEIGHT)
+            lower_x_bound = max(min_x, 0)
+            upper_x_bound = min(max_x, const.SCREEN_WIDTH)
+            startx = lower_x_bound - min_x
+            starty = lower_y_bound - min_y
+            endx = 512 + upper_x_bound - max_x
+            endy = 512 + upper_y_bound - max_y
+            obs[startx:endx, starty:endy, :] = screen[
+                lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
+            ]
 
-            return np.swapaxes(cropped, 1, 0)
+        return np.swapaxes(obs, 1, 0)
 
+    def _observe_vector(self, agent: AgentID) -> ObsTypeVector:
+        """Return observation for given agent as a vector based observation."""
+        # get the agent
+        agent = self.agent_list[self.agent_name_mapping[agent]]
+
+        # get the agent position
+        agent_state = agent.vector_state
+        agent_pos = np.expand_dims(agent_state[0:2], axis=0)
+
+        # get vector state of everything
+        vector_state = self.get_vector_state()
+        state = vector_state[:, -4:]
+        is_dead = np.sum(np.abs(state), axis=1) == 0.0
+        all_ids = vector_state[:, :-4]
+        all_pos = state[:, 0:2]
+        all_ang = state[:, 2:4]
+
+        # get relative positions
+        rel_pos = all_pos - agent_pos
+
+        # get norm of relative distance
+        norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True) / np.sqrt(2)
+
+        # kill dead things
+        all_ids[is_dead] *= 0
+        all_ang[is_dead] *= 0
+        rel_pos[is_dead] *= 0
+        norm_pos[is_dead] *= 0
+
+        # combine the typemasks, positions and angles
+        state = np.concatenate([all_ids, norm_pos, rel_pos, all_ang], axis=-1)
+
+        # get the agent state as absolute vector
+        # typemask is one longer to also include norm_pos
+        if self.use_typemasks:
+            typemask = np.zeros(self.typemask_width + 1)
+            typemask[-2] = 1.0
         else:
-            # get the agent
-            agent = self.agent_list[self.agent_name_mapping[agent]]
+            typemask = np.array([0.0])
+        agent_state = agent.vector_state
+        agent_state = np.concatenate([typemask, agent_state], axis=0)
+        agent_state = np.expand_dims(agent_state, axis=0)
 
-            # get the agent position
-            agent_state = agent.vector_state
-            agent_pos = np.expand_dims(agent_state[0:2], axis=0)
+        # prepend agent state to the observation
+        state = np.concatenate([agent_state, state], axis=0)
+        if self.sequence_space:
+            # remove pure zero rows if using sequence space
+            state = state[~np.all(state == 0, axis=-1)]
 
-            # get vector state of everything
-            vector_state = self.get_vector_state()
-            state = vector_state[:, -4:]
-            is_dead = np.sum(np.abs(state), axis=1) == 0.0
-            all_ids = vector_state[:, :-4]
-            all_pos = state[:, 0:2]
-            all_ang = state[:, 2:4]
+        return state
 
-            # get relative positions
-            rel_pos = all_pos - agent_pos
-
-            # get norm of relative distance
-            norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True) / np.sqrt(2)
-
-            # kill dead things
-            all_ids[is_dead] *= 0
-            all_ang[is_dead] *= 0
-            rel_pos[is_dead] *= 0
-            norm_pos[is_dead] *= 0
-
-            # combine the typemasks, positions and angles
-            state = np.concatenate([all_ids, norm_pos, rel_pos, all_ang], axis=-1)
-
-            # get the agent state as absolute vector
-            # typemask is one longer to also include norm_pos
-            if self.use_typemasks:
-                typemask = np.zeros(self.typemask_width + 1)
-                typemask[-2] = 1.0
-            else:
-                typemask = np.array([0.0])
-            agent_state = agent.vector_state
-            agent_state = np.concatenate([typemask, agent_state], axis=0)
-            agent_state = np.expand_dims(agent_state, axis=0)
-
-            # prepend agent state to the observation
-            state = np.concatenate([agent_state, state], axis=0)
-            if self.sequence_space:
-                # remove pure zero rows if using sequence space
-                state = state[~np.all(state == 0, axis=-1)]
-
-            return state
+    def observe(self, agent: AgentID) -> ObsType:
+        """Return the observation for the given agent."""
+        if self.vector_state:
+            return self._observe_vector(agent)
+        else:
+            return self._observe_image(agent)
 
     def state(self):
         """Returns an observation of the global environment."""
