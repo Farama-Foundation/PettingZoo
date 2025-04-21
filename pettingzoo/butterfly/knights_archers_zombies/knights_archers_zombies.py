@@ -505,19 +505,6 @@ class raw_env(AECEnv, EzPickle):
                         self.zombie_list.remove(zombie)
                         arrow.archer.score += 1
 
-    # Zombie reaches the End of the Screen
-    def zombie_endscreen(self, run, zombie_list):
-        for zombie in zombie_list:
-            if zombie.rect.y > const.SCREEN_HEIGHT - const.ZOMBIE_Y_SPEED:
-                run = False
-        return run
-
-    # Zombie Kills all Players
-    def zombie_all_players(self, run, knight_list, archer_list):
-        if not knight_list and not archer_list:
-            run = False
-        return run
-
     def observe(self, agent):
         if not self.vector_state:
             screen = pygame.surfarray.pixels3d(self.screen)
@@ -752,10 +739,10 @@ class raw_env(AECEnv, EzPickle):
             if self.screen is not None:
                 self.draw()
 
-            self.check_game_end()
+            self._check_game_over()
             self.frames += 1
 
-        terminate = not self.run
+        terminate = self.game_over
         truncate = self.frames >= self.max_cycles
         self.terminations = {a: terminate for a in self.agents}
         self.truncations = {a: truncate for a in self.agents}
@@ -844,17 +831,25 @@ class raw_env(AECEnv, EzPickle):
             pygame.quit()
             self.screen = None
 
-    def check_game_end(self):
-        # Zombie reaches the End of the Screen
-        self.run = self.zombie_endscreen(self.run, self.zombie_list)
+    def _check_zombie_escape(self) -> bool:
+        """Return True if Zombies won by reaching the end."""
+        for zombie in self.zombie_list:
+            if zombie.rect.y > const.SCREEN_HEIGHT - const.ZOMBIE_Y_SPEED:
+                return True
+        return False
 
-        # Zombie Kills all Players
-        self.run = self.zombie_all_players(self.run, self.knight_list, self.archer_list)
+    def _check_zombie_killall(self) -> bool:
+        """Return True if Zombies won by killing all players."""
+        return not bool(self.knight_list or self.archer_list)
+
+    def _check_game_over(self) -> None:
+        """Determine whether game is over and set self.game_over with result."""
+        self.game_over = self._check_zombie_escape() or self._check_zombie_killall()
 
     def reinit(self):
         # Game Variables
         self.score = 0
-        self.run = True
+        self.game_over = False
         self.zombie_spawn_rate = 0
 
         # Creating Sprite Groups
