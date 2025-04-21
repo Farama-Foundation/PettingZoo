@@ -386,12 +386,9 @@ class raw_env(AECEnv, EzPickle):
     def spawn_zombie(self):
         if len(self.zombie_list) < self.max_zombies:
             self.zombie_spawn_rate += 1
-            zombie = Zombie(self.np_random)
 
             if self.zombie_spawn_rate >= self.spawn_rate:
-                zombie.rect.x = self.np_random.integers(0, const.SCREEN_WIDTH)
-                zombie.rect.y = 5
-
+                zombie = Zombie(self.np_random)
                 self.zombie_list.add(zombie)
                 self.zombie_spawn_rate = 0
 
