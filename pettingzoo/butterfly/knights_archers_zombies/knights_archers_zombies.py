@@ -185,7 +185,6 @@ from gymnasium.spaces import Box, Discrete, Sequence
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
-from pettingzoo.butterfly.knights_archers_zombies.manual_policy import ManualPolicy
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 from pettingzoo.butterfly.knights_archers_zombies.src.players import Archer, Knight
@@ -197,7 +196,7 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 sys.dont_write_bytecode = True
 
 
-__all__ = ["ManualPolicy", "env", "parallel_env", "raw_env"]
+__all__ = ["env", "parallel_env", "raw_env"]
 
 
 def env(**kwargs):
