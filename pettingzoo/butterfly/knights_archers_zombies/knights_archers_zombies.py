@@ -428,7 +428,7 @@ class raw_env(AECEnv, EzPickle):
     def update_weapons(self):
         for agent in self.agent_list:
             for weapon in list(agent.weapons):
-                weapon.update()
+                weapon.act()
 
                 if not weapon.is_active:
                     agent.weapons.remove(weapon)
@@ -708,7 +708,7 @@ class raw_env(AECEnv, EzPickle):
 
         agent_action = Actions(action)
 
-        out_of_bounds = agent.update(agent_action)
+        out_of_bounds = agent.act(agent_action)
 
         # check for out of bounds death
         if self.line_death and out_of_bounds:
@@ -744,7 +744,7 @@ class raw_env(AECEnv, EzPickle):
 
             # update some zombies
             for zombie in self.zombie_list:
-                zombie.update()
+                zombie.act()
 
             # Spawning Zombies at Random Location at every 100 iterations
             self.spawn_zombie()

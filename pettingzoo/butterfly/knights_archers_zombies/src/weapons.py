@@ -33,7 +33,7 @@ class Arrow(pygame.sprite.Sprite):
             ]
         )
 
-    def update(self):
+    def act(self) -> None:
         if self.archer.alive:
             self.pos += self.direction * const.ARROW_SPEED
             self.rect.center = self.pos
@@ -72,7 +72,7 @@ class Sword(pygame.sprite.Sprite):
             ]
         )
 
-    def update(self) -> None:
+    def act(self) -> None:
         if self.knight.action == Actions.ActionAttack:
             self.active = True
 

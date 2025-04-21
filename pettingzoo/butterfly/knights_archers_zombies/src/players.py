@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
             ]
         )
 
-    def update(self, action: Actions) -> bool:
+    def act(self, action: Actions) -> bool:
         self.action = action
         went_out_of_bounds = False
 

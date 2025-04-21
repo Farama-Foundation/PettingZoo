@@ -45,7 +45,7 @@ class Zombie(pygame.sprite.Sprite):
             ]
         )
 
-    def update(self) -> None:
+    def act(self) -> None:
         """Move the zombie.
 
         The zombie always moves down the screen. Sometimes it will also move
