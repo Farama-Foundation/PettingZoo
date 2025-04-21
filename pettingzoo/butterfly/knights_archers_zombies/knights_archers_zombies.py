@@ -835,15 +835,10 @@ class raw_env(AECEnv, EzPickle):
         self.run = self.zombie_all_players(self.run, self.knight_list, self.archer_list)
 
     def reinit(self):
-        # Dictionaries for holding new players and their weapons
-        self.archer_dict = {}
-        self.knight_dict = {}
-
         # Game Variables
         self.score = 0
         self.run = True
         self.zombie_spawn_rate = 0
-        self.knight_player_num = self.archer_player_num = 0
 
         # Creating Sprite Groups
         self.zombie_list = pygame.sprite.Group()
@@ -857,26 +852,16 @@ class raw_env(AECEnv, EzPickle):
         self.dead_agents = []
 
         for i in range(self.num_archers):
-            name = "archer_" + str(i)
-            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(
-                agent_name=name
-            )
-            self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
-            self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
-            self.agent_list.append(self.archer_dict[f"archer{self.archer_player_num}"])
-            if i != self.num_archers - 1:
-                self.archer_player_num += 1
+            archer = Archer(agent_name=f"archer_{i}")
+            archer.offset(i * 50, 0)
+            self.archer_list.add(archer)
+            self.agent_list.append(archer)
 
         for i in range(self.num_knights):
-            name = "knight_" + str(i)
-            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(
-                agent_name=name
-            )
-            self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
-            self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
-            self.agent_list.append(self.knight_dict[f"knight{self.knight_player_num}"])
-            if i != self.num_knights - 1:
-                self.knight_player_num += 1
+            knight = Knight(agent_name=f"knight_{i}")
+            knight.offset(i * 50, 0)
+            self.knight_list.add(knight)
+            self.agent_list.append(knight)
 
         self.agent_name_mapping = {}
         a_count = 0
