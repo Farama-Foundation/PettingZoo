@@ -293,17 +293,7 @@ class raw_env(AECEnv, EzPickle):
         self.dead_agents = []
 
         self.agent_name_mapping = {}
-        a_count = 0
-        for i in range(self.num_archers):
-            a_name = "archer_" + str(i)
-            self.agents.append(a_name)
-            self.agent_name_mapping[a_name] = a_count
-            a_count += 1
-        for i in range(self.num_knights):
-            k_name = "knight_" + str(i)
-            self.agents.append(k_name)
-            self.agent_name_mapping[k_name] = a_count
-            a_count += 1
+        self._fill_agent_name_mapping()
 
         shape = (
             [512, 512, 3]
@@ -371,6 +361,23 @@ class raw_env(AECEnv, EzPickle):
 
     def action_space(self, agent):
         return self.action_spaces[agent]
+
+    def _fill_agent_name_mapping(self) -> None:
+        """Fill the agent name mapping.
+
+        The mapping is between agent_name to the index in agent list
+        """
+        a_count = 0
+        for i in range(self.num_archers):
+            a_name = "archer_" + str(i)
+            self.agents.append(a_name)
+            self.agent_name_mapping[a_name] = a_count
+            a_count += 1
+        for i in range(self.num_knights):
+            k_name = "knight_" + str(i)
+            self.agents.append(k_name)
+            self.agent_name_mapping[k_name] = a_count
+            a_count += 1
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -857,17 +864,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_list.append(knight)
 
         self.agent_name_mapping = {}
-        a_count = 0
-        for i in range(self.num_archers):
-            a_name = "archer_" + str(i)
-            self.agents.append(a_name)
-            self.agent_name_mapping[a_name] = a_count
-            a_count += 1
-        for i in range(self.num_knights):
-            k_name = "knight_" + str(i)
-            self.agents.append(k_name)
-            self.agent_name_mapping[k_name] = a_count
-            a_count += 1
+        self._fill_agent_name_mapping()
 
         if self.render_mode is not None:
             self.render()
