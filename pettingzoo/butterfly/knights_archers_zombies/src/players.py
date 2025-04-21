@@ -5,6 +5,7 @@ import numpy as np
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
+from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 
 
@@ -30,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 0
         self.ang_rate = 0
 
-        self.action = 6
+        self.action = Actions.ActionNone
         self.attacking = False
         self.weapon_timeout = 99
 
@@ -46,28 +47,26 @@ class Player(pygame.sprite.Sprite):
             ]
         )
 
-    def update(self, action):
+    def update(self, action: Actions) -> bool:
         self.action = action
         went_out_of_bounds = False
 
         if not self.attacking:
             move_angle = math.radians(self.angle + 90)
-            # Up and Down movement
-            if action == 1 and self.rect.y > 20:
+
+            if action == Actions.ActionForward and self.rect.y > 20:
                 self.rect.x += math.cos(move_angle) * self.speed
                 self.rect.y -= math.sin(move_angle) * self.speed
-            elif action == 2 and self.rect.y < const.SCREEN_HEIGHT - 40:
+            elif action == Actions.ActionBackward and self.rect.y < const.SCREEN_HEIGHT - 40:
                 self.rect.x -= math.cos(move_angle) * self.speed
                 self.rect.y += math.sin(move_angle) * self.speed
-            # Turn CCW & CW
-            elif action == 3:
+            elif action == Actions.ActionTurnCCW:
                 self.angle += self.ang_rate
-            elif action == 4:
+            elif action == Actions.ActionTurnCW:
                 self.angle -= self.ang_rate
-            # weapon and do nothing
-            elif action == 5 and self.alive:
+            elif action == Actions.ActionAttack and self.alive:
                 pass
-            elif action == 6:
+            elif action == Actions.ActionNone:
                 pass
 
             # Clamp to stay inside the screen

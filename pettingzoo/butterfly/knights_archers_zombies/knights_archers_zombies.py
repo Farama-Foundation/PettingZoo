@@ -27,6 +27,19 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
 and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all
 agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie.
+
+### Actions
+Each agent acts independently. The action space is [0,5] with the following meanings:
+
+* 0 - move forward
+* 1 - move backward
+* 2 - turn counter clockwise
+* 3 - turn clockwise
+* 4 - use weapon
+* 5 - do nothing
+
+Movement and turning is done at a fixed rate.
+
 There are two possible observation types for this environment, vectorized and image-based.
 
 #### Vectorized (Default)
@@ -186,6 +199,7 @@ from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
+from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 from pettingzoo.butterfly.knights_archers_zombies.src.players import Archer, Knight
 from pettingzoo.butterfly.knights_archers_zombies.src.weapons import Arrow, Sword
@@ -197,6 +211,9 @@ sys.dont_write_bytecode = True
 
 
 __all__ = ["env", "parallel_env", "raw_env"]
+
+
+ActionType = int
 
 
 def env(**kwargs):
@@ -393,8 +410,8 @@ class raw_env(AECEnv, EzPickle):
                 self.zombie_spawn_rate = 0
 
     # actuate weapons
-    def action_weapon(self, action, agent):
-        if action == 5:
+    def action_weapon(self, action: Actions, agent):
+        if action == Actions.ActionAttack:
             if agent.is_knight:
                 if agent.weapon_timeout > const.SWORD_TIMEOUT:
                     # make sure that the current knight doesn't have a sword already
@@ -670,7 +687,7 @@ class raw_env(AECEnv, EzPickle):
 
         return np.stack(state, axis=0)
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
         # check if the particular agent is done
         if (
             self.terminations[self.agent_selection]
@@ -689,9 +706,9 @@ class raw_env(AECEnv, EzPickle):
         self._cumulative_rewards[self.agent_selection] = 0
         agent.score = 0
 
-        # this is... so whacky... but all actions here are index with 1 so... ok
-        action = action + 1
-        out_of_bounds = agent.update(action)
+        agent_action = Actions(action)
+
+        out_of_bounds = agent.update(agent_action)
 
         # check for out of bounds death
         if self.line_death and out_of_bounds:
@@ -704,7 +721,7 @@ class raw_env(AECEnv, EzPickle):
             self.kill_list.append(agent.agent_name)
 
         # actuate the weapon if necessary
-        self.action_weapon(action, agent)
+        self.action_weapon(agent_action, agent)
 
         # Do these things once per cycle
         if self._agent_selector.is_last():

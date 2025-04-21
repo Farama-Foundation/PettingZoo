@@ -1,3 +1,16 @@
+from enum import Enum
+
+
+class Actions(Enum):
+    """Actions available for each agent."""
+    ActionForward = 0
+    ActionBackward = 1
+    ActionTurnCCW = 2
+    ActionTurnCW = 3
+    ActionAttack = 4
+    ActionNone = 5
+
+
 # video options
 FPS = 15
 SCREEN_WIDTH = 1280

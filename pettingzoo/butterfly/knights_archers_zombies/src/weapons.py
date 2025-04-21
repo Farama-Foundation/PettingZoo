@@ -5,6 +5,7 @@ import numpy as np
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
+from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 
 
@@ -71,8 +72,8 @@ class Sword(pygame.sprite.Sprite):
             ]
         )
 
-    def update(self):
-        if self.knight.action == 5:
+    def update(self) -> None:
+        if self.knight.action == Actions.ActionAttack:
             self.active = True
 
         if self.active and self.knight.alive:
