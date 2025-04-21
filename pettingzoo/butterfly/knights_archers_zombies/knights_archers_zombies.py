@@ -126,7 +126,6 @@ knights_archers_zombies_v10.env(
   max_arrows=10,
   killable_knights=True,
   killable_archers=True,
-  pad_observation=True,
   line_death=False,
   max_cycles=900,
   vector_state=True,
@@ -148,8 +147,6 @@ knights_archers_zombies_v10.env(
 `killable_knights`:  if set to False, knight agents cannot be killed by zombies.
 
 `killable_archers`:  if set to False, archer agents cannot be killed by zombies.
-
-`pad_observation`:  if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
 
 `line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
@@ -231,7 +228,6 @@ class raw_env(AECEnv, EzPickle):
         max_arrows=10,
         killable_knights=True,
         killable_archers=True,
-        pad_observation=True,
         line_death=False,
         max_cycles=900,
         vector_state=True,
@@ -248,7 +244,6 @@ class raw_env(AECEnv, EzPickle):
             max_arrows=max_arrows,
             killable_knights=killable_knights,
             killable_archers=killable_archers,
-            pad_observation=pad_observation,
             line_death=line_death,
             max_cycles=max_cycles,
             vector_state=vector_state,
@@ -284,7 +279,6 @@ class raw_env(AECEnv, EzPickle):
         self._seed()
         self.spawn_rate = spawn_rate
         self.max_cycles = max_cycles
-        self.pad_observation = pad_observation
         self.killable_knights = killable_knights
         self.killable_archers = killable_archers
         self.line_death = line_death
