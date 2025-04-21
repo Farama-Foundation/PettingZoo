@@ -13,7 +13,7 @@ class Arrow(pygame.sprite.Sprite):
         super().__init__()
         self.archer = archer
         self.image = get_image(os.path.join("img", "arrow.png"))
-        self.rect = self.image.get_rect(center=self.archer.pos)
+        self.rect = self.image.get_rect(center=self.archer.rect.center)
         self.image = pygame.transform.rotate(self.image, self.archer.angle)
 
         self.pos = pygame.Vector2(self.archer.rect.center)
