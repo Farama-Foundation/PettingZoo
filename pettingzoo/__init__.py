@@ -16,7 +16,7 @@ if sys.platform.startswith("linux"):
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
-__version__ = "1.24.4"
+__version__ = "1.25.0"
 
 try:
     import sys
