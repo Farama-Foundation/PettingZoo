@@ -1,6 +1,10 @@
+"""Players used in Knights-Archers-Zombies."""
+
 import os
+from typing import Any
 
 import numpy as np
+import numpy.typing as npt
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
@@ -9,15 +13,21 @@ from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    """Base class for a player's agent."""
+
+    def __init__(self, agent_name: str, image_name: str) -> None:
+        """Initialize a Player.
+
+        Args:
+            agent_name: name of the agent
+            image_name: filename of icon for agent
+        """
         super().__init__()
-        self.agent_name = None
+        self.agent_name = agent_name
+        self.image = get_image(os.path.join("img", image_name))
+        self.org_image = self.image.copy()
 
         self.rect = pygame.Rect(0.0, 0.0, 0.0, 0.0)
-        self.image = None
-        self.org_image = None
-
-        self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(0, -1)
 
         self.is_alive = True
@@ -27,16 +37,17 @@ class Player(pygame.sprite.Sprite):
         self.is_knight = False
 
         self.speed = 0
-        self.ang_rate = 0
+        self.ang_rate = const.PLAYER_ANG_RATE
 
         self.action = Actions.ActionNone
         self.attacking = False
         self.weapon_timeout = 99
 
-        self.weapons = pygame.sprite.Group()
+        self.weapons: pygame.sprite.Group[Any] = pygame.sprite.Group()
 
     @property
-    def vector_state(self):
+    def vector_state(self) -> npt.NDArray[np.float64]:
+        """Return the vector observation for the Player."""
         return np.array(
             [
                 self.rect.x / const.SCREEN_WIDTH,
@@ -57,7 +68,7 @@ class Player(pygame.sprite.Sprite):
             action: The action to perform
 
         Returns:
-            whether or not the player is in the screen after acting  
+            whether or not the player is in the screen after acting
         """
         self.action = action
         went_out_of_bounds = False
@@ -97,42 +108,47 @@ class Player(pygame.sprite.Sprite):
 
         return went_out_of_bounds
 
-    def _update_image(self):
+    def _update_image(self) -> None:
         """Update the image after rotating."""
         angle = self.direction.angle_to(pygame.Vector2(0, -1))
         self.image = pygame.transform.rotate(self.org_image, angle)
         self.rect = self.image.get_rect(center=self.rect.center)
 
-    def offset(self, x_offset, y_offset):
+    def offset(self, x_offset: int, y_offset: int) -> None:
         """Move the object by the given offsets."""
         self.rect.x += x_offset
         self.rect.y += y_offset
 
-    def is_done(self):
+    def is_done(self) -> bool:
+        """Return True if the agent is not alive."""
         return not self.is_alive
 
 
 class Archer(Player):
-    def __init__(self, agent_name):
-        super().__init__()
-        self.agent_name = agent_name
-        self.image = get_image(os.path.join("img", "archer.png"))
+    """Archer agent."""
+
+    def __init__(self, agent_name: str) -> None:
+        """Initialize an Archer.
+
+        Args:
+            agent_name: the name describing the agent
+        """
+        super().__init__(agent_name, "archer.png")
         self.rect = self.image.get_rect(center=(const.ARCHER_X, const.ARCHER_Y))
-        self.org_image = self.image.copy()
-        self.pos = pygame.Vector2(self.rect.center)
         self.is_archer = True
         self.speed = const.ARCHER_SPEED
-        self.ang_rate = const.PLAYER_ANG_RATE
 
 
 class Knight(Player):
-    def __init__(self, agent_name):
-        super().__init__()
-        self.agent_name = agent_name
-        self.image = get_image(os.path.join("img", "knight.png"))
+    """Knight agent."""
+
+    def __init__(self, agent_name: str) -> None:
+        """Initialize a Knight.
+
+        Args:
+            agent_name: the name describing the agent
+        """
+        super().__init__(agent_name, "knight.png")
         self.rect = self.image.get_rect(center=(const.KNIGHT_X, const.KNIGHT_Y))
-        self.org_image = self.image.copy()
-        self.pos = pygame.Vector2(self.rect.center)
         self.is_knight = True
         self.speed = const.KNIGHT_SPEED
-        self.ang_rate = const.PLAYER_ANG_RATE
