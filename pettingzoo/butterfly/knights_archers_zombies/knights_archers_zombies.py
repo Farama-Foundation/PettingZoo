@@ -40,10 +40,11 @@ Each agent acts independently. The action space is [0,5] with the following mean
 
 Movement and turning is done at a fixed rate.
 
-There are two possible observation types for this environment, vectorized and image-based.
+### Observations
+There are two possible observation types for this environment, vectorized (including two additional subtypes - sequence and typemasked) and image-based.
 
 #### Vectorized (Default)
-Pass the argument `vector_state=True` to the environment.
+Pass the argument `obs_method='vector'` to the environment.
 
 The observation is an (N+1)x5 array for each agent, where `N = num_archers + num_knights + num_swords + max_arrows + max_zombies`.
 > Note that `num_swords = num_knights`
@@ -92,7 +93,7 @@ For everything else:
 
 **Typemasks**
 
-There is an option to prepend a typemask to each row vector. This can be enabled by passing `use_typemasks=True` as a kwarg.
+There is an option to prepend a typemask to each row vector. This can be enabled by passing `obs_method='vector-masked'` as a kwarg.
 
 The typemask is a 6 wide vector, that looks something like this:
 ```
@@ -106,17 +107,20 @@ Each value corresponds to either
 
 If there is no entity there, the whole typemask (as well as the whole state vector) will be 0.
 
-As a result, setting `use_typemask=True` results in the observation being a (N+1)x11 vector.
+As a result, setting `obs_method='vector-masked'` results in the observation being a (N+1)x11 vector.
 
 **Sequence Space** (Experimental)
 
-There is an option to also pass `sequence_space=True` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size are no longer constant. In particular, `N` is now a
-variable number.
+There is an option to also pass `obs_method='vector-sequence'` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size
+are no longer constant. In particular, `N` is now a variable number.
 
 #### Image-based
-Pass the argument `vector_state=False` to the environment.
+Pass the argument `obs_method='image'` to the environment.
 
 Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.
+Each pixel is defined as RGB values in range [0, 255]. Areas outside of the game box are returned as black pixels: (0,0,0).
+Dead agents return all pixels as black
+
 
 ### Manual Control
 
@@ -141,9 +145,7 @@ knights_archers_zombies_v10.env(
   killable_archers=True,
   line_death=False,
   max_cycles=900,
-  vector_state=True,
-  use_typemasks=False,
-  sequence_space=False,
+  obs_method="vector",
 )
 ```
 
@@ -163,11 +165,7 @@ knights_archers_zombies_v10.env(
 
 `line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
-`vector_state`: whether to use vectorized state, if set to `False`, an image-based observation will be provided instead.
-
-`use_typemasks`: only relevant when `vector_state=True` is set, adds typemasks to the vectors.
-
-`sequence_space`: **experimental**, only relevant when `vector_state=True` is set, removes non-existent entities in the vector state.
+`obs_method`: method of observations to use. Options are 'vector' (default), 'image', 'vector-sequence', or 'vector-masked'. See docs above for details.
 
 
 ### Version History
@@ -190,6 +188,7 @@ from __future__ import annotations
 
 import os
 import sys
+from enum import Enum
 from itertools import repeat
 from typing import Any, cast
 
@@ -228,6 +227,15 @@ ObsType = ObsTypeImage | ObsTypeVector
 ActionType = int
 
 
+class ObsOptions(Enum):
+    """Types of Observations supported."""
+
+    IMAGE = "image"  # uses ObsTypeImage
+    VECTOR = "vector"  # uses ObsTypeVector
+    VECTOR_SEQUENCE = "vector-sequence"  # uses ObsTypeVector
+    VECTOR_MASKED = "vector-masked"  # uses ObsTypeVector
+
+
 def env(**kwargs: Any) -> AECEnv[AgentID, ObsType, ActionType]:
     aec_env: AECEnv[AgentID, ObsType, ActionType] = raw_env(**kwargs)
     aec_env = wrappers.AssertOutOfBoundsWrapper(aec_env)
@@ -258,9 +266,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         killable_archers: bool = True,
         line_death: bool = False,
         max_cycles: int = 900,
-        vector_state: bool = True,
-        use_typemasks: bool = False,
-        sequence_space: bool = False,
+        obs_method: str = "vector",
         render_mode: str | None = None,
     ) -> None:
         EzPickle.__init__(
@@ -274,29 +280,29 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             killable_archers=killable_archers,
             line_death=line_death,
             max_cycles=max_cycles,
-            vector_state=vector_state,
-            use_typemasks=use_typemasks,
-            sequence_space=sequence_space,
+            obs_method=obs_method,
             render_mode=render_mode,
         )
+        try:
+            self.obs_type = ObsOptions(obs_method)
+        except ValueError as e:
+            raise ValueError(f"Invalid 'obs_method': {obs_method}") from e
+
         # variable state space
-        self.sequence_space = sequence_space
-        if self.sequence_space:
-            assert vector_state, "vector_state must be True if sequence_space is True."
+        self.sequence_space = self.obs_type == ObsOptions.VECTOR_SEQUENCE
+        self.vector_state = self.obs_type != ObsOptions.IMAGE
 
-            assert (
-                use_typemasks
-            ), "use_typemasks should be True if sequence_space is True"
-
-        # whether we want RGB state or vector state
-        self.vector_state = vector_state
         # agents + zombies + weapons
         self.num_tracked = (
             num_archers + num_knights + max_zombies + num_knights + max_arrows
         )
-        self.use_typemasks = True if sequence_space else use_typemasks
+
+        self.use_typemasks = self.obs_type in [
+            ObsOptions.VECTOR_SEQUENCE,
+            ObsOptions.VECTOR_MASKED,
+        ]
         self.typemask_width = 6
-        self.vector_width = 4 + self.typemask_width if use_typemasks else 4
+        self.vector_width = 4 + self.typemask_width if self.use_typemasks else 4
 
         # Game Status
         self.zombie_spawn_rate = 0
