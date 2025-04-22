@@ -1,4 +1,3 @@
-import math
 import os
 
 import numpy as np
@@ -15,7 +14,8 @@ class Arrow(pygame.sprite.Sprite):
         self.archer = archer
         self.image = get_image(os.path.join("img", "arrow.png"))
         self.rect = self.image.get_rect(center=self.archer.rect.center)
-        self.image = pygame.transform.rotate(self.image, self.archer.angle)
+        angle = self.archer.direction.angle_to(pygame.Vector2(0, -1))
+        self.image = pygame.transform.rotate(self.image, angle)
 
         self.pos = pygame.Vector2(self.archer.rect.center)
         self.direction = self.archer.direction
@@ -83,15 +83,13 @@ class Sword(pygame.sprite.Sprite):
                 self.phase -= 1
                 self.knight.attacking = True
 
-                angle = math.radians(
-                    self.knight.angle + 90 + const.SWORD_SPEED * self.phase
-                )
+                new_dir = self.knight.direction.rotate(-const.SWORD_SPEED * self.phase)
                 self.rect = self.image.get_rect(center=self.knight.rect.center)
-                self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (
-                    math.cos(angle) * (self.knight.rect.width / 2)
+                self.rect.x += (
+                    new_dir[0] * (self.rect.width + self.knight.rect.width) / 2
                 )
-                self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (
-                    math.sin(angle) * (self.knight.rect.height / 2)
+                self.rect.y += (
+                    new_dir[1] * (self.rect.height + self.knight.rect.height) / 2
                 )
             else:
                 self.phase = const.MAX_PHASE

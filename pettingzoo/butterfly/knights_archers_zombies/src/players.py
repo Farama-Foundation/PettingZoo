@@ -1,4 +1,3 @@
-import math
 import os
 
 import numpy as np
@@ -18,7 +17,6 @@ class Player(pygame.sprite.Sprite):
         self.image = None
         self.org_image = None
 
-        self.angle = 0
         self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(0, -1)
 
@@ -48,23 +46,39 @@ class Player(pygame.sprite.Sprite):
         )
 
     def act(self, action: Actions) -> bool:
+        """Perform the given action.
+
+        This moves/turns the player. Attacks are handled elsewhere.
+        It also checks that the player is within the bounds.
+        If a move would take the player out of the box, it is instead
+        moved to the edge and the out of bounds status is returned.
+
+        Args:
+            action: The action to perform
+
+        Returns:
+            whether or not the player is in the screen after acting  
+        """
         self.action = action
         went_out_of_bounds = False
 
         if not self.attacking:
-            move_angle = math.radians(self.angle + 90)
-
             if action == Actions.ActionForward and self.rect.y > 20:
-                self.rect.x += math.cos(move_angle) * self.speed
-                self.rect.y -= math.sin(move_angle) * self.speed
-            elif action == Actions.ActionBackward and self.rect.y < const.SCREEN_HEIGHT - 40:
-                self.rect.x -= math.cos(move_angle) * self.speed
-                self.rect.y += math.sin(move_angle) * self.speed
+                self.rect.x += round(self.direction[0] * self.speed)
+                self.rect.y += round(self.direction[1] * self.speed)
+            elif (
+                action == Actions.ActionBackward
+                and self.rect.y < const.SCREEN_HEIGHT - 40
+            ):
+                self.rect.x -= round(self.direction[0] * self.speed)
+                self.rect.y -= round(self.direction[1] * self.speed)
             elif action == Actions.ActionTurnCCW:
-                self.angle += self.ang_rate
+                self.direction = self.direction.rotate(-self.ang_rate)
+                self._update_image()
             elif action == Actions.ActionTurnCW:
-                self.angle -= self.ang_rate
-            elif action == Actions.ActionAttack and self.alive:
+                self.direction = self.direction.rotate(self.ang_rate)
+                self._update_image()
+            elif action == Actions.ActionAttack and self._is_alive:
                 pass
             elif action == Actions.ActionNone:
                 pass
@@ -81,12 +95,16 @@ class Player(pygame.sprite.Sprite):
         else:
             self.weapon_timeout = 0
 
-        self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
-        self.image = pygame.transform.rotate(self.org_image, self.angle)
-        self.rect = self.image.get_rect(center=self.rect.center)
         return went_out_of_bounds
 
+    def _update_image(self):
+        """Update the image after rotating."""
+        angle = self.direction.angle_to(pygame.Vector2(0, -1))
+        self.image = pygame.transform.rotate(self.org_image, angle)
+        self.rect = self.image.get_rect(center=self.rect.center)
+
     def offset(self, x_offset, y_offset):
+        """Move the object by the given offsets."""
         self.rect.x += x_offset
         self.rect.y += y_offset
 
