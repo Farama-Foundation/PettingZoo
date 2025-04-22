@@ -331,52 +331,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.agent_name_mapping: dict[str, int] = {}
         self._fill_agent_name_mapping()
 
-        shape = (
-            [512, 512, 3]
-            if not self.vector_state
-            else [self.num_tracked + 1, self.vector_width + 1]
-        )
-        low = 0 if not self.vector_state else -1.0
-        high = 255 if not self.vector_state else 1.0
-        dtype: type[np.floating[Any]] | type[np.integer[Any]] = (
-            np.uint8 if not self.vector_state else np.float64
-        )
-        if not self.sequence_space:
-            obs_space = Box(low=low, high=high, shape=shape, dtype=dtype)
-            self.observation_spaces = dict(
-                zip(
-                    self.agents,
-                    [obs_space for _ in enumerate(self.agents)],
-                )
-            )
-        else:
-            box_space = Box(low=low, high=high, shape=[shape[-1]], dtype=dtype)
-            obs_sequence_space = Sequence(space=box_space, stack=True)
-            self.observation_spaces = dict(
-                zip(
-                    self.agents,
-                    [obs_sequence_space for _ in enumerate(self.agents)],
-                )
-            )
-
-        self.action_spaces = dict(
-            zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
-        )
-
-        shape = (
-            [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
-            if not self.vector_state
-            else [self.num_tracked, self.vector_width]
-        )
-        low = 0 if not self.vector_state else -1.0
-        high = 255 if not self.vector_state else 1.0
-        dtype = np.uint8 if not self.vector_state else np.float64
-        self.state_space = Box(
-            low=low,
-            high=high,
-            shape=shape,
-            dtype=dtype,
-        )
+        self._build_spaces()
         self.possible_agents = self.agents
 
         if self.render_mode == "human":
@@ -393,6 +348,44 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         self._agent_selector = AgentSelector(self.agents)
         self.reinit()
+
+    def _build_spaces(self) -> None:
+        """Build the observation, action, and state spaces."""
+        # Observation space
+        if self.vector_state:
+            if self.sequence_space:
+                shape = [self.num_tracked + 1, self.vector_width + 1]
+            else:
+                shape = [self.vector_width + 1]
+
+            box_space = Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
+
+            if self.sequence_space:
+                obs_space: Box | Sequence = Sequence(space=box_space, stack=True)
+            else:
+                obs_space = box_space
+        else:  # image space
+            obs_space = Box(low=0, high=255, shape=[512, 512, 3], dtype=np.uint8)
+
+        self.observation_spaces = dict(
+            zip(
+                self.agents,
+                [obs_space for _ in enumerate(self.agents)],
+            )
+        )
+
+        # Action space
+        self.action_spaces = dict(
+            zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
+        )
+
+        # State space
+        if self.vector_state:
+            shape = [self.num_tracked, self.vector_width]
+            self.state_space = Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
+        else:  # image space
+            shape = [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
+            self.state_space = Box(low=0, high=255, shape=shape, dtype=np.uint8)
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.observation_spaces[agent]
