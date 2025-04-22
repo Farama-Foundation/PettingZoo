@@ -1,30 +1,40 @@
+"""Weapons for the KAZ game."""
+
 import os
 
 import numpy as np
+import numpy.typing as npt
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.players import (
+    Archer,
+    Knight,
+    Player,
+)
 
 
-class Arrow(pygame.sprite.Sprite):
-    def __init__(self, archer):
+class Weapon(pygame.sprite.Sprite):
+    """Base class for a weapon."""
+
+    def __init__(self, player: Player, image_name: str) -> None:
+        """Initialize a weapon.
+
+        Args:
+            player: The player the weapon is from
+            image_name: The filename of the image to render.
+        """
         super().__init__()
-        self.archer = archer
-        self.image = get_image(os.path.join("img", "arrow.png"))
-        self.rect = self.image.get_rect(center=self.archer.rect.center)
-        angle = self.archer.direction.angle_to(pygame.Vector2(0, -1))
-        self.image = pygame.transform.rotate(self.image, angle)
-
-        self.pos = pygame.Vector2(self.archer.rect.center)
-        self.direction = self.archer.direction
-
-        # reset the archer timeout when arrow fired
-        archer.weapon_timeout = 0
+        self.player = player
+        self.image = get_image(os.path.join("img", image_name))
+        self.rect = self.image.get_rect(center=self.player.rect.center)
+        self.direction = self.player.direction
 
     @property
-    def vector_state(self):
+    def vector_state(self) -> npt.NDArray[np.float64]:
+        """Return a vector observation of the weapon."""
         return np.array(
             [
                 self.rect.x / const.SCREEN_WIDTH,
@@ -33,15 +43,34 @@ class Arrow(pygame.sprite.Sprite):
             ]
         )
 
+
+class Arrow(Weapon):
+    """An arrow fired by an archer."""
+
+    def __init__(self, archer: Archer) -> None:
+        """Initialize an Arrow fired by the given archer."""
+        super().__init__(archer, "arrow.png")
+
+        # rotate the arrow to align with archer who fired it
+        angle = self.player.direction.angle_to(pygame.Vector2(0, -1))
+        self.image = pygame.transform.rotate(self.image, angle)
+
+        # reset the archer timeout when arrow fired
+        archer.weapon_timeout = 0
+
     def act(self) -> None:
+        """Move the arrow along its path."""
         if self.player.is_alive:
-            self.pos += self.direction * const.ARROW_SPEED
-            self.rect.center = self.pos
+            self.rect.center = (
+                int(self.rect.center[0] + self.direction[0] * const.ARROW_SPEED),
+                int(self.rect.center[1] + self.direction[1] * const.ARROW_SPEED),
+            )
         else:
             self.rect.x = -100
 
     @property
-    def is_active(self):
+    def is_active(self) -> bool:
+        """Return True if the arrow is active."""
         if self.rect.x < 0 or self.rect.y < 0:
             return False
         if self.rect.x > const.SCREEN_WIDTH or self.rect.y > const.SCREEN_HEIGHT:
@@ -49,30 +78,24 @@ class Arrow(pygame.sprite.Sprite):
         return True
 
 
-class Sword(pygame.sprite.Sprite):
-    def __init__(self, knight):
-        # the sword is actually a mace, but we refer to it as sword everywhere
-        super().__init__()
-        self.knight = knight
-        self.image = get_image(os.path.join("img", "mace.png"))
-        self.rect = self.image.get_rect(center=self.knight.rect.center)
-        self.direction = self.knight.direction
+class Sword(Weapon):
+    """A sword carried by a knight.
+
+    The 'sword' is actually rendered as a mace, but it is referred to as
+    a sword everywhere.
+    """
+
+    def __init__(self, knight: Knight) -> None:
+        """Initialize the sword object for the given knight."""
+        super().__init__(knight, "mace.png")
+        self.knight = self.player
         self.active = False
 
         # phase of the sword, starts at the left most part
         self.phase = const.MAX_PHASE
 
-    @property
-    def vector_state(self):
-        return np.array(
-            [
-                self.rect.x / const.SCREEN_WIDTH,
-                self.rect.y / const.SCREEN_HEIGHT,
-                *self.direction,
-            ]
-        )
-
     def act(self) -> None:
+        """Move the sword along its path."""
         if self.knight.action == Actions.ActionAttack:
             self.active = True
 
@@ -85,10 +108,10 @@ class Sword(pygame.sprite.Sprite):
 
                 new_dir = self.knight.direction.rotate(-const.SWORD_SPEED * self.phase)
                 self.rect = self.image.get_rect(center=self.knight.rect.center)
-                self.rect.x += (
+                self.rect.x += int(
                     new_dir[0] * (self.rect.width + self.knight.rect.width) / 2
                 )
-                self.rect.y += (
+                self.rect.y += int(
                     new_dir[1] * (self.rect.height + self.knight.rect.height) / 2
                 )
             else:
@@ -97,5 +120,6 @@ class Sword(pygame.sprite.Sprite):
                 self.knight.attacking = False
 
     @property
-    def is_active(self):
+    def is_active(self) -> bool:
+        """Return True if the sword is still active."""
         return self.active
