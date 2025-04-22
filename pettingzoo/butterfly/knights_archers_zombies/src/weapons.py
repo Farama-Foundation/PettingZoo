@@ -34,7 +34,7 @@ class Arrow(pygame.sprite.Sprite):
         )
 
     def act(self) -> None:
-        if self.archer.alive:
+        if self.player.is_alive:
             self.pos += self.direction * const.ARROW_SPEED
             self.rect.center = self.pos
         else:
@@ -76,7 +76,7 @@ class Sword(pygame.sprite.Sprite):
         if self.knight.action == Actions.ActionAttack:
             self.active = True
 
-        if self.active and self.knight.alive:
+        if self.active and self.knight.is_alive:
             # phase goes from max to min because
             # it counts positive from CCW
             if self.phase > const.MIN_PHASE:

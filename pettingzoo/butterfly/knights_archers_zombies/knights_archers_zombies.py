@@ -464,7 +464,7 @@ class raw_env(AECEnv, EzPickle):
             )
 
             for knight in zombie_knight_list:
-                knight.alive = False
+                knight.is_alive = False
                 knight.weapons.empty()
 
                 if knight.agent_name not in self.kill_list:
@@ -480,7 +480,7 @@ class raw_env(AECEnv, EzPickle):
             )
 
             for archer in zombie_archer_list:
-                archer.alive = False
+                archer.is_alive = False
                 self.archer_list.remove(archer)
                 if archer.agent_name not in self.kill_list:
                     self.kill_list.append(archer.agent_name)
@@ -521,7 +521,7 @@ class raw_env(AECEnv, EzPickle):
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         obs = np.zeros(self.observation_spaces[agent].shape, dtype=np.uint8)
-        if agent_obj.alive:
+        if agent_obj.is_alive:
             min_x = agent_position[0] - 256
             max_x = agent_position[0] + 256
             min_y = agent_position[1] - 256
@@ -712,7 +712,7 @@ class raw_env(AECEnv, EzPickle):
 
         # check for out of bounds death
         if self.line_death and out_of_bounds:
-            agent.alive = False
+            agent.is_alive = False
             if agent in self.archer_list:
                 self.archer_list.remove(agent)
             else:

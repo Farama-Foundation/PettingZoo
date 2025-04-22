@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(0, -1)
 
-        self.alive = True
+        self.is_alive = True
         self.score = 0
 
         self.is_archer = False
@@ -78,7 +78,7 @@ class Player(pygame.sprite.Sprite):
             elif action == Actions.ActionTurnCW:
                 self.direction = self.direction.rotate(self.ang_rate)
                 self._update_image()
-            elif action == Actions.ActionAttack and self._is_alive:
+            elif action == Actions.ActionAttack and self.is_alive:
                 pass
             elif action == Actions.ActionNone:
                 pass
@@ -109,7 +109,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += y_offset
 
     def is_done(self):
-        return not self.alive
+        return not self.is_alive
 
 
 class Archer(Player):
