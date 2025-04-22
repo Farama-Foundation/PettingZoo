@@ -191,6 +191,7 @@ from __future__ import annotations
 import os
 import sys
 from itertools import repeat
+from typing import Any, cast
 
 import gymnasium
 import numpy as np
@@ -204,7 +205,11 @@ from pettingzoo import AECEnv
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
-from pettingzoo.butterfly.knights_archers_zombies.src.players import Archer, Knight
+from pettingzoo.butterfly.knights_archers_zombies.src.players import (
+    Archer,
+    Knight,
+    Player,
+)
 from pettingzoo.butterfly.knights_archers_zombies.src.weapons import Arrow, Sword
 from pettingzoo.butterfly.knights_archers_zombies.src.zombie import Zombie
 from pettingzoo.utils import AgentSelector, wrappers
@@ -223,17 +228,17 @@ ObsType = ObsTypeImage | ObsTypeVector
 ActionType = int
 
 
-def env(**kwargs):
-    env = raw_env(**kwargs)
-    env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.OrderEnforcingWrapper(env)
-    return env
+def env(**kwargs: Any) -> AECEnv[AgentID, ObsType, ActionType]:
+    aec_env: AECEnv[AgentID, ObsType, ActionType] = raw_env(**kwargs)
+    aec_env = wrappers.AssertOutOfBoundsWrapper(aec_env)
+    aec_env = wrappers.OrderEnforcingWrapper(aec_env)
+    return aec_env
 
 
 parallel_env = parallel_wrapper_fn(env)
 
 
-class raw_env(AECEnv, EzPickle):
+class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "knights_archers_zombies_v10",
@@ -244,20 +249,20 @@ class raw_env(AECEnv, EzPickle):
 
     def __init__(
         self,
-        spawn_rate=20,
-        num_archers=2,
-        num_knights=2,
-        max_zombies=10,
-        max_arrows=10,
-        killable_knights=True,
-        killable_archers=True,
-        line_death=False,
-        max_cycles=900,
-        vector_state=True,
-        use_typemasks=False,
-        sequence_space=False,
-        render_mode=None,
-    ):
+        spawn_rate: int = 20,
+        num_archers: int = 2,
+        num_knights: int = 2,
+        max_zombies: int = 10,
+        max_arrows: int = 10,
+        killable_knights: bool = True,
+        killable_archers: bool = True,
+        line_death: bool = False,
+        max_cycles: int = 900,
+        vector_state: bool = True,
+        use_typemasks: bool = False,
+        sequence_space: bool = False,
+        render_mode: str | None = None,
+    ) -> None:
         EzPickle.__init__(
             self,
             spawn_rate=spawn_rate,
@@ -294,9 +299,10 @@ class raw_env(AECEnv, EzPickle):
         self.vector_width = 4 + self.typemask_width if use_typemasks else 4
 
         # Game Status
+        self.zombie_spawn_rate = 0
         self.frames = 0
         self.render_mode = render_mode
-        self.screen = None
+        self.screen: pygame.Surface | None = None
 
         # Game Constants
         self._seed()
@@ -311,12 +317,12 @@ class raw_env(AECEnv, EzPickle):
         self.max_arrows = max_arrows
 
         # Represents agents to remove at end of cycle
-        self.kill_list = []
-        self.agent_list = []
+        self.kill_list: list[AgentID] = []
+        self.agent_list: list[Player] = []
         self.agents = []
-        self.dead_agents = []
+        self.dead_agents: list[AgentID] = []
 
-        self.agent_name_mapping = {}
+        self.agent_name_mapping: dict[str, int] = {}
         self._fill_agent_name_mapping()
 
         shape = (
@@ -326,7 +332,9 @@ class raw_env(AECEnv, EzPickle):
         )
         low = 0 if not self.vector_state else -1.0
         high = 255 if not self.vector_state else 1.0
-        dtype = np.uint8 if not self.vector_state else np.float64
+        dtype: type[np.floating[Any]] | type[np.integer[Any]] = (
+            np.uint8 if not self.vector_state else np.float64
+        )
         if not self.sequence_space:
             obs_space = Box(low=low, high=high, shape=shape, dtype=dtype)
             self.observation_spaces = dict(
@@ -337,11 +345,11 @@ class raw_env(AECEnv, EzPickle):
             )
         else:
             box_space = Box(low=low, high=high, shape=[shape[-1]], dtype=dtype)
-            obs_space = Sequence(space=box_space, stack=True)
+            obs_sequence_space = Sequence(space=box_space, stack=True)
             self.observation_spaces = dict(
                 zip(
                     self.agents,
-                    [obs_space for _ in enumerate(self.agents)],
+                    [obs_sequence_space for _ in enumerate(self.agents)],
                 )
             )
 
@@ -380,10 +388,10 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = AgentSelector(self.agents)
         self.reinit()
 
-    def observation_space(self, agent):
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.action_spaces[agent]
 
     def _fill_agent_name_mapping(self) -> None:
@@ -403,11 +411,11 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-    def _seed(self, seed=None):
+    def _seed(self, seed: int | None = None) -> None:
         self.np_random, seed = seeding.np_random(seed)
 
     # Spawn Zombies at Random Location at every 100 iterations
-    def spawn_zombie(self):
+    def spawn_zombie(self) -> None:
         if len(self.zombie_list) < self.max_zombies:
             self.zombie_spawn_rate += 1
 
@@ -417,22 +425,22 @@ class raw_env(AECEnv, EzPickle):
                 self.zombie_spawn_rate = 0
 
     # actuate weapons
-    def action_weapon(self, action: Actions, agent):
+    def action_weapon(self, action: Actions, agent: Player) -> None:
         if action == Actions.ActionAttack:
             if agent.is_knight:
                 if agent.weapon_timeout > const.SWORD_TIMEOUT:
                     # make sure that the current knight doesn't have a sword already
                     if len(agent.weapons) == 0:
-                        agent.weapons.add(Sword(agent))
+                        agent.weapons.add(Sword(cast(Knight, agent)))
 
             if agent.is_archer:
                 if agent.weapon_timeout > const.ARROW_TIMEOUT:
                     # make sure that the screen has less arrows than allowable
                     if self.num_active_arrows < self.max_arrows:
-                        agent.weapons.add(Arrow(agent))
+                        agent.weapons.add(Arrow(cast(Archer, agent)))
 
     # move weapons
-    def update_weapons(self):
+    def update_weapons(self) -> None:
         for agent in self.agent_list:
             for weapon in list(agent.weapons):
                 weapon.act()
@@ -441,7 +449,7 @@ class raw_env(AECEnv, EzPickle):
                     agent.weapons.remove(weapon)
 
     @property
-    def num_active_arrows(self):
+    def num_active_arrows(self) -> int:
         num_arrows = 0
         for agent in self.agent_list:
             if agent.is_archer:
@@ -449,7 +457,7 @@ class raw_env(AECEnv, EzPickle):
         return num_arrows
 
     @property
-    def num_active_swords(self):
+    def num_active_swords(self) -> int:
         num_swords = 0
         for agent in self.agent_list:
             if agent.is_knight:
@@ -457,7 +465,7 @@ class raw_env(AECEnv, EzPickle):
         return num_swords
 
     # Zombie Kills the Knight (also remove the sword)
-    def zombit_hit_knight(self):
+    def zombit_hit_knight(self) -> None:
         for zombie in self.zombie_list:
             zombie_knight_list = pygame.sprite.spritecollide(
                 zombie, self.knight_list, True
@@ -473,7 +481,7 @@ class raw_env(AECEnv, EzPickle):
                 self.knight_list.remove(knight)
 
     # Zombie Kills the Archer
-    def zombie_hit_archer(self):
+    def zombie_hit_archer(self) -> None:
         for zombie in self.zombie_list:
             zombie_archer_list = pygame.sprite.spritecollide(
                 zombie, self.archer_list, True
@@ -486,7 +494,7 @@ class raw_env(AECEnv, EzPickle):
                     self.kill_list.append(archer.agent_name)
 
     # Zombie Kills the Sword
-    def sword_hit(self):
+    def sword_hit(self) -> None:
         for knight in self.knight_list:
             for sword in knight.weapons:
                 zombie_sword_list = pygame.sprite.spritecollide(
@@ -495,10 +503,10 @@ class raw_env(AECEnv, EzPickle):
 
                 for zombie in zombie_sword_list:
                     self.zombie_list.remove(zombie)
-                    sword.knight.score += 1
+                    sword.player.score += 1
 
     # Zombie Kills the Arrow
-    def arrow_hit(self):
+    def arrow_hit(self) -> None:
         for agent in self.agent_list:
             if agent.is_archer:
                 for arrow in list(agent.weapons):
@@ -510,17 +518,20 @@ class raw_env(AECEnv, EzPickle):
                     for zombie in zombie_arrow_list:
                         agent.weapons.remove(arrow)
                         self.zombie_list.remove(zombie)
-                        arrow.archer.score += 1
+                        arrow.player.score += 1
 
     def _observe_image(self, agent: AgentID) -> ObsTypeImage:
         """Return observation for given agent as an image based observation."""
+        assert self.screen is not None
         screen = pygame.surfarray.pixels3d(self.screen)
 
         i = self.agent_name_mapping[agent]
         agent_obj = self.agent_list[i]
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
-        obs = np.zeros(self.observation_spaces[agent].shape, dtype=np.uint8)
+        shape = self.observation_spaces[agent].shape
+        assert shape is not None
+        obs = np.zeros(shape, dtype=np.uint8)
         if agent_obj.is_alive:
             min_x = agent_position[0] - 256
             max_x = agent_position[0] + 256
@@ -543,10 +554,10 @@ class raw_env(AECEnv, EzPickle):
     def _observe_vector(self, agent: AgentID) -> ObsTypeVector:
         """Return observation for given agent as a vector based observation."""
         # get the agent
-        agent = self.agent_list[self.agent_name_mapping[agent]]
+        agent_obj = self.agent_list[self.agent_name_mapping[agent]]
 
         # get the agent position
-        agent_state = agent.vector_state
+        agent_state = agent_obj.vector_state
         agent_pos = np.expand_dims(agent_state[0:2], axis=0)
 
         # get vector state of everything
@@ -579,7 +590,7 @@ class raw_env(AECEnv, EzPickle):
             typemask[-2] = 1.0
         else:
             typemask = np.array([0.0])
-        agent_state = agent.vector_state
+        agent_state = agent_obj.vector_state
         agent_state = np.concatenate([typemask, agent_state], axis=0)
         agent_state = np.expand_dims(agent_state, axis=0)
 
@@ -598,9 +609,10 @@ class raw_env(AECEnv, EzPickle):
         else:
             return self._observe_image(agent)
 
-    def state(self):
+    def state(self) -> npt.NDArray[np.float64]:
         """Returns an observation of the global environment."""
         if not self.vector_state:
+            assert self.screen is not None
             state = pygame.surfarray.pixels3d(self.screen).copy()
             state = np.rot90(state, k=3)
             state = np.fliplr(state)
@@ -609,7 +621,7 @@ class raw_env(AECEnv, EzPickle):
 
         return state
 
-    def get_vector_state(self):
+    def get_vector_state(self) -> npt.NDArray[np.float64]:
         state = []
         typemask = np.array([])
 
@@ -792,7 +804,8 @@ class raw_env(AECEnv, EzPickle):
         if self.render_mode == "human":
             self.render()
 
-    def draw(self):
+    def draw(self) -> None:
+        assert self.screen is not None
         self.screen.fill((66, 40, 53))
         self.screen.blit(self.left_wall, self.left_wall.get_rect())
         self.screen.blit(self.right_wall, self.right_wall_rect)
@@ -809,12 +822,12 @@ class raw_env(AECEnv, EzPickle):
         self.archer_list.draw(self.screen)
         self.knight_list.draw(self.screen)
 
-    def render(self):
+    def render(self) -> npt.NDArray[np.uint8] | None:
         if self.render_mode is None:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         if self.screen is None:
             pygame.init()
@@ -826,6 +839,7 @@ class raw_env(AECEnv, EzPickle):
                 pygame.display.set_caption("Knights, Archers, Zombies")
             elif self.render_mode == "rgb_array":
                 self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+        assert self.screen is not None
 
         self.draw()
 
@@ -833,13 +847,14 @@ class raw_env(AECEnv, EzPickle):
         if self.render_mode == "human":
             pygame.display.flip()
             self.clock.tick(self.metadata["render_fps"])
+            # print("fps", self.clock.get_fps())
         return (
             np.transpose(observation, axes=(1, 0, 2))
             if self.render_mode == "rgb_array"
             else None
         )
 
-    def close(self):
+    def close(self) -> None:
         if self.screen is not None:
             pygame.quit()
             self.screen = None
@@ -859,16 +874,15 @@ class raw_env(AECEnv, EzPickle):
         """Determine whether game is over and set self.game_over with result."""
         self.game_over = self._check_zombie_escape() or self._check_zombie_killall()
 
-    def reinit(self):
+    def reinit(self) -> None:
         # Game Variables
-        self.score = 0
         self.game_over = False
         self.zombie_spawn_rate = 0
 
         # Creating Sprite Groups
-        self.zombie_list = pygame.sprite.Group()
-        self.archer_list = pygame.sprite.Group()
-        self.knight_list = pygame.sprite.Group()
+        self.zombie_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
+        self.archer_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
+        self.knight_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
 
         # agent_list is a list of instances
         # agents is s list of strings
@@ -897,7 +911,9 @@ class raw_env(AECEnv, EzPickle):
             self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         self.frames = 0
 
-    def reset(self, seed=None, options=None):
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
         if seed is not None:
             self._seed(seed=seed)
         self.agents = self.possible_agents

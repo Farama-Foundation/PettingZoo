@@ -3,7 +3,7 @@ from os import path as os_path
 import pygame
 
 
-def get_image(path):
+def get_image(path: str) -> pygame.Surface:
     cwd = os_path.dirname(os_path.dirname(__file__))
     image = pygame.image.load(cwd + "/" + path)
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
