@@ -337,17 +337,32 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-        self.left_wall = get_image(os.path.join("img", "left_wall.png"))
-        self.right_wall = get_image(os.path.join("img", "right_wall.png"))
-        self.right_wall_rect = self.right_wall.get_rect()
-        self.right_wall_rect.left = const.SCREEN_WIDTH - self.right_wall_rect.width
-        self.floor_patch1 = get_image(os.path.join("img", "patch1.png"))
-        self.floor_patch2 = get_image(os.path.join("img", "patch2.png"))
-        self.floor_patch3 = get_image(os.path.join("img", "patch3.png"))
-        self.floor_patch4 = get_image(os.path.join("img", "patch4.png"))
+        self.background = self._generate_background()
 
         self._agent_selector = AgentSelector(self.agents)
         self.reinit()
+
+    def _generate_background(self) -> pygame.Surface:
+        """Returns a background surface formed from image components."""
+        background = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+        left_wall = get_image(os.path.join("img", "left_wall.png"))
+        right_wall = get_image(os.path.join("img", "right_wall.png"))
+        right_wall_rect = right_wall.get_rect()
+        right_wall_rect.left = const.SCREEN_WIDTH - right_wall_rect.width
+        floor_patch1 = get_image(os.path.join("img", "patch1.png"))
+        floor_patch2 = get_image(os.path.join("img", "patch2.png"))
+        floor_patch3 = get_image(os.path.join("img", "patch3.png"))
+        floor_patch4 = get_image(os.path.join("img", "patch4.png"))
+
+        background.fill((66, 40, 53))
+        background.blit(left_wall, left_wall.get_rect())
+        background.blit(right_wall, right_wall_rect)
+        background.blit(floor_patch1, (500, 500))
+        background.blit(floor_patch2, (900, 30))
+        background.blit(floor_patch3, (150, 430))
+        background.blit(floor_patch4, (300, 50))
+        background.blit(floor_patch1, (1000, 250))
+        return background
 
     def _build_spaces(self) -> None:
         """Build the observation, action, and state spaces."""
@@ -805,14 +820,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def draw(self) -> None:
         assert self.screen is not None
-        self.screen.fill((66, 40, 53))
-        self.screen.blit(self.left_wall, self.left_wall.get_rect())
-        self.screen.blit(self.right_wall, self.right_wall_rect)
-        self.screen.blit(self.floor_patch1, (500, 500))
-        self.screen.blit(self.floor_patch2, (900, 30))
-        self.screen.blit(self.floor_patch3, (150, 430))
-        self.screen.blit(self.floor_patch4, (300, 50))
-        self.screen.blit(self.floor_patch1, (1000, 250))
+        self.screen.blit(self.background, (0, 0))
 
         # draw all the sprites
         self.zombie_list.draw(self.screen)
