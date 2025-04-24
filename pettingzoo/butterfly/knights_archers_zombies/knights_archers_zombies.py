@@ -283,6 +283,8 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             obs_method=obs_method,
             render_mode=render_mode,
         )
+        if render_mode is not None and render_mode not in self.metadata["render_modes"]:
+            raise ValueError(f"render_mode: '{render_mode}' is not supported.")
         try:
             self.obs_type = ObsOptions(obs_method)
         except ValueError as e:
