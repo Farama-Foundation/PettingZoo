@@ -394,12 +394,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         else:  # image space
             obs_space = Box(low=0, high=255, shape=[512, 512, 3], dtype=np.uint8)
 
-        self.observation_spaces = dict(
-            zip(
-                self.agents,
-                [obs_space for _ in enumerate(self.agents)],
-            )
-        )
+        return {i: obs_space for i in self.possible_agents}
 
     def _build_action_spaces(self) -> dict[AgentID, gymnasium.spaces.Space[Any]]:
         """Create and return the action spaces for the object."""
@@ -914,11 +909,11 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.agents = self.possible_agents
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.rewards = {i: 0 for i in self.agents}
         self._cumulative_rewards = {a: 0 for a in self.agents}
-        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
-        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
+        self.infos = {i: {} for i in self.agents}
         self.reinit()
 
 
