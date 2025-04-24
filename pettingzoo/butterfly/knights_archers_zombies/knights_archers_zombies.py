@@ -328,8 +328,10 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.dead_agents: list[AgentID] = []
 
         self.possible_agents = self._build_possible_agents()
+        self.observation_spaces = self._build_observation_spaces()
+        self.action_spaces = self._build_action_spaces()
+        self.state_space = self._build_state_space()
 
-        self._build_spaces()
         self.agents = self.possible_agents[:]
 
         if self.render_mode == "human":
@@ -375,14 +377,13 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         background.blit(floor_patch1, (1000, 250))
         return background
 
-    def _build_spaces(self) -> None:
-        """Build the observation, action, and state spaces."""
-        # Observation space
+    def _build_observation_spaces(self) -> dict[AgentID, gymnasium.spaces.Space[Any]]:
+        """Create and return the observation spaces for the object."""
         if self.vector_state:
             if self.sequence_space:
-                shape = [self.num_tracked + 1, self.vector_width + 1]
-            else:
                 shape = [self.vector_width + 1]
+            else:
+                shape = [self.num_tracked + 1, self.vector_width + 1]
 
             box_space = Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
 
@@ -400,18 +401,18 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             )
         )
 
-        # Action space
-        self.action_spaces = dict(
-            zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
-        )
+    def _build_action_spaces(self) -> dict[AgentID, gymnasium.spaces.Space[Any]]:
+        """Create and return the action spaces for the object."""
+        return {i: Discrete(6) for i in self.possible_agents}
 
-        # State space
+    def _build_state_space(self) -> Box:
+        """Create and return the state space for the object."""
         if self.vector_state:
             shape = [self.num_tracked, self.vector_width]
-            self.state_space = Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
+            return Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
         else:  # image space
             shape = [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
-            self.state_space = Box(low=0, high=255, shape=shape, dtype=np.uint8)
+            return Box(low=0, high=255, shape=shape, dtype=np.uint8)
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.observation_spaces[agent]
