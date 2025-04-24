@@ -813,6 +813,19 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.archer_list.draw(self.screen)
         self.knight_list.draw(self.screen)
 
+    def _get_screen(self) -> pygame.Surface:
+        """Return a newly created pygame surface."""
+        pygame.init()
+
+        if self.render_mode == "human":
+            screen = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
+            pygame.display.set_caption("Knights, Archers, Zombies")
+            return screen
+        elif self.render_mode == "rgb_array":
+            return pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+
+        raise ValueError(f"Unknown render_mode: {self.render_mode}")
+
     def render(self) -> npt.NDArray[np.uint8] | None:
         if self.render_mode is None:
             gymnasium.logger.warn(
@@ -821,16 +834,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             return None
 
         if self.screen is None:
-            pygame.init()
-
-            if self.render_mode == "human":
-                self.screen = pygame.display.set_mode(
-                    [const.SCREEN_WIDTH, const.SCREEN_HEIGHT]
-                )
-                pygame.display.set_caption("Knights, Archers, Zombies")
-            elif self.render_mode == "rgb_array":
-                self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
-        assert self.screen is not None
+            self.screen = self._get_screen()
 
         self.draw()
 
