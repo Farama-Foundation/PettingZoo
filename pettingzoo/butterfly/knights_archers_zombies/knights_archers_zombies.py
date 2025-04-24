@@ -324,15 +324,13 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         # Represents agents to remove at end of cycle
         self.kill_list: list[AgentID] = []
-        self.agent_list: list[Player] = []
-        self.agents = []
+        self.agent_map: dict[str, Player] = {}
         self.dead_agents: list[AgentID] = []
 
-        self.agent_name_mapping: dict[str, int] = {}
-        self._fill_agent_name_mapping()
+        self.possible_agents = self._build_possible_agents()
 
         self._build_spaces()
-        self.possible_agents = self.agents
+        self.agents = self.possible_agents[:]
 
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
@@ -341,6 +339,19 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         self._agent_selector = AgentSelector(self.agents)
         self.reinit()
+
+    def _build_possible_agents(self) -> list[AgentID]:
+        possible_agents: list[AgentID] = []
+
+        for i in range(self.num_archers):
+            agent_name = f"archer_{i}"
+            possible_agents.append(agent_name)
+
+        for i in range(self.num_knights):
+            agent_name = f"knight_{i}"
+            possible_agents.append(agent_name)
+
+        return possible_agents
 
     def _generate_background(self) -> pygame.Surface:
         """Returns a background surface formed from image components."""
@@ -408,23 +419,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.action_spaces[agent]
 
-    def _fill_agent_name_mapping(self) -> None:
-        """Fill the agent name mapping.
-
-        The mapping is between agent_name to the index in agent list
-        """
-        a_count = 0
-        for i in range(self.num_archers):
-            a_name = "archer_" + str(i)
-            self.agents.append(a_name)
-            self.agent_name_mapping[a_name] = a_count
-            a_count += 1
-        for i in range(self.num_knights):
-            k_name = "knight_" + str(i)
-            self.agents.append(k_name)
-            self.agent_name_mapping[k_name] = a_count
-            a_count += 1
-
     def _seed(self, seed: int | None = None) -> None:
         self.np_random, seed = seeding.np_random(seed)
 
@@ -455,7 +449,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     # move weapons
     def update_weapons(self) -> None:
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             for weapon in list(agent.weapons):
                 weapon.act()
 
@@ -465,7 +459,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     @property
     def num_active_arrows(self) -> int:
         num_arrows = 0
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             if agent.is_archer:
                 num_arrows += len(agent.weapons)
         return num_arrows
@@ -473,7 +467,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     @property
     def num_active_swords(self) -> int:
         num_swords = 0
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             if agent.is_knight:
                 num_swords += len(agent.weapons)
         return num_swords
@@ -521,7 +515,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     # Zombie Kills the Arrow
     def arrow_hit(self) -> None:
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             if agent.is_archer:
                 for arrow in list(agent.weapons):
                     zombie_arrow_list = pygame.sprite.spritecollide(
@@ -539,8 +533,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         assert self.screen is not None
         screen = pygame.surfarray.pixels3d(self.screen)
 
-        i = self.agent_name_mapping[agent]
-        agent_obj = self.agent_list[i]
+        agent_obj = self.agent_map[agent]
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         shape = self.observation_spaces[agent].shape
@@ -567,8 +560,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def _observe_vector(self, agent: AgentID) -> ObsTypeVector:
         """Return observation for given agent as a vector based observation."""
-        # get the agent
-        agent_obj = self.agent_list[self.agent_name_mapping[agent]]
+        agent_obj = self.agent_map[agent]
 
         # get the agent position
         agent_state = agent_obj.vector_state
@@ -642,7 +634,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         # handle agents
         for agent_name in self.possible_agents:
             if agent_name not in self.dead_agents:
-                agent = self.agent_list[self.agent_name_mapping[agent_name]]
+                agent = self.agent_map[agent_name]
 
                 if self.use_typemasks:
                     typemask = np.zeros(self.typemask_width)
@@ -657,7 +649,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 state.append(np.zeros(self.vector_width))
 
         # handle swords
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             if agent.is_knight:
                 for sword in agent.weapons:
                     if self.use_typemasks:
@@ -676,7 +668,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         )
 
         # handle arrows
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             if agent.is_archer:
                 for arrow in agent.weapons:
                     if self.use_typemasks:
@@ -722,11 +714,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             self._was_dead_step(action)
             return
 
-        # agent_list : list of agent instance indexed by number
-        # agent_name_mapping: dict of {str, idx} for agent index and name
-        # agent_selection : str representing the agent name
-        # agent: agent instance
-        agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
+        agent = self.agent_map[self.agent_selection]
 
         # cumulative rewards from previous iterations should be cleared
         self._cumulative_rewards[self.agent_selection] = 0
@@ -809,7 +797,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             self.agent_selection = self._agent_selector.next()
 
         self._clear_rewards()
-        next_agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
+        next_agent = self.agent_map[self.agent_selection]
         self.rewards[self.agent_selection] = next_agent.score
 
         self._accumulate_rewards()
@@ -824,7 +812,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         # draw all the sprites
         self.zombie_list.draw(self.screen)
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             agent.weapons.draw(self.screen)
         self.archer_list.draw(self.screen)
         self.knight_list.draw(self.screen)
@@ -891,26 +879,25 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.archer_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
         self.knight_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
 
-        # agent_list is a list of instances
-        # agents is s list of strings
-        self.agent_list = []
+        self.agent_map = {}
         self.agents = []
         self.dead_agents = []
 
         for i in range(self.num_archers):
-            archer = Archer(agent_name=f"archer_{i}")
+            agent_name = f"archer_{i}"
+            archer = Archer(agent_name=agent_name)
             archer.offset(i * 50, 0)
             self.archer_list.add(archer)
-            self.agent_list.append(archer)
+            self.agent_map[agent_name] = archer
+            self.agents.append(agent_name)
 
         for i in range(self.num_knights):
-            knight = Knight(agent_name=f"knight_{i}")
+            agent_name = f"knight_{i}"
+            knight = Knight(agent_name=agent_name)
             knight.offset(i * 50, 0)
             self.knight_list.add(knight)
-            self.agent_list.append(knight)
-
-        self.agent_name_mapping = {}
-        self._fill_agent_name_mapping()
+            self.agent_map[agent_name] = knight
+            self.agents.append(agent_name)
 
         if self.render_mode is not None:
             self.render()
