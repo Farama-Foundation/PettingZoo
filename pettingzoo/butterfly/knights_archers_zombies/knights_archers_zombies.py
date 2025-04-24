@@ -199,6 +199,7 @@ import pygame
 import pygame.gfxdraw
 from gymnasium.spaces import Box, Discrete, Sequence
 from gymnasium.utils import EzPickle, seeding
+from typing_extensions import TypeAlias
 
 from pettingzoo import AECEnv
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
@@ -221,9 +222,9 @@ __all__ = ["env", "parallel_env", "raw_env"]
 
 
 AgentID = str
-ObsTypeVector = npt.NDArray[np.float64]
-ObsTypeImage = npt.NDArray[np.uint8]
-ObsType = ObsTypeImage | ObsTypeVector
+ObsTypeVector: TypeAlias = npt.NDArray[np.float64]
+ObsTypeImage: TypeAlias = npt.NDArray[np.uint8]
+ObsType: TypeAlias = ObsTypeImage | ObsTypeVector
 ActionType = int
 
 
