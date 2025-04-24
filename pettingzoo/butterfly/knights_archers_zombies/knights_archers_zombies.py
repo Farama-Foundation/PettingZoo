@@ -615,7 +615,13 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         """Returns an observation of the global environment."""
         if not self.vector_state:
             assert self.screen is not None
-            state = pygame.surfarray.pixels3d(self.screen).copy()
+            # this makes a copy of the state, only including the
+            # expected size. It is intentionally done without using
+            # the .copy() function to accommodate a future case where
+            # the screen may be larger than the expected size.
+            state = pygame.surfarray.pixels3d(self.screen)[
+                : const.SCREEN_WIDTH, : const.SCREEN_HEIGHT, :
+            ]
             state = np.rot90(state, k=3)
             state = np.fliplr(state)
         else:
