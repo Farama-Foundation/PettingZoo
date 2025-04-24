@@ -3,16 +3,15 @@
 import os
 from typing import Any
 
-import numpy as np
-import numpy.typing as npt
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.mixins import VectorObservable
 
 
-class Player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite, VectorObservable):
     """Base class for a player's agent."""
 
     def __init__(self, agent_name: str, image_name: str) -> None:
@@ -44,17 +43,6 @@ class Player(pygame.sprite.Sprite):
         self.weapon_timeout = 99
 
         self.weapons: pygame.sprite.Group[Any] = pygame.sprite.Group()
-
-    @property
-    def vector_state(self) -> npt.NDArray[np.float64]:
-        """Return the vector observation for the Player."""
-        return np.array(
-            [
-                self.rect.x / const.SCREEN_WIDTH,
-                self.rect.y / const.SCREEN_HEIGHT,
-                *self.direction,
-            ]
-        )
 
     def act(self, action: Actions) -> bool:
         """Perform the given action.
@@ -137,6 +125,7 @@ class Archer(Player):
         self.rect = self.image.get_rect(center=(const.ARCHER_X, const.ARCHER_Y))
         self.is_archer = True
         self.speed = const.ARCHER_SPEED
+        self.typemask = [0, 1, 0, 0, 0, 0]
 
 
 class Knight(Player):
@@ -152,3 +141,4 @@ class Knight(Player):
         self.rect = self.image.get_rect(center=(const.KNIGHT_X, const.KNIGHT_Y))
         self.is_knight = True
         self.speed = const.KNIGHT_SPEED
+        self.typemask = [0, 0, 1, 0, 0, 0]

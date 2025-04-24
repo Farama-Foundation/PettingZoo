@@ -634,7 +634,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def get_vector_state(self) -> npt.NDArray[np.float64]:
         state = []
-        typemask = np.array([])
 
         # handle agents
         for agent_name in self.possible_agents:
@@ -642,14 +641,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 agent = self.agent_map[agent_name]
 
                 if self.use_typemasks:
-                    typemask = np.zeros(self.typemask_width)
-                    if agent.is_archer:
-                        typemask[1] = 1.0
-                    elif agent.is_knight:
-                        typemask[2] = 1.0
-
-                vector = np.concatenate((typemask, agent.vector_state), axis=0)
-                state.append(vector)
+                    state.append(agent.typemasked_vector_state)
+                else:
+                    state.append(agent.vector_state)
             else:
                 state.append(np.zeros(self.vector_width))
 
@@ -658,11 +652,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             if agent.is_knight:
                 for sword in agent.weapons:
                     if self.use_typemasks:
-                        typemask = np.zeros(self.typemask_width)
-                        typemask[4] = 1.0
-
-                    vector = np.concatenate((typemask, sword.vector_state), axis=0)
-                    state.append(vector)
+                        state.append(sword.typemasked_vector_state)
+                    else:
+                        state.append(sword.vector_state)
 
         # handle empty swords
         state.extend(
@@ -677,11 +669,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             if agent.is_archer:
                 for arrow in agent.weapons:
                     if self.use_typemasks:
-                        typemask = np.zeros(self.typemask_width)
-                        typemask[3] = 1.0
-
-                    vector = np.concatenate((typemask, arrow.vector_state), axis=0)
-                    state.append(vector)
+                        state.append(arrow.typemasked_vector_state)
+                    else:
+                        state.append(arrow.vector_state)
 
         # handle empty arrows
         state.extend(
@@ -694,11 +684,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         # handle zombies
         for zombie in self.zombie_list:
             if self.use_typemasks:
-                typemask = np.zeros(self.typemask_width)
-                typemask[0] = 1.0
-
-            vector = np.concatenate((typemask, zombie.vector_state), axis=0)
-            state.append(vector)
+                state.append(zombie.typemasked_vector_state)
+            else:
+                state.append(zombie.vector_state)
 
         # handle empty zombies
         state.extend(

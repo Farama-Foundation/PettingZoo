@@ -2,13 +2,12 @@
 
 import os
 
-import numpy as np
-import numpy.typing as npt
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.mixins import VectorObservable
 from pettingzoo.butterfly.knights_archers_zombies.src.players import (
     Archer,
     Knight,
@@ -16,7 +15,7 @@ from pettingzoo.butterfly.knights_archers_zombies.src.players import (
 )
 
 
-class Weapon(pygame.sprite.Sprite):
+class Weapon(pygame.sprite.Sprite, VectorObservable):
     """Base class for a weapon."""
 
     def __init__(self, player: Player, image_name: str) -> None:
@@ -32,17 +31,6 @@ class Weapon(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.player.rect.center)
         self.direction = self.player.direction
 
-    @property
-    def vector_state(self) -> npt.NDArray[np.float64]:
-        """Return a vector observation of the weapon."""
-        return np.array(
-            [
-                self.rect.x / const.SCREEN_WIDTH,
-                self.rect.y / const.SCREEN_HEIGHT,
-                *self.direction,
-            ]
-        )
-
 
 class Arrow(Weapon):
     """An arrow fired by an archer."""
@@ -57,6 +45,7 @@ class Arrow(Weapon):
 
         # reset the archer timeout when arrow fired
         archer.weapon_timeout = 0
+        self.typemask = [0, 0, 0, 1, 0, 0]
 
     def act(self) -> None:
         """Move the arrow along its path."""
@@ -93,6 +82,7 @@ class Sword(Weapon):
 
         # phase of the sword, starts at the left most part
         self.phase = const.MAX_PHASE
+        self.typemask = [0, 0, 0, 0, 1, 0]
 
     def act(self) -> None:
         """Move the sword along its path."""

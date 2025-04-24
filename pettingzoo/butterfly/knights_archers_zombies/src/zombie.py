@@ -2,20 +2,21 @@
 import os
 
 import numpy as np
-import numpy.typing as npt
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.mixins import VectorObservable
 
 
-class Zombie(pygame.sprite.Sprite):
+class Zombie(pygame.sprite.Sprite, VectorObservable):
     """A zombie for the Knight-Archers-Zombie game."""
+
     # this is the valid range of x values allowed. It corresponds to the
     # visible region on the screen that is between the two walls.
     x_range = [const.WALL_WIDTH, const.SCREEN_WIDTH - const.WALL_WIDTH]
 
-    def __init__(self, randomizer:np.random.Generator) -> None:
+    def __init__(self, randomizer: np.random.Generator) -> None:
         """Initialize the Zombie agent.
 
         Args:
@@ -32,18 +33,8 @@ class Zombie(pygame.sprite.Sprite):
         self.wobble_rate = 3  # wobble every this many steps
         self.wobble_countdown = self.wobble_rate
         self.randomizer = randomizer
-
-    @property
-    def vector_state(self) -> npt.NDArray[np.float64]:
-        """The vector observation for the zombie."""
-        return np.array(
-            [
-                self.rect.x / const.SCREEN_WIDTH,
-                self.rect.y / const.SCREEN_HEIGHT,
-                0.0,
-                1.0,
-            ]
-        )
+        self.direction = pygame.Vector2(0, 1)
+        self.typemask = [1, 0, 0, 0, 0, 0]
 
     def act(self) -> None:
         """Move the zombie.
