@@ -6,6 +6,7 @@ import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.interval import Interval
 from pettingzoo.butterfly.knights_archers_zombies.src.mixins import VectorObservable
 
 
@@ -30,8 +31,7 @@ class Zombie(pygame.sprite.Sprite, VectorObservable):
         self.rect.y = 5
         self.rect.x = int(randomizer.integers(*self.x_range))
 
-        self.wobble_rate = 3  # wobble every this many steps
-        self.wobble_countdown = self.wobble_rate
+        self.wobble_interval = Interval(3)
         self.randomizer = randomizer
         self.direction = pygame.Vector2(0, 1)
         self.typemask = [1, 0, 0, 0, 0, 0]
@@ -48,11 +48,7 @@ class Zombie(pygame.sprite.Sprite, VectorObservable):
         # 3 steps. Not sure why that was chosen, but the behavior has been
         # retained here. On these steps, there *may* be some left/right movement.
         # On other steps, there is only downward movement.
-        self.wobble_countdown -= 1
-        if self.wobble_countdown == 0:
-            # reset the wobble countdown
-            self.wobble_countdown = self.wobble_rate
-
+        if self.wobble_interval.increment():
             # The random left/right motion is determined from this random value:
             #   values of 0, 7, 9 result in no movement left or right
             #   values of 1, 3, 6 result in movement to the right
