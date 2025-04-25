@@ -210,6 +210,8 @@ from pettingzoo.butterfly.knights_archers_zombies.src.players import (
     Archer,
     Knight,
     Player,
+    is_archer,
+    is_knight,
 )
 from pettingzoo.butterfly.knights_archers_zombies.src.zombie import Zombie
 from pettingzoo.utils import AgentSelector, wrappers
@@ -407,9 +409,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         if self.vector_state:
             shape = [self.num_tracked, self.vector_width]
             return Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
-        else:  # image space
-            shape = [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
-            return Box(low=0, high=255, shape=shape, dtype=np.uint8)
+        # image space
+        shape = [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
+        return Box(low=0, high=255, shape=shape, dtype=np.uint8)
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
         return self.observation_spaces[agent]
@@ -429,9 +431,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 zombie, self.player_list, True
             )
             for player in zombie_hit_list:
-                if player.is_archer and not self.killable_archers:
+                if is_archer(player) and not self.killable_archers:
                     continue
-                if player.is_knight and not self.killable_knights:
+                if is_knight(player) and not self.killable_knights:
                     continue
                 self._remove_agent(player)
 
@@ -452,7 +454,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             self.player_list.remove(agent)
         if agent.agent_name not in self.kill_list:
             self.kill_list.append(agent.agent_name)
-        if agent.is_knight:
+        if is_knight(agent):
             agent.weapons.empty()
 
     def apply_weapons(self) -> None:
@@ -481,7 +483,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 for zombie in zombie_hit_list:
                     self.zombie_list.remove(zombie)
                     weapon.player.score += 1
-                    if agent.is_archer:
+                    if is_archer(agent):
                         # remove the arrow that hit the zombie
                         agent.weapons.remove(weapon)
 
@@ -489,7 +491,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def num_active_arrows(self) -> int:
         num_arrows = 0
         for agent in self.agent_map.values():
-            if agent.is_archer:
+            if is_archer(agent):
                 num_arrows += len(agent.weapons)
         return num_arrows
 
@@ -497,7 +499,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def num_active_swords(self) -> int:
         num_swords = 0
         for agent in self.agent_map.values():
-            if agent.is_knight:
+            if is_knight(agent):
                 num_swords += len(agent.weapons)
         return num_swords
 
@@ -585,8 +587,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         """Return the observation for the given agent."""
         if self.vector_state:
             return self._observe_vector(agent)
-        else:
-            return self._observe_image(agent)
+        return self._observe_image(agent)
 
     def state(self) -> npt.NDArray[np.float64]:
         """Returns an observation of the global environment."""
@@ -620,7 +621,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         # handle swords
         for agent in self.agent_map.values():
-            if agent.is_knight:
+            if is_knight(agent):
                 for sword in agent.weapons:
                     state.append(sword.get_vector_state(self.use_typemasks))
 
@@ -629,7 +630,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         # handle arrows
         for agent in self.agent_map.values():
-            if agent.is_archer:
+            if is_archer(agent):
                 for arrow in agent.weapons:
                     state.append(arrow.get_vector_state(self.use_typemasks))
 
@@ -664,9 +665,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         # archer can't attack if the number of arrows exceeds
         # the max count. In this case, change the action to no action.
-        if agent.is_archer and agent_action == Actions.ActionAttack:
+        if is_archer(agent) and agent_action == Actions.ACTION_ATTACK:
             if self.num_active_arrows >= self.max_arrows:
-                agent_action = Actions.ActionNone
+                agent_action = Actions.ACTION_NONE
 
         if not agent.is_timed_out(agent_action):
             out_of_bounds = agent.act(agent_action)
@@ -744,7 +745,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             screen = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
             pygame.display.set_caption("Knights, Archers, Zombies")
             return screen
-        elif self.render_mode == "rgb_array":
+        if self.render_mode == "rgb_array":
             return pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
 
         raise ValueError(f"Unknown render_mode: {self.render_mode}")
@@ -765,7 +766,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         if self.render_mode == "human":
             pygame.display.flip()
             self.clock.tick(self.metadata["render_fps"])
-            # print("fps", self.clock.get_fps())
         return (
             np.transpose(observation, axes=(1, 0, 2))
             if self.render_mode == "rgb_array"
@@ -804,7 +804,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         for agent in self.possible_agents:
             if agent.startswith("archer"):
-                player = Archer(agent_name=agent)
+                player: Player = Archer(agent_name=agent)
             elif agent.startswith("knight"):
                 player = Knight(agent_name=agent)
             else:

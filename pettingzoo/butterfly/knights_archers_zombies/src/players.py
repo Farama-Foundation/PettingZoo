@@ -34,9 +34,6 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         self.is_alive = True
         self.score = 0
 
-        self.is_archer = False
-        self.is_knight = False
-
         self.speed = 0
         self.ang_rate = const.PLAYER_ANG_RATE
 
@@ -48,11 +45,10 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         """Return True if the Player is blocked from making the given move."""
         if self.timeout is None:
             return False
-        else:
-            if self.timeout.increment():  # timeout ended, remove block
-                self.timeout = None
-                return False
-            return True
+        if self.timeout.increment():  # timeout ended, remove block
+            self.timeout = None
+            return False
+        return True
 
     def act(self, action: Actions) -> bool:
         """Perform the given action.
@@ -70,23 +66,23 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         """
         went_out_of_bounds = False
 
-        if action == Actions.ActionForward and self.rect.y > 20:
+        if action == Actions.ACTION_FORWARD and self.rect.y > 20:
             self.rect.x += round(self.direction[0] * self.speed)
             self.rect.y += round(self.direction[1] * self.speed)
         elif (
-            action == Actions.ActionBackward and self.rect.y < const.SCREEN_HEIGHT - 40
+            action == Actions.ACTION_BACKWARD and self.rect.y < const.SCREEN_HEIGHT - 40
         ):
             self.rect.x -= round(self.direction[0] * self.speed)
             self.rect.y -= round(self.direction[1] * self.speed)
-        elif action == Actions.ActionTurnCCW:
+        elif action == Actions.ACTION_TURN_CCW:
             self.direction = self.direction.rotate(-self.ang_rate)
             self._update_image()
-        elif action == Actions.ActionTurnCW:
+        elif action == Actions.ACTION_TURN_CW:
             self.direction = self.direction.rotate(self.ang_rate)
             self._update_image()
-        elif action == Actions.ActionAttack and self.is_alive:
+        elif action == Actions.ACTION_ATTACK and self.is_alive:
             self.attack()
-        elif action == Actions.ActionNone:
+        elif action == Actions.ACTION_NONE:
             pass
 
         # Clamp to stay inside the screen
@@ -128,7 +124,6 @@ class Archer(Player):
         """
         super().__init__(agent_name, "archer.png")
         self.rect = self.image.get_rect(center=(const.ARCHER_X, const.ARCHER_Y))
-        self.is_archer = True
         self.speed = const.ARCHER_SPEED
         self.typemask = [0, 1, 0, 0, 0, 0]
 
@@ -138,7 +133,7 @@ class Archer(Player):
         Archers are blocked from attacking for a short time after attacking.
         """
         # only the attack action is blocked
-        if action != Actions.ActionAttack:
+        if action != Actions.ACTION_ATTACK:
             return False
         return super().is_timed_out(action)
 
@@ -165,7 +160,6 @@ class Knight(Player):
         """
         super().__init__(agent_name, "knight.png")
         self.rect = self.image.get_rect(center=(const.KNIGHT_X, const.KNIGHT_Y))
-        self.is_knight = True
         self.speed = const.KNIGHT_SPEED
         self.typemask = [0, 0, 1, 0, 0, 0]
 
@@ -182,3 +176,13 @@ class Knight(Player):
             self.timeout = Interval(const.KNIGHT_TIMEOUT)
         else:  # this should never happen
             raise RuntimeError("bad knight attack happened - already attacking")
+
+
+def is_archer(player: Player) -> bool:
+    """Return True if the player is an archer."""
+    return isinstance(player, Archer)
+
+
+def is_knight(player: Player) -> bool:
+    """Return True if the player is a knight."""
+    return isinstance(player, Knight)

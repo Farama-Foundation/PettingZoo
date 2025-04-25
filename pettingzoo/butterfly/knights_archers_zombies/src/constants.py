@@ -4,12 +4,12 @@ from enum import Enum
 class Actions(Enum):
     """Actions available for each agent."""
 
-    ActionForward = 0
-    ActionBackward = 1
-    ActionTurnCCW = 2
-    ActionTurnCW = 3
-    ActionAttack = 4
-    ActionNone = 5
+    ACTION_FORWARD = 0
+    ACTION_BACKWARD = 1
+    ACTION_TURN_CCW = 2
+    ACTION_TURN_CW = 3
+    ACTION_ATTACK = 4
+    ACTION_NONE = 5
 
 
 # video options

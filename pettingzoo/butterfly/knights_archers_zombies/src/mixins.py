@@ -18,7 +18,7 @@ class VectorObservable:
     these to be correct.
     """
 
-    direction = [0, 0]
+    direction = pygame.Vector2(0, 0)
     typemask = [0, 0, 0, 0, 0, 0]
     rect: pygame.Rect
 
@@ -49,5 +49,4 @@ class VectorObservable:
         """Return the vector observation with or without typemask."""
         if use_typemask:
             return self.typemasked_vector_state
-        else:
-            return self.vector_state
+        return self.vector_state
