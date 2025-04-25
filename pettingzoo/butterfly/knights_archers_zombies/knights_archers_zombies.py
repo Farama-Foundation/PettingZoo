@@ -475,7 +475,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def zombit_hit_knight(self) -> None:
         for zombie in self.zombie_list:
             zombie_knight_list = pygame.sprite.spritecollide(
-                zombie, self.knight_list, True
+                zombie, self.player_list, True
             )
 
             for knight in zombie_knight_list:
@@ -485,24 +485,23 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 if knight.agent_name not in self.kill_list:
                     self.kill_list.append(knight.agent_name)
 
-                self.knight_list.remove(knight)
+                self.player_list.remove(knight)
 
     # Zombie Kills the Archer
     def zombie_hit_archer(self) -> None:
         for zombie in self.zombie_list:
             zombie_archer_list = pygame.sprite.spritecollide(
-                zombie, self.archer_list, True
+                zombie, self.player_list, True
             )
 
             for archer in zombie_archer_list:
                 archer.is_alive = False
-                self.archer_list.remove(archer)
+                self.player_list.remove(archer)
                 if archer.agent_name not in self.kill_list:
                     self.kill_list.append(archer.agent_name)
 
-    # Zombie Kills the Sword
     def sword_hit(self) -> None:
-        for knight in self.knight_list:
+        for knight in self.player_list:
             for sword in knight.weapons:
                 zombie_sword_list = pygame.sprite.spritecollide(
                     sword, self.zombie_list, True
@@ -720,11 +719,10 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         # check for out of bounds death
         if self.line_death and out_of_bounds:
             agent.is_alive = False
-            if agent in self.archer_list:
-                self.archer_list.remove(agent)
-            else:
-                agent.weapons.empty()
-                self.knight_list.remove(agent)
+            if agent in self.player_list:
+                self.player_list.remove(agent)
+                if agent.is_knight:
+                    agent.weapons.empty()
             self.kill_list.append(agent.agent_name)
 
         # actuate the weapon if necessary
@@ -807,8 +805,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.zombie_list.draw(self.screen)
         for agent in self.agent_map.values():
             agent.weapons.draw(self.screen)
-        self.archer_list.draw(self.screen)
-        self.knight_list.draw(self.screen)
+        self.player_list.draw(self.screen)
 
     def _get_screen(self) -> pygame.Surface:
         """Return a newly created pygame surface."""
@@ -860,41 +857,33 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def _check_zombie_killall(self) -> bool:
         """Return True if Zombies won by killing all players."""
-        return not bool(self.knight_list or self.archer_list)
+        return not bool(self.player_list)
 
     def _check_game_over(self) -> None:
         """Determine whether game is over and set self.game_over with result."""
         self.game_over = self._check_zombie_escape() or self._check_zombie_killall()
 
     def reinit(self) -> None:
-        # Game Variables
         self.game_over = False
-        self.zombie_spawn_rate = 0
 
-        # Creating Sprite Groups
         self.zombie_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
-        self.archer_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
-        self.knight_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
+        self.player_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
 
         self.agent_map = {}
         self.agents = []
         self.dead_agents = []
 
-        for i in range(self.num_archers):
-            agent_name = f"archer_{i}"
-            archer = Archer(agent_name=agent_name)
-            archer.offset(i * 50, 0)
-            self.archer_list.add(archer)
-            self.agent_map[agent_name] = archer
-            self.agents.append(agent_name)
-
-        for i in range(self.num_knights):
-            agent_name = f"knight_{i}"
-            knight = Knight(agent_name=agent_name)
-            knight.offset(i * 50, 0)
-            self.knight_list.add(knight)
-            self.agent_map[agent_name] = knight
-            self.agents.append(agent_name)
+        for agent in self.possible_agents:
+            if agent.startswith("archer"):
+                player = Archer(agent_name=agent)
+            elif agent.startswith("knight"):
+                player = Knight(agent_name=agent)
+            else:
+                raise ValueError(f"Unknown agent type: {agent}")
+            self.player_list.add(player)
+            player.offset(int(agent[-1]) * 50, 0)
+            self.agent_map[agent] = player
+            self.agents.append(agent)
 
         if self.render_mode is not None:
             self.render()
