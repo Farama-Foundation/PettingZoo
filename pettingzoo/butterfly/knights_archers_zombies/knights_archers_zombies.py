@@ -190,7 +190,7 @@ import os
 import sys
 from enum import Enum
 from itertools import repeat
-from typing import Any, cast
+from typing import Any
 
 import gymnasium
 import numpy as np
@@ -211,7 +211,6 @@ from pettingzoo.butterfly.knights_archers_zombies.src.players import (
     Knight,
     Player,
 )
-from pettingzoo.butterfly.knights_archers_zombies.src.weapons import Arrow, Sword
 from pettingzoo.butterfly.knights_archers_zombies.src.zombie import Zombie
 from pettingzoo.utils import AgentSelector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
@@ -456,21 +455,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         if agent.is_knight:
             agent.weapons.empty()
 
-    # actuate weapons
-    def action_weapon(self, action: Actions, agent: Player) -> None:
-        if action == Actions.ActionAttack:
-            if agent.is_knight:
-                if agent.weapon_timeout > const.SWORD_TIMEOUT:
-                    # make sure that the current knight doesn't have a sword already
-                    if len(agent.weapons) == 0:
-                        agent.weapons.add(Sword(cast(Knight, agent)))
-
-            if agent.is_archer:
-                if agent.weapon_timeout > const.ARROW_TIMEOUT:
-                    # make sure that the screen has less arrows than allowable
-                    if self.num_active_arrows < self.max_arrows:
-                        agent.weapons.add(Arrow(cast(Archer, agent)))
-
     def apply_weapons(self) -> None:
         """Move the weapons and remove any zombies that were hit.
 
@@ -494,17 +478,12 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 zombie_hit_list = pygame.sprite.spritecollide(
                     weapon, self.zombie_list, True
                 )
-                # remove zombies hit by swords
-                if agent.is_knight:
-                    for zombie in zombie_hit_list:
-                        self.zombie_list.remove(zombie)
-                        weapon.player.score += 1
-                # remove zombies hit by arrows
-                elif agent.is_archer:
-                    for zombie in zombie_hit_list:
+                for zombie in zombie_hit_list:
+                    self.zombie_list.remove(zombie)
+                    weapon.player.score += 1
+                    if agent.is_archer:
+                        # remove the arrow that hit the zombie
                         agent.weapons.remove(weapon)
-                        self.zombie_list.remove(zombie)
-                        weapon.player.score += 1
 
     @property
     def num_active_arrows(self) -> int:
@@ -683,13 +662,19 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         agent_action = Actions(action)
 
-        out_of_bounds = agent.act(agent_action)
+        # archer can't attack if the number of arrows exceeds
+        # the max count. In this case, change the action to no action.
+        if agent.is_archer and agent_action == Actions.ActionAttack:
+            if self.num_active_arrows >= self.max_arrows:
+                agent_action = Actions.ActionNone
+
+        if not agent.is_timed_out(agent_action):
+            out_of_bounds = agent.act(agent_action)
+        else:
+            out_of_bounds = False
 
         if self.line_death and out_of_bounds:
             self._remove_agent(agent)
-
-        # actuate the weapon if necessary
-        self.action_weapon(agent_action, agent)
 
         # Do these things once per cycle
         if self._agent_selector.is_last():

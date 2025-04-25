@@ -8,7 +8,9 @@ import pygame
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.interval import Interval
 from pettingzoo.butterfly.knights_archers_zombies.src.mixins import VectorObservable
+from pettingzoo.butterfly.knights_archers_zombies.src.weapons import Arrow, Sword
 
 
 class Player(pygame.sprite.Sprite, VectorObservable):
@@ -38,11 +40,19 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         self.speed = 0
         self.ang_rate = const.PLAYER_ANG_RATE
 
-        self.action = Actions.ActionNone
-        self.attacking = False
-        self.weapon_timeout = 99
+        self.timeout: None | Interval = None
 
         self.weapons: pygame.sprite.Group[Any] = pygame.sprite.Group()
+
+    def is_timed_out(self, action: Actions) -> bool:
+        """Return True if the Player is blocked from making the given move."""
+        if self.timeout is None:
+            return False
+        else:
+            if self.timeout.increment():  # timeout ended, remove block
+                self.timeout = None
+                return False
+            return True
 
     def act(self, action: Actions) -> bool:
         """Perform the given action.
@@ -58,41 +68,33 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         Returns:
             whether or not the player is in the screen after acting
         """
-        self.action = action
         went_out_of_bounds = False
 
-        if not self.attacking:
-            if action == Actions.ActionForward and self.rect.y > 20:
-                self.rect.x += round(self.direction[0] * self.speed)
-                self.rect.y += round(self.direction[1] * self.speed)
-            elif (
-                action == Actions.ActionBackward
-                and self.rect.y < const.SCREEN_HEIGHT - 40
-            ):
-                self.rect.x -= round(self.direction[0] * self.speed)
-                self.rect.y -= round(self.direction[1] * self.speed)
-            elif action == Actions.ActionTurnCCW:
-                self.direction = self.direction.rotate(-self.ang_rate)
-                self._update_image()
-            elif action == Actions.ActionTurnCW:
-                self.direction = self.direction.rotate(self.ang_rate)
-                self._update_image()
-            elif action == Actions.ActionAttack and self.is_alive:
-                pass
-            elif action == Actions.ActionNone:
-                pass
+        if action == Actions.ActionForward and self.rect.y > 20:
+            self.rect.x += round(self.direction[0] * self.speed)
+            self.rect.y += round(self.direction[1] * self.speed)
+        elif (
+            action == Actions.ActionBackward and self.rect.y < const.SCREEN_HEIGHT - 40
+        ):
+            self.rect.x -= round(self.direction[0] * self.speed)
+            self.rect.y -= round(self.direction[1] * self.speed)
+        elif action == Actions.ActionTurnCCW:
+            self.direction = self.direction.rotate(-self.ang_rate)
+            self._update_image()
+        elif action == Actions.ActionTurnCW:
+            self.direction = self.direction.rotate(self.ang_rate)
+            self._update_image()
+        elif action == Actions.ActionAttack and self.is_alive:
+            self.attack()
+        elif action == Actions.ActionNone:
+            pass
 
-            # Clamp to stay inside the screen
-            if self.rect.y < 0 or self.rect.y > (const.SCREEN_HEIGHT - 40):
-                went_out_of_bounds = True
+        # Clamp to stay inside the screen
+        if self.rect.y < 0 or self.rect.y > (const.SCREEN_HEIGHT - 40):
+            went_out_of_bounds = True
 
-            self.rect.x = max(min(self.rect.x, const.SCREEN_WIDTH - 132), 100)
-            self.rect.y = max(min(self.rect.y, const.SCREEN_HEIGHT - 40), 0)
-
-            # add to weapon timeout when we know we're not attacking
-            self.weapon_timeout += 1
-        else:
-            self.weapon_timeout = 0
+        self.rect.x = max(min(self.rect.x, const.SCREEN_WIDTH - 132), 100)
+        self.rect.y = max(min(self.rect.y, const.SCREEN_HEIGHT - 40), 0)
 
         return went_out_of_bounds
 
@@ -111,6 +113,9 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         """Return True if the agent is not alive."""
         return not self.is_alive
 
+    def attack(self) -> None:
+        """Perform an attack."""
+
 
 class Archer(Player):
     """Archer agent."""
@@ -127,6 +132,27 @@ class Archer(Player):
         self.speed = const.ARCHER_SPEED
         self.typemask = [0, 1, 0, 0, 0, 0]
 
+    def is_timed_out(self, action: Actions) -> bool:
+        """Return True if the Player is blocked from making the given move.
+
+        Archers are blocked from attacking for a short time after attacking.
+        """
+        # only the attack action is blocked
+        if action != Actions.ActionAttack:
+            return False
+        return super().is_timed_out(action)
+
+    def attack(self) -> None:
+        """Perform an attack.
+
+        This adds a weapon to the knight which then attacks.
+        It also sets a timeout on the archer's attack.
+        """
+        if self.timeout is not None:  # this should never happen
+            raise RuntimeError("bad archer attack happened")
+        self.timeout = Interval(const.ARROW_TIMEOUT)
+        self.weapons.add(Arrow(self))
+
 
 class Knight(Player):
     """Knight agent."""
@@ -142,3 +168,17 @@ class Knight(Player):
         self.is_knight = True
         self.speed = const.KNIGHT_SPEED
         self.typemask = [0, 0, 1, 0, 0, 0]
+
+    def attack(self) -> None:
+        """Perform an attack.
+
+        This adds a weapon to the knight which then attacks.
+        """
+        if self.timeout is not None:  # this should never happen
+            raise RuntimeError("bad knight attack happened - timeout")
+        # make sure that the knight doesn't have a sword already
+        if len(self.weapons) == 0:
+            self.weapons.add(Sword(self))
+            self.timeout = Interval(const.KNIGHT_TIMEOUT)
+        else:  # this should never happen
+            raise RuntimeError("bad knight attack happened - already attacking")

@@ -3,6 +3,7 @@ from enum import Enum
 
 class Actions(Enum):
     """Actions available for each agent."""
+
     ActionForward = 0
     ActionBackward = 1
     ActionTurnCCW = 2
@@ -76,26 +77,11 @@ ARROW_SPEED = int(ARROW_SPEED)
 
 # sword stuff
 SWORD_SPEED = 20
-SWORD_SPEED = SWORD_SPEED * 15.0 / FPS
-if SWORD_SPEED % 1.0 != 0.0:
-    raise ValueError(
-        f"FPS of {FPS} leads to decimal place value of {SWORD_SPEED} for sword_speed."
-    )
-SWORD_SPEED = int(SWORD_SPEED)
 
-MIN_PHASE = -3 / 15.0 * FPS
-if MIN_PHASE % 1.0 != 0.0:
-    raise ValueError(
-        f"FPS of {FPS} leads to decimal place value of {MIN_PHASE} for min_phase."
-    )
-MIN_PHASE = int(MIN_PHASE)
+MIN_ARC = -60
+MAX_ARC = 60
 
-MAX_PHASE = 3 / 15.0 * FPS
-if MAX_PHASE % 1.0 != 0.0:
-    raise ValueError(
-        f"FPS of {FPS} leads to decimal place value of {MAX_PHASE} for max_phase."
-    )
-MAX_PHASE = int(MAX_PHASE)
-
-ARROW_TIMEOUT = 3
-SWORD_TIMEOUT = 0
+# steps between when an archer attacks and can attack again
+ARROW_TIMEOUT = 4
+# steps between when a knight attacks and can do any action again
+KNIGHT_TIMEOUT = 7

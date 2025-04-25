@@ -1,18 +1,22 @@
 """Weapons for the KAZ game."""
 
+from __future__ import annotations
+
 import os
+from typing import TYPE_CHECKING
 
 import pygame
 
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
-from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 from pettingzoo.butterfly.knights_archers_zombies.src.mixins import VectorObservable
-from pettingzoo.butterfly.knights_archers_zombies.src.players import (
-    Archer,
-    Knight,
-    Player,
-)
+
+if TYPE_CHECKING:
+    from pettingzoo.butterfly.knights_archers_zombies.src.players import (
+        Archer,
+        Knight,
+        Player,
+    )
 
 
 class Weapon(pygame.sprite.Sprite, VectorObservable):
@@ -43,8 +47,6 @@ class Arrow(Weapon):
         angle = self.player.direction.angle_to(pygame.Vector2(0, -1))
         self.image = pygame.transform.rotate(self.image, angle)
 
-        # reset the archer timeout when arrow fired
-        archer.weapon_timeout = 0
         self.typemask = [0, 0, 0, 1, 0, 0]
 
     def act(self) -> None:
@@ -75,36 +77,29 @@ class Sword(Weapon):
         """Initialize the sword object for the given knight."""
         super().__init__(knight, "mace.png")
         self.knight = self.player
-        self.active = False
+        self.active = True
 
-        # phase of the sword, starts at the left most part
-        self.phase = const.MAX_PHASE
+        # arc of the sword, starts at the left most part
+        self.arc = const.MAX_ARC
+
         self.typemask = [0, 0, 0, 0, 1, 0]
 
     def act(self) -> None:
         """Move the sword along its path."""
-        if self.knight.action == Actions.ActionAttack:
-            self.active = True
+        # arc goes from max to min because it counts positive from CCW
+        if self.arc > const.MIN_ARC:
+            self.arc -= const.SWORD_SPEED
 
-        if self.active and self.knight.is_alive:
-            # phase goes from max to min because
-            # it counts positive from CCW
-            if self.phase > const.MIN_PHASE:
-                self.phase -= 1
-                self.knight.attacking = True
-
-                new_dir = self.knight.direction.rotate(-const.SWORD_SPEED * self.phase)
-                self.rect = self.image.get_rect(center=self.knight.rect.center)
-                self.rect.x += int(
-                    new_dir[0] * (self.rect.width + self.knight.rect.width) / 2
-                )
-                self.rect.y += int(
-                    new_dir[1] * (self.rect.height + self.knight.rect.height) / 2
-                )
-            else:
-                self.phase = const.MAX_PHASE
-                self.active = False
-                self.knight.attacking = False
+            new_dir = self.knight.direction.rotate(self.arc)
+            self.rect = self.image.get_rect(center=self.knight.rect.center)
+            self.rect.x += int(
+                new_dir[0] * (self.rect.width + self.knight.rect.width) / 2
+            )
+            self.rect.y += int(
+                new_dir[1] * (self.rect.height + self.knight.rect.height) / 2
+            )
+        else:
+            self.active = False
 
     @property
     def is_active(self) -> bool:
