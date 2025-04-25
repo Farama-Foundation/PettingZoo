@@ -446,14 +446,40 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                     if self.num_active_arrows < self.max_arrows:
                         agent.weapons.add(Arrow(cast(Archer, agent)))
 
-    # move weapons
-    def update_weapons(self) -> None:
+    def apply_weapons(self) -> None:
+        """Move the weapons and remove any zombies that were hit.
+
+        The weapons are moved along their path.
+        If an arrow hits a zombie, both the arrow and the zombie are removed.
+        The archer that fired the arrow is awarded 1 point.
+
+        If a sword hits a zombie, the zombie is removed but the sword is not.
+        The knight wielding a sword is awarded 1 point.
+        """
         for agent in self.agent_map.values():
             for weapon in list(agent.weapons):
                 weapon.act()
 
                 if not weapon.is_active:
                     agent.weapons.remove(weapon)
+
+        # remove zombies hit by weapons
+        for agent in self.agent_map.values():
+            for weapon in list(agent.weapons):
+                zombie_hit_list = pygame.sprite.spritecollide(
+                    weapon, self.zombie_list, True
+                )
+                # remove zombies hit by swords
+                if agent.is_knight:
+                    for zombie in zombie_hit_list:
+                        self.zombie_list.remove(zombie)
+                        weapon.player.score += 1
+                # remove zombies hit by arrows
+                elif agent.is_archer:
+                    for zombie in zombie_hit_list:
+                        agent.weapons.remove(weapon)
+                        self.zombie_list.remove(zombie)
+                        weapon.player.score += 1
 
     @property
     def num_active_arrows(self) -> int:
@@ -499,32 +525,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 self.player_list.remove(archer)
                 if archer.agent_name not in self.kill_list:
                     self.kill_list.append(archer.agent_name)
-
-    def sword_hit(self) -> None:
-        for knight in self.player_list:
-            for sword in knight.weapons:
-                zombie_sword_list = pygame.sprite.spritecollide(
-                    sword, self.zombie_list, True
-                )
-
-                for zombie in zombie_sword_list:
-                    self.zombie_list.remove(zombie)
-                    sword.player.score += 1
-
-    # Zombie Kills the Arrow
-    def arrow_hit(self) -> None:
-        for agent in self.agent_map.values():
-            if agent.is_archer:
-                for arrow in list(agent.weapons):
-                    zombie_arrow_list = pygame.sprite.spritecollide(
-                        arrow, self.zombie_list, True
-                    )
-
-                    # For each zombie hit, remove the arrow, zombie and add to the score
-                    for zombie in zombie_arrow_list:
-                        agent.weapons.remove(arrow)
-                        self.zombie_list.remove(zombie)
-                        arrow.player.score += 1
 
     def _observe_image(self, agent: AgentID) -> ObsTypeImage:
         """Return observation for given agent as an image based observation."""
@@ -730,14 +730,8 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         # Do these things once per cycle
         if self._agent_selector.is_last():
-            # Update the weapons
-            self.update_weapons()
-
-            # Zombie Kills the Sword
-            self.sword_hit()
-
-            # Zombie Kills the Arrow
-            self.arrow_hit()
+            # Update the weapons and use them against zombies
+            self.apply_weapons()
 
             # Zombie Kills the Archer
             if self.killable_archers:
