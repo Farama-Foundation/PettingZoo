@@ -49,13 +49,10 @@ class Arrow(Weapon):
 
     def act(self) -> None:
         """Move the arrow along its path."""
-        if self.player.is_alive:
-            self.rect.center = (
-                int(self.rect.center[0] + self.direction[0] * const.ARROW_SPEED),
-                int(self.rect.center[1] + self.direction[1] * const.ARROW_SPEED),
-            )
-        else:
-            self.rect.x = -100
+        self.rect.center = (
+            int(self.rect.center[0] + self.direction[0] * const.ARROW_SPEED),
+            int(self.rect.center[1] + self.direction[1] * const.ARROW_SPEED),
+        )
 
     @property
     def is_active(self) -> bool:
