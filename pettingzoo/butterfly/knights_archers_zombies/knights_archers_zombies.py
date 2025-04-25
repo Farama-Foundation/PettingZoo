@@ -205,6 +205,7 @@ from pettingzoo import AECEnv
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.interval import Interval
 from pettingzoo.butterfly.knights_archers_zombies.src.players import (
     Archer,
     Knight,
@@ -308,14 +309,13 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.vector_width = 4 + self.typemask_width if self.use_typemasks else 4
 
         # Game Status
-        self.zombie_spawn_rate = 0
+        self.zombie_spawn_interval = Interval(spawn_rate)
         self.frames = 0
         self.render_mode = render_mode
         self.screen: pygame.Surface | None = None
 
         # Game Constants
         self._seed()
-        self.spawn_rate = spawn_rate
         self.max_cycles = max_cycles
         self.killable_knights = killable_knights
         self.killable_archers = killable_archers
@@ -421,15 +421,35 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def _seed(self, seed: int | None = None) -> None:
         self.np_random, seed = seeding.np_random(seed)
 
-    # Spawn Zombies at Random Location at every 100 iterations
-    def spawn_zombie(self) -> None:
-        if len(self.zombie_list) < self.max_zombies:
-            self.zombie_spawn_rate += 1
+    def do_zombie_turn(self) -> None:
+        """Have zombies attack, move, and then spawn."""
+        # Any players in comtact with zombies are killed unless
+        # the env was created with killable players turned off
+        for zombie in self.zombie_list:
+            zombie_hit_list = pygame.sprite.spritecollide(
+                zombie, self.player_list, True
+            )
+            for player in zombie_hit_list:
+                if player.is_archer and not self.killable_archers:
+                    continue
+                if player.is_knight and not self.killable_knights:
+                    continue
+                player.is_alive = False
+                self.player_list.remove(player)
+                if player.agent_name not in self.kill_list:
+                    self.kill_list.append(player.agent_name)
+                if player.is_knight:
+                    player.weapons.empty()
 
-            if self.zombie_spawn_rate >= self.spawn_rate:
+        # have zombies move
+        for zombie in self.zombie_list:
+            zombie.act()
+
+        # spawn new zombie if appropriate
+        if len(self.zombie_list) < self.max_zombies:
+            if self.zombie_spawn_interval.increment():
                 zombie = Zombie(self.np_random)
                 self.zombie_list.add(zombie)
-                self.zombie_spawn_rate = 0
 
     # actuate weapons
     def action_weapon(self, action: Actions, agent: Player) -> None:
@@ -496,35 +516,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             if agent.is_knight:
                 num_swords += len(agent.weapons)
         return num_swords
-
-    # Zombie Kills the Knight (also remove the sword)
-    def zombit_hit_knight(self) -> None:
-        for zombie in self.zombie_list:
-            zombie_knight_list = pygame.sprite.spritecollide(
-                zombie, self.player_list, True
-            )
-
-            for knight in zombie_knight_list:
-                knight.is_alive = False
-                knight.weapons.empty()
-
-                if knight.agent_name not in self.kill_list:
-                    self.kill_list.append(knight.agent_name)
-
-                self.player_list.remove(knight)
-
-    # Zombie Kills the Archer
-    def zombie_hit_archer(self) -> None:
-        for zombie in self.zombie_list:
-            zombie_archer_list = pygame.sprite.spritecollide(
-                zombie, self.player_list, True
-            )
-
-            for archer in zombie_archer_list:
-                archer.is_alive = False
-                self.player_list.remove(archer)
-                if archer.agent_name not in self.kill_list:
-                    self.kill_list.append(archer.agent_name)
 
     def _observe_image(self, agent: AgentID) -> ObsTypeImage:
         """Return observation for given agent as an image based observation."""
@@ -733,20 +724,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             # Update the weapons and use them against zombies
             self.apply_weapons()
 
-            # Zombie Kills the Archer
-            if self.killable_archers:
-                self.zombie_hit_archer()
-
-            # Zombie Kills the Knight
-            if self.killable_knights:
-                self.zombit_hit_knight()
-
-            # update some zombies
-            for zombie in self.zombie_list:
-                zombie.act()
-
-            # Spawning Zombies at Random Location at every 100 iterations
-            self.spawn_zombie()
+            self.do_zombie_turn()
 
             if self.screen is not None:
                 self.draw()
