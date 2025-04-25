@@ -628,68 +628,41 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         return state
 
     def get_vector_state(self) -> npt.NDArray[np.float64]:
-        state = []
+        state: list[npt.NDArray[np.float64]] = []
+        empty_row = np.zeros(self.vector_width)
 
         # handle agents
         for agent_name in self.possible_agents:
             if agent_name not in self.dead_agents:
                 agent = self.agent_map[agent_name]
-
-                if self.use_typemasks:
-                    state.append(agent.typemasked_vector_state)
-                else:
-                    state.append(agent.vector_state)
+                state.append(agent.get_vector_state(self.use_typemasks))
             else:
-                state.append(np.zeros(self.vector_width))
+                state.append(empty_row)
 
         # handle swords
         for agent in self.agent_map.values():
             if agent.is_knight:
                 for sword in agent.weapons:
-                    if self.use_typemasks:
-                        state.append(sword.typemasked_vector_state)
-                    else:
-                        state.append(sword.vector_state)
+                    state.append(sword.get_vector_state(self.use_typemasks))
 
-        # handle empty swords
-        state.extend(
-            repeat(
-                np.zeros(self.vector_width),
-                self.num_knights - self.num_active_swords,
-            )
-        )
+        n_empty_swords = self.num_knights - self.num_active_swords
+        state.extend(repeat(empty_row, n_empty_swords))
 
         # handle arrows
         for agent in self.agent_map.values():
             if agent.is_archer:
                 for arrow in agent.weapons:
-                    if self.use_typemasks:
-                        state.append(arrow.typemasked_vector_state)
-                    else:
-                        state.append(arrow.vector_state)
+                    state.append(arrow.get_vector_state(self.use_typemasks))
 
-        # handle empty arrows
-        state.extend(
-            repeat(
-                np.zeros(self.vector_width),
-                self.max_arrows - self.num_active_arrows,
-            )
-        )
+        n_empty_arrows = self.max_arrows - self.num_active_arrows
+        state.extend(repeat(empty_row, n_empty_arrows))
 
         # handle zombies
         for zombie in self.zombie_list:
-            if self.use_typemasks:
-                state.append(zombie.typemasked_vector_state)
-            else:
-                state.append(zombie.vector_state)
+            state.append(zombie.get_vector_state(self.use_typemasks))
 
-        # handle empty zombies
-        state.extend(
-            repeat(
-                np.zeros(self.vector_width),
-                self.max_zombies - len(self.zombie_list),
-            )
-        )
+        n_empty_zombies = self.max_zombies - len(self.zombie_list)
+        state.extend(repeat(empty_row, n_empty_zombies))
 
         return np.stack(state, axis=0)
 

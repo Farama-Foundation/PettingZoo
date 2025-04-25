@@ -44,3 +44,10 @@ class VectorObservable:
                 *self.direction,
             ]
         )
+
+    def get_vector_state(self, use_typemask: bool) -> npt.NDArray[np.float64]:
+        """Return the vector observation with or without typemask."""
+        if use_typemask:
+            return self.typemasked_vector_state
+        else:
+            return self.vector_state
