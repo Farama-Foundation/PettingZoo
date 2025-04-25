@@ -434,12 +434,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                     continue
                 if player.is_knight and not self.killable_knights:
                     continue
-                player.is_alive = False
-                self.player_list.remove(player)
-                if player.agent_name not in self.kill_list:
-                    self.kill_list.append(player.agent_name)
-                if player.is_knight:
-                    player.weapons.empty()
+                self._remove_agent(player)
 
         # have zombies move
         for zombie in self.zombie_list:
@@ -450,6 +445,16 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             if self.zombie_spawn_interval.increment():
                 zombie = Zombie(self.np_random)
                 self.zombie_list.add(zombie)
+
+    def _remove_agent(self, agent: Player) -> None:
+        """Mark an agent as dead."""
+        agent.is_alive = False
+        if agent in self.player_list:
+            self.player_list.remove(agent)
+        if agent.agent_name not in self.kill_list:
+            self.kill_list.append(agent.agent_name)
+        if agent.is_knight:
+            agent.weapons.empty()
 
     # actuate weapons
     def action_weapon(self, action: Actions, agent: Player) -> None:
@@ -707,14 +712,8 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         out_of_bounds = agent.act(agent_action)
 
-        # check for out of bounds death
         if self.line_death and out_of_bounds:
-            agent.is_alive = False
-            if agent in self.player_list:
-                self.player_list.remove(agent)
-                if agent.is_knight:
-                    agent.weapons.empty()
-            self.kill_list.append(agent.agent_name)
+            self._remove_agent(agent)
 
         # actuate the weapon if necessary
         self.action_weapon(agent_action, agent)
