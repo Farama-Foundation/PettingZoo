@@ -87,8 +87,10 @@ In any given turn, an agent can choose from one of 18 actions.
 
 import os
 from glob import glob
+from typing import Any
 
 from pettingzoo.atari.base_atari_env import (
+    AtariAECEnv,
     BaseAtariEnv,
     base_env_wrapper_fn,
     parallel_wrapper_fn,
@@ -100,7 +102,9 @@ avaliable_versions = {
 }
 
 
-def raw_env(game_version="bi-plane", guided_missile=True, **kwargs):
+def raw_env(
+    game_version: str = "bi-plane", guided_missile: bool = True, **kwargs: Any
+) -> AtariAECEnv:
     assert (
         game_version in avaliable_versions
     ), "game_version must be either 'jet' or 'bi-plane'"
