@@ -611,13 +611,15 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         state: list[npt.NDArray[np.float64]] = []
         empty_row = np.zeros(self.vector_width)
 
-        # handle agents
-        for agent_name in self.possible_agents:
-            if agent_name not in self.dead_agents:
-                agent = self.agent_map[agent_name]
-                state.append(agent.get_vector_state(self.use_typemasks))
-            else:
-                state.append(empty_row)
+        # handle agents - all archers then all knights
+        for category in ["archer", "knight"]:
+            for agent_name in self.possible_agents:
+                if agent_name.startswith(category):
+                    if agent_name not in self.dead_agents:
+                        agent = self.agent_map[agent_name]
+                        state.append(agent.get_vector_state(self.use_typemasks))
+                    else:
+                        state.append(empty_row)
 
         # handle swords
         for agent in self.agent_map.values():
