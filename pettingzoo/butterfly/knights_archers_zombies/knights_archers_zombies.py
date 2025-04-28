@@ -537,14 +537,14 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         agent_obj = self.agent_map[agent]
 
         # get the agent position
-        agent_state = agent_obj.vector_state
-        agent_pos = np.expand_dims(agent_state[0:2], axis=0)
+        agent_state = agent_obj.get_vector_state(self.use_typemasks)
+        agent_pos = np.expand_dims(agent_state[-4:-2], axis=0)
 
         # get vector state of everything
         vector_state = self.get_vector_state()
-        state = vector_state[:, -4:]
+        state = vector_state[:, -4:]  # trim type mask, if present
         is_dead = np.sum(np.abs(state), axis=1) == 0.0
-        all_ids = vector_state[:, :-4]
+        all_typemasks = vector_state[:, :-4]
         all_pos = state[:, 0:2]
         all_ang = state[:, 2:4]
 
@@ -555,27 +555,23 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True) / np.sqrt(2)
 
         # kill dead things
-        all_ids[is_dead] *= 0
+        all_typemasks[is_dead] *= 0
         all_ang[is_dead] *= 0
         rel_pos[is_dead] *= 0
         norm_pos[is_dead] *= 0
 
         # combine the typemasks, positions and angles
-        state = np.concatenate([all_ids, norm_pos, rel_pos, all_ang], axis=-1)
+        state = np.concatenate([all_typemasks, norm_pos, rel_pos, all_ang], axis=-1)
 
-        # get the agent state as absolute vector
-        # typemask is one longer to also include norm_pos
+        # set current agent data
+        full_agent_state = np.zeros((1, self.vector_width + 1), dtype=np.float64)
         if self.use_typemasks:
-            typemask = np.zeros(self.typemask_width + 1)
-            typemask[-2] = 1.0
-        else:
-            typemask = np.array([0.0])
-        agent_state = agent_obj.vector_state
-        agent_state = np.concatenate([typemask, agent_state], axis=0)
-        agent_state = np.expand_dims(agent_state, axis=0)
+            full_agent_state[0, 5] = 1.0
+        full_agent_state[0, -4:] = agent_state[-4:]
+        full_agent_state[0, -5] = 0.0  # distance to self
 
         # prepend agent state to the observation
-        state = np.concatenate([agent_state, state], axis=0)
+        state = np.concatenate([full_agent_state, state], axis=0)
         if self.sequence_space:
             # remove pure zero rows if using sequence space
             state = state[~np.all(state == 0, axis=-1)]

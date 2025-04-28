@@ -47,7 +47,7 @@ class Arrow(Weapon):
         angle = self.player.direction.angle_to(pygame.Vector2(0, -1))
         self.image = pygame.transform.rotate(self.image, angle)
 
-        self.typemask = [0, 0, 0, 1, 0, 0]
+        self.typemask = [0, 0, 0, 0, 1, 0]
 
     def act(self) -> None:
         """Move the arrow along its path."""
@@ -82,7 +82,7 @@ class Sword(Weapon):
         # arc of the sword, starts at the left most part
         self.arc = const.MAX_ARC
 
-        self.typemask = [0, 0, 0, 0, 1, 0]
+        self.typemask = [0, 0, 0, 1, 0, 0]
 
     def act(self) -> None:
         """Move the sword along its path."""
