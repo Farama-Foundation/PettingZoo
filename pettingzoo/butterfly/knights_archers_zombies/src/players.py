@@ -105,10 +105,6 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         self.rect.x += x_offset
         self.rect.y += y_offset
 
-    def is_done(self) -> bool:
-        """Return True if the agent is not alive."""
-        return not self.is_alive
-
     def attack(self) -> None:
         """Perform an attack."""
 

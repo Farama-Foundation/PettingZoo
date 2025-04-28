@@ -196,7 +196,6 @@ import gymnasium
 import numpy as np
 import numpy.typing as npt
 import pygame
-import pygame.gfxdraw
 from gymnasium.spaces import Box, Discrete, Sequence
 from gymnasium.utils import EzPickle, seeding
 from typing_extensions import TypeAlias
