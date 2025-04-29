@@ -136,7 +136,7 @@ Press 'M' key to spawn a new knight.
 
 ``` python
 knights_archers_zombies_v10.env(
-  spawn_rate=20,
+  spawn_delay=20,
   num_archers=2,
   num_knights=2,
   max_zombies=10,
@@ -149,7 +149,7 @@ knights_archers_zombies_v10.env(
 )
 ```
 
-`spawn_rate`:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
+`spawn_delay`: how many cycles before a new zombie is spawned. A higher number means zombies are spawned at a slower rate.
 
 `num_archers`:  how many archer agents initially spawn.
 
@@ -259,7 +259,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def __init__(
         self,
-        spawn_rate: int = 20,
+        spawn_delay: int = 20,
         num_archers: int = 2,
         num_knights: int = 2,
         max_zombies: int = 10,
@@ -273,7 +273,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     ) -> None:
         EzPickle.__init__(
             self,
-            spawn_rate=spawn_rate,
+            spawn_delay=spawn_delay,
             num_archers=num_archers,
             num_knights=num_knights,
             max_zombies=max_zombies,
@@ -309,7 +309,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.vector_width = 4 + self.typemask_width if self.use_typemasks else 4
 
         # Game Status
-        self.zombie_spawn_interval = Interval(spawn_rate)
+        self.zombie_spawn_interval = Interval(spawn_delay)
         self.frames = 0
         self.render_mode = render_mode
         self.screen: pygame.Surface | None = None
