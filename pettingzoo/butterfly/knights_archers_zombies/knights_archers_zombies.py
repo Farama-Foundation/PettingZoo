@@ -315,7 +315,8 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.zombie_spawn_interval = Interval(spawn_delay)
         self.frames = 0
         self.render_mode = render_mode
-        self.screen: pygame.Surface | None = None
+        self.screen_dims = [const.SCREEN_WIDTH, const.SCREEN_HEIGHT]
+        self.screen = self._get_screen()
 
         # Game Constants
         self._seed()
@@ -507,7 +508,12 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def _observe_image(self, agent: AgentID) -> ObsTypeImage:
         """Return observation for given agent as an image based observation."""
-        assert self.screen is not None
+        # the observation is based on the image, so we need to update it
+        # this is already done in render(), which is called when render_mode
+        # is "human", so skip in that case
+        if self.render_mode != "human":
+            self.draw()
+
         screen = pygame.surfarray.pixels3d(self.screen)
 
         agent_obj = self.agent_map[agent]
@@ -590,7 +596,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def state(self) -> StateType:
         """Returns an observation of the global environment."""
         if not self.vector_state:
-            assert self.screen is not None
             # this makes a copy of the state, only including the
             # expected size. It is intentionally done without using
             # the .copy() function to accommodate a future case where
@@ -681,9 +686,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
             self.do_zombie_turn()
 
-            if self.screen is not None:
-                self.draw()
-
             self._check_game_over()
             self.frames += 1
 
@@ -725,7 +727,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             self.render()
 
     def draw(self) -> None:
-        assert self.screen is not None
         self.screen.blit(self.background, (0, 0))
 
         # draw all the sprites
@@ -739,11 +740,11 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         pygame.init()
 
         if self.render_mode == "human":
-            screen = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
+            screen = pygame.display.set_mode(self.screen_dims)
             pygame.display.set_caption("Knights, Archers, Zombies")
             return screen
-        if self.render_mode == "rgb_array":
-            return pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+        if self.render_mode == "rgb_array" or self.render_mode is None:
+            return pygame.Surface(self.screen_dims)
 
         raise ValueError(f"Unknown render_mode: {self.render_mode}")
 
@@ -753,9 +754,6 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 "You are calling render method without specifying any render mode."
             )
             return None
-
-        if self.screen is None:
-            self.screen = self._get_screen()
 
         self.draw()
 
@@ -770,9 +768,8 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         )
 
     def close(self) -> None:
-        if self.screen is not None:
-            pygame.quit()
-            self.screen = None
+        """Close the screen, if open."""
+        pygame.quit()
 
     def _check_zombie_escape(self) -> bool:
         """Return True if Zombies won by reaching the end."""
@@ -811,10 +808,10 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             self.agent_map[agent] = player
             self.agents.append(agent)
 
+        self.screen = self._get_screen()
         if self.render_mode is not None:
             self.render()
-        else:
-            self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+
         self.frames = 0
 
     def reset(
