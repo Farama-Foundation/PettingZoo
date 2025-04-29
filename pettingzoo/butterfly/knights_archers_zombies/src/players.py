@@ -1,5 +1,7 @@
 """Players used in Knights-Archers-Zombies."""
 
+from __future__ import annotations
+
 import os
 from typing import Any
 
