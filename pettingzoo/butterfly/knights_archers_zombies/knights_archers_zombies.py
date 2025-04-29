@@ -122,16 +122,6 @@ Each pixel is defined as RGB values in range [0, 255]. Areas outside of the game
 Dead agents return all pixels as black
 
 
-### Manual Control
-
-Move the archer using the 'W', 'A', 'S' and 'D' keys. Shoot the Arrow using 'F' key. Rotate the archer using 'Q' and 'E' keys.
-Press 'X' key to spawn a new archer.
-
-Move the knight using the 'I', 'J', 'K' and 'L' keys. Stab the Sword using ';' key. Rotate the knight using 'U' and 'O' keys.
-Press 'M' key to spawn a new knight.
-
-
-
 ### Arguments
 
 ``` python
