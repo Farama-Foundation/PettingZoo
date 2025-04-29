@@ -31,13 +31,16 @@ class Interval:
         """Initialize the Interval object.
 
         Args:
-            step_interval: how often the interval is true
+            step_interval: how often the interval is True
         """
         self.step_interval = step_interval
         self._current_step = 0
 
     def increment(self) -> bool:
-        """Increment the counter and return True if it reached its interval."""
+        """Increment the counter and return True and if it reached its interval.
+
+        If the interval expired, it will be reset to its original value.
+        """
         self._current_step += 1
         if self._current_step == self.step_interval:
             self.reset()

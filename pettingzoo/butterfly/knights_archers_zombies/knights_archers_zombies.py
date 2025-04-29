@@ -25,11 +25,13 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 
 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
-and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all
-agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie.
+and move forward or backward. An agent that moves off the top or bottom of the screen may be killed (if this setting is enabled, otherwise they stop at the edge). Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading
+direction. During this attack, which takes several steps, the knight cannot take any other action. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. There is a slight delay after firing an arrow before an archer can fire another arrow.
+However, the archer and move and turn during this time. A zombie that is hit by either a mace or an arrow is removed. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of its arrows hits and kills a zombie. A knight or archer that is
+touched by a zombie is removed (unless they are set to be unkillable). The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border.
 
 ### Actions
-Each agent acts independently. The action space is [0,5] with the following meanings:
+Each agent acts independently. The action space is discrete [0,5] with the following meanings:
 
 * 0 - move forward
 * 1 - move backward
@@ -41,15 +43,16 @@ Each agent acts independently. The action space is [0,5] with the following mean
 Movement and turning is done at a fixed rate.
 
 ### Observations
-There are two possible observation types for this environment, vectorized (including two additional subtypes - sequence and typemasked) and image-based.
+There are four possible observation types for this environment - three vectorized (a base vectorized, a sequence vectorized, and a typemasked vectorized) and one image-based.
+The selection is made when the environment is created by passing a value to the `obs_method` argument.
 
-#### Vectorized (Default)
+#### Vectorized (the default)
 Pass the argument `obs_method='vector'` to the environment.
 
 The observation is an (N+1)x5 array for each agent, where `N = num_archers + num_knights + num_swords + max_arrows + max_zombies`.
 > Note that `num_swords = num_knights`
 
-The ordering of the rows of the observation look something like this:
+The ordering of the rows of the observation is:
 ```
 [
 [current agent],
@@ -76,50 +79,51 @@ In total, there will be N+1 rows. Rows with no entities will be all 0, but the o
 **Vector Breakdown**
 
 This breaks down what a row in the observation means. All distances are normalized to [0, 1].
-Note that for positions, [0, 0] is the top left corner of the image. Down is positive y, Left is positive x.
+Note that for positions, [0, 0] is the top left corner of the image. Down is positive y, Right is positive x. The bottom right corner is [1, 1] in normalized coordinates.
 
-For the vector for `current agent`:
+For the vector of `current agent` (the first row):
 - The first value means nothing and will always be 0.
 - The next four values are the position and angle of the current agent.
   - The first two values are position values, normalized to the width and height of the image respectively.
   - The final two values are heading of the agent represented as a unit vector.
 
-For everything else:
-- Each row of the matrix (this is an 5 wide vector) has a breakdown that looks something like this:
-  - The first value is the absolute distance between an entity and the current agent.
-  - The next four values are relative position and absolute angles of each entity relative to the current agent.
-    - The first two values are position values relative to the current agent.
-    - The final two values are the angle of the entity represented as a directional unit vector relative to the world.
+For the remaining rows, each row is a 5 wide vector with the following values:
+  - The first value is the magnitude of the distance between an entity and the current agent.
+  - The next four values are the position and angle.
+    - The first two values are position values relative to the current agent, normalized to the width and height of the image respectively.
+    - The final two values are the heading of the entity (relative to the world) represented as a unit vector.
 
-**Typemasks**
+Dead agents or missing objects (i.e. zombies, swords, or arrows) have a vector of all zeros.
 
-There is an option to prepend a typemask to each row vector. This can be enabled by passing `obs_method='vector-masked'` as a kwarg.
+#### Vectorized with typemasks
 
-The typemask is a 6 wide vector, that looks something like this:
+There is an option to prepend a typemask to each row vector. This can be enabled by passing `obs_method='vector-masked'` as an argument.
+
+The typemask is a 6 wide vector that indicates the type of entry. A dead agent or a non-existent object (zombie, sword, arrow) is indicated by a vector (type mask and all state vector) of all zeros.
+Otherwise, a single value of 1 indicated, by its position, which type of entry the observation corresponds to. The possible options are:
 ```
-[0., 0., 0., 1., 0., 0.]
+an active zombie:  [1., 0., 0., 0., 0., 0.]
+a living archer:   [0., 1., 0., 0., 0., 0.]
+a living knight:   [0., 0., 1., 0., 0., 0.]
+an active sword:   [0., 0., 0., 1., 0., 0.]
+an active arrow:   [0., 0., 0., 0., 1., 0.]
+the current agent: [0., 0., 0., 0., 0., 1.]
 ```
 
-Each value corresponds to either
-```
-[zombie, archer, knight, sword, arrow, current agent]
-```
-
-If there is no entity there, the whole typemask (as well as the whole state vector) will be 0.
-
+The remainder of the row will be as defined by the vector observation above.
 As a result, setting `obs_method='vector-masked'` results in the observation being a (N+1)x11 vector.
 
-**Sequence Space** (Experimental)
+#### Sequence Vectorized space with typemasks
 
-There is an option to also pass `obs_method='vector-sequence'` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size
-are no longer constant. In particular, `N` is now a variable number.
+With this option, the observations are the same as in the typemask section except that all empty rows are removed. So the size of the observation will change through the run. So the observation size is a (X+1)x11 vector where 'X' varies within a run.
+Note that this is **still experimental**. It can be used by passing `obs_method='vector-sequence'` as aargument during environment creation.
 
 #### Image-based
-Pass the argument `obs_method='image'` to the environment.
+To use a image based observation, pass `obs_method='image'` to the environment during creation.
 
 Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.
 Each pixel is defined as RGB values in range [0, 255]. Areas outside of the game box are returned as black pixels: (0,0,0).
-Dead agents return all pixels as black
+Dead agents return all pixels as black.
 
 
 ### Arguments
@@ -141,21 +145,23 @@ knights_archers_zombies_v10.env(
 
 `spawn_delay`: how many cycles before a new zombie is spawned. A higher number means zombies are spawned at a slower rate.
 
-`num_archers`:  how many archer agents initially spawn.
+`num_archers`: how many archer agents initially spawn.
 
-`num_knights`:  how many knight agents initially spawn.
+`num_knights`: how many knight agents initially spawn.
 
 `max_zombies`: maximum number of zombies that can exist at a time
 
 `max_arrows`: maximum number of arrows that can exist at a time
 
-`killable_knights`:  if set to False, knight agents cannot be killed by zombies.
+`killable_knights`: if set to False, knight agents cannot be killed by zombies.
 
-`killable_archers`:  if set to False, archer agents cannot be killed by zombies.
+`killable_archers`: if set to False, archer agents cannot be killed by zombies.
 
-`line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
+`line_death`: if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
-`obs_method`: method of observations to use. Options are 'vector' (default), 'image', 'vector-sequence', or 'vector-masked'. See docs above for details.
+`max_cycles`: The maximum number of game cycles to run. One cycle is complete when one step has been made by all players and zombies.
+
+`obs_method`: method of observations to use. Options are 'vector' (default), 'image', 'vector-sequence', or 'vector-masked'. See docs for details.
 
 
 ### Version History
@@ -232,6 +238,7 @@ class ObsOptions(Enum):
 
 
 def env(**kwargs: Any) -> AECEnv[AgentID, ObsType, ActionType]:
+    """Create the wrapped KAZ environment."""
     aec_env: AECEnv[AgentID, ObsType, ActionType] = raw_env(**kwargs)
     aec_env = wrappers.AssertOutOfBoundsWrapper(aec_env)
     aec_env = wrappers.OrderEnforcingWrapper(aec_env)
@@ -242,6 +249,8 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
+    """The Knights Archers Zombies environment."""
+
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "knights_archers_zombies_v10",
@@ -264,6 +273,25 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         obs_method: str = "vector",
         render_mode: str | None = None,
     ) -> None:
+        """Initialize the environment object.
+
+        Args:
+            spawn_delay: how many cycles before a new zombie is spawned. A higher
+              number means zombies are spawned at a slower rate.
+            num_archers: how many archer agents initially spawn.
+            num_knights: how many knight agents initially spawn.
+            max_zombies: maximum number of zombies that can exist at a time
+            max_arrows: maximum number of arrows that can exist at a time
+            killable_knights: if False, knight agents cannot be killed by zombies.
+            killable_archers: if False, archer agents cannot be killed by zombies.
+            line_death: if True, agents die when they touch the top or bottom wall.
+            max_cycles: The maximum number of game cycles to run. One cycle is
+              complete when one step has been made by all players and zombies.
+            obs_method: method of observations to use. Options are
+              'vector' (default), 'image', 'vector-sequence', or 'vector-masked'.
+              See docs for details.
+            render_mode: the render mode to use.
+        """
         EzPickle.__init__(
             self,
             spawn_delay=spawn_delay,
@@ -340,6 +368,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.reinit()
 
     def _build_possible_agents(self) -> list[AgentID]:
+        """Return the list of possible agents."""
         possible_agents: list[AgentID] = []
 
         for i in range(self.num_archers):
@@ -407,12 +436,19 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         return Box(low=0, high=255, shape=shape, dtype=np.uint8)
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
+        """Return the observation space for the given agent."""
         return self.observation_spaces[agent]
 
     def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
+        """Return the action space for the given agent."""
         return self.action_spaces[agent]
 
     def _seed(self, seed: int | None = None) -> None:
+        """Seed the random number generator.
+
+        Args:
+            seed: The seed to use.
+        """
         self.np_random, seed = seeding.np_random(seed)
 
     def do_zombie_turn(self) -> None:
@@ -441,7 +477,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
                 self.zombie_list.add(zombie)
 
     def _remove_agent(self, agent: Player) -> None:
-        """Mark an agent as dead."""
+        """Mark the given agent as dead."""
         agent.is_alive = False
         if agent in self.player_list:
             self.player_list.remove(agent)
@@ -458,7 +494,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         The archer that fired the arrow is awarded 1 point.
 
         If a sword hits a zombie, the zombie is removed but the sword is not.
-        The knight wielding a sword is awarded 1 point.
+        The knight wielding the sword is awarded 1 point.
         """
         for agent in self.agent_map.values():
             for weapon in list(agent.weapons):
@@ -482,6 +518,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     @property
     def num_active_arrows(self) -> int:
+        """Return the number of arrows on the screen."""
         num_arrows = 0
         for agent in self.agent_map.values():
             if is_archer(agent):
@@ -490,6 +527,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     @property
     def num_active_swords(self) -> int:
+        """Return the number of swords on the screen."""
         num_swords = 0
         for agent in self.agent_map.values():
             if is_knight(agent):
@@ -584,7 +622,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         return self._observe_image(agent)
 
     def state(self) -> StateType:
-        """Returns an observation of the global environment."""
+        """Returns the state of the global environment."""
         if not self.vector_state:
             # this makes a copy of the state, only including the
             # expected size. It is intentionally done without using
@@ -598,6 +636,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         return self.get_vector_state()
 
     def get_vector_state(self) -> StateTypeVector:
+        """Returns the vector state of the global environment."""
         state: list[StateTypeVector] = []
         empty_row = np.zeros(self.vector_width)
 
@@ -639,6 +678,11 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         return np.stack(state, axis=0)
 
     def step(self, action: ActionType) -> None:
+        """Perform a step for one agent in the environment.
+
+        Args:
+            action: the action the agent will perform.
+        """
         # check if the particular agent is done
         if (
             self.terminations[self.agent_selection]
@@ -717,6 +761,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             self.render()
 
     def draw(self) -> None:
+        """Draw the screen."""
         self.screen.blit(self.background, (0, 0))
 
         # draw all the sprites
@@ -726,7 +771,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.player_list.draw(self.screen)
 
     def _get_screen(self) -> pygame.Surface:
-        """Return a newly created pygame surface."""
+        """Return a newly created pygame surface as the display screen."""
         pygame.init()
 
         if self.render_mode == "human":
@@ -739,6 +784,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         raise ValueError(f"Unknown render_mode: {self.render_mode}")
 
     def render(self) -> npt.NDArray[np.uint8] | None:
+        """Render the state based on the render mode."""
         if self.render_mode is None:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
@@ -777,6 +823,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.game_over = self._check_zombie_escape() or self._check_zombie_killall()
 
     def reinit(self) -> None:
+        """Re-initialize the env for another run."""
         self.game_over = False
 
         self.zombie_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
@@ -807,6 +854,12 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def reset(
         self, seed: int | None = None, options: dict[str, Any] | None = None
     ) -> None:
+        """Reset the env for another run.
+
+        Args:
+            seed: the seed to use for the new run
+            options: these are ignored for this env
+        """
         if seed is not None:
             self._seed(seed=seed)
         self.agents = self.possible_agents

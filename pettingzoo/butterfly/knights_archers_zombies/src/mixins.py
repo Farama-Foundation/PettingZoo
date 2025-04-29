@@ -24,7 +24,7 @@ class VectorObservable:
 
     @property
     def vector_state(self) -> npt.NDArray[np.float64]:
-        """Return the vector observation for the Player."""
+        """Return the vector observation for the object."""
         return np.array(
             [
                 self.rect.x / const.SCREEN_WIDTH,
@@ -46,7 +46,11 @@ class VectorObservable:
         )
 
     def get_vector_state(self, use_typemask: bool) -> npt.NDArray[np.float64]:
-        """Return the vector observation with or without typemask."""
+        """Return the vector observation with or without typemask.
+
+        Args:
+            use_typemask: whether include the type mask in the observation
+        """
         if use_typemask:
             return self.typemasked_vector_state
         return self.vector_state

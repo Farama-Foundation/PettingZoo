@@ -45,7 +45,7 @@ class Zombie(pygame.sprite.Sprite, VectorObservable):
         """
         self.rect.y += const.ZOMBIE_Y_SPEED
 
-        # Wobbling in X Direction. he original code seemed to have this every
+        # Wobbling in X Direction. The original code seemed to have this every
         # 3 steps. Not sure why that was chosen, but the behavior has been
         # retained here. On these steps, there *may* be some left/right movement.
         # On other steps, there is only downward movement.

@@ -58,7 +58,10 @@ class Arrow(Weapon):
 
     @property
     def is_active(self) -> bool:
-        """Return True if the arrow is active."""
+        """Return True if the arrow is active.
+
+        'Active' for an arrow means it is on the screen.
+        """
         if self.rect.x < 0 or self.rect.y < 0:
             return False
         if self.rect.x > const.SCREEN_WIDTH or self.rect.y > const.SCREEN_HEIGHT:

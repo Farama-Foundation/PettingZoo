@@ -42,7 +42,13 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         self.weapons: pygame.sprite.Group[Any] = pygame.sprite.Group()
 
     def is_timed_out(self, action: Actions) -> bool:
-        """Return True if the Player is blocked from making the given move."""
+        """Return True if the Player is blocked from making the given action.
+
+        It is up to the subclass to determine which actions are blocked.
+
+        Args:
+            action: The desired action
+        """
         if self.timeout is None:
             return False
         if self.timeout.increment():  # timeout ended, remove block
@@ -53,7 +59,7 @@ class Player(pygame.sprite.Sprite, VectorObservable):
     def act(self, action: Actions) -> bool:
         """Perform the given action.
 
-        This moves/turns the player. Attacks are handled elsewhere.
+        This causes the player to move/turn/attack.
         It also checks that the player is within the bounds.
         If a move would take the player out of the box, it is instead
         moved to the edge and the out of bounds status is returned.
