@@ -793,15 +793,15 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         self.draw()
 
-        observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
             pygame.display.flip()
             self.clock.tick(self.metadata["render_fps"])
-        return (
-            np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array"
-            else None
-        )
+
+        if self.render_mode == "rgb_array":
+            obs: ObsTypeImage = np.array(pygame.surfarray.pixels3d(self.screen))
+            return np.transpose(obs, axes=(1, 0, 2))
+
+        return None
 
     def close(self) -> None:
         """Close the screen, if open."""
