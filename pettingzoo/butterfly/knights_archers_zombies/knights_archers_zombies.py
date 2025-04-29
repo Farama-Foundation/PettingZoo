@@ -227,6 +227,9 @@ ObsTypeVector: TypeAlias = npt.NDArray[np.float64]
 ObsTypeImage: TypeAlias = npt.NDArray[np.uint8]
 ObsType: TypeAlias = ObsTypeImage | ObsTypeVector
 ActionType = int
+StateTypeVector: TypeAlias = npt.NDArray[np.float64]
+StateTypeImage: TypeAlias = npt.NDArray[np.uint8]
+StateType: TypeAlias = ObsTypeImage | ObsTypeVector
 
 
 class ObsOptions(Enum):
@@ -584,7 +587,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             return self._observe_vector(agent)
         return self._observe_image(agent)
 
-    def state(self) -> npt.NDArray[np.float64]:
+    def state(self) -> StateType:
         """Returns an observation of the global environment."""
         if not self.vector_state:
             assert self.screen is not None
@@ -592,18 +595,15 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             # expected size. It is intentionally done without using
             # the .copy() function to accommodate a future case where
             # the screen may be larger than the expected size.
-            state = pygame.surfarray.pixels3d(self.screen)[
+            state: StateTypeImage = pygame.surfarray.pixels3d(self.screen)[
                 : const.SCREEN_WIDTH, : const.SCREEN_HEIGHT, :
             ]
             state = np.rot90(state, k=3)
-            state = np.fliplr(state)
-        else:
-            state = self.get_vector_state()
+            return np.fliplr(state)
+        return self.get_vector_state()
 
-        return state
-
-    def get_vector_state(self) -> npt.NDArray[np.float64]:
-        state: list[npt.NDArray[np.float64]] = []
+    def get_vector_state(self) -> StateTypeVector:
+        state: list[StateTypeVector] = []
         empty_row = np.zeros(self.vector_width)
 
         # handle agents - all archers then all knights
