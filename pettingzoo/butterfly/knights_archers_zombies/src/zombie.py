@@ -15,7 +15,7 @@ class Zombie(pygame.sprite.Sprite, VectorObservable):
 
     # this is the valid range of x values allowed. It corresponds to the
     # visible region on the screen that is between the two walls.
-    x_range = [const.WALL_WIDTH, const.SCREEN_WIDTH - const.WALL_WIDTH]
+    x_range: list[int] = [const.WALL_WIDTH, const.SCREEN_WIDTH - const.WALL_WIDTH]
 
     def __init__(self, randomizer: np.random.Generator) -> None:
         """Initialize the Zombie agent.
@@ -29,7 +29,8 @@ class Zombie(pygame.sprite.Sprite, VectorObservable):
 
         # move rect to random starting position at the top
         self.rect.y = 5
-        self.rect.x = int(randomizer.integers(*self.x_range))
+        low_x, high_x = self.x_range
+        self.rect.x = int(randomizer.integers(low_x, high_x))
 
         self.wobble_interval = Interval(3)
         self.randomizer = randomizer
