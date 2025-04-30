@@ -187,7 +187,7 @@ import os
 import sys
 from enum import Enum
 from itertools import repeat
-from typing import Any
+from typing import Any, Union
 
 import gymnasium
 import numpy as np
@@ -222,11 +222,11 @@ __all__ = ["env", "parallel_env", "raw_env"]
 AgentID = str
 ObsTypeVector: TypeAlias = npt.NDArray[np.float64]
 ObsTypeImage: TypeAlias = npt.NDArray[np.uint8]
-ObsType: TypeAlias = ObsTypeImage | ObsTypeVector
+ObsType: TypeAlias = Union[ObsTypeImage, ObsTypeVector]
 ActionType = int
 StateTypeVector: TypeAlias = npt.NDArray[np.float64]
 StateTypeImage: TypeAlias = npt.NDArray[np.uint8]
-StateType: TypeAlias = ObsTypeImage | ObsTypeVector
+StateType: TypeAlias = Union[ObsTypeImage, ObsTypeVector]
 
 
 class ObsOptions(Enum):
