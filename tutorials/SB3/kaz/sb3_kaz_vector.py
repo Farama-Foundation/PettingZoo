@@ -124,8 +124,8 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 if __name__ == "__main__":
     env_fn = knights_archers_zombies_v11
 
-    # Set vector_state to false in order to use visual observations (significantly longer training time)
-    env_kwargs = dict(max_cycles=100, max_zombies=4, vector_state=True)
+    # Set obs_method to "image" in order to use visual observations (significantly longer training time)
+    env_kwargs = dict(max_cycles=100, max_zombies=4, obs_method="vector")
 
     # Train a model (takes ~5 minutes on a laptop CPU)
     train(env_fn, steps=81_920, seed=0, **env_kwargs)
