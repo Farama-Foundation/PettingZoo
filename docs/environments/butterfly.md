@@ -52,12 +52,12 @@ env.close()
 To launch a [Knights Archers Zombies](/environments/butterfly/knights_archers_zombies/) environment with interactive user input (see [manual_policy.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py)):
 ```python
 import pygame
-from pettingzoo.butterfly import knights_archers_zombies_v10
+from pettingzoo.butterfly import knights_archers_zombies_v11
 
-env = knights_archers_zombies_v10.env(render_mode="human")
+env = knights_archers_zombies_v11.env(render_mode="human")
 env.reset(seed=42)
 
-manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
+manual_policy = knights_archers_zombies_v11.ManualPolicy(env)
 
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()

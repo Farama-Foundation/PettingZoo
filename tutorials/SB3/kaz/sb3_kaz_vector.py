@@ -16,7 +16,7 @@ import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.ppo import CnnPolicy, MlpPolicy
 
-from pettingzoo.butterfly import knights_archers_zombies_v10
+from pettingzoo.butterfly import knights_archers_zombies_v11
 
 
 def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
@@ -122,7 +122,7 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
 
 if __name__ == "__main__":
-    env_fn = knights_archers_zombies_v10
+    env_fn = knights_archers_zombies_v11
 
     # Set vector_state to false in order to use visual observations (significantly longer training time)
     env_kwargs = dict(max_cycles=100, max_zombies=4, vector_state=True)

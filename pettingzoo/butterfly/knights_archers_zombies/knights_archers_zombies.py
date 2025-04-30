@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import knights_archers_zombies_v10` |
+| Import               | `from pettingzoo.butterfly import knights_archers_zombies_v11` |
 |----------------------|----------------------------------------------------------------|
 | Actions              | Discrete                                                       |
 | Parallel API         | Yes                                                            |
@@ -129,7 +129,7 @@ Dead agents return all pixels as black.
 ### Arguments
 
 ``` python
-knights_archers_zombies_v10.env(
+knights_archers_zombies_v11.env(
   spawn_delay=20,
   num_archers=2,
   num_knights=2,
@@ -166,6 +166,7 @@ knights_archers_zombies_v10.env(
 
 ### Version History
 
+* v11: Code rewrite and numerous fixes (1.25.1)
 * v10: Add vectorizable state space (1.17.0)
 * v9: Code rewrite and numerous fixes (1.16.0)
 * v8: Code cleanup and several bug fixes (1.14.0)
@@ -253,7 +254,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "knights_archers_zombies_v10",
+        "name": "knights_archers_zombies_v11",
         "is_parallelizable": True,
         "render_fps": const.FPS,
         "has_manual_policy": True,
