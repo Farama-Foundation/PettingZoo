@@ -30,6 +30,14 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         self.image = get_image(os.path.join("img", image_name))
         self.org_image = self.image.copy()
 
+        # these are the limits of where the agent can move on the screen
+        height = self.org_image.get_rect().height
+        width = self.org_image.get_rect().width
+        self.y_top_limit = height // 2
+        self.y_bot_limit = const.SCREEN_HEIGHT - height // 2
+        self.x_left_limit = const.WALL_WIDTH + width // 2
+        self.x_right_limit = const.SCREEN_WIDTH - const.WALL_WIDTH - width // 2
+
         self.rect = pygame.Rect(0.0, 0.0, 0.0, 0.0)
         self.direction = pygame.Vector2(0, -1)
 
@@ -74,12 +82,10 @@ class Player(pygame.sprite.Sprite, VectorObservable):
         """
         went_out_of_bounds = False
 
-        if action == Actions.ACTION_FORWARD and self.rect.y > 20:
+        if action == Actions.ACTION_FORWARD:
             self.rect.x += round(self.direction[0] * self.speed)
             self.rect.y += round(self.direction[1] * self.speed)
-        elif (
-            action == Actions.ACTION_BACKWARD and self.rect.y < const.SCREEN_HEIGHT - 40
-        ):
+        elif action == Actions.ACTION_BACKWARD:
             self.rect.x -= round(self.direction[0] * self.speed)
             self.rect.y -= round(self.direction[1] * self.speed)
         elif action == Actions.ACTION_TURN_CCW:
@@ -94,11 +100,15 @@ class Player(pygame.sprite.Sprite, VectorObservable):
             pass
 
         # Clamp to stay inside the screen
-        if self.rect.y < 0 or self.rect.y > (const.SCREEN_HEIGHT - 40):
+        if self.rect.centery < self.y_top_limit or self.rect.centery > self.y_bot_limit:
             went_out_of_bounds = True
 
-        self.rect.x = max(min(self.rect.x, const.SCREEN_WIDTH - 132), 100)
-        self.rect.y = max(min(self.rect.y, const.SCREEN_HEIGHT - 40), 0)
+        self.rect.centerx = max(
+            min(self.rect.centerx, self.x_right_limit), self.x_left_limit
+        )
+        self.rect.centery = max(
+            min(self.rect.centery, self.y_bot_limit), self.y_top_limit
+        )
 
         return went_out_of_bounds
 
