@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 class Weapon(pygame.sprite.Sprite, VectorObservable):
     """Base class for a weapon."""
 
-    def __init__(self, player: Player, image_name: str) -> None:
+    def __init__(self, player: "Player", image_name: str) -> None:
         """Initialize a weapon.
 
         Args:
@@ -37,7 +37,7 @@ class Weapon(pygame.sprite.Sprite, VectorObservable):
 class Arrow(Weapon):
     """An arrow fired by an archer."""
 
-    def __init__(self, archer: Archer) -> None:
+    def __init__(self, archer: "Archer") -> None:
         """Initialize an Arrow fired by the given archer."""
         super().__init__(archer, "arrow.png")
 
@@ -74,7 +74,7 @@ class Sword(Weapon):
     a sword everywhere.
     """
 
-    def __init__(self, knight: Knight) -> None:
+    def __init__(self, knight: "Knight") -> None:
         """Initialize the sword object for the given knight."""
         super().__init__(knight, "mace.png")
         self.knight = self.player
