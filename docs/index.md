@@ -78,8 +78,8 @@ The [AEC API](/api/aec/) supports sequential turn based environments, while the 
 Environments can be interacted with using a similar interface to [Gymnasium](https://gymnasium.farama.org):
 
 ```python
-from pettingzoo.butterfly import knights_archers_zombies_v10
-env = knights_archers_zombies_v10.env(render_mode="human")
+from pettingzoo.butterfly import knights_archers_zombies_v11
+env = knights_archers_zombies_v11.env(render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():

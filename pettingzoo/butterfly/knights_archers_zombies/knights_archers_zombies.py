@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import knights_archers_zombies_v10` |
+| Import               | `from pettingzoo.butterfly import knights_archers_zombies_v11` |
 |----------------------|----------------------------------------------------------------|
 | Actions              | Discrete                                                       |
 | Parallel API         | Yes                                                            |
@@ -25,17 +25,34 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 
 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
-and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all
-agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie.
-There are two possible observation types for this environment, vectorized and image-based.
+and move forward or backward. An agent that moves off the top or bottom of the screen may be killed (if this setting is enabled, otherwise they stop at the edge). Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading
+direction. During this attack, which takes several steps, the knight cannot take any other action. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. There is a slight delay after firing an arrow before an archer can fire another arrow.
+However, the archer and move and turn during this time. A zombie that is hit by either a mace or an arrow is removed. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of its arrows hits and kills a zombie. A knight or archer that is
+touched by a zombie is removed (unless they are set to be unkillable). The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border.
 
-#### Vectorized (Default)
-Pass the argument `vector_state=True` to the environment.
+### Actions
+Each agent acts independently. The action space is discrete [0,5] with the following meanings:
+
+* 0 - move forward
+* 1 - move backward
+* 2 - turn counter clockwise
+* 3 - turn clockwise
+* 4 - use weapon
+* 5 - do nothing
+
+Movement and turning is done at a fixed rate.
+
+### Observations
+There are four possible observation types for this environment - three vectorized (a base vectorized, a sequence vectorized, and a typemasked vectorized) and one image-based.
+The selection is made when the environment is created by passing a value to the `obs_method` argument.
+
+#### Vectorized (the default)
+Pass the argument `obs_method='vector'` to the environment.
 
 The observation is an (N+1)x5 array for each agent, where `N = num_archers + num_knights + num_swords + max_arrows + max_zombies`.
 > Note that `num_swords = num_knights`
 
-The ordering of the rows of the observation look something like this:
+The ordering of the rows of the observation is:
 ```
 [
 [current agent],
@@ -62,106 +79,94 @@ In total, there will be N+1 rows. Rows with no entities will be all 0, but the o
 **Vector Breakdown**
 
 This breaks down what a row in the observation means. All distances are normalized to [0, 1].
-Note that for positions, [0, 0] is the top left corner of the image. Down is positive y, Left is positive x.
+Note that for positions, [0, 0] is the top left corner of the image. Down is positive y, Right is positive x. The bottom right corner is [1, 1] in normalized coordinates.
 
-For the vector for `current agent`:
+For the vector of `current agent` (the first row):
 - The first value means nothing and will always be 0.
 - The next four values are the position and angle of the current agent.
   - The first two values are position values, normalized to the width and height of the image respectively.
   - The final two values are heading of the agent represented as a unit vector.
 
-For everything else:
-- Each row of the matrix (this is an 5 wide vector) has a breakdown that looks something like this:
-  - The first value is the absolute distance between an entity and the current agent.
-  - The next four values are relative position and absolute angles of each entity relative to the current agent.
-    - The first two values are position values relative to the current agent.
-    - The final two values are the angle of the entity represented as a directional unit vector relative to the world.
+For the remaining rows, each row is a 5 wide vector with the following values:
+  - The first value is the magnitude of the distance between an entity and the current agent.
+  - The next four values are the position and angle.
+    - The first two values are position values relative to the current agent, normalized to the width and height of the image respectively.
+    - The final two values are the heading of the entity (relative to the world) represented as a unit vector.
 
-**Typemasks**
+Dead agents or missing objects (i.e. zombies, swords, or arrows) have a vector of all zeros.
 
-There is an option to prepend a typemask to each row vector. This can be enabled by passing `use_typemasks=True` as a kwarg.
+#### Vectorized with typemasks
 
-The typemask is a 6 wide vector, that looks something like this:
+There is an option to prepend a typemask to each row vector. This can be enabled by passing `obs_method='vector-masked'` as an argument.
+
+The typemask is a 6 wide vector that indicates the type of entry. A dead agent or a non-existent object (zombie, sword, arrow) is indicated by a vector (type mask and all state vector) of all zeros.
+Otherwise, a single value of 1 indicated, by its position, which type of entry the observation corresponds to. The possible options are:
 ```
-[0., 0., 0., 1., 0., 0.]
+an active zombie:  [1., 0., 0., 0., 0., 0.]
+a living archer:   [0., 1., 0., 0., 0., 0.]
+a living knight:   [0., 0., 1., 0., 0., 0.]
+an active sword:   [0., 0., 0., 1., 0., 0.]
+an active arrow:   [0., 0., 0., 0., 1., 0.]
+the current agent: [0., 0., 0., 0., 0., 1.]
 ```
 
-Each value corresponds to either
-```
-[zombie, archer, knight, sword, arrow, current agent]
-```
+The remainder of the row will be as defined by the vector observation above.
+As a result, setting `obs_method='vector-masked'` results in the observation being a (N+1)x11 vector.
 
-If there is no entity there, the whole typemask (as well as the whole state vector) will be 0.
+#### Sequence Vectorized space with typemasks
 
-As a result, setting `use_typemask=True` results in the observation being a (N+1)x11 vector.
-
-**Sequence Space** (Experimental)
-
-There is an option to also pass `sequence_space=True` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size are no longer constant. In particular, `N` is now a
-variable number.
+With this option, the observations are the same as in the typemask section except that all empty rows are removed. So the size of the observation will change through the run. So the observation size is a (X+1)x11 vector where 'X' varies within a run.
+Note that this is **still experimental**. It can be used by passing `obs_method='vector-sequence'` as aargument during environment creation.
 
 #### Image-based
-Pass the argument `vector_state=False` to the environment.
+To use a image based observation, pass `obs_method='image'` to the environment during creation.
 
 Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.
-
-### Manual Control
-
-Move the archer using the 'W', 'A', 'S' and 'D' keys. Shoot the Arrow using 'F' key. Rotate the archer using 'Q' and 'E' keys.
-Press 'X' key to spawn a new archer.
-
-Move the knight using the 'I', 'J', 'K' and 'L' keys. Stab the Sword using ';' key. Rotate the knight using 'U' and 'O' keys.
-Press 'M' key to spawn a new knight.
-
+Each pixel is defined as RGB values in range [0, 255]. Areas outside of the game box are returned as black pixels: (0,0,0).
+Dead agents return all pixels as black.
 
 
 ### Arguments
 
 ``` python
-knights_archers_zombies_v10.env(
-  spawn_rate=20,
+knights_archers_zombies_v11.env(
+  spawn_delay=20,
   num_archers=2,
   num_knights=2,
   max_zombies=10,
   max_arrows=10,
   killable_knights=True,
   killable_archers=True,
-  pad_observation=True,
   line_death=False,
   max_cycles=900,
-  vector_state=True,
-  use_typemasks=False,
-  sequence_space=False,
+  obs_method="vector",
 )
 ```
 
-`spawn_rate`:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
+`spawn_delay`: how many cycles before a new zombie is spawned. A higher number means zombies are spawned at a slower rate.
 
-`num_archers`:  how many archer agents initially spawn.
+`num_archers`: how many archer agents initially spawn.
 
-`num_knights`:  how many knight agents initially spawn.
+`num_knights`: how many knight agents initially spawn.
 
 `max_zombies`: maximum number of zombies that can exist at a time
 
 `max_arrows`: maximum number of arrows that can exist at a time
 
-`killable_knights`:  if set to False, knight agents cannot be killed by zombies.
+`killable_knights`: if set to False, knight agents cannot be killed by zombies.
 
-`killable_archers`:  if set to False, archer agents cannot be killed by zombies.
+`killable_archers`: if set to False, archer agents cannot be killed by zombies.
 
-`pad_observation`:  if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
+`line_death`: if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
-`line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
+`max_cycles`: The maximum number of game cycles to run. One cycle is complete when one step has been made by all players and zombies.
 
-`vector_state`: whether to use vectorized state, if set to `False`, an image-based observation will be provided instead.
-
-`use_typemasks`: only relevant when `vector_state=True` is set, adds typemasks to the vectors.
-
-`sequence_space`: **experimental**, only relevant when `vector_state=True` is set, removes non-existent entities in the vector state.
+`obs_method`: method of observations to use. Options are 'vector' (default), 'image', 'vector-sequence', or 'vector-masked'. See docs for details.
 
 
 ### Version History
 
+* v11: Code rewrite and numerous fixes (1.25.1)
 * v10: Add vectorizable state space (1.17.0)
 * v9: Code rewrite and numerous fixes (1.16.0)
 * v8: Code cleanup and several bug fixes (1.14.0)
@@ -176,23 +181,34 @@ knights_archers_zombies_v10.env(
 
 """
 
+from __future__ import annotations
+
 import os
 import sys
+from enum import Enum
 from itertools import repeat
+from typing import Any, Union
 
 import gymnasium
 import numpy as np
+import numpy.typing as npt
 import pygame
-import pygame.gfxdraw
 from gymnasium.spaces import Box, Discrete, Sequence
 from gymnasium.utils import EzPickle, seeding
+from typing_extensions import TypeAlias
 
 from pettingzoo import AECEnv
-from pettingzoo.butterfly.knights_archers_zombies.manual_policy import ManualPolicy
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
+from pettingzoo.butterfly.knights_archers_zombies.src.constants import Actions
 from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
-from pettingzoo.butterfly.knights_archers_zombies.src.players import Archer, Knight
-from pettingzoo.butterfly.knights_archers_zombies.src.weapons import Arrow, Sword
+from pettingzoo.butterfly.knights_archers_zombies.src.interval import Interval
+from pettingzoo.butterfly.knights_archers_zombies.src.players import (
+    Archer,
+    Knight,
+    Player,
+    is_archer,
+    is_knight,
+)
 from pettingzoo.butterfly.knights_archers_zombies.src.zombie import Zombie
 from pettingzoo.utils import AgentSelector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
@@ -200,23 +216,45 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 sys.dont_write_bytecode = True
 
 
-__all__ = ["ManualPolicy", "env", "parallel_env", "raw_env"]
+__all__ = ["env", "parallel_env", "raw_env"]
 
 
-def env(**kwargs):
-    env = raw_env(**kwargs)
-    env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.OrderEnforcingWrapper(env)
-    return env
+AgentID = str
+ObsTypeVector: TypeAlias = npt.NDArray[np.float64]
+ObsTypeImage: TypeAlias = npt.NDArray[np.uint8]
+ObsType: TypeAlias = Union[ObsTypeImage, ObsTypeVector]
+ActionType = int
+StateTypeVector: TypeAlias = npt.NDArray[np.float64]
+StateTypeImage: TypeAlias = npt.NDArray[np.uint8]
+StateType: TypeAlias = Union[ObsTypeImage, ObsTypeVector]
+
+
+class ObsOptions(Enum):
+    """Types of Observations supported."""
+
+    IMAGE = "image"  # uses ObsTypeImage
+    VECTOR = "vector"  # uses ObsTypeVector
+    VECTOR_SEQUENCE = "vector-sequence"  # uses ObsTypeVector
+    VECTOR_MASKED = "vector-masked"  # uses ObsTypeVector
+
+
+def env(**kwargs: Any) -> AECEnv[AgentID, ObsType, ActionType]:
+    """Create the wrapped KAZ environment."""
+    aec_env: AECEnv[AgentID, ObsType, ActionType] = raw_env(**kwargs)
+    aec_env = wrappers.AssertOutOfBoundsWrapper(aec_env)
+    aec_env = wrappers.OrderEnforcingWrapper(aec_env)
+    return aec_env
 
 
 parallel_env = parallel_wrapper_fn(env)
 
 
-class raw_env(AECEnv, EzPickle):
+class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
+    """The Knights Archers Zombies environment."""
+
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "knights_archers_zombies_v10",
+        "name": "knights_archers_zombies_v11",
         "is_parallelizable": True,
         "render_fps": const.FPS,
         "has_manual_policy": True,
@@ -224,67 +262,84 @@ class raw_env(AECEnv, EzPickle):
 
     def __init__(
         self,
-        spawn_rate=20,
-        num_archers=2,
-        num_knights=2,
-        max_zombies=10,
-        max_arrows=10,
-        killable_knights=True,
-        killable_archers=True,
-        pad_observation=True,
-        line_death=False,
-        max_cycles=900,
-        vector_state=True,
-        use_typemasks=False,
-        sequence_space=False,
-        render_mode=None,
-    ):
+        spawn_delay: int = 20,
+        num_archers: int = 2,
+        num_knights: int = 2,
+        max_zombies: int = 10,
+        max_arrows: int = 10,
+        killable_knights: bool = True,
+        killable_archers: bool = True,
+        line_death: bool = False,
+        max_cycles: int = 900,
+        obs_method: str = "vector",
+        render_mode: str | None = None,
+    ) -> None:
+        """Initialize the environment object.
+
+        Args:
+            spawn_delay: how many cycles before a new zombie is spawned. A higher
+              number means zombies are spawned at a slower rate.
+            num_archers: how many archer agents initially spawn.
+            num_knights: how many knight agents initially spawn.
+            max_zombies: maximum number of zombies that can exist at a time
+            max_arrows: maximum number of arrows that can exist at a time
+            killable_knights: if False, knight agents cannot be killed by zombies.
+            killable_archers: if False, archer agents cannot be killed by zombies.
+            line_death: if True, agents die when they touch the top or bottom wall.
+            max_cycles: The maximum number of game cycles to run. One cycle is
+              complete when one step has been made by all players and zombies.
+            obs_method: method of observations to use. Options are
+              'vector' (default), 'image', 'vector-sequence', or 'vector-masked'.
+              See docs for details.
+            render_mode: the render mode to use.
+        """
         EzPickle.__init__(
             self,
-            spawn_rate=spawn_rate,
+            spawn_delay=spawn_delay,
             num_archers=num_archers,
             num_knights=num_knights,
             max_zombies=max_zombies,
             max_arrows=max_arrows,
             killable_knights=killable_knights,
             killable_archers=killable_archers,
-            pad_observation=pad_observation,
             line_death=line_death,
             max_cycles=max_cycles,
-            vector_state=vector_state,
-            use_typemasks=use_typemasks,
-            sequence_space=sequence_space,
+            obs_method=obs_method,
             render_mode=render_mode,
         )
+        if render_mode is not None and render_mode not in self.metadata["render_modes"]:
+            raise ValueError(f"render_mode: '{render_mode}' is not supported.")
+        try:
+            self.obs_type = ObsOptions(obs_method)
+        except ValueError as e:
+            raise ValueError(f"Invalid 'obs_method': {obs_method}") from e
+
         # variable state space
-        self.sequence_space = sequence_space
-        if self.sequence_space:
-            assert vector_state, "vector_state must be True if sequence_space is True."
+        self.sequence_space = self.obs_type == ObsOptions.VECTOR_SEQUENCE
+        self.vector_state = self.obs_type != ObsOptions.IMAGE
 
-            assert (
-                use_typemasks
-            ), "use_typemasks should be True if sequence_space is True"
-
-        # whether we want RGB state or vector state
-        self.vector_state = vector_state
         # agents + zombies + weapons
         self.num_tracked = (
             num_archers + num_knights + max_zombies + num_knights + max_arrows
         )
-        self.use_typemasks = True if sequence_space else use_typemasks
+
+        self.use_typemasks = self.obs_type in [
+            ObsOptions.VECTOR_SEQUENCE,
+            ObsOptions.VECTOR_MASKED,
+        ]
         self.typemask_width = 6
-        self.vector_width = 4 + self.typemask_width if use_typemasks else 4
+        self.vector_width = 4 + self.typemask_width if self.use_typemasks else 4
 
         # Game Status
+        self.zombie_spawn_interval = Interval(spawn_delay)
         self.frames = 0
         self.render_mode = render_mode
-        self.screen = None
+        self.screen_dims = [const.SCREEN_WIDTH, const.SCREEN_HEIGHT]
+        self.screen = self._get_screen()
 
         # Game Constants
         self._seed()
-        self.spawn_rate = spawn_rate
         self.max_cycles = max_cycles
-        self.pad_observation = pad_observation
         self.killable_knights = killable_knights
         self.killable_archers = killable_archers
         self.line_death = line_death
@@ -294,386 +349,341 @@ class raw_env(AECEnv, EzPickle):
         self.max_arrows = max_arrows
 
         # Represents agents to remove at end of cycle
-        self.kill_list = []
-        self.agent_list = []
-        self.agents = []
-        self.dead_agents = []
+        self.kill_list: list[AgentID] = []
+        self.agent_map: dict[str, Player] = {}
+        self.dead_agents: list[AgentID] = []
 
-        self.agent_name_mapping = {}
-        a_count = 0
-        for i in range(self.num_archers):
-            a_name = "archer_" + str(i)
-            self.agents.append(a_name)
-            self.agent_name_mapping[a_name] = a_count
-            a_count += 1
-        for i in range(self.num_knights):
-            k_name = "knight_" + str(i)
-            self.agents.append(k_name)
-            self.agent_name_mapping[k_name] = a_count
-            a_count += 1
+        self.possible_agents = self._build_possible_agents()
+        self.observation_spaces = self._build_observation_spaces()
+        self.action_spaces = self._build_action_spaces()
+        self.state_space = self._build_state_space()
 
-        shape = (
-            [512, 512, 3]
-            if not self.vector_state
-            else [self.num_tracked + 1, self.vector_width + 1]
-        )
-        low = 0 if not self.vector_state else -1.0
-        high = 255 if not self.vector_state else 1.0
-        dtype = np.uint8 if not self.vector_state else np.float64
-        if not self.sequence_space:
-            obs_space = Box(low=low, high=high, shape=shape, dtype=dtype)
-            self.observation_spaces = dict(
-                zip(
-                    self.agents,
-                    [obs_space for _ in enumerate(self.agents)],
-                )
-            )
-        else:
-            box_space = Box(low=low, high=high, shape=[shape[-1]], dtype=dtype)
-            obs_space = Sequence(space=box_space, stack=True)
-            self.observation_spaces = dict(
-                zip(
-                    self.agents,
-                    [obs_space for _ in enumerate(self.agents)],
-                )
-            )
-
-        self.action_spaces = dict(
-            zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
-        )
-
-        shape = (
-            [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
-            if not self.vector_state
-            else [self.num_tracked, self.vector_width]
-        )
-        low = 0 if not self.vector_state else -1.0
-        high = 255 if not self.vector_state else 1.0
-        dtype = np.uint8 if not self.vector_state else np.float64
-        self.state_space = Box(
-            low=low,
-            high=high,
-            shape=shape,
-            dtype=dtype,
-        )
-        self.possible_agents = self.agents
+        self.agents = self.possible_agents[:]
 
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-        self.left_wall = get_image(os.path.join("img", "left_wall.png"))
-        self.right_wall = get_image(os.path.join("img", "right_wall.png"))
-        self.right_wall_rect = self.right_wall.get_rect()
-        self.right_wall_rect.left = const.SCREEN_WIDTH - self.right_wall_rect.width
-        self.floor_patch1 = get_image(os.path.join("img", "patch1.png"))
-        self.floor_patch2 = get_image(os.path.join("img", "patch2.png"))
-        self.floor_patch3 = get_image(os.path.join("img", "patch3.png"))
-        self.floor_patch4 = get_image(os.path.join("img", "patch4.png"))
+        self.background = self._generate_background()
 
         self._agent_selector = AgentSelector(self.agents)
         self.reinit()
 
-    def observation_space(self, agent):
+    def _build_possible_agents(self) -> list[AgentID]:
+        """Return the list of possible agents."""
+        possible_agents: list[AgentID] = []
+
+        for i in range(self.num_archers):
+            agent_name = f"archer_{i}"
+            possible_agents.append(agent_name)
+
+        for i in range(self.num_knights):
+            agent_name = f"knight_{i}"
+            possible_agents.append(agent_name)
+
+        return possible_agents
+
+    def _generate_background(self) -> pygame.Surface:
+        """Returns a background surface formed from image components."""
+        background = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+        left_wall = get_image(os.path.join("img", "left_wall.png"))
+        right_wall = get_image(os.path.join("img", "right_wall.png"))
+        right_wall_rect = right_wall.get_rect()
+        right_wall_rect.left = const.SCREEN_WIDTH - right_wall_rect.width
+        floor_patch1 = get_image(os.path.join("img", "patch1.png"))
+        floor_patch2 = get_image(os.path.join("img", "patch2.png"))
+        floor_patch3 = get_image(os.path.join("img", "patch3.png"))
+        floor_patch4 = get_image(os.path.join("img", "patch4.png"))
+
+        background.fill((66, 40, 53))
+        background.blit(left_wall, left_wall.get_rect())
+        background.blit(right_wall, right_wall_rect)
+        background.blit(floor_patch1, (500, 500))
+        background.blit(floor_patch2, (900, 30))
+        background.blit(floor_patch3, (150, 430))
+        background.blit(floor_patch4, (300, 50))
+        background.blit(floor_patch1, (1000, 250))
+        return background
+
+    def _build_observation_spaces(self) -> dict[AgentID, gymnasium.spaces.Space[Any]]:
+        """Create and return the observation spaces for the object."""
+        if self.vector_state:
+            if self.sequence_space:
+                shape = [self.vector_width + 1]
+            else:
+                shape = [self.num_tracked + 1, self.vector_width + 1]
+
+            box_space = Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
+
+            if self.sequence_space:
+                obs_space: Box | Sequence = Sequence(space=box_space, stack=True)
+            else:
+                obs_space = box_space
+        else:  # image space
+            obs_space = Box(low=0, high=255, shape=[512, 512, 3], dtype=np.uint8)
+
+        return {i: obs_space for i in self.possible_agents}
+
+    def _build_action_spaces(self) -> dict[AgentID, gymnasium.spaces.Space[Any]]:
+        """Create and return the action spaces for the object."""
+        return {i: Discrete(6) for i in self.possible_agents}
+
+    def _build_state_space(self) -> Box:
+        """Create and return the state space for the object."""
+        if self.vector_state:
+            shape = [self.num_tracked, self.vector_width]
+            return Box(low=-1.0, high=1.0, shape=shape, dtype=np.float64)
+        # image space
+        shape = [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
+        return Box(low=0, high=255, shape=shape, dtype=np.uint8)
+
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
+        """Return the observation space for the given agent."""
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
+        """Return the action space for the given agent."""
         return self.action_spaces[agent]
 
-    def _seed(self, seed=None):
+    def _seed(self, seed: int | None = None) -> None:
+        """Seed the random number generator.
+
+        Args:
+            seed: The seed to use.
+        """
         self.np_random, seed = seeding.np_random(seed)
 
-    # Spawn Zombies at Random Location at every 100 iterations
-    def spawn_zombie(self):
+    def do_zombie_turn(self) -> None:
+        """Have zombies attack, move, and then spawn."""
+        # Any players in comtact with zombies are killed unless
+        # the env was created with killable players turned off
+        for zombie in self.zombie_list:
+            zombie_hit_list = pygame.sprite.spritecollide(
+                zombie, self.player_list, True
+            )
+            for player in zombie_hit_list:
+                if is_archer(player) and not self.killable_archers:
+                    continue
+                if is_knight(player) and not self.killable_knights:
+                    continue
+                self._remove_agent(player)
+
+        # have zombies move
+        for zombie in self.zombie_list:
+            zombie.act()
+
+        # spawn new zombie if appropriate
         if len(self.zombie_list) < self.max_zombies:
-            self.zombie_spawn_rate += 1
-            zombie = Zombie(self.np_random)
-
-            if self.zombie_spawn_rate >= self.spawn_rate:
-                zombie.rect.x = self.np_random.integers(0, const.SCREEN_WIDTH)
-                zombie.rect.y = 5
-
+            if self.zombie_spawn_interval.increment():
+                zombie = Zombie(self.np_random)
                 self.zombie_list.add(zombie)
-                self.zombie_spawn_rate = 0
 
-    # actuate weapons
-    def action_weapon(self, action, agent):
-        if action == 5:
-            if agent.is_knight:
-                if agent.weapon_timeout > const.SWORD_TIMEOUT:
-                    # make sure that the current knight doesn't have a sword already
-                    if len(agent.weapons) == 0:
-                        agent.weapons.add(Sword(agent))
+    def _remove_agent(self, agent: Player) -> None:
+        """Mark the given agent as dead."""
+        agent.is_alive = False
+        if agent in self.player_list:
+            self.player_list.remove(agent)
+        if agent.agent_name not in self.kill_list:
+            self.kill_list.append(agent.agent_name)
+        if is_knight(agent):
+            agent.weapons.empty()
 
-            if agent.is_archer:
-                if agent.weapon_timeout > const.ARROW_TIMEOUT:
-                    # make sure that the screen has less arrows than allowable
-                    if self.num_active_arrows < self.max_arrows:
-                        agent.weapons.add(Arrow(agent))
+    def apply_weapons(self) -> None:
+        """Move the weapons and remove any zombies that were hit.
 
-    # move weapons
-    def update_weapons(self):
-        for agent in self.agent_list:
+        The weapons are moved along their path.
+        If an arrow hits a zombie, both the arrow and the zombie are removed.
+        The archer that fired the arrow is awarded 1 point.
+
+        If a sword hits a zombie, the zombie is removed but the sword is not.
+        The knight wielding the sword is awarded 1 point.
+        """
+        for agent in self.agent_map.values():
             for weapon in list(agent.weapons):
-                weapon.update()
+                weapon.act()
 
                 if not weapon.is_active:
                     agent.weapons.remove(weapon)
 
+        # remove zombies hit by weapons
+        for agent in self.agent_map.values():
+            for weapon in list(agent.weapons):
+                zombie_hit_list = pygame.sprite.spritecollide(
+                    weapon, self.zombie_list, True
+                )
+                for zombie in zombie_hit_list:
+                    self.zombie_list.remove(zombie)
+                    weapon.player.score += 1
+                    if is_archer(agent):
+                        # remove the arrow that hit the zombie
+                        agent.weapons.remove(weapon)
+
     @property
-    def num_active_arrows(self):
+    def num_active_arrows(self) -> int:
+        """Return the number of arrows on the screen."""
         num_arrows = 0
-        for agent in self.agent_list:
-            if agent.is_archer:
+        for agent in self.agent_map.values():
+            if is_archer(agent):
                 num_arrows += len(agent.weapons)
         return num_arrows
 
     @property
-    def num_active_swords(self):
+    def num_active_swords(self) -> int:
+        """Return the number of swords on the screen."""
         num_swords = 0
-        for agent in self.agent_list:
-            if agent.is_knight:
+        for agent in self.agent_map.values():
+            if is_knight(agent):
                 num_swords += len(agent.weapons)
         return num_swords
 
-    # Zombie Kills the Knight (also remove the sword)
-    def zombit_hit_knight(self):
-        for zombie in self.zombie_list:
-            zombie_knight_list = pygame.sprite.spritecollide(
-                zombie, self.knight_list, True
-            )
+    def _observe_image(self, agent: AgentID) -> ObsTypeImage:
+        """Return observation for given agent as an image based observation."""
+        # the observation is based on the image, so we need to update it
+        # this is already done in render(), which is called when render_mode
+        # is "human", so skip in that case
+        if self.render_mode != "human":
+            self.draw()
 
-            for knight in zombie_knight_list:
-                knight.alive = False
-                knight.weapons.empty()
+        screen = pygame.surfarray.pixels3d(self.screen)
 
-                if knight.agent_name not in self.kill_list:
-                    self.kill_list.append(knight.agent_name)
+        agent_obj = self.agent_map[agent]
+        agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
-                self.knight_list.remove(knight)
+        shape = self.observation_spaces[agent].shape
+        assert shape is not None
+        obs = np.zeros(shape, dtype=np.uint8)
+        if agent_obj.is_alive:
+            min_x = agent_position[0] - 256
+            max_x = agent_position[0] + 256
+            min_y = agent_position[1] - 256
+            max_y = agent_position[1] + 256
+            lower_y_bound = max(min_y, 0)
+            upper_y_bound = min(max_y, const.SCREEN_HEIGHT)
+            lower_x_bound = max(min_x, 0)
+            upper_x_bound = min(max_x, const.SCREEN_WIDTH)
+            startx = lower_x_bound - min_x
+            starty = lower_y_bound - min_y
+            endx = 512 + upper_x_bound - max_x
+            endy = 512 + upper_y_bound - max_y
+            obs[startx:endx, starty:endy, :] = screen[
+                lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
+            ]
 
-    # Zombie Kills the Archer
-    def zombie_hit_archer(self):
-        for zombie in self.zombie_list:
-            zombie_archer_list = pygame.sprite.spritecollide(
-                zombie, self.archer_list, True
-            )
+        return np.swapaxes(obs, 1, 0)
 
-            for archer in zombie_archer_list:
-                archer.alive = False
-                self.archer_list.remove(archer)
-                if archer.agent_name not in self.kill_list:
-                    self.kill_list.append(archer.agent_name)
+    def _observe_vector(self, agent: AgentID) -> ObsTypeVector:
+        """Return observation for given agent as a vector based observation."""
+        agent_obj = self.agent_map[agent]
 
-    # Zombie Kills the Sword
-    def sword_hit(self):
-        for knight in self.knight_list:
-            for sword in knight.weapons:
-                zombie_sword_list = pygame.sprite.spritecollide(
-                    sword, self.zombie_list, True
-                )
+        # get the agent position
+        agent_state = agent_obj.get_vector_state(self.use_typemasks)
+        agent_pos = np.expand_dims(agent_state[-4:-2], axis=0)
 
-                for zombie in zombie_sword_list:
-                    self.zombie_list.remove(zombie)
-                    sword.knight.score += 1
+        # get vector state of everything
+        vector_state = self.get_vector_state()
+        state = vector_state[:, -4:]  # trim type mask, if present
+        is_dead = np.sum(np.abs(state), axis=1) == 0.0
+        all_typemasks = vector_state[:, :-4]
+        all_pos = state[:, 0:2]
+        all_ang = state[:, 2:4]
 
-    # Zombie Kills the Arrow
-    def arrow_hit(self):
-        for agent in self.agent_list:
-            if agent.is_archer:
-                for arrow in list(agent.weapons):
-                    zombie_arrow_list = pygame.sprite.spritecollide(
-                        arrow, self.zombie_list, True
-                    )
+        # get relative positions
+        rel_pos = all_pos - agent_pos
 
-                    # For each zombie hit, remove the arrow, zombie and add to the score
-                    for zombie in zombie_arrow_list:
-                        agent.weapons.remove(arrow)
-                        self.zombie_list.remove(zombie)
-                        arrow.archer.score += 1
+        # get norm of relative distance
+        norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True) / np.sqrt(2)
 
-    # Zombie reaches the End of the Screen
-    def zombie_endscreen(self, run, zombie_list):
-        for zombie in zombie_list:
-            if zombie.rect.y > const.SCREEN_HEIGHT - const.ZOMBIE_Y_SPEED:
-                run = False
-        return run
+        # kill dead things
+        all_typemasks[is_dead] *= 0
+        all_ang[is_dead] *= 0
+        rel_pos[is_dead] *= 0
+        norm_pos[is_dead] *= 0
 
-    # Zombie Kills all Players
-    def zombie_all_players(self, run, knight_list, archer_list):
-        if not knight_list and not archer_list:
-            run = False
-        return run
+        # combine the typemasks, positions and angles
+        state = np.concatenate([all_typemasks, norm_pos, rel_pos, all_ang], axis=-1)
 
-    def observe(self, agent):
-        if not self.vector_state:
-            screen = pygame.surfarray.pixels3d(self.screen)
+        # set current agent data
+        full_agent_state = np.zeros((1, self.vector_width + 1), dtype=np.float64)
+        if self.use_typemasks:
+            full_agent_state[0, 5] = 1.0
+        full_agent_state[0, -4:] = agent_state[-4:]
+        full_agent_state[0, -5] = 0.0  # distance to self
 
-            i = self.agent_name_mapping[agent]
-            agent_obj = self.agent_list[i]
-            agent_position = (agent_obj.rect.x, agent_obj.rect.y)
-
-            if not agent_obj.alive:
-                cropped = np.zeros((512, 512, 3), dtype=np.uint8)
-            else:
-                min_x = agent_position[0] - 256
-                max_x = agent_position[0] + 256
-                min_y = agent_position[1] - 256
-                max_y = agent_position[1] + 256
-                lower_y_bound = max(min_y, 0)
-                upper_y_bound = min(max_y, const.SCREEN_HEIGHT)
-                lower_x_bound = max(min_x, 0)
-                upper_x_bound = min(max_x, const.SCREEN_WIDTH)
-                startx = lower_x_bound - min_x
-                starty = lower_y_bound - min_y
-                endx = 512 + upper_x_bound - max_x
-                endy = 512 + upper_y_bound - max_y
-                cropped = np.zeros_like(self.observation_spaces[agent].low)
-                cropped[startx:endx, starty:endy, :] = screen[
-                    lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
-                ]
-
-            return np.swapaxes(cropped, 1, 0)
-
-        else:
-            # get the agent
-            agent = self.agent_list[self.agent_name_mapping[agent]]
-
-            # get the agent position
-            agent_state = agent.vector_state
-            agent_pos = np.expand_dims(agent_state[0:2], axis=0)
-
-            # get vector state of everything
-            vector_state = self.get_vector_state()
-            state = vector_state[:, -4:]
-            is_dead = np.sum(np.abs(state), axis=1) == 0.0
-            all_ids = vector_state[:, :-4]
-            all_pos = state[:, 0:2]
-            all_ang = state[:, 2:4]
-
-            # get relative positions
-            rel_pos = all_pos - agent_pos
-
-            # get norm of relative distance
-            norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True) / np.sqrt(2)
-
-            # kill dead things
-            all_ids[is_dead] *= 0
-            all_ang[is_dead] *= 0
-            rel_pos[is_dead] *= 0
-            norm_pos[is_dead] *= 0
-
-            # combine the typemasks, positions and angles
-            state = np.concatenate([all_ids, norm_pos, rel_pos, all_ang], axis=-1)
-
-            # get the agent state as absolute vector
-            # typemask is one longer to also include norm_pos
-            if self.use_typemasks:
-                typemask = np.zeros(self.typemask_width + 1)
-                typemask[-2] = 1.0
-            else:
-                typemask = np.array([0.0])
-            agent_state = agent.vector_state
-            agent_state = np.concatenate([typemask, agent_state], axis=0)
-            agent_state = np.expand_dims(agent_state, axis=0)
-
-            # prepend agent state to the observation
-            state = np.concatenate([agent_state, state], axis=0)
-            if self.sequence_space:
-                # remove pure zero rows if using sequence space
-                state = state[~np.all(state == 0, axis=-1)]
-
-            return state
-
-    def state(self):
-        """Returns an observation of the global environment."""
-        if not self.vector_state:
-            state = pygame.surfarray.pixels3d(self.screen).copy()
-            state = np.rot90(state, k=3)
-            state = np.fliplr(state)
-        else:
-            state = self.get_vector_state()
+        # prepend agent state to the observation
+        state = np.concatenate([full_agent_state, state], axis=0)
+        if self.sequence_space:
+            # remove pure zero rows if using sequence space
+            state = state[~np.all(state == 0, axis=-1)]
 
         return state
 
-    def get_vector_state(self):
-        state = []
-        typemask = np.array([])
+    def observe(self, agent: AgentID) -> ObsType:
+        """Return the observation for the given agent."""
+        if self.vector_state:
+            return self._observe_vector(agent)
+        return self._observe_image(agent)
 
-        # handle agents
-        for agent_name in self.possible_agents:
-            if agent_name not in self.dead_agents:
-                agent = self.agent_list[self.agent_name_mapping[agent_name]]
+    def state(self) -> StateType:
+        """Returns the state of the global environment."""
+        if not self.vector_state:
+            # this makes a copy of the state, only including the
+            # expected size. It is intentionally done without using
+            # the .copy() function to accommodate a future case where
+            # the screen may be larger than the expected size.
+            state: StateTypeImage = pygame.surfarray.pixels3d(self.screen)[
+                : const.SCREEN_WIDTH, : const.SCREEN_HEIGHT, :
+            ]
+            state = np.rot90(state, k=3)
+            return np.fliplr(state)
+        return self.get_vector_state()
 
-                if self.use_typemasks:
-                    typemask = np.zeros(self.typemask_width)
-                    if agent.is_archer:
-                        typemask[1] = 1.0
-                    elif agent.is_knight:
-                        typemask[2] = 1.0
+    def get_vector_state(self) -> StateTypeVector:
+        """Returns the vector state of the global environment."""
+        state: list[StateTypeVector] = []
+        empty_row = np.zeros(self.vector_width)
 
-                vector = np.concatenate((typemask, agent.vector_state), axis=0)
-                state.append(vector)
-            else:
-                state.append(np.zeros(self.vector_width))
+        # handle agents - all archers then all knights
+        for category in ["archer", "knight"]:
+            for agent_name in self.possible_agents:
+                if agent_name.startswith(category):
+                    if agent_name not in self.dead_agents:
+                        agent = self.agent_map[agent_name]
+                        state.append(agent.get_vector_state(self.use_typemasks))
+                    else:
+                        state.append(empty_row)
 
         # handle swords
-        for agent in self.agent_list:
-            if agent.is_knight:
+        for agent in self.agent_map.values():
+            if is_knight(agent):
                 for sword in agent.weapons:
-                    if self.use_typemasks:
-                        typemask = np.zeros(self.typemask_width)
-                        typemask[4] = 1.0
+                    state.append(sword.get_vector_state(self.use_typemasks))
 
-                    vector = np.concatenate((typemask, sword.vector_state), axis=0)
-                    state.append(vector)
-
-        # handle empty swords
-        state.extend(
-            repeat(
-                np.zeros(self.vector_width),
-                self.num_knights - self.num_active_swords,
-            )
-        )
+        n_empty_swords = self.num_knights - self.num_active_swords
+        state.extend(repeat(empty_row, n_empty_swords))
 
         # handle arrows
-        for agent in self.agent_list:
-            if agent.is_archer:
+        for agent in self.agent_map.values():
+            if is_archer(agent):
                 for arrow in agent.weapons:
-                    if self.use_typemasks:
-                        typemask = np.zeros(self.typemask_width)
-                        typemask[3] = 1.0
+                    state.append(arrow.get_vector_state(self.use_typemasks))
 
-                    vector = np.concatenate((typemask, arrow.vector_state), axis=0)
-                    state.append(vector)
-
-        # handle empty arrows
-        state.extend(
-            repeat(
-                np.zeros(self.vector_width),
-                self.max_arrows - self.num_active_arrows,
-            )
-        )
+        n_empty_arrows = self.max_arrows - self.num_active_arrows
+        state.extend(repeat(empty_row, n_empty_arrows))
 
         # handle zombies
         for zombie in self.zombie_list:
-            if self.use_typemasks:
-                typemask = np.zeros(self.typemask_width)
-                typemask[0] = 1.0
+            state.append(zombie.get_vector_state(self.use_typemasks))
 
-            vector = np.concatenate((typemask, zombie.vector_state), axis=0)
-            state.append(vector)
-
-        # handle empty zombies
-        state.extend(
-            repeat(
-                np.zeros(self.vector_width),
-                self.max_zombies - len(self.zombie_list),
-            )
-        )
+        n_empty_zombies = self.max_zombies - len(self.zombie_list)
+        state.extend(repeat(empty_row, n_empty_zombies))
 
         return np.stack(state, axis=0)
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
+        """Perform a step for one agent in the environment.
+
+        Args:
+            action: the action the agent will perform.
+        """
         # check if the particular agent is done
         if (
             self.terminations[self.agent_selection]
@@ -682,66 +692,39 @@ class raw_env(AECEnv, EzPickle):
             self._was_dead_step(action)
             return
 
-        # agent_list : list of agent instance indexed by number
-        # agent_name_mapping: dict of {str, idx} for agent index and name
-        # agent_selection : str representing the agent name
-        # agent: agent instance
-        agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
+        agent = self.agent_map[self.agent_selection]
 
         # cumulative rewards from previous iterations should be cleared
         self._cumulative_rewards[self.agent_selection] = 0
         agent.score = 0
 
-        # this is... so whacky... but all actions here are index with 1 so... ok
-        action = action + 1
-        out_of_bounds = agent.update(action)
+        agent_action = Actions(action)
 
-        # check for out of bounds death
+        # archer can't attack if the number of arrows exceeds
+        # the max count. In this case, change the action to no action.
+        if is_archer(agent) and agent_action == Actions.ACTION_ATTACK:
+            if self.num_active_arrows >= self.max_arrows:
+                agent_action = Actions.ACTION_NONE
+
+        if not agent.is_timed_out(agent_action):
+            out_of_bounds = agent.act(agent_action)
+        else:
+            out_of_bounds = False
+
         if self.line_death and out_of_bounds:
-            agent.alive = False
-            if agent in self.archer_list:
-                self.archer_list.remove(agent)
-            else:
-                agent.weapons.empty()
-                self.knight_list.remove(agent)
-            self.kill_list.append(agent.agent_name)
-
-        # actuate the weapon if necessary
-        self.action_weapon(action, agent)
+            self._remove_agent(agent)
 
         # Do these things once per cycle
         if self._agent_selector.is_last():
-            # Update the weapons
-            self.update_weapons()
+            # Update the weapons and use them against zombies
+            self.apply_weapons()
 
-            # Zombie Kills the Sword
-            self.sword_hit()
+            self.do_zombie_turn()
 
-            # Zombie Kills the Arrow
-            self.arrow_hit()
-
-            # Zombie Kills the Archer
-            if self.killable_archers:
-                self.zombie_hit_archer()
-
-            # Zombie Kills the Knight
-            if self.killable_knights:
-                self.zombit_hit_knight()
-
-            # update some zombies
-            for zombie in self.zombie_list:
-                zombie.update()
-
-            # Spawning Zombies at Random Location at every 100 iterations
-            self.spawn_zombie()
-
-            if self.screen is not None:
-                self.draw()
-
-            self.check_game_end()
+            self._check_game_over()
             self.frames += 1
 
-        terminate = not self.run
+        terminate = self.game_over
         truncate = self.frames >= self.max_cycles
         self.terminations = {a: terminate for a in self.agents}
         self.truncations = {a: truncate for a in self.agents}
@@ -769,7 +752,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_selection = self._agent_selector.next()
 
         self._clear_rewards()
-        next_agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
+        next_agent = self.agent_map[self.agent_selection]
         self.rewards[self.agent_selection] = next_agent.score
 
         self._accumulate_rewards()
@@ -778,139 +761,116 @@ class raw_env(AECEnv, EzPickle):
         if self.render_mode == "human":
             self.render()
 
-    def draw(self):
-        self.screen.fill((66, 40, 53))
-        self.screen.blit(self.left_wall, self.left_wall.get_rect())
-        self.screen.blit(self.right_wall, self.right_wall_rect)
-        self.screen.blit(self.floor_patch1, (500, 500))
-        self.screen.blit(self.floor_patch2, (900, 30))
-        self.screen.blit(self.floor_patch3, (150, 430))
-        self.screen.blit(self.floor_patch4, (300, 50))
-        self.screen.blit(self.floor_patch1, (1000, 250))
+    def draw(self) -> None:
+        """Draw the screen."""
+        self.screen.blit(self.background, (0, 0))
 
         # draw all the sprites
         self.zombie_list.draw(self.screen)
-        for agent in self.agent_list:
+        for agent in self.agent_map.values():
             agent.weapons.draw(self.screen)
-        self.archer_list.draw(self.screen)
-        self.knight_list.draw(self.screen)
+        self.player_list.draw(self.screen)
 
-    def render(self):
+    def _get_screen(self) -> pygame.Surface:
+        """Return a newly created pygame surface as the display screen."""
+        pygame.init()
+
+        if self.render_mode == "human":
+            screen = pygame.display.set_mode(self.screen_dims)
+            pygame.display.set_caption("Knights, Archers, Zombies")
+            return screen
+        if self.render_mode == "rgb_array" or self.render_mode is None:
+            return pygame.Surface(self.screen_dims)
+
+        raise ValueError(f"Unknown render_mode: {self.render_mode}")
+
+    def render(self) -> npt.NDArray[np.uint8] | None:
+        """Render the state based on the render mode."""
         if self.render_mode is None:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
-
-        if self.screen is None:
-            pygame.init()
-
-            if self.render_mode == "human":
-                self.screen = pygame.display.set_mode(
-                    [const.SCREEN_WIDTH, const.SCREEN_HEIGHT]
-                )
-                pygame.display.set_caption("Knights, Archers, Zombies")
-            elif self.render_mode == "rgb_array":
-                self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+            return None
 
         self.draw()
 
-        observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
             pygame.display.flip()
             self.clock.tick(self.metadata["render_fps"])
-        return (
-            np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array"
-            else None
-        )
 
-    def close(self):
-        if self.screen is not None:
-            pygame.quit()
-            self.screen = None
+        if self.render_mode == "rgb_array":
+            obs: ObsTypeImage = np.array(pygame.surfarray.pixels3d(self.screen))
+            return np.transpose(obs, axes=(1, 0, 2))
 
-    def check_game_end(self):
-        # Zombie reaches the End of the Screen
-        self.run = self.zombie_endscreen(self.run, self.zombie_list)
+        return None
 
-        # Zombie Kills all Players
-        self.run = self.zombie_all_players(self.run, self.knight_list, self.archer_list)
+    def close(self) -> None:
+        """Close the screen, if open."""
+        pygame.quit()
 
-    def reinit(self):
-        # Dictionaries for holding new players and their weapons
-        self.archer_dict = {}
-        self.knight_dict = {}
+    def _check_zombie_escape(self) -> bool:
+        """Return True if Zombies won by reaching the end."""
+        for zombie in self.zombie_list:
+            if zombie.rect.y > zombie.y_bot_limit:
+                return True
+        return False
 
-        # Game Variables
-        self.score = 0
-        self.run = True
-        self.zombie_spawn_rate = 0
-        self.knight_player_num = self.archer_player_num = 0
+    def _check_zombie_killall(self) -> bool:
+        """Return True if Zombies won by killing all players."""
+        return not bool(self.player_list)
 
-        # Creating Sprite Groups
-        self.zombie_list = pygame.sprite.Group()
-        self.archer_list = pygame.sprite.Group()
-        self.knight_list = pygame.sprite.Group()
+    def _check_game_over(self) -> None:
+        """Determine whether game is over and set self.game_over with result."""
+        self.game_over = self._check_zombie_escape() or self._check_zombie_killall()
 
-        # agent_list is a list of instances
-        # agents is s list of strings
-        self.agent_list = []
+    def reinit(self) -> None:
+        """Re-initialize the env for another run."""
+        self.game_over = False
+
+        self.zombie_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
+        self.player_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
+
+        self.agent_map = {}
         self.agents = []
         self.dead_agents = []
 
-        for i in range(self.num_archers):
-            name = "archer_" + str(i)
-            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(
-                agent_name=name
-            )
-            self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
-            self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
-            self.agent_list.append(self.archer_dict[f"archer{self.archer_player_num}"])
-            if i != self.num_archers - 1:
-                self.archer_player_num += 1
+        for agent in self.possible_agents:
+            if agent.startswith("archer"):
+                player: Player = Archer(agent_name=agent)
+            elif agent.startswith("knight"):
+                player = Knight(agent_name=agent)
+            else:
+                raise ValueError(f"Unknown agent type: {agent}")
+            self.player_list.add(player)
+            player.offset(int(agent[-1]) * 50, 0)
+            self.agent_map[agent] = player
+            self.agents.append(agent)
 
-        for i in range(self.num_knights):
-            name = "knight_" + str(i)
-            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(
-                agent_name=name
-            )
-            self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
-            self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
-            self.agent_list.append(self.knight_dict[f"knight{self.knight_player_num}"])
-            if i != self.num_knights - 1:
-                self.knight_player_num += 1
-
-        self.agent_name_mapping = {}
-        a_count = 0
-        for i in range(self.num_archers):
-            a_name = "archer_" + str(i)
-            self.agents.append(a_name)
-            self.agent_name_mapping[a_name] = a_count
-            a_count += 1
-        for i in range(self.num_knights):
-            k_name = "knight_" + str(i)
-            self.agents.append(k_name)
-            self.agent_name_mapping[k_name] = a_count
-            a_count += 1
-
+        self.screen = self._get_screen()
         if self.render_mode is not None:
             self.render()
-        else:
-            self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+
         self.frames = 0
 
-    def reset(self, seed=None, options=None):
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
+        """Reset the env for another run.
+
+        Args:
+            seed: the seed to use for the new run
+            options: these are ignored for this env
+        """
         if seed is not None:
             self._seed(seed=seed)
         self.agents = self.possible_agents
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.rewards = {i: 0 for i in self.agents}
         self._cumulative_rewards = {a: 0 for a in self.agents}
-        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
-        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
+        self.infos = {i: {} for i in self.agents}
         self.reinit()
 
 

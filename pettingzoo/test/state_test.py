@@ -102,7 +102,7 @@ def test_state_space(env):
 
 
 def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
-    graphical_envs = ["knights_archers_zombies_v10"]
+    graphical_envs = ["knights_archers_zombies_v11"]
     env.reset(seed=seed)
     state_0 = env.state()
     for agent in env.agent_iter(env.num_agents * num_cycles):

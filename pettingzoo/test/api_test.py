@@ -77,24 +77,24 @@ env_obs_dicts = [
     "tictactoe_v3",
     "gin_rummy_v4",
 ]
-env_graphical_obs = ["knights_archers_zombies_v10"]
+env_graphical_obs = ["knights_archers_zombies_v11"]
 env_diff_obs_shapes = [
     "simple_adversary_v3",
     "simple_world_comm_v3",
     "simple_tag_v3",
-    "knights_archers_zombies_v10",
+    "knights_archers_zombies_v11",
     "simple_push_v3",
     "simple_speaker_listener_v4",
     "simple_crypto_v3",
 ]
-env_all_zeros_obs = ["knights_archers_zombies_v10"]
+env_all_zeros_obs = ["knights_archers_zombies_v11"]
 env_obs_space = [
     "leduc_holdem_v4",
     "texas_holdem_no_limit_v6",
     "texas_holdem_v4",
     "go_v5",
     "hanabi_v5",
-    "knights_archers_zombies_v10",
+    "knights_archers_zombies_v11",
     "chess_v6",
     "connect_four_v3",
     "tictactoe_v3",
