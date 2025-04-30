@@ -13,10 +13,6 @@ from pettingzoo.butterfly.knights_archers_zombies.src.mixins import VectorObserv
 class Zombie(pygame.sprite.Sprite, VectorObservable):
     """A zombie for the Knight-Archers-Zombie game."""
 
-    # this is the valid range of x values allowed. It corresponds to the
-    # visible region on the screen that is between the two walls.
-    x_range: list[int] = [const.WALL_WIDTH, const.SCREEN_WIDTH - const.WALL_WIDTH]
-
     def __init__(self, randomizer: np.random.Generator) -> None:
         """Initialize the Zombie agent.
 
@@ -27,10 +23,16 @@ class Zombie(pygame.sprite.Sprite, VectorObservable):
         self.image = get_image(os.path.join("img", "zombie.png"))
         self.rect = self.image.get_rect(center=(50, 50))
 
+        # these are the limits of where the zombie can move on the screen
+        height = self.image.get_rect().height
+        width = self.image.get_rect().width
+        self.y_bot_limit = const.SCREEN_HEIGHT - height
+        self.x_left_limit = const.WALL_WIDTH - height
+        self.x_right_limit = const.SCREEN_WIDTH - const.WALL_WIDTH - width
+
         # move rect to random starting position at the top
         self.rect.y = 5
-        low_x, high_x = self.x_range
-        self.rect.x = int(randomizer.integers(low_x, high_x))
+        self.rect.x = int(randomizer.integers(self.x_left_limit, self.x_right_limit))
 
         self.wobble_interval = Interval(3)
         self.randomizer = randomizer
@@ -65,5 +67,5 @@ class Zombie(pygame.sprite.Sprite, VectorObservable):
             elif rand_x in [2, 4, 5, 8]:
                 proposed_x -= const.ZOMBIE_X_SPEED
 
-            if self.x_range[0] <= proposed_x <= self.x_range[1]:
+            if self.x_left_limit <= proposed_x <= self.x_right_limit:
                 self.rect.x = proposed_x

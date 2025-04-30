@@ -810,7 +810,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def _check_zombie_escape(self) -> bool:
         """Return True if Zombies won by reaching the end."""
         for zombie in self.zombie_list:
-            if zombie.rect.y > const.SCREEN_HEIGHT - const.ZOMBIE_Y_SPEED:
+            if zombie.rect.y > zombie.y_bot_limit:
                 return True
         return False
 
