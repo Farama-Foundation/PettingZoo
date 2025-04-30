@@ -18,6 +18,14 @@ mpe/simple_tag
 mpe/simple_world_comm
 ```
 
+```{eval-rst}
+.. warning::
+
+    The package `pettingzoo.mpe` has been moved to the new `MPE2 package <https://mpe2.farama.org>`_, and will be removed from PettingZoo in a future release.
+    Please update your imports to `mpe2`.
+
+```
+
 ```{raw} html
     :file: mpe/list.html
 ```

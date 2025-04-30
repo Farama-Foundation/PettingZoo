@@ -7,6 +7,14 @@
 :name: simple_speaker_listener
 ```
 
+```{eval-rst}
+.. warning::
+
+    The environment `pettingzoo.mpe.simple_speaker_listener_v4` has been moved to the new `MPE2 package <https://mpe2.farama.org>`_, and will be removed from PettingZoo in a future release.
+    Please update your import to `mpe2.simple_speaker_listener_v4`.
+
+```
+
 This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
 
 | Import               | `from pettingzoo.mpe import simple_speaker_listener_v4` |
