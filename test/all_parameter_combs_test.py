@@ -169,7 +169,7 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(spawn_rate=50, max_cycles=50),
+        dict(spawn_delay=50, max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
@@ -184,17 +184,22 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(sequence_space=True, use_typemasks=True, max_cycles=50),
+        dict(obs_method="image", max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(vector_state=False, max_cycles=50),
+        dict(obs_method="vector", max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(vector_state=False, pad_observation=False, max_cycles=50),
+        dict(obs_method="vector-sequence", max_cycles=50),
+    ],
+    [
+        "butterfly/knights_archers_zombies_v10",
+        knights_archers_zombies_v10,
+        dict(obs_method="vector-masked", max_cycles=50),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
