@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import itertools
-from collections.abc import Sequence
 from math import sqrt
 from typing import cast
 
@@ -252,28 +251,12 @@ render_modes = [None, "rgb_array", "human"]
 obs_test_combinations = list(itertools.product(obs_modes, render_modes))
 
 
-def dummy_set_mode(
-    size: tuple[float, float] | Sequence[float] | pygame.Vector2 = (1, 1),
-    flags: int = 0,
-    depth: int = 0,
-    display: int = 0,
-    vsync: int = 0,
-) -> pygame.Surface:
-    """Dummy function to prevent window from popping up"""
-    return pygame.Surface(size)
-
-
 @pytest.mark.parametrize("obs_method, render_mode", obs_test_combinations)
 def test_kaz_obs_updates(obs_method: str, render_mode: str | None) -> None:
     """Confirm that obs updates after each agent acts.
 
     This is to ensure it complies with the intent of the AEC method.
     """
-    if render_mode == "human":
-        # prevent window from displaying
-        pygame.display.set_mode = dummy_set_mode
-        pygame.display.flip = lambda: None
-
     env = KAZEnv(
         num_archers=2, num_knights=2, obs_method=obs_method, render_mode=render_mode
     )
