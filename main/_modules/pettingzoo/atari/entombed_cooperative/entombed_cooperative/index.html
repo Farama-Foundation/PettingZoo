@@ -474,8 +474,10 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari.base_atari_env</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AtariAECEnv</span><span class="p">,</span>
     <span class="n">BaseAtariEnv</span><span class="p">,</span>
     <span class="n">base_env_wrapper_fn</span><span class="p">,</span>
     <span class="n">parallel_wrapper_fn</span><span class="p">,</span>
@@ -484,7 +486,7 @@
 
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/atari/entombed_cooperative/#pettingzoo.atari.entombed_cooperative.entombed_cooperative.raw_env">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtariAECEnv</span><span class="p">:</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
