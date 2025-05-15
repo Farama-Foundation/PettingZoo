@@ -71,15 +71,17 @@ In any given turn, an agent can choose from one of 18 actions.
 
 import os
 from glob import glob
+from typing import Any
 
 from pettingzoo.atari.base_atari_env import (
+    AtariAECEnv,
     BaseAtariEnv,
     base_env_wrapper_fn,
     parallel_wrapper_fn,
 )
 
 
-def raw_env(**kwargs):
+def raw_env(**kwargs: Any) -> AtariAECEnv:
     name = os.path.basename(__file__).split(".")[0]
     parent_file = glob(
         os.path.join(os.path.dirname(os.path.dirname(__file__)), name + "*.py")
