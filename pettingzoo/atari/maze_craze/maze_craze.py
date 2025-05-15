@@ -86,8 +86,10 @@ In any given turn, an agent can choose from one of 18 actions.
 
 import os
 from glob import glob
+from typing import Any
 
 from pettingzoo.atari.base_atari_env import (
+    AtariAECEnv,
     BaseAtariEnv,
     base_env_wrapper_fn,
     parallel_wrapper_fn,
@@ -100,7 +102,9 @@ avaliable_versions = {
 }
 
 
-def raw_env(game_version="robbers", visibilty_level=0, **kwargs):
+def raw_env(
+    game_version: str = "robbers", visibilty_level: int = 0, **kwargs: Any
+) -> AtariAECEnv:
     assert (
         game_version in avaliable_versions
     ), f"`game_version` parameter must be one of {avaliable_versions.keys()}"
