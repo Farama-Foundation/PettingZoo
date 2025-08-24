@@ -41,7 +41,7 @@ classic = [
 butterfly = ["pygame>=2.3.0", "pymunk>=6.2.0"]
 mpe = ["pygame>=2.3.0"]
 sisl = ["pygame>=2.3.0", "pymunk>=6.2.0", "box2d-py>=2.3.5", "scipy>=1.4.1"]
-other = ["pillow>=8.0.1"]
+other = ["pillow>=8.0.1", "moviepy>=2.2.1"]
 testing = [
     "pynput>=1.7.6",
     "pytest>=8.0.0",
