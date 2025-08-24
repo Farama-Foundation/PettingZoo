@@ -7,6 +7,8 @@ from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
 from pettingzoo.utils.wrappers.terminate_illegal import TerminateIllegalWrapper
+from pettingzoo.utils.wrappers.record_video import RecordVideo
+from pettingzoo.utils.wrappers.record_video_parallel import RecordVideoParallel
 
 __all__ = [
     "AssertOutOfBoundsWrapper",
@@ -18,4 +20,6 @@ __all__ = [
     "MultiEpisodeParallelEnv",
     "OrderEnforcingWrapper",
     "TerminateIllegalWrapper",
+    "RecordVideo",
+    "RecordVideoParallel"
 ]
