@@ -21,7 +21,7 @@ def test_video_folder_and_filenames_base(
         step_trigger=lambda x: x in [0, 25],
     )
 
-    for _ in range(100):
+    for _ in range(130):
         env.reset(seed=123)
 
         for agent in env.agent_iter():
@@ -57,7 +57,7 @@ def test_video_folder_and_filenames_parallel(
     )
 
     obs, infos = env.reset(seed=123)
-    for i in range(100):
+    for i in range(130):
         actions = {agent: env.action_space(agent).sample() for agent in obs.keys()}
         obs, rewards, terms, truncs, infos = env.step(actions)
         if any(terms.values()) or any(truncs.values()):
