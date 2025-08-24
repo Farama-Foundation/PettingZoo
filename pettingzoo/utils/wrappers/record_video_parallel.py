@@ -1,22 +1,20 @@
 from __future__ import annotations
-import os 
+
 import gc
-from typing import Callable, TypeAlias, Any
+import os
+from typing import Any, Callable, TypeAlias
 
-
-import numpy as np 
 import gymnasium
+import numpy as np
 from gymnasium.error import DependencyNotInstalled
 
 from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
-
 RenderFrame: TypeAlias = np.typing.NDArray[Any]
 
 
 class RecordVideoParallel(BaseParallelWrapper):
-
     def __init__(
         self,
         env: ParallelEnv,
@@ -24,29 +22,29 @@ class RecordVideoParallel(BaseParallelWrapper):
         episode_trigger: Callable[[int], bool] | None = None,
         step_trigger: Callable[[int], bool] | None = None,
         video_length: int = 0,
-        name_prefix: str ="rl-video",
+        name_prefix: str = "rl-video",
         fps: int | None = None,
         disable_logger: bool = True,
         gc_trigger: Callable[[int], bool] | None = lambda episode: True,
     ):
-        """ Wraps a Parallel environment with to output interval-based recordings.
+        """Wraps a Parallel environment with to output interval-based recordings.
 
         Args:
             env (ParallelEnv): The parallel environment that will be trapped.
             video_folder (str): The folder where the recordings will be stored.
-            episode_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer and returns 
+            episode_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer and returns
               ``True`` to start recording an episode.
-            step_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer that should return 
-                ``True`` on the n-th environment step that the recording should be started, 
+            step_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer that should return
+                ``True`` on the n-th environment step that the recording should be started,
                 where n sums over all previous episodes.
             video_length (int, optional): The length of recorded episodes. If 0, entire episodes are recorded.
                 Otherwise, snippets of the specified length are captured.
             name_prefix (str, optional): Will be prepended to the filename of the recordings. Defaults to "rl-video".
-            fps (int | None, optional): The frame per second in the video. Provides a custom video fps for environment, 
-                if ``None`` then the environment metadata ``render_fps`` key is used if it exists, 
+            fps (int | None, optional): The frame per second in the video. Provides a custom video fps for environment,
+                if ``None`` then the environment metadata ``render_fps`` key is used if it exists,
                 otherwise a default value of 30 is used.
             disable_logger (bool, optional): Whether to disable moviepy logger or not, default it is disabled
-            gc_trigger (_type_, optional):  Function that accepts an integer and returns ``True`` iff garbage 
+            gc_trigger (_type_, optional):  Function that accepts an integer and returns ``True`` iff garbage
                 collection should be performed after this episode
 
         Raises:
@@ -65,9 +63,13 @@ class RecordVideoParallel(BaseParallelWrapper):
             )
 
         if episode_trigger is None and step_trigger is None:
-            episode_trigger = lambda episode_id: (
-                int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
-            ) if episode_id < 1000 else (episode_id % 1000 == 0)
+            episode_trigger = (
+                lambda episode_id: (
+                    int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
+                )
+                if episode_id < 1000
+                else (episode_id % 1000 == 0)
+            )
 
         self.episode_trigger = episode_trigger
         self.step_trigger = step_trigger
@@ -87,7 +89,9 @@ class RecordVideoParallel(BaseParallelWrapper):
         self.frames_per_sec: int = fps
         self.name_prefix: str = name_prefix
         self._video_name: str | None = None
-        self.video_length: int | float = video_length if video_length != 0 else float("inf") 
+        self.video_length: int | float = (
+            video_length if video_length != 0 else float("inf")
+        )
         self.recording: bool = False
         self.recorded_frames: list[RenderFrame] = []
         self.render_history: list[RenderFrame] = []
@@ -96,12 +100,12 @@ class RecordVideoParallel(BaseParallelWrapper):
         self.episode_id: int = -1
 
         try:
-            import moviepy
+            import moviepy  # noqa: F401
         except ImportError as e:
             raise DependencyNotInstalled(
                 'MoviePy is not installed, run `pip install "pettingzoo[other]"`'
-             ) from e
-        
+            ) from e
+
     def _capture_frame(self):
         assert self.recording, "Cannot capture a frame, recording wasn't started."
 
@@ -142,7 +146,7 @@ class RecordVideoParallel(BaseParallelWrapper):
     def step(
         self, actions: dict[AgentID, ActionType]
     ) -> tuple[
-       dict[AgentID, ObsType],
+        dict[AgentID, ObsType],
         dict[AgentID, float],
         dict[AgentID, bool],
         dict[AgentID, bool],
@@ -162,7 +166,7 @@ class RecordVideoParallel(BaseParallelWrapper):
 
         return obs, rew, terminated, truncated, info
 
-    def render(self) -> RenderFrame | list[RenderFrame]:
+    def render(self):
         """Compute the render frames as specified by render_mode attribute during initialization of the environment."""
         render_out = self.env.render()
         if self.recording and isinstance(render_out, list):
@@ -195,7 +199,9 @@ class RecordVideoParallel(BaseParallelWrapper):
         assert self.recording, "stop_recording was called, but no recording was started"
 
         if len(self.recorded_frames) == 0:
-            gymnasium.logger.warn("Ignored saving a video as there were zero frames to save.")
+            gymnasium.logger.warn(
+                "Ignored saving a video as there were zero frames to save."
+            )
         else:
             try:
                 from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
