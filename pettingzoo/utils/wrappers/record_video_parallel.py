@@ -1,7 +1,8 @@
 from __future__ import annotations
 import os 
 import gc
-from typing import Callable
+from typing import Callable, TypeAlias, Any
+
 
 import numpy as np 
 import gymnasium
@@ -11,7 +12,7 @@ from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 
-RenderFrame = np.ndarray 
+RenderFrame: TypeAlias = np.typing.NDArray[Any]
 
 
 class RecordVideoParallel(BaseParallelWrapper):
@@ -57,9 +58,9 @@ class RecordVideoParallel(BaseParallelWrapper):
             env, ParallelEnv
         ), "RecordVideoParallelEnv is only compatible with ParallelEnv environments."
 
-        if env.render_mode in {None, "human", "ansi"}:
+        if env.render_mode in {None, "human", "ansi"}:  # type: ignore
             raise ValueError(
-                f"Render mode is {env.render_mode}, which is incompatible with RecordVideo.",
+                f"Render mode is {env.render_mode}, which is incompatible with RecordVideo.",  # type: ignore
                 "Initialize your environment with a render_mode that returns an image, such as rgb_array.",
             )
 
@@ -82,11 +83,11 @@ class RecordVideoParallel(BaseParallelWrapper):
         os.makedirs(self.video_folder, exist_ok=True)
 
         if fps is None:
-            fps = getattr(env, "metadata", {}).get("render_fps", 30)
-        self.frames_per_sec: int = int(fps)
+            fps = int(getattr(env, "metadata", {}).get("render_fps", 30))
+        self.frames_per_sec: int = fps
         self.name_prefix: str = name_prefix
         self._video_name: str | None = None
-        self.video_length: int = video_length if video_length != 0 else float("inf")
+        self.video_length: int = video_length
         self.recording: bool = False
         self.recorded_frames: list[RenderFrame] = []
         self.render_history: list[RenderFrame] = []
@@ -98,7 +99,7 @@ class RecordVideoParallel(BaseParallelWrapper):
             import moviepy
         except ImportError as e:
             raise DependencyNotInstalled(
-                'MoviePy is not installed, run `pip install "gymnasium[other]"`'
+                'MoviePy is not installed, run `pip install "pettingzoo[other]"`'
              ) from e
         
     def _capture_frame(self):
@@ -170,7 +171,8 @@ class RecordVideoParallel(BaseParallelWrapper):
         if len(self.render_history) > 0:
             tmp_history = self.render_history
             self.render_history = []
-            return tmp_history + render_out
+            frames = render_out if isinstance(render_out, list) else [render_out]
+            return tmp_history + frames
         else:
             return render_out
 

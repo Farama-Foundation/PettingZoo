@@ -22,12 +22,14 @@ def test_video_folder_and_filenames_base(
         step_trigger=lambda x: x in [0, 25],
     )
 
-    env.reset(seed=123)
-    for i in range(1):
+    for _ in range(100):
+        env.reset(seed=123)
+
         for agent in env.agent_iter():
             obs, reward, terminated, truncated, info = env.last()
             action = None if (terminated or truncated) else env.action_space(agent).sample()
-            env.step(action)
+            env.step(action)         # type: ignore
+        
 
     env.close()
 
@@ -41,7 +43,6 @@ def test_video_folder_and_filenames_base(
         "video-prefix-episode-4.mp4",
     }
 
-@pytest.mark.skip(reason="no way of currently testing this")
 def test_video_folder_and_filenames_parallel(
     video_folder="custom_video_folder/parallel", name_prefix="video-prefix"
 ):
