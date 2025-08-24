@@ -86,7 +86,7 @@ class RecordVideo(BaseWrapper):
         self.frames_per_sec: int = fps
         self.name_prefix: str = name_prefix
         self._video_name: str | None = None
-        self.video_length: int = video_length
+        self.video_length: int | float = video_length if video_length != 0 else float("inf") 
         self.recording: bool = False
         self.recorded_frames: list[RenderFrame] = []
         self.render_history: list[RenderFrame] = []

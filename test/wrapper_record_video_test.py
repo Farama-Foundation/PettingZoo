@@ -12,7 +12,7 @@ from pettingzoo.utils.wrappers import RecordVideo, RecordVideoParallel
 def test_video_folder_and_filenames_base(
     video_folder="custom_video_folder/aec", name_prefix="video-prefix"
 ):
-    par_env = pistonball_v6.parallel_env(render_mode="rgb_array", max_cycles=10)
+    par_env = pistonball_v6.parallel_env(render_mode="rgb_array", max_cycles=30)
     aec_env = parallel_to_aec(par_env)
     env = RecordVideo(
         aec_env,
@@ -46,7 +46,7 @@ def test_video_folder_and_filenames_base(
 def test_video_folder_and_filenames_parallel(
     video_folder="custom_video_folder/parallel", name_prefix="video-prefix"
 ):
-    par_env = pistonball_v6.parallel_env(render_mode="rgb_array", max_cycles=10)
+    par_env = pistonball_v6.parallel_env(render_mode="rgb_array", max_cycles=30)
     env = RecordVideoParallel(
         par_env,
         video_folder=video_folder,
