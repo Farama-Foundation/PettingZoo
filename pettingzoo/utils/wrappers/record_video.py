@@ -1,21 +1,20 @@
 from __future__ import annotations
-import os 
-import gc
-from typing import Callable, TypeAlias, Any
 
-import numpy as np 
+import gc
+import os
+from typing import Any, Callable, TypeAlias
+
 import gymnasium
+import numpy as np
 from gymnasium.error import DependencyNotInstalled
 
-from pettingzoo.utils.env import ActionType, AgentID, ObsType, AECEnv
+from pettingzoo.utils.env import ActionType, AECEnv, AgentID
 from pettingzoo.utils.wrappers.base import BaseWrapper
-
 
 RenderFrame: TypeAlias = np.typing.NDArray[Any]
 
 
 class RecordVideo(BaseWrapper):
-
     def __init__(
         self,
         env: AECEnv,
@@ -23,29 +22,29 @@ class RecordVideo(BaseWrapper):
         episode_trigger: Callable[[int], bool] | None = None,
         step_trigger: Callable[[int], bool] | None = None,
         video_length: int = 0,
-        name_prefix: str ="rl-video",
+        name_prefix: str = "rl-video",
         fps: int | None = None,
         disable_logger: bool = True,
         gc_trigger: Callable[[int], bool] | None = lambda episode: True,
     ):
-        """ Wraps an AEC environment with to output interval-based recordings.
+        """Wraps an AEC environment with to output interval-based recordings.
 
         Args:
             env (ParallelEnv): The parallel environment that will be trapped.
             video_folder (str): The folder where the recordings will be stored.
-            episode_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer and returns 
+            episode_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer and returns
               ``True`` to start recording an episode.
-            step_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer that should return 
-                ``True`` on the n-th environment step that the recording should be started, 
+            step_trigger (Callable[[int], bool] | None, optional): Function that accepts an integer that should return
+                ``True`` on the n-th environment step that the recording should be started,
                 where n sums over all previous episodes.
             video_length (int, optional): The length of recorded episodes. If 0, entire episodes are recorded.
                 Otherwise, snippets of the specified length are captured.
             name_prefix (str, optional): Will be prepended to the filename of the recordings. Defaults to "rl-video".
-            fps (int | None, optional): The frame per second in the video. Provides a custom video fps for environment, 
-                if ``None`` then the environment metadata ``render_fps`` key is used if it exists, 
+            fps (int | None, optional): The frame per second in the video. Provides a custom video fps for environment,
+                if ``None`` then the environment metadata ``render_fps`` key is used if it exists,
                 otherwise a default value of 30 is used.
             disable_logger (bool, optional): Whether to disable moviepy logger or not, default it is disabled
-            gc_trigger (_type_, optional):  Function that accepts an integer and returns ``True`` iff garbage 
+            gc_trigger (_type_, optional):  Function that accepts an integer and returns ``True`` iff garbage
                 collection should be performed after this episode
 
         Raises:
@@ -57,16 +56,20 @@ class RecordVideo(BaseWrapper):
             env, AECEnv
         ), "RecordVideoEnv is only compatible with AECEnv environments."
 
-        if env.render_mode in {None, "human", "ansi"}:         # type: ignore
+        if env.render_mode in {None, "human", "ansi"}:  # type: ignore
             raise ValueError(
-                f"Render mode is {env.render_mode}, which is incompatible with RecordVideo.",    # type: ignore
+                f"Render mode is {env.render_mode}, which is incompatible with RecordVideo.",  # type: ignore
                 "Initialize your environment with a render_mode that returns an image, such as rgb_array.",
             )
 
         if episode_trigger is None and step_trigger is None:
-            episode_trigger = lambda episode_id: (
-                int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
-            ) if episode_id < 1000 else (episode_id % 1000 == 0)
+            episode_trigger = (
+                lambda episode_id: (
+                    int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
+                )
+                if episode_id < 1000
+                else (episode_id % 1000 == 0)
+            )
 
         self.episode_trigger = episode_trigger
         self.step_trigger = step_trigger
@@ -86,7 +89,9 @@ class RecordVideo(BaseWrapper):
         self.frames_per_sec: int = fps
         self.name_prefix: str = name_prefix
         self._video_name: str | None = None
-        self.video_length: int | float = video_length if video_length != 0 else float("inf") 
+        self.video_length: int | float = (
+            video_length if video_length != 0 else float("inf")
+        )
         self.recording: bool = False
         self.recorded_frames: list[RenderFrame] = []
         self.render_history: list[RenderFrame] = []
@@ -95,12 +100,12 @@ class RecordVideo(BaseWrapper):
         self.episode_id: int = -1
 
         try:
-            import moviepy
+            import moviepy  # noqa: F401
         except ImportError as e:
             raise DependencyNotInstalled(
                 'MoviePy is not installed, run `pip install "pettingzoo[other]"`'
-             ) from e
-        
+            ) from e
+
     def _capture_frame(self):
         assert self.recording, "Cannot capture a frame, recording wasn't started."
 
@@ -147,7 +152,7 @@ class RecordVideo(BaseWrapper):
             if len(self.recorded_frames) > self.video_length:
                 self.stop_recording()
 
-    def render(self) -> RenderFrame | list[RenderFrame]:
+    def render(self):
         """Compute the render frames as specified by render_mode attribute during initialization of the environment."""
         render_out = self.env.render()
         if self.recording and isinstance(render_out, list):
@@ -180,7 +185,9 @@ class RecordVideo(BaseWrapper):
         assert self.recording, "stop_recording was called, but no recording was started"
 
         if len(self.recorded_frames) == 0:
-            gymnasium.logger.warn("Ignored saving a video as there were zero frames to save.")
+            gymnasium.logger.warn(
+                "Ignored saving a video as there were zero frames to save."
+            )
         else:
             try:
                 from moviepy.video.io.ImageSequenceClip import ImageSequenceClip

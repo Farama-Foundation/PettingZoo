@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import pytest
-import os 
+import os
 import shutil
 
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.utils import parallel_to_aec
-
 from pettingzoo.utils.wrappers import RecordVideo, RecordVideoParallel
+
 
 def test_video_folder_and_filenames_base(
     video_folder="custom_video_folder/aec", name_prefix="video-prefix"
@@ -27,9 +26,10 @@ def test_video_folder_and_filenames_base(
 
         for agent in env.agent_iter():
             obs, reward, terminated, truncated, info = env.last()
-            action = None if (terminated or truncated) else env.action_space(agent).sample()
-            env.step(action)         # type: ignore
-        
+            action = (
+                None if (terminated or truncated) else env.action_space(agent).sample()
+            )
+            env.step(action)  # type: ignore
 
     env.close()
 
@@ -42,6 +42,7 @@ def test_video_folder_and_filenames_base(
         "video-prefix-episode-1.mp4",  # episode triggers
         "video-prefix-episode-4.mp4",
     }
+
 
 def test_video_folder_and_filenames_parallel(
     video_folder="custom_video_folder/parallel", name_prefix="video-prefix"
