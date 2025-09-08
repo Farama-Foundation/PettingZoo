@@ -83,12 +83,12 @@ A library for doing reinforcement learning using [Crazyflie](https://www.bitcraz
 A single and multi-agent environment to train swarms of drones for maritime search.
 
 
-### [PettingZoo Dilemma Envs](https://github.com/tianyu-z/pettingzoo_dilemma_envs)
+### [PettingZoo Dilemmas](https://github.com/mrochk/pettingzoo-dilemmas)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/tianyu-z/pettingzoo_dilemma_envs)]()
+[![GitHub stars](https://img.shields.io/github/stars/mrochk/pettingzoo-dilemmas)]()
 
-PettingZoo environments for classic game theory problems: [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma), [Samaritan's Dilemma](https://en.wikipedia.org/wiki/Samaritan%27s_dilemma), [Stag Hunt](https://en.wikipedia.org/wiki/Stag_hunt), [Chicken](https://en.wikipedia.org/wiki/Chicken_(game)) and [Matching Pennies](https://en.wikipedia.org/wiki/Matching_pennies).
+PettingZoo environments for classic game theory problems such as [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma), [Stag Hunt](https://en.wikipedia.org/wiki/Stag_hunt) and [Matching Pennies](https://en.wikipedia.org/wiki/Matching_pennies). User can also create its own custom matrix game easily by providing a reward matrix.
 
 
 ### [Breakout-Clone](https://github.com/SethCram/Breakout-Clone)
