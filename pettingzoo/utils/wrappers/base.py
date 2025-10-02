@@ -35,7 +35,7 @@ class BaseWrapper(AECEnv[AgentID, ObsType, ActionType]):
         return self.env.render()
 
     def reset(self, seed: int | None = None, options: dict | None = None):
-        self.env.reset(seed=seed, options=options)
+        return self.env.reset(seed=seed, options=options)
 
     def observe(self, agent: AgentID) -> ObsType | None:
         return self.env.observe(agent)
@@ -44,7 +44,7 @@ class BaseWrapper(AECEnv[AgentID, ObsType, ActionType]):
         return self.env.state()
 
     def step(self, action: ActionType) -> None:
-        self.env.step(action)
+        return self.env.step(action)
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self.env.observation_space(agent)
