@@ -4,6 +4,7 @@ Author: Rohan (https://github.com/Rohan138)
 """
 
 import os
+from pathlib import Path
 
 import ray
 import supersuit as ss
@@ -70,12 +71,23 @@ if __name__ == "__main__":
 
     env_name = "pistonball_v6"
 
-    register_env(env_name, lambda config: ParallelPettingZooEnv(env_creator(config)))
+    def _make_rllib_env(config):
+        base = env_creator(config)
+        wrapped = ParallelPettingZooEnv(base)
+        wrapped._agent_ids = set(getattr(base, "possible_agents", []))
+        return wrapped
+
+    register_env(env_name, _make_rllib_env)
+
     ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
     config = (
         PPOConfig()
-        .environment(env=env_name, clip_actions=True)
+        .environment(
+            env=env_name,
+            clip_actions=True,
+            disable_env_checking=True,
+        )
         .rollouts(num_rollout_workers=4, rollout_fragment_length=128)
         .training(
             train_batch_size=512,
@@ -95,11 +107,13 @@ if __name__ == "__main__":
         .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
     )
 
+    storage_uri = (Path("~/ray_results") / env_name).expanduser().resolve().as_uri()
+
     tune.run(
         "PPO",
         name="PPO",
         stop={"timesteps_total": 5000000 if not os.environ.get("CI") else 50000},
         checkpoint_freq=10,
-        local_dir="~/ray_results/" + env_name,
+        storage_path=storage_uri,
         config=config.to_dict(),
     )
