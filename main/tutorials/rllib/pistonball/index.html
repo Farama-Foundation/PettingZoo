@@ -427,6 +427,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">supersuit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ss</span>
@@ -493,12 +494,23 @@ tensorflow-probability&gt;=0.19.0
 
     <span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;pistonball_v6&quot;</span>
 
-    <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">ParallelPettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">(</span><span class="n">config</span><span class="p">)))</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_rllib_env</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">env_creator</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">wrapped</span> <span class="o">=</span> <span class="n">ParallelPettingZooEnv</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">wrapped</span><span class="o">.</span><span class="n">_agent_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;possible_agents&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="k">return</span> <span class="n">wrapped</span>
+
+    <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="n">_make_rllib_env</span><span class="p">)</span>
+
     <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;CNNModelV2&quot;</span><span class="p">,</span> <span class="n">CNNModelV2</span><span class="p">)</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">PPOConfig</span><span class="p">()</span>
-        <span class="o">.</span><span class="n">environment</span><span class="p">(</span><span class="n">env</span><span class="o">=</span><span class="n">env_name</span><span class="p">,</span> <span class="n">clip_actions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">environment</span><span class="p">(</span>
+            <span class="n">env</span><span class="o">=</span><span class="n">env_name</span><span class="p">,</span>
+            <span class="n">clip_actions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">disable_env_checking</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="o">.</span><span class="n">rollouts</span><span class="p">(</span><span class="n">num_rollout_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">rollout_fragment_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
         <span class="o">.</span><span class="n">training</span><span class="p">(</span>
             <span class="n">train_batch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
@@ -518,12 +530,14 @@ tensorflow-probability&gt;=0.19.0
         <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RLLIB_NUM_GPUS&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)))</span>
     <span class="p">)</span>
 
+    <span class="n">storage_uri</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;~/ray_results&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">env_name</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span>
+
     <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="s2">&quot;PPO&quot;</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;PPO&quot;</span><span class="p">,</span>
         <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">5000000</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">50000</span><span class="p">},</span>
         <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">local_dir</span><span class="o">=</span><span class="s2">&quot;~/ray_results/&quot;</span> <span class="o">+</span> <span class="n">env_name</span><span class="p">,</span>
+        <span class="n">storage_path</span><span class="o">=</span><span class="n">storage_uri</span><span class="p">,</span>
         <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
     <span class="p">)</span>
 </pre></div>
