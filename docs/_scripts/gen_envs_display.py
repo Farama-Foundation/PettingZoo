@@ -56,7 +56,7 @@ all_envs = {
         "simple_world_comm",
         "simple",
     ],
-    "sisl": ["multiwalker", "pursuit", "waterworld"],
+    "sisl": ["multiwalker", "pursuit"],
 }
 
 
