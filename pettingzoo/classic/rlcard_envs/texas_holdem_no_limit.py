@@ -53,8 +53,8 @@ The main observation space is similar to Texas Hold'em. The first 52 entries rep
 | 13 - 25 | Hearts<br>_`13`: A, `14`: 2, ..., `25`: K_   |  [0, 1]  |
 | 26 - 38 | Diamonds<br>_`26`: A, `27`: 2, ..., `38`: K_ |  [0, 1]  |
 | 39 - 51 | Clubs<br>_`39`: A, `40`: 2, ..., `51`: K_    |  [0, 1]  |
-|    52   | Number of Chips of player_0                  | [0, 100] |
-|    53   | Number of Chips of player_1                  | [0, 100] |
+|    52   | Number of Chips of current acting player     | [0, 100] |
+|    53   | Max Number of Chips of all players           | [0, 100] |
 
 #### Legal Actions Mask
 
