@@ -44,6 +44,8 @@ jobs:
         environment: pypi
         if: github.event_name == 'release' && github.event.action == 'published'
         steps:
+            - name: Download dists
+              uses: actions/download-artifact@v4.1.7
             - name: Download dist
               uses: actions/download-artifact@v4
               with:
