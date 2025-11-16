@@ -77,8 +77,10 @@ In any given turn, an agent can choose from one of 6 actions.
 
 import os
 from glob import glob
+from typing import Any
 
 from pettingzoo.atari.base_atari_env import (
+    AtariAECEnv,
     BaseAtariEnv,
     base_env_wrapper_fn,
     parallel_wrapper_fn,
@@ -86,13 +88,13 @@ from pettingzoo.atari.base_atari_env import (
 
 
 def raw_env(
-    alternating_control=False,
-    moving_shields=True,
-    zigzaging_bombs=False,
-    fast_bomb=False,
-    invisible_invaders=False,
-    **kwargs,
-):
+    alternating_control: bool = False,
+    moving_shields: bool = True,
+    zigzaging_bombs: bool = False,
+    fast_bomb: bool = False,
+    invisible_invaders: bool = False,
+    **kwargs: Any,
+) -> AtariAECEnv:
     mode = 33 + (
         moving_shields * 1
         + zigzaging_bombs * 2

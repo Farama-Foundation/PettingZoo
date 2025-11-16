@@ -122,23 +122,14 @@ from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.action_event import GinAction, KnockAction
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
+from pettingzoo.classic.rlcard_envs.rlcard_utils import (
+    calculate_height,
+    calculate_offset,
+    calculate_width,
+    get_font,
+    get_image,
+)
 from pettingzoo.utils import wrappers
-
-
-def get_image(path):
-    from os import path as os_path
-
-    cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + "/" + path)
-    return image
-
-
-def get_font(path, size):
-    from os import path as os_path
-
-    cwd = os_path.dirname(__file__)
-    font = pygame.font.Font((cwd + "/" + path), size)
-    return font
 
 
 def env(**kwargs):
@@ -220,12 +211,6 @@ class raw_env(RLCardBase, EzPickle):
 
         return {"observation": observation, "action_mask": action_mask}
 
-    def step(self, action):
-        super().step(action)
-
-        if self.render_mode == "human":
-            self.render()
-
     """
     To render:
     state: {'player_id', 'hand', 'top_discard'}
@@ -237,24 +222,6 @@ class raw_env(RLCardBase, EzPickle):
                 "You are calling render method without specifying any render mode."
             )
             return
-
-        def calculate_width(self, screen_width, i):
-            return int(
-                (
-                    screen_width
-                    / (np.ceil(len(self.possible_agents) / 2) + 1)
-                    * np.ceil((i + 1) / 2)
-                )
-                + (tile_size * 31 / 616)
-            )
-
-        def calculate_offset(hand, j, tile_size):
-            return int(
-                (len(hand) * (tile_size * 23 / 56)) - ((j) * (tile_size * 23 / 28))
-            )
-
-        def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
-            return int(multiplier * screen_height / divisor + tile_size * offset)
 
         def draw_borders(x, y, width, height, bw, color):
             pygame.draw.line(
@@ -320,7 +287,13 @@ class raw_env(RLCardBase, EzPickle):
                         card_img,
                         (
                             (
-                                calculate_width(self, screen_width, i)
+                                calculate_width(
+                                    self.possible_agents,
+                                    screen_width,
+                                    i,
+                                    tile_size,
+                                    tile_scale=31,
+                                )
                                 - calculate_offset(state["hand"], j, tile_size)
                             ),
                             calculate_height(screen_height, 4, 1, tile_size, -1),
@@ -332,7 +305,13 @@ class raw_env(RLCardBase, EzPickle):
                         card_img,
                         (
                             (
-                                calculate_width(self, screen_width, i)
+                                calculate_width(
+                                    self.possible_agents,
+                                    screen_width,
+                                    i,
+                                    tile_size,
+                                    tile_scale=31,
+                                )
                                 - calculate_offset(state["hand"], j, tile_size)
                             ),
                             calculate_height(screen_height, 4, 3, tile_size, 0),
@@ -388,7 +367,11 @@ class raw_env(RLCardBase, EzPickle):
             text = font.render("Top Discarded Card", True, white)
             textRect = text.get_rect()
             textRect.center = (
-                (calculate_width(self, screen_width, 0)),
+                (
+                    calculate_width(
+                        self.possible_agents, screen_width, 0, tile_size, tile_scale=31
+                    )
+                ),
                 calculate_height(screen_height, 2, 1, tile_size, (-2 / 3))
                 + (tile_size * (13 / 200)),
             )

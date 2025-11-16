@@ -7,7 +7,7 @@ opponent_upgrade:       # Epoch frequency to update opponent pool
 eval_opponent: weak  # 'random', 'weak' or 'strong'
 pretrained_path: models/DQN/lesson1_trained_agent.pt  # Path to pretrained model weights
 save_path: models/DQN/lesson2_trained_agent.pt  # Path to save trained model
-max_train_episodes: 100000  # Maximum number of training episodes in environment
+max_train_episodes: 100  # Maximum number of training episodes in environment
 
 ## Game specific:
 buffer_warm_up: false  # Fill replay buffer with random experiences

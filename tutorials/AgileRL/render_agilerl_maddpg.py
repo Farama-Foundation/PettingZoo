@@ -5,6 +5,8 @@ import numpy as np
 import supersuit as ss
 import torch
 from agilerl.algorithms.maddpg import MADDPG
+from agilerl.utils.algo_utils import obs_channels_to_first
+from agilerl.utils.utils import observation_space_channels_to_first
 from PIL import Image, ImageDraw
 
 from pettingzoo.atari import space_invaders_v2
@@ -40,28 +42,16 @@ if __name__ == "__main__":
         env = ss.color_reduction_v0(env, mode="B")
         env = ss.resize_v1(env, x_size=84, y_size=84)
         env = ss.frame_stack_v1(env, 4)
+
     env.reset()
-    try:
-        state_dim = [env.observation_space(agent).n for agent in env.agents]
-        one_hot = True
-    except Exception:
-        state_dim = [env.observation_space(agent).shape for agent in env.agents]
-        one_hot = False
-    try:
-        action_dim = [env.action_space(agent).n for agent in env.agents]
-        discrete_actions = True
-        max_action = None
-        min_action = None
-    except Exception:
-        action_dim = [env.action_space(agent).shape[0] for agent in env.agents]
-        discrete_actions = False
-        max_action = [env.action_space(agent).high for agent in env.agents]
-        min_action = [env.action_space(agent).low for agent in env.agents]
+
+    observation_spaces = [env.observation_space(agent) for agent in env.agents]
+    action_spaces = [env.action_space(agent) for agent in env.agents]
 
     # Pre-process image dimensions for pytorch convolutional layers
     if channels_last:
-        state_dim = [
-            (state_dim[2], state_dim[0], state_dim[1]) for state_dim in state_dim
+        observation_spaces = [
+            observation_space_channels_to_first(space) for space in observation_spaces
         ]
 
     # Append number of agents and agent IDs to the initial hyperparameter dictionary
@@ -70,20 +60,15 @@ if __name__ == "__main__":
 
     # Instantiate an MADDPG object
     maddpg = MADDPG(
-        state_dim,
-        action_dim,
-        one_hot,
-        n_agents,
-        agent_ids,
-        max_action,
-        min_action,
-        discrete_actions,
+        observation_spaces=observation_spaces,
+        action_spaces=action_spaces,
+        agent_ids=agent_ids,
         device=device,
     )
 
     # Load the saved algorithm into the MADDPG object
     path = "./models/MADDPG/MADDPG_trained_agent.pt"
-    maddpg.loadCheckpoint(path)
+    maddpg.load_checkpoint(path)
 
     # Define test loop parameters
     episodes = 10  # Number of episodes to test agent on
@@ -103,8 +88,7 @@ if __name__ == "__main__":
         for _ in range(max_steps):
             if channels_last:
                 state = {
-                    agent_id: np.moveaxis(np.expand_dims(s, 0), [3], [1])
-                    for agent_id, s in state.items()
+                    agent_id: obs_channels_to_first(s) for agent_id, s in state.items()
                 }
 
             agent_mask = info["agent_mask"] if "agent_mask" in info.keys() else None
@@ -115,12 +99,8 @@ if __name__ == "__main__":
             )
 
             # Get next action from agent
-            cont_actions, discrete_action = maddpg.getAction(
-                state,
-                epsilon=0,
-                agent_mask=agent_mask,
-                env_defined_actions=env_defined_actions,
-            )
+            cont_actions, discrete_action = maddpg.get_action(state, training=False)
+
             if maddpg.discrete_actions:
                 action = discrete_action
             else:
@@ -131,6 +111,7 @@ if __name__ == "__main__":
             frames.append(_label_with_episode_number(frame, episode_num=ep))
 
             # Take action in environment
+            action = {agent_id: a[0] for agent_id, a in action.items()}
             state, reward, termination, truncation, info = env.step(action)
 
             # Save agent's reward for this step in this episode
@@ -154,6 +135,7 @@ if __name__ == "__main__":
         print("Episodic Reward: ", rewards[-1])
         for agent_id, reward_list in indi_agent_rewards.items():
             print(f"{agent_id} reward: {reward_list[-1]}")
+
     env.close()
 
     # Save the gif to specified path

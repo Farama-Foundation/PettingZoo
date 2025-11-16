@@ -113,6 +113,9 @@ class RLCardBase(AECEnv):
         self._accumulate_rewards()
         self._deads_step_first()
 
+        if self.render_mode == "human":
+            self.render()
+
     def reset(self, seed=None, options=None):
         if seed is not None:
             self._seed(seed=seed)

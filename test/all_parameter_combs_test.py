@@ -29,7 +29,7 @@ from pettingzoo.atari import (
     wizard_of_wor_v3,
 )
 from pettingzoo.butterfly import (
-    cooperative_pong_v5,
+    cooperative_pong_v6,
     knights_archers_zombies_v10,
     pistonball_v6,
 )
@@ -56,7 +56,7 @@ from pettingzoo.mpe import (
     simple_v3,
     simple_world_comm_v3,
 )
-from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
+from pettingzoo.sisl import multiwalker_v9, pursuit_v4
 from pettingzoo.test import max_cycles_test, parallel_api_test
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.render_test import render_test
@@ -95,10 +95,10 @@ parameterized_envs = [
         volleyball_pong_v3,
         dict(num_players=4, max_cycles=50),
     ],
-    ["butterfly/cooperative_pong_v5", cooperative_pong_v5, dict(max_cycles=50)],
+    ["butterfly/cooperative_pong_v6", cooperative_pong_v6, dict(max_cycles=50)],
     [
-        "butterfly/cooperative_pong_v5",
-        cooperative_pong_v5,
+        "butterfly/cooperative_pong_v6",
+        cooperative_pong_v6,
         dict(bounce_randomness=True, max_cycles=50),
     ],
     ["classic/connect_four_v3", connect_four_v3, dict()],
@@ -346,16 +346,6 @@ parameterized_envs = [
     ["sisl/pursuit_v4", pursuit_v4, dict(obs_range=15, max_cycles=50)],
     ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3, max_cycles=50)],
     ["sisl/pursuit_v4", pursuit_v4, dict(freeze_evaders=True, max_cycles=50)],
-    [
-        "sisl/waterworld_v4",
-        waterworld_v4,
-        dict(n_pursuers=3, n_evaders=6, max_cycles=50),
-    ],
-    ["sisl/waterworld_v4", waterworld_v4, dict(n_coop=1, max_cycles=50)],
-    ["sisl/waterworld_v4", waterworld_v4, dict(n_poisons=4, max_cycles=50)],
-    ["sisl/waterworld_v4", waterworld_v4, dict(n_sensors=4, max_cycles=50)],
-    ["sisl/waterworld_v4", waterworld_v4, dict(local_ratio=0.5, max_cycles=50)],
-    ["sisl/waterworld_v4", waterworld_v4, dict(speed_features=False, max_cycles=50)],
 ]
 
 

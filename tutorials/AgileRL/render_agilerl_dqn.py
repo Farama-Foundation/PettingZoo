@@ -4,6 +4,7 @@ import imageio
 import numpy as np
 import torch
 from agilerl.algorithms.dqn import DQN
+from agilerl.utils.utils import observation_space_channels_to_first
 from agilerl_dqn_curriculum import Opponent
 from PIL import Image, ImageDraw, ImageFont
 
@@ -56,28 +57,20 @@ if __name__ == "__main__":
     env.reset()
 
     # Configure the algo input arguments
-    state_dim = [
-        env.observation_space(agent)["observation"].shape for agent in env.agents
+    observation_spaces = [
+        env.observation_space(agent)["observation"] for agent in env.agents
     ]
-    one_hot = False
-    action_dim = [env.action_space(agent).n for agent in env.agents]
-
-    # Pre-process dimensions for pytorch layers
-    # We will use self-play, so we only need to worry about the state dim of a single agent
-    # We flatten the 6x7x2 observation as input to the agent's neural network
-    state_dim = np.zeros(state_dim[0]).flatten().shape
-    action_dim = action_dim[0]
+    action_spaces = [env.action_space(agent) for agent in env.agents]
 
     # Instantiate an DQN object
     dqn = DQN(
-        state_dim,
-        action_dim,
-        one_hot,
+        observation_space=observation_space_channels_to_first(observation_spaces[0]),
+        action_space=action_spaces[0],
         device=device,
     )
 
     # Load the saved algorithm into the DQN object
-    dqn.loadCheckpoint(path)
+    dqn.load_checkpoint(path)
 
     for opponent_difficulty in ["random", "weak", "strong", "self"]:
         # Create opponent
@@ -124,15 +117,15 @@ if __name__ == "__main__":
                     state = np.expand_dims(state, 0)
                     if opponent_first:
                         if opponent_difficulty == "self":
-                            action = opponent.getAction(
+                            action = opponent.get_action(
                                 state, epsilon=0, action_mask=action_mask
                             )[0]
                         elif opponent_difficulty == "random":
-                            action = opponent.getAction(action_mask)
+                            action = opponent.get_action(action_mask)
                         else:
-                            action = opponent.getAction(player=0)
+                            action = opponent.get_action(player=0)
                     else:
-                        action = dqn.getAction(
+                        action = dqn.get_action(
                             state, epsilon=0, action_mask=action_mask
                         )[
                             0
@@ -143,15 +136,15 @@ if __name__ == "__main__":
                     state = np.expand_dims(state, 0)
                     if not opponent_first:
                         if opponent_difficulty == "self":
-                            action = opponent.getAction(
+                            action = opponent.get_action(
                                 state, epsilon=0, action_mask=action_mask
                             )[0]
                         elif opponent_difficulty == "random":
-                            action = opponent.getAction(action_mask)
+                            action = opponent.get_action(action_mask)
                         else:
-                            action = opponent.getAction(player=1)
+                            action = opponent.get_action(player=1)
                     else:
-                        action = dqn.getAction(
+                        action = dqn.get_action(
                             state, epsilon=0, action_mask=action_mask
                         )[
                             0

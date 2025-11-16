@@ -54,6 +54,7 @@ if __name__ == "__main__":
                     not os.path.isdir(os.path.join(env_type_path, "rlcard_envs", i))
                     and i != "__init__.py"
                     and i != "rlcard_base.py"
+                    and i != "rlcard_utils.py"
                 ):
                     envs_list.append(os.path.join("rlcard_envs", i[:-3]))
             envs_list = sorted(envs_list)
@@ -93,7 +94,7 @@ if __name__ == "__main__":
             full_env_names = [
                 full_name
                 for full_name in all_environments.keys()
-                if env_name in full_name
+                if env_name == full_name.split("/")[1].rsplit("_", 1)[0]
             ]
             env_name_version = full_env_names[0].split("/")[1]
             if env_type == "classic" and env_name != "rps":

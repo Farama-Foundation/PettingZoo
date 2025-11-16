@@ -11,7 +11,7 @@ This does not include dependencies for all families of environments (some enviro
 
 To install the dependencies for one family, use `pip install 'pettingzoo[atari]'`, or use `pip install 'pettingzoo[all]'` to install all dependencies.
 
-We support Python 3.8, 3.9, 3.10 and 3.11 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
+We support and maintain PettingZoo for Python 3.9, 3.10, 3.11, and 3.12 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 ## Initializing Environments
 
@@ -25,9 +25,9 @@ env = pistonball_v6.env()
 Environments are generally highly configurable via arguments at creation, i.e.:
 
 ``` python
-from pettingzoo.butterfly import cooperative_pong_v5
+from pettingzoo.butterfly import cooperative_pong_v6
 
-cooperative_pong_v5.env(ball_speed=18, left_paddle_speed=25,
+cooperative_pong_v6.env(ball_speed=18, left_paddle_speed=25,
 right_paddle_speed=25, cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
 
@@ -36,9 +36,9 @@ right_paddle_speed=25, cake_paddle=True, max_cycles=900, bounce_randomness=False
 Environments can be interacted with using a similar interface to Gymnasium:
 
 ``` python
-from pettingzoo.butterfly import cooperative_pong_v5
+from pettingzoo.butterfly import cooperative_pong_v6
 
-env = cooperative_pong_v5.env(render_mode="human")
+env = cooperative_pong_v6.env(render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():
