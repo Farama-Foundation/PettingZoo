@@ -2,3 +2,5 @@ pettingzoo[butterfly,atari,testing]>=1.24.0
 SuperSuit>=3.9.0
 tensorboard>=2.11.2
 torch>=1.13.1
+imageio
+imageio-ffmpeg
