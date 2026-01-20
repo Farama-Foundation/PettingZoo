@@ -119,6 +119,13 @@ A multi-agent traffic scenario environment for CARLA that supports [ScenarioRunn
 
 Implementation of the board game *Fanorona*.
 
+### [Ludo](https://github.com/Sim43/PettingZoo-Ludo)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/Sim43/PettingZoo-Ludo)]()
+
+PettingZoo implementation of the [Ludo](https://en.wikipedia.org/wiki/Ludo) board game, with optional Pygame rendering. Supports both single-player and team modes (2v2).
+* [Variant Rules](https://github.com/Sim43/PettingZoo-Ludo/blob/main/LUDO_RULES.md)
+
 ### [Gobblet-RL](https://github.com/elliottower/gobblet-rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
