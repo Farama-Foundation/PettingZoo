@@ -141,6 +141,12 @@ Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.or
  Play [Connect Four](/environments/classic/connect_four/) in real-time against an [RLlib](https://docs.ray.io/en/latest/rllib/index.html) agent trained via self-play and PPO.
 * Online game demo (using [Gradio](https://www.gradio.app/) and [HuggingFace Spaces](https://huggingface.co/docs/hub/spaces-overview)): [link](https://huggingface.co/spaces/ClementBM/connectfour), [tutorial](https://clementbm.github.io/project/2023/03/29/reinforcement-learning-connect-four-rllib.html)
 
+### [Coup](https://github.com/ivomac/pettingzoo-coup)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.25.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/ivomac/pettingzoo-coup)]()
+
+Implementation of the card game [Coup](https://en.wikipedia.org/wiki/Coup_(card_game)).
 
 
 ___
