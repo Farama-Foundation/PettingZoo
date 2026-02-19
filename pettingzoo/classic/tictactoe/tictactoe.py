@@ -226,7 +226,7 @@ class raw_env(AECEnv, EzPickle):
         self.truncations = {i: False for i in self.agents}
         self.infos = {i: {} for i in self.agents}
         # selects the first agent
-        self._agent_selector.reinit(self.agents)
+        self._agent_selector.reinit(self.possible_agents)
         self.agent_selection = self._agent_selector.reset()
 
         if self.render_mode is not None and self.screen is None:
