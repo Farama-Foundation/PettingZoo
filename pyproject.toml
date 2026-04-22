@@ -41,7 +41,6 @@ classic = [
     "shimmy[openspiel]>=1.2.0"
 ]
 butterfly = ["pygame-ce>=2.3.0", "pymunk>=6.2.0"]
-mpe = ["pygame-ce>=2.3.0"]
 sisl = ["pygame-ce>=2.3.0", "pymunk>=6.2.0", "box2d-py>=2.3.5", "scipy>=1.4.1"]
 other = ["pillow>=8.0.1"]
 testing = [
@@ -96,7 +95,6 @@ exclude = [
     "pettingzoo/atari/",
     "pettingzoo/butterfly/",
     "pettingzoo/classic/",
-    "pettingzoo/mpe/",
     "pettingzoo/sisl/",
     "pettingzoo/test/",
 ]

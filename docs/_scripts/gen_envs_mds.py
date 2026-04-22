@@ -139,7 +139,7 @@ if __name__ == "__main__":
    :members:
 ```
 """
-            elif env_type in ["mpe", "atari"]:
+            elif env_type in ["atari"]:
                 docs_text += f"""## API
 ```{{eval-rst}}
 .. currentmodule:: pettingzoo.{env_type}.{env_name}.{env_name}
