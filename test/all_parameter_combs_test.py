@@ -45,17 +45,6 @@ from pettingzoo.classic import (
     texas_holdem_v4,
     tictactoe_v3,
 )
-from pettingzoo.mpe import (
-    simple_adversary_v3,
-    simple_crypto_v3,
-    simple_push_v3,
-    simple_reference_v3,
-    simple_speaker_listener_v4,
-    simple_spread_v3,
-    simple_tag_v3,
-    simple_v3,
-    simple_world_comm_v3,
-)
 from pettingzoo.sisl import multiwalker_v9, pursuit_v4
 from pettingzoo.test import max_cycles_test, parallel_api_test
 from pettingzoo.test.api_test import api_test
@@ -107,26 +96,6 @@ parameterized_envs = [
     ["classic/tictactoe_v3", tictactoe_v3, dict()],
     ["classic/gin_rummy_v4", gin_rummy_v4, dict()],
     ["classic/gin_rummy_v4", gin_rummy_v4, dict(opponents_hand_visible=True)],
-    ["mpe/simple_v3", simple_v3, dict(max_cycles=50)],
-    ["mpe/simple_v3", simple_v3, dict(continuous_actions=True, max_cycles=50)],
-    ["mpe/simple_push_v3", simple_push_v3, dict(max_cycles=50)],
-    [
-        "mpe/simple_push_v3",
-        simple_push_v3,
-        dict(continuous_actions=True, max_cycles=50),
-    ],
-    ["mpe/simple_crypto_v3", simple_crypto_v3, dict(max_cycles=50)],
-    [
-        "mpe/simple_crypto_v3",
-        simple_crypto_v3,
-        dict(continuous_actions=True, max_cycles=50),
-    ],
-    ["mpe/simple_speaker_listener_v4", simple_speaker_listener_v4, dict(max_cycles=50)],
-    [
-        "mpe/simple_speaker_listener_v4",
-        simple_speaker_listener_v4,
-        dict(continuous_actions=True, max_cycles=50),
-    ],
     ["atari/boxing_v2", boxing_v2, dict(max_cycles=50)],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="grayscale_image", max_cycles=50)],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="ram", max_cycles=50)],
@@ -237,96 +206,6 @@ parameterized_envs = [
     ["classic/hanabi_v5", hanabi_v5, dict(observation_type="minimal")],
     ["classic/hanabi_v5", hanabi_v5, dict(observation_type="seer")],
     ["classic/hanabi_v5", hanabi_v5, dict(random_start_player=True)],
-    ["mpe/simple_adversary_v3", simple_adversary_v3, dict(N=4, max_cycles=50)],
-    [
-        "mpe/simple_reference_v3",
-        simple_reference_v3,
-        dict(local_ratio=0.2, max_cycles=50),
-    ],
-    ["mpe/simple_spread_v3", simple_spread_v3, dict(N=5, max_cycles=50)],
-    [
-        "mpe/simple_tag_v3",
-        simple_tag_v3,
-        dict(num_good=5, num_adversaries=10, num_obstacles=4, max_cycles=50),
-    ],
-    [
-        "mpe/simple_tag_v3",
-        simple_tag_v3,
-        dict(num_good=1, num_adversaries=1, num_obstacles=1, max_cycles=50),
-    ],
-    [
-        "mpe/simple_tag_v3",
-        simple_tag_v3,
-        dict(
-            num_good=5,
-            num_adversaries=10,
-            num_obstacles=4,
-            continuous_actions=True,
-            max_cycles=50,
-        ),
-    ],
-    [
-        "mpe/simple_tag_v3",
-        simple_tag_v3,
-        dict(
-            num_good=1,
-            num_adversaries=1,
-            num_obstacles=1,
-            continuous_actions=True,
-            max_cycles=50,
-        ),
-    ],
-    [
-        "mpe/simple_world_comm_v3",
-        simple_world_comm_v3,
-        dict(
-            num_good=5, num_adversaries=10, num_obstacles=4, num_food=3, max_cycles=50
-        ),
-    ],
-    [
-        "mpe/simple_world_comm_v3",
-        simple_world_comm_v3,
-        dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1, max_cycles=50),
-    ],
-    [
-        "mpe/simple_world_comm_v3",
-        simple_world_comm_v3,
-        dict(
-            num_good=5,
-            num_adversaries=10,
-            num_obstacles=4,
-            num_food=3,
-            continuous_actions=True,
-            max_cycles=50,
-        ),
-    ],
-    [
-        "mpe/simple_world_comm_v3",
-        simple_world_comm_v3,
-        dict(
-            num_good=1,
-            num_adversaries=1,
-            num_obstacles=1,
-            num_food=1,
-            continuous_actions=True,
-            max_cycles=50,
-        ),
-    ],
-    [
-        "mpe/simple_adversary_v3",
-        simple_adversary_v3,
-        dict(N=4, continuous_actions=True, max_cycles=50),
-    ],
-    [
-        "mpe/simple_reference_v3",
-        simple_reference_v3,
-        dict(local_ratio=0.2, continuous_actions=True, max_cycles=50),
-    ],
-    [
-        "mpe/simple_spread_v3",
-        simple_spread_v3,
-        dict(N=5, continuous_actions=True, max_cycles=50),
-    ],
     ["sisl/multiwalker_v9", multiwalker_v9, dict(n_walkers=10, max_cycles=50)],
     ["sisl/multiwalker_v9", multiwalker_v9, dict(shared_reward=False, max_cycles=50)],
     [
@@ -365,7 +244,7 @@ def test_module(name, env_module, kwargs):
 
     render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))
 
-    if ("butterfly/" in name) or ("mpe/" in name):
+    if "butterfly/" in name:
         state_test(env_module.env(), env_module.parallel_env())
 
     try:
