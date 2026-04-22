@@ -1,5 +1,5 @@
 # AgileRL: Implementing MATD3
-This tutorial shows how to train an [MATD3](https://agilerl.readthedocs.io/en/latest/api/algorithms/matd3.html) agent on the [simple speaker listener](https://pettingzoo.farama.org/environments/mpe/simple_speaker_listener/) multi-particle environment.
+This tutorial shows how to train an [MATD3](https://agilerl.readthedocs.io/en/latest/api/algorithms/matd3.html) agent on the [simple speaker listener](https://mpe2.farama.org/environments/simple_speaker_listener/) multi-particle environment.
 
 ## What is MATD3?
 [MATD3](https://agilerl.readthedocs.io/en/latest/api/algorithms/matd3.html) (Multi-Agent Twin Delayed Deep Deterministic Policy Gradients) extends the [MADDPG](https://agilerl.readthedocs.io/en/latest/api/algorithms/maddpg.html) (Multi-Agent Deep Deterministic Policy Gradients) algorithm to reduce overestimation bias in multi-agent domains through the use of a second set of critic networks and delayed updates of the policy networks. This enables superior performance when compared to MADDPG. For further information on MATD3, check out the AgileRL [documentation](https://agilerl.readthedocs.io/en/latest/api/algorithms/matd3.html).
