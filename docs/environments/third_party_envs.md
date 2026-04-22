@@ -148,6 +148,13 @@ Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.or
 
 Implementation of the card game [Coup](https://en.wikipedia.org/wiki/Coup_(card_game)).
 
+### [Chinese Checkers](https://github.com/masarwy/SternhalmaEnv/tree/main)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/masarwy/SternhalmaEnv)]()
+
+Implementation of the game [Chinese Checkers](https://en.wikipedia.org/wiki/Chinese_checkers).
+
 
 ___
 
