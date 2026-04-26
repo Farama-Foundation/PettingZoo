@@ -15,8 +15,7 @@ PettingZoo includes the following families of environments:
 * [Atari](https://pettingzoo.farama.org/environments/atari/): Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
 * [Butterfly](https://pettingzoo.farama.org/environments/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
 * [Classic](https://pettingzoo.farama.org/environments/classic): Classical games including card games, board games, etc.
-* [MPE](https://pettingzoo.farama.org/environments/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
-* [SISL](https://pettingzoo.farama.org/environments/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
+* [SISL](https://pettingzoo.farama.org/environments/sisl): 2 cooperative environments, originally from https://github.com/sisl/MADRL
 
 ## Installation
 
@@ -26,7 +25,7 @@ This does not include dependencies for all families of environments (some enviro
 
 To install the dependencies for one family, use `pip install 'pettingzoo[atari]'`, or use `pip install 'pettingzoo[all]'` to install all dependencies.
 
-We support and maintain PettingZoo for Python 3.9, 3.10, 3.11, and 3.12 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
+We support and maintain PettingZoo for Python 3.9, 3.10, 3.11, 3.12, 3.13, and 3.14 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 Note: Some Linux distributions may require manual installation of `cmake`, `swig`, or `zlib1g-dev` (e.g., `sudo apt install cmake swig zlib1g-dev`)
 
