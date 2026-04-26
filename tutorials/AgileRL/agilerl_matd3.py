@@ -14,9 +14,8 @@ from agilerl.hpo.tournament import TournamentSelection
 from agilerl.utils.algo_utils import obs_channels_to_first
 from agilerl.utils.utils import create_population, observation_space_channels_to_first
 from agilerl.vector.pz_async_vec_env import AsyncPettingZooVecEnv
+from mpe2 import simple_speaker_listener_v4
 from tqdm import trange
-
-from pettingzoo.mpe import simple_speaker_listener_v4
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
