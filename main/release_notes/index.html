@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Release Notes - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=5b1a364e" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
@@ -387,6 +387,16 @@
             
             <section class="tex2jax_ignore mathjax_ignore" id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">¶</a></h1>
+<section id="release-1-26-1">
+<h2>PettingZoo 1.26.1<a class="headerlink" href="#release-1-26-1" title="Link to this heading">¶</a></h2>
+<p><em>Released on 2026-04-27 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.26.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.26.1/">PyPI</a></em></p>
+<h2>PettingZoo 1.26.1 release note</h2>
+<p>This is a patch release for PettingZoo addressing dependency updates.</p>
+<h2>Dependency updates</h2>
+<ul>
+<li>Updated Ray dependency in tutorials from 2.7.0 to 2.55.0 (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4329596885" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1329" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1329/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1329">#1329</a>).</li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.26.0...1.26.1"><tt>1.26.0...1.26.1</tt></a></p></section>
 <section id="release-1-26-0">
 <h2>PettingZoo 1.26.0<a class="headerlink" href="#release-1-26-0" title="Link to this heading">¶</a></h2>
 <p><em>Released on 2026-04-26 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.26.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.26.0/">PyPI</a></em></p>
@@ -1209,6 +1219,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#release-1-26-1">PettingZoo 1.26.1</a></li>
 <li><a class="reference internal" href="#release-1-26-0">PettingZoo 1.26.0</a></li>
 <li><a class="reference internal" href="#release-1-25-0">PettingZoo 1.25.0</a></li>
 <li><a class="reference internal" href="#release-1-24-3">PettingZoo 1.24.3</a></li>
@@ -1399,14 +1410,6 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -1420,7 +1423,14 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -1436,8 +1446,6 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -1449,6 +1457,13 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -1493,7 +1508,14 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 
