@@ -170,7 +170,9 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
 
-    def agent_iter(self, max_iter: int = 2**63) -> AECIterable:
+    def agent_iter(
+        self, max_iter: int = 2**63
+    ) -> AECIterable[AgentID, ObsType, ActionType]:
         """Yields the current agent (self.agent_selection).
 
         Needs to be used in a loop where you step() each iteration.
