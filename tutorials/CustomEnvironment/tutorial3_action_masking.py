@@ -63,8 +63,8 @@ class CustomActionMaskedEnvironment(ParallelEnv):
         self.prisoner_x = 0
         self.prisoner_y = 0
 
-        self.guard_x = 7
-        self.guard_y = 7
+        self.guard_x = 6
+        self.guard_y = 6
 
         self.escape_x = random.randint(2, 5)
         self.escape_y = random.randint(2, 5)
@@ -75,8 +75,8 @@ class CustomActionMaskedEnvironment(ParallelEnv):
             self.escape_x + 7 * self.escape_y,
         )
         observations = {
-            "prisoner": {"observation": observation, "action_mask": [0, 1, 1, 0]},
-            "guard": {"observation": observation, "action_mask": [1, 0, 0, 1]},
+            "prisoner": {"observation": observation, "action_mask": [0, 1, 0, 1]},
+            "guard": {"observation": observation, "action_mask": [1, 0, 1, 0]},
         }
 
         # Get dummy infos. Necessary for proper parallel_to_aec conversion
@@ -193,7 +193,7 @@ class CustomActionMaskedEnvironment(ParallelEnv):
 
     def render(self):
         """Renders the environment."""
-        grid = np.zeros((8, 8), dtype=object)
+        grid = np.full((7, 7), " ")
         grid[self.prisoner_y, self.prisoner_x] = "P"
         grid[self.guard_y, self.guard_x] = "G"
         grid[self.escape_y, self.escape_x] = "E"
