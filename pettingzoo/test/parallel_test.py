@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import random
 import warnings
-
-import numpy as np
 
 from pettingzoo.test.api_test import missing_attr_warning
 from pettingzoo.utils.conversions import (
