@@ -106,3 +106,7 @@ reportMissingImports = false
 
 [tool.pytest.ini_options]
 addopts = [ "--ignore-glob=*/__init__.py", "-n=auto", "--ignore=tutorials", "--ignore=docs/_scripts", "--ignore=conf.py"]
+filterwarnings = [
+    "ignore::DeprecationWarning:pygame.*",
+    "ignore::DeprecationWarning:pkg_resources.*"
+]
