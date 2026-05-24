@@ -565,7 +565,9 @@
         <span class="k">for</span> <span class="n">agent</span><span class="p">,</span> <span class="n">reward</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">agent_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">63</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECIterable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">agent_iter</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">63</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECIterable</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields the current agent (self.agent_selection).</span>
 
 <span class="sd">        Needs to be used in a loop where you step() each iteration.</span>
