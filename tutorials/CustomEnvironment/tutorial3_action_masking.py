@@ -75,8 +75,14 @@ class CustomActionMaskedEnvironment(ParallelEnv):
             self.escape_x + 7 * self.escape_y,
         )
         observations = {
-            "prisoner": {"observation": observation, "action_mask": [0, 1, 0, 1]},
-            "guard": {"observation": observation, "action_mask": [1, 0, 1, 0]},
+            "prisoner": {
+                "observation": observation,
+                "action_mask": np.array([0, 1, 0, 1], dtype=np.int8),
+            },
+            "guard": {
+                "observation": observation,
+                "action_mask": np.array([1, 0, 1, 0], dtype=np.int8),
+            },
         }
 
         # Get dummy infos. Necessary for proper parallel_to_aec conversion
