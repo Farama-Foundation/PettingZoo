@@ -61,6 +61,7 @@ all = [
     "pymunk>=6.2.0",
     "box2d-py>=2.3.5",
     "scipy>=1.4.1",
+    "moviepy>=2.2.1",
     "pillow>=8.0.1",
 ]
 
