@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import gc
 import os
-from typing import Any, Callable, TypeAlias
+from typing import Any, Callable
+
+try:
+    from typing import TypeAlias
+except ImportError:
+    from typing_extensions import TypeAlias
 
 import gymnasium
 import numpy as np
