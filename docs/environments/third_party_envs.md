@@ -82,13 +82,20 @@ A library for doing reinforcement learning using [Crazyflie](https://www.bitcraz
 
 A single and multi-agent environment to train swarms of drones for maritime search.
 
-
 ### [PettingZoo Dilemma Envs](https://github.com/tianyu-z/pettingzoo_dilemma_envs)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/tianyu-z/pettingzoo_dilemma_envs)]()
 
 PettingZoo environments for classic game theory problems: [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma), [Samaritan's Dilemma](https://en.wikipedia.org/wiki/Samaritan%27s_dilemma), [Stag Hunt](https://en.wikipedia.org/wiki/Stag_hunt), [Chicken](https://en.wikipedia.org/wiki/Chicken_(game)) and [Matching Pennies](https://en.wikipedia.org/wiki/Matching_pennies).
+
+
+### [PettingZoo Dilemmas](https://github.com/mrochk/pettingzoo-dilemmas)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/mrochk/pettingzoo-dilemmas)]()
+
+Another implementation of PettingZoo environments for classic game theory problems such as [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma), [Stag Hunt](https://en.wikipedia.org/wiki/Stag_hunt) and [Matching Pennies](https://en.wikipedia.org/wiki/Matching_pennies). User can also create its own custom matrix game easily by providing a reward matrix.
 
 
 ### [Breakout-Clone](https://github.com/SethCram/Breakout-Clone)
@@ -141,6 +148,19 @@ Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.or
  Play [Connect Four](/environments/classic/connect_four/) in real-time against an [RLlib](https://docs.ray.io/en/latest/rllib/index.html) agent trained via self-play and PPO.
 * Online game demo (using [Gradio](https://www.gradio.app/) and [HuggingFace Spaces](https://huggingface.co/docs/hub/spaces-overview)): [link](https://huggingface.co/spaces/ClementBM/connectfour), [tutorial](https://clementbm.github.io/project/2023/03/29/reinforcement-learning-connect-four-rllib.html)
 
+### [Coup](https://github.com/ivomac/pettingzoo-coup)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.25.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/ivomac/pettingzoo-coup)]()
+
+Implementation of the card game [Coup](https://en.wikipedia.org/wiki/Coup_(card_game)).
+
+### [Chinese Checkers](https://github.com/masarwy/SternhalmaEnv/tree/main)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/masarwy/SternhalmaEnv)]()
+
+Implementation of the game [Chinese Checkers](https://en.wikipedia.org/wiki/Chinese_checkers).
 
 
 ___

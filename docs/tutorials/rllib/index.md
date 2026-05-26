@@ -24,11 +24,7 @@ See the [documentation](https://docs.ray.io/en/latest/rllib/index.html) for more
 ### Training:
  * [supersuit preprocessing: pistonball](https://github.com/ray-project/ray/blob/master/rllib/examples/env/greyscale_env.py)
  * [simple multi-agent: rock-paper-scissors](https://github.com/ray-project/ray/blob/master/rllib/examples/rock_paper_scissors_multiagent.py)
- * [multi-agent parameter sharing: waterworld](https://github.com/ray-project/ray/blob/master/rllib/examples/multi_agent_parameter_sharing.py)
- * [multi-agent independent learning: waterworld](https://github.com/ray-project/ray/blob/master/rllib/examples/multi_agent_independent_learning.py)
  * [multi-agent leela chess zero](https://github.com/ray-project/ray/blob/master/rllib/examples/multi-agent-leela-chess-zero.py)
-
-[//]: # (TODO: test waterworld, leela chess zero, add PR to pettingzoo if it isn't merged)
 
 ### Environments:
  * [connect four](https://github.com/ray-project/ray/blob/293fe2cb182b15499672c9cf50f79c8a9857dfb4/rllib/examples/env/pettingzoo_connect4.py)

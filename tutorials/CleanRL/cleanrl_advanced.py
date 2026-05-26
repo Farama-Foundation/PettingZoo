@@ -19,6 +19,7 @@ import time
 from distutils.util import strtobool
 
 import gymnasium as gym
+import imageio
 import numpy as np
 import supersuit as ss
 import torch
@@ -178,7 +179,9 @@ if __name__ == "__main__":
     envs.single_action_space = envs.action_space
     envs.is_vector_env = True
     if args.capture_video:
-        envs = gym.wrappers.RecordVideo(envs, f"videos/{run_name}")
+        print(
+            "capture_video=True, but RecordVideo is disabled for vectorized PettingZoo environments."
+        )
     assert isinstance(
         envs.single_action_space, gym.spaces.Discrete
     ), "only discrete action space is supported"
@@ -369,6 +372,56 @@ if __name__ == "__main__":
         writer.add_scalar(
             "charts/SPS", int(global_step / (time.time() - start_time)), global_step
         )
+
+    def record_video(env_id, agent, run_name, num_frames=500):
+        print("Recording video...")
+
+        device = next(agent.parameters()).device
+
+        # Create a fresh non-vectorized Atari env with RGB rendering.
+        env = importlib.import_module(f"pettingzoo.atari.{env_id}").parallel_env(
+            render_mode="rgb_array"
+        )
+        env = ss.color_reduction_v0(env, mode="B")
+        env = ss.resize_v1(env, x_size=84, y_size=84)
+        env = ss.frame_stack_v1(env, 4)
+        env = ss.agent_indicator_v0(env, type_only=False)
+
+        frames = []
+        obs, infos = env.reset()
+        terminated = {agent_name: False for agent_name in env.agents}
+
+        for _ in range(num_frames):
+            # Use trained agent's policy
+            with torch.no_grad():
+                obs_list = np.stack([obs[a] for a in env.agents])
+                obs_tensor = torch.tensor(obs_list).float().to(device)
+
+                actions, _, _, _ = agent.get_action_and_value(obs_tensor)
+
+            # Convert vector back to dict
+            action_dict = {
+                agent_name: actions[i].item() for i, agent_name in enumerate(env.agents)
+            }
+
+            obs, rewards, terminations, truncations, infos = env.step(action_dict)
+
+            # Capture a frame
+            frame = env.render()
+            if frame is not None:
+                frames.append(frame)
+
+            if all(terminations.values()) or all(truncations.values()):
+                break
+
+        video_path = f"runs/{run_name}/{run_name}.mp4"
+        imageio.mimwrite(video_path, frames, fps=30)
+        print(f"Saved video to {video_path}")
+
+        env.close()
+
+    if args.capture_video:
+        record_video(args.env_id, agent, run_name)
 
     envs.close()
     writer.close()
