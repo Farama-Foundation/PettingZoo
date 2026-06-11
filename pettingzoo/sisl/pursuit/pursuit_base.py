@@ -142,6 +142,12 @@ class Pursuit:
         self.action_space = [act_space for _ in range(self.n_pursuers)]
 
         self.observation_space = [obs_space for _ in range(self.n_pursuers)]
+        self.state_space = spaces.Box(
+            low=0,
+            high=max_agents_overlap,
+            shape=(self.y_size, self.x_size, 3),
+            dtype=np.float32,
+        )
         self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
 
         self.evaders_gone = np.array([False for i in range(self.n_evaders)])
@@ -482,6 +488,12 @@ class Pursuit:
         agent_layer = self.pursuer_layer
         obs = self.collect_obs(agent_layer, i)
         return obs
+
+    def state(self):
+        # the global state is the same as the observations, but covers the
+        # whole map instead of an obs_range crop around each agent
+        state = np.abs(self.model_state[0:3])
+        return np.swapaxes(state, 2, 0)
 
     def collect_obs(self, agent_layer, i):
         for j in range(self.n_agents()):

@@ -20,6 +20,8 @@ This environment is part of the <a href='..'>SISL environments</a>. Please read 
 | Action Values        | Discrete(5)                                            |
 | Observation Shape    | (7, 7, 3)                                              |
 | Observation Values   | [0, 30]                                                |
+| State Shape          | (16, 16, 3)                                            |
+| State Values         | (0, 30)                                                |
 
 
 By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 16 grid with an obstacle, shown in white, in the center. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader each of the surrounding agents receives a reward of 5
@@ -27,6 +29,8 @@ and the evader is removed from the environment. Pursuers also receive a reward o
 the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in section 4.1 of the PettingZoo paper applied.
 
 Observation shape takes the full form of `(obs_range, obs_range, 3)` where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.
+
+The state takes the full form of `(y_size, x_size, 3)`, with the same three channels as the observations, but covering the whole map instead of the `obs_range` box around each agent.
 
 ### Manual Control
 
@@ -123,6 +127,7 @@ class raw_env(AECEnv, EzPickle):
         self.n_act_agents = self.env.act_dims[0]
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
+        self.state_space = self.env.state_space
         self.steps = 0
         self.closed = False
 
@@ -148,6 +153,9 @@ class raw_env(AECEnv, EzPickle):
     def render(self):
         if not self.closed:
             return self.env.render()
+
+    def state(self):
+        return self.env.state()
 
     def step(self, action):
         if (
