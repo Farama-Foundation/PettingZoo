@@ -249,9 +249,10 @@ class raw_env(RLCardBase, EzPickle):
         screen_width = int(screen_height * (1 / 20) + 3.5 * (screen_height * 1 / 2))
 
         if self.screen is None:
-            pygame.init()
+            pygame.font.init()
 
             if self.render_mode == "human":
+                pygame.display.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
                 pygame.display.set_caption("Gin Rummy")
             else:

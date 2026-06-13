@@ -394,6 +394,7 @@ class Pursuit:
             return
 
         if self.screen is None:
+            pygame.font.init()
             if self.render_mode == "human":
                 pygame.display.init()
                 self.screen = pygame.display.set_mode(

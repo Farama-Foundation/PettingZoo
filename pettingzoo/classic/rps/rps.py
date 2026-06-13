@@ -437,10 +437,11 @@ class raw_env(AECEnv, EzPickle):
         screen_height = self.screen_height
         screen_width = int(screen_height * 5 / 14)
 
-        if self.screen is None:
-            pygame.init()
+        if self.render_mode is not None and self.screen is None:
+            pygame.font.init()
 
         if self.render_mode == "human":
+            pygame.display.init()
             self.screen = pygame.display.set_mode((screen_width, screen_height))
             pygame.display.set_caption("Rock Paper Scissors")
         else:

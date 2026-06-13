@@ -803,9 +803,8 @@ class raw_env(AECEnv, EzPickle):
             return
 
         if self.screen is None:
-            pygame.init()
-
             if self.render_mode == "human":
+                pygame.display.init()
                 self.screen = pygame.display.set_mode(
                     [const.SCREEN_WIDTH, const.SCREEN_HEIGHT]
                 )

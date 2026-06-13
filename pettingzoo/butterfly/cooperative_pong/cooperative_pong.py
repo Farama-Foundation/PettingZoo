@@ -205,7 +205,6 @@ class CooperativePong:
         """
         super().__init__()
 
-        pygame.init()
         self.num_agents = 2
 
         self.render_ratio = render_ratio
@@ -331,6 +330,7 @@ class CooperativePong:
 
         if self.screen is None:
             if self.render_mode == "human":
+                pygame.display.init()
                 self.screen = pygame.display.set_mode((self.s_width, self.s_height))
                 pygame.display.set_caption("Cooperative Pong")
         assert self.screen is not None
