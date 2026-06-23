@@ -216,14 +216,14 @@ class Scenario(BaseScenario):
                 landmark.state.p_pos = np.array([-1 + i * landmark_size, y_pos])
                 boundary_list.append(landmark)
 
-        for i, l in enumerate(boundary_list):
-            l.name = "boundary %d" % i
-            l.collide = True
-            l.movable = False
-            l.boundary = True
-            l.color = np.array([0.75, 0.75, 0.75])
-            l.size = landmark_size
-            l.state.p_vel = np.zeros(world.dim_p)
+        for i, landmark in enumerate(boundary_list):
+            landmark.name = "boundary %d" % i
+            landmark.collide = True
+            landmark.movable = False
+            landmark.boundary = True
+            landmark.color = np.array([0.75, 0.75, 0.75])
+            landmark.size = landmark_size
+            landmark.state.p_vel = np.zeros(world.dim_p)
 
         return boundary_list
 
