@@ -36,8 +36,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
             if action is None or np.isnan(action).any():
                 EnvLogger.error_nan_action()
             assert (
-                space.shape
-                == action.shape  # type: ignore
+                space.shape == action.shape  # type: ignore
             ), f"action should have shape {space.shape}, has shape {action.shape}"  # type: ignore
 
             EnvLogger.warn_action_out_of_bound(
