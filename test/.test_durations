@@ -18,7 +18,6 @@
     "docs/environments/atari/double_dunk.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/atari/double_dunk.md": 185.828062413,
     "docs/environments/butterfly.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/butterfly.md": 47.86748527300006,
     "docs/environments/classic.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/classic.md": 4.020500405000234,
-    "docs/environments/mpe.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe.md": 0.9304283090001491,
     "docs/environments/sisl.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/sisl.md": 66.18398216000003,
     "docs/environments/atari/double_dunk.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/atari/double_dunk.md": 133.747984821,
     "docs/environments/atari/entombed_competitive.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/atari/entombed_competitive.md": 25.935626054000068,
@@ -56,18 +55,6 @@
     "docs/environments/classic/texas_holdem.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/classic/texas_holdem.md": 1.1457221179999806,
     "docs/environments/classic/texas_holdem_no_limit.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/classic/texas_holdem_no_limit.md": 0.2406819990000031,
     "docs/environments/classic/tictactoe.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/classic/tictactoe.md": 7.014489913000034,
-    "docs/environments/mpe/simple.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple.md": 0.751147876999994,
-    "docs/environments/mpe/simple_adversary.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_adversary.md": 0.8430898630000456,
-    "docs/environments/mpe/simple_crypto.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_crypto.md": 0.8630620200000294,
-    "docs/environments/mpe/simple_push.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_push.md": 0.03914030399994317,
-    "docs/environments/mpe/simple_push.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_push.md": 1.005568055000026,
-    "docs/environments/mpe/simple_reference.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_reference.md": 1.076244678999899,
-    "docs/environments/mpe/simple_speaker_listener.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_speaker_listener.md": 0.7779045569999994,
-    "docs/environments/mpe/simple_spread.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_spread.md": 1.0387281100000223,
-    "docs/environments/mpe/simple_tag.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_tag.md": 1.101105718000099,
-    "docs/environments/mpe/simple_world_comm.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_world_comm.md": 0.031191154999987702,
-    "docs/environments/mpe/simple_world_comm.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/mpe/simple_world_comm.md": 2.282404692,
     "docs/environments/sisl/multiwalker.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/sisl/multiwalker.md": 5.958337295000035,
-    "docs/environments/sisl/pursuit.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/sisl/pursuit.md": 131.81597468300015,
-    "docs/environments/sisl/waterworld.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/sisl/waterworld.md": 132.31707428700003
+    "docs/environments/sisl/pursuit.md::/home/runner/work/PettingZoo/PettingZoo/docs/environments/sisl/pursuit.md": 131.81597468300015
 }
