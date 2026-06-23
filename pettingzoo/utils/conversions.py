@@ -1,4 +1,3 @@
-# pyright: reportGeneralTypeIssues=false
 import copy
 import warnings
 from collections import defaultdict
@@ -126,7 +125,7 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
 
         try:
             self.render_mode = (
-                self.aec_env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
+                self.aec_env.render_mode  # type: ignore
             )
         except AttributeError:
             warnings.warn(
@@ -246,7 +245,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
 
         try:
             self.render_mode = (
-                self.env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
+                self.env.render_mode  # type: ignore
             )
         except AttributeError:
             warnings.warn(
@@ -261,7 +260,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         # Not every environment has the .state_space attribute implemented
         try:
             self.state_space = (
-                self.env.state_space  # pyright: ignore[reportGeneralTypeIssues]
+                self.env.state_space  # type: ignore
             )
         except AttributeError:
             pass
@@ -424,14 +423,14 @@ class turn_based_aec_to_parallel_wrapper(
         # Not every environment has the .state_space attribute implemented
         try:
             self.state_space = (
-                self.aec_env.state_space  # pyright: ignore[reportGeneralTypeIssues]
+                self.aec_env.state_space  # type: ignore
             )
         except AttributeError:
             pass
 
         try:
             self.render_mode = (
-                self.aec_env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
+                self.aec_env.render_mode  # type: ignore
             )
         except AttributeError:
             warnings.warn(

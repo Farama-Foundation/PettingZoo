@@ -37,16 +37,16 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
                 EnvLogger.error_nan_action()
             assert (
                 space.shape
-                == action.shape  # pyright: ignore[reportOptionalMemberAccess]
-            ), f"action should have shape {space.shape}, has shape {action.shape}"  # pyright: ignore[reportOptionalMemberAccess]
+                == action.shape  # type: ignore
+            ), f"action should have shape {space.shape}, has shape {action.shape}"  # type: ignore
 
             EnvLogger.warn_action_out_of_bound(
                 action=action, action_space=space, backup_policy="clipping to space"
             )
             action = np.clip(
-                action,  # pyright: ignore[reportGeneralTypeIssues]
-                space.low,  # pyright: ignore[reportGeneralTypeIssues]
-                space.high,  # pyright: ignore[reportGeneralTypeIssues]
+                action,  # type: ignore
+                space.low,  # type: ignore
+                space.high,  # type: ignore
             )
 
         super().step(action)

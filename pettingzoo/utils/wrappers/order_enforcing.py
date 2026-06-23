@@ -118,7 +118,7 @@ class AECOrderEnforcingIterator(AECIterator[AgentID, ObsType, ActionType]):
     def __next__(self) -> AgentID:
         agent = super().__next__()
         assert (
-            self.env._has_updated  # pyright: ignore[reportGeneralTypeIssues]
+            self.env._has_updated  # type: ignore
         ), "need to call step() or reset() in a loop over `agent_iter`"
-        self.env._has_updated = False  # pyright: ignore[reportGeneralTypeIssues]
+        self.env._has_updated = False  # type: ignore
         return agent
