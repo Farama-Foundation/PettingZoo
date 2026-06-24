@@ -51,7 +51,7 @@ def test_double_conversion_equals():
     # we don't do this test for aec_to_parallel because generated_agents_env_v0.env() is not parallelizable
     env1 = generated_agents_parallel_v0.parallel_env()
     env2 = aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
-    assert type(env1) == type(
+    assert type(env1) is type(
         env2
     ), f"Unequal types when double wrapped: {type(env1)} != {type(env2)}"
     check_environment_deterministic_parallel(env1, env2, 500)

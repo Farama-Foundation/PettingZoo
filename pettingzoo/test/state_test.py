@@ -1,12 +1,12 @@
+"""Tests that the environment's state() and state_space() methods work as expected."""
 from __future__ import annotations
 
-from pettingzoo.utils.env import AECEnv, ParallelEnv
-
-"""Tests that the environment's state() and state_space() methods work as expected."""
 import warnings
 
 import gymnasium
 import numpy as np
+
+from pettingzoo.utils.env import AECEnv, ParallelEnv
 
 try:
     """Allows doctests to be run using pytest"""

@@ -144,7 +144,7 @@ def is_eyeish(board, c):
     if len(diagonals) < 4:
         diagonal_faults += 1
     for d in diagonals:
-        if not board[d] in (color, EMPTY):
+        if board[d] not in (color, EMPTY):
             diagonal_faults += 1
     if diagonal_faults > 1:
         return None
