@@ -3,7 +3,7 @@ name: MacOS tests
 
 on:
     push:
-        branches: [main]
+        branches: [none]
 
 permissions:
     contents: read
