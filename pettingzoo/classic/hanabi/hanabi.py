@@ -161,7 +161,7 @@ If an illegal action is taken, the game terminates and the one player that took 
 
 """
 
-from typing import List, Optional, Union
+from typing import List, Optional
 
 import gymnasium
 import numpy as np
@@ -243,9 +243,8 @@ class raw_env(AECEnv, EzPickle):
                 "players": 2,
                 "max_information_tokens": 8,
                 "max_life_tokens": 3,
-                "hand_size": (4 if players >= 4 else 5)
+                "hand_size": 5,
                 "observation_type": "card_knowledge",
-                "hand_size": 2,
                 }
 
             Hanabi-Small : {
@@ -282,7 +281,6 @@ class raw_env(AECEnv, EzPickle):
             render_mode=render_mode,
         )
 
-        # ToDo: Starts
         # Check if all possible dictionary values are within a certain ranges.
         self._raise_error_if_config_values_out_of_range(
             colors,
@@ -404,13 +402,12 @@ class raw_env(AECEnv, EzPickle):
         mask = self.hanabi_env.infos[self.agent_selection]["action_mask"]
         return [i for i in range(len(mask))]
 
-    # ToDo: Fix Return value
     def reset(self, seed=None, options=None):
-        """Resets the environment for a new game and returns observations of current player as List of ints.
+        """Resets the environment for a new game.
 
-        Returns:
-            observation: Optional list of integers of length self.observation_vector_dim, describing observations of
-            current agent (agent_selection).
+        Resets the underlying OpenSpiel (Shimmy) environment and re-initializes the
+        agent iteration order. Follows the AEC API and returns nothing; the current
+        agent's observation is available via `observe`/`last`.
         """
         self.agents = self.possible_agents[:]
 
@@ -436,7 +433,6 @@ class raw_env(AECEnv, EzPickle):
         self.rewards = self.hanabi_env.rewards
         self._cumulative_rewards = self.hanabi_env._cumulative_rewards
         self.agent_selection = self.hanabi_env.agent_selection
-        self.rewards = self.hanabi_env.rewards
         self.terminations = self.hanabi_env.terminations
         self.truncations = self.hanabi_env.truncations
         self.infos = self.hanabi_env.infos
@@ -444,15 +440,12 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
-    def step(
-        self, action: int, observe: bool = True, as_vector: bool = True
-    ) -> Optional[Union[np.ndarray, List[List[dict]]]]:
-        """Advances the environment by one step. Action must be within self.legal_moves, otherwise throws error.
+    def step(self, action: int) -> None:
+        """Advances the environment by one step.
 
-        Returns:
-            observation: Optional List of new observations of agent at turn after the action step is performed.
-            By default, a list of integers, describing the logic state of the game from the view of the agent.
-            Can be a returned as a descriptive dictionary, if as_vector=False.
+        Action must be within `self.legal_moves`; illegal moves are handled by the
+        surrounding wrappers. Follows the AEC API and returns nothing; the next
+        agent's observation is available via `observe`/`last`.
         """
         if (
             self.terminations[self.agent_selection]
@@ -471,9 +464,9 @@ class raw_env(AECEnv, EzPickle):
         if self.render_mode is not None:
             self.render()
 
-    def observe(self, agent_name: str):
-        observation = self.hanabi_env.observe(agent_name)
-        mask = self.infos[agent_name]["action_mask"]
+    def observe(self, agent: str):
+        observation = self.hanabi_env.observe(agent)
+        mask = self.infos[agent]["action_mask"]
         return {"observation": observation, "action_mask": mask}
 
     def render(self):
