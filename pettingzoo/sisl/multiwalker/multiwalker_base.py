@@ -575,7 +575,7 @@ class MultiWalkerEnv:
         offset = 200  # compensates for the negative coordinates
         render_scale = SCALE / self.package_scale / 0.75
         if self.screen is None:
-            pygame.init()
+            pygame.display.init()
             self.screen = pygame.display.set_mode((VIEWPORT_W, VIEWPORT_H))
             pygame.display.set_caption("Multiwalker")
 

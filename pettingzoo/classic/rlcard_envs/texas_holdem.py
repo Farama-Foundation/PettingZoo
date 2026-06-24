@@ -146,9 +146,10 @@ class raw_env(RLCardBase, EzPickle):
         )
 
         if self.screen is None:
-            pygame.init()
+            pygame.font.init()
 
             if self.render_mode == "human":
+                pygame.display.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
                 pygame.display.set_caption(self.caption)
             else:
