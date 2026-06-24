@@ -51,12 +51,12 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import knights_archers_zombies_v10
+    from pettingzoo.butterfly import knights_archers_zombies_v11
 
-    env = knights_archers_zombies_v10.env(render_mode="human")
+    env = knights_archers_zombies_v11.env(render_mode="human")
     env.reset()
 
-    manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
+    manual_policy = knights_archers_zombies_v11.ManualPolicy(env)
 
     for agent in env.agent_iter():
         observation, reward, termination, truncation, info = env.last()

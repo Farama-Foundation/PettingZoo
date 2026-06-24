@@ -43,9 +43,9 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 [//]: # ()
 [//]: # (``` python)
 
-[//]: # (from pettingzoo.butterfly knights_archers_zombies_v10)
+[//]: # (from pettingzoo.butterfly knights_archers_zombies_v11)
 
-[//]: # (knights_archers_zombies_v10.manual_control&#40;<environment parameters>&#41;)
+[//]: # (knights_archers_zombies_v11.manual_control&#40;<environment parameters>&#41;)
 
 [//]: # (```)
 
@@ -80,15 +80,15 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 
 [//]: # (import time)
 
-[//]: # (from pettingzoo.butterfly import knights_archers_zombies_v10)
+[//]: # (from pettingzoo.butterfly import knights_archers_zombies_v11)
 
 [//]: # ()
-[//]: # (env = knights_archers_zombies_v10.env&#40;&#41;)
+[//]: # (env = knights_archers_zombies_v11.env&#40;&#41;)
 
 [//]: # (env.reset&#40;&#41;)
 
 [//]: # ()
-[//]: # (manual_policy = knights_archers_zombies_v10.ManualPolicy&#40;env&#41;)
+[//]: # (manual_policy = knights_archers_zombies_v11.ManualPolicy&#40;env&#41;)
 
 [//]: # ()
 [//]: # (for agent in env.agent_iter&#40;&#41;:)
