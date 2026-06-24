@@ -85,12 +85,12 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import cooperative_pong_v6
+    from pettingzoo.butterfly import cooperative_pong_v7
 
     # which agents will be controlled by manual policies
     MANUAL_AGENTS = [0, 1]
 
-    env = cooperative_pong_v6.env(render_mode="human")
+    env = cooperative_pong_v7.env(render_mode="human")
     env.reset()
 
     # this allows holding down a key for continuous motion. Only a single
@@ -99,9 +99,9 @@ if __name__ == "__main__":
 
     clock = pygame.time.Clock()
 
-    manual_policies: dict[AgentID, cooperative_pong_v6.ManualPolicy] = {}
+    manual_policies: dict[AgentID, cooperative_pong_v7.ManualPolicy] = {}
     for agent_id in MANUAL_AGENTS:
-        new_policy = cooperative_pong_v6.ManualPolicy(env, agent_id)
+        new_policy = cooperative_pong_v7.ManualPolicy(env, agent_id)
         manual_policies[new_policy.agent] = new_policy
 
     for agent in env.agent_iter():
