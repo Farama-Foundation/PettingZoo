@@ -36,8 +36,9 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
         env = ss.frame_stack_v1(env, 3)
 
     env.reset(seed=seed)
+    env_name = str(env.metadata.get("name", "pettingzoo_env"))
 
-    print(f"Starting training on {str(env.metadata['name'])}.")
+    print(f"Starting training on {env_name}.")
 
     env = ss.pettingzoo_env_to_vec_env_v1(env)
     env = ss.concat_vec_envs_v1(env, 8, num_cpus=1, base_class="stable_baselines3")
@@ -52,11 +53,11 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
 
     model.learn(total_timesteps=steps)
 
-    model.save(f"{env.unwrapped.metadata.get('name')}_{time.strftime('%Y%m%d-%H%M%S')}")
+    model.save(f"{env_name}_{time.strftime('%Y%m%d-%H%M%S')}")
 
     print("Model has been saved.")
 
-    print(f"Finished training on {str(env.unwrapped.metadata['name'])}.")
+    print(f"Finished training on {env_name}.")
 
     env.close()
 
