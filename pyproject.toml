@@ -78,6 +78,23 @@ include = ["pettingzoo", "pettingzoo.*"]
 
 # Linters and Test tools #######################################################
 
+[tool.ruff]
+# Forgiving configuration to start: only the default rule set (pyflakes `F`
+# and a subset of pycodestyle `E`). Line length is intentionally relaxed.
+line-length = 300
+target-version = "py39"
+
+[tool.ruff.lint]
+# Default ruff rules (E4, E7, E9, F). Mirror the historical flake8 ignore.
+extend-ignore = ["E203"]
+
+[tool.ruff.lint.per-file-ignores]
+"*/__init__.py" = ["F401"]  # allow re-exports without explicit __all__
+"test/all_parameter_combs_test.py" = ["F405"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pettingzoo"]
+
 [tool.black]
 safe = true
 

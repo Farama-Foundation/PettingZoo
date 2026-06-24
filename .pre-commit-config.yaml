@@ -31,17 +31,11 @@ repos:
             args:
                 - --skip=*.css,*.js,*.map,*.scss,*.svg
                 - --ignore-words-list=magent
-    - repo: https://github.com/PyCQA/flake8
-      rev: 6.0.0
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.15.18
       hooks:
-          - id: flake8
-            args:
-                - --per-file-ignores=*/__init__.py:F401 test/all_parameter_combs_test.py:F405 pettingzoo/classic/go/go.py:W605
-                - --extend-ignore=E203
-                - --max-complexity=205
-                - --max-line-length=300
-                - --show-source
-                - --statistics
+          - id: ruff
+            args: [--fix]
     - repo: https://github.com/PyCQA/isort
       rev: 5.12.0
       hooks:
