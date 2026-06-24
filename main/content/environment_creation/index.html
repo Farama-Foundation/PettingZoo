@@ -890,13 +890,13 @@
 <p>The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.</p>
 <p>For example, when the user tries to import the <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v0</span></code> environment, they import the following variable (defined in <code class="docutils literal notranslate"><span class="pre">pettingzoo/butterfly/__init__.py</span></code>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.deprecated_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeprecatedModule</span>
-<span class="n">knights_archers_zombies_v0</span> <span class="o">=</span> <span class="n">DeprecatedModule</span><span class="p">(</span><span class="s2">&quot;knights_archers_zombies&quot;</span><span class="p">,</span> <span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;v10&quot;</span><span class="p">)</span>
+<span class="n">knights_archers_zombies_v0</span> <span class="o">=</span> <span class="n">DeprecatedModule</span><span class="p">(</span><span class="s2">&quot;knights_archers_zombies&quot;</span><span class="p">,</span> <span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;v11&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This declaration tells the user that <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v0</span></code> is deprecated and <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v10</span></code> should be used instead. In particular, it gives the following error:</p>
+<p>This declaration tells the user that <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v0</span></code> is deprecated and <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v11</span></code> should be used instead. In particular, it gives the following error:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v0</span>
 <span class="n">knights_archers_zombies_v0</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="c1"># pettingzoo.utils.deprecated_module.DeprecatedEnv: knights_archers_zombies_v0 is now deprecated, use knights_archers_zombies_v10 instead</span>
+<span class="c1"># pettingzoo.utils.deprecated_module.DeprecatedEnv: knights_archers_zombies_v0 is now deprecated, use knights_archers_zombies_v11 instead</span>
 </pre></div>
 </div>
 </section>

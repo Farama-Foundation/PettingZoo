@@ -774,7 +774,7 @@
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">max_life_tokens</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="n">observation_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;minimal&quot;</span><span class="p">,</span> <span class="s2">&quot;card_knowledge&quot;</span><span class="p">,</span> <span class="s2">&quot;seer&quot;</span><span class="p">]):</span>
+        <span class="k">elif</span> <span class="n">observation_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;minimal&quot;</span><span class="p">,</span> <span class="s2">&quot;card_knowledge&quot;</span><span class="p">,</span> <span class="s2">&quot;seer&quot;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">observation_type</span><span class="si">}</span><span class="s2"> must be either &#39;minimal&#39;, &#39;card_knowledge&#39;, or &#39;seer&#39;. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>

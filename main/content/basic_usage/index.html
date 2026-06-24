@@ -476,9 +476,9 @@
 <section id="unwrapping-an-environment">
 <h3>Unwrapping an environment<a class="headerlink" href="#unwrapping-an-environment" title="Link to this heading">¶</a></h3>
 <p>If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the <code class="docutils literal notranslate"><span class="pre">.unwrapped</span></code> attribute. If the environment is already a base environment, the <code class="docutils literal notranslate"><span class="pre">.unwrapped</span></code> attribute will just return itself.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v11</span>
 
-<span class="n">base_env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">()</span><span class="o">.</span><span class="n">unwrapped</span>
+<span class="n">base_env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v11</span><span class="o">.</span><span class="n">env</span><span class="p">()</span><span class="o">.</span><span class="n">unwrapped</span>
 </pre></div>
 </div>
 </section>
@@ -495,7 +495,7 @@
 <h2>Raw Environments<a class="headerlink" href="#raw-environments" title="Link to this heading">¶</a></h2>
 <p>Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the <code class="docutils literal notranslate"><span class="pre">raw_env()</span></code> constructor contained within each module:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">environment_parameters</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># any parameters to pass to the environment</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">environment_parameters</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v11</span><span class="o">.</span><span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">environment_parameters</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
