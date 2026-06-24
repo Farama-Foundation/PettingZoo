@@ -1,6 +1,6 @@
 from pettingzoo.butterfly import (
-    knights_archers_zombies_v11,
     cooperative_pong_v6,
+    knights_archers_zombies_v11,
     pistonball_v6,
 )
 
