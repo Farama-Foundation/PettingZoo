@@ -176,6 +176,15 @@ class raw_env(RLCardBase, EzPickle):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
+    def _seed(self, seed=None):
+        # RLCardBase._seed() rebuilds self.env via rlcard.make(), which
+        # discards the custom payoff scorer installed in __init__. Without
+        # re-applying it here, the configured knock_reward / gin_reward
+        # silently revert to RLCard's defaults (0.2 / 1.0) on every
+        # reset(seed=...). See issue #1312.
+        super()._seed(seed=seed)
+        self.env.game.judge.scorer.get_payoff = self._get_payoff
+
     def _get_payoff(self, player: GinRummyPlayer, game) -> float:
         going_out_action = game.round.going_out_action
         going_out_player_id = game.round.going_out_player_id
