@@ -320,9 +320,8 @@ class raw_env(AECEnv, EzPickle):
 
     def _render_gui(self):
         if self.screen is None:
-            pygame.init()
-
             if self.render_mode == "human":
+                pygame.display.init()
                 pygame.display.set_caption("Chess")
                 self.screen = pygame.display.set_mode(self.BOARD_SIZE)
             elif self.render_mode == "rgb_array":

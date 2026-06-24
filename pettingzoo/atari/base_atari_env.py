@@ -287,7 +287,7 @@ class ParallelAtariEnv(ParallelEnv[AgentID, ObsType, ActionType], EzPickle):
         if self.render_mode == "human":
             zoom_factor = 4
             if self._screen is None:
-                pygame.init()
+                pygame.display.init()
                 self._screen = pygame.display.set_mode(
                     (screen_width * zoom_factor, screen_height * zoom_factor)
                 )
