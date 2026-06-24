@@ -403,7 +403,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly]&gt;=1.24.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly]&gt;=1.25.0
 stable-baselines3&gt;=2.0.0
 supersuit&gt;=3.9.0
 </pre></div>
@@ -432,7 +432,7 @@ supersuit&gt;=3.9.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">stable_baselines3</span><span class="w"> </span><span class="kn">import</span> <span class="n">PPO</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">stable_baselines3.ppo</span><span class="w"> </span><span class="kn">import</span> <span class="n">CnnPolicy</span><span class="p">,</span> <span class="n">MlpPolicy</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v11</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
@@ -538,10 +538,10 @@ supersuit&gt;=3.9.0
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">env_fn</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span>
+    <span class="n">env_fn</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v11</span>
 
-    <span class="c1"># Set vector_state to false in order to use visual observations (significantly longer training time)</span>
-    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_zombies</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">vector_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Set obs_method to &quot;image&quot; in order to use visual observations (significantly longer training time)</span>
+    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_zombies</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">obs_method</span><span class="o">=</span><span class="s2">&quot;vector&quot;</span><span class="p">)</span>
 
     <span class="c1"># Train a model (takes ~5 minutes on a laptop CPU)</span>
     <span class="n">train</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">81_920</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>

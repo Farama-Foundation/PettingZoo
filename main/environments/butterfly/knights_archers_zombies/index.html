@@ -389,7 +389,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.butterfly</span> <span class="pre">import</span> <span class="pre">knights_archers_zombies_v10</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.butterfly</span> <span class="pre">import</span> <span class="pre">knights_archers_zombies_v11</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -430,17 +430,35 @@
 </table>
 </div>
 <p>Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
-and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer’s heading. The game ends when all
-agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie.
-There are two possible observation types for this environment, vectorized and image-based.</p>
-<section id="vectorized-default">
-<h2>Vectorized (Default)<a class="headerlink" href="#vectorized-default" title="Link to this heading">¶</a></h2>
-<p>Pass the argument <code class="docutils literal notranslate"><span class="pre">vector_state=True</span></code> to the environment.</p>
+and move forward or backward. An agent that moves off the top or bottom of the screen may be killed (if this setting is enabled, otherwise they stop at the edge). Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading
+direction. During this attack, which takes several steps, the knight cannot take any other action. When an archer attacks, it fires an arrow in a straight line in the direction of the archer’s heading. There is a slight delay after firing an arrow before an archer can fire another arrow.
+However, the archer and move and turn during this time. A zombie that is hit by either a mace or an arrow is removed. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of its arrows hits and kills a zombie. A knight or archer that is
+touched by a zombie is removed (unless they are set to be unkillable). The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border.</p>
+<section id="actions">
+<h2>Actions<a class="headerlink" href="#actions" title="Link to this heading">¶</a></h2>
+<p>Each agent acts independently. The action space is discrete [0,5] with the following meanings:</p>
+<ul class="simple">
+<li><p>0 - move forward</p></li>
+<li><p>1 - move backward</p></li>
+<li><p>2 - turn counter clockwise</p></li>
+<li><p>3 - turn clockwise</p></li>
+<li><p>4 - use weapon</p></li>
+<li><p>5 - do nothing</p></li>
+</ul>
+<p>Movement and turning is done at a fixed rate.</p>
+</section>
+<section id="observations">
+<h2>Observations<a class="headerlink" href="#observations" title="Link to this heading">¶</a></h2>
+<p>There are four possible observation types for this environment - three vectorized (a base vectorized, a sequence vectorized, and a typemasked vectorized) and one image-based.
+The selection is made when the environment is created by passing a value to the <code class="docutils literal notranslate"><span class="pre">obs_method</span></code> argument.</p>
+<section id="vectorized-the-default">
+<h3>Vectorized (the default)<a class="headerlink" href="#vectorized-the-default" title="Link to this heading">¶</a></h3>
+<p>Pass the argument <code class="docutils literal notranslate"><span class="pre">obs_method='vector'</span></code> to the environment.</p>
 <p>The observation is an (N+1)x5 array for each agent, where <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">num_archers</span> <span class="pre">+</span> <span class="pre">num_knights</span> <span class="pre">+</span> <span class="pre">num_swords</span> <span class="pre">+</span> <span class="pre">max_arrows</span> <span class="pre">+</span> <span class="pre">max_zombies</span></code>.</p>
 <blockquote>
 <div><p>Note that <code class="docutils literal notranslate"><span class="pre">num_swords</span> <span class="pre">=</span> <span class="pre">num_knights</span></code></p>
 </div></blockquote>
-<p>The ordering of the rows of the observation look something like this:</p>
+<p>The ordering of the rows of the observation is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
 <span class="p">[</span><span class="n">current</span> <span class="n">agent</span><span class="p">],</span>
 <span class="p">[</span><span class="n">archer</span> <span class="mi">1</span><span class="p">],</span>
@@ -464,8 +482,8 @@ There are two possible observation types for this environment, vectorized and im
 <p>In total, there will be N+1 rows. Rows with no entities will be all 0, but the ordering of the entities will not change.</p>
 <p><strong>Vector Breakdown</strong></p>
 <p>This breaks down what a row in the observation means. All distances are normalized to [0, 1].
-Note that for positions, [0, 0] is the top left corner of the image. Down is positive y, Left is positive x.</p>
-<p>For the vector for <code class="docutils literal notranslate"><span class="pre">current</span> <span class="pre">agent</span></code>:</p>
+Note that for positions, [0, 0] is the top left corner of the image. Down is positive y, Right is positive x. The bottom right corner is [1, 1] in normalized coordinates.</p>
+<p>For the vector of <code class="docutils literal notranslate"><span class="pre">current</span> <span class="pre">agent</span></code> (the first row):</p>
 <ul class="simple">
 <li><p>The first value means nothing and will always be 0.</p></li>
 <li><p>The next four values are the position and angle of the current agent.</p>
@@ -475,83 +493,78 @@ Note that for positions, [0, 0] is the top left corner of the image. Down is pos
 </ul>
 </li>
 </ul>
-<p>For everything else:</p>
+<p>For the remaining rows, each row is a 5 wide vector with the following values:</p>
 <ul class="simple">
-<li><p>Each row of the matrix (this is an 5 wide vector) has a breakdown that looks something like this:</p>
+<li><p>The first value is the magnitude of the distance between an entity and the current agent.</p></li>
+<li><p>The next four values are the position and angle.</p>
 <ul>
-<li><p>The first value is the absolute distance between an entity and the current agent.</p></li>
-<li><p>The next four values are relative position and absolute angles of each entity relative to the current agent.</p>
-<ul>
-<li><p>The first two values are position values relative to the current agent.</p></li>
-<li><p>The final two values are the angle of the entity represented as a directional unit vector relative to the world.</p></li>
+<li><p>The first two values are position values relative to the current agent, normalized to the width and height of the image respectively.</p></li>
+<li><p>The final two values are the heading of the entity (relative to the world) represented as a unit vector.</p></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<p><strong>Typemasks</strong></p>
-<p>There is an option to prepend a typemask to each row vector. This can be enabled by passing <code class="docutils literal notranslate"><span class="pre">use_typemasks=True</span></code> as a kwarg.</p>
-<p>The typemask is a 6 wide vector, that looks something like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<p>Dead agents or missing objects (i.e. zombies, swords, or arrows) have a vector of all zeros.</p>
+</section>
+<section id="vectorized-with-typemasks">
+<h3>Vectorized with typemasks<a class="headerlink" href="#vectorized-with-typemasks" title="Link to this heading">¶</a></h3>
+<p>There is an option to prepend a typemask to each row vector. This can be enabled by passing <code class="docutils literal notranslate"><span class="pre">obs_method='vector-masked'</span></code> as an argument.</p>
+<p>The typemask is a 6 wide vector that indicates the type of entry. A dead agent or a non-existent object (zombie, sword, arrow) is indicated by a vector (type mask and all state vector) of all zeros.
+Otherwise, a single value of 1 indicated, by its position, which type of entry the observation corresponds to. The possible options are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">an</span> <span class="n">active</span> <span class="n">zombie</span><span class="p">:</span>  <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<span class="n">a</span> <span class="n">living</span> <span class="n">archer</span><span class="p">:</span>   <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<span class="n">a</span> <span class="n">living</span> <span class="n">knight</span><span class="p">:</span>   <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<span class="n">an</span> <span class="n">active</span> <span class="n">sword</span><span class="p">:</span>   <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<span class="n">an</span> <span class="n">active</span> <span class="n">arrow</span><span class="p">:</span>   <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<span class="n">the</span> <span class="n">current</span> <span class="n">agent</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Each value corresponds to either</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">zombie</span><span class="p">,</span> <span class="n">archer</span><span class="p">,</span> <span class="n">knight</span><span class="p">,</span> <span class="n">sword</span><span class="p">,</span> <span class="n">arrow</span><span class="p">,</span> <span class="n">current</span> <span class="n">agent</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>If there is no entity there, the whole typemask (as well as the whole state vector) will be 0.</p>
-<p>As a result, setting <code class="docutils literal notranslate"><span class="pre">use_typemask=True</span></code> results in the observation being a (N+1)x11 vector.</p>
-<p><strong>Sequence Space</strong> (Experimental)</p>
-<p>There is an option to also pass <code class="docutils literal notranslate"><span class="pre">sequence_space=True</span></code> as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is <strong>still experimental</strong> as the state and observation size are no longer constant. In particular, <code class="docutils literal notranslate"><span class="pre">N</span></code> is now a
-variable number.</p>
+<p>The remainder of the row will be as defined by the vector observation above.
+As a result, setting <code class="docutils literal notranslate"><span class="pre">obs_method='vector-masked'</span></code> results in the observation being a (N+1)x11 vector.</p>
+</section>
+<section id="sequence-vectorized-space-with-typemasks">
+<h3>Sequence Vectorized space with typemasks<a class="headerlink" href="#sequence-vectorized-space-with-typemasks" title="Link to this heading">¶</a></h3>
+<p>With this option, the observations are the same as in the typemask section except that all empty rows are removed. So the size of the observation will change through the run. So the observation size is a (X+1)x11 vector where ‘X’ varies within a run.
+Note that this is <strong>still experimental</strong>. It can be used by passing <code class="docutils literal notranslate"><span class="pre">obs_method='vector-sequence'</span></code> as aargument during environment creation.</p>
 </section>
 <section id="image-based">
-<h2>Image-based<a class="headerlink" href="#image-based" title="Link to this heading">¶</a></h2>
-<p>Pass the argument <code class="docutils literal notranslate"><span class="pre">vector_state=False</span></code> to the environment.</p>
-<p>Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.</p>
+<h3>Image-based<a class="headerlink" href="#image-based" title="Link to this heading">¶</a></h3>
+<p>To use a image based observation, pass <code class="docutils literal notranslate"><span class="pre">obs_method='image'</span></code> to the environment during creation.</p>
+<p>Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.
+Each pixel is defined as RGB values in range [0, 255]. Areas outside of the game box are returned as black pixels: (0,0,0).
+Dead agents return all pixels as black.</p>
 </section>
-<section id="manual-control">
-<h2>Manual Control<a class="headerlink" href="#manual-control" title="Link to this heading">¶</a></h2>
-<p>Move the archer using the ‘W’, ‘A’, ‘S’ and ‘D’ keys. Shoot the Arrow using ‘F’ key. Rotate the archer using ‘Q’ and ‘E’ keys.
-Press ‘X’ key to spawn a new archer.</p>
-<p>Move the knight using the ‘I’, ‘J’, ‘K’ and ‘L’ keys. Stab the Sword using ‘;’ key. Rotate the knight using ‘U’ and ‘O’ keys.
-Press ‘M’ key to spawn a new knight.</p>
 </section>
 <section id="arguments">
 <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">(</span>
-  <span class="n">spawn_rate</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">knights_archers_zombies_v11</span><span class="o">.</span><span class="n">env</span><span class="p">(</span>
+  <span class="n">spawn_delay</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
   <span class="n">num_archers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
   <span class="n">num_knights</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
   <span class="n">max_zombies</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
   <span class="n">max_arrows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
   <span class="n">killable_knights</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
   <span class="n">killable_archers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-  <span class="n">pad_observation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
   <span class="n">line_death</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
   <span class="n">max_cycles</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
-  <span class="n">vector_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-  <span class="n">use_typemasks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-  <span class="n">sequence_space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+  <span class="n">obs_method</span><span class="o">=</span><span class="s2">&quot;vector&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">spawn_rate</span></code>:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.</p>
-<p><code class="docutils literal notranslate"><span class="pre">num_archers</span></code>:  how many archer agents initially spawn.</p>
-<p><code class="docutils literal notranslate"><span class="pre">num_knights</span></code>:  how many knight agents initially spawn.</p>
+<p><code class="docutils literal notranslate"><span class="pre">spawn_delay</span></code>: how many cycles before a new zombie is spawned. A higher number means zombies are spawned at a slower rate.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num_archers</span></code>: how many archer agents initially spawn.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num_knights</span></code>: how many knight agents initially spawn.</p>
 <p><code class="docutils literal notranslate"><span class="pre">max_zombies</span></code>: maximum number of zombies that can exist at a time</p>
 <p><code class="docutils literal notranslate"><span class="pre">max_arrows</span></code>: maximum number of arrows that can exist at a time</p>
-<p><code class="docutils literal notranslate"><span class="pre">killable_knights</span></code>:  if set to False, knight agents cannot be killed by zombies.</p>
-<p><code class="docutils literal notranslate"><span class="pre">killable_archers</span></code>:  if set to False, archer agents cannot be killed by zombies.</p>
-<p><code class="docutils literal notranslate"><span class="pre">pad_observation</span></code>:  if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.</p>
-<p><code class="docutils literal notranslate"><span class="pre">line_death</span></code>:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.</p>
-<p><code class="docutils literal notranslate"><span class="pre">vector_state</span></code>: whether to use vectorized state, if set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, an image-based observation will be provided instead.</p>
-<p><code class="docutils literal notranslate"><span class="pre">use_typemasks</span></code>: only relevant when <code class="docutils literal notranslate"><span class="pre">vector_state=True</span></code> is set, adds typemasks to the vectors.</p>
-<p><code class="docutils literal notranslate"><span class="pre">sequence_space</span></code>: <strong>experimental</strong>, only relevant when <code class="docutils literal notranslate"><span class="pre">vector_state=True</span></code> is set, removes non-existent entities in the vector state.</p>
+<p><code class="docutils literal notranslate"><span class="pre">killable_knights</span></code>: if set to False, knight agents cannot be killed by zombies.</p>
+<p><code class="docutils literal notranslate"><span class="pre">killable_archers</span></code>: if set to False, archer agents cannot be killed by zombies.</p>
+<p><code class="docutils literal notranslate"><span class="pre">line_death</span></code>: if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.</p>
+<p><code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>: The maximum number of game cycles to run. One cycle is complete when one step has been made by all players and zombies.</p>
+<p><code class="docutils literal notranslate"><span class="pre">obs_method</span></code>: method of observations to use. Options are ‘vector’ (default), ‘image’, ‘vector-sequence’, or ‘vector-masked’. See docs for details.</p>
 </section>
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
+<li><p>v11: Code rewrite and numerous fixes (1.25.1)</p></li>
 <li><p>v10: Add vectorizable state space (1.17.0)</p></li>
 <li><p>v9: Code rewrite and numerous fixes (1.16.0)</p></li>
 <li><p>v8: Code cleanup and several bug fixes (1.14.0)</p></li>
@@ -569,9 +582,9 @@ Press ‘M’ key to spawn a new knight.</p>
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v11</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v11</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -591,9 +604,9 @@ Press ‘M’ key to spawn a new knight.</p>
 </section>
 <section id="parallel">
 <h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">knights_archers_zombies_v11</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v11</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
@@ -611,70 +624,142 @@ Press ‘M’ key to spawn a new knight.</p>
 <h2>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.env" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.env" title="Link to this definition">¶</a></dt>
+<dd><p>Create the wrapped KAZ environment.</p>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spawn_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_archers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_knights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_zombies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_arrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">killable_knights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">killable_archers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_observation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_death</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cycles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">900</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_typemasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env" title="Link to this definition">¶</a></dt>
-<dd><dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spawn_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_archers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_knights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_zombies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_arrows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">killable_knights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">killable_archers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_death</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cycles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">900</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vector'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env" title="Link to this definition">¶</a></dt>
+<dd><p>The Knights Archers Zombies environment.</p>
+<p>Initialize the environment object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spawn_delay</strong> – how many cycles before a new zombie is spawned. A higher
+number means zombies are spawned at a slower rate.</p></li>
+<li><p><strong>num_archers</strong> – how many archer agents initially spawn.</p></li>
+<li><p><strong>num_knights</strong> – how many knight agents initially spawn.</p></li>
+<li><p><strong>max_zombies</strong> – maximum number of zombies that can exist at a time</p></li>
+<li><p><strong>max_arrows</strong> – maximum number of arrows that can exist at a time</p></li>
+<li><p><strong>killable_knights</strong> – if False, knight agents cannot be killed by zombies.</p></li>
+<li><p><strong>killable_archers</strong> – if False, archer agents cannot be killed by zombies.</p></li>
+<li><p><strong>line_death</strong> – if True, agents die when they touch the top or bottom wall.</p></li>
+<li><p><strong>max_cycles</strong> – The maximum number of game cycles to run. One cycle is
+complete when one step has been made by all players and zombies.</p></li>
+<li><p><strong>obs_method</strong> – method of observations to use. Options are
+‘vector’ (default), ‘image’, ‘vector-sequence’, or ‘vector-masked’.
+See docs for details.</p></li>
+<li><p><strong>render_mode</strong> – the render mode to use.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.action_space">
-<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.action_space" title="Link to this definition">¶</a></dt>
-<dd><p>Takes in agent and returns the action space for that agent.</p>
-<p>MUST return the same value for the same agent name</p>
-<p>Default implementation is to return the action_spaces dict</p>
+<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.action_space" title="Link to this definition">¶</a></dt>
+<dd><p>Return the action space for the given agent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.apply_weapons">
+<span class="sig-name descname"><span class="pre">apply_weapons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.apply_weapons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.apply_weapons" title="Link to this definition">¶</a></dt>
+<dd><p>Move the weapons and remove any zombies that were hit.</p>
+<p>The weapons are moved along their path.
+If an arrow hits a zombie, both the arrow and the zombie are removed.
+The archer that fired the arrow is awarded 1 point.</p>
+<p>If a sword hits a zombie, the zombie is removed but the sword is not.
+The knight wielding the sword is awarded 1 point.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.close" title="Link to this definition">¶</a></dt>
-<dd><p>Closes any resources that should be released.</p>
-<p>Closes the rendering window, subprocesses, network connections,
-or any other resources that should be released.</p>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the screen, if open.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.do_zombie_turn">
+<span class="sig-name descname"><span class="pre">do_zombie_turn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.do_zombie_turn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.do_zombie_turn" title="Link to this definition">¶</a></dt>
+<dd><p>Have zombies attack, move, and then spawn.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.draw" title="Link to this definition">¶</a></dt>
+<dd><p>Draw the screen.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.get_vector_state">
+<span class="sig-name descname"><span class="pre">get_vector_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.get_vector_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.get_vector_state" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the vector state of the global environment.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_arrows">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_active_arrows</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_arrows" title="Link to this definition">¶</a></dt>
+<dd><p>Return the number of arrows on the screen.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_swords">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_active_swords</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_swords" title="Link to this definition">¶</a></dt>
+<dd><p>Return the number of swords on the screen.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observation_space">
-<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observation_space" title="Link to this definition">¶</a></dt>
-<dd><p>Takes in agent and returns the observation space for that agent.</p>
-<p>MUST return the same value for the same agent name</p>
-<p>Default implementation is to return the observation_spaces dict</p>
+<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observation_space" title="Link to this definition">¶</a></dt>
+<dd><p>Return the observation space for the given agent.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observe">
-<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observe" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the observation an agent currently can make.</p>
-<p><cite>last()</cite> calls this function.</p>
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observe" title="Link to this definition">¶</a></dt>
+<dd><p>Return the observation for the given agent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reinit">
+<span class="sig-name descname"><span class="pre">reinit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.reinit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reinit" title="Link to this definition">¶</a></dt>
+<dd><p>Re-initialize the env for another run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.render" title="Link to this definition">¶</a></dt>
-<dd><p>Renders the environment as specified by self.render_mode.</p>
-<p>Render mode can be <cite>human</cite> to display a window.
-Other render modes in the default environments are <cite>‘rgb_array’</cite>
-which returns a numpy array and is supported by all environments outside of classic,
-and <cite>‘ansi’</cite> which returns the strings printed (specific to classic environments).</p>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.render" title="Link to this definition">¶</a></dt>
+<dd><p>Render the state based on the render mode.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reset" title="Link to this definition">¶</a></dt>
-<dd><p>Resets the environment to a starting state.</p>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reset" title="Link to this definition">¶</a></dt>
+<dd><p>Reset the env for another run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed</strong> – the seed to use for the new run</p></li>
+<li><p><strong>options</strong> – these are ignored for this env</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.state">
-<span class="sig-name descname"><span class="pre">state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.state" title="Link to this definition">¶</a></dt>
-<dd><p>Returns an observation of the global environment.</p>
+<span class="sig-name descname"><span class="pre">state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.state" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the state of the global environment.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.step" title="Link to this definition">¶</a></dt>
-<dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
-<p>Automatically switches control to the next agent.</p>
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/butterfly/knights_archers_zombies/knights_archers_zombies/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.step" title="Link to this definition">¶</a></dt>
+<dd><p>Perform a step for one agent in the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>action</strong> – the action the agent will perform.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -742,9 +827,14 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Knights Archers Zombies (‘KAZ’)</a><ul>
-<li><a class="reference internal" href="#vectorized-default">Vectorized (Default)</a></li>
+<li><a class="reference internal" href="#actions">Actions</a></li>
+<li><a class="reference internal" href="#observations">Observations</a><ul>
+<li><a class="reference internal" href="#vectorized-the-default">Vectorized (the default)</a></li>
+<li><a class="reference internal" href="#vectorized-with-typemasks">Vectorized with typemasks</a></li>
+<li><a class="reference internal" href="#sequence-vectorized-space-with-typemasks">Sequence Vectorized space with typemasks</a></li>
 <li><a class="reference internal" href="#image-based">Image-based</a></li>
-<li><a class="reference internal" href="#manual-control">Manual Control</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#arguments">Arguments</a></li>
 <li><a class="reference internal" href="#version-history">Version History</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
@@ -756,9 +846,16 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.env"><code class="docutils literal notranslate"><span class="pre">env</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env"><code class="docutils literal notranslate"><span class="pre">raw_env</span></code></a><ul>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.action_space"><code class="docutils literal notranslate"><span class="pre">raw_env.action_space()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.apply_weapons"><code class="docutils literal notranslate"><span class="pre">raw_env.apply_weapons()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.close"><code class="docutils literal notranslate"><span class="pre">raw_env.close()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.do_zombie_turn"><code class="docutils literal notranslate"><span class="pre">raw_env.do_zombie_turn()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.draw"><code class="docutils literal notranslate"><span class="pre">raw_env.draw()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.get_vector_state"><code class="docutils literal notranslate"><span class="pre">raw_env.get_vector_state()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_arrows"><code class="docutils literal notranslate"><span class="pre">raw_env.num_active_arrows</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_swords"><code class="docutils literal notranslate"><span class="pre">raw_env.num_active_swords</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observation_space"><code class="docutils literal notranslate"><span class="pre">raw_env.observation_space()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observe"><code class="docutils literal notranslate"><span class="pre">raw_env.observe()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reinit"><code class="docutils literal notranslate"><span class="pre">raw_env.reinit()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.render"><code class="docutils literal notranslate"><span class="pre">raw_env.render()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reset"><code class="docutils literal notranslate"><span class="pre">raw_env.reset()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.state"><code class="docutils literal notranslate"><span class="pre">raw_env.state()</span></code></a></li>
