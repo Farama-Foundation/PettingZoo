@@ -2,7 +2,7 @@
 name: Build Documentation website
 on:
     push:
-        branches: [master]
+        branches: [main]
 permissions:
     contents: write
 jobs:
