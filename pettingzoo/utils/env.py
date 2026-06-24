@@ -5,6 +5,7 @@ from typing import Any, Dict, Generic, Iterable, Iterator, TypeVar
 
 import gymnasium.spaces
 import numpy as np
+from typing_extensions import override
 
 ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
@@ -68,7 +69,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
     def reset(
         self,
         seed: int | None = None,
-        options: dict | None = None,
+        options: dict[str, Any] | None = None,
     ) -> None:
         """Resets the environment to a starting state."""
         raise NotImplementedError
@@ -81,7 +82,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         """
         raise NotImplementedError
 
-    def render(self) -> None | np.ndarray | str | list:
+    def render(self) -> None | np.ndarray | str | list[Any]:
         """Renders the environment as specified by self.render_mode.
 
         Render mode can be `human` to display a window.
@@ -244,6 +245,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
             self._skip_agent_selection = None
         self._clear_rewards()
 
+    @override
     def __str__(self) -> str:
         """Returns a name which looks like: `space_invaders_v1`."""
         if hasattr(self, "metadata"):
@@ -261,6 +263,7 @@ class AECIterable(Iterable[AgentID], Generic[AgentID, ObsType, ActionType]):
         self.env = env
         self.max_iter = max_iter
 
+    @override
     def __iter__(self) -> AECIterator[AgentID, ObsType, ActionType]:
         return AECIterator(self.env, self.max_iter)
 
@@ -270,12 +273,14 @@ class AECIterator(Iterator[AgentID], Generic[AgentID, ObsType, ActionType]):
         self.env = env
         self.iters_til_term = max_iter
 
+    @override
     def __next__(self) -> AgentID:
         if not self.env.agents or self.iters_til_term <= 0:
             raise StopIteration
         self.iters_til_term -= 1
         return self.env.agent_selection
 
+    @override
     def __iter__(self) -> AECIterator[AgentID, ObsType, ActionType]:
         return self
 
@@ -300,8 +305,8 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
     def reset(
         self,
         seed: int | None = None,
-        options: dict | None = None,
-    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict]]:
+        options: dict[str, Any] | None = None,
+    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict[str, Any]]]:
         """Resets the environment.
 
         And returns a dictionary of observations (keyed by the agent name)
@@ -315,7 +320,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         dict[AgentID, float],
         dict[AgentID, bool],
         dict[AgentID, bool],
-        dict[AgentID, dict],
+        dict[AgentID, dict[str, Any]],
     ]:
         """Receives a dictionary of actions keyed by the agent name.
 
@@ -324,7 +329,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         """
         raise NotImplementedError
 
-    def render(self) -> None | np.ndarray | str | list:
+    def render(self) -> None | np.ndarray | str | list[Any]:
         """Displays a rendered frame from the environment, if supported.
 
         Alternate render modes in the default environments are `'rgb_array'`
@@ -382,6 +387,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
     def max_num_agents(self) -> int:
         return len(self.possible_agents)
 
+    @override
     def __str__(self) -> str:
         """Returns the name.
 
@@ -393,5 +399,5 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
             return self.__class__.__name__
 
     @property
-    def unwrapped(self) -> ParallelEnv:
+    def unwrapped(self) -> ParallelEnv[AgentID, ObsType, ActionType]:
         return self

@@ -5,6 +5,7 @@ from logging import Logger
 from typing import Any
 
 import gymnasium.spaces
+from typing_extensions import override
 
 
 class EnvLogger:
@@ -111,6 +112,7 @@ class EnvWarningHandler(logging.Handler):
         logging.Handler.__init__(self, *args, **kwargs)
         self.mqueue = mqueue
 
+    @override
     def emit(self, record: logging.LogRecord):
         m = self.format(record).rstrip("\n")
         self.mqueue.append(m)

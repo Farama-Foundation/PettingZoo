@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from typing import Any
+
+from typing_extensions import override
+
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
@@ -17,16 +21,20 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     ):
         super().__init__(env)
         self._illegal_value = illegal_reward
-        self._prev_obs = None
-        self._prev_info = None
+        self._prev_obs: Any = None
+        self._prev_info: Any = None
         self._terminated = False  # terminated by an illegal move
 
-    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
+    @override
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
         self._terminated = False
         self._prev_obs = None
         self._prev_info = None
         super().reset(seed=seed, options=options)
 
+    @override
     def observe(self, agent: AgentID) -> ObsType | None:
         obs = super().observe(agent)
         if agent == self.agent_selection:
@@ -37,6 +45,7 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
                 self._prev_info = {}
         return obs
 
+    @override
     def step(self, action: ActionType) -> None:
         current_agent = self.agent_selection
         if self._prev_obs is None:
@@ -77,5 +86,6 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         else:
             super().step(action)
 
+    @override
     def __str__(self) -> str:
         return str(self.env)

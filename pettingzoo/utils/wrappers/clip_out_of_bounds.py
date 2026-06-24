@@ -1,20 +1,23 @@
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 from gymnasium.spaces import Box
+from typing_extensions import override
 
 from pettingzoo.utils.env import AECEnv
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
-class ClipOutOfBoundsWrapper(BaseWrapper):
+class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
     """Clips the input action to fit in the continuous action space (emitting a warning if it does so).
 
     Applied to continuous environments in pettingzoo.
     """
 
-    def __init__(self, env: AECEnv):
+    def __init__(self, env: AECEnv[Any, Any, Any]):
         super().__init__(env)
         assert isinstance(
             env, AECEnv
@@ -24,6 +27,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
             for agent in getattr(self, "possible_agents", [])
         ), "should only use ClipOutOfBoundsWrapper for Box spaces"
 
+    @override
     def step(self, action: np.ndarray | None) -> None:
         space = self.action_space(self.agent_selection)
         if not (
@@ -43,12 +47,13 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
                 action=action, action_space=space, backup_policy="clipping to space"
             )
             action = np.clip(
-                action,  # type: ignore
-                space.low,  # type: ignore
-                space.high,  # type: ignore
+                action,
+                space.low,
+                space.high,
             )
 
         super().step(action)
 
+    @override
     def __str__(self) -> str:
         return str(self.env)

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+from typing import Any
 
 import numpy as np
 
@@ -8,7 +9,7 @@ from pettingzoo.utils.env import AECEnv
 
 
 def average_total_reward(
-    env: AECEnv, max_episodes: int = 100, max_steps: int = 10000000000
+    env: AECEnv[Any, Any, Any], max_episodes: int = 100, max_steps: int = 10000000000
 ) -> float:
     """Calculates the average total reward over the episodes for AEC environments.
 

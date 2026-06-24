@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import copy
+from typing import Any
+
+from typing_extensions import override
 
 from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 
-class MultiEpisodeParallelEnv(BaseParallelWrapper):
+class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType]):
     """Creates a new environment using the base environment that runs for `num_episodes` before truncating.
 
     This is useful for creating evaluation environments.
@@ -15,7 +18,9 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
     """
 
-    def __init__(self, env: ParallelEnv, num_episodes: int):
+    def __init__(
+        self, env: ParallelEnv[AgentID, ObsType, ActionType], num_episodes: int
+    ):
         """__init__.
 
         Args:
@@ -29,9 +34,10 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
 
         self._num_episodes = num_episodes
 
+    @override
     def reset(
-        self, seed: int | None = None, options: dict | None = None
-    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict]]:
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict[str, Any]]]:
         """reset.
 
         Args:
@@ -49,6 +55,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
 
         return obs, info
 
+    @override
     def step(
         self, actions: dict[AgentID, ActionType]
     ) -> tuple[
@@ -56,7 +63,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper):
         dict[AgentID, float],
         dict[AgentID, bool],
         dict[AgentID, bool],
-        dict[AgentID, dict],
+        dict[AgentID, dict[str, Any]],
     ]:
         """Steps the environment.
 

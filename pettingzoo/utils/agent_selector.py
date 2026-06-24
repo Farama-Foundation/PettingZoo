@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import Any
 from warnings import warn
 
+from typing_extensions import override
+
 
 class AgentSelector:
     """Outputs an agent in the given order whenever agent_select is called.
@@ -53,7 +55,8 @@ class AgentSelector:
         """Check if the current agent is the first agent in the cycle."""
         return self.selected_agent == self.agent_order[0]
 
-    def __eq__(self, other: AgentSelector) -> bool:
+    @override
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, AgentSelector):
             return NotImplemented
 
