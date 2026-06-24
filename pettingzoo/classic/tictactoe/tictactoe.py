@@ -230,9 +230,10 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.reset()
 
         if self.render_mode is not None and self.screen is None:
-            pygame.init()
+            pygame.font.init()
 
         if self.render_mode == "human":
+            pygame.display.init()
             self.screen = pygame.display.set_mode(
                 (self.screen_height, self.screen_height)
             )

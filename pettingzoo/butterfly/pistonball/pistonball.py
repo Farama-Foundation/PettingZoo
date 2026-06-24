@@ -215,7 +215,6 @@ class raw_env(AECEnv, EzPickle):
             dtype=np.uint8,
         )
 
-        pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
 
         self.render_mode = render_mode
@@ -302,6 +301,7 @@ class raw_env(AECEnv, EzPickle):
         return state
 
     def enable_render(self):
+        pygame.display.init()
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption("Pistonball")
 

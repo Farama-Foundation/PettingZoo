@@ -79,7 +79,6 @@ catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 """
 
 import numpy as np
-import pygame
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
@@ -114,7 +113,6 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, *args, **kwargs)
         self.env = _env(*args, **kwargs)
         self.render_mode = kwargs.get("render_mode")
-        pygame.init()
         self.agents = ["pursuer_" + str(a) for a in range(self.env.num_agents)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))

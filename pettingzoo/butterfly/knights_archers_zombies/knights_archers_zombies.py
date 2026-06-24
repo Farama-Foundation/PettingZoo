@@ -790,7 +790,17 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return None
+            return
+
+        if self.screen is None:
+            if self.render_mode == "human":
+                pygame.display.init()
+                self.screen = pygame.display.set_mode(
+                    [const.SCREEN_WIDTH, const.SCREEN_HEIGHT]
+                )
+                pygame.display.set_caption("Knights, Archers, Zombies")
+            elif self.render_mode == "rgb_array":
+                self.screen = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
 
         self.draw()
 

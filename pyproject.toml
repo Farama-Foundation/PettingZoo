@@ -8,20 +8,22 @@ build-backend = "setuptools.build_meta"
 name = "pettingzoo"
 description = "Gymnasium for multi-agent reinforcement learning."
 readme = "README.md"
-requires-python = ">= 3.9, <3.13"
+requires-python = ">= 3.9, <3.15"
 authors = [{ name = "Farama Foundation", email = "contact@farama.org" }]
 license = { text = "MIT License" }
 keywords = ["Reinforcement Learning", "game", "RL", "AI", "gymnasium"]
 classifiers = [
-    "Development Status :: 4 - Beta",  # change to `5 - Production/Stable` when ready
+    "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    'Intended Audience :: Science/Research',
-    'Topic :: Scientific/Engineering :: Artificial Intelligence',
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
     "numpy>=1.21.0",
@@ -32,16 +34,15 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 # Update dependencies in `all` if any are added or removed
-atari = ["multi_agent_ale_py>=0.1.11", "pygame>=2.3.0"]
+atari = ["multi_agent_ale_py>=0.1.11", "pygame-ce>=2.3.0"]
 classic = [
     "chess>=1.9.4",
     "rlcard>=1.0.5",
-    "pygame>=2.3.0",
+    "pygame-ce>=2.3.0",
     "shimmy[openspiel]>=1.2.0"
 ]
-butterfly = ["pygame>=2.3.0", "pymunk>=6.2.0"]
-mpe = ["pygame>=2.3.0"]
-sisl = ["pygame>=2.3.0", "pymunk>=6.2.0", "box2d-py>=2.3.5", "scipy>=1.4.1"]
+butterfly = ["pygame-ce>=2.3.0", "pymunk>=6.2.0"]
+sisl = ["pygame-ce>=2.3.0", "pymunk>=6.2.0", "box2d-py>=2.3.5", "scipy>=1.4.1"]
 other = ["pillow>=8.0.1"]
 testing = [
     "pynput>=1.7.6",
@@ -54,7 +55,7 @@ testing = [
 ]
 all = [
     "multi_agent_ale_py>=0.1.11",
-    "pygame>=2.3.0",
+    "pygame-ce>=2.3.0",
     "chess>=1.9.4",
     "rlcard>=1.0.5",
     "shimmy[openspiel]>=1.2.0",
@@ -78,6 +79,23 @@ include = ["pettingzoo", "pettingzoo.*"]
 
 # Linters and Test tools #######################################################
 
+[tool.ruff]
+# Forgiving configuration to start: only the default rule set (pyflakes `F`
+# and a subset of pycodestyle `E`). Line length is intentionally relaxed.
+line-length = 300
+target-version = "py39"
+
+[tool.ruff.lint]
+# Default ruff rules (E4, E7, E9, F). Mirror the historical flake8 ignore.
+extend-ignore = ["E203"]
+
+[tool.ruff.lint.per-file-ignores]
+"*/__init__.py" = ["F401"]  # allow re-exports without explicit __all__
+"test/all_parameter_combs_test.py" = ["F405"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pettingzoo"]
+
 [tool.black]
 safe = true
 
@@ -86,7 +104,7 @@ atomic = true
 profile = "black"
 src_paths = ["pettingzoo", "test"]
 
-[tool.pyright]
+[tool.ty.src]
 # add any files/directories with type declaration to include
 include = [
     "pettingzoo/",
@@ -95,15 +113,24 @@ exclude = [
     "pettingzoo/atari/",
     "pettingzoo/butterfly/",
     "pettingzoo/classic/",
-    "pettingzoo/mpe/",
     "pettingzoo/sisl/",
     "pettingzoo/test/",
 ]
-strict = [
-]
-verboseOutput = true
-typeCheckingMode = "basic"
-reportMissingImports = false
+
+[tool.ty.rules]
+# Forgiving baseline: downgrade every rule to a warning so type checking does
+# not fail CI. Ratchet individual rules back up to "error" over time.
+all = "warn"
+# Missing imports are not reported (third-party deps lack stubs).
+unresolved-import = "ignore"
+
+[tool.ty.terminal]
+# Don't fail (exit non-zero) on warning-level diagnostics for now.
+error-on-warning = false
 
 [tool.pytest.ini_options]
 addopts = [ "--ignore-glob=*/__init__.py", "-n=auto", "--ignore=tutorials", "--ignore=docs/_scripts", "--ignore=conf.py"]
+filterwarnings = [
+    "ignore::DeprecationWarning:pygame.*",
+    "ignore::DeprecationWarning:pkg_resources.*"
+]

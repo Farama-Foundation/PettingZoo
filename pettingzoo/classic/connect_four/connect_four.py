@@ -235,9 +235,8 @@ class raw_env(AECEnv, EzPickle):
         screen_height = 86 / 99 * screen_width
 
         if self.screen is None:
-            pygame.init()
-
             if self.render_mode == "human":
+                pygame.display.init()
                 pygame.display.set_caption("Connect Four")
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
             elif self.render_mode == "rgb_array":

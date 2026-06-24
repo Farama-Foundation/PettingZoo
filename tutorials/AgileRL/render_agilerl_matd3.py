@@ -4,9 +4,8 @@ import imageio
 import numpy as np
 import torch
 from agilerl.algorithms.matd3 import MATD3
+from mpe2 import simple_speaker_listener_v4
 from PIL import Image, ImageDraw
-
-from pettingzoo.mpe import simple_speaker_listener_v4
 
 
 # Define function to return image

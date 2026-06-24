@@ -385,7 +385,7 @@ class raw_env(AECEnv, EzPickle):
                 f"Config parameter {max_life_tokens} is out of bounds. See description in hanabi.py."
             )
 
-        elif not (observation_type in ["minimal", "card_knowledge", "seer"]):
+        elif observation_type not in ["minimal", "card_knowledge", "seer"]:
             raise ValueError(
                 f"Config parameter {observation_type} must be either 'minimal', 'card_knowledge', or 'seer'. See description in hanabi.py."
             )

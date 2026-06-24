@@ -31,17 +31,11 @@ repos:
             args:
                 - --skip=*.css,*.js,*.map,*.scss,*.svg
                 - --ignore-words-list=magent
-    - repo: https://github.com/PyCQA/flake8
-      rev: 6.0.0
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.15.18
       hooks:
-          - id: flake8
-            args:
-                - --per-file-ignores=*/__init__.py:F401 test/all_parameter_combs_test.py:F405 pettingzoo/classic/go/go.py:W605
-                - --extend-ignore=E203
-                - --max-complexity=205
-                - --max-line-length=300
-                - --show-source
-                - --statistics
+          - id: ruff
+            args: [--fix]
     - repo: https://github.com/PyCQA/isort
       rev: 5.12.0
       hooks:
@@ -65,17 +59,10 @@ repos:
                 - --add-ignore=D100,D107,D101,D102,D103,D105
             exclude: __init__.py$|^pettingzoo.test|^docs
             additional_dependencies: [tomli]
-    - repo: local
+    - repo: https://github.com/astral-sh/ty-pre-commit
+      rev: v0.0.52
       hooks:
-          - id: pyright
-            name: pyright
-            entry: pyright
-            language: node
-            pass_filenames: false
-            types: [python]
-            additional_dependencies: [pyright@1.1.347]
-            args:
-                - --project=pyproject.toml
+          - id: ty
     - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
       rev: 0.2.3
       hooks:
