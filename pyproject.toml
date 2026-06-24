@@ -39,7 +39,8 @@ classic = [
     "chess>=1.9.4",
     "rlcard>=1.0.5",
     "pygame-ce>=2.3.0",
-    "shimmy[openspiel]>=1.2.0"
+    "shimmy>=1.2.0"
+    "openspiel>=1.6.15"
 ]
 butterfly = ["pygame-ce>=2.3.0", "pymunk>=6.2.0"]
 sisl = ["pygame-ce>=2.3.0", "pymunk>=6.2.0", "box2d-py>=2.3.5", "scipy>=1.4.1"]
