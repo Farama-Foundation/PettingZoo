@@ -143,27 +143,31 @@ class Paddle(pygame.sprite.Sprite):
         """
         # handle collision from left or right
         if self._side == PaddleLocation.PADDLE_LEFT and b_rect.left < rect.right:
-            b_rect.left = rect.right
+            overshoot = rect.right - b_rect.left
+            b_rect.left = rect.right + overshoot
             if b_speed[0] < 0:
                 b_speed[0] *= -1
         elif self._side == PaddleLocation.PADDLE_RIGHT and b_rect.right > rect.left:
-            b_rect.right = rect.left
+            overshoot = b_rect.right - rect.left
+            b_rect.right = rect.left - overshoot
             if b_speed[0] > 0:
                 b_speed[0] *= -1
-        # handle collision from top
+
         if (
             b_rect.bottom > rect.top
             and b_rect.top - b_speed[1] < rect.top
             and b_speed[1] > 0
         ):
-            b_rect.bottom = rect.top
+            overshoot = b_rect.bottom - rect.top
+            b_rect.bottom = rect.top - overshoot
             b_speed[1] *= -1
-        # handle collision from bottom
         elif (
             b_rect.top < rect.bottom
             and b_rect.bottom - b_speed[1] > rect.bottom
             and b_speed[1] < 0
         ):
-            b_rect.top = rect.bottom - 1
+            overshoot = rect.bottom - b_rect.top
+            b_rect.top = rect.bottom + overshoot
             b_speed[1] *= -1
+
         return True, b_rect, b_speed

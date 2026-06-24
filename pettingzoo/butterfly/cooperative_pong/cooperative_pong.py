@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import cooperative_pong_v6` |
+| Import               | `from pettingzoo.butterfly import cooperative_pong_v7` |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -37,7 +37,7 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 ### Arguments
 
 ``` python
-cooperative_pong_v6.env(
+cooperative_pong_v7.env(
     ball_speed = 9,
     left_paddle_speed = 12,
     right_paddle_speed = 12,
@@ -77,6 +77,7 @@ cooperative_pong_v6.env(
 
 ### Version History
 
+* v7: Fixed incorrect ball bounce physics against paddle and env rectangle (1.26.1)
 * v6: Fixed incorrect termination condition and random bounce behaviour (1.25.5)
 * v5: Fixed ball teleporting bugs
 * v4: Added max_reward and off_screen_penalty arguments and changed default, fixed glitch where ball would occasionally teleport, reward redesign (1.14.0)
@@ -446,7 +447,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "cooperative_pong_v6",
+        "name": "cooperative_pong_v7",
         "is_parallelizable": True,
         "render_fps": FPS,
         "has_manual_policy": True,
