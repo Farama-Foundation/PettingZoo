@@ -12,8 +12,8 @@ class CaptureStdoutWrapper(BaseWrapper):
         ), "CaptureStdoutWrapper is only compatible with AEC environments"
         assert hasattr(env, "render_mode"), f"Environment {env} has no render_mode."
         assert (
-            env.render_mode == "human"  # pyright: ignore[reportGeneralTypeIssues]
-        ), f"CaptureStdoutWrapper works only with human rendering mode, but found {env.render_mode} instead."  # pyright: ignore[reportGeneralTypeIssues]
+            env.render_mode == "human"  # type: ignore
+        ), f"CaptureStdoutWrapper works only with human rendering mode, but found {env.render_mode} instead."  # type: ignore
         super().__init__(env)
         self.metadata["render_modes"].append("ansi")
         self.render_mode = "ansi"

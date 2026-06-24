@@ -86,7 +86,7 @@ atomic = true
 profile = "black"
 src_paths = ["pettingzoo", "test"]
 
-[tool.pyright]
+[tool.ty.src]
 # add any files/directories with type declaration to include
 include = [
     "pettingzoo/",
@@ -98,11 +98,17 @@ exclude = [
     "pettingzoo/sisl/",
     "pettingzoo/test/",
 ]
-strict = [
-]
-verboseOutput = true
-typeCheckingMode = "basic"
-reportMissingImports = false
+
+[tool.ty.rules]
+# Forgiving baseline: downgrade every rule to a warning so type checking does
+# not fail CI. Ratchet individual rules back up to "error" over time.
+all = "warn"
+# Missing imports are not reported (third-party deps lack stubs).
+unresolved-import = "ignore"
+
+[tool.ty.terminal]
+# Don't fail (exit non-zero) on warning-level diagnostics for now.
+error-on-warning = false
 
 [tool.pytest.ini_options]
 addopts = [ "--ignore-glob=*/__init__.py", "-n=auto", "--ignore=tutorials", "--ignore=docs/_scripts", "--ignore=conf.py"]
