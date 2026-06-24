@@ -1,14 +1,16 @@
 import copy
 import warnings
 from collections import defaultdict
-from typing import Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, cast
+
+from typing_extensions import override
 
 from pettingzoo.utils import AgentSelector
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 
 
-def parallel_wrapper_fn(env_fn: Callable) -> Callable:
+def parallel_wrapper_fn(env_fn: Callable[..., Any]) -> Callable[..., Any]:
     def par_fn(**kwargs):
         env = env_fn(**kwargs)
         env = aec_to_parallel_wrapper(env)
@@ -17,7 +19,7 @@ def parallel_wrapper_fn(env_fn: Callable) -> Callable:
     return par_fn
 
 
-def aec_wrapper_fn(par_env_fn: Callable) -> Callable:
+def aec_wrapper_fn(par_env_fn: Callable[..., Any]) -> Callable[..., Any]:
     """Converts class(pettingzoo.utils.env.ParallelEnv) -> class(pettingzoo.utils.env.AECEnv).
 
     Args:
@@ -77,7 +79,7 @@ def turn_based_aec_to_parallel(
     aec_env: AECEnv[AgentID, ObsType, Optional[ActionType]]
 ) -> ParallelEnv[AgentID, ObsType, Optional[ActionType]]:
     if isinstance(aec_env, parallel_to_aec_wrapper):
-        return aec_env.env
+        return cast("ParallelEnv[AgentID, ObsType, Optional[ActionType]]", aec_env.env)
     else:
         par_env = turn_based_aec_to_parallel_wrapper(aec_env)
         return par_env
@@ -124,7 +126,7 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         self.metadata = aec_env.metadata
 
         try:
-            self.render_mode = self.aec_env.render_mode  # type: ignore
+            self.render_mode = self.aec_env.render_mode
         except AttributeError:
             warnings.warn(
                 f"The base environment `{aec_env}` does not have a `render_mode` defined."
@@ -137,6 +139,7 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
             pass
 
     @property
+    @override
     def observation_spaces(self):
         warnings.warn(
             "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
@@ -151,6 +154,7 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
             ) from e
 
     @property
+    @override
     def action_spaces(self):
         warnings.warn(
             "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
@@ -162,16 +166,20 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
                 "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
             ) from e
 
+    @override
     def observation_space(self, agent):
         return self.aec_env.observation_space(agent)
 
+    @override
     def action_space(self, agent):
         return self.aec_env.action_space(agent)
 
     @property
+    @override
     def unwrapped(self):
         return self.aec_env.unwrapped
 
+    @override
     def reset(self, seed=None, options=None):
         self.aec_env.reset(seed=seed, options=options)
         self.agents = self.aec_env.agents[:]
@@ -184,6 +192,7 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         infos = dict(**self.aec_env.infos)
         return observations, infos
 
+    @override
     def step(self, actions):
         rewards = defaultdict(int)
         terminations = {}
@@ -220,12 +229,15 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         self.agents = self.aec_env.agents
         return observations, rewards, terminations, truncations, infos
 
+    @override
     def render(self):
         return self.aec_env.render()
 
+    @override
     def state(self):
         return self.aec_env.state()
 
+    @override
     def close(self):
         return self.aec_env.close()
 
@@ -260,10 +272,12 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
             pass
 
     @property
+    @override
     def unwrapped(self):
         return self.env.unwrapped
 
     @property
+    @override
     def observation_spaces(self):
         warnings.warn(
             "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
@@ -278,6 +292,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
             ) from e
 
     @property
+    @override
     def action_spaces(self):
         warnings.warn(
             "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
@@ -289,12 +304,15 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
                 "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
             ) from e
 
+    @override
     def observation_space(self, agent):
         return self.env.observation_space(agent)
 
+    @override
     def action_space(self, agent):
         return self.env.action_space(agent)
 
+    @override
     def reset(self, seed=None, options=None):
         self._observations, self.infos = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
@@ -315,7 +333,8 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
             )
             self.infos = {agent: {} for agent in self.agents}
         elif set(self.infos.keys()) != set(self.agents):
-            self.infos = {agent: {self.infos.copy()} for agent in self.agents}
+            current_info = cast("dict[str, Any]", self.infos)
+            self.infos = {agent: current_info.copy() for agent in self.agents}
             warnings.warn(
                 f"The `infos` dictionary returned by `env.reset()` is not valid: must contain keys for each agent defined in self.agents: {self.agents}. Overwriting with current info duplicated for each agent: {self.infos}"
             )
@@ -324,9 +343,11 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self.new_agents = []
         self.new_values = {}
 
+    @override
     def observe(self, agent):
         return self._observations[agent]
 
+    @override
     def state(self):
         return self.env.state()
 
@@ -341,6 +362,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self.rewards[new_agent] = 0
         self._cumulative_rewards[new_agent] = 0
 
+    @override
     def step(self, action: Optional[ActionType]):
         if (
             self.terminations[self.agent_selection]
@@ -380,6 +402,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
 
             self.agent_selection = self._agent_selector.next()
 
+    @override
     def last(self, observe=True):
         agent = self.agent_selection
         observation = self.observe(agent) if observe else None
@@ -391,12 +414,15 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
             self.infos[agent],
         )
 
+    @override
     def render(self):
         return self.env.render()
 
+    @override
     def close(self):
         self.env.close()
 
+    @override
     def __str__(self):
         return str(self.env)
 
@@ -428,10 +454,12 @@ class turn_based_aec_to_parallel_wrapper(
             )
 
     @property
+    @override
     def unwrapped(self):
         return self.aec_env.unwrapped
 
     @property
+    @override
     def observation_spaces(self):
         warnings.warn(
             "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
@@ -446,6 +474,7 @@ class turn_based_aec_to_parallel_wrapper(
             ) from e
 
     @property
+    @override
     def action_spaces(self):
         warnings.warn(
             "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
@@ -457,12 +486,15 @@ class turn_based_aec_to_parallel_wrapper(
                 "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
             ) from e
 
+    @override
     def observation_space(self, agent):
         return self.aec_env.observation_space(agent)
 
+    @override
     def action_space(self, agent):
         return self.aec_env.action_space(agent)
 
+    @override
     def reset(self, seed=None, options=None):
         self.aec_env.reset(seed=seed, options=options)
         self.agents = self.aec_env.agents[:]
@@ -475,6 +507,7 @@ class turn_based_aec_to_parallel_wrapper(
         infos = {**self.aec_env.infos}
         return observations, infos
 
+    @override
     def step(self, actions):
         if not self.agents:
             return {}, {}, {}, {}
@@ -502,11 +535,14 @@ class turn_based_aec_to_parallel_wrapper(
         self.agents = self.aec_env.agents
         return observations, rewards, terminations, truncations, infos
 
+    @override
     def render(self):
         return self.aec_env.render()
 
+    @override
     def state(self):
         return self.aec_env.state()
 
+    @override
     def close(self):
         return self.aec_env.close()

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing_extensions import override
+
 from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
@@ -13,6 +15,7 @@ class AssertOutOfBoundsWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         ), "AssertOutOfBoundsWrapper is only compatible with AEC environments"
         super().__init__(env)
 
+    @override
     def step(self, action: ActionType) -> None:
         assert (
             action is None
@@ -25,5 +28,6 @@ class AssertOutOfBoundsWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         ), "action is not in action space"
         super().step(action)
 
+    @override
     def __str__(self) -> str:
         return str(self.env)

@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import random
+from typing import Any
 
 import numpy as np
 
 from pettingzoo.utils.env import AECEnv
 
 
-def random_demo(env: AECEnv, render: bool = True, episodes: int = 1) -> float:
+def random_demo(
+    env: AECEnv[Any, Any, Any], render: bool = True, episodes: int = 1
+) -> float:
     """Runs an env object with random actions."""
     total_reward = 0
     completed_episodes = 0
