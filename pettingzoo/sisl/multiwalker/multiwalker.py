@@ -107,6 +107,7 @@ terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)
 
 
 ### Version History
+* v9: Fixed reward sharing and termination logic, refactored rendering to use pygame (1.18.0)
 * v8: Replaced local_ratio, fixed rewards, terrain length as an argument and documentation (1.15.0)
 * v7: Fixed problem with walker collisions (1.8.2)
 * v6: Fixed observation space and made large improvements to code quality (1.5.0)
