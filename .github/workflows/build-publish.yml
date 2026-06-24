@@ -9,7 +9,7 @@ name: build-publish
 on:
     workflow_dispatch:
     push:
-        branches: [master]
+        branches: [main]
     pull_request:
         paths:
             - .github/workflows/build-publish.yml
