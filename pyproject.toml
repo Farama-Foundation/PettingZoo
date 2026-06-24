@@ -28,7 +28,7 @@ classifiers = [
 dependencies = [
     "numpy>=1.21.0",
     "gymnasium>=1.0.0",
-    "typing-extensions >=4.0.0",
+    "typing-extensions >=4.4.0",
 ]
 dynamic = ["version"]
 
@@ -118,15 +118,16 @@ exclude = [
 ]
 
 [tool.ty.rules]
-# Forgiving baseline: downgrade every rule to a warning so type checking does
-# not fail CI. Ratchet individual rules back up to "error" over time.
-all = "warn"
+# Every enabled rule is an error so type-checking failures fail CI. The set of
+# enabled rules is unchanged from the forgiving baseline (no new strictness);
+# we only promoted the existing diagnostics from "warn" to "error".
+all = "error"
 # Missing imports are not reported (third-party deps lack stubs).
 unresolved-import = "ignore"
 
 [tool.ty.terminal]
-# Don't fail (exit non-zero) on warning-level diagnostics for now.
-error-on-warning = false
+# Fail (exit non-zero) on warning-level diagnostics too.
+error-on-warning = true
 
 [tool.pytest.ini_options]
 addopts = [ "--ignore-glob=*/__init__.py", "-n=auto", "--ignore=tutorials", "--ignore=docs/_scripts", "--ignore=conf.py"]
