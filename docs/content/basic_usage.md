@@ -129,9 +129,9 @@ When an agent is terminated or truncated, it's removed from `agents`, so when th
 If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
 
 ``` python
-from pettingzoo.butterfly import knights_archers_zombies_v10
+from pettingzoo.butterfly import knights_archers_zombies_v11
 
-base_env = knights_archers_zombies_v10.env().unwrapped
+base_env = knights_archers_zombies_v11.env().unwrapped
 ```
 
 ### Variable Numbers of Agents (Death)
@@ -149,5 +149,5 @@ Environments are by default wrapped in a handful of lightweight wrappers that ha
 
 ``` python
 environment_parameters = {}  # any parameters to pass to the environment
-env = knights_archers_zombies_v10.raw_env(**environment_parameters)
+env = knights_archers_zombies_v11.raw_env(**environment_parameters)
 ```
