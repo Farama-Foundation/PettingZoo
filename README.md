@@ -27,8 +27,6 @@ To install the dependencies for one family, use `pip install 'pettingzoo[atari]'
 
 We support and maintain PettingZoo for Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
-Note: Some Linux distributions may require manual installation of `cmake`, `swig`, or `zlib1g-dev` (e.g., `sudo apt install cmake swig zlib1g-dev`)
-
 ## Getting started
 
 For an introduction to PettingZoo, see [Basic Usage](https://pettingzoo.farama.org/content/basic_usage/). To create a new environment, see our [Environment Creation Tutorial](https://pettingzoo.farama.org/tutorials/custom_environment/1-project-structure/) and [Custom Environment Examples](https://pettingzoo.farama.org/content/environment_creation/).
