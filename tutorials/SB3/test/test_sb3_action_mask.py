@@ -4,7 +4,7 @@ import pytest
 
 from pettingzoo.classic import (
     chess_v6,
-    gin_rummy_v4,
+    gin_rummy_v5,
     go_v5,
     hanabi_v5,
     leduc_holdem_v4,
@@ -21,7 +21,7 @@ pytest.importorskip("sb3_contrib")
 
 # These environments do better than random even after the minimum number of timesteps
 EASY_ENVS = [
-    gin_rummy_v4,
+    gin_rummy_v5,
     texas_holdem_no_limit_v6,  # texas holdem human rendered game ends instantly, but with random actions it works fine
     tictactoe_v3,
     leduc_holdem_v4,

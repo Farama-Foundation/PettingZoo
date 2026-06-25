@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import gin_rummy_v4` |
+| Import             | `from pettingzoo.classic import gin_rummy_v5` |
 |--------------------|-----------------------------------------------|
 | Actions            | Discrete                                      |
 | Parallel API       | Yes                                           |
@@ -31,7 +31,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and yo
 Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
 
 ``` python
-gin_rummy_v4.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)
+gin_rummy_v5.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)
 ```
 
 `knock_reward`:  reward received by a player who knocks
@@ -101,6 +101,7 @@ Penalties of `deadwood_count / 100` ensure that the reward never goes below -1.
 
 ### Version History
 
+* v5: Fixed `knock_reward` / `gin_reward` reverting to RLCard defaults on a seeded reset (1.27.0)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
@@ -143,7 +144,7 @@ def env(**kwargs):
 class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "gin_rummy_v4",
+        "name": "gin_rummy_v5",
         "is_parallelizable": False,
         "render_fps": 1,
     }
