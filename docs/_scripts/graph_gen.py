@@ -53,8 +53,8 @@ def generate_graphviz(words):
         ypos = rad * math.cos(theta)
         innards += f'a{i} [label="{word}",pos="{xpos},{ypos}!"];\n'
     for i in range(len(words) - 1):
-        innards += f"a{i} -> a{i+1};\n"
-    innards += f"a{len(words)-1} -> a{0};\n"
+        innards += f"a{i} -> a{i + 1};\n"
+    innards += f"a{len(words) - 1} -> a{0};\n"
     return "digraph G {\n%s\n}" % innards
 
 
@@ -67,7 +67,7 @@ for name, module in list(all_environments.items()):
     os.makedirs(os.path.dirname(code_path), exist_ok=True)
     with open(code_path, "w") as file:
         file.write(vis_code)
-    out_path = f"docs/assets/img/aec/{name.replace('/','_')}_aec.svg"
+    out_path = f"docs/assets/img/aec/{name.replace('/', '_')}_aec.svg"
     cmd = ["neato", "-Tsvg", "-o", out_path, code_path]
     print(" ".join(cmd))
     subprocess.Popen(cmd)

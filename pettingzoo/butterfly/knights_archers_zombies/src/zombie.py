@@ -1,4 +1,5 @@
 """Zombie object for Knights-Archers-Zombies."""
+
 import os
 
 import numpy as np

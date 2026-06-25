@@ -63,20 +63,19 @@ def get_parser() -> argparse.ArgumentParser:
         "--watch",
         default=False,
         action="store_true",
-        help="no training, " "watch the play of pre-trained models",
+        help="no training, watch the play of pre-trained models",
     )
     parser.add_argument(
         "--agent-id",
         type=int,
         default=2,
-        help="the learned agent plays as the"
-        " agent_id-th player. Choices are 1 and 2.",
+        help="the learned agent plays as the agent_id-th player. Choices are 1 and 2.",
     )
     parser.add_argument(
         "--resume-path",
         type=str,
         default="",
-        help="the path of agent pth file " "for resuming from a pre-trained agent",
+        help="the path of agent pth file for resuming from a pre-trained agent",
     )
     parser.add_argument(
         "--opponent-path",

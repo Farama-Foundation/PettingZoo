@@ -1,4 +1,5 @@
 """A manual policy for CoooperativePong and script to run it."""
+
 import pygame
 
 from pettingzoo import AECEnv
@@ -60,9 +61,9 @@ class ManualPolicy:
             An action based on the policy
         """
         # only trigger when we are the correct agent
-        assert (
-            agent == self.agent
-        ), f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
+        assert agent == self.agent, (
+            f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
+        )
 
         # set the default action
         action = self.default_action

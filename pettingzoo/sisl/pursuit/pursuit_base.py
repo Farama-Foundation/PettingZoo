@@ -201,11 +201,13 @@ class Pursuit:
 
         x_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
         y_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
-        xlb, xub = int(self.x_size * x_window_start), int(
-            self.x_size * (x_window_start + self.constraint_window)
+        xlb, xub = (
+            int(self.x_size * x_window_start),
+            int(self.x_size * (x_window_start + self.constraint_window)),
         )
-        ylb, yub = int(self.y_size * y_window_start), int(
-            self.y_size * (y_window_start + self.constraint_window)
+        ylb, yub = (
+            int(self.y_size * y_window_start),
+            int(self.y_size * (y_window_start + self.constraint_window)),
         )
         constraints = [[xlb, xub], [ylb, yub]]
 
@@ -512,8 +514,9 @@ class Pursuit:
             np.clip(yld, 0, self.y_size - 1),
             np.clip(yhd, 0, self.y_size - 1),
         )
-        xolo, yolo = abs(np.clip(xld, -self.obs_offset, 0)), abs(
-            np.clip(yld, -self.obs_offset, 0)
+        xolo, yolo = (
+            abs(np.clip(xld, -self.obs_offset, 0)),
+            abs(np.clip(yld, -self.obs_offset, 0)),
         )
         xohi, yohi = xolo + (xhi - xlo), yolo + (yhi - ylo)
         return xlo, xhi + 1, ylo, yhi + 1, xolo, xohi + 1, yolo, yohi + 1

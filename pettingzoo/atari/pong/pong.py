@@ -106,9 +106,9 @@ def raw_env(
 ) -> AtariAECEnv:
     assert num_players == 2 or num_players == 4, "pong only supports 2 or 4 players"
     versions = avaliable_2p_versions if num_players == 2 else avaliable_4p_versions
-    assert (
-        game_version in versions
-    ), f"pong version {game_version} not supported for number of players {num_players}. Available options are {list(versions)}"
+    assert game_version in versions, (
+        f"pong version {game_version} not supported for number of players {num_players}. Available options are {list(versions)}"
+    )
     mode = versions[game_version]
     name = os.path.basename(__file__).split(".")[0]
     parent_file = glob(

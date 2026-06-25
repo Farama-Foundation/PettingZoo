@@ -475,9 +475,7 @@ class Opponent:
 
         positions = np.array([row, col]).reshape(1, 1, 1, -1) + np.expand_dims(
             directions, -2
-        ) * np.arange(1, self.length).reshape(
-            1, 1, -1, 1
-        )  # |4x2x3x2|
+        ) * np.arange(1, self.length).reshape(1, 1, -1, 1)  # |4x2x3x2|
         valid_positions = np.logical_and(
             np.logical_and(
                 positions[:, :, :, 0] >= 0, positions[:, :, :, 0] < self.num_rows
@@ -754,9 +752,7 @@ if __name__ == "__main__":
                         else:
                             p0_action = agent.get_action(
                                 p0_state, epsilon, p0_action_mask
-                            )[
-                                0
-                            ]  # Get next action from agent
+                            )[0]  # Get next action from agent
                             train_actions_hist[p0_action] += 1
 
                         env.step(p0_action)  # Act in environment
@@ -840,9 +836,7 @@ if __name__ == "__main__":
                             else:
                                 p1_action = agent.get_action(
                                     p1_state, epsilon, p1_action_mask
-                                )[
-                                    0
-                                ]  # Get next action from agent
+                                )[0]  # Get next action from agent
                                 train_actions_hist[p1_action] += 1
 
                             env.step(p1_action)  # Act in environment
@@ -996,9 +990,7 @@ if __name__ == "__main__":
                                         state = np.expand_dims(state, 0)
                                         action = agent.get_action(
                                             state, 0, action_mask
-                                        )[
-                                            0
-                                        ]  # Get next action from agent
+                                        )[0]  # Get next action from agent
                                         eval_actions_hist[action] += 1
                                 if player > 0:
                                     if not opponent_first:
@@ -1014,9 +1006,7 @@ if __name__ == "__main__":
                                         state = np.expand_dims(state, 0)
                                         action = agent.get_action(
                                             state, 0, action_mask
-                                        )[
-                                            0
-                                        ]  # Get next action from agent
+                                        )[0]  # Get next action from agent
                                         eval_actions_hist[action] += 1
 
                                 env.step(action)  # Act in environment

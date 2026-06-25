@@ -28,9 +28,9 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
             num_episodes (int): the number of episodes to run the underlying environment
         """
         super().__init__(env)
-        assert isinstance(
-            env, ParallelEnv
-        ), "MultiEpisodeEnv is only compatible with ParallelEnv environments."
+        assert isinstance(env, ParallelEnv), (
+            "MultiEpisodeEnv is only compatible with ParallelEnv environments."
+        )
 
         self._num_episodes = num_episodes
 

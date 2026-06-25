@@ -41,9 +41,9 @@ def test_multi_episode_env_wrapper(num_episodes: int) -> None:
 
     env.close()
 
-    assert (
-        steps == num_episodes * 6
-    ), f"Expected to have 6 steps per episode, got {steps / num_episodes}."
+    assert steps == num_episodes * 6, (
+        f"Expected to have 6 steps per episode, got {steps / num_episodes}."
+    )
 
 
 @pytest.mark.parametrize(("num_episodes"), [1, 2, 3, 4, 5, 6])
@@ -69,16 +69,16 @@ def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
 
     env.close()
 
-    assert (
-        steps == num_episodes * 125
-    ), f"Expected to have 125 steps per episode, got {steps / num_episodes}."
+    assert steps == num_episodes * 125, (
+        f"Expected to have 125 steps per episode, got {steps / num_episodes}."
+    )
 
 
 def _do_game(env: TerminateIllegalWrapper, seed: int) -> None:
     """Run a single game with reproducible random moves."""
-    assert isinstance(
-        env, TerminateIllegalWrapper
-    ), "test_terminate_illegal must use TerminateIllegalWrapper"
+    assert isinstance(env, TerminateIllegalWrapper), (
+        "test_terminate_illegal must use TerminateIllegalWrapper"
+    )
     env.reset(seed)
     for agent in env.agents:
         # make the random moves reproducible

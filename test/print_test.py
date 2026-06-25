@@ -12,6 +12,6 @@ def test_print():
                 if file.endswith(".py"):
                     with open(os.path.join(_dir, file)) as f:
                         for line in f:
-                            assert not line.lstrip().startswith(
-                                "print"
-                            ), f"File: {os.path.join(_dir, file)} has a print statement. Please remove it."
+                            assert not line.lstrip().startswith("print"), (
+                                f"File: {os.path.join(_dir, file)} has a print statement. Please remove it."
+                            )

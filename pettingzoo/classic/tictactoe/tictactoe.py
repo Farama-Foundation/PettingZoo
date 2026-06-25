@@ -68,6 +68,7 @@ If the game ends in a draw, both players will receive a reward of 0.
 * v0: Initial versions release (1.0.0)
 
 """
+
 from __future__ import annotations
 
 import os

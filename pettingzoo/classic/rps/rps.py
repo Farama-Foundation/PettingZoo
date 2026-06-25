@@ -110,6 +110,7 @@ If the game ends in a draw, both players will receive a reward of 0.
 * v0: Initial versions release (1.0.0)
 
 """
+
 from __future__ import annotations
 
 import os
@@ -188,7 +189,7 @@ class raw_env(AECEnv, EzPickle):
             # expand to lizard, spock for first extra action pair
             self._moves.extend(("SPOCK", "LIZARD"))
             for action in range(num_actions - 5):
-                self._moves.append("ACTION_" f"{action + 6}")
+                self._moves.append(f"ACTION_{action + 6}")
         # none is last possible action, to satisfy discrete action space
         self._moves.append("None")
         self._none = num_actions
