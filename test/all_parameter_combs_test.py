@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from importlib.util import find_spec
+
 import pytest
 
 from pettingzoo.atari import (
@@ -36,7 +38,7 @@ from pettingzoo.butterfly import (
 from pettingzoo.classic import (
     chess_v6,
     connect_four_v3,
-    gin_rummy_v4,
+    gin_rummy_v5,
     go_v5,
     hanabi_v5,
     leduc_holdem_v4,
@@ -94,8 +96,8 @@ parameterized_envs = [
     ["classic/rps_v2", rps_v2, dict()],
     ["classic/chess_v6", chess_v6, dict()],
     ["classic/tictactoe_v3", tictactoe_v3, dict()],
-    ["classic/gin_rummy_v4", gin_rummy_v4, dict()],
-    ["classic/gin_rummy_v4", gin_rummy_v4, dict(opponents_hand_visible=True)],
+    ["classic/gin_rummy_v5", gin_rummy_v5, dict()],
+    ["classic/gin_rummy_v5", gin_rummy_v5, dict(opponents_hand_visible=True)],
     ["atari/boxing_v2", boxing_v2, dict(max_cycles=50)],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="grayscale_image", max_cycles=50)],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="ram", max_cycles=50)],
@@ -231,6 +233,10 @@ parameterized_envs = [
     ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3, max_cycles=50)],
     ["sisl/pursuit_v4", pursuit_v4, dict(freeze_evaders=True, max_cycles=50)],
 ]
+
+
+if find_spec("pyspiel") is None:  # open_spiel (Hanabi) is unavailable on Python < 3.11
+    parameterized_envs = [e for e in parameterized_envs if "hanabi" not in e[0]]
 
 
 @pytest.mark.parametrize(["name", "env_module", "kwargs"], parameterized_envs)

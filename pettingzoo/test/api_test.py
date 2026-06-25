@@ -75,7 +75,7 @@ env_obs_dicts = [
     "chess_v6",
     "connect_four_v3",
     "tictactoe_v3",
-    "gin_rummy_v4",
+    "gin_rummy_v5",
 ]
 env_graphical_obs = ["knights_archers_zombies_v11"]
 env_diff_obs_shapes = [
@@ -98,7 +98,7 @@ env_obs_space = [
     "chess_v6",
     "connect_four_v3",
     "tictactoe_v3",
-    "gin_rummy_v4",
+    "gin_rummy_v5",
 ]
 env_diff_agent_obs_size = [
     "simple_adversary_v3",
