@@ -773,9 +773,8 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def _get_screen(self) -> pygame.Surface:
         """Return a newly created pygame surface as the display screen."""
-        pygame.init()
-
         if self.render_mode == "human":
+            pygame.display.init()
             screen = pygame.display.set_mode(self.screen_dims)
             pygame.display.set_caption("Knights, Archers, Zombies")
             return screen
