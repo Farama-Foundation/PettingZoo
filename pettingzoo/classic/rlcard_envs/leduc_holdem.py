@@ -72,6 +72,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 * v0: Initial versions release (1.0.0)
 
 """
+
 from __future__ import annotations
 
 import os

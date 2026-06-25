@@ -1,4 +1,5 @@
 """Various Constants used in Knights, Archers, Zombies."""
+
 from enum import Enum
 
 

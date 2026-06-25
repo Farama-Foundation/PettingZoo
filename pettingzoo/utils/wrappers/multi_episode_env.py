@@ -25,9 +25,9 @@ class MultiEpisodeEnv(BaseWrapper[AgentID, ObsType, ActionType]):
             env (AECEnv): env
             num_episodes (int): num_episodes
         """
-        assert isinstance(
-            env, AECEnv
-        ), "MultiEpisodeEnv is only compatible with AEC environments"
+        assert isinstance(env, AECEnv), (
+            "MultiEpisodeEnv is only compatible with AEC environments"
+        )
         super().__init__(env)
 
         self._num_episodes = num_episodes

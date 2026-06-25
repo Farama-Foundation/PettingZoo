@@ -1,4 +1,5 @@
 """Tests that the environment's state() and state_space() methods work as expected."""
+
 from __future__ import annotations
 
 import warnings
@@ -57,9 +58,9 @@ env_neg_inf_state = [
 
 
 def test_state_space(env):
-    assert isinstance(
-        env.state_space, gymnasium.spaces.Space
-    ), "State space for each environment must extend gymnasium.spaces.Space"
+    assert isinstance(env.state_space, gymnasium.spaces.Space), (
+        "State space for each environment must extend gymnasium.spaces.Space"
+    )
     if not (
         isinstance(env.state_space, gymnasium.spaces.Box)
         or isinstance(env.state_space, gymnasium.spaces.Discrete)
@@ -88,17 +89,17 @@ def test_state_space(env):
                 "Environment's maximum and minimum state space values are equal"
             )
         if np.any(np.greater(env.state_space.low, env.state_space.high)):
-            assert (
-                False
-            ), "Environment's minimum state space value is greater than it's maximum"
+            assert False, (
+                "Environment's minimum state space value is greater than it's maximum"
+            )
         if env.state_space.low.shape != env.state_space.shape:
-            assert (
-                False
-            ), "Environment's state_space.low and state_space have different shapes"
+            assert False, (
+                "Environment's state_space.low and state_space have different shapes"
+            )
         if env.state_space.high.shape != env.state_space.shape:
-            assert (
-                False
-            ), "Environment's state_space.high and state_space have different shapes"
+            assert False, (
+                "Environment's state_space.high and state_space have different shapes"
+            )
 
 
 def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
@@ -114,9 +115,9 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
 
         env.step(action)
         new_state = env.state()
-        assert env.state_space.contains(
-            new_state
-        ), "Environment's state is outside of it's state space"
+        assert env.state_space.contains(new_state), (
+            "Environment's state is outside of it's state space"
+        )
         if (
             not isinstance(new_state, np.ndarray)
             and str(env.unwrapped) not in graphical_envs
@@ -164,14 +165,14 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
 def test_parallel_env(parallel_env: ParallelEnv, seed: int | None = 0):
     parallel_env.reset(seed=seed)
 
-    assert isinstance(
-        parallel_env.state_space, gymnasium.spaces.Space
-    ), "State space for each parallel environment must extend gymnasium.spaces.Space"
+    assert isinstance(parallel_env.state_space, gymnasium.spaces.Space), (
+        "State space for each parallel environment must extend gymnasium.spaces.Space"
+    )
 
     state_0 = parallel_env.state()
-    assert parallel_env.state_space.contains(
-        state_0
-    ), "ParallelEnvironment's state is outside of it's state space"
+    assert parallel_env.state_space.contains(state_0), (
+        "ParallelEnvironment's state is outside of it's state space"
+    )
 
 
 def state_test(env, parallel_env, num_cycles=10):

@@ -52,9 +52,9 @@ def test_pickle_env(name, env_module):
         action1 = env1.action_space(agent1).sample(mask=mask)
         action2 = env2.action_space(agent2).sample(mask=mask)
 
-        assert data_equivalence(
-            action1, action2
-        ), f"Incorrect actions: {action1} {action2}"
+        assert data_equivalence(action1, action2), (
+            f"Incorrect actions: {action1} {action2}"
+        )
 
         env1.step(action1)
         env2.step(action2)
