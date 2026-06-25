@@ -56,51 +56,52 @@ max_life_tokens=3, observation_type='minimal')
 
 The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-The main observation space of an agent is a 658 sized vector representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. The observation vector contains the following features, life tokens,
-information tokens, number of players, deck size, formed fireworks, legal moves, observed hands, discard pile, the hints received from other players, which are then serialized into a bit string.
+The main observation space of an agent is a 658 sized vector (for the default 2-player full game) representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. Since v5 the observation is produced by
+OpenSpiel's canonical Hanabi encoder (via Shimmy), so its layout — and the index ranges in the table below — depend on the chosen configuration (`colors`, `ranks`, `players`, `hand_size`, `max_information_tokens`, `max_life_tokens`). The table below is for the default configuration
+(`colors=5, ranks=5, players=2, hand_size=5, max_information_tokens=8, max_life_tokens=3`).
 
-Each card is encoded with a 25 bit one-hot vector, where the encoding of a card is equal to its color*T + rank, where T is the max possible rank. By default this value is 5. The maximum deck size is 50. The remaining deck size is represented with unary encoding. The state of each colored
-firework is represented with a one-hot encoding. The information tokens remaining are represented with a unary encoding. The life tokens remaining are represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card. That is the
-least significant bit being set to 1 indicates the lowest rank card of that color has been discarded.
+Each card is encoded with a `colors*ranks` bit one-hot vector (25 bits by default), where the index of the set bit is `color*ranks + rank`. The remaining deck size is represented with a unary encoding whose length is `max_deck_size - players*hand_size` (40 bits by default, since the
+`players*hand_size` cards dealt at the start can never be in the deck — note this is *not* the full deck size of 50). The state of each colored firework is represented with a one-hot encoding of the highest rank played (all-zero if no card of that color has been played yet). The information
+tokens remaining and the life tokens remaining are each represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card, that is the least significant bit being set to 1 indicates the lowest rank card of that color has been
+discarded.
 
-As players reveal info about their cards, the information revealed per card is also observed. The first 25 bits represent whether or not that specific card could be a specific color. For example if the card could only be red, then the first 25 bits of the observed revealed info would be 11111
-followed by 20 zeros. The next 5 bits store whether the color of that card was explicitly revealed, so if the card was revealed to be red, then the next 5 bits would be 10000. Finally the last 5 bits are the revealed rank of the card. So if the card was revealed to be of rank 1, then the next 5
-bits would be 10000. These 25 bits are tracked and observed for all cards in each player's hand.
+As players reveal info about their cards, the information revealed per card is also observed (the "card knowledge" section). Each card uses `colors*ranks + colors + ranks` bits (35 by default). The first `colors*ranks` bits represent whether or not that specific card could still be a specific
+color/rank given the hints received. The next `colors` bits store whether the color of that card was explicitly revealed, so if the card was revealed to be red, then these bits would be 10000. Finally the last `ranks` bits are the revealed rank of the card. So if the card was revealed to be of
+rank 1, then these bits would be 10000. These bits are tracked and observed for every card in every player's hand (this player first, then the others).
 
-|  Index  | Description                                     |  Values  |
-|:-------:|-------------------------------------------------|:--------:|
-|  0 - 24 | Vector of Card 1 in other player's hand         |  [0, 1]  |
-| 25 - 49 | Vector of Card 2 in other player's hand         |  [0, 1]  |
-| 50 - 74 | Vector of Card 3 in other player's hand         |  [0, 1]  |
-| 75 -100 | Vector of Card 4 in other player's hand         |  [0, 1]  |
-| 100-124 | Vector of Card 5 in other player's hand         |  [0, 1]  |
-| 125-174 | Unary Encoding of Remaining Deck Size           |  [0, 1]  |
-| 175-179 | Vector of Red Firework                          |  [0, 1]  |
-| 180-184 | Vector of Yellow Firework                       |  [0, 1]  |
-| 185-189 | Vector of Green Firework                        |  [0, 1]  |
-| 190-195 | Vector of White Firework                        |  [0, 1]  |
-| 195-199 | Vector of Blue Firework                         |  [0, 1]  |
-| 200-207 | Unary Encoding of Remaining Info Tokens         |  [0, 1]  |
-| 208-210 | Unary Encoding of Remaining Life Tokens         |  [0, 1]  |
-| 211-260 | Thermometer Encoding of Discard Pile            |  [0, 1]  |
-| 261-262 | One-Hot Encoding of Previous Player ID          |  [0, 1]  |
-| 263-266 | Vector of Previous Player's Action Type         |  [0, 1]  |
-| 267-268 | Vector of Target from Previous Action           |  [0, 1]  |
-| 269-273 | Vector of the Color Revealed in Last Action     |  [0, 1]  |
-| 274-278 | Vector of the Rank Revealed in Last Action      |  [0, 1]  |
-| 279-280 | Vector of Which Cards in the Hand were Revealed |  [0, 1]  |
-| 281-282 | Position of the Card that was played or dropped |  [0, 1]  |
-| 283-307 | Vector Representing Card that was last played   |  [0, 1]  |
-| 308-342 | Revealed Info of This Player's 0th Card         |  [0, 1]  |
-| 343-377 | Revealed Info of This Player's 1st Card         |  [0, 1]  |
-| 378-412 | Revealed Info of This Player's 2nd Card         |  [0, 1]  |
-| 413-447 | Revealed Info of This Player's 3rd Card         |  [0, 1]  |
-| 445-482 | Revealed Info of This Player's 4th Card         |  [0, 1]  |
-| 483-517 | Revealed Info of Other Player's 0th Card        |  [0, 1]  |
-| 518-552 | Revealed Info of Other Player's 1st Card        |  [0, 1]  |
-| 553-587 | Revealed Info of Other Player's 2nd Card        |  [0, 1]  |
-| 588-622 | Revealed Info of Other Player's 3rd Card        |  [0, 1]  |
-| 663-657 | Revealed Info of Other Player's 4th Card        |  [0, 1]  |
+|  Index  | Description                                                    |  Values  |
+|:-------:|----------------------------------------------------------------|:--------:|
+|   0-124 | Other player's hand: 5 cards × 25-bit one-hot                  |  [0, 1]  |
+| 125-126 | Per-player flag set when that player's hand is missing a card  |  [0, 1]  |
+| 127-166 | Unary Encoding of Remaining Deck Size (max_deck − players×hand)|  [0, 1]  |
+| 167-171 | Vector of Red Firework                                         |  [0, 1]  |
+| 172-176 | Vector of Yellow Firework                                      |  [0, 1]  |
+| 177-181 | Vector of Green Firework                                       |  [0, 1]  |
+| 182-186 | Vector of White Firework                                       |  [0, 1]  |
+| 187-191 | Vector of Blue Firework                                        |  [0, 1]  |
+| 192-199 | Unary Encoding of Remaining Info Tokens                        |  [0, 1]  |
+| 200-202 | Unary Encoding of Remaining Life Tokens                        |  [0, 1]  |
+| 203-252 | Thermometer Encoding of Discard Pile                           |  [0, 1]  |
+| 253-254 | Last action: Acting Player (relative offset, one-hot)          |  [0, 1]  |
+| 255-258 | Last action: Move Type (play / discard / reveal color / rank)  |  [0, 1]  |
+| 259-260 | Last action: Target Player of a reveal (relative offset)       |  [0, 1]  |
+| 261-265 | Last action: Color Revealed                                    |  [0, 1]  |
+| 266-270 | Last action: Rank Revealed                                     |  [0, 1]  |
+| 271-275 | Last action: Which Cards in the Hand were Revealed             |  [0, 1]  |
+| 276-280 | Last action: Position of the Card that was played or discarded |  [0, 1]  |
+| 281-305 | Last action: Vector Representing the Card that was played/discarded | [0, 1] |
+| 306-306 | Last action: Whether the played card was added to a firework   |  [0, 1]  |
+| 307-307 | Last action: Whether an info token was added                   |  [0, 1]  |
+| 308-342 | Card Knowledge of This Player's 0th Card                       |  [0, 1]  |
+| 343-377 | Card Knowledge of This Player's 1st Card                       |  [0, 1]  |
+| 378-412 | Card Knowledge of This Player's 2nd Card                       |  [0, 1]  |
+| 413-447 | Card Knowledge of This Player's 3rd Card                       |  [0, 1]  |
+| 448-482 | Card Knowledge of This Player's 4th Card                       |  [0, 1]  |
+| 483-517 | Card Knowledge of Other Player's 0th Card                      |  [0, 1]  |
+| 518-552 | Card Knowledge of Other Player's 1st Card                      |  [0, 1]  |
+| 553-587 | Card Knowledge of Other Player's 2nd Card                      |  [0, 1]  |
+| 588-622 | Card Knowledge of Other Player's 3rd Card                      |  [0, 1]  |
+| 623-657 | Card Knowledge of Other Player's 4th Card                      |  [0, 1]  |
 
 
 #### Legal Actions Mask
