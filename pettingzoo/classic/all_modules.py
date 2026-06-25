@@ -1,3 +1,5 @@
+from importlib.util import find_spec
+
 from pettingzoo.classic import (
     chess_v6,
     connect_four_v3,
@@ -21,5 +23,7 @@ classic_environments = {
     "classic/texas_holdem_no_limit_v6": texas_holdem_no_limit_v6,
     "classic/gin_rummy_v5": gin_rummy_v5,
     "classic/go_v5": go_v5,
-    "classic/hanabi_v5": hanabi_v5,
 }
+
+if find_spec("pyspiel") is not None:  # Hanabi needs open_spiel (Python >= 3.11)
+    classic_environments["classic/hanabi_v5"] = hanabi_v5

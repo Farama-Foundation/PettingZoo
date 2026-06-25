@@ -167,7 +167,6 @@ import gymnasium
 import numpy as np
 from gymnasium import spaces
 from gymnasium.utils import EzPickle
-from shimmy.openspiel_compatibility import OpenSpielCompatibilityV0
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -305,6 +304,13 @@ class raw_env(AECEnv, EzPickle):
             "observation_type": observation_type,
             "random_start_player": random_start_player,
         }
+        try:
+            from shimmy.openspiel_compatibility import OpenSpielCompatibilityV0
+        except ImportError as e:
+            raise ImportError(
+                "Hanabi depends on OpenSpiel via Shimmy, which requires Python >= 3.11. "
+                "Install it with: pip install open_spiel"
+            ) from e
         self.hanabi_env = OpenSpielCompatibilityV0(
             game_name="hanabi", render_mode=render_mode, config=self._config
         )

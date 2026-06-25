@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from importlib.util import find_spec
+
 import pytest
 
 from pettingzoo.atari import (
@@ -231,6 +233,10 @@ parameterized_envs = [
     ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3, max_cycles=50)],
     ["sisl/pursuit_v4", pursuit_v4, dict(freeze_evaders=True, max_cycles=50)],
 ]
+
+
+if find_spec("pyspiel") is None:  # open_spiel (Hanabi) is unavailable on Python < 3.11
+    parameterized_envs = [e for e in parameterized_envs if "hanabi" not in e[0]]
 
 
 @pytest.mark.parametrize(["name", "env_module", "kwargs"], parameterized_envs)

@@ -1,5 +1,7 @@
 """Tests that action masking code works properly with all PettingZoo classic environments."""
 
+from importlib.util import find_spec
+
 import pytest
 
 from pettingzoo.classic import (
@@ -33,6 +35,9 @@ MEDIUM_ENVS = [
     texas_holdem_v4,  # this performs poorly with updates to SB3 wrapper
     chess_v6,  # difficult to train because games take so long, performance varies heavily
 ]
+
+if find_spec("pyspiel") is None:  # Hanabi needs open_spiel (Python >= 3.11)
+    MEDIUM_ENVS = [e for e in MEDIUM_ENVS if e is not hanabi_v5]
 
 # Most difficult environments to train agents for (and longest games
 # TODO: test board_size to see if smaller go board is more easily solvable
