@@ -12,7 +12,7 @@ import random
 
 import numpy as np
 
-from pettingzoo.classic import gin_rummy_v4
+from pettingzoo.classic import gin_rummy_v5
 from pettingzoo.test import seed_test
 
 # Action ids that end a hand (gin, or any of the 52 knock actions).
@@ -22,7 +22,7 @@ KNOCK_ACTIONS = range(58, 110)
 
 def test_payoff_override_survives_seeded_reset():
     """Ensure the custom payoff scorer survives a seeded reset."""
-    env = gin_rummy_v4.env(knock_reward=0.5, gin_reward=1.0)
+    env = gin_rummy_v5.env(knock_reward=0.5, gin_reward=1.0)
 
     env.reset()  # no seed: override installed in __init__
     raw = env.unwrapped
@@ -43,7 +43,7 @@ def test_configured_knock_reward_used_in_seeded_game():
 
     saw_knock = False
     for seed in range(50):
-        env = gin_rummy_v4.env(knock_reward=knock_reward, gin_reward=1.0)
+        env = gin_rummy_v5.env(knock_reward=knock_reward, gin_reward=1.0)
         env.reset(seed=seed)
         raw = env.unwrapped
         rng = random.Random(seed)
@@ -63,4 +63,4 @@ def test_configured_knock_reward_used_in_seeded_game():
 
 def test_seeding_is_deterministic():
     """Run PettingZoo's determinism check for gin_rummy."""
-    seed_test(gin_rummy_v4.env)
+    seed_test(gin_rummy_v5.env)

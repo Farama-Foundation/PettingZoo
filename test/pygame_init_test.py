@@ -12,7 +12,7 @@ from pettingzoo.butterfly import (
 from pettingzoo.classic import (
     chess_v6,
     connect_four_v3,
-    gin_rummy_v4,
+    gin_rummy_v5,
     go_v5,
     leduc_holdem_v4,
     rps_v2,
@@ -27,7 +27,7 @@ pygame_envs = [
     pistonball_v6,
     chess_v6,
     connect_four_v3,
-    gin_rummy_v4,
+    gin_rummy_v5,
     go_v5,
     leduc_holdem_v4,
     rps_v2,
