@@ -30,9 +30,9 @@ def collect_render_results(env):
 def render_test(env_fn: Callable[[], Env], custom_tests={}):
     env = env_fn(render_mode="human")
     render_modes = env.metadata.get("render_modes")[:]
-    assert (
-        render_modes is not None
-    ), "Environments that support rendering must define render_modes in metadata"
+    assert render_modes is not None, (
+        "Environments that support rendering must define render_modes in metadata"
+    )
     for mode in render_modes:
         env = env_fn(render_mode=mode)
         render_results = collect_render_results(env)

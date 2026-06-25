@@ -105,12 +105,12 @@ avaliable_versions = {
 def raw_env(
     game_version: str = "robbers", visibilty_level: int = 0, **kwargs: Any
 ) -> AtariAECEnv:
-    assert (
-        game_version in avaliable_versions
-    ), f"`game_version` parameter must be one of {avaliable_versions.keys()}"
-    assert (
-        0 <= visibilty_level < 4
-    ), "visibility level must be between 0 and 4, where 0 is 100% visibility and 3 is 0% visibility"
+    assert game_version in avaliable_versions, (
+        f"`game_version` parameter must be one of {avaliable_versions.keys()}"
+    )
+    assert 0 <= visibilty_level < 4, (
+        "visibility level must be between 0 and 4, where 0 is 100% visibility and 3 is 0% visibility"
+    )
     base_mode = (avaliable_versions[game_version] - 1) * 4
     mode = base_mode + visibilty_level
     name = os.path.basename(__file__).split(".")[0]

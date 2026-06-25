@@ -226,9 +226,9 @@ def test_kaz_agent_management() -> None:
     env.reset()
     expected_possible_agents = ["archer_0", "archer_1", "knight_0", "knight_1"]
     expected_agents = expected_possible_agents[:]
-    assert sorted(expected_possible_agents) == sorted(
-        env.possible_agents
-    ), "Wrong possible agent list"
+    assert sorted(expected_possible_agents) == sorted(env.possible_agents), (
+        "Wrong possible agent list"
+    )
     assert sorted(expected_agents) == sorted(env.agents), "Wrong agent list"
 
     # four agents to move
@@ -308,12 +308,12 @@ def test_kaz_killable_agents() -> None:
             env.zombie_list.add(zombie2)
             # check for overlaps
             env.do_zombie_turn()
-            assert (
-                "archer_0" in env.kill_list
-            ) == is_archer_killable, "archer death status is wrong"
-            assert (
-                "knight_0" in env.kill_list
-            ) == is_knight_killable, "knight death status is wrong"
+            assert ("archer_0" in env.kill_list) == is_archer_killable, (
+                "archer death status is wrong"
+            )
+            assert ("knight_0" in env.kill_list) == is_knight_killable, (
+                "knight death status is wrong"
+            )
 
 
 def test_kaz_zombie_motion() -> None:
@@ -474,26 +474,22 @@ def test_kaz_player_directions() -> None:
     env.reset()
     knight = env.agent_map["knight_0"]
     approx_one = pytest.approx(1.0)
-    assert knight.direction.magnitude() == approx_one, (
-        "Direction is not a unit vector" ""
-    )
+    assert knight.direction.magnitude() == approx_one, "Direction is not a unit vector"
     # move around a bit
     knight.act(const.Actions.ACTION_FORWARD)
     knight.act(const.Actions.ACTION_FORWARD)
     knight.act(const.Actions.ACTION_FORWARD)
-    assert knight.direction.magnitude() == approx_one, (
-        "Direction is not a unit vector" ""
-    )
+    assert knight.direction.magnitude() == approx_one, "Direction is not a unit vector"
     # confirm turns give normalized directions
     for _ in range(4):
         knight.act(const.Actions.ACTION_TURN_CCW)
         assert knight.direction.magnitude() == approx_one, (
-            "Direction is not a unit vector" ""
+            "Direction is not a unit vector"
         )
     knight.act(const.Actions.ACTION_FORWARD)
     knight.act(const.Actions.ACTION_FORWARD)
     for _ in range(12):
         knight.act(const.Actions.ACTION_TURN_CW)
         assert knight.direction.magnitude() == approx_one, (
-            "Direction is not a unit vector" ""
+            "Direction is not a unit vector"
         )

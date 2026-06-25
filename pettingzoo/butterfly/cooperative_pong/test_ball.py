@@ -37,9 +37,9 @@ def test_bounds() -> None:
 
             in_bounds = ball._rect.x >= 0 and ball._rect.x <= width - ball_dims[1]
             if not terminate and not in_bounds:
-                assert (
-                    False
-                ), f"Cooperative pong not terminated with ball out of bounds (seed = {seed})"
+                assert False, (
+                    f"Cooperative pong not terminated with ball out of bounds (seed = {seed})"
+                )
             if terminate:
                 break
 

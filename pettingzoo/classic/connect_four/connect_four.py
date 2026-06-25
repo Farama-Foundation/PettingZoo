@@ -57,6 +57,7 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 * v0: Initial versions release (1.0.0)
 
 """
+
 from __future__ import annotations
 
 import os

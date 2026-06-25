@@ -182,9 +182,9 @@ if __name__ == "__main__":
         print(
             "capture_video=True, but RecordVideo is disabled for vectorized PettingZoo environments."
         )
-    assert isinstance(
-        envs.single_action_space, gym.spaces.Discrete
-    ), "only discrete action space is supported"
+    assert isinstance(envs.single_action_space, gym.spaces.Discrete), (
+        "only discrete action space is supported"
+    )
 
     agent = Agent(envs).to(device)
     optimizer = optim.Adam(agent.parameters(), lr=args.learning_rate, eps=1e-5)

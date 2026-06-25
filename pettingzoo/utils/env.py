@@ -218,9 +218,9 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
 
         # removes dead agent
         agent = self.agent_selection
-        assert (
-            self.terminations[agent] or self.truncations[agent]
-        ), "an agent that was not dead as attempted to be removed"
+        assert self.terminations[agent] or self.truncations[agent], (
+            "an agent that was not dead as attempted to be removed"
+        )
         del self.terminations[agent]
         del self.truncations[agent]
         del self.rewards[agent]

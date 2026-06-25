@@ -30,9 +30,9 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
     """
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
-        assert isinstance(
-            env, AECEnv
-        ), "OrderEnforcingWrapper is only compatible with AEC environments"
+        assert isinstance(env, AECEnv), (
+            "OrderEnforcingWrapper is only compatible with AEC environments"
+        )
         self._has_reset = False
         self._has_updated = False
         super().__init__(env)
@@ -122,9 +122,9 @@ class AECOrderEnforcingIterator(AECIterator[AgentID, ObsType, ActionType]):
     def __init__(
         self, env: OrderEnforcingWrapper[AgentID, ObsType, ActionType], max_iter: int
     ):
-        assert isinstance(
-            env, OrderEnforcingWrapper
-        ), "env must be wrapped by OrderEnforcingWrapper"
+        assert isinstance(env, OrderEnforcingWrapper), (
+            "env must be wrapped by OrderEnforcingWrapper"
+        )
         super().__init__(env, max_iter)
 
     @override

@@ -62,10 +62,12 @@ if __name__ == "__main__":
         envs_list = list(
             filter(
                 lambda x: (
-                    os.path.isdir(os.path.join(env_type_path, x))
-                    and "utils" not in os.path.join(env_type_path, x)
-                )
-                or "rlcard_envs" in x,
+                    (
+                        os.path.isdir(os.path.join(env_type_path, x))
+                        and "utils" not in os.path.join(env_type_path, x)
+                    )
+                    or "rlcard_envs" in x
+                ),
                 envs_list,
             )
         )

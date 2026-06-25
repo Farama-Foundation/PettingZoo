@@ -105,9 +105,9 @@ avaliable_versions = {
 def raw_env(
     game_version: str = "bi-plane", guided_missile: bool = True, **kwargs: Any
 ) -> AtariAECEnv:
-    assert (
-        game_version in avaliable_versions
-    ), "game_version must be either 'jet' or 'bi-plane'"
+    assert game_version in avaliable_versions, (
+        "game_version must be either 'jet' or 'bi-plane'"
+    )
     mode = avaliable_versions[game_version] + (0 if guided_missile else 1)
     name = os.path.basename(__file__).split(".")[0]
     parent_file = glob(

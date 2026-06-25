@@ -33,7 +33,7 @@ StateType = npt.NDArray[np.int8]
 
 
 def base_env_wrapper_fn(
-    raw_env_fn: Callable[..., AtariAECEnv]
+    raw_env_fn: Callable[..., AtariAECEnv],
 ) -> Callable[..., AtariAECEnv]:
     def env_fn(**kwargs: Any) -> AtariAECEnv:
         env = raw_env_fn(**kwargs)
@@ -134,9 +134,9 @@ class ParallelAtariEnv(ParallelEnv[AgentID, ObsType, ActionType], EzPickle):
             mode = all_modes[0]
         else:
             mode = mode_num
-            assert (
-                mode in all_modes
-            ), f"mode_num parameter is wrong. Mode {mode_num} selected, only {list(all_modes)} modes are supported"
+            assert mode in all_modes, (
+                f"mode_num parameter is wrong. Mode {mode_num} selected, only {list(all_modes)} modes are supported"
+            )
 
         self.mode = mode
         self.ale.setMode(self.mode)
@@ -279,9 +279,9 @@ class ParallelAtariEnv(ParallelEnv[AgentID, ObsType, ActionType], EzPickle):
             )
             return None
 
-        assert (
-            self.render_mode in self.metadata["render_modes"]
-        ), f"{self.render_mode} is not a valid render mode"
+        assert self.render_mode in self.metadata["render_modes"], (
+            f"{self.render_mode} is not a valid render mode"
+        )
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = cast(npt.NDArray[np.int8], self.ale.getScreenRGB())
         if self.render_mode == "human":
