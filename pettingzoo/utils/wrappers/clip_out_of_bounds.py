@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 from gymnasium.spaces import Box
@@ -29,7 +29,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
 
     @override
     def step(self, action: np.ndarray | None) -> None:
-        space = self.action_space(self.agent_selection)
+        space = cast(Box, self.action_space(self.agent_selection))
         if not (
             action is None
             and (
