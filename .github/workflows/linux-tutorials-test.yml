@@ -19,6 +19,14 @@ jobs:
             matrix:
                 python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
                 tutorial: [Tianshou, CustomEnvironment, CleanRL, SB3/connect_four, SB3/kaz, SB3/test]  # TODO: fix tutorials and add back Ray.
+                # tianshou 0.5.0 depends on numba, which requires NumPy <= 2.4; Python 3.12+ resolves NumPy 2.5, so `import tianshou` fails. Skip until the tutorial is bumped to a tianshou release that supports NumPy 2.5.
+                exclude:
+                    - python-version: '3.12'
+                      tutorial: Tianshou
+                    - python-version: '3.13'
+                      tutorial: Tianshou
+                    - python-version: '3.14'
+                      tutorial: Tianshou
         steps:
             - uses: actions/checkout@v4
             - name: Set up Python ${{ matrix.python-version }}
