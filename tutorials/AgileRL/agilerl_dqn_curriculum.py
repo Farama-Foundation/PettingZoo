@@ -7,7 +7,6 @@ import copy
 import os
 import random
 from collections import deque
-from typing import List, Optional, Tuple
 
 import numpy as np
 import torch
@@ -205,7 +204,7 @@ class CurriculumEnv:
         print("Replay buffer warmed up.")
         return memory
 
-    def check_winnable(self, lst: List[int], piece: int) -> bool:
+    def check_winnable(self, lst: list[int], piece: int) -> bool:
         """Checks if four pieces in a row represent a winnable opportunity, e.g. [1, 1, 1, 0] or [2, 0, 2, 2].
 
         :param lst: List of pieces in row
@@ -321,7 +320,7 @@ class CurriculumEnv:
                 )
         return reward
 
-    def last(self) -> Tuple[dict, float, bool, bool, dict]:
+    def last(self) -> tuple[dict, float, bool, bool, dict]:
         """Wrapper around PettingZoo env last method."""
         return self.env.last()
 
@@ -375,8 +374,8 @@ class Opponent:
 
     def random_opponent(
         self,
-        action_mask: List[int],
-        last_opp_move: Optional[int] = None,
+        action_mask: list[int],
+        last_opp_move: int | None = None,
         block_vert_coef: float = 1,
     ) -> int:
         """Takes move for random opponent.
@@ -447,7 +446,7 @@ class Opponent:
 
     def outcome(
         self, action: int, player: int, return_length: bool = False
-    ) -> Tuple[bool, Optional[float], bool, Optional[np.ndarray]]:
+    ) -> tuple[bool, float | None, bool, np.ndarray | None]:
         """Takes move for weak rule-based opponent.
 
         :param action: Action to take in environment
@@ -606,7 +605,7 @@ if __name__ == "__main__":
         )
 
         # Create a population ready for evolutionary hyper-parameter optimisation
-        pop: List[DQN] = create_population(
+        pop: list[DQN] = create_population(
             INIT_HP["ALGO"],
             observation_space,
             action_spaces[0],
@@ -690,7 +689,7 @@ if __name__ == "__main__":
                 print("Warming up agents ...")
                 agent = pop[0]
                 # Train on randomly collected samples
-                for epoch in trange(LESSON["agent_warm_up"]):
+                for _epoch in trange(LESSON["agent_warm_up"]):
                     experiences = memory.sample(agent.batch_size)
                     agent.learn(experiences)
 
@@ -707,7 +706,7 @@ if __name__ == "__main__":
             turns_per_episode = []
             train_actions_hist = [0] * action_spaces[0].n
             for agent in pop:  # Loop through population
-                for episode in range(episodes_per_epoch):
+                for _episode in range(episodes_per_epoch):
                     env.reset()  # Reset environment at start of episode
                     observation, cumulative_reward, done, truncation, _ = env.last()
 
@@ -731,7 +730,8 @@ if __name__ == "__main__":
 
                     score = 0
                     turns = 0  # Number of turns counter
-                    for idx_step in range(max_steps):
+                    # idx_step is used after the loop (total_steps), not unused.
+                    for idx_step in range(max_steps):  # noqa: B007
                         # Player 0"s turn
                         p0_action_mask = observation["action_mask"]
                         p0_state, p0_state_flipped = transform_and_flip(
@@ -952,7 +952,7 @@ if __name__ == "__main__":
                 for agent in pop:
                     with torch.no_grad():
                         rewards = []
-                        for i in range(evo_loop):
+                        for _i in range(evo_loop):
                             env.reset()  # Reset environment at start of episode
                             (
                                 observation,
@@ -975,7 +975,7 @@ if __name__ == "__main__":
 
                             score = 0
 
-                            for idx_step in range(max_steps):
+                            for _idx_step in range(max_steps):
                                 action_mask = observation["action_mask"]
                                 if player < 0:
                                     if opponent_first:

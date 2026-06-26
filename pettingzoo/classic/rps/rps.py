@@ -220,13 +220,12 @@ class raw_env(AECEnv, EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         def offset(i, size, offset=0):
             if i == 0:
                 return -(size) - offset
-            else:
-                return offset
+            return offset
 
         screen_height = self.screen_height
         screen_width = int(screen_height * 5 / 14)
@@ -340,7 +339,7 @@ class raw_env(AECEnv, EzPickle):
         )
 
         if len(self.agents) > 1:
-            for i in range(0, 2):
+            for i in range(2):
                 # Text for each agent
                 text = font.render("Agent " + str(i + 1), True, black)
                 textRect = text.get_rect()
@@ -422,14 +421,14 @@ class raw_env(AECEnv, EzPickle):
         self.agents = self.possible_agents[:]
         self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.next()
-        self.rewards = {agent: 0 for agent in self.agents}
-        self._cumulative_rewards = {agent: 0 for agent in self.agents}
-        self.terminations = {agent: False for agent in self.agents}
-        self.truncations = {agent: False for agent in self.agents}
+        self.rewards = dict.fromkeys(self.agents, 0)
+        self._cumulative_rewards = dict.fromkeys(self.agents, 0)
+        self.terminations = dict.fromkeys(self.agents, False)
+        self.truncations = dict.fromkeys(self.agents, False)
         self.infos = {agent: {} for agent in self.agents}
 
-        self.state = {agent: self._none for agent in self.agents}
-        self.observations = {agent: self._none for agent in self.agents}
+        self.state = dict.fromkeys(self.agents, self._none)
+        self.observations = dict.fromkeys(self.agents, self._none)
 
         self.history = [-1] * (2 * 5)
 
@@ -482,9 +481,9 @@ class raw_env(AECEnv, EzPickle):
 
             self.num_moves += 1
 
-            self.truncations = {
-                agent: self.num_moves >= self.max_cycles for agent in self.agents
-            }
+            self.truncations = dict.fromkeys(
+                self.agents, self.num_moves >= self.max_cycles
+            )
             for i in self.agents:
                 self.observations[i] = self.state[
                     self.agents[1 - self.agent_name_mapping[i]]

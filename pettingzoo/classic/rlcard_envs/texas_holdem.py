@@ -138,7 +138,7 @@ class raw_env(RLCardBase, EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         screen_height = self.screen_height
         screen_width = int(
@@ -280,7 +280,7 @@ class raw_env(RLCardBase, EzPickle):
                 )
 
                 # Blit poker chip img
-                for j in range(0, int(chips[key]["number"])):
+                for j in range(int(chips[key]["number"])):
                     if i % 2 == 0:
                         self.screen.blit(
                             chip_img,

@@ -567,7 +567,7 @@ class raw_env(AECEnv, EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         if self.render_mode == "human" and not self.renderOn:
             # sets self.renderOn to true and initializes display
@@ -640,7 +640,7 @@ class raw_env(AECEnv, EzPickle):
             if not self.terminate:
                 reward += self.time_penalty
 
-            self.rewards = {agent: reward for agent in self.agents}
+            self.rewards = dict.fromkeys(self.agents, reward)
             self.ball_prev_pos = ball_curr_pos
             self.frames += 1
         else:

@@ -30,8 +30,7 @@ def get_docs_from_py(file_path):
         match = regex.search(text)
         if match:
             return match.group(1)
-        else:
-            return ""
+        return ""
 
 
 if __name__ == "__main__":
@@ -95,7 +94,7 @@ if __name__ == "__main__":
             # Full usage scripts for each environment page
             full_env_names = [
                 full_name
-                for full_name in all_environments.keys()
+                for full_name in all_environments
                 if env_name == full_name.split("/")[1].rsplit("_", 1)[0]
             ]
 
@@ -145,7 +144,7 @@ if __name__ == "__main__":
    :members:
 ```
 """
-            elif env_type in ["atari"]:
+            elif env_type == "atari":
                 docs_text += f"""## API
 ```{{eval-rst}}
 .. currentmodule:: pettingzoo.{env_type}.{env_name}.{env_name}

@@ -138,10 +138,10 @@ def test_observation(observation, observation_0, env_name=None):
     if not isinstance(observation, np.ndarray):
         if env_name is not None and env_name not in env_obs_dicts:
             warnings.warn("Observation is not a NumPy array")
-        if isinstance(observation, dict) and "observation" in observation.keys():
+        if isinstance(observation, dict) and "observation" in observation:
             observation = observation["observation"]
             test_observation(observation, observation_0, env_name)
-        if isinstance(observation, dict) and "action_mask" in observation.keys():
+        if isinstance(observation, dict) and "action_mask" in observation:
             test_action_mask(observation["action_mask"], env_name)
         return
     if np.isinf(observation).any():
@@ -153,7 +153,7 @@ def test_observation(observation, observation_0, env_name=None):
     if len(observation.shape) > 3:
         warnings.warn("Observation has more than 3 dimensions")
     if observation.shape == (0,):
-        assert False, "Observation can not be an empty array"
+        raise AssertionError("Observation can not be an empty array")
     if observation.shape == (1,):
         warnings.warn("Observation is a single number")
     if not isinstance(observation, observation_0.__class__):
@@ -200,7 +200,7 @@ def test_action_mask(action_mask, env_name=None):
     if len(action_mask.shape) > 1:
         warnings.warn("Action mask has more than 1 dimension")
     if action_mask.shape == (0,):
-        assert False, "Action mask can not be an empty array"
+        raise AssertionError("Action mask can not be an empty array")
     if action_mask.shape == (1,):
         warnings.warn("Action mask is a single number")
     if not np.can_cast(action_mask.dtype, np.dtype("float64")):
@@ -293,15 +293,15 @@ def test_observation_action_spaces(env, agent_0):
             if np.any(
                 np.greater(env.action_space(agent).low, env.action_space(agent).high)
             ):
-                assert False, (
+                raise AssertionError(
                     "Agent's minimum action space value is greater than it's maximum"
                 )
             if env.action_space(agent).low.shape != env.action_space(agent).shape:
-                assert False, (
+                raise AssertionError(
                     "Agent's action_space.low and action_space have different shapes"
                 )
             if env.action_space(agent).high.shape != env.action_space(agent).shape:
-                assert False, (
+                raise AssertionError(
                     "Agent's action_space.high and action_space have different shapes"
                 )
 
@@ -333,21 +333,21 @@ def test_observation_action_spaces(env, agent_0):
                     env.observation_space(agent).low, env.observation_space(agent).high
                 )
             ):
-                assert False, (
+                raise AssertionError(
                     "Agent's minimum observation space value is greater than it's maximum"
                 )
             if (
                 env.observation_space(agent).low.shape
                 != env.observation_space(agent).shape
             ):
-                assert False, (
+                raise AssertionError(
                     "Agent's observation_space.low and observation_space have different shapes"
                 )
             if (
                 env.observation_space(agent).high.shape
                 != env.observation_space(agent).shape
             ):
-                assert False, (
+                raise AssertionError(
                     "Agent's observation_space.high and observation_space have different shapes"
                 )
 
@@ -360,14 +360,14 @@ def test_reward(reward):
     ):
         warnings.warn("Reward should be int, float, NumPy dtype or NumPy array")
     if isinstance(reward, np.ndarray):
-        if isinstance(reward, np.ndarray) and not reward.shape == (1,):
-            assert False, "Rewards can only be one number"
+        if isinstance(reward, np.ndarray) and reward.shape != (1,):
+            raise AssertionError("Rewards can only be one number")
         if np.isinf(reward):
-            assert False, "Reward must be finite"
+            raise AssertionError("Reward must be finite")
         if np.isnan(reward):
-            assert False, "Rewards cannot be NaN"
+            raise AssertionError("Rewards cannot be NaN")
         if not np.can_cast(reward.dtype, np.dtype("float64")):
-            assert False, "Reward NumPy array is not a numeric dtype"
+            raise AssertionError("Reward NumPy array is not a numeric dtype")
 
 
 def test_rewards_terminations_truncations(env, agent_0):
@@ -403,7 +403,7 @@ def _test_observation_space_compatibility(
           an assert fails. The initial call should have an empty list.
     """
     if isinstance(expected, gymnasium.spaces.Dict):
-        for key in expected.keys():
+        for key in expected:
             if not recursed_keys and key != "observation":
                 # For the top level, we only care about the 'observation' key.
                 continue

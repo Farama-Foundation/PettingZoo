@@ -1,5 +1,3 @@
-from typing import Type
-
 import pytest
 
 from pettingzoo.test import seed_test
@@ -17,7 +15,7 @@ from pettingzoo.utils.env import AECEnv
         generated_agents_env_action_mask_obs_v0.env,
     ],
 )
-def test_action_mask(env_constructor: Type[AECEnv]):
+def test_action_mask(env_constructor: type[AECEnv]):
     """Test that environments function deterministically in cases where action mask is in observation, or in info."""
     seed_test(env_constructor)
 

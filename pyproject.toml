@@ -81,21 +81,84 @@ include = ["pettingzoo", "pettingzoo.*"]
 # Linters and Test tools #######################################################
 
 [tool.ruff]
-# Match black's default line length (88) so `ruff format` reproduces the
-# historical black formatting. Linting uses only the default rule set
-# (pyflakes `F` and a subset of pycodestyle `E`); E501 is not enabled.
+# Match the historical black line length (88) so `ruff format` reproduces it.
 line-length = 88
 target-version = "py310"
 
 [tool.ruff.lint]
-# Default ruff rules (E4, E7, E9, F) plus `I` for import sorting (replaces
-# isort). Mirror the historical flake8 ignore.
-extend-select = ["I"]
-extend-ignore = ["E203"]
+# Strictness ratchet. On top of the default set (pyflakes `F`, pycodestyle
+# `E4/E7/E9`) plus `I` (import sorting; replaces the standalone isort), we
+# enable additional rules using two strategies:
+#   - Families that are mostly useful (B, C4, FURB, PERF, PIE, RET, RSE, RUF,
+#     UP) are selected whole; the few rules whose autofix would change runtime
+#     behavior, regress performance, or only rewrite style are deferred via
+#     `ignore` below (each with a reason) so the family still catches *new*
+#     violations of its useful rules.
+#   - Families that are mostly stylistic (SIM) are selected rule-by-rule, so a
+#     new rule added to such a family upstream is not auto-activated as a CI
+#     error.
+extend-select = [
+    "I",    # isort (import sorting; replaces the standalone isort hook)
+    "B",    # flake8-bugbear (likely bugs)
+    "C4",   # flake8-comprehensions
+    "FURB", # refurb (modernization)
+    "PERF", # perflint (performance)
+    "PIE",  # flake8-pie (misc lints)
+    "RET",  # flake8-return
+    "RSE",  # flake8-raise
+    "RUF",  # ruff-specific rules
+    "UP",   # pyupgrade
+    # flake8-simplify (`SIM`): selected rule-by-rule rather than as a family.
+    # Most of its rules are stylistic (ternaries, collapsed ifs) or perf-negative
+    # (SIM105), so we opt in only to the few we want instead of selecting the
+    # whole family and ignoring the majority.
+    "SIM118", # `key in dict` instead of `key in dict.keys()`
+    "SIM201", # `a != b` instead of `not a == b`
+    "SIM300", # yoda condition (`var == literal`)
+    "SIM401", # `dict.get(k, default)` instead of an if/else block
+    "SIM905", # split a static string into a list literal
+]
+extend-ignore = [
+    "E203",   # whitespace before ':' (conflicts with the formatter)
+    # -- pyupgrade --
+    "UP031",  # printf-string -> format: no autofix, fiddly (some nested in f-strings), low value
+    # -- flake8-bugbear -- (deferred: need per-site judgement, not mechanical)
+    "B006",   # mutable default arg: fixing changes signature/behavior; review case-by-case
+    "B008",   # function call in default arg: often intentional framework patterns
+    "B019",   # cached method: PettingZoo intentionally caches observation/action spaces
+    "B028",   # warnings.warn without stacklevel: noisy, alters reported location, low value
+    "B905",   # zip() without strict=: no autofix; strict=True/False is a per-call judgement
+    # -- flake8-return -- (stylistic; can hurt readability/debuggability)
+    "RET503", # implicit return None: manual, stylistic
+    "RET504", # unnecessary assign before return: intermediate vars aid debugging
+    # -- perflint --
+    "PERF203", # try/except in loop: no clean mechanical fix
+    "PERF401", # build list via comprehension/extend: risky in env state-vector builders
+    # -- ruff-specific -- (deferred: noisy / behavior-or-type-sensitive / own pass)
+    "RUF002", # ambiguous unicode in docstring: usually intentional
+    "RUF005", # collection concat: no autofix, manual
+    "RUF012", # mutable ClassVar default: large annotation-only sweep, defer
+    "RUF015", # iterable allocation for first element: empty-handling differs
+    "RUF046", # int(round(x)): on numpy scalars this changes result type
+    "RUF059", # unused unpacked variable: noisy, no autofix
+]
+
+# `# noqa` codes owned by the separate pydocstyle pre-commit hook, not by ruff.
+# Every env module carries a top-of-file `# noqa: D212, D415` (a comment before
+# the module docstring suppresses those pydocstyle checks). Declaring the codes
+# `external` stops RUF100 from treating those directives as unused (which would
+# strip them and break the pydocstyle hook), while still validating every other
+# noqa in the tree.
+external = ["D212", "D415"]
 
 [tool.ruff.lint.per-file-ignores]
 "*/__init__.py" = ["F401"]  # allow re-exports without explicit __all__
 "test/all_parameter_combs_test.py" = ["F405"]
+# Canonical env-authoring templates embedded in the docs and copied verbatim by
+# users. Keep the explicit `{agent: x for agent in self.agents}` comprehension
+# (clearer per-agent intent, and safe to copy with a mutable value) rather than
+# the `dict.fromkeys` form C420 would prefer.
+"docs/code_examples/*.py" = ["C420"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["pettingzoo"]

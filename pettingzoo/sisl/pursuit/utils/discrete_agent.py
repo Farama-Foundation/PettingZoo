@@ -89,12 +89,11 @@ class DiscreteAgent(Agent):
         # if bumped into building, then stay
         if self.inbuilding(x, y):
             return cpos
-        else:
-            lpos[0] = cpos[0]
-            lpos[1] = cpos[1]
-            cpos[0] = x
-            cpos[1] = y
-            return cpos
+        lpos[0] = cpos[0]
+        lpos[1] = cpos[1]
+        cpos[0] = x
+        cpos[1] = y
+        return cpos
 
     def get_state(self):
         return self.current_pos

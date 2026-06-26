@@ -107,7 +107,7 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             return (
                 str(self.env)
                 if self.__class__ is OrderEnforcingWrapper
-                else f"{type(self).__name__}<{str(self.env)}>"
+                else f"{type(self).__name__}<{self.env!s}>"
             )
         return repr(self)
 

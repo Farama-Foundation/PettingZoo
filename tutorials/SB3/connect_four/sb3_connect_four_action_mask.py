@@ -79,7 +79,7 @@ def train_action_mask(env_fn, steps=10_000, seed=0, **env_kwargs):
     """Train a single model to play as each agent in a zero-sum game environment using invalid action masking."""
     env = env_fn.env(**env_kwargs)
 
-    print(f"Starting training on {str(env.metadata['name'])}.")
+    print(f"Starting training on {env.metadata['name']!s}.")
 
     # Custom wrapper to convert PettingZoo envs to work with SB3 action masking
     env = SB3ActionMaskWrapper(env)
@@ -99,7 +99,7 @@ def train_action_mask(env_fn, steps=10_000, seed=0, **env_kwargs):
 
     print("Model has been saved.")
 
-    print(f"Finished training on {str(env.unwrapped.metadata['name'])}.\n")
+    print(f"Finished training on {env.unwrapped.metadata['name']!s}.\n")
 
     env.close()
 
@@ -122,8 +122,8 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
 
     model = MaskablePPO.load(latest_policy)
 
-    scores = {agent: 0 for agent in env.possible_agents}
-    total_rewards = {agent: 0 for agent in env.possible_agents}
+    scores = dict.fromkeys(env.possible_agents, 0)
+    total_rewards = dict.fromkeys(env.possible_agents, 0)
     round_rewards = []
 
     for i in range(num_games):
@@ -152,16 +152,15 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
                 # List of rewards by round, for reference
                 round_rewards.append(env.rewards)
                 break
+            if agent == env.possible_agents[0]:
+                act = env.action_space(agent).sample(action_mask)
             else:
-                if agent == env.possible_agents[0]:
-                    act = env.action_space(agent).sample(action_mask)
-                else:
-                    # Note: PettingZoo expects integer actions # TODO: change chess to cast actions to type int?
-                    act = int(
-                        model.predict(
-                            observation, action_masks=action_mask, deterministic=True
-                        )[0]
-                    )
+                # Note: PettingZoo expects integer actions # TODO: change chess to cast actions to type int?
+                act = int(
+                    model.predict(
+                        observation, action_masks=action_mask, deterministic=True
+                    )[0]
+                )
             env.step(act)
     env.close()
 

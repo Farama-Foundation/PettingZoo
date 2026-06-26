@@ -128,15 +128,14 @@ def is_koish(board, c):
     neighbors = {board[n] for n in NEIGHBORS[c]}
     if len(neighbors) == 1 and EMPTY not in neighbors:
         return list(neighbors)[0]
-    else:
-        return None
+    return None
 
 
 def is_eyeish(board, c):
     """Check if c is an eye, for the purpose of restricting MC rollouts."""
     # pass is fine.
     if c is None:
-        return
+        return None
     color = is_koish(board, c)
     if color is None:
         return None
@@ -149,8 +148,7 @@ def is_eyeish(board, c):
             diagonal_faults += 1
     if diagonal_faults > 1:
         return None
-    else:
-        return color
+    return color
 
 
 class Group(namedtuple("Group", ["id", "stones", "liberties", "color"])):
@@ -324,7 +322,7 @@ class Position:
         caps=(0, 0),
         lib_tracker=None,
         ko=None,
-        recent=tuple(),
+        recent=(),
         board_deltas=None,
         to_play=BLACK,
     ):
@@ -597,16 +595,14 @@ class Position:
         score = self.score()
         if score > 0:
             return 1
-        elif score < 0:
+        if score < 0:
             return -1
-        else:
-            return 0
+        return 0
 
     def result_string(self):
         score = self.score()
         if score > 0:
             return "B+" + "%.1f" % score
-        elif score < 0:
+        if score < 0:
             return "W+" + "%.1f" % abs(score)
-        else:
-            return "DRAW"
+        return "DRAW"

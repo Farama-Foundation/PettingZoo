@@ -38,8 +38,7 @@ def remove_front_matter(string):
     if match:
         g = match.group(0)
         return string[len(g) :]
-    else:
-        return string
+    return string
 
 
 if __name__ == "__main__":
