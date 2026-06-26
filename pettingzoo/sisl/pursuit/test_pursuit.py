@@ -1,11 +1,11 @@
 import numpy as np
 
-from pettingzoo.sisl import pursuit_v4
+from pettingzoo.sisl import pursuit_v5
 
 
 def test_state_matches_model_state():
     # use a non-square map so axis ordering mistakes are caught
-    env = pursuit_v4.env(x_size=8, y_size=19, max_cycles=40)
+    env = pursuit_v5.env(x_size=8, y_size=19, max_cycles=40)
     env.reset(seed=42)
     base_env = env.unwrapped.env
     for agent in env.agent_iter(env.num_agents * 4):
@@ -22,7 +22,7 @@ def test_state_matches_model_state():
 
 
 def test_observations_are_crops_of_state():
-    env = pursuit_v4.env(max_cycles=40)
+    env = pursuit_v5.env(max_cycles=40)
     env.reset(seed=0)
     base_env = env.unwrapped.env
     for agent in env.agent_iter(env.num_agents * 4):
@@ -40,7 +40,7 @@ def test_observations_are_crops_of_state():
 
 
 def test_parallel_state():
-    par_env = pursuit_v4.parallel_env(max_cycles=40)
+    par_env = pursuit_v5.parallel_env(max_cycles=40)
     par_env.reset(seed=42)
     state = par_env.state()
     assert par_env.state_space.contains(state)

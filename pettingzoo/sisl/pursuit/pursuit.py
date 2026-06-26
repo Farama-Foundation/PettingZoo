@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.sisl import pursuit_v4`               |
+| Import               | `from pettingzoo.sisl import pursuit_v5`               |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -40,7 +40,7 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 ### Arguments
 
 ``` python
-pursuit_v4.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,
+pursuit_v5.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,
 n_pursuers=8,obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,
 catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 ```
@@ -74,6 +74,7 @@ catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 
 ### Version History
 
+* v5: Add state() and state space support (1.27.0)
 * v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)
 * v3: Observation space bug fixed (1.5.0)
 * v2: Misc bug fixes (1.4.0)
@@ -108,7 +109,7 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "pursuit_v4",
+        "name": "pursuit_v5",
         "is_parallelizable": True,
         "render_fps": 5,
         "has_manual_policy": True,
