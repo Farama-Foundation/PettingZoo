@@ -33,8 +33,13 @@ jobs:
                   cd tutorials/${{ matrix.tutorial }}
                   grep -ivE "pettingzoo" requirements.txt > _requirements.txt
                   pip install -r _requirements.txt
-                  pip install -e $root_dir[all]
-                  pip install -e $root_dir[testing]
+                  if [ "${{ matrix.tutorial }}" = "Tianshou" ]; then
+                    pip install -c _requirements.txt -e $root_dir[all]
+                    pip install -c _requirements.txt -e $root_dir[testing]
+                  else
+                    pip install -e $root_dir[all]
+                    pip install -e $root_dir[testing]
+                  fi
                   AutoROM -v
                   for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
 
