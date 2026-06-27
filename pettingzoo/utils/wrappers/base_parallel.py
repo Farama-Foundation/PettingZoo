@@ -56,9 +56,9 @@ class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         return self.env.state()
 
     @override
-    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[ObsType]:
         return self.env.observation_space(agent)
 
     @override
-    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[ActionType]:
         return self.env.action_space(agent)
