@@ -55,7 +55,7 @@ class EnvLogger:
 
     @staticmethod
     def warn_action_out_of_bound(
-        action: Any, action_space: gymnasium.spaces.Space, backup_policy: str
+        action: Any, action_space: gymnasium.spaces.Space[Any], backup_policy: str
     ) -> None:
         """Warns: ``[WARNING]: Received an action {action} that was outside action space {action_space}.``."""
         EnvLogger._generic_warning(
