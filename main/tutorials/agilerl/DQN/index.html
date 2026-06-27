@@ -1708,7 +1708,7 @@ PyYAML&gt;=5.4.1
     <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="s2">&quot;arial.ttf&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
     <span class="n">drawer</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
         <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-        <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">episode_num</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">     Frame: </span><span class="si">{</span><span class="n">frame_no</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">episode_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">     Frame: </span><span class="si">{</span><span class="n">frame_no</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">fill</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span>
         <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
     <span class="p">)</span>
@@ -1816,9 +1816,7 @@ PyYAML&gt;=5.4.1
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">action</span> <span class="o">=</span> <span class="n">dqn</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                             <span class="n">state</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span><span class="o">=</span><span class="n">action_mask</span>
-                        <span class="p">)[</span>
-                            <span class="mi">0</span>
-                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                 <span class="k">if</span> <span class="n">player</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
                     <span class="n">state</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span>
@@ -1835,9 +1833,7 @@ PyYAML&gt;=5.4.1
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">action</span> <span class="o">=</span> <span class="n">dqn</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                             <span class="n">state</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span><span class="o">=</span><span class="n">action_mask</span>
-                        <span class="p">)[</span>
-                            <span class="mi">0</span>
-                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                 <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>
                 <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
                 <span class="c1"># Save the frame for this step and append to frames list</span>
@@ -1861,7 +1857,7 @@ PyYAML&gt;=5.4.1
 
                 <span class="n">player</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
 
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">ep</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">ep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode length: </span><span class="si">{</span><span class="n">idx_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -2368,9 +2364,7 @@ PyYAML&gt;=5.4.1
 
         <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
             <span class="n">directions</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span>
-        <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
-        <span class="p">)</span>  <span class="c1"># |4x2x3x2|</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># |4x2x3x2|</span>
         <span class="n">valid_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
                 <span class="n">positions</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">positions</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_rows</span>
@@ -2647,9 +2641,7 @@ PyYAML&gt;=5.4.1
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">p0_action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                 <span class="n">p0_state</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">p0_action_mask</span>
-                            <span class="p">)[</span>
-                                <span class="mi">0</span>
-                            <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                             <span class="n">train_actions_hist</span><span class="p">[</span><span class="n">p0_action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                         <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">p0_action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>
@@ -2733,9 +2725,7 @@ PyYAML&gt;=5.4.1
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">p1_action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                     <span class="n">p1_state</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">p1_action_mask</span>
-                                <span class="p">)[</span>
-                                    <span class="mi">0</span>
-                                <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                                 <span class="n">train_actions_hist</span><span class="p">[</span><span class="n">p1_action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                             <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">p1_action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>
@@ -2889,9 +2879,7 @@ PyYAML&gt;=5.4.1
                                         <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                                         <span class="n">action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                             <span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span>
-                                        <span class="p">)[</span>
-                                            <span class="mi">0</span>
-                                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                                         <span class="n">eval_actions_hist</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                                 <span class="k">if</span> <span class="n">player</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                                     <span class="k">if</span> <span class="ow">not</span> <span class="n">opponent_first</span><span class="p">:</span>
@@ -2907,9 +2895,7 @@ PyYAML&gt;=5.4.1
                                         <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                                         <span class="n">action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                             <span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span>
-                                        <span class="p">)[</span>
-                                            <span class="mi">0</span>
-                                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                                         <span class="n">eval_actions_hist</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                                 <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>

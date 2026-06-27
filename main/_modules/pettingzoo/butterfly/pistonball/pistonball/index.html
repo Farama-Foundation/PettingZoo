@@ -555,9 +555,9 @@
         <span class="n">y_low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span>
         <span class="n">obs_height</span> <span class="o">=</span> <span class="n">y_high</span> <span class="o">-</span> <span class="n">y_low</span>
 
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">piston_width</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span>
-        <span class="p">),</span> <span class="s2">&quot;Wall width and piston width must be equal for observation calculation&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">piston_width</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wall_width</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;Wall width and piston width must be equal for observation calculation&quot;</span>
+        <span class="p">)</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_pistons</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;n_pistons must be greater than 1&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;piston_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_pistons</span><span class="p">)]</span>

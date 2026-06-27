@@ -423,7 +423,7 @@
 <div class="viewcode-block" id="aec_to_parallel">
 <a class="viewcode-back" href="../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.aec_to_parallel">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">aec_to_parallel</span><span class="p">(</span>
-    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]</span>
+    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts an AEC environment to a Parallel environment.</span>
 
@@ -443,7 +443,7 @@
 <div class="viewcode-block" id="parallel_to_aec">
 <a class="viewcode-back" href="../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.parallel_to_aec">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parallel_to_aec</span><span class="p">(</span>
-    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]</span>
+    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a Parallel environment to an AEC environment.</span>
 
@@ -460,7 +460,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">turn_based_aec_to_parallel</span><span class="p">(</span>
-    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]</span>
+    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]:</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aec_env</span><span class="p">,</span> <span class="n">parallel_to_aec_wrapper</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;ParallelEnv[AgentID, ObsType, Optional[ActionType]]&quot;</span><span class="p">,</span> <span class="n">aec_env</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
@@ -470,7 +470,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">to_parallel</span><span class="p">(</span>
-    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]</span>
+    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
         <span class="s2">&quot;The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead.&quot;</span>
@@ -479,7 +479,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">from_parallel</span><span class="p">(</span>
-    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]</span>
+    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]:</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
         <span class="s2">&quot;The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead.&quot;</span>
