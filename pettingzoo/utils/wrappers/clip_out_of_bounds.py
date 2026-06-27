@@ -30,6 +30,9 @@ class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
     @override
     def step(self, action: np.ndarray | None) -> None:
         space = self.action_space(self.agent_selection)
+        assert isinstance(space, Box), (
+            "should only use ClipOutOfBoundsWrapper for Box spaces"
+        )
         if not (
             action is None
             and (
