@@ -387,7 +387,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import             | `from pettingzoo.classic import gin_rummy_v4` |</span>
+<span class="sd">| Import             | `from pettingzoo.classic import gin_rummy_v5` |</span>
 <span class="sd">|--------------------|-----------------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                                      |</span>
 <span class="sd">| Parallel API       | Yes                                           |</span>
@@ -409,7 +409,7 @@
 <span class="sd">Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.</span>
 
 <span class="sd">``` python</span>
-<span class="sd">gin_rummy_v4.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)</span>
+<span class="sd">gin_rummy_v5.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)</span>
 <span class="sd">```</span>
 
 <span class="sd">`knock_reward`:  reward received by a player who knocks</span>
@@ -479,6 +479,7 @@
 
 <span class="sd">### Version History</span>
 
+<span class="sd">* v5: Fixed `knock_reward` / `gin_reward` reverting to RLCard defaults on a seeded reset (1.27.0)</span>
 <span class="sd">* v4: Upgrade to RLCard 1.0.3 (1.11.0)</span>
 <span class="sd">* v3: Fixed bug in arbitrary calls to observe() (1.8.0)</span>
 <span class="sd">* v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)</span>
@@ -486,6 +487,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -526,7 +528,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">RLCardBase</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;gin_rummy_v4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;gin_rummy_v5&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
@@ -558,6 +560,15 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># RLCardBase._seed() rebuilds self.env via rlcard.make(), which</span>
+        <span class="c1"># discards the custom payoff scorer installed in __init__. Without</span>
+        <span class="c1"># re-applying it here, the configured knock_reward / gin_reward</span>
+        <span class="c1"># silently revert to RLCard&#39;s defaults (0.2 / 1.0) on every</span>
+        <span class="c1"># reset(seed=...). See issue #1312.</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">judge</span><span class="o">.</span><span class="n">scorer</span><span class="o">.</span><span class="n">get_payoff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_payoff</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_payoff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="n">GinRummyPlayer</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">going_out_action</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">round</span><span class="o">.</span><span class="n">going_out_action</span>

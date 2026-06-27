@@ -387,7 +387,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;SISL environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import               | `from pettingzoo.sisl import pursuit_v4`               |</span>
+<span class="sd">| Import               | `from pettingzoo.sisl import pursuit_v5`               |</span>
 <span class="sd">|----------------------|--------------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                               |</span>
 <span class="sd">| Parallel API         | Yes                                                    |</span>
@@ -398,6 +398,8 @@
 <span class="sd">| Action Values        | Discrete(5)                                            |</span>
 <span class="sd">| Observation Shape    | (7, 7, 3)                                              |</span>
 <span class="sd">| Observation Values   | [0, 30]                                                |</span>
+<span class="sd">| State Shape          | (16, 16, 3)                                            |</span>
+<span class="sd">| State Values         | (0, 30)                                                |</span>
 
 
 <span class="sd">By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 16 grid with an obstacle, shown in white, in the center. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader each of the surrounding agents receives a reward of 5</span>
@@ -405,6 +407,8 @@
 <span class="sd">the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in section 4.1 of the PettingZoo paper applied.</span>
 
 <span class="sd">Observation shape takes the full form of `(obs_range, obs_range, 3)` where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.</span>
+
+<span class="sd">The state takes the full form of `(y_size, x_size, 3)`, with the same three channels as the observations, but covering the whole map instead of the `obs_range` box around each agent.</span>
 
 <span class="sd">### Manual Control</span>
 
@@ -414,7 +418,7 @@
 <span class="sd">### Arguments</span>
 
 <span class="sd">``` python</span>
-<span class="sd">pursuit_v4.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,</span>
+<span class="sd">pursuit_v5.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,</span>
 <span class="sd">n_pursuers=8,obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,</span>
 <span class="sd">catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)</span>
 <span class="sd">```</span>
@@ -448,6 +452,7 @@
 
 <span class="sd">### Version History</span>
 
+<span class="sd">* v5: Add state() and state space support (1.27.0)</span>
 <span class="sd">* v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)</span>
 <span class="sd">* v3: Observation space bug fixed (1.5.0)</span>
 <span class="sd">* v2: Misc bug fixes (1.4.0)</span>
@@ -486,7 +491,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;pursuit_v4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;pursuit_v5&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
         <span class="s2">&quot;has_manual_policy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -504,6 +509,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_act_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">act_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state_space</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -537,6 +543,12 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="raw_env.state">
+<a class="viewcode-back" href="../../../../../environments/sisl/pursuit/#pettingzoo.sisl.pursuit.pursuit.raw_env.state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="raw_env.step">

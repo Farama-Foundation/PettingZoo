@@ -389,7 +389,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.sisl</span> <span class="pre">import</span> <span class="pre">pursuit_v4</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.sisl</span> <span class="pre">import</span> <span class="pre">pursuit_v5</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -420,6 +420,12 @@
 <tr class="row-even"><td><p>Observation Values</p></td>
 <td><p>[0, 30]</p></td>
 </tr>
+<tr class="row-odd"><td><p>State Shape</p></td>
+<td><p>(16, 16, 3)</p></td>
+</tr>
+<tr class="row-even"><td><p>State Values</p></td>
+<td><p>(0, 30)</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -427,13 +433,14 @@
 and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding
 the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in section 4.1 of the PettingZoo paper applied.</p>
 <p>Observation shape takes the full form of <code class="docutils literal notranslate"><span class="pre">(obs_range,</span> <span class="pre">obs_range,</span> <span class="pre">3)</span></code> where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.</p>
+<p>The state takes the full form of <code class="docutils literal notranslate"><span class="pre">(y_size,</span> <span class="pre">x_size,</span> <span class="pre">3)</span></code>, with the same three channels as the observations, but covering the whole map instead of the <code class="docutils literal notranslate"><span class="pre">obs_range</span></code> box around each agent.</p>
 <section id="manual-control">
 <h2>Manual Control<a class="headerlink" href="#manual-control" title="Link to this heading">¶</a></h2>
 <p>Select different pursuers with ‘J’ and ‘K’. The selected pursuer can be moved with the arrow keys.</p>
 </section>
 <section id="arguments">
 <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pursuit_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_evaders</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pursuit_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_evaders</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
 <span class="n">n_pursuers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">obs_range</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n_catch</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freeze_evaders</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tag_reward</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
 <span class="n">catch_reward</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">urgency_reward</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">surround</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint_window</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
@@ -455,6 +462,7 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
+<li><p>v5: Add state() and state space support (1.27.0)</p></li>
 <li><p>v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)</p></li>
 <li><p>v3: Observation space bug fixed (1.5.0)</p></li>
 <li><p>v2: Misc bug fixes (1.4.0)</p></li>
@@ -466,9 +474,9 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.sisl</span><span class="w"> </span><span class="kn">import</span> <span class="n">pursuit_v4</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.sisl</span><span class="w"> </span><span class="kn">import</span> <span class="n">pursuit_v5</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -488,9 +496,9 @@ the red pursuer agents. The environment terminates when every evader has been ca
 </section>
 <section id="parallel">
 <h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.sisl</span><span class="w"> </span><span class="kn">import</span> <span class="n">pursuit_v4</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.sisl</span><span class="w"> </span><span class="kn">import</span> <span class="n">pursuit_v5</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v4</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v5</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
@@ -559,6 +567,13 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 <dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.reset" title="Link to this definition">¶</a></dt>
 <dd><p>Resets the environment to a starting state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.sisl.pursuit.pursuit.raw_env.state">
+<span class="sig-name descname"><span class="pre">state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/sisl/pursuit/pursuit/#raw_env.state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.state" title="Link to this definition">¶</a></dt>
+<dd><p>State returns a global view of the environment.</p>
+<p>It is appropriate for centralized training decentralized execution methods like QMIX</p>
 </dd></dl>
 
 <dl class="py method">
@@ -648,6 +663,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 <li><a class="reference internal" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.observe"><code class="docutils literal notranslate"><span class="pre">raw_env.observe()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.render"><code class="docutils literal notranslate"><span class="pre">raw_env.render()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.reset"><code class="docutils literal notranslate"><span class="pre">raw_env.reset()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.state"><code class="docutils literal notranslate"><span class="pre">raw_env.state()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.sisl.pursuit.pursuit.raw_env.step"><code class="docutils literal notranslate"><span class="pre">raw_env.step()</span></code></a></li>
 </ul>
 </li>

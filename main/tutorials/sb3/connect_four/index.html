@@ -623,11 +623,13 @@ sb3-contrib&gt;=2.0.0
 <p>This code yields decent results on simpler environments like <a class="reference internal" href="../../../environments/classic/connect_four/"><span class="doc std std-doc">Connect Four</span></a>, while more difficult environments such as <a class="reference internal" href="../../../environments/classic/chess/"><span class="doc std std-doc">Chess</span></a> or <a class="reference internal" href="../../../environments/classic/hanabi/"><span class="doc std std-doc">Hanabi</span></a> will likely take much more training time and hyperparameter tuning.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Tests that action masking code works properly with all PettingZoo classic environments.&quot;&quot;&quot;</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_spec</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">chess_v6</span><span class="p">,</span>
-    <span class="n">gin_rummy_v4</span><span class="p">,</span>
+    <span class="n">gin_rummy_v5</span><span class="p">,</span>
     <span class="n">go_v5</span><span class="p">,</span>
     <span class="n">hanabi_v5</span><span class="p">,</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>
@@ -644,7 +646,7 @@ sb3-contrib&gt;=2.0.0
 
 <span class="c1"># These environments do better than random even after the minimum number of timesteps</span>
 <span class="n">EASY_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">gin_rummy_v4</span><span class="p">,</span>
+    <span class="n">gin_rummy_v5</span><span class="p">,</span>
     <span class="n">texas_holdem_no_limit_v6</span><span class="p">,</span>  <span class="c1"># texas holdem human rendered game ends instantly, but with random actions it works fine</span>
     <span class="n">tictactoe_v3</span><span class="p">,</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>
@@ -656,6 +658,9 @@ sb3-contrib&gt;=2.0.0
     <span class="n">texas_holdem_v4</span><span class="p">,</span>  <span class="c1"># this performs poorly with updates to SB3 wrapper</span>
     <span class="n">chess_v6</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
 <span class="p">]</span>
+
+<span class="k">if</span> <span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;pyspiel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Hanabi needs open_spiel (Python &gt;= 3.11)</span>
+    <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">MEDIUM_ENVS</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">hanabi_v5</span><span class="p">]</span>
 
 <span class="c1"># Most difficult environments to train agents for (and longest games</span>
 <span class="c1"># TODO: test board_size to see if smaller go board is more easily solvable</span>
@@ -712,9 +717,9 @@ sb3-contrib&gt;=2.0.0
         <span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
-    <span class="k">assert</span> <span class="p">(</span>
-        <span class="n">winrate</span> <span class="o">&lt;</span> <span class="mf">0.75</span>
-    <span class="p">),</span> <span class="s2">&quot;Policy should not perform better than 75% winrate&quot;</span>  <span class="c1"># 30-40% for leduc, 0% for hanabi</span>
+    <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&lt;</span> <span class="mf">0.75</span><span class="p">,</span> <span class="p">(</span>
+        <span class="s2">&quot;Policy should not perform better than 75% winrate&quot;</span>
+    <span class="p">)</span>  <span class="c1"># 30-40% for leduc, 0% for hanabi</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
     <span class="c1"># eval_action_mask(env_fn, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>

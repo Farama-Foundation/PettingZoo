@@ -488,6 +488,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -571,7 +572,7 @@
             <span class="c1"># expand to lizard, spock for first extra action pair</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="s2">&quot;SPOCK&quot;</span><span class="p">,</span> <span class="s2">&quot;LIZARD&quot;</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_actions</span> <span class="o">-</span> <span class="mi">5</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ACTION_&quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">action</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">6</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ACTION_</span><span class="si">{</span><span class="n">action</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">6</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># none is last possible action, to satisfy discrete action space</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_none</span> <span class="o">=</span> <span class="n">num_actions</span>

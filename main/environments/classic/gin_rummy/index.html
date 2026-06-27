@@ -389,7 +389,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">gin_rummy_v4</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">gin_rummy_v5</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -428,7 +428,7 @@
 <section id="arguments">
 <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
 <p>Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gin_rummy_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">knock_reward</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">gin_reward</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">opponents_hand_visible</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gin_rummy_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">knock_reward</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">gin_reward</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">opponents_hand_visible</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">knock_reward</span></code>:  reward received by a player who knocks</p>
@@ -568,6 +568,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
+<li><p>v5: Fixed <code class="docutils literal notranslate"><span class="pre">knock_reward</span></code> / <code class="docutils literal notranslate"><span class="pre">gin_reward</span></code> reverting to RLCard defaults on a seeded reset (1.27.0)</p></li>
 <li><p>v4: Upgrade to RLCard 1.0.3 (1.11.0)</p></li>
 <li><p>v3: Fixed bug in arbitrary calls to observe() (1.8.0)</p></li>
 <li><p>v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)</p></li>
@@ -579,9 +580,9 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">gin_rummy_v4</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">gin_rummy_v5</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">gin_rummy_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gin_rummy_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>

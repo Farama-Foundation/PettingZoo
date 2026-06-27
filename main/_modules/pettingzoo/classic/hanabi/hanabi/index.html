@@ -545,7 +545,6 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="kn">import</span> <span class="n">spaces</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">EzPickle</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">shimmy.openspiel_compatibility</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenSpielCompatibilityV0</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">AECEnv</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrappers</span>
@@ -688,6 +687,13 @@
             <span class="s2">&quot;observation_type&quot;</span><span class="p">:</span> <span class="n">observation_type</span><span class="p">,</span>
             <span class="s2">&quot;random_start_player&quot;</span><span class="p">:</span> <span class="n">random_start_player</span><span class="p">,</span>
         <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">shimmy.openspiel_compatibility</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenSpielCompatibilityV0</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;Hanabi depends on OpenSpiel via Shimmy, which requires Python &gt;= 3.11. &quot;</span>
+                <span class="s2">&quot;Install it with: pip install open_spiel&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span> <span class="o">=</span> <span class="n">OpenSpielCompatibilityV0</span><span class="p">(</span>
             <span class="n">game_name</span><span class="o">=</span><span class="s2">&quot;hanabi&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span>
         <span class="p">)</span>
