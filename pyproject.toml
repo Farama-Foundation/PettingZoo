@@ -25,7 +25,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "numpy>=1.21.0",
+    "numpy>=2.0",
     "gymnasium>=1.0.0",
     "typing-extensions >=4.4.0",
 ]
