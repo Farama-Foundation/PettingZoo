@@ -19,9 +19,9 @@ class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
 
     def __init__(self, env: AECEnv[Any, Any, Any]):
         super().__init__(env)
-        assert isinstance(
-            env, AECEnv
-        ), "ClipOutOfBoundsWrapper is only compatible with AEC environments."
+        assert isinstance(env, AECEnv), (
+            "ClipOutOfBoundsWrapper is only compatible with AEC environments."
+        )
         assert all(
             isinstance(self.action_space(agent), Box)
             for agent in getattr(self, "possible_agents", [])
@@ -30,18 +30,15 @@ class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
     @override
     def step(self, action: np.ndarray | None) -> None:
         space = self.action_space(self.agent_selection)
-        if not (
-            action is None
-            and (
-                self.terminations[self.agent_selection]
-                or self.truncations[self.agent_selection]
-            )
-        ) and not space.contains(action):
-            if action is None or np.isnan(action).any():
+        assert isinstance(space, Box), (
+            "should only use ClipOutOfBoundsWrapper for Box spaces"
+        )
+        if action is not None and not space.contains(action):
+            if np.isnan(action).any():
                 EnvLogger.error_nan_action()
-            assert (
-                space.shape == action.shape  # type: ignore
-            ), f"action should have shape {space.shape}, has shape {action.shape}"  # type: ignore
+            assert space.shape == action.shape, (
+                f"action should have shape {space.shape}, has shape {action.shape}"
+            )
 
             EnvLogger.warn_action_out_of_bound(
                 action=action, action_space=space, backup_policy="clipping to space"

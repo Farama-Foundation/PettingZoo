@@ -23,9 +23,9 @@ except ModuleNotFoundError:
 
 def check_save_obs(env):
     for agent in env.agents:
-        assert isinstance(
-            env.observation_space(agent), gymnasium.spaces.Box
-        ), "Observations must be Box to save observations as image"
+        assert isinstance(env.observation_space(agent), gymnasium.spaces.Box), (
+            "Observations must be Box to save observations as image"
+        )
         assert np.all(np.equal(env.observation_space(agent).low, 0)) and np.all(
             np.equal(env.observation_space(agent).high, 255)
         ), "Observations must be 0 to 255 to save as image"

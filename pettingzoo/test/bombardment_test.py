@@ -52,9 +52,9 @@ def bombardment_test(env, cycles=10000):
             else:
                 action = env.action_space(agent).sample()
             next_observe = env.step(action)
-            assert env.observation_space(agent).contains(
-                prev_observe
-            ), "Agent's observation is outside of its observation space"
+            assert env.observation_space(agent).contains(prev_observe), (
+                "Agent's observation is outside of its observation space"
+            )
             test_observation(prev_observe, observation_0)
             prev_observe = next_observe
         env.reset()

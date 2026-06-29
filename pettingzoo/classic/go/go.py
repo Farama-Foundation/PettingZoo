@@ -106,6 +106,7 @@ $N^2+1$.
 * v0: Initial versions release (1.0.0)
 
 """
+
 from __future__ import annotations
 
 import os

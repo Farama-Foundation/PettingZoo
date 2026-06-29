@@ -39,10 +39,10 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
     agents: list[AgentID]  # Agents active at any given time
 
     observation_spaces: dict[
-        AgentID, gymnasium.spaces.Space
+        AgentID, gymnasium.spaces.Space[ObsType]
     ]  # Observation space for each agent
     # Action space for each agent
-    action_spaces: dict[AgentID, gymnasium.spaces.Space]
+    action_spaces: dict[AgentID, gymnasium.spaces.Space[ActionType]]
 
     # Whether each agent has just reached a terminal state
     terminations: dict[AgentID, bool]
@@ -111,7 +111,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         """
         pass
 
-    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[ObsType]:
         """Takes in agent and returns the observation space for that agent.
 
         MUST return the same value for the same agent name
@@ -123,7 +123,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[ActionType]:
         """Takes in agent and returns the action space for that agent.
 
         MUST return the same value for the same agent name
@@ -218,9 +218,9 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
 
         # removes dead agent
         agent = self.agent_selection
-        assert (
-            self.terminations[agent] or self.truncations[agent]
-        ), "an agent that was not dead as attempted to be removed"
+        assert self.terminations[agent] or self.truncations[agent], (
+            "an agent that was not dead as attempted to be removed"
+        )
         del self.terminations[agent]
         del self.truncations[agent]
         del self.rewards[agent]
@@ -298,9 +298,11 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
     agents: list[AgentID]
     possible_agents: list[AgentID]
     observation_spaces: dict[
-        AgentID, gymnasium.spaces.Space
+        AgentID, gymnasium.spaces.Space[ObsType]
     ]  # Observation space for each agent
-    action_spaces: dict[AgentID, gymnasium.spaces.Space]
+    action_spaces: dict[
+        AgentID, gymnasium.spaces.Space[ActionType]
+    ]  # Action space for each agent
 
     def reset(
         self,
@@ -355,7 +357,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
             )
         )
 
-    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[ObsType]:
         """Takes in agent and returns the observation space for that agent.
 
         MUST return the same value for the same agent name
@@ -367,7 +369,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space[ActionType]:
         """Takes in agent and returns the action space for that agent.
 
         MUST return the same value for the same agent name

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from importlib.util import find_spec
+
 import pytest
 
 from pettingzoo.atari import (
@@ -36,7 +38,7 @@ from pettingzoo.butterfly import (
 from pettingzoo.classic import (
     chess_v6,
     connect_four_v3,
-    gin_rummy_v4,
+    gin_rummy_v5,
     go_v5,
     hanabi_v5,
     leduc_holdem_v4,
@@ -45,7 +47,7 @@ from pettingzoo.classic import (
     texas_holdem_v4,
     tictactoe_v3,
 )
-from pettingzoo.sisl import multiwalker_v9, pursuit_v4
+from pettingzoo.sisl import multiwalker_v9, pursuit_v5
 from pettingzoo.test import max_cycles_test, parallel_api_test
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.render_test import render_test
@@ -94,8 +96,8 @@ parameterized_envs = [
     ["classic/rps_v2", rps_v2, dict()],
     ["classic/chess_v6", chess_v6, dict()],
     ["classic/tictactoe_v3", tictactoe_v3, dict()],
-    ["classic/gin_rummy_v4", gin_rummy_v4, dict()],
-    ["classic/gin_rummy_v4", gin_rummy_v4, dict(opponents_hand_visible=True)],
+    ["classic/gin_rummy_v5", gin_rummy_v5, dict()],
+    ["classic/gin_rummy_v5", gin_rummy_v5, dict(opponents_hand_visible=True)],
     ["atari/boxing_v2", boxing_v2, dict(max_cycles=50)],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="grayscale_image", max_cycles=50)],
     ["atari/boxing_v2", boxing_v2, dict(obs_type="ram", max_cycles=50)],
@@ -223,14 +225,18 @@ parameterized_envs = [
         multiwalker_v9,
         dict(terminate_on_fall=False, remove_on_fall=False, max_cycles=50),
     ],
-    ["sisl/pursuit_v4", pursuit_v4, dict(max_cycles=50)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(x_size=8, y_size=19, max_cycles=50)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(shared_reward=True, max_cycles=50)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(n_evaders=5, n_pursuers=16, max_cycles=50)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(obs_range=15, max_cycles=50)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3, max_cycles=50)],
-    ["sisl/pursuit_v4", pursuit_v4, dict(freeze_evaders=True, max_cycles=50)],
+    ["sisl/pursuit_v5", pursuit_v5, dict(max_cycles=50)],
+    ["sisl/pursuit_v5", pursuit_v5, dict(x_size=8, y_size=19, max_cycles=50)],
+    ["sisl/pursuit_v5", pursuit_v5, dict(shared_reward=True, max_cycles=50)],
+    ["sisl/pursuit_v5", pursuit_v5, dict(n_evaders=5, n_pursuers=16, max_cycles=50)],
+    ["sisl/pursuit_v5", pursuit_v5, dict(obs_range=15, max_cycles=50)],
+    ["sisl/pursuit_v5", pursuit_v5, dict(n_catch=3, max_cycles=50)],
+    ["sisl/pursuit_v5", pursuit_v5, dict(freeze_evaders=True, max_cycles=50)],
 ]
+
+
+if find_spec("pyspiel") is None:  # open_spiel (Hanabi) is unavailable on Python < 3.11
+    parameterized_envs = [e for e in parameterized_envs if "hanabi" not in e[0]]
 
 
 @pytest.mark.parametrize(["name", "env_module", "kwargs"], parameterized_envs)

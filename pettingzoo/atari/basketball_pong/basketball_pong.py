@@ -64,7 +64,6 @@ In any given turn, an agent can choose from one of 6 actions.
 
 """
 
-
 import os
 from glob import glob
 from typing import Any

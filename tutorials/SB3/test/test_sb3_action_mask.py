@@ -1,10 +1,12 @@
 """Tests that action masking code works properly with all PettingZoo classic environments."""
 
+from importlib.util import find_spec
+
 import pytest
 
 from pettingzoo.classic import (
     chess_v6,
-    gin_rummy_v4,
+    gin_rummy_v5,
     go_v5,
     hanabi_v5,
     leduc_holdem_v4,
@@ -21,7 +23,7 @@ pytest.importorskip("sb3_contrib")
 
 # These environments do better than random even after the minimum number of timesteps
 EASY_ENVS = [
-    gin_rummy_v4,
+    gin_rummy_v5,
     texas_holdem_no_limit_v6,  # texas holdem human rendered game ends instantly, but with random actions it works fine
     tictactoe_v3,
     leduc_holdem_v4,
@@ -33,6 +35,9 @@ MEDIUM_ENVS = [
     texas_holdem_v4,  # this performs poorly with updates to SB3 wrapper
     chess_v6,  # difficult to train because games take so long, performance varies heavily
 ]
+
+if find_spec("pyspiel") is None:  # Hanabi needs open_spiel (Python >= 3.11)
+    MEDIUM_ENVS = [e for e in MEDIUM_ENVS if e is not hanabi_v5]
 
 # Most difficult environments to train agents for (and longest games
 # TODO: test board_size to see if smaller go board is more easily solvable
@@ -89,9 +94,9 @@ def test_action_mask_medium(env_fn):
         env_fn, num_games=100, render_mode=None, **env_kwargs
     )
 
-    assert (
-        winrate < 0.75
-    ), "Policy should not perform better than 75% winrate"  # 30-40% for leduc, 0% for hanabi
+    assert winrate < 0.75, (
+        "Policy should not perform better than 75% winrate"
+    )  # 30-40% for leduc, 0% for hanabi
 
     # Watch two games (disabled by default)
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)

@@ -43,7 +43,7 @@ def aec_wrapper_fn(par_env_fn: Callable[..., Any]) -> Callable[..., Any]:
 
 
 def aec_to_parallel(
-    aec_env: AECEnv[AgentID, ObsType, ActionType]
+    aec_env: AECEnv[AgentID, ObsType, ActionType],
 ) -> ParallelEnv[AgentID, ObsType, ActionType]:
     """Converts an AEC environment to a Parallel environment.
 
@@ -60,7 +60,7 @@ def aec_to_parallel(
 
 
 def parallel_to_aec(
-    par_env: ParallelEnv[AgentID, ObsType, Optional[ActionType]]
+    par_env: ParallelEnv[AgentID, ObsType, Optional[ActionType]],
 ) -> AECEnv[AgentID, ObsType, Optional[ActionType]]:
     """Converts a Parallel environment to an AEC environment.
 
@@ -76,7 +76,7 @@ def parallel_to_aec(
 
 
 def turn_based_aec_to_parallel(
-    aec_env: AECEnv[AgentID, ObsType, Optional[ActionType]]
+    aec_env: AECEnv[AgentID, ObsType, Optional[ActionType]],
 ) -> ParallelEnv[AgentID, ObsType, Optional[ActionType]]:
     if isinstance(aec_env, parallel_to_aec_wrapper):
         return cast("ParallelEnv[AgentID, ObsType, Optional[ActionType]]", aec_env.env)
@@ -86,7 +86,7 @@ def turn_based_aec_to_parallel(
 
 
 def to_parallel(
-    aec_env: AECEnv[AgentID, ObsType, ActionType]
+    aec_env: AECEnv[AgentID, ObsType, ActionType],
 ) -> ParallelEnv[AgentID, ObsType, ActionType]:
     warnings.warn(
         "The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead."
@@ -95,7 +95,7 @@ def to_parallel(
 
 
 def from_parallel(
-    par_env: ParallelEnv[AgentID, ObsType, Optional[ActionType]]
+    par_env: ParallelEnv[AgentID, ObsType, Optional[ActionType]],
 ) -> AECEnv[AgentID, ObsType, Optional[ActionType]]:
     warnings.warn(
         "The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead."

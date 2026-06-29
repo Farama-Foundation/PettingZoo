@@ -22,9 +22,9 @@ class ManualPolicy:
 
     def __call__(self, observation, agent):
         # only trigger when we are the correct agent
-        assert (
-            agent == self.agent
-        ), f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
+        assert agent == self.agent, (
+            f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
+        )
 
         # set the default action
         action = self.default_action
