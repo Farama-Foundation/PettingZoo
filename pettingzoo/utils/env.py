@@ -342,7 +342,11 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         raise NotImplementedError
 
     def close(self):
-        """Closes the rendering window."""
+        """Closes any resources that should be released.
+
+        Closes the rendering window, subprocesses, network connections,
+        or any other resources that should be released.
+        """
         pass
 
     def state(self) -> np.ndarray:
