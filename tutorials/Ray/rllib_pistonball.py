@@ -90,7 +90,7 @@ if __name__ == "__main__":
             clip_actions=True,
             disable_env_checking=True,
         )
-        .rollouts(num_rollout_workers=4, rollout_fragment_length=128)
+        .env_runners(num_env_runners=4, rollout_fragment_length=128)
         .training(
             train_batch_size=512,
             lr=2e-5,
@@ -101,8 +101,8 @@ if __name__ == "__main__":
             grad_clip=None,
             entropy_coeff=0.1,
             vf_loss_coeff=0.25,
-            sgd_minibatch_size=64,
-            num_sgd_iter=10,
+            minibatch_size=64,
+            num_epochs=10,
         )
         .debugging(log_level="ERROR")
         .framework(framework="torch")
