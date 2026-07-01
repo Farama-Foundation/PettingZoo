@@ -76,9 +76,9 @@ class TerminateIllegalWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         ):
             EnvLogger.warn_on_illegal_move()
             self.env.unwrapped._cumulative_rewards[self.agent_selection] = 0
-            self.env.unwrapped.terminations = {d: True for d in self.agents}
-            self.env.unwrapped.truncations = {d: True for d in self.agents}
-            self.env.unwrapped.rewards = {d: 0 for d in self.truncations}
+            self.env.unwrapped.terminations = dict.fromkeys(self.agents, True)
+            self.env.unwrapped.truncations = dict.fromkeys(self.agents, True)
+            self.env.unwrapped.rewards = dict.fromkeys(self.truncations, 0)
             self.env.unwrapped.rewards[current_agent] = float(self._illegal_value)
             self.env.unwrapped._accumulate_rewards()
             self.env.unwrapped._deads_step_first()

@@ -238,8 +238,7 @@ class raw_env(AECEnv, EzPickle):
     def _encode_player_plane(self, agent):
         if agent == self.possible_agents[0]:
             return np.zeros([self._N, self._N], dtype=bool)
-        else:
-            return np.ones([self._N, self._N], dtype=bool)
+        return np.ones([self._N, self._N], dtype=bool)
 
     def _encode_board_planes(self, agent):
         agent_factor = (
@@ -308,9 +307,7 @@ class raw_env(AECEnv, EzPickle):
             self.next_legal_moves = self._encode_legal_actions(
                 self._go.all_legal_moves()
             )
-        self.agent_selection = (
-            next_player if next_player else self._agent_selector.next()
-        )
+        self.agent_selection = next_player or self._agent_selector.next()
         self._accumulate_rewards()
 
         if self.render_mode == "human":
@@ -340,7 +337,7 @@ class raw_env(AECEnv, EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         if self.screen is None:
             if self.render_mode == "human":
@@ -408,8 +405,8 @@ class raw_env(AECEnv, EzPickle):
 
         offset = tile_size * (1 / 6)
         # Blit the necessary chips and their positions
-        for i in range(0, size):
-            for j in range(0, size):
+        for i in range(size):
+            for j in range(size):
                 if self._go.board[i][j] == go_base.BLACK:
                     self.screen.blit(
                         black_stone,

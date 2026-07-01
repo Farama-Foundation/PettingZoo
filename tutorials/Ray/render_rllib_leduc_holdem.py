@@ -54,7 +54,7 @@ register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 ray.init()
 DQNAgent = Algorithm.from_checkpoint(checkpoint_path)
 
-reward_sums = {a: 0 for a in env.possible_agents}
+reward_sums = dict.fromkeys(env.possible_agents, 0)
 i = 0
 env.reset()
 

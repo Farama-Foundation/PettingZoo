@@ -3,8 +3,8 @@ from __future__ import annotations
 import importlib.util
 import pkgutil
 import re
+from collections.abc import Iterable
 from types import ModuleType
-from typing import Iterable
 
 
 class DeprecatedEnv(ImportError):
@@ -50,16 +50,15 @@ def deprecated_handler(
             )
         name, version = env_name.rsplit("_v")
 
-        for loader, alt_env_name, is_pkg in pkgutil.iter_modules(module_path):
+        for _loader, alt_env_name, _is_pkg in pkgutil.iter_modules(module_path):
             if is_env(alt_env_name):
                 alt_name, alt_version = alt_env_name.rsplit("_v")
                 if alt_name == name:
                     if int(alt_version) > int(version):
                         return DeprecatedModule(name, version, alt_version)
-                    else:
-                        raise AttributeError(
-                            f"cannot import name '{env_name}' from '{module_name}'"
-                        )
+                    raise AttributeError(
+                        f"cannot import name '{env_name}' from '{module_name}'"
+                    )
 
     # This constructs the module but doesn't execute its code
     assert spec

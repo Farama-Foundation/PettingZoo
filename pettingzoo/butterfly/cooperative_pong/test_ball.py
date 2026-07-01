@@ -37,7 +37,7 @@ def test_bounds() -> None:
 
             in_bounds = ball._rect.x >= 0 and ball._rect.x <= width - ball_dims[1]
             if not terminate and not in_bounds:
-                assert False, (
+                raise AssertionError(
                     f"Cooperative pong not terminated with ball out of bounds (seed = {seed})"
                 )
             if terminate:
@@ -91,7 +91,7 @@ def test_bounce_randomness() -> None:
             #    number of steps run here is less than than limit.
             # 4) something is wrong with the paddle/ball to allow the ball to
             #    bypass a paddle or terminate without the ball hitting a wall.
-            assert False, "Unknown error in test (seed test code)"
+            raise AssertionError("Unknown error in test (seed test code)")
 
 
 if __name__ == "__main__":

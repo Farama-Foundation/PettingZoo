@@ -14,7 +14,7 @@ class ManualPolicy:
         # action mappings for all agents are the same
         if True:
             self.default_action = 0
-            self.action_mapping = dict()
+            self.action_mapping = {}
             self.action_mapping[pygame.K_w] = 1.0
             self.action_mapping[pygame.K_s] = -1.0
 

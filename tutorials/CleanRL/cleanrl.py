@@ -133,7 +133,7 @@ if __name__ == "__main__":
             total_episodic_return = 0
 
             # each episode has num_steps
-            for step in range(0, max_cycles):
+            for step in range(max_cycles):
                 # rollover the observation
                 obs = batchify_obs(next_obs, device)
 
@@ -157,7 +157,7 @@ if __name__ == "__main__":
                 total_episodic_return += rb_rewards[step].cpu().numpy()
 
                 # if we reach termination or truncation, end
-                if any([terms[a] for a in terms]) or any([truncs[a] for a in truncs]):
+                if any(terms[a] for a in terms) or any(truncs[a] for a in truncs):
                     end_step = step
                     break
 
@@ -184,7 +184,7 @@ if __name__ == "__main__":
         # Optimizing the policy and value network
         b_index = np.arange(len(b_obs))
         clip_fracs = []
-        for repeat in range(3):
+        for _repeat in range(3):
             # shuffle the indices we use to access the data
             np.random.shuffle(b_index)
             for start in range(0, len(b_obs), batch_size):
@@ -245,7 +245,7 @@ if __name__ == "__main__":
         print(f"Training episode {episode}")
         print(f"Episodic Return: {np.mean(total_episodic_return)}")
         print(f"Episode Length: {end_step}")
-        print("")
+        print()
         print(f"Value Loss: {v_loss.item()}")
         print(f"Policy Loss: {pg_loss.item()}")
         print(f"Old Approx KL: {old_approx_kl.item()}")
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         # render 5 episodes out
-        for episode in range(5):
+        for _episode in range(5):
             obs, infos = env.reset(seed=None)
             obs = batchify_obs(obs, device)
             terms = [False]

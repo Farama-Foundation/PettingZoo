@@ -85,7 +85,7 @@ if __name__ == "__main__":
     # Test loop for inference
     for ep in range(episodes):
         state, info = env.reset()
-        agent_reward = {agent_id: 0 for agent_id in agent_ids}
+        agent_reward = dict.fromkeys(agent_ids, 0)
         score = 0
         for _ in range(max_steps):
             if channels_last:
@@ -93,12 +93,8 @@ if __name__ == "__main__":
                     agent_id: obs_channels_to_first(s) for agent_id, s in state.items()
                 }
 
-            agent_mask = info["agent_mask"] if "agent_mask" in info.keys() else None
-            env_defined_actions = (
-                info["env_defined_actions"]
-                if "env_defined_actions" in info.keys()
-                else None
-            )
+            agent_mask = info.get("agent_mask", None)
+            env_defined_actions = info.get("env_defined_actions", None)
 
             # Get next action from agent
             cont_actions, discrete_action = maddpg.get_action(state, training=False)

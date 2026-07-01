@@ -1,5 +1,3 @@
-from typing import Union
-
 import gymnasium
 import numpy as np
 
@@ -20,7 +18,7 @@ def get_type(agent):
     return agent[: agent.rfind("_")]
 
 
-class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
+class raw_env(AECEnv[str, np.ndarray, int | None]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_env_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):
@@ -37,7 +35,7 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
         self.max_cycles = max_cycles
         self._seed()
         self.render_mode = render_mode
-        for i in range(3):
+        for _i in range(3):
             self.add_type()
 
     def observation_space(self, agent):
@@ -100,18 +98,18 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
 
         self.types = []
         self._agent_counters = {}
-        for i in range(3):
+        for _i in range(3):
             self.add_type()
-        for i in range(5):
+        for _i in range(5):
             self.add_agent(self.np_random.choice(self.types))
 
         self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
         # seed observation and action spaces
-        for i, agent in enumerate(self.agents):
+        for _i, agent in enumerate(self.agents):
             self.observation_space(agent).seed(seed)
-        for i, agent in enumerate(self.agents):
+        for _i, agent in enumerate(self.agents):
             self.action_space(agent).seed(seed)
 
     def _seed(self, seed=None):
@@ -128,7 +126,7 @@ class raw_env(AECEnv[str, np.ndarray, Union[int, None]]):
         self._cumulative_rewards[self.agent_selection] = 0
 
         if self._agent_selector.is_last():
-            for i in range(5):
+            for _i in range(5):
                 if self.np_random.random() < 0.1:
                     if self.np_random.random() < 0.1:
                         type = self.add_type()

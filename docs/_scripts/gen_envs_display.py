@@ -99,7 +99,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         type_arg = sys.argv[1]
 
-    for key in all_envs.keys():
+    for key in all_envs:
         env_list = all_envs[key]
         envs_path = os.path.join(os.path.dirname(__file__), "..", "environments", key)
         page = generate_page(key, env_list)

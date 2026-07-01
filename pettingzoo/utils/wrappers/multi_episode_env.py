@@ -72,7 +72,7 @@ class MultiEpisodeEnv(BaseWrapper[AgentID, ObsType, ActionType]):
         # if we've crossed num_episodes, truncate all agents
         # and let the environment terminate normally
         if self._episodes_elapsed >= self._num_episodes:
-            self.env.unwrapped.truncations = {agent: True for agent in self.env.agents}
+            self.env.unwrapped.truncations = dict.fromkeys(self.env.agents, True)
             return
 
         # if no more agents and haven't had enough episodes,

@@ -158,16 +158,16 @@ class CustomActionMaskedEnvironment(ParallelEnv):
             guard_action_mask[3] = 0
 
         # Check termination conditions
-        terminations = {a: False for a in self.agents}
-        rewards = {a: 0 for a in self.agents}
+        terminations = dict.fromkeys(self.agents, False)
+        rewards = dict.fromkeys(self.agents, 0)
         if self.prisoner_x == self.guard_x and self.prisoner_y == self.guard_y:
             rewards = {"prisoner": -1, "guard": 1}
-            terminations = {a: True for a in self.agents}
+            terminations = dict.fromkeys(self.agents, True)
             self.agents = []
 
         elif self.prisoner_x == self.escape_x and self.prisoner_y == self.escape_y:
             rewards = {"prisoner": 1, "guard": -1}
-            terminations = {a: True for a in self.agents}
+            terminations = dict.fromkeys(self.agents, True)
             self.agents = []
 
         # Check truncation conditions (overwrites termination conditions)
@@ -208,13 +208,13 @@ class CustomActionMaskedEnvironment(ParallelEnv):
     # Observation space should be defined here.
     # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
     # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
+    @functools.cache
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return MultiDiscrete([7 * 7 - 1] * 3)
 
     # Action space should be defined here.
     # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
+    @functools.cache
     def action_space(self, agent):
         return Discrete(4)

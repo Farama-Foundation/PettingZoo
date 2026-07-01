@@ -86,14 +86,14 @@ class raw_env(AECEnv):
     # Observation space should be defined here.
     # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
     # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
+    @functools.cache
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
     # Action space should be defined here.
     # If your spaces change over time, remove this line (disable caching).
-    @functools.lru_cache(maxsize=None)
+    @functools.cache
     def action_space(self, agent):
         # We can seed the action space to make the environment deterministic.
         return Discrete(3, seed=self.np_random_seed)
@@ -110,9 +110,7 @@ class raw_env(AECEnv):
             return
 
         if len(self.agents) == 2:
-            string = "Current state: Agent1: {} , Agent2: {}".format(
-                MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]
-            )
+            string = f"Current state: Agent1: {MOVES[self.state[self.agents[0]]]} , Agent2: {MOVES[self.state[self.agents[1]]]}"
         else:
             string = "Game over"
         print(string)
@@ -132,7 +130,6 @@ class raw_env(AECEnv):
         or any other environment data which should not be kept around after the
         user is no longer using the environment.
         """
-        pass
 
     def reset(self, seed=None, options=None):
         """

@@ -46,8 +46,8 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
         # Note: obs and info dicts must contain all AgentIDs, but can also have other additional keys (e.g., "common")
         assert set(par_env.agents).issubset(set(obs.keys()))
         assert set(par_env.agents).issubset(set(infos.keys()))
-        terminated = {agent: False for agent in par_env.agents}
-        truncated = {agent: False for agent in par_env.agents}
+        terminated = dict.fromkeys(par_env.agents, False)
+        truncated = dict.fromkeys(par_env.agents, False)
         live_agents = set(par_env.agents[:])
         has_finished = set()
         for _ in range(num_cycles):
@@ -72,7 +72,7 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
             assert isinstance(truncated, dict)
             assert isinstance(info, dict)
 
-            keys = "observation reward terminated truncated info".split()
+            keys = ["observation", "reward", "terminated", "truncated", "info"]
             vals = [obs, rew, terminated, truncated, info]
             for k, v in zip(keys, vals):
                 key_set = set(v.keys())

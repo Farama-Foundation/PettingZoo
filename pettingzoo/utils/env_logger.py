@@ -72,12 +72,12 @@ class EnvLogger:
     @staticmethod
     def error_observe_before_reset() -> None:
         """Error: ``reset() needs to be called before observe.``."""
-        assert False, "reset() needs to be called before observe."
+        raise AssertionError("reset() needs to be called before observe.")
 
     @staticmethod
     def error_step_before_reset() -> None:
         """Error: ``reset() needs to be called before step.``."""
-        assert False, "reset() needs to be called before step."
+        raise AssertionError("reset() needs to be called before step.")
 
     @staticmethod
     def warn_step_after_terminated_truncated() -> None:
@@ -89,22 +89,22 @@ class EnvLogger:
     @staticmethod
     def error_render_before_reset() -> None:
         """Error: ``reset() needs to be called before render.``."""
-        assert False, "reset() needs to be called before render."
+        raise AssertionError("reset() needs to be called before render.")
 
     @staticmethod
     def error_agent_iter_before_reset() -> None:
         """Error: ``reset() needs to be called before agent_iter().``."""
-        assert False, "reset() needs to be called before agent_iter()."
+        raise AssertionError("reset() needs to be called before agent_iter().")
 
     @staticmethod
     def error_nan_action() -> None:
         """Error: ``step() cannot take in a nan action.``."""
-        assert False, "step() cannot take in a nan action."
+        raise AssertionError("step() cannot take in a nan action.")
 
     @staticmethod
     def error_state_before_reset() -> None:
         """Error: ``reset() needs to be called before state.``."""
-        assert False, "reset() needs to be called before state."
+        raise AssertionError("reset() needs to be called before state.")
 
 
 class EnvWarningHandler(logging.Handler):

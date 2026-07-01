@@ -20,7 +20,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import pettingzoo  # noqa: E402
+import pettingzoo
 
 project = "PettingZoo"
 copyright = "2023 Farama Foundation"

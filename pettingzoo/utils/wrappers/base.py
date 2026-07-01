@@ -65,4 +65,4 @@ class BaseWrapper(AECEnv[AgentID, ObsType, ActionType]):
     @override
     def __str__(self) -> str:
         """Returns a name which looks like: "max_observation<space_invaders_v1>"."""
-        return f"{type(self).__name__}<{str(self.env)}>"
+        return f"{type(self).__name__}<{self.env!s}>"
