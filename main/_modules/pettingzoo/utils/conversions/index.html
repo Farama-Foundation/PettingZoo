@@ -379,7 +379,8 @@
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
 
@@ -434,17 +435,16 @@
         <span class="n">aec_env</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">parallel_to_aec_wrapper</span>
     <span class="p">):</span>
         <span class="k">return</span> <span class="n">aec_env</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">env</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">par_env</span> <span class="o">=</span> <span class="n">aec_to_parallel_wrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">par_env</span></div>
+    <span class="n">par_env</span> <span class="o">=</span> <span class="n">aec_to_parallel_wrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">par_env</span></div>
 
 
 
 <div class="viewcode-block" id="parallel_to_aec">
 <a class="viewcode-back" href="../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.parallel_to_aec">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parallel_to_aec</span><span class="p">(</span>
-    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]:</span>
+    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a Parallel environment to an AEC environment.</span>
 
 <span class="sd">    In the case of an existing AEC environment wrapped using a `aec_to_parallel_wrapper`, this function will return the original AEC environment.</span>
@@ -452,21 +452,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">par_env</span><span class="p">,</span> <span class="n">aec_to_parallel_wrapper</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">par_env</span><span class="o">.</span><span class="n">aec_env</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">aec_env</span> <span class="o">=</span> <span class="n">parallel_to_aec_wrapper</span><span class="p">(</span><span class="n">par_env</span><span class="p">)</span>
-        <span class="n">ordered_env</span> <span class="o">=</span> <span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ordered_env</span></div>
+    <span class="n">aec_env</span> <span class="o">=</span> <span class="n">parallel_to_aec_wrapper</span><span class="p">(</span><span class="n">par_env</span><span class="p">)</span>
+    <span class="n">ordered_env</span> <span class="o">=</span> <span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ordered_env</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">turn_based_aec_to_parallel</span><span class="p">(</span>
-    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]:</span>
+    <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aec_env</span><span class="p">,</span> <span class="n">parallel_to_aec_wrapper</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;ParallelEnv[AgentID, ObsType, Optional[ActionType]]&quot;</span><span class="p">,</span> <span class="n">aec_env</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">par_env</span> <span class="o">=</span> <span class="n">turn_based_aec_to_parallel_wrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">par_env</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;ParallelEnv[AgentID, ObsType, ActionType | None]&quot;</span><span class="p">,</span> <span class="n">aec_env</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+    <span class="n">par_env</span> <span class="o">=</span> <span class="n">turn_based_aec_to_parallel_wrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">par_env</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">to_parallel</span><span class="p">(</span>
@@ -479,8 +477,8 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">from_parallel</span><span class="p">(</span>
-    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]:</span>
+    <span class="n">par_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
         <span class="s2">&quot;The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead.&quot;</span>
     <span class="p">)</span>
@@ -589,10 +587,9 @@
                     <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;expected agent </span><span class="si">{</span><span class="n">agent</span><span class="si">}</span><span class="s2"> got termination or truncation agent </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">agent_selection</span><span class="si">}</span><span class="s2">. Parallel environment wrapper expects all agent death (setting an agent&#39;s self.terminations or self.truncations entry to True) to happen only at the end of a cycle.&quot;</span>
                     <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;expected agent </span><span class="si">{</span><span class="n">agent</span><span class="si">}</span><span class="s2"> got agent </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">agent_selection</span><span class="si">}</span><span class="s2">, Parallel environment wrapper expects agents to step in a cycle.&quot;</span>
-                    <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;expected agent </span><span class="si">{</span><span class="n">agent</span><span class="si">}</span><span class="s2"> got agent </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">agent_selection</span><span class="si">}</span><span class="s2">, Parallel environment wrapper expects agents to step in a cycle.&quot;</span>
+                <span class="p">)</span>
             <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">[</span><span class="n">agent</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
@@ -626,12 +623,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">parallel_to_aec_wrapper</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">parallel_to_aec_wrapper</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a Parallel environment into an AEC environment.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">parallel_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]</span>
-    <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallel_env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">parallel_env</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">parallel_env</span><span class="o">.</span><span class="n">metadata</span><span class="p">}</span>
@@ -701,14 +696,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_observations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_live_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_actions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">agent</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
-        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_actions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_live_agents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># Every environment needs to return infos that contain self.agents as their keys</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">:</span>
@@ -723,7 +716,7 @@
                 <span class="sa">f</span><span class="s2">&quot;The `infos` dictionary returned by `env.reset()` is not valid: must contain keys for each agent defined in self.agents: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="si">}</span><span class="s2">. Overwriting with current info duplicated for each agent: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_agents</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_values</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -747,7 +740,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span><span class="p">[</span><span class="n">new_agent</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="nd">@override</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -812,9 +805,9 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">turn_based_aec_to_parallel_wrapper</span><span class="p">(</span>
-    <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]</span>
+    <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
 <span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span> <span class="o">=</span> <span class="n">aec_env</span>
 
         <span class="k">try</span><span class="p">:</span>

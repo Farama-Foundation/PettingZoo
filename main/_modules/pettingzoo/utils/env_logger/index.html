@@ -475,7 +475,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_observe_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before observe.``.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;reset() needs to be called before observe.&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before observe.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_step_before_reset">
@@ -483,7 +483,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_step_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before step.``.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;reset() needs to be called before step.&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before step.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.warn_step_after_terminated_truncated">
@@ -501,7 +501,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_render_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before render.``.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;reset() needs to be called before render.&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before render.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_agent_iter_before_reset">
@@ -509,7 +509,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_agent_iter_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before agent_iter().``.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;reset() needs to be called before agent_iter().&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before agent_iter().&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_nan_action">
@@ -517,7 +517,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_nan_action</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``step() cannot take in a nan action.``.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;step() cannot take in a nan action.&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;step() cannot take in a nan action.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_state_before_reset">
@@ -525,7 +525,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_state_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before state.``.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;reset() needs to be called before state.&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before state.&quot;</span><span class="p">)</span></div>
 </div>
 
 

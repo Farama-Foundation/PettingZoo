@@ -481,14 +481,14 @@
     <span class="c1"># Observation space should be defined here.</span>
     <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent&#39;s space.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="c1"># gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
     <span class="c1"># Action space should be defined here.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="c1"># We can seed the action space to make the environment deterministic.</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">np_random_seed</span><span class="p">)</span>
@@ -505,9 +505,7 @@
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;Current state: Agent1: </span><span class="si">{}</span><span class="s2"> , Agent2: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]],</span> <span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
-            <span class="p">)</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Current state: Agent1: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span><span class="si">}</span><span class="s2"> , Agent2: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;Game over&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
@@ -527,7 +525,6 @@
 <span class="sd">        or any other environment data which should not be kept around after the</span>
 <span class="sd">        user is no longer using the environment.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -732,7 +729,7 @@
     <span class="c1"># Observation space should be defined here.</span>
     <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent&#39;s space.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="c1"># gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/</span>
         <span class="c1"># Discrete(4) means an integer in range(0, 4)</span>
@@ -740,7 +737,7 @@
 
     <span class="c1"># Action space should be defined here.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">np_random_seed</span><span class="p">)</span>
 
@@ -756,9 +753,7 @@
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;Current state: Agent1: </span><span class="si">{}</span><span class="s2"> , Agent2: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]],</span> <span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
-            <span class="p">)</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Current state: Agent1: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span><span class="si">}</span><span class="s2"> , Agent2: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;Game over&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
@@ -769,7 +764,6 @@
 <span class="sd">        or any other environment data which should not be kept around after the</span>
 <span class="sd">        user is no longer using the environment.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

@@ -523,7 +523,7 @@
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
             <span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
         <span class="n">screen_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
@@ -665,7 +665,7 @@
                 <span class="p">)</span>
 
                 <span class="c1"># Blit poker chip img</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;number&quot;</span><span class="p">])):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">chips</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;number&quot;</span><span class="p">])):</span>
                     <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                             <span class="n">chip_img</span><span class="p">,</span>

@@ -408,7 +408,7 @@ tenacity
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="n">agent</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">agent_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -1084,7 +1084,7 @@ Action: None
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="n">agent</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">agent_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>

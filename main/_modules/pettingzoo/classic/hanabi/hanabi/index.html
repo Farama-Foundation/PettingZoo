@@ -539,8 +539,6 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
-
 <span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="kn">import</span> <span class="n">spaces</span>
@@ -601,7 +599,7 @@
         <span class="n">max_life_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
         <span class="n">observation_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;card_knowledge&quot;</span><span class="p">,</span>
         <span class="n">random_start_player</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">render_mode</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the `raw_env` class.</span>
 
@@ -750,37 +748,37 @@
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">colors</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">ranks</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">ranks</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">ranks</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">players</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">players</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">players</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="n">players</span> <span class="o">&lt;=</span> <span class="n">colors</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">players</span> <span class="o">&lt;=</span> <span class="n">colors</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter colors: </span><span class="si">{</span><span class="n">colors</span><span class="si">}</span><span class="s2"> is smaller than players: </span><span class="si">{</span><span class="n">players</span><span class="si">}</span><span class="s2">, which is not allowed. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">hand_size</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">hand_size</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">hand_size</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">max_information_tokens</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">max_information_tokens</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">max_information_tokens</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">max_life_tokens</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">max_life_tokens</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">max_life_tokens</span><span class="si">}</span><span class="s2"> is out of bounds. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">observation_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;minimal&quot;</span><span class="p">,</span> <span class="s2">&quot;card_knowledge&quot;</span><span class="p">,</span> <span class="s2">&quot;seer&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">observation_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;minimal&quot;</span><span class="p">,</span> <span class="s2">&quot;card_knowledge&quot;</span><span class="p">,</span> <span class="s2">&quot;seer&quot;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Config parameter </span><span class="si">{</span><span class="n">observation_type</span><span class="si">}</span><span class="s2"> must be either &#39;minimal&#39;, &#39;card_knowledge&#39;, or &#39;seer&#39;. See description in hanabi.py.&quot;</span>
             <span class="p">)</span>
@@ -790,14 +788,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">legal_moves</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">legal_moves</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">))</span> <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">all_moves</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">all_moves</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hanabi_env</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)))</span>
 
     <span class="c1"># ToDo: Fix Return value</span>
 <div class="viewcode-block" id="raw_env.reset">
@@ -846,7 +844,7 @@
 <a class="viewcode-back" href="../../../../../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">observe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">as_vector</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]]]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Advances the environment by one step. Action must be within self.legal_moves, otherwise throws error.</span>
 
 <span class="sd">        Returns:</span>

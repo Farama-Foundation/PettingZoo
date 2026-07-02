@@ -789,15 +789,11 @@ PyYAML&gt;=5.4.1
     <span class="c1"># Test loop for inference</span>
     <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">episodes</span><span class="p">):</span>
         <span class="n">state</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        <span class="n">agent_reward</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent_id</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent_id</span> <span class="ow">in</span> <span class="n">agent_ids</span><span class="p">}</span>
+        <span class="n">agent_reward</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">agent_ids</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
-            <span class="n">agent_mask</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;agent_mask&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;agent_mask&quot;</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">env_defined_actions</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">info</span><span class="p">[</span><span class="s2">&quot;env_defined_actions&quot;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="s2">&quot;env_defined_actions&quot;</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-                <span class="k">else</span> <span class="kc">None</span>
-            <span class="p">)</span>
+            <span class="n">agent_mask</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agent_mask&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">env_defined_actions</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;env_defined_actions&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
             <span class="c1"># Get next action from agent</span>
             <span class="n">cont_actions</span><span class="p">,</span> <span class="n">discrete_action</span> <span class="o">=</span> <span class="n">matd3</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

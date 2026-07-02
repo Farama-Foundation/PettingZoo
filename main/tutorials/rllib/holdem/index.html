@@ -597,7 +597,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="n">DQNAgent</span> <span class="o">=</span> <span class="n">Algorithm</span><span class="o">.</span><span class="n">from_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
 
-<span class="n">reward_sums</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
+<span class="n">reward_sums</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 

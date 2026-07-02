@@ -539,7 +539,7 @@ imageio-ffmpeg
             <span class="n">total_episodic_return</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="c1"># each episode has num_steps</span>
-            <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_cycles</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_cycles</span><span class="p">):</span>
                 <span class="c1"># rollover the observation</span>
                 <span class="n">obs</span> <span class="o">=</span> <span class="n">batchify_obs</span><span class="p">(</span><span class="n">next_obs</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
 
@@ -563,7 +563,7 @@ imageio-ffmpeg
                 <span class="n">total_episodic_return</span> <span class="o">+=</span> <span class="n">rb_rewards</span><span class="p">[</span><span class="n">step</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
                 <span class="c1"># if we reach termination or truncation, end</span>
-                <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">terms</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">])</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">([</span><span class="n">truncs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">truncs</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">truncs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">truncs</span><span class="p">):</span>
                     <span class="n">end_step</span> <span class="o">=</span> <span class="n">step</span>
                     <span class="k">break</span>
 
@@ -590,7 +590,7 @@ imageio-ffmpeg
         <span class="c1"># Optimizing the policy and value network</span>
         <span class="n">b_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b_obs</span><span class="p">))</span>
         <span class="n">clip_fracs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">repeat</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_repeat</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
             <span class="c1"># shuffle the indices we use to access the data</span>
             <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">b_index</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">b_obs</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
@@ -651,7 +651,7 @@ imageio-ffmpeg
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training episode </span><span class="si">{</span><span class="n">episode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episodic Return: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">total_episodic_return</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode Length: </span><span class="si">{</span><span class="n">end_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Value Loss: </span><span class="si">{</span><span class="n">v_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Policy Loss: </span><span class="si">{</span><span class="n">pg_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Old Approx KL: </span><span class="si">{</span><span class="n">old_approx_kl</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -670,7 +670,7 @@ imageio-ffmpeg
 
     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="c1"># render 5 episodes out</span>
-        <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
             <span class="n">obs</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">obs</span> <span class="o">=</span> <span class="n">batchify_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
             <span class="n">terms</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>

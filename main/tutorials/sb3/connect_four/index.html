@@ -498,7 +498,7 @@ sb3-contrib&gt;=2.0.0
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Train a single model to play as each agent in a zero-sum game environment using invalid action masking.&quot;&quot;&quot;</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">!s}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Custom wrapper to convert PettingZoo envs to work with SB3 action masking</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -518,7 +518,7 @@ sb3-contrib&gt;=2.0.0
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model has been saved.&quot;</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished training on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished training on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">!s}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -541,8 +541,8 @@ sb3-contrib&gt;=2.0.0
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">MaskablePPO</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">latest_policy</span><span class="p">)</span>
 
-    <span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
-    <span class="n">total_rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">total_rewards</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">round_rewards</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_games</span><span class="p">):</span>
@@ -571,16 +571,15 @@ sb3-contrib&gt;=2.0.0
                 <span class="c1"># List of rewards by round, for reference</span>
                 <span class="n">round_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">)</span>
                 <span class="k">break</span>
+            <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">act</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">action_mask</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                    <span class="n">act</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">action_mask</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="c1"># Note: PettingZoo expects integer actions # TODO: change chess to cast actions to type int?</span>
-                    <span class="n">act</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-                        <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
-                            <span class="n">observation</span><span class="p">,</span> <span class="n">action_masks</span><span class="o">=</span><span class="n">action_mask</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">True</span>
-                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="p">)</span>
+                <span class="c1"># Note: PettingZoo expects integer actions # TODO: change chess to cast actions to type int?</span>
+                <span class="n">act</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+                        <span class="n">observation</span><span class="p">,</span> <span class="n">action_masks</span><span class="o">=</span><span class="n">action_mask</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="p">)</span>
             <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 

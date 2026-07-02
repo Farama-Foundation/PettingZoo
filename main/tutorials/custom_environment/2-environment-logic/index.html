@@ -474,14 +474,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
-        <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">a</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">observations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span>
+            <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
-        <span class="p">}</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Get dummy infos. Necessary for proper parallel_to_aec conversion</span>
         <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
@@ -525,32 +525,32 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="c1"># Check termination conditions</span>
-        <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">rewards</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">:</span>
             <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-            <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+            <span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">:</span>
             <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
-            <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+            <span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Check truncation conditions (overwrites termination conditions)</span>
-        <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="n">truncations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
             <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
             <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="c1"># Get observations</span>
-        <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">a</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">observations</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span>
+            <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
-        <span class="p">}</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Get dummy infos (not used in this example)</span>
         <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
@@ -571,14 +571,14 @@
     <span class="c1"># Observation space should be defined here.</span>
     <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent&#39;s space.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="c1"># gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/</span>
         <span class="k">return</span> <span class="n">MultiDiscrete</span><span class="p">([</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
 
     <span class="c1"># Action space should be defined here.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
