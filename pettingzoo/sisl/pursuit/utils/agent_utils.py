@@ -26,7 +26,7 @@ def create_agents(
     xs, ys = map_matrix.shape
     agents = []
     expanded_mat = np.zeros((xs + 2, ys + 2))
-    for i in range(nagents):
+    for _i in range(nagents):
         xinit, yinit = (0, 0)
         if randinit:
             xinit, yinit = feasible_position_exp(

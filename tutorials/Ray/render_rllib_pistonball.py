@@ -102,7 +102,7 @@ frame_list = []
 i = 0
 env.reset()
 
-for agent in env.agent_iter():
+for _agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
     reward_sum += reward
     if termination or truncation:

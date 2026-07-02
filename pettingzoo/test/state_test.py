@@ -89,15 +89,15 @@ def test_state_space(env):
                 "Environment's maximum and minimum state space values are equal"
             )
         if np.any(np.greater(env.state_space.low, env.state_space.high)):
-            assert False, (
+            raise AssertionError(
                 "Environment's minimum state space value is greater than it's maximum"
             )
         if env.state_space.low.shape != env.state_space.shape:
-            assert False, (
+            raise AssertionError(
                 "Environment's state_space.low and state_space have different shapes"
             )
         if env.state_space.high.shape != env.state_space.shape:
-            assert False, (
+            raise AssertionError(
                 "Environment's state_space.high and state_space have different shapes"
             )
 
@@ -133,7 +133,7 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
         if len(new_state.shape) > 3:
             warnings.warn("State has more than 3 dimensions")
         if new_state.shape == (0,):
-            assert False, "State can not be an empty array"
+            raise AssertionError("State can not be an empty array")
         if new_state.shape == (1,):
             warnings.warn("State is a single number")
         if not isinstance(new_state, state_0.__class__):

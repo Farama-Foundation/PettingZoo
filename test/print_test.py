@@ -7,7 +7,7 @@ def test_print():
     for name in dir_names:
         root_dir = os.path.join("pettingzoo", name)
 
-        for _dir, subdirs, files in os.walk(root_dir):
+        for _dir, _subdirs, files in os.walk(root_dir):
             for file in files:
                 if file.endswith(".py"):
                     with open(os.path.join(_dir, file)) as f:

@@ -164,8 +164,8 @@ class raw_env(AECEnv, EzPickle):
 
         self.rewards = None
         self.infos = {name: {} for name in self.agents}
-        self.truncations = {name: False for name in self.agents}
-        self.terminations = {name: False for name in self.agents}
+        self.truncations = dict.fromkeys(self.agents, False)
+        self.terminations = dict.fromkeys(self.agents, False)
 
         self.agent_selection = None
 
@@ -242,10 +242,10 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
-        self.rewards = {name: 0 for name in self.agents}
-        self._cumulative_rewards = {name: 0 for name in self.agents}
-        self.terminations = {name: False for name in self.agents}
-        self.truncations = {name: False for name in self.agents}
+        self.rewards = dict.fromkeys(self.agents, 0)
+        self._cumulative_rewards = dict.fromkeys(self.agents, 0)
+        self.terminations = dict.fromkeys(self.agents, False)
+        self.truncations = dict.fromkeys(self.agents, False)
         self.infos = {name: {} for name in self.agents}
 
         self.board_history = np.zeros((8, 8, 104), dtype=bool)

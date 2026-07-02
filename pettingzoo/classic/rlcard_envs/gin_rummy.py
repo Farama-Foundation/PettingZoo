@@ -232,7 +232,7 @@ class raw_env(RLCardBase, EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         def draw_borders(x, y, width, height, bw, color):
             pygame.draw.line(

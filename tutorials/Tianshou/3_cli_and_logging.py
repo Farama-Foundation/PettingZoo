@@ -12,7 +12,6 @@ git+https://github.com/thu-ml/tianshou
 import argparse
 import os
 from copy import deepcopy
-from typing import Optional, Tuple
 
 import gymnasium
 import numpy as np
@@ -97,10 +96,10 @@ def get_args() -> argparse.Namespace:
 
 def get_agents(
     args: argparse.Namespace = get_args(),
-    agent_learn: Optional[BasePolicy] = None,
-    agent_opponent: Optional[BasePolicy] = None,
-    optim: Optional[torch.optim.Optimizer] = None,
-) -> Tuple[BasePolicy, torch.optim.Optimizer, list]:
+    agent_learn: BasePolicy | None = None,
+    agent_opponent: BasePolicy | None = None,
+    optim: torch.optim.Optimizer | None = None,
+) -> tuple[BasePolicy, torch.optim.Optimizer, list]:
     env = get_env()
     observation_space = (
         env.observation_space["observation"]
@@ -150,10 +149,10 @@ def get_env(render_mode=None):
 
 def train_agent(
     args: argparse.Namespace = get_args(),
-    agent_learn: Optional[BasePolicy] = None,
-    agent_opponent: Optional[BasePolicy] = None,
-    optim: Optional[torch.optim.Optimizer] = None,
-) -> Tuple[dict, BasePolicy]:
+    agent_learn: BasePolicy | None = None,
+    agent_opponent: BasePolicy | None = None,
+    optim: torch.optim.Optimizer | None = None,
+) -> tuple[dict, BasePolicy]:
     # ======== environment setup =========
     train_envs = DummyVectorEnv([get_env for _ in range(args.training_num)])
     test_envs = DummyVectorEnv([get_env for _ in range(args.test_num)])
@@ -235,8 +234,8 @@ def train_agent(
 # ======== a test function that tests a pre-trained agent ======
 def watch(
     args: argparse.Namespace = get_args(),
-    agent_learn: Optional[BasePolicy] = None,
-    agent_opponent: Optional[BasePolicy] = None,
+    agent_learn: BasePolicy | None = None,
+    agent_opponent: BasePolicy | None = None,
 ) -> None:
     env = DummyVectorEnv([lambda: get_env(render_mode="human")])
     policy, optim, agents = get_agents(

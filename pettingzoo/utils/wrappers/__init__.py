@@ -10,8 +10,8 @@ from pettingzoo.utils.wrappers.terminate_illegal import TerminateIllegalWrapper
 
 __all__ = [
     "AssertOutOfBoundsWrapper",
-    "BaseWrapper",
     "BaseParallelWrapper",
+    "BaseWrapper",
     "CaptureStdoutWrapper",
     "ClipOutOfBoundsWrapper",
     "MultiEpisodeEnv",

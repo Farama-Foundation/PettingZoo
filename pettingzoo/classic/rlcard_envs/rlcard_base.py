@@ -133,11 +133,11 @@ class RLCardBase(AECEnv):
             [False for _ in range(self.num_agents)]
         )
         self.infos = self._convert_to_dict([{} for _ in range(self.num_agents)])
-        self.next_legal_moves = list(sorted(obs["legal_actions"]))
+        self.next_legal_moves = sorted(obs["legal_actions"])
         self._last_obs = obs["obs"]
 
     def render(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def close(self):
         pass
