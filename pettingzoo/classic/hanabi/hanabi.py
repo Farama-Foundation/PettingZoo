@@ -161,8 +161,6 @@ If an illegal action is taken, the game terminates and the one player that took 
 
 """
 
-from typing import List, Optional, Union
-
 import gymnasium
 import numpy as np
 from gymnasium import spaces
@@ -218,7 +216,7 @@ class raw_env(AECEnv, EzPickle):
         max_life_tokens: int = 3,
         observation_type: str = "card_knowledge",
         random_start_player: bool = False,
-        render_mode: Optional[str] = None,
+        render_mode: str | None = None,
     ):
         """Initializes the `raw_env` class.
 
@@ -361,37 +359,37 @@ class raw_env(AECEnv, EzPickle):
                 f"Config parameter {colors} is out of bounds. See description in hanabi.py."
             )
 
-        elif not (2 <= ranks <= 5):
+        if not (2 <= ranks <= 5):
             raise ValueError(
                 f"Config parameter {ranks} is out of bounds. See description in hanabi.py."
             )
 
-        elif not (2 <= players <= 5):
+        if not (2 <= players <= 5):
             raise ValueError(
                 f"Config parameter {players} is out of bounds. See description in hanabi.py."
             )
 
-        elif not (players <= colors):
+        if not (players <= colors):
             raise ValueError(
                 f"Config parameter colors: {colors} is smaller than players: {players}, which is not allowed. See description in hanabi.py."
             )
 
-        elif not (2 <= hand_size <= 5):
+        if not (2 <= hand_size <= 5):
             raise ValueError(
                 f"Config parameter {hand_size} is out of bounds. See description in hanabi.py."
             )
 
-        elif not (0 <= max_information_tokens):
+        if not (max_information_tokens >= 0):
             raise ValueError(
                 f"Config parameter {max_information_tokens} is out of bounds. See description in hanabi.py."
             )
 
-        elif not (1 <= max_life_tokens):
+        if not (max_life_tokens >= 1):
             raise ValueError(
                 f"Config parameter {max_life_tokens} is out of bounds. See description in hanabi.py."
             )
 
-        elif observation_type not in ["minimal", "card_knowledge", "seer"]:
+        if observation_type not in ["minimal", "card_knowledge", "seer"]:
             raise ValueError(
                 f"Config parameter {observation_type} must be either 'minimal', 'card_knowledge', or 'seer'. See description in hanabi.py."
             )
@@ -401,14 +399,14 @@ class raw_env(AECEnv, EzPickle):
         return self.hanabi_env.observation_space(self.possible_agents[0]).shape
 
     @property
-    def legal_moves(self) -> List[int]:
+    def legal_moves(self) -> list[int]:
         mask = self.hanabi_env.infos[self.agent_selection]["action_mask"]
         return [i for i in range(len(mask)) if mask[i] == 1]
 
     @property
-    def all_moves(self) -> List[int]:
+    def all_moves(self) -> list[int]:
         mask = self.hanabi_env.infos[self.agent_selection]["action_mask"]
-        return [i for i in range(len(mask))]
+        return list(range(len(mask)))
 
     # ToDo: Fix Return value
     def reset(self, seed=None, options=None):
@@ -452,7 +450,7 @@ class raw_env(AECEnv, EzPickle):
 
     def step(
         self, action: int, observe: bool = True, as_vector: bool = True
-    ) -> Optional[Union[np.ndarray, List[List[dict]]]]:
+    ) -> np.ndarray | list[list[dict]] | None:
         """Advances the environment by one step. Action must be within self.legal_moves, otherwise throws error.
 
         Returns:

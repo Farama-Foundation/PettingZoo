@@ -125,7 +125,7 @@ class Ball(pygame.sprite.Sprite):
         # finish the update.
         if not area.contains(self._rect):
             self._out_of_bounds = True
-            return None
+            return
 
         # Do ball and paddle collide?
         if self._rect.center[0] < area.center[0]:  # ball in left half of screen
@@ -141,7 +141,7 @@ class Ball(pygame.sprite.Sprite):
             delta_angle = get_small_random_value(self._randomizer)
             self._speed = change_speed_angle(self._speed, delta_angle)
 
-        return None
+        return
 
     def draw(self, screen: pygame.Surface) -> None:
         """Draw the ball on the given surface."""

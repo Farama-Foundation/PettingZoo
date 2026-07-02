@@ -13,7 +13,7 @@ class ManualPolicy:
         # action mappings for all agents are the same
         if True:
             self.default_action = 5
-            self.action_mapping = dict()
+            self.action_mapping = {}
             self.action_mapping[pygame.K_w] = 0  # front
             self.action_mapping[pygame.K_s] = 1  # back
             self.action_mapping[pygame.K_a] = 2  # rotate left

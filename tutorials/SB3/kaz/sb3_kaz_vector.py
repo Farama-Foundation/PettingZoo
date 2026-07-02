@@ -76,7 +76,7 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
         env = ss.frame_stack_v1(env, 3)
 
     print(
-        f"\nStarting evaluation on {str(env.metadata['name'])} (num_games={num_games}, render_mode={render_mode})"
+        f"\nStarting evaluation on {env.metadata['name']!s} (num_games={num_games}, render_mode={render_mode})"
     )
 
     try:
@@ -89,7 +89,7 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
     model = PPO.load(latest_policy)
 
-    rewards = {agent: 0 for agent in env.possible_agents}
+    rewards = dict.fromkeys(env.possible_agents, 0)
 
     # Note: we evaluate here using an AEC environments, to allow for easy A/B testing against random policies
     # For example, we can see here that using a random agent for archer_0 results in less points than the trained agent
@@ -105,11 +105,10 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
             if termination or truncation:
                 break
+            if agent == env.possible_agents[0]:
+                act = env.action_space(agent).sample()
             else:
-                if agent == env.possible_agents[0]:
-                    act = env.action_space(agent).sample()
-                else:
-                    act = model.predict(obs, deterministic=True)[0]
+                act = model.predict(obs, deterministic=True)[0]
             env.step(act)
     env.close()
 
@@ -127,7 +126,7 @@ if __name__ == "__main__":
     env_fn = knights_archers_zombies_v11
 
     # Set obs_method to "image" in order to use visual observations (significantly longer training time)
-    env_kwargs = dict(max_cycles=100, max_zombies=4, obs_method="vector")
+    env_kwargs = {"max_cycles": 100, "max_zombies": 4, "obs_method": "vector"}
 
     # Train a model (takes ~5 minutes on a laptop CPU)
     train(env_fn, steps=81_920, seed=0, **env_kwargs)

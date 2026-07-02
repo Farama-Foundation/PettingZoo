@@ -7,7 +7,7 @@ from action_masking_agent import ActionMaskAgent  # isort: skip
 def main(agents, env):
     env.reset()
 
-    for name, agent in agents.items():
+    for agent in agents.values():
         agent.reset()
 
     for agent_name in env.agent_iter():

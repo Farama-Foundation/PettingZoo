@@ -10,7 +10,6 @@ git+https://github.com/thu-ml/tianshou
 """
 
 import os
-from typing import Optional, Tuple
 
 import gymnasium
 import numpy as np
@@ -26,10 +25,10 @@ from pettingzoo.classic import tictactoe_v3
 
 
 def _get_agents(
-    agent_learn: Optional[BasePolicy] = None,
-    agent_opponent: Optional[BasePolicy] = None,
-    optim: Optional[torch.optim.Optimizer] = None,
-) -> Tuple[BasePolicy, torch.optim.Optimizer, list]:
+    agent_learn: BasePolicy | None = None,
+    agent_opponent: BasePolicy | None = None,
+    optim: torch.optim.Optimizer | None = None,
+) -> tuple[BasePolicy, torch.optim.Optimizer, list]:
     env = _get_env()
     observation_space = (
         env.observation_space["observation"]

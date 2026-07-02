@@ -1,5 +1,4 @@
 from collections import defaultdict
-from typing import Optional
 
 import gymnasium
 import numpy as np
@@ -28,8 +27,8 @@ class Pursuit:
         obs_range: int = 7,
         n_catch: int = 2,
         freeze_evaders: bool = False,
-        evader_controller: Optional[PursuitPolicy] = None,
-        pursuer_controller: Optional[PursuitPolicy] = None,
+        evader_controller: PursuitPolicy | None = None,
+        pursuer_controller: PursuitPolicy | None = None,
         tag_reward: float = 0.01,
         catch_reward: float = 5.0,
         urgency_reward: float = -0.1,
@@ -399,7 +398,7 @@ class Pursuit:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         if self.screen is None:
             pygame.font.init()
@@ -502,7 +501,7 @@ class Pursuit:
         for j in range(self.n_agents()):
             if i == j:
                 return self.collect_obs_by_idx(agent_layer, i)
-        assert False, "bad index"
+        raise AssertionError("bad index")
 
     def collect_obs_by_idx(self, agent_layer, agent_idx):
         # returns a flattened array of all the observations
@@ -570,7 +569,7 @@ class Pursuit:
                         tes = np.concatenate((xpur[tt], ypur[tt])).reshape(
                             2, len(xpur[tt])
                         )
-                        tem = tes.T == np.array([xpp, ypp])
+                        tem = np.array([xpp, ypp]) == tes.T
                         if np.any(np.all(tem, axis=1)):
                             purs_sur[j] = True
                 ai += 1

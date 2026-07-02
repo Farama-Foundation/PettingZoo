@@ -533,7 +533,7 @@ class MultiWalkerEnv:
         return dict(
             zip(
                 list(range(self.n_walkers)),
-                map(lambda r: np.float64(r), self.last_rewards),
+                (np.float64(r) for r in self.last_rewards),
             )
         )
 
@@ -570,7 +570,7 @@ class MultiWalkerEnv:
     def render(self, close=False):
         if close:
             self.close()
-            return
+            return None
 
         offset = 200  # compensates for the negative coordinates
         render_scale = SCALE / self.package_scale / 0.75
@@ -881,7 +881,7 @@ class MultiWalkerEnv:
     def _generate_clouds(self):
         # Sorry for the clouds, couldn't resist
         self.cloud_poly = []
-        for i in range(self.terrain_length // 20):
+        for _i in range(self.terrain_length // 20):
             x = self.np_random.uniform(0, self.terrain_length) * TERRAIN_STEP
             y = VIEWPORT_H / SCALE * 3 / 4
             poly = [

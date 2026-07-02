@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Dict, Generic, Iterable, Iterator, TypeVar
+from collections.abc import Iterable, Iterator
+from typing import Any, Generic, TypeVar
 
 import gymnasium.spaces
 import numpy as np
@@ -12,10 +13,10 @@ ActionType = TypeVar("ActionType")
 AgentID = TypeVar("AgentID")
 
 # deprecated
-ObsDict = Dict[AgentID, ObsType]
+ObsDict = dict[AgentID, ObsType]
 
 # deprecated
-ActionDict = Dict[AgentID, ActionType]
+ActionDict = dict[AgentID, ActionType]
 
 """
 Base environment definitions
@@ -109,7 +110,6 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         Closes the rendering window, subprocesses, network connections,
         or any other resources that should be released.
         """
-        pass
 
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[ObsType]:
         """Takes in agent and returns the observation space for that agent.
@@ -250,8 +250,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         """Returns a name which looks like: `space_invaders_v1`."""
         if hasattr(self, "metadata"):
             return self.metadata.get("name", self.__class__.__name__)
-        else:
-            return self.__class__.__name__
+        return self.__class__.__name__
 
     @property
     def unwrapped(self) -> AECEnv[AgentID, ObsType, ActionType]:
@@ -347,7 +346,6 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         Closes the rendering window, subprocesses, network connections,
         or any other resources that should be released.
         """
-        pass
 
     def state(self) -> np.ndarray:
         """Returns the state.
@@ -401,8 +399,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         """
         if hasattr(self, "metadata"):
             return self.metadata.get("name", self.__class__.__name__)
-        else:
-            return self.__class__.__name__
+        return self.__class__.__name__
 
     @property
     def unwrapped(self) -> ParallelEnv[AgentID, ObsType, ActionType]:

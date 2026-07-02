@@ -84,16 +84,16 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
             ]:
         """
         obs, rew, term, trunc, info = super().step(actions)
-        term = {agent: False for agent in term}
-        trunc = {agent: False for agent in term}
+        term = dict.fromkeys(term, False)
+        trunc = dict.fromkeys(term, False)
 
         if self.agents:
             return obs, rew, term, trunc, info
 
         # override the term trunc to only trunc when num_episodes have been elapsed
         if self._episodes_elapsed >= self._num_episodes:
-            term = {agent: False for agent in term}
-            trunc = {agent: True for agent in term}
+            term = dict.fromkeys(term, False)
+            trunc = dict.fromkeys(term, True)
             return obs, rew, term, trunc, info
 
         # if any agent terminates or truncates

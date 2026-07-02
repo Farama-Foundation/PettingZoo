@@ -187,7 +187,7 @@ import os
 import sys
 from enum import Enum
 from itertools import repeat
-from typing import Any, Union
+from typing import Any, TypeAlias
 
 import gymnasium
 import numpy as np
@@ -195,7 +195,6 @@ import numpy.typing as npt
 import pygame
 from gymnasium.spaces import Box, Discrete, Sequence
 from gymnasium.utils import EzPickle, seeding
-from typing_extensions import TypeAlias
 
 from pettingzoo import AECEnv
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
@@ -222,11 +221,11 @@ __all__ = ["env", "parallel_env", "raw_env"]
 AgentID = str
 ObsTypeVector: TypeAlias = npt.NDArray[np.float64]
 ObsTypeImage: TypeAlias = npt.NDArray[np.uint8]
-ObsType: TypeAlias = Union[ObsTypeImage, ObsTypeVector]
+ObsType: TypeAlias = ObsTypeImage | ObsTypeVector
 ActionType = int
 StateTypeVector: TypeAlias = npt.NDArray[np.float64]
 StateTypeImage: TypeAlias = npt.NDArray[np.uint8]
-StateType: TypeAlias = Union[ObsTypeImage, ObsTypeVector]
+StateType: TypeAlias = ObsTypeImage | ObsTypeVector
 
 
 class ObsOptions(Enum):
@@ -421,7 +420,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         else:  # image space
             obs_space = Box(low=0, high=255, shape=[512, 512, 3], dtype=np.uint8)
 
-        return {i: obs_space for i in self.possible_agents}
+        return dict.fromkeys(self.possible_agents, obs_space)
 
     def _build_action_spaces(self) -> dict[AgentID, gymnasium.spaces.Space[Any]]:
         """Create and return the action spaces for the object."""
@@ -726,8 +725,8 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
         terminate = self.game_over
         truncate = self.frames >= self.max_cycles
-        self.terminations = {a: terminate for a in self.agents}
-        self.truncations = {a: truncate for a in self.agents}
+        self.terminations = dict.fromkeys(self.agents, terminate)
+        self.truncations = dict.fromkeys(self.agents, truncate)
 
         # manage the kill list
         if self._agent_selector.is_last():
@@ -789,7 +788,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         if self.screen is None:
             if self.render_mode == "human":
@@ -875,10 +874,10 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
         self.agents = self.possible_agents
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
-        self.rewards = {i: 0 for i in self.agents}
-        self._cumulative_rewards = {a: 0 for a in self.agents}
-        self.terminations = {i: False for i in self.agents}
-        self.truncations = {i: False for i in self.agents}
+        self.rewards = dict.fromkeys(self.agents, 0)
+        self._cumulative_rewards = dict.fromkeys(self.agents, 0)
+        self.terminations = dict.fromkeys(self.agents, False)
+        self.truncations = dict.fromkeys(self.agents, False)
         self.infos = {i: {} for i in self.agents}
         self.reinit()
 

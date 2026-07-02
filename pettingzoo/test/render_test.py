@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 import numpy as np
 from gymnasium.core import Env
@@ -37,7 +37,7 @@ def render_test(env_fn: Callable[[], Env], custom_tests={}):
         env = env_fn(render_mode=mode)
         render_results = collect_render_results(env)
         for res in render_results:
-            if mode in custom_tests.keys():
+            if mode in custom_tests:
                 assert custom_tests[mode](res)
             if mode == "rgb_array":
                 assert (
