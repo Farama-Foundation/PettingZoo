@@ -151,9 +151,17 @@ At the end of the game, the total score would be 2 + 1 + 3 = 6
 If an illegal action is taken, the game terminates and the one player that took the illegal action loses. Like an ordinary loss, their final reward will be the negation of all reward received so far. The reward of the other players will not be affected by the illegal action.
 
 
+### Rendering
+
+Hanabi supports `human`, `rgb_array`, and `ansi` render modes. In `human` and
+`rgb_array` modes the board is drawn with pygame: the fireworks piles, every
+player's hand (the player whose turn it is is highlighted), the remaining info
+and life tokens, the deck size, and the discard pile. In `ansi` mode the render
+returns the OpenSpiel text representation of the state.
+
 ### Version History
 
-* v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility (1.23.0)
+* v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility, and added pygame (`human`/`rgb_array`) rendering (1.23.0)
 * v4: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v2: Fixed default parameters (1.4.2)
@@ -173,14 +181,7 @@ from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def env(**kwargs):
-    render_mode = kwargs.get("render_mode")
-    if render_mode == "ansi":
-        kwargs["render_mode"] = "human"
-        env = raw_env(**kwargs)
-        env = wrappers.CaptureStdoutWrapper(env)
-    else:
-        env = raw_env(**kwargs)
-
+    env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -189,7 +190,7 @@ def env(**kwargs):
 
 class raw_env(AECEnv, EzPickle):
     metadata = {
-        "render_modes": ["human"],
+        "render_modes": ["human", "ansi", "rgb_array"],
         "name": "hanabi_v5",
         "is_parallelizable": False,
         "render_fps": 2,
@@ -310,8 +311,10 @@ class raw_env(AECEnv, EzPickle):
                 "Hanabi depends on OpenSpiel via Shimmy, which requires Python >= 3.11. "
                 "Install it with: pip install open_spiel"
             ) from e
+        # The board is rendered by this class directly from the underlying
+        # OpenSpiel state, so the wrapped env is created without a render mode.
         self.hanabi_env = OpenSpielCompatibilityV0(
-            game_name="hanabi", render_mode=render_mode, config=self._config
+            game_name="hanabi", render_mode=None, config=self._config
         )
 
         # List of agent names
@@ -336,7 +339,14 @@ class raw_env(AECEnv, EzPickle):
             for a in self.possible_agents
         }
 
+        assert render_mode is None or render_mode in self.metadata["render_modes"], (
+            f"{render_mode} is not a valid render mode. Available modes are: "
+            f"{self.metadata['render_modes']}"
+        )
         self.render_mode = render_mode
+        # Lazily created pygame objects (only used for human / rgb_array modes).
+        self.screen = None
+        self._renderer = None
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -482,19 +492,85 @@ class raw_env(AECEnv, EzPickle):
         return {"observation": observation, "action_mask": mask}
 
     def render(self):
-        """Prints player's data.
+        """Renders the current game state.
 
-        Supports console print only.
+        - ``"ansi"``: returns the OpenSpiel text representation of the state.
+        - ``"human"``: draws the board to a window using pygame.
+        - ``"rgb_array"``: returns the rendered board as an ``(H, W, 3)`` array.
         """
         if self.render_mode is None:
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
-        try:
-            self.hanabi_env.render()
-        except NotImplementedError:
-            return
+            return None
+
+        if not hasattr(self.hanabi_env, "game_state"):
+            gymnasium.logger.warn(
+                "You are calling render method before reset() has been called."
+            )
+            return None
+
+        state_string = str(self.hanabi_env.game_state)
+        if self.render_mode == "ansi":
+            return state_string
+        if self.render_mode in {"human", "rgb_array"}:
+            return self._render_gui(state_string)
+        raise ValueError(
+            f"{self.render_mode} is not a valid render mode. Available modes "
+            f"are: {self.metadata['render_modes']}"
+        )
+
+    def _render_gui(self, state_string: str):
+        import pygame
+
+        from pettingzoo.classic.hanabi.rendering import (
+            HanabiRenderer,
+            parse_hanabi_state,
+        )
+
+        if self._renderer is None:
+            self._renderer = HanabiRenderer(
+                colors=self._config["colors"],
+                ranks=self._config["ranks"],
+                players=self._config["players"],
+            )
+        if self.screen is None:
+            if self.render_mode == "human":
+                pygame.init()
+                pygame.display.init()
+                pygame.display.set_caption("Hanabi")
+                self.screen = pygame.display.set_mode(
+                    (self._renderer.width, self._renderer.height)
+                )
+                self.clock = pygame.time.Clock()
+            else:  # rgb_array
+                self.screen = pygame.Surface(
+                    (self._renderer.width, self._renderer.height)
+                )
+
+        data = parse_hanabi_state(state_string)
+        board = self._renderer.draw(
+            data,
+            max_info=self._config["max_information_tokens"],
+            max_life=self._config["max_life_tokens"],
+        )
+        self.screen.blit(board, (0, 0))
+
+        if self.render_mode == "human":
+            pygame.event.pump()
+            pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
+            return None
+        # rgb_array
+        return np.transpose(
+            np.array(pygame.surfarray.pixels3d(self.screen)), axes=(1, 0, 2)
+        )
 
     def close(self):
-        pass
+        if self.screen is not None:
+            import pygame
+
+            pygame.display.quit()
+            pygame.quit()
+            self.screen = None
+            self._renderer = None
