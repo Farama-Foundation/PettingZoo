@@ -88,7 +88,7 @@ html_theme_options = {
     "gtag": "G-Q4EGMJ3R24",
     "versioning": True,
     "source_repository": "https://github.com/Farama-Foundation/PettingZoo/",
-    "source_branch": "master",
+    "source_branch": "main",
     "source_directory": "docs/",
 }
 
