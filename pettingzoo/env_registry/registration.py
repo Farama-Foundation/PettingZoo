@@ -3,6 +3,7 @@
 import warnings
 from collections.abc import Callable
 from copy import deepcopy
+from functools import lru_cache
 from typing import Any, Literal, overload
 
 from pettingzoo.env_registry.exceptions import FailedToImport
@@ -14,14 +15,6 @@ from pettingzoo.utils.env import AECEnv, ParallelEnv
 # Two separate registries for AEC and Parallel
 aec_registry: dict[str, EnvSpec] = {}
 parallel_registry: dict[str, EnvSpec] = {}
-
-
-def _get_registry(env_type: EnvType) -> dict[str, EnvSpec]:
-    if env_type == "aec":
-        return aec_registry
-    if env_type == "parallel":
-        return parallel_registry
-    raise ValueError(f"Invalid env_type: {env_type!r}. Must be 'aec' or 'parallel'.")
 
 
 @overload
@@ -179,3 +172,12 @@ def pprint_registry() -> None:
     print("\nParallel environments:")
     for env_id in sorted(parallel_registry.keys()):
         print(f"  {env_id}")
+
+
+@lru_cache(maxsize=2)
+def _get_registry(env_type: EnvType) -> dict[str, EnvSpec]:
+    if env_type == "aec":
+        return aec_registry
+    if env_type == "parallel":
+        return parallel_registry
+    raise ValueError(f"Invalid env_type: {env_type!r}. Must be 'aec' or 'parallel'.")
