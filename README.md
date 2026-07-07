@@ -46,6 +46,13 @@ from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
 ```
 
+or with the new Gymnasium-like registry:
+
+```python
+from pettingzoo import make
+env = make("aec", "butterfly/pistonball_v6")
+```
+
 Environments can be interacted with in a manner very similar to Gymnasium:
 
 ```python
