@@ -67,16 +67,6 @@ very uncommon and these features should be included whenever possible as all
 standard learning code requires these properties. Also not that if you do not
 have {name} it should also not be possible for you to expose the possible_agents
 list and observation_spaces, action_spaces dictionaries."""
-env_obs_dicts = [
-    "leduc_holdem_v4",
-    "texas_holdem_no_limit_v6",
-    "texas_holdem_v4",
-    "go_v5",
-    "chess_v6",
-    "connect_four_v3",
-    "tictactoe_v3",
-    "gin_rummy_v5",
-]
 env_graphical_obs = ["knights_archers_zombies_v11"]
 env_diff_obs_shapes = [
     "simple_adversary_v3",
@@ -88,18 +78,6 @@ env_diff_obs_shapes = [
     "simple_crypto_v3",
 ]
 env_all_zeros_obs = ["knights_archers_zombies_v11"]
-env_obs_space = [
-    "leduc_holdem_v4",
-    "texas_holdem_no_limit_v6",
-    "texas_holdem_v4",
-    "go_v5",
-    "hanabi_v5",
-    "knights_archers_zombies_v11",
-    "chess_v6",
-    "connect_four_v3",
-    "tictactoe_v3",
-    "gin_rummy_v5",
-]
 env_diff_agent_obs_size = [
     "simple_adversary_v3",
     "simple_world_comm_v3",
@@ -136,8 +114,6 @@ env_neg_inf_obs = [
 
 def test_observation(observation, observation_0, env_name=None):
     if not isinstance(observation, np.ndarray):
-        if env_name is not None and env_name not in env_obs_dicts:
-            warnings.warn("Observation is not a NumPy array")
         if isinstance(observation, dict) and "observation" in observation:
             observation = observation["observation"]
             test_observation(observation, observation_0, env_name)
@@ -232,16 +208,6 @@ def test_observation_action_spaces(env, agent_0):
             "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). "
             "Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None) to enable caching, or changing it to read from a dict such as self.action_spaces."
         )
-        if (
-            not (
-                isinstance(env.observation_space(agent), gymnasium.spaces.Box)
-                or isinstance(env.observation_space(agent), gymnasium.spaces.Discrete)
-            )
-            and str(env.unwrapped) not in env_obs_space
-        ):
-            warnings.warn(
-                "Observation space for each agent probably should be gymnasium.spaces.box or gymnasium.spaces.discrete"
-            )
         if not (
             isinstance(env.action_space(agent), gymnasium.spaces.Box)
             or isinstance(env.action_space(agent), gymnasium.spaces.Discrete)
