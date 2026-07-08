@@ -22,9 +22,9 @@ def _normalize_env_id(env_id: str) -> str:
     return UNDERSCORE_NORMALIZATION.sub("-v", env_id.strip(), count=1)
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class EnvSpec:
-    """Specification for a registered environment."""
+    """Specification for a registered environment, immutable after creation."""
 
     id: str
     entry_point: Callable[..., Any] | str | None = None
@@ -36,8 +36,12 @@ class EnvSpec:
     version: int | None = field(init=False)
 
     def __post_init__(self):
-        self.id = _normalize_env_id(self.id)
-        self.namespace, self.name, self.version = _parse_env_id(self.id)
+        force_setattr = object.__setattr__  # we need to overwrite frozen fields
+        force_setattr(self, "id", _normalize_env_id(self.id))
+        ns, name, ver = _parse_env_id(self.id)
+        force_setattr(self, "namespace", ns)
+        force_setattr(self, "name", name)
+        force_setattr(self, "version", ver)
 
     def make(self, **kwargs: Any) -> _AECEnv | _ParallelEnv:
         """Create an environment instance from this spec."""
