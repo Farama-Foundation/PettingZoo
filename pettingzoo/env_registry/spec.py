@@ -10,9 +10,16 @@ from typing import Any
 from pettingzoo.env_registry.exceptions import PettingZooRegistryError
 from pettingzoo.env_registry.types import _AECEnv, _ParallelEnv
 
-ENV_ID_RE = re.compile(
+ENV_ID_PARSING = re.compile(
     r"^(?:(?P<namespace>[\w.-]+)\/)?(?P<name>[\w:.-]+?)(?:-v(?P<version>\d+))?$"
 )
+UNDERSCORE_NORMALIZATION = re.compile(r"_v(?=\d+$)")
+
+
+@lru_cache(typed=True)
+def _normalize_env_id(env_id: str) -> str:
+    """Normalize PettingZoo-style version suffixes to Gymnasium-style IDs."""
+    return UNDERSCORE_NORMALIZATION.sub("-v", env_id.strip(), count=1)
 
 
 @dataclass
@@ -29,6 +36,7 @@ class EnvSpec:
     version: int | None = field(init=False)
 
     def __post_init__(self):
+        self.id = _normalize_env_id(self.id)
         self.namespace, self.name, self.version = _parse_env_id(self.id)
 
     def make(self, **kwargs: Any) -> _AECEnv | _ParallelEnv:
@@ -46,15 +54,17 @@ def _parse_env_id(env_id: str) -> tuple[str | None, str, int | None]:
 
     Format: ``[namespace/]EnvName[-vN]``
     """
-    match = ENV_ID_RE.fullmatch(env_id) if isinstance(env_id, str) else None
-    if not match:
+    env_id_parsed = None
+    if isinstance(env_id, str):
+        env_id_parsed = ENV_ID_PARSING.fullmatch(_normalize_env_id(env_id))
+    if not env_id_parsed:
         raise PettingZooRegistryError(
             f"Malformed environment ID: {env_id!r}. "
             f"Expected a str with format: [namespace/]EnvName[-vN]"
         )
-    namespace = match.group("namespace")
-    name = match.group("name")
-    version_str = match.group("version")
+    namespace = env_id_parsed.group("namespace")
+    name = env_id_parsed.group("name")
+    version_str = env_id_parsed.group("version")
     version = int(version_str) if version_str is not None else None
     return namespace, name, version
 

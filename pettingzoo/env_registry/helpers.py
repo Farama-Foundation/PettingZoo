@@ -7,17 +7,18 @@ from pettingzoo.env_registry.exceptions import (
     NamespaceNotFound,
     VersionNotFound,
 )
-from pettingzoo.env_registry.spec import EnvSpec, _parse_env_id
+from pettingzoo.env_registry.spec import EnvSpec, _normalize_env_id, _parse_env_id
 
 
 def find_spec(registry: dict[str, "EnvSpec"], env_id: str) -> "EnvSpec":
     """Look up an EnvSpec in a registry, resolving unversioned IDs to the latest version."""
+    env_id = _normalize_env_id(env_id)
+    if env_id in registry:
+        return registry[env_id]
+
     namespace, name, version = _parse_env_id(env_id)
 
     if version is not None:
-        full_id = _get_env_id(namespace, name, version)
-        if full_id in registry:
-            return registry[full_id]
         # Check if the env name exists at all
         highest = _find_highest_version(registry, namespace, name)
         if highest is not None:
@@ -42,11 +43,6 @@ def find_spec(registry: dict[str, "EnvSpec"], env_id: str) -> "EnvSpec":
     if highest is not None:
         full_id = _get_env_id(namespace, name, highest)
         return registry[full_id]
-
-    # No versioned env found; try unversioned exact match
-    unversioned_id = _get_env_id(namespace, name, None)
-    if unversioned_id in registry:
-        return registry[unversioned_id]
 
     if namespace is not None:
         ns_exists = any(s.namespace == namespace for s in registry.values())
