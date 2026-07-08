@@ -54,7 +54,7 @@ def find_spec(registry: dict[str, "EnvSpec"], env_id: str) -> "EnvSpec":
     )
 
 
-@lru_cache(typed=True)
+@lru_cache
 def _get_env_id(namespace: str | None, name: str, version: int | None) -> str:
     """Reconstruct a full environment ID from its components."""
     env_id = namespace + "/" if namespace else ""

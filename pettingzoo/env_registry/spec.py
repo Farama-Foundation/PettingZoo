@@ -16,7 +16,7 @@ ENV_ID_PARSING = re.compile(
 UNDERSCORE_NORMALIZATION = re.compile(r"_v(?=\d+$)")
 
 
-@lru_cache(typed=True)
+@lru_cache
 def _normalize_env_id(env_id: str) -> str:
     """Normalize PettingZoo-style version suffixes to Gymnasium-style IDs."""
     return UNDERSCORE_NORMALIZATION.sub("-v", env_id.strip(), count=1)
@@ -52,7 +52,7 @@ class EnvSpec:
         return creator(**merged_kwargs)
 
 
-@lru_cache(typed=True)
+@lru_cache
 def _parse_env_id(env_id: str) -> tuple[str | None, str, int | None]:
     """Parse an environment ID into (namespace, name, version).
 
@@ -73,7 +73,7 @@ def _parse_env_id(env_id: str) -> tuple[str | None, str, int | None]:
     return namespace, name, version
 
 
-@lru_cache(typed=True)
+@lru_cache
 def _load_env_creator(
     entry_point: Callable[..., Any] | str | None,
 ) -> Callable[..., Any]:
