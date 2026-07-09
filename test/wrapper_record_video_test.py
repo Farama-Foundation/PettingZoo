@@ -57,8 +57,8 @@ def test_video_folder_and_filenames_parallel(
     )
 
     obs, infos = env.reset(seed=123)
-    for i in range(130):
-        actions = {agent: env.action_space(agent).sample() for agent in obs.keys()}
+    for _ in range(130):
+        actions = {agent: env.action_space(agent).sample() for agent in obs}
         obs, rewards, terms, truncs, infos = env.step(actions)
         if any(terms.values()) or any(truncs.values()):
             obs, infos = env.reset()

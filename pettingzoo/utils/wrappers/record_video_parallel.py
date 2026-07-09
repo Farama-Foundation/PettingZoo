@@ -2,16 +2,13 @@ from __future__ import annotations
 
 import gc
 import os
-from typing import Any, Callable
-
-try:
-    from typing import TypeAlias
-except ImportError:
-    from typing_extensions import TypeAlias
+from collections.abc import Callable
+from typing import Any, TypeAlias
 
 import gymnasium
 import numpy as np
 from gymnasium.error import DependencyNotInstalled
+from typing_extensions import override
 
 from pettingzoo.utils.env import ActionType, AgentID, ObsType, ParallelEnv
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
@@ -19,10 +16,10 @@ from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 RenderFrame: TypeAlias = np.typing.NDArray[Any]
 
 
-class RecordVideoParallel(BaseParallelWrapper):
+class RecordVideoParallel(BaseParallelWrapper[AgentID, ObsType, ActionType]):
     def __init__(
         self,
-        env: ParallelEnv,
+        env: ParallelEnv[AgentID, ObsType, ActionType],
         video_folder: str,
         episode_trigger: Callable[[int], bool] | None = None,
         step_trigger: Callable[[int], bool] | None = None,
@@ -57,9 +54,9 @@ class RecordVideoParallel(BaseParallelWrapper):
             DependencyNotInstalled: If `MoviePy` is not installed
         """
         super().__init__(env)
-        assert isinstance(
-            env, ParallelEnv
-        ), "RecordVideoParallelEnv is only compatible with ParallelEnv environments."
+        assert isinstance(env, ParallelEnv), (
+            "RecordVideoParallelEnv is only compatible with ParallelEnv environments."
+        )
 
         if env.render_mode in {None, "human", "ansi"}:  # type: ignore
             raise ValueError(
@@ -68,13 +65,11 @@ class RecordVideoParallel(BaseParallelWrapper):
             )
 
         if episode_trigger is None and step_trigger is None:
-            episode_trigger = (
-                lambda episode_id: (
-                    int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
-                )
-                if episode_id < 1000
-                else (episode_id % 1000 == 0)
-            )
+
+            def episode_trigger(episode_id: int) -> bool:
+                if episode_id < 1000:
+                    return int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
+                return episode_id % 1000 == 0
 
         self.episode_trigger = episode_trigger
         self.step_trigger = step_trigger
@@ -111,7 +106,7 @@ class RecordVideoParallel(BaseParallelWrapper):
                 'MoviePy is not installed, run `pip install "pettingzoo[other]"`'
             ) from e
 
-    def _capture_frame(self):
+    def _capture_frame(self) -> None:
         assert self.recording, "Cannot capture a frame, recording wasn't started."
 
         frame = self.env.render()
@@ -129,9 +124,10 @@ class RecordVideoParallel(BaseParallelWrapper):
                 f"Recording stopped: expected type of frame returned by render to be a numpy array, got instead {type(frame)}."
             )
 
+    @override
     def reset(
-        self, seed: int | None = None, options: dict | None = None
-    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict]]:
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict[str, Any]]]:
         """Reset the environment and eventually starts a new recording."""
         obs, info = self.env.reset(seed=seed, options=options)
         self.episode_id += 1
@@ -148,6 +144,7 @@ class RecordVideoParallel(BaseParallelWrapper):
 
         return obs, info
 
+    @override
     def step(
         self, actions: dict[AgentID, ActionType]
     ) -> tuple[
@@ -155,7 +152,7 @@ class RecordVideoParallel(BaseParallelWrapper):
         dict[AgentID, float],
         dict[AgentID, bool],
         dict[AgentID, bool],
-        dict[AgentID, dict],
+        dict[AgentID, dict[str, Any]],
     ]:
         """Steps through the environment using actions, recording frames if `self.recording`."""
         obs, rew, terminated, truncated, info = self.env.step(actions)
@@ -171,7 +168,8 @@ class RecordVideoParallel(BaseParallelWrapper):
 
         return obs, rew, terminated, truncated, info
 
-    def render(self):
+    @override
+    def render(self) -> None | np.ndarray | str | list[Any]:
         """Compute the render frames as specified by render_mode attribute during initialization of the environment."""
         render_out = self.env.render()
         if self.recording and isinstance(render_out, list):
@@ -182,16 +180,16 @@ class RecordVideoParallel(BaseParallelWrapper):
             self.render_history = []
             frames = render_out if isinstance(render_out, list) else [render_out]
             return tmp_history + frames
-        else:
-            return render_out
+        return render_out
 
-    def close(self):
+    @override
+    def close(self) -> None:
         """Closes the wrapper then the video recorder."""
         super().close()
         if self.recording:
             self.stop_recording()
 
-    def start_recording(self, video_name: str):
+    def start_recording(self, video_name: str) -> None:
         """Start a new recording. If it is already recording, stops the current recording before starting the new one."""
         if self.recording:
             self.stop_recording()
@@ -199,7 +197,7 @@ class RecordVideoParallel(BaseParallelWrapper):
         self.recording = True
         self._video_name = video_name
 
-    def stop_recording(self):
+    def stop_recording(self) -> None:
         """Stop current recording and saves the video."""
         assert self.recording, "stop_recording was called, but no recording was started"
 
@@ -212,7 +210,7 @@ class RecordVideoParallel(BaseParallelWrapper):
                 from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
             except ImportError as e:
                 raise DependencyNotInstalled(
-                    'MoviePy is not installed, run `pip install "gymnasium[other]"`'
+                    'MoviePy is not installed, run `pip install "pettingzoo[other]"`'
                 ) from e
 
             clip = ImageSequenceClip(self.recorded_frames, fps=self.frames_per_sec)
@@ -227,7 +225,7 @@ class RecordVideoParallel(BaseParallelWrapper):
         if self.gc_trigger and self.gc_trigger(self.episode_id):
             gc.collect()
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Warn the user in case last video wasn't saved."""
         if len(self.recorded_frames) > 0:
             gymnasium.logger.warn("Unable to save last video! Did you call close()?")

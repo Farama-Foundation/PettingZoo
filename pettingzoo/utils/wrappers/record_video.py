@@ -2,27 +2,24 @@ from __future__ import annotations
 
 import gc
 import os
-from typing import Any, Callable
-
-try:
-    from typing import TypeAlias
-except ImportError:
-    from typing_extensions import TypeAlias
+from collections.abc import Callable
+from typing import Any, TypeAlias
 
 import gymnasium
 import numpy as np
 from gymnasium.error import DependencyNotInstalled
+from typing_extensions import override
 
-from pettingzoo.utils.env import ActionType, AECEnv, AgentID
+from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
 RenderFrame: TypeAlias = np.typing.NDArray[Any]
 
 
-class RecordVideo(BaseWrapper):
+class RecordVideo(BaseWrapper[AgentID, ObsType, ActionType]):
     def __init__(
         self,
-        env: AECEnv,
+        env: AECEnv[AgentID, ObsType, ActionType],
         video_folder: str,
         episode_trigger: Callable[[int], bool] | None = None,
         step_trigger: Callable[[int], bool] | None = None,
@@ -57,9 +54,9 @@ class RecordVideo(BaseWrapper):
             DependencyNotInstalled: If `MoviePy` is not installed
         """
         super().__init__(env)
-        assert isinstance(
-            env, AECEnv
-        ), "RecordVideoEnv is only compatible with AECEnv environments."
+        assert isinstance(env, AECEnv), (
+            "RecordVideoEnv is only compatible with AECEnv environments."
+        )
 
         if env.render_mode in {None, "human", "ansi"}:  # type: ignore
             raise ValueError(
@@ -68,13 +65,11 @@ class RecordVideo(BaseWrapper):
             )
 
         if episode_trigger is None and step_trigger is None:
-            episode_trigger = (
-                lambda episode_id: (
-                    int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
-                )
-                if episode_id < 1000
-                else (episode_id % 1000 == 0)
-            )
+
+            def episode_trigger(episode_id: int) -> bool:
+                if episode_id < 1000:
+                    return int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
+                return episode_id % 1000 == 0
 
         self.episode_trigger = episode_trigger
         self.step_trigger = step_trigger
@@ -111,7 +106,7 @@ class RecordVideo(BaseWrapper):
                 'MoviePy is not installed, run `pip install "pettingzoo[other]"`'
             ) from e
 
-    def _capture_frame(self):
+    def _capture_frame(self) -> None:
         assert self.recording, "Cannot capture a frame, recording wasn't started."
 
         frame = self.env.render()
@@ -129,7 +124,10 @@ class RecordVideo(BaseWrapper):
                 f"Recording stopped: expected type of frame returned by render to be a numpy array, got instead {type(frame)}."
             )
 
-    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
+    @override
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
         """Reset the environment and eventually starts a new recording."""
         self.env.reset(seed=seed, options=options)
         self.episode_id += 1
@@ -144,9 +142,10 @@ class RecordVideo(BaseWrapper):
             if len(self.recorded_frames) > self.video_length:
                 self.stop_recording()
 
-    def step(self, actions: dict[AgentID, ActionType]) -> None:
+    @override
+    def step(self, action: ActionType) -> None:
         """Steps through the environment using actions, recording frames if `self.recording`."""
-        self.env.step(actions)
+        self.env.step(action)
         self.step_id += 1
 
         if self.step_trigger and self.step_trigger(self.step_id):
@@ -157,7 +156,8 @@ class RecordVideo(BaseWrapper):
             if len(self.recorded_frames) > self.video_length:
                 self.stop_recording()
 
-    def render(self):
+    @override
+    def render(self) -> None | np.ndarray | str | list[Any]:
         """Compute the render frames as specified by render_mode attribute during initialization of the environment."""
         render_out = self.env.render()
         if self.recording and isinstance(render_out, list):
@@ -168,16 +168,16 @@ class RecordVideo(BaseWrapper):
             self.render_history = []
             frames = render_out if isinstance(render_out, list) else [render_out]
             return tmp_history + frames
-        else:
-            return render_out
+        return render_out
 
-    def close(self):
+    @override
+    def close(self) -> None:
         """Closes the wrapper then the video recorder."""
         super().close()
         if self.recording:
             self.stop_recording()
 
-    def start_recording(self, video_name: str):
+    def start_recording(self, video_name: str) -> None:
         """Start a new recording. If it is already recording, stops the current recording before starting the new one."""
         if self.recording:
             self.stop_recording()
@@ -185,7 +185,7 @@ class RecordVideo(BaseWrapper):
         self.recording = True
         self._video_name = video_name
 
-    def stop_recording(self):
+    def stop_recording(self) -> None:
         """Stop current recording and saves the video."""
         assert self.recording, "stop_recording was called, but no recording was started"
 
@@ -213,7 +213,7 @@ class RecordVideo(BaseWrapper):
         if self.gc_trigger and self.gc_trigger(self.episode_id):
             gc.collect()
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Warn the user in case last video wasn't saved."""
         if len(self.recorded_frames) > 0:
             gymnasium.logger.warn("Unable to save last video! Did you call close()?")
