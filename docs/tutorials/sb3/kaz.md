@@ -41,3 +41,40 @@ The following code should run without any issues. The comments are designed to h
 .. literalinclude:: ../../../tutorials/SB3/kaz/sb3_kaz_vector.py
    :language: python
 ```
+
+## Interpretable Predictive Policy
+
+KAZ's vector observation also supports a compact policy that is useful as a
+reproducible benchmark. The controller prioritizes zombies nearest the bottom
+of the board, gives the two archers separate targets when possible, and solves
+a projectile-intercept equation before firing. A small grid search calibrates
+the lead and alignment thresholds; no model checkpoint is required.
+
+```{figure} kaz_predictive_policy.gif
+:width: 400px
+:name: kaz-predictive-policy
+
+Predictive policy on seed 2000, selected automatically as a median-reward
+episode from the evaluation block rather than for appearance.
+```
+
+The following command searches on seeds 0 through 9, evaluates on the disjoint
+seed block 2000 through 2049, and renders the representative GIF:
+
+```bash
+python tutorials/SB3/kaz/predictive_kaz_policy.py \
+  --search --search-episodes 10 \
+  --episodes 50 --eval-start 2000 \
+  --render-gif docs/tutorials/sb3/kaz_predictive_policy.gif
+```
+
+On the environment defaults used by the script (`max_cycles=900`,
+`max_zombies=10`), the frozen policy averaged 43.60 reward on those 50 held-out
+seeds. A deterministically seeded random-action policy averaged 2.44. The
+paired mean improvement was 41.16 with a bootstrap 95% confidence interval of
+[40.62, 41.66].
+
+```{eval-rst}
+.. literalinclude:: ../../../tutorials/SB3/kaz/predictive_kaz_policy.py
+   :language: python
+```

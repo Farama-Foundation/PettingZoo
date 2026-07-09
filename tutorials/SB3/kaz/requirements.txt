@@ -1,3 +1,4 @@
 pettingzoo[butterfly]>=1.25.0
 stable-baselines3>=2.0.0
 supersuit>=3.9.0
+pillow>=10.0.0
