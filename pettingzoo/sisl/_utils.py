@@ -5,11 +5,11 @@ class Agent:
 
     @property
     def observation_space(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @property
     def action_space(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def __str__(self):
         return f"<{type(self).__name__} instance>"

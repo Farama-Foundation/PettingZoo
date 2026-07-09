@@ -6,12 +6,13 @@ def max_cycles_test(mod):
     parallel_env = mod.parallel_env(max_cycles=max_cycles)
 
     observations, infos = parallel_env.reset()
-    terminations = {agent: False for agent in parallel_env.agents}
-    truncations = {agent: False for agent in parallel_env.agents}
+    terminations = dict.fromkeys(parallel_env.agents, False)
+    truncations = dict.fromkeys(parallel_env.agents, False)
     test_cycles = (
         max_cycles + 10
     )  # allows environment to do more than max_cycles if it so wishes
-    for step in range(test_cycles):
+    # `step` is used after the loop (pstep), so it is not "unused".
+    for step in range(test_cycles):  # noqa: B007
         actions = {
             agent: parallel_env.action_space(agent).sample()
             for agent in parallel_env.agents
@@ -20,7 +21,7 @@ def max_cycles_test(mod):
         observations, rewards, terminations, truncations, infos = parallel_env.step(
             actions
         )
-        if all([x or y for x, y in zip(terminations.values(), truncations.values())]):
+        if all(x or y for x, y in zip(terminations.values(), truncations.values())):
             break
 
     pstep = step + 1

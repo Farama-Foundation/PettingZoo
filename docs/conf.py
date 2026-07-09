@@ -20,7 +20,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import pettingzoo  # noqa: E402
+import pettingzoo
 
 project = "PettingZoo"
 copyright = "2023 Farama Foundation"
@@ -88,7 +88,7 @@ html_theme_options = {
     "gtag": "G-Q4EGMJ3R24",
     "versioning": True,
     "source_repository": "https://github.com/Farama-Foundation/PettingZoo/",
-    "source_branch": "master",
+    "source_branch": "main",
     "source_directory": "docs/",
 }
 

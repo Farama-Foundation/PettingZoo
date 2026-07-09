@@ -145,7 +145,7 @@ if __name__ == "__main__":
             action = {agent: env.action_space(agent).sample() for agent in env.agents}
             next_state, reward, termination, truncation, info = env.step(action)
             if not termination:
-                assert False
+                raise AssertionError
             scores += np.array(list(reward.values())).transpose()
             total_steps += num_envs
             steps += num_envs

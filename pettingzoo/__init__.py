@@ -1,11 +1,28 @@
 import os
 import sys
 
+# This import also populate registries with built-in environments
+from pettingzoo.env_registry.registration import (
+    EnvSpec,
+    aec_registry,
+    make,
+    parallel_registry,
+    pprint_registry,
+    register,
+    spec,
+)
 from pettingzoo.utils import AECEnv, ParallelEnv
 
 __all__ = [
     "AECEnv",
+    "EnvSpec",
     "ParallelEnv",
+    "aec_registry",
+    "make",
+    "parallel_registry",
+    "pprint_registry",
+    "register",
+    "spec",
 ]
 # Initializing pygame initializes audio connections through SDL. SDL uses alsa by default on all Linux systems
 # SDL connecting to alsa frequently create these giant lists of warnings every time you import an environment using pygame

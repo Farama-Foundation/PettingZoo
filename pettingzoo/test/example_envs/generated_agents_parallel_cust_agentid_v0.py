@@ -1,5 +1,3 @@
-from typing import Tuple, Union
-
 import gymnasium
 import numpy as np
 from gymnasium.utils import seeding
@@ -19,11 +17,11 @@ def raw_env(**kwargs):
     return conversions.parallel_to_aec(parallel_env(**kwargs))
 
 
-def get_type(agent: Tuple[str, int]):
+def get_type(agent: tuple[str, int]):
     return agent[0]
 
 
-class parallel_env(ParallelEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
+class parallel_env(ParallelEnv[tuple[str, int], np.ndarray, int | None]):
     metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):
@@ -41,7 +39,7 @@ class parallel_env(ParallelEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
         self.rng_seed = None
         self._seed()
         self.render_mode = render_mode
-        for i in range(3):
+        for _i in range(3):
             self.add_type()
 
     def observation_space(self, agent):
@@ -93,18 +91,18 @@ class parallel_env(ParallelEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
 
         self.types = []
         self._agent_counters = {}
-        for i in range(3):
+        for _i in range(3):
             self.add_type()
 
         # Add agents
         self.agents = []
-        for i in range(5):
+        for _i in range(5):
             self.add_agent(self.np_random.choice(self.types))
 
         # seed observation and action spaces
-        for i, agent in enumerate(self.agents):
+        for _i, agent in enumerate(self.agents):
             self.observation_space(agent).seed(seed)
-        for i, agent in enumerate(self.agents):
+        for _i, agent in enumerate(self.agents):
             self.action_space(agent).seed(seed)
 
         return {agent: self.observe(agent) for agent in self.agents}, {
@@ -118,16 +116,16 @@ class parallel_env(ParallelEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
         truncated = self.num_steps >= self.max_cycles
         for agent in self.agents:
             assert agent in actions
-        all_truncations = {agent: truncated for agent in self.agents}
-        all_terminations = {agent: False for agent in self.agents}
+        all_truncations = dict.fromkeys(self.agents, truncated)
+        all_terminations = dict.fromkeys(self.agents, False)
         if not truncated:
-            for i in range(6):
+            for _i in range(6):
                 if self.np_random.random() < 0.1 and len(self.agents) >= 10:
                     all_terminations[
                         self.agents[self.np_random.choice(len(self.agents))]
                     ] = True
 
-            for i in range(3):
+            for _i in range(3):
                 if self.np_random.random() < 0.1:
                     if self.np_random.random() < 0.1:
                         type = self.add_type()
@@ -139,7 +137,7 @@ class parallel_env(ParallelEnv[Tuple[str, int], np.ndarray, Union[int, None]]):
                     all_truncations[new_agent] = False
 
         all_infos = {agent: {} for agent in self.agents}
-        all_rewards = {agent: 0 for agent in self.agents}
+        all_rewards = dict.fromkeys(self.agents, 0)
         all_rewards[self.agents[self.np_random.choice(len(self.agents))]] = 1
         all_observes = {agent: self.observe(agent) for agent in self.agents}
         self.agents = [

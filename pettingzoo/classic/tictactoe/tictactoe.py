@@ -141,9 +141,9 @@ class raw_env(AECEnv, EzPickle):
             for i in self.agents
         }
 
-        self.rewards = {i: 0 for i in self.agents}
-        self.terminations = {i: False for i in self.agents}
-        self.truncations = {i: False for i in self.agents}
+        self.rewards = dict.fromkeys(self.agents, 0)
+        self.terminations = dict.fromkeys(self.agents, False)
+        self.truncations = dict.fromkeys(self.agents, False)
         self.infos = {i: {} for i in self.agents}
 
         self._agent_selector = AgentSelector(self.agents)
@@ -209,7 +209,7 @@ class raw_env(AECEnv, EzPickle):
                 self.rewards[self.agents[loser]] -= 1
 
             # once either play wins or there is a draw, game over, both players are done
-            self.terminations = {i: True for i in self.agents}
+            self.terminations = dict.fromkeys(self.agents, True)
             self._accumulate_rewards()
 
         self.agent_selection = self._agent_selector.next()
@@ -221,10 +221,10 @@ class raw_env(AECEnv, EzPickle):
         self.board.reset()
 
         self.agents = self.possible_agents[:]
-        self.rewards = {i: 0 for i in self.agents}
-        self._cumulative_rewards = {i: 0 for i in self.agents}
-        self.terminations = {i: False for i in self.agents}
-        self.truncations = {i: False for i in self.agents}
+        self.rewards = dict.fromkeys(self.agents, 0)
+        self._cumulative_rewards = dict.fromkeys(self.agents, 0)
+        self.terminations = dict.fromkeys(self.agents, False)
+        self.truncations = dict.fromkeys(self.agents, False)
         self.infos = {i: {} for i in self.agents}
         # selects the first agent
         self._agent_selector.reinit(self.agents)
@@ -250,7 +250,7 @@ class raw_env(AECEnv, EzPickle):
             gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
-            return
+            return None
 
         screen_height = self.screen_height
         screen_width = self.screen_height
@@ -270,10 +270,9 @@ class raw_env(AECEnv, EzPickle):
         def getSymbol(input):
             if input == 0:
                 return None
-            elif input == 1:
+            if input == 1:
                 return "cross"
-            else:
-                return "circle"
+            return "circle"
 
         board_state = list(map(getSymbol, self.board.squares))
 

@@ -41,12 +41,11 @@ def mirror_move(move):
 def result_to_int(result_str):
     if result_str == "1-0":
         return 1
-    elif result_str == "0-1":
+    if result_str == "0-1":
         return -1
-    elif result_str == "1/2-1/2":
+    if result_str == "1/2-1/2":
         return 0
-    else:
-        assert False, "bad result"
+    raise AssertionError("bad result")
 
 
 def get_queen_dir(diff):
@@ -63,7 +62,7 @@ def get_queen_dir(diff):
             if x == sign(dx) and y == sign(dy):
                 return magnitude, counter
             counter += 1
-    assert False, "bad queen move inputted"
+    raise AssertionError("bad queen move inputted")
 
 
 def get_queen_plane(diff):
@@ -81,7 +80,7 @@ def get_knight_dir(diff):
                 if dx == x and dy == y:
                     return counter
                 counter += 1
-    assert False, "bad knight move inputted"
+    raise AssertionError("bad knight move inputted")
 
 
 def is_knight_move(diff):
@@ -122,15 +121,13 @@ def get_move_plane(move):
 
     if is_knight_move(difference):
         return KNIGHT_OFFSET + get_knight_dir(difference)
-    else:
-        if move.promotion is not None and move.promotion != chess.QUEEN:
-            return (
-                UNDER_OFFSET
-                + 3 * get_pawn_promotion_move(difference)
-                + get_pawn_promotion_num(move.promotion)
-            )
-        else:
-            return QUEEN_OFFSET + get_queen_plane(difference)
+    if move.promotion is not None and move.promotion != chess.QUEEN:
+        return (
+            UNDER_OFFSET
+            + 3 * get_pawn_promotion_move(difference)
+            + get_pawn_promotion_num(move.promotion)
+        )
+    return QUEEN_OFFSET + get_queen_plane(difference)
 
 
 moves_to_actions = {}

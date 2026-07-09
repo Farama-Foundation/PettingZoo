@@ -1,7 +1,8 @@
 import copy
 import warnings
 from collections import defaultdict
-from typing import Any, Callable, Dict, Optional, cast
+from collections.abc import Callable
+from typing import Any, cast
 
 from typing_extensions import override
 
@@ -54,14 +55,13 @@ def aec_to_parallel(
         aec_env.env, parallel_to_aec_wrapper
     ):
         return aec_env.env.env
-    else:
-        par_env = aec_to_parallel_wrapper(aec_env)
-        return par_env
+    par_env = aec_to_parallel_wrapper(aec_env)
+    return par_env
 
 
 def parallel_to_aec(
-    par_env: ParallelEnv[AgentID, ObsType, Optional[ActionType]],
-) -> AECEnv[AgentID, ObsType, Optional[ActionType]]:
+    par_env: ParallelEnv[AgentID, ObsType, ActionType | None],
+) -> AECEnv[AgentID, ObsType, ActionType | None]:
     """Converts a Parallel environment to an AEC environment.
 
     In the case of an existing AEC environment wrapped using a `aec_to_parallel_wrapper`, this function will return the original AEC environment.
@@ -69,20 +69,18 @@ def parallel_to_aec(
     """
     if isinstance(par_env, aec_to_parallel_wrapper):
         return par_env.aec_env
-    else:
-        aec_env = parallel_to_aec_wrapper(par_env)
-        ordered_env = OrderEnforcingWrapper(aec_env)
-        return ordered_env
+    aec_env = parallel_to_aec_wrapper(par_env)
+    ordered_env = OrderEnforcingWrapper(aec_env)
+    return ordered_env
 
 
 def turn_based_aec_to_parallel(
-    aec_env: AECEnv[AgentID, ObsType, Optional[ActionType]],
-) -> ParallelEnv[AgentID, ObsType, Optional[ActionType]]:
+    aec_env: AECEnv[AgentID, ObsType, ActionType | None],
+) -> ParallelEnv[AgentID, ObsType, ActionType | None]:
     if isinstance(aec_env, parallel_to_aec_wrapper):
-        return cast("ParallelEnv[AgentID, ObsType, Optional[ActionType]]", aec_env.env)
-    else:
-        par_env = turn_based_aec_to_parallel_wrapper(aec_env)
-        return par_env
+        return cast("ParallelEnv[AgentID, ObsType, ActionType | None]", aec_env.env)
+    par_env = turn_based_aec_to_parallel_wrapper(aec_env)
+    return par_env
 
 
 def to_parallel(
@@ -95,8 +93,8 @@ def to_parallel(
 
 
 def from_parallel(
-    par_env: ParallelEnv[AgentID, ObsType, Optional[ActionType]],
-) -> AECEnv[AgentID, ObsType, Optional[ActionType]]:
+    par_env: ParallelEnv[AgentID, ObsType, ActionType | None],
+) -> AECEnv[AgentID, ObsType, ActionType | None]:
     warnings.warn(
         "The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead."
     )
@@ -205,10 +203,9 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
                     raise AssertionError(
                         f"expected agent {agent} got termination or truncation agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent death (setting an agent's self.terminations or self.truncations entry to True) to happen only at the end of a cycle."
                     )
-                else:
-                    raise AssertionError(
-                        f"expected agent {agent} got agent {self.aec_env.agent_selection}, Parallel environment wrapper expects agents to step in a cycle."
-                    )
+                raise AssertionError(
+                    f"expected agent {agent} got agent {self.aec_env.agent_selection}, Parallel environment wrapper expects agents to step in a cycle."
+                )
             obs, rew, termination, truncation, info = self.aec_env.last()
             self.aec_env.step(actions[agent])
             for agent in self.aec_env.agents:
@@ -242,12 +239,10 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         return self.aec_env.close()
 
 
-class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
+class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, ActionType | None]):
     """Converts a Parallel environment into an AEC environment."""
 
-    def __init__(
-        self, parallel_env: ParallelEnv[AgentID, ObsType, Optional[ActionType]]
-    ):
+    def __init__(self, parallel_env: ParallelEnv[AgentID, ObsType, ActionType | None]):
         self.env = parallel_env
 
         self.metadata = {**parallel_env.metadata}
@@ -317,14 +312,12 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self._observations, self.infos = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
-        self._actions: Dict[AgentID, Optional[ActionType]] = {
-            agent: None for agent in self.agents
-        }
+        self._actions: dict[AgentID, ActionType | None] = dict.fromkeys(self.agents)
         self._agent_selector = AgentSelector(self._live_agents)
         self.agent_selection = self._agent_selector.reset()
-        self.terminations = {agent: False for agent in self.agents}
-        self.truncations = {agent: False for agent in self.agents}
-        self.rewards = {agent: 0 for agent in self.agents}
+        self.terminations = dict.fromkeys(self.agents, False)
+        self.truncations = dict.fromkeys(self.agents, False)
+        self.rewards = dict.fromkeys(self.agents, 0)
 
         # Every environment needs to return infos that contain self.agents as their keys
         if not self.infos:
@@ -339,7 +332,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
                 f"The `infos` dictionary returned by `env.reset()` is not valid: must contain keys for each agent defined in self.agents: {self.agents}. Overwriting with current info duplicated for each agent: {self.infos}"
             )
 
-        self._cumulative_rewards = {agent: 0 for agent in self.agents}
+        self._cumulative_rewards = dict.fromkeys(self.agents, 0)
         self.new_agents = []
         self.new_values = {}
 
@@ -363,7 +356,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
         self._cumulative_rewards[new_agent] = 0
 
     @override
-    def step(self, action: Optional[ActionType]):
+    def step(self, action: ActionType | None):
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
@@ -428,9 +421,9 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, Optional[ActionType]]):
 
 
 class turn_based_aec_to_parallel_wrapper(
-    ParallelEnv[AgentID, ObsType, Optional[ActionType]]
+    ParallelEnv[AgentID, ObsType, ActionType | None]
 ):
-    def __init__(self, aec_env: AECEnv[AgentID, ObsType, Optional[ActionType]]):
+    def __init__(self, aec_env: AECEnv[AgentID, ObsType, ActionType | None]):
         self.aec_env = aec_env
 
         try:
