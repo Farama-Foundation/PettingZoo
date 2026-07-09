@@ -19,7 +19,7 @@ __all__ = [
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
     "OrderEnforcingWrapper",
-    "TerminateIllegalWrapper",
     "RecordVideo",
     "RecordVideoParallel",
+    "TerminateIllegalWrapper",
 ]
