@@ -210,6 +210,9 @@ env.close()
 import matplotlib.pyplot as plt
 
 # Plot learning progress
+# Use the episode returns collected during training. This sample data keeps the
+# plotting example runnable on its own.
+episode_returns = [0.0, 0.2, -0.1, 0.5, 0.7, 0.9]
 episodes = range(len(episode_returns))
 rewards = episode_returns
 
@@ -229,34 +232,14 @@ plt.ylabel("Reward")
 plt.title("Learning Progress")
 plt.legend()
 plt.grid(True, alpha=0.3)
-plt.show()
+# Use plt.show() or plt.savefig(...) in an interactive training script.
+plt.close()
 ```
 
 ## Integration with Experiment Tracking
 
-For more sophisticated projects, integrate with experiment tracking tools:
-
-```python
-# Example with Weights & Biases (wandb)
-import wandb
-import os
-
-# Initialize experiment tracking
-wandb.init(project="connect-four-training", name="training-run-1")
-
-# Log episode statistics after each episode
-wandb.log({
-    "episode": episode_num,
-    "reward": episode_returns[-1],
-    "length": episode_lengths[-1],
-})
-
-# Upload videos periodically
-if episode_num % training_period == 0:
-    video_path = f"connect-four-training/training-episode-{episode_num}.mp4"
-    if os.path.exists(video_path):
-        wandb.log({"training_video": wandb.Video(video_path)})
-```
+For more sophisticated projects, integrate your experiment-tracking tool of
+choice (such as `wandb`) by logging the episode return, episode length, and paths to the videos created by `RecordVideo`. See the `wandb` example in the [Gymnasium documentation](https://gymnasium.farama.org/introduction/record_agent/#integration-with-experiment-tracking).
 
 ## Best Practices Summary
 
