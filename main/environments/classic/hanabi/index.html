@@ -448,14 +448,16 @@ played card does not satisfy these conditions, a life token is placed. The game 
 <section id="observation-space">
 <h2>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">¶</a></h2>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
-<p>The main observation space of an agent is a 658 sized vector representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. The observation vector contains the following features, life tokens,
-information tokens, number of players, deck size, formed fireworks, legal moves, observed hands, discard pile, the hints received from other players, which are then serialized into a bit string.</p>
-<p>Each card is encoded with a 25 bit one-hot vector, where the encoding of a card is equal to its color*T + rank, where T is the max possible rank. By default this value is 5. The maximum deck size is 50. The remaining deck size is represented with unary encoding. The state of each colored
-firework is represented with a one-hot encoding. The information tokens remaining are represented with a unary encoding. The life tokens remaining are represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card. That is the
-least significant bit being set to 1 indicates the lowest rank card of that color has been discarded.</p>
-<p>As players reveal info about their cards, the information revealed per card is also observed. The first 25 bits represent whether or not that specific card could be a specific color. For example if the card could only be red, then the first 25 bits of the observed revealed info would be 11111
-followed by 20 zeros. The next 5 bits store whether the color of that card was explicitly revealed, so if the card was revealed to be red, then the next 5 bits would be 10000. Finally the last 5 bits are the revealed rank of the card. So if the card was revealed to be of rank 1, then the next 5
-bits would be 10000. These 25 bits are tracked and observed for all cards in each player’s hand.</p>
+<p>The main observation space of an agent is a 658 sized vector (for the default 2-player full game) representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. Since v5 the observation is produced by
+OpenSpiel’s canonical Hanabi encoder (via Shimmy), so its layout — and the index ranges in the table below — depend on the chosen configuration (<code class="docutils literal notranslate"><span class="pre">colors</span></code>, <code class="docutils literal notranslate"><span class="pre">ranks</span></code>, <code class="docutils literal notranslate"><span class="pre">players</span></code>, <code class="docutils literal notranslate"><span class="pre">hand_size</span></code>, <code class="docutils literal notranslate"><span class="pre">max_information_tokens</span></code>, <code class="docutils literal notranslate"><span class="pre">max_life_tokens</span></code>). The table below is for the default configuration
+(<code class="docutils literal notranslate"><span class="pre">colors=5,</span> <span class="pre">ranks=5,</span> <span class="pre">players=2,</span> <span class="pre">hand_size=5,</span> <span class="pre">max_information_tokens=8,</span> <span class="pre">max_life_tokens=3</span></code>).</p>
+<p>Each card is encoded with a <code class="docutils literal notranslate"><span class="pre">colors*ranks</span></code> bit one-hot vector (25 bits by default), where the index of the set bit is <code class="docutils literal notranslate"><span class="pre">color*ranks</span> <span class="pre">+</span> <span class="pre">rank</span></code>. The remaining deck size is represented with a unary encoding whose length is <code class="docutils literal notranslate"><span class="pre">max_deck_size</span> <span class="pre">-</span> <span class="pre">players*hand_size</span></code> (40 bits by default, since the
+<code class="docutils literal notranslate"><span class="pre">players*hand_size</span></code> cards dealt at the start can never be in the deck — note this is <em>not</em> the full deck size of 50). The state of each colored firework is represented with a one-hot encoding of the highest rank played (all-zero if no card of that color has been played yet). The information
+tokens remaining and the life tokens remaining are each represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card, that is the least significant bit being set to 1 indicates the lowest rank card of that color has been
+discarded.</p>
+<p>As players reveal info about their cards, the information revealed per card is also observed (the “card knowledge” section). Each card uses <code class="docutils literal notranslate"><span class="pre">colors*ranks</span> <span class="pre">+</span> <span class="pre">colors</span> <span class="pre">+</span> <span class="pre">ranks</span></code> bits (35 by default). The first <code class="docutils literal notranslate"><span class="pre">colors*ranks</span></code> bits represent whether or not that specific card could still be a specific
+color/rank given the hints received. The next <code class="docutils literal notranslate"><span class="pre">colors</span></code> bits store whether the color of that card was explicitly revealed, so if the card was revealed to be red, then these bits would be 10000. Finally the last <code class="docutils literal notranslate"><span class="pre">ranks</span></code> bits are the revealed rank of the card. So if the card was revealed to be of
+rank 1, then these bits would be 10000. These bits are tracked and observed for every card in every player’s hand (this player first, then the others).</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -465,132 +467,128 @@ bits would be 10000. These 25 bits are tracked and observed for all cards in eac
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-center"><p>0 - 24</p></td>
-<td><p>Vector of Card 1 in other player’s hand</p></td>
+<tr class="row-even"><td class="text-center"><p>0-124</p></td>
+<td><p>Other player’s hand: 5 cards × 25-bit one-hot</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>25 - 49</p></td>
-<td><p>Vector of Card 2 in other player’s hand</p></td>
+<tr class="row-odd"><td class="text-center"><p>125-126</p></td>
+<td><p>Per-player flag set when that player’s hand is missing a card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>50 - 74</p></td>
-<td><p>Vector of Card 3 in other player’s hand</p></td>
+<tr class="row-even"><td class="text-center"><p>127-166</p></td>
+<td><p>Unary Encoding of Remaining Deck Size (max_deck − players×hand)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>75 -100</p></td>
-<td><p>Vector of Card 4 in other player’s hand</p></td>
-<td class="text-center"><p>[0, 1]</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>100-124</p></td>
-<td><p>Vector of Card 5 in other player’s hand</p></td>
-<td class="text-center"><p>[0, 1]</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>125-174</p></td>
-<td><p>Unary Encoding of Remaining Deck Size</p></td>
-<td class="text-center"><p>[0, 1]</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>175-179</p></td>
+<tr class="row-odd"><td class="text-center"><p>167-171</p></td>
 <td><p>Vector of Red Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>180-184</p></td>
+<tr class="row-even"><td class="text-center"><p>172-176</p></td>
 <td><p>Vector of Yellow Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>185-189</p></td>
+<tr class="row-odd"><td class="text-center"><p>177-181</p></td>
 <td><p>Vector of Green Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>190-195</p></td>
+<tr class="row-even"><td class="text-center"><p>182-186</p></td>
 <td><p>Vector of White Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>195-199</p></td>
+<tr class="row-odd"><td class="text-center"><p>187-191</p></td>
 <td><p>Vector of Blue Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>200-207</p></td>
+<tr class="row-even"><td class="text-center"><p>192-199</p></td>
 <td><p>Unary Encoding of Remaining Info Tokens</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>208-210</p></td>
+<tr class="row-odd"><td class="text-center"><p>200-202</p></td>
 <td><p>Unary Encoding of Remaining Life Tokens</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>211-260</p></td>
+<tr class="row-even"><td class="text-center"><p>203-252</p></td>
 <td><p>Thermometer Encoding of Discard Pile</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>261-262</p></td>
-<td><p>One-Hot Encoding of Previous Player ID</p></td>
+<tr class="row-odd"><td class="text-center"><p>253-254</p></td>
+<td><p>Last action: Acting Player (relative offset, one-hot)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>263-266</p></td>
-<td><p>Vector of Previous Player’s Action Type</p></td>
+<tr class="row-even"><td class="text-center"><p>255-258</p></td>
+<td><p>Last action: Move Type (play / discard / reveal color / rank)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>267-268</p></td>
-<td><p>Vector of Target from Previous Action</p></td>
+<tr class="row-odd"><td class="text-center"><p>259-260</p></td>
+<td><p>Last action: Target Player of a reveal (relative offset)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>269-273</p></td>
-<td><p>Vector of the Color Revealed in Last Action</p></td>
+<tr class="row-even"><td class="text-center"><p>261-265</p></td>
+<td><p>Last action: Color Revealed</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>274-278</p></td>
-<td><p>Vector of the Rank Revealed in Last Action</p></td>
+<tr class="row-odd"><td class="text-center"><p>266-270</p></td>
+<td><p>Last action: Rank Revealed</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>279-280</p></td>
-<td><p>Vector of Which Cards in the Hand were Revealed</p></td>
+<tr class="row-even"><td class="text-center"><p>271-275</p></td>
+<td><p>Last action: Which Cards in the Hand were Revealed</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>281-282</p></td>
-<td><p>Position of the Card that was played or dropped</p></td>
+<tr class="row-odd"><td class="text-center"><p>276-280</p></td>
+<td><p>Last action: Position of the Card that was played or discarded</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>283-307</p></td>
-<td><p>Vector Representing Card that was last played</p></td>
+<tr class="row-even"><td class="text-center"><p>281-305</p></td>
+<td><p>Last action: Vector Representing the Card that was played/discarded</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>308-342</p></td>
-<td><p>Revealed Info of This Player’s 0th Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>306-306</p></td>
+<td><p>Last action: Whether the played card was added to a firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>343-377</p></td>
-<td><p>Revealed Info of This Player’s 1st Card</p></td>
+<tr class="row-even"><td class="text-center"><p>307-307</p></td>
+<td><p>Last action: Whether an info token was added</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>378-412</p></td>
-<td><p>Revealed Info of This Player’s 2nd Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>308-342</p></td>
+<td><p>Card Knowledge of This Player’s 0th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>413-447</p></td>
-<td><p>Revealed Info of This Player’s 3rd Card</p></td>
+<tr class="row-even"><td class="text-center"><p>343-377</p></td>
+<td><p>Card Knowledge of This Player’s 1st Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>445-482</p></td>
-<td><p>Revealed Info of This Player’s 4th Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>378-412</p></td>
+<td><p>Card Knowledge of This Player’s 2nd Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>483-517</p></td>
-<td><p>Revealed Info of Other Player’s 0th Card</p></td>
+<tr class="row-even"><td class="text-center"><p>413-447</p></td>
+<td><p>Card Knowledge of This Player’s 3rd Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>518-552</p></td>
-<td><p>Revealed Info of Other Player’s 1st Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>448-482</p></td>
+<td><p>Card Knowledge of This Player’s 4th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>553-587</p></td>
-<td><p>Revealed Info of Other Player’s 2nd Card</p></td>
+<tr class="row-even"><td class="text-center"><p>483-517</p></td>
+<td><p>Card Knowledge of Other Player’s 0th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>588-622</p></td>
-<td><p>Revealed Info of Other Player’s 3rd Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>518-552</p></td>
+<td><p>Card Knowledge of Other Player’s 1st Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>663-657</p></td>
-<td><p>Revealed Info of Other Player’s 4th Card</p></td>
+<tr class="row-even"><td class="text-center"><p>553-587</p></td>
+<td><p>Card Knowledge of Other Player’s 2nd Card</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>588-622</p></td>
+<td><p>Card Knowledge of Other Player’s 3rd Card</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>623-657</p></td>
+<td><p>Card Knowledge of Other Player’s 4th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
 </tbody>
