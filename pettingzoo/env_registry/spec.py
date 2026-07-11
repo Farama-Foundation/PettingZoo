@@ -10,14 +10,21 @@ from typing import Any
 from pettingzoo.env_registry.exceptions import PettingZooRegistryError
 from pettingzoo.env_registry.types import _AECEnv, _ParallelEnv
 
-ENV_ID_RE = re.compile(
+ENV_ID_PARSING = re.compile(
     r"^(?:(?P<namespace>[\w.-]+)\/)?(?P<name>[\w:.-]+?)(?:-v(?P<version>\d+))?$"
 )
+UNDERSCORE_NORMALIZATION = re.compile(r"_v(?=\d+$)")
 
 
-@dataclass
+@lru_cache
+def _normalize_env_id(env_id: str) -> str:
+    """Normalize PettingZoo-style version suffixes to Gymnasium-style IDs."""
+    return UNDERSCORE_NORMALIZATION.sub("-v", env_id.strip(), count=1)
+
+
+@dataclass(frozen=True, slots=True)
 class EnvSpec:
-    """Specification for a registered environment."""
+    """Specification for a registered environment, immutable after creation."""
 
     id: str
     entry_point: Callable[..., Any] | str | None = None
@@ -29,7 +36,12 @@ class EnvSpec:
     version: int | None = field(init=False)
 
     def __post_init__(self):
-        self.namespace, self.name, self.version = _parse_env_id(self.id)
+        force_setattr = object.__setattr__  # we need to overwrite frozen fields
+        force_setattr(self, "id", _normalize_env_id(self.id))
+        ns, name, ver = _parse_env_id(self.id)
+        force_setattr(self, "namespace", ns)
+        force_setattr(self, "name", name)
+        force_setattr(self, "version", ver)
 
     def make(self, **kwargs: Any) -> _AECEnv | _ParallelEnv:
         """Create an environment instance from this spec."""
@@ -40,26 +52,28 @@ class EnvSpec:
         return creator(**merged_kwargs)
 
 
-@lru_cache(typed=True)
+@lru_cache
 def _parse_env_id(env_id: str) -> tuple[str | None, str, int | None]:
     """Parse an environment ID into (namespace, name, version).
 
     Format: ``[namespace/]EnvName[-vN]``
     """
-    match = ENV_ID_RE.fullmatch(env_id) if isinstance(env_id, str) else None
-    if not match:
+    env_id_parsed = None
+    if isinstance(env_id, str):
+        env_id_parsed = ENV_ID_PARSING.fullmatch(_normalize_env_id(env_id))
+    if not env_id_parsed:
         raise PettingZooRegistryError(
             f"Malformed environment ID: {env_id!r}. "
             f"Expected a str with format: [namespace/]EnvName[-vN]"
         )
-    namespace = match.group("namespace")
-    name = match.group("name")
-    version_str = match.group("version")
+    namespace = env_id_parsed.group("namespace")
+    name = env_id_parsed.group("name")
+    version_str = env_id_parsed.group("version")
     version = int(version_str) if version_str is not None else None
     return namespace, name, version
 
 
-@lru_cache(typed=True)
+@lru_cache
 def _load_env_creator(
     entry_point: Callable[..., Any] | str | None,
 ) -> Callable[..., Any]:
