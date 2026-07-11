@@ -18,7 +18,7 @@ from pettingzoo.env_registry.registration import (
     register,
     spec,
 )
-from pettingzoo.env_registry.spec import _parse_env_id
+from pettingzoo.env_registry.spec import _normalize_env_id, _parse_env_id
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 
 
@@ -47,6 +47,12 @@ class TestParseEnvId:
         assert name == "space_invaders"
         assert version == 2
 
+    def test_pettingzoo_version_suffix_alias(self):
+        ns, name, version = _parse_env_id("atari/space_invaders_v2")
+        assert ns == "atari"
+        assert name == "space_invaders"
+        assert version == 2
+
     def test_no_namespace_no_version(self):
         ns, name, version = _parse_env_id("MyEnv")
         assert ns is None
@@ -63,6 +69,20 @@ class TestGetEnvId:
 
     def test_no_version(self):
         assert _get_env_id("classic", "rps", None) == "classic/rps"
+
+
+class TestNormalizeEnvId:
+    def test_pettingzoo_suffix_to_gymnasium_suffix(self):
+        assert _normalize_env_id("classic/rps_v2") == "classic/rps-v2"
+
+    def test_internal_underscore_in_name_is_preserved(self):
+        assert (
+            _normalize_env_id("classic/texas_holdem_no_limit_v6")
+            == "classic/texas_holdem_no_limit-v6"
+        )
+
+    def test_non_version_suffix_is_preserved(self):
+        assert _normalize_env_id("test_ns/My_v2_CustomEnv") == "test_ns/My_v2_CustomEnv"
 
 
 class TestEnvSpec:
@@ -98,6 +118,16 @@ class TestRegister:
         assert aec_registry["test_ns/KW-v1"].kwargs == {"x": 1}
         del aec_registry["test_ns/KW-v1"]
 
+    def test_register_normalizes_pettingzoo_version_suffix(self):
+        register("aec", "test_ns/NormalizeMe_v2", entry_point="a:b")
+        assert "test_ns/NormalizeMe-v2" in aec_registry
+        assert "test_ns/NormalizeMe_v2" not in aec_registry
+        registered_spec = aec_registry["test_ns/NormalizeMe-v2"]
+        assert registered_spec.id == "test_ns/NormalizeMe-v2"
+        assert registered_spec.name == "NormalizeMe"
+        assert registered_spec.version == 2
+        del aec_registry["test_ns/NormalizeMe-v2"]
+
 
 class TestVersionResolution:
     def setup_method(self):
@@ -115,6 +145,11 @@ class TestVersionResolution:
 
     def test_explicit_version(self):
         s = find_spec(aec_registry, "test_ns/VersionedEnv-v1")
+        assert s.version == 1
+
+    def test_explicit_pettingzoo_version_suffix_alias(self):
+        s = find_spec(aec_registry, "test_ns/VersionedEnv_v1")
+        assert s.id == "test_ns/VersionedEnv-v1"
         assert s.version == 1
 
 
@@ -140,6 +175,26 @@ class TestSpec:
         s = spec("parallel", "test_ns/SpecTest-v0")
         assert s.id == "test_ns/SpecTest-v0"
         del parallel_registry["test_ns/SpecTest-v0"]
+
+
+class TestBuiltInRegistryIds:
+    def test_builtin_canonical_id_uses_gymnasium_suffix(self):
+        s = spec("aec", "butterfly/pistonball-v6")
+        assert s.id == "butterfly/pistonball-v6"
+        assert s.name == "pistonball"
+        assert s.version == 6
+
+    def test_builtin_pettingzoo_suffix_alias_resolves(self):
+        s = spec("aec", "butterfly/pistonball_v6")
+        assert s.id == "butterfly/pistonball-v6"
+        assert s.name == "pistonball"
+        assert s.version == 6
+
+    def test_builtin_unversioned_resolves_latest(self):
+        s = spec("aec", "butterfly/pistonball")
+        assert s.id == "butterfly/pistonball-v6"
+        assert s.name == "pistonball"
+        assert s.version == 6
 
 
 class TestHelperEdgeCases:

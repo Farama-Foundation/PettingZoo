@@ -50,7 +50,7 @@ or with the new Gymnasium-like registry:
 
 ```python
 from pettingzoo import make
-env = make("aec", "butterfly/pistonball_v6")
+env = make("aec", "butterfly/pistonball-v6")
 ```
 
 Environments can be interacted with in a manner very similar to Gymnasium:
