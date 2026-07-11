@@ -1,9 +1,8 @@
-"""Evolved vector-observation policy for Knights-Archers-Zombies.
+"""Interpretable vector-observation policy for Knights-Archers-Zombies.
 
-This script keeps the KAZ demo lightweight and reproducible. It uses the
-``vector-masked`` observation, searches a small set of interpretable policy
-parameters, evaluates the tuned policy against a random baseline, and can render
-the best episode as a GIF for the documentation.
+The policy uses a small reproducible parameter sweep, projectile interception
+for the archers, and a close-range fallback for the knights. It can evaluate
+the policy against seeded random actions and render an episode as a GIF.
 """
 
 from __future__ import annotations
@@ -11,105 +10,178 @@ from __future__ import annotations
 import argparse
 import itertools
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 
 import numpy as np
 from PIL import Image
 
 from pettingzoo.butterfly import knights_archers_zombies_v11
+from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 
 
 @dataclass(frozen=True)
 class PolicyParams:
-    archer_align: float = 0.995
-    knight_align: float = 0.92
-    archer_fire: float = 0.55
-    archer_move: float = 0.75
-    archer_retreat: float = 0.18
-    archer_y_min: float = 0.45
-    knight_hit: float = 0.20
-    knight_stop: float = 0.28
-    knight_y_min: float = 0.35
-    dot_weight: float = 0.08
-    bottom_weight: float = 0.02
+    """Tunable parameters for the deterministic KAZ policy."""
+
+    archer_align_degrees: float = 6.6
+    archer_lane_split: float = 0.70
+    left_standby_degrees: float = 0.0
+    right_standby_degrees: float = 35.0
+    knight_track_distance: float = 260.0
+    knight_attack_distance: float = 150.0
+    knight_track_degrees: float = 18.0
+    knight_attack_degrees: float = 25.0
 
 
 def zombie_rows(observation: np.ndarray) -> list[np.ndarray]:
-    """Return active zombie rows from a vector-masked KAZ observation."""
-    return [row for row in observation if row[0] > 0.5 and abs(float(row[6])) > 1e-9]
+    """Return active zombie rows from a vector-masked observation."""
+    return [row for row in observation if row[0] > 0.5]
 
 
-def select_target(observation: np.ndarray, params: PolicyParams) -> np.ndarray | None:
-    """Choose a nearby zombie, preferring targets already near the agent aim."""
-    candidates = zombie_rows(observation)
-    if not candidates:
-        return None
+def relative_pixels(row: np.ndarray) -> tuple[float, float]:
+    """Convert an entity's normalized relative position to screen pixels."""
+    return (
+        float(row[7]) * const.SCREEN_WIDTH,
+        float(row[8]) * const.SCREEN_HEIGHT,
+    )
 
+
+def normalized_direction(x: float, y: float) -> tuple[float, float]:
+    """Return a unit direction, defaulting upward for a zero-length vector."""
+    length = math.hypot(x, y)
+    if length < 1e-9:
+        return 0.0, -1.0
+    return x / length, y / length
+
+
+def intercept_direction(row: np.ndarray) -> tuple[float, float]:
+    """Aim where a downward-moving zombie and an arrow should intersect."""
+    x, y = relative_pixels(row)
+    zombie_speed = float(const.ZOMBIE_Y_SPEED)
+    arrow_speed = float(const.ARROW_SPEED)
+
+    # Solve |(x, y) + (0, zombie_speed) * t| = arrow_speed * t.
+    a = zombie_speed**2 - arrow_speed**2
+    b = 2.0 * y * zombie_speed
+    c = x**2 + y**2
+    discriminant = max(b**2 - 4.0 * a * c, 0.0)
+    roots = (
+        (-b + math.sqrt(discriminant)) / (2.0 * a),
+        (-b - math.sqrt(discriminant)) / (2.0 * a),
+    )
+    positive_roots = [root for root in roots if root > 0.0]
+    intercept_time = (
+        min(positive_roots) if positive_roots else math.sqrt(c) / arrow_speed
+    )
+    return normalized_direction(x, y + zombie_speed * intercept_time)
+
+
+def turn_action(
+    observation: np.ndarray,
+    target_x: float,
+    target_y: float,
+    *,
+    tolerance_degrees: float,
+) -> int | None:
+    """Return a turn action, or None when the agent is sufficiently aligned."""
     heading_x = float(observation[0][9])
     heading_y = float(observation[0][10])
+    dot = heading_x * target_x + heading_y * target_y
+    if dot >= math.cos(math.radians(tolerance_degrees)):
+        return None
 
-    def target_score(row: np.ndarray) -> float:
-        distance = float(row[6])
-        rel_x = float(row[7])
-        rel_y = float(row[8])
-        norm = math.hypot(rel_x, rel_y) or 1.0
-        aim_dot = (heading_x * rel_x + heading_y * rel_y) / norm
-        return (
-            distance
-            - params.dot_weight * max(aim_dot, 0.0)
-            + params.bottom_weight * (-rel_y)
+    cross = heading_x * target_y - heading_y * target_x
+    return 3 if cross > 0.0 else 2
+
+
+def archer_standby_action(
+    observation: np.ndarray, archer_index: int, params: PolicyParams
+) -> int:
+    """Fan idle archers across the board so new targets need little turning."""
+    angle_degrees = (
+        params.left_standby_degrees
+        if archer_index % 2 == 0
+        else params.right_standby_degrees
+    )
+    angle = math.radians(angle_degrees)
+    action = turn_action(
+        observation,
+        math.sin(angle),
+        -math.cos(angle),
+        tolerance_degrees=5.0,
+    )
+    return 5 if action is None else action
+
+
+def select_archer_target(
+    observation: np.ndarray,
+    zombies: list[np.ndarray],
+    archer_index: int,
+    params: PolicyParams,
+) -> np.ndarray:
+    """Select an urgent target while giving one archer the far-right lane."""
+    current_x = float(observation[0][7])
+    primary_lane_is_left = archer_index % 2 == 0
+
+    def target_key(row: np.ndarray) -> tuple[int, float, float]:
+        world_x = current_x + float(row[7])
+        outside_primary_lane = int(
+            (world_x >= params.archer_lane_split) == primary_lane_is_left
         )
+        relative_x, relative_y = relative_pixels(row)
+        return outside_primary_lane, math.hypot(relative_x, relative_y), -relative_y
 
-    return min(candidates, key=target_score)
+    return min(zombies, key=target_key)
 
 
 def policy_action(
-    observation: np.ndarray, agent: str, params: PolicyParams = PolicyParams()
+    observation: np.ndarray,
+    agent: str,
+    params: PolicyParams = PolicyParams(),
 ) -> int:
-    """Map a vector observation to a KAZ action."""
-    current = observation[0]
-    y_pos = float(current[8])
-    heading_x = float(current[9])
-    heading_y = float(current[10])
+    """Map a vector-masked observation to a deterministic KAZ action."""
+    zombies = zombie_rows(observation)
 
-    target = select_target(observation, params)
-    if target is None:
+    if agent.startswith("archer"):
+        archer_index = int(agent.rsplit("_", 1)[1])
+        if not zombies:
+            return archer_standby_action(observation, archer_index, params)
+
+        target = select_archer_target(observation, zombies, archer_index, params)
+        target_x, target_y = intercept_direction(target)
+        action = turn_action(
+            observation,
+            target_x,
+            target_y,
+            tolerance_degrees=params.archer_align_degrees,
+        )
+        return 4 if action is None else action
+
+    if not zombies:
         return 5
 
-    distance = float(target[6])
-    rel_x = float(target[7])
-    rel_y = float(target[8])
-    norm = math.hypot(rel_x, rel_y)
-    if norm < 1e-9:
-        return 4
-
-    target_x = rel_x / norm
-    target_y = rel_y / norm
-    dot = heading_x * target_x + heading_y * target_y
-    cross = heading_x * target_y - heading_y * target_x
-
-    is_archer = agent.startswith("archer")
-    align_threshold = params.archer_align if is_archer else params.knight_align
-    if dot < align_threshold:
-        return 3 if cross > 0 else 2
-
-    if is_archer:
-        if distance < params.archer_retreat and y_pos < 0.92:
-            return 1
-        if distance <= params.archer_fire:
-            return 4
-        if y_pos > params.archer_y_min and distance > params.archer_move:
-            return 0
+    target = min(zombies, key=lambda row: math.hypot(*relative_pixels(row)))
+    relative_x, relative_y = relative_pixels(target)
+    distance = math.hypot(relative_x, relative_y)
+    if distance >= params.knight_track_distance:
         return 5
 
-    if distance <= params.knight_hit:
-        return 4
-    if distance <= params.knight_stop and dot > 0.92:
-        return 4
-    if y_pos < params.knight_y_min and rel_y < 0:
-        return 1
-    return 0
+    target_x, target_y = normalized_direction(relative_x, relative_y)
+    tolerance = (
+        params.knight_attack_degrees
+        if distance <= params.knight_attack_distance
+        else params.knight_track_degrees
+    )
+    action = turn_action(
+        observation,
+        target_x,
+        target_y,
+        tolerance_degrees=tolerance,
+    )
+    if action is not None:
+        return action
+    return 4 if distance <= params.knight_attack_distance else 5
 
 
 def run_episode(
@@ -149,7 +221,6 @@ def run_episode(
             action = policy_action(observation, agent, params)
 
         env.step(action)
-
         if render and step % frame_stride == 0:
             frame = env.render()
             if frame is not None:
@@ -168,6 +239,7 @@ def evaluate(
     max_zombies: int,
     random_policy: bool = False,
 ) -> list[float]:
+    """Evaluate a policy on every seed in a range."""
     return [
         run_episode(
             seed,
@@ -183,23 +255,24 @@ def evaluate(
 def search_params(
     *, seeds: range, max_cycles: int, max_zombies: int
 ) -> tuple[PolicyParams, list[float]]:
-    """Small grid search over interpretable thresholds."""
-    best_params = PolicyParams()
+    """Run a small grid search over interpretable archer parameters."""
+    defaults = PolicyParams()
+    best_params = defaults
     best_scores: list[float] = []
     best_mean = float("-inf")
 
-    for archer_align, knight_align, archer_fire, knight_hit in itertools.product(
-        [0.97, 0.985, 0.995],
-        [0.92, 0.96, 0.985],
-        [0.55, 0.70, 0.90, 1.10],
-        [0.16, 0.20, 0.25, 0.30],
+    for align, lane_split, left_standby, right_standby in itertools.product(
+        [6.0, 6.6, 7.0],
+        [0.65, 0.70, 0.75],
+        [-5.0, 0.0],
+        [30.0, 35.0],
     ):
-        params = PolicyParams(
-            archer_align=archer_align,
-            knight_align=knight_align,
-            archer_fire=archer_fire,
-            knight_hit=knight_hit,
-            knight_stop=knight_hit + 0.08,
+        params = replace(
+            defaults,
+            archer_align_degrees=align,
+            archer_lane_split=lane_split,
+            left_standby_degrees=left_standby,
+            right_standby_degrees=right_standby,
         )
         scores = evaluate(
             seeds,
@@ -217,6 +290,7 @@ def search_params(
 
 
 def save_gif(frames: list[np.ndarray], output_path: Path, *, duration_ms: int) -> None:
+    """Save captured RGB frames as a looping GIF."""
     if not frames:
         raise ValueError("No frames were captured.")
 
@@ -232,25 +306,32 @@ def save_gif(frames: list[np.ndarray], output_path: Path, *, duration_ms: int) -
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--episodes", type=int, default=10)
+    parser.add_argument("--seed-start", type=int, default=0)
     parser.add_argument("--max-cycles", type=int, default=900)
     parser.add_argument("--max-zombies", type=int, default=10)
     parser.add_argument("--search", action="store_true")
     parser.add_argument("--render-gif", type=Path)
     parser.add_argument("--gif-seed", type=int, default=0)
     parser.add_argument("--gif-duration-ms", type=int, default=80)
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.episodes <= 0:
+        parser.error("--episodes must be positive")
+    return args
 
 
 def main() -> None:
+    """Evaluate the tuned policy and optionally search or render it."""
     args = parse_args()
-    seeds = range(args.episodes)
+    seeds = range(args.seed_start, args.seed_start + args.episodes)
 
     params = PolicyParams()
     if args.search:
+        search_seeds = range(args.seed_start, args.seed_start + min(args.episodes, 5))
         params, search_scores = search_params(
-            seeds=range(min(args.episodes, 5)),
+            seeds=search_seeds,
             max_cycles=args.max_cycles,
             max_zombies=args.max_zombies,
         )
@@ -270,6 +351,7 @@ def main() -> None:
         max_zombies=args.max_zombies,
         random_policy=True,
     )
+    print("Policy params:", asdict(params))
     print(f"Policy scores: {policy_scores}")
     print(f"Random scores: {random_scores}")
     print(f"Policy mean: {sum(policy_scores) / len(policy_scores):.2f}")
