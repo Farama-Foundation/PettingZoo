@@ -95,3 +95,7 @@ To cite this project in publication, please use
 ## Project Maintainers
 - Project Manager: [Travis Virgil](https://github.com/virgilt) - `travis@farama.org`
 - Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
+
+---
+
+*[Mukller](https://github.com/Mukller)*
