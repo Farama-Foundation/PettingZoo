@@ -32,6 +32,18 @@ Observation shape takes the full form of `(obs_range, obs_range, 3)` where the f
 
 The state takes the full form of `(y_size, x_size, 3)`, with the same three channels as the observations, but covering the whole map instead of the `obs_range` box around each agent.
 
+### Center obstacle
+
+The `center_box_size` argument controls the size of the centered obstacle in
+grid cells. Pass a `(width, height)` tuple to set an explicit size, for example
+`center_box_size=(4, 2)`. Passing `(0, 0)` removes the obstacle entirely, while
+the default `None` preserves the obstacle dimensions used by earlier versions
+of Pursuit.
+
+Both dimensions must be non-negative integers, cannot exceed the corresponding
+map dimension, and cannot cover the entire map. This argument was introduced in
+`pursuit_v6`; code using `pursuit_v5` must update its import to use it.
+
 ### Manual Control
 
 Select different pursuers with 'J' and 'K'. The selected pursuer can be moved with the arrow keys.
@@ -77,7 +89,7 @@ center_box_size=None)
 
 ### Version History
 
-* v6: Add an argument to control the center obstacle size
+* v6: Add `center_box_size` to control or remove the center obstacle
 * v5: Add state() and state space support (1.27.0)
 * v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)
 * v3: Observation space bug fixed (1.5.0)
