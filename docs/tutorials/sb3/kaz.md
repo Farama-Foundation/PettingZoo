@@ -51,7 +51,7 @@ a projectile-intercept equation before firing. A small grid search calibrates
 the lead and alignment thresholds; no model checkpoint is required.
 
 ```{figure} kaz_predictive_policy.gif
-:width: 400px
+:width: 640px
 :name: kaz-predictive-policy
 
 Predictive policy on seed 2000, selected automatically as a median-reward

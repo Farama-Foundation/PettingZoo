@@ -310,10 +310,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--search-episodes", type=int, default=5)
     parser.add_argument("--render-gif", type=Path)
     parser.add_argument("--gif-seed", type=int)
-    parser.add_argument("--gif-width", type=int, default=400)
-    parser.add_argument("--gif-colors", type=int, default=32)
-    parser.add_argument("--gif-duration-ms", type=int, default=120)
-    parser.add_argument("--frame-stride", type=int, default=32)
+    parser.add_argument("--gif-width", type=int, default=640)
+    parser.add_argument("--gif-colors", type=int, default=256)
+    parser.add_argument("--gif-duration-ms", type=int, default=240)
+    parser.add_argument("--frame-stride", type=int, default=64)
     return parser.parse_args()
 
 
