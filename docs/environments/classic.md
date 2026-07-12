@@ -9,7 +9,6 @@ firstpage:
 :hidden:
 classic/chess
 classic/connect_four
-classic/gin_rummy
 classic/go
 classic/hanabi
 classic/leduc_holdem
