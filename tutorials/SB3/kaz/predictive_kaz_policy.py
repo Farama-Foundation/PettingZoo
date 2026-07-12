@@ -285,10 +285,23 @@ def save_gif(
 
     height = round(width * frames[0].shape[0] / frames[0].shape[1])
     images = [
-        Image.fromarray(frame)
-        .resize((width, height), Image.Resampling.LANCZOS)
-        .quantize(colors=colors)
+        Image.fromarray(frame).resize((width, height), Image.Resampling.LANCZOS)
         for frame in frames
+    ]
+    sample_count = min(32, len(images))
+    sample_indexes = np.linspace(0, len(images) - 1, sample_count, dtype=int)
+    palette_width = max(1, width // 4)
+    palette_height = max(1, height // 4)
+    palette_source = Image.new("RGB", (palette_width, palette_height * sample_count))
+    for sample_index, frame_index in enumerate(sample_indexes):
+        sample = images[frame_index].resize(
+            (palette_width, palette_height), Image.Resampling.BILINEAR
+        )
+        palette_source.paste(sample, (0, sample_index * palette_height))
+
+    palette = palette_source.quantize(colors=colors)
+    images = [
+        image.quantize(palette=palette, dither=Image.Dither.NONE) for image in images
     ]
     output_path.parent.mkdir(parents=True, exist_ok=True)
     images[0].save(
@@ -297,6 +310,7 @@ def save_gif(
         append_images=images[1:],
         duration=duration_ms,
         loop=0,
+        optimize=True,
     )
 
 
@@ -312,8 +326,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--gif-seed", type=int)
     parser.add_argument("--gif-width", type=int, default=640)
     parser.add_argument("--gif-colors", type=int, default=256)
-    parser.add_argument("--gif-duration-ms", type=int, default=240)
-    parser.add_argument("--frame-stride", type=int, default=64)
+    parser.add_argument("--gif-duration-ms", type=int, default=60)
+    parser.add_argument("--frame-stride", type=int, default=16)
     return parser.parse_args()
 
 
