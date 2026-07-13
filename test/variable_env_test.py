@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import warnings
+
 from pettingzoo.test import api_test, parallel_api_test, seed_test
 from pettingzoo.test.example_envs import (
+    generated_agents_env_action_mask_obs_v0,
     generated_agents_env_cust_agentid_v0,
     generated_agents_env_v0,
     generated_agents_parallel_cust_agentid_v0,
@@ -43,6 +46,23 @@ def test_generated_agents_parallel_to_aec():
         lambda: parallel_to_aec(
             generated_agents_parallel_cust_agentid_v0.parallel_env()
         )
+    )
+
+
+def test_dict_obs_space_no_spurious_api_warnings():
+    # A Dict observation space with an "observation" key (and a Discrete action
+    # space) is a valid, common pattern. api_test should not warn that the
+    # observation "is not a NumPy array" or that the observation space "probably
+    # should be" Box/Discrete for such environments. See issue #1211.
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        api_test(generated_agents_env_action_mask_obs_v0.env())
+    msgs = [str(w.message) for w in caught]
+    assert not any("Observation is not a NumPy array" in m for m in msgs)
+    assert not any(
+        "Observation space" in m
+        and "probably should be gymnasium.spaces.box or gymnasium.spaces.discrete" in m
+        for m in msgs
     )
 
 
