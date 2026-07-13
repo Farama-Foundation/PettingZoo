@@ -31,6 +31,7 @@ class raw_env(AECEnv[str, np.ndarray, int | None]):
 
         self.types = []
         self._agent_counters = {}
+        self._agent_selector = AgentSelector([])
         self.max_cycles = max_cycles
         self._seed()
         self.render_mode = render_mode
@@ -67,6 +68,7 @@ class raw_env(AECEnv[str, np.ndarray, int | None]):
         self._agent_counters[type] += 1
         agent = f"{type}_{agent_id}"
         self.agents.append(agent)
+        self._agent_selector.add_agent(agent)
         self.terminations[agent] = False
         self.truncations[agent] = False
         self.rewards[agent] = 0
@@ -78,6 +80,7 @@ class raw_env(AECEnv[str, np.ndarray, int | None]):
         if seed is not None:
             self._seed(seed=seed)
         self.agents = []
+        self._agent_selector.reinit([])
         self.rewards = {}
         self._cumulative_rewards = {}
         self.terminations = {}
@@ -97,7 +100,6 @@ class raw_env(AECEnv[str, np.ndarray, int | None]):
         for _i in range(5):
             self.add_agent(self.np_random.choice(self.types))
 
-        self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
         # seed observation and action spaces
