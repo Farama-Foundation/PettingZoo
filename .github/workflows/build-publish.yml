@@ -43,6 +43,8 @@ jobs:
         runs-on: ubuntu-latest
         environment: pypi
         if: github.event_name == 'release' && github.event.action == 'published'
+        permissions:
+            contents: read
         steps:
             - name: Download dist
               uses: actions/download-artifact@v4

@@ -11,6 +11,25 @@ class DeprecatedEnv(ImportError):
     pass
 
 
+# Environments removed from PettingZoo entirely, mapped to the reason why. These
+# raise on attribute access rather than falling through as a missing module, so
+# that users upgrading from an older release get an actionable message.
+REMOVED_ENVS: dict[str, str] = {
+    "gin_rummy": (
+        "gin_rummy was removed from PettingZoo, see "
+        "https://github.com/Farama-Foundation/PettingZoo/issues/1383. The "
+        "underlying implementation remains available in RLCard: "
+        "https://github.com/datamllab/rlcard"
+    ),
+}
+
+
+# Must subclass AttributeError: this is raised from a __getattr__(), and raising
+# anything else breaks the default handling in getattr(obj, "key", "default").
+class RemovedEnv(AttributeError):
+    pass
+
+
 class DeprecatedModule:
     def __init__(self, name: str, old_version: str | int, new_version: str | int):
         def env(*args, **kwargs):
@@ -50,6 +69,9 @@ def deprecated_handler(
             )
         name, version = env_name.rsplit("_v")
 
+        if name in REMOVED_ENVS:
+            raise RemovedEnv(REMOVED_ENVS[name])
+
         for _loader, alt_env_name, _is_pkg in pkgutil.iter_modules(module_path):
             if is_env(alt_env_name):
                 alt_name, alt_version = alt_env_name.rsplit("_v")
@@ -60,8 +82,10 @@ def deprecated_handler(
                         f"cannot import name '{env_name}' from '{module_name}'"
                     )
 
+        # No module of this name exists at any version.
+        raise AttributeError(f"cannot import name '{env_name}' from '{module_name}'")
+
     # This constructs the module but doesn't execute its code
-    assert spec
     module = importlib.util.module_from_spec(spec)
     # This executes the module and will raise any exceptions
     # that would typically be raised by just `import blah`

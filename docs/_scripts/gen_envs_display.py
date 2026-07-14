@@ -36,7 +36,6 @@ all_envs = {
     "classic": [
         "chess",
         "connect_four",
-        "gin_rummy",
         "go",
         "hanabi",
         "leduc_holdem",
