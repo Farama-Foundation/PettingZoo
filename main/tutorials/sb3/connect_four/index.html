@@ -266,7 +266,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -628,7 +627,6 @@ sb3-contrib&gt;=2.0.0
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">chess_v6</span><span class="p">,</span>
-    <span class="n">gin_rummy_v5</span><span class="p">,</span>
     <span class="n">go_v5</span><span class="p">,</span>
     <span class="n">hanabi_v5</span><span class="p">,</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>
@@ -645,7 +643,6 @@ sb3-contrib&gt;=2.0.0
 
 <span class="c1"># These environments do better than random even after the minimum number of timesteps</span>
 <span class="n">EASY_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">gin_rummy_v5</span><span class="p">,</span>
     <span class="n">texas_holdem_no_limit_v6</span><span class="p">,</span>  <span class="c1"># texas holdem human rendered game ends instantly, but with random actions it works fine</span>
     <span class="n">tictactoe_v3</span><span class="p">,</span>
     <span class="n">leduc_holdem_v4</span><span class="p">,</span>
