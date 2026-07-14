@@ -32,6 +32,44 @@ def test_remove_absent_agent_is_a_noop():
     assert selector.agent_order == ["a", "b"]
 
 
+def test_reset_restores_order_after_removals():
+    """reset() undoes mid-episode remove_agent calls.
+
+    Envs such as mpe2 only call ``_agent_selector.reset()`` on env reset and
+    never reinit. After every agent has been dead-stepped out, that reset must
+    still put the original cycle back — not reinit an empty list.
+    """
+    selector = AgentSelector(["speaker_0", "listener_0"])
+    selector.reset()
+    selector.remove_agent("speaker_0")
+    selector.remove_agent("listener_0")
+
+    assert selector.agent_order == []
+
+    assert selector.reset() == "speaker_0"
+    assert selector.agent_order == ["speaker_0", "listener_0"]
+    assert selector.next() == "listener_0"
+
+
+def test_reset_drops_episode_local_additions():
+    """add_agent is episode-local; reset restores the last reinit order."""
+    selector = AgentSelector(["a", "b"])
+    selector.add_agent("c")
+    assert selector.agent_order == ["a", "b", "c"]
+
+    assert selector.reset() == "a"
+    assert selector.agent_order == ["a", "b"]
+
+
+def test_reinit_updates_what_reset_restores():
+    selector = AgentSelector(["a", "b"])
+    selector.reinit(["x", "y", "z"])
+    selector.remove_agent("y")
+
+    assert selector.reset() == "x"
+    assert selector.agent_order == ["x", "y", "z"]
+
+
 def test_dead_step_removes_agent_from_the_cycle():
     """_was_dead_step() keeps the selector in sync when it drops an agent."""
     env = tictactoe_v3.env()
