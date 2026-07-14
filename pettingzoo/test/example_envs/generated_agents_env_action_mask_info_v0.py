@@ -106,7 +106,7 @@ class raw_env(AECEnv[str, np.ndarray, int | None]):
         for _i in range(5):
             self.add_agent(self.np_random.choice(self.types))
 
-        self.agent_selection = self._agent_selector.reset()
+        self.agent_selection = self._agent_selector.next()
 
         # seed observation and action spaces
         for _i, agent in enumerate(self.agents):
