@@ -38,7 +38,6 @@ from pettingzoo.butterfly import (
 from pettingzoo.classic import (
     chess_v6,
     connect_four_v3,
-    gin_rummy_v5,
     go_v5,
     hanabi_v5,
     leduc_holdem_v4,
@@ -96,8 +95,6 @@ parameterized_envs = [
     ["classic/rps_v2", rps_v2, {}],
     ["classic/chess_v6", chess_v6, {}],
     ["classic/tictactoe_v3", tictactoe_v3, {}],
-    ["classic/gin_rummy_v5", gin_rummy_v5, {}],
-    ["classic/gin_rummy_v5", gin_rummy_v5, {"opponents_hand_visible": True}],
     ["atari/boxing_v2", boxing_v2, {"max_cycles": 50}],
     ["atari/boxing_v2", boxing_v2, {"obs_type": "grayscale_image", "max_cycles": 50}],
     ["atari/boxing_v2", boxing_v2, {"obs_type": "ram", "max_cycles": 50}],

@@ -77,7 +77,6 @@ _classic_envs = [
     ("leduc_holdem_v4", "leduc_holdem"),
     ("texas_holdem_v4", "texas_holdem"),
     ("texas_holdem_no_limit_v6", "texas_holdem_no_limit"),
-    ("gin_rummy_v5", "gin_rummy"),
     ("go_v5", "go"),
     ("hanabi_v5", "hanabi"),
 ]
