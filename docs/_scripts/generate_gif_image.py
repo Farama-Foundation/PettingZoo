@@ -13,7 +13,6 @@ def generate_data(nameline, module):
     dir = f"frames/{nameline}/"
     os.mkdir(dir)
     env = module.env(render_mode="rgb_array")
-    # env = gin_rummy_v0.env()
     env.reset()
     for step in range(100):
         for agent in env.agent_iter(
