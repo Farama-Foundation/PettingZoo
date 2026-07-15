@@ -153,15 +153,14 @@ If an illegal action is taken, the game terminates and the one player that took 
 
 ### Rendering
 
-Hanabi supports `human`, `rgb_array`, and `ansi` render modes. In `human` and
-`rgb_array` modes the board is drawn with pygame: the fireworks piles, every
-player's hand (the player whose turn it is is highlighted), the remaining info
-and life tokens, the deck size, and the discard pile. In `ansi` mode the render
-returns the OpenSpiel text representation of the state.
+Hanabi supports `human` and `rgb_array` render modes. In both modes the board
+is drawn with pygame: the fireworks piles, every player's hand (the player
+whose turn it is is highlighted), the remaining info and life tokens, the deck
+size, and the discard pile.
 
 ### Version History
 
-* v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility, and added pygame (`human`/`rgb_array`) rendering (1.23.0)
+* v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility, and replaced the `ansi` text rendering with pygame (`human`/`rgb_array`) rendering (1.23.0)
 * v4: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v2: Fixed default parameters (1.4.2)
@@ -190,7 +189,7 @@ def env(**kwargs):
 
 class raw_env(AECEnv, EzPickle):
     metadata = {
-        "render_modes": ["human", "ansi", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         "name": "hanabi_v5",
         "is_parallelizable": False,
         "render_fps": 2,
@@ -494,7 +493,6 @@ class raw_env(AECEnv, EzPickle):
     def render(self):
         """Renders the current game state.
 
-        - ``"ansi"``: returns the OpenSpiel text representation of the state.
         - ``"human"``: draws the board to a window using pygame.
         - ``"rgb_array"``: returns the rendered board as an ``(H, W, 3)`` array.
         """
@@ -511,8 +509,6 @@ class raw_env(AECEnv, EzPickle):
             return None
 
         state_string = str(self.hanabi_env.game_state)
-        if self.render_mode == "ansi":
-            return state_string
         if self.render_mode in {"human", "rgb_array"}:
             return self._render_gui(state_string)
         raise ValueError(
