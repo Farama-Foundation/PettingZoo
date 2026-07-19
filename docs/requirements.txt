@@ -1,5 +1,5 @@
 sphinx
 sphinx-autobuild
 myst-parser
-git+https://github.com/Farama-Foundation/Celshast#egg=furo
+celshast
 sphinx_github_changelog
