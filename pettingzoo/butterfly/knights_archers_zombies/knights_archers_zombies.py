@@ -128,7 +128,9 @@ Dead agents return all pixels as black.
 
 ### Arguments
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "butterfly/knights_archers_zombies-v11",
   spawn_delay=20,
   num_archers=2,

@@ -41,7 +41,9 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Foozpong are
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "atari/foozpong-v3", num_players=4)
 ```
 

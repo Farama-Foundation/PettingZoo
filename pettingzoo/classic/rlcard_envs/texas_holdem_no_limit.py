@@ -28,7 +28,9 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-ho
 
 ### Arguments
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "classic/texas_holdem_no_limit-v6", num_players=2)
 ```
 

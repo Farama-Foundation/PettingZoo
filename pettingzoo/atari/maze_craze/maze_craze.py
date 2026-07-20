@@ -41,7 +41,9 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Maze Craze are
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "atari/maze_craze-v3", game_version="robbers", visibilty_level=0)
 ```
 

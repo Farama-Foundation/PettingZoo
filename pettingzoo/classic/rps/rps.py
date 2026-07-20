@@ -30,7 +30,9 @@ other half. The most common expansion of this game is [Rock, Paper, Scissors, Li
 
 ### Arguments
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "classic/rps-v2", num_actions=3, max_cycles=15)
 ```
 

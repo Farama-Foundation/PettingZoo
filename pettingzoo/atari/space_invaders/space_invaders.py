@@ -38,7 +38,9 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Space Invaders are
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "atari/space_invaders-v2", alternating_control=False, moving_shields=True,
 zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
 ```

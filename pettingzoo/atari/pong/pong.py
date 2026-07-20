@@ -38,7 +38,9 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Pong are
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "atari/pong-v3", num_players=2)
 ```
 

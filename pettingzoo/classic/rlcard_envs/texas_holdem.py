@@ -24,7 +24,9 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 
 ## Arguments
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "classic/texas_holdem-v4", num_players=2)
 ```
 

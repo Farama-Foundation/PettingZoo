@@ -36,7 +36,9 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 
 ### Arguments
 
-``` python
+```python
+from pettingzoo import make
+
 make("aec", "butterfly/cooperative_pong-v6",
     ball_speed = 9,
     left_paddle_speed = 12,
