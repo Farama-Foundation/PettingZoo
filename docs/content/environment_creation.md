@@ -42,7 +42,7 @@ To interact with your custom parallel environment, use the following code:
 
 ## Using Wrappers
 
-A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides [wrappers to convert environments](/api/pz_wrappers) back and forth between the AEC API and the Parallel API and a set of simple [utility wrappers](/api/pz_wrappers) which provide input validation and other convenient reusable logic. PettingZoo also includes [wrappers](/api/supersuit_wrappers) via the SuperSuit companion package (`pip install supersuit`).
+A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides [wrappers to convert environments](../api/wrappers/pz_wrappers.md#conversion-wrappers) back and forth between the AEC API and the Parallel API and a set of simple [utility wrappers](../api/wrappers/pz_wrappers.md#utility-wrappers) which provide input validation and other convenient reusable logic. PettingZoo also includes [wrappers](../api/wrappers/supersuit_wrappers.md) via the SuperSuit companion package (`pip install supersuit`).
 
 ```python
 from pettingzoo.butterfly import pistonball_v6
