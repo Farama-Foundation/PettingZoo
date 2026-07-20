@@ -40,6 +40,23 @@ To interact with your custom parallel environment, use the following code:
    :language: python
 ```
 
+## Registering Custom Environments
+
+Once your environment is ready, register so it can be created with [`make`](basic_usage.md#initializing-environments), the same way as built-in PettingZoo environments:
+
+```python
+from pettingzoo import make, parallel_registry, register
+from . import aec_rps, parallel_rps
+
+register("aec", "custom/rps-v0", aec_rps.env)
+register("parallel", "custom/rps-v0", parallel_rps.parallel_env)
+
+# Confirm the environment is available in the registry
+assert "custom/rps-v0" in parallel_registry
+
+env = make("parallel", "custom/rps-v0", render_mode="human")
+```
+
 ## Using Wrappers
 
 A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides [wrappers to convert environments](../api/wrappers/pz_wrappers.md#conversion-wrappers) back and forth between the AEC API and the Parallel API and a set of simple [utility wrappers](../api/wrappers/pz_wrappers.md#utility-wrappers) which provide input validation and other convenient reusable logic. PettingZoo also includes [wrappers](../api/wrappers/supersuit_wrappers.md) via the SuperSuit companion package (`pip install supersuit`).
