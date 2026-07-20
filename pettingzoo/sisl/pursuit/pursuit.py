@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.sisl import pursuit_v5`               |
+| Import               | `from pettingzoo.sisl import pursuit_v6`               |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -32,6 +32,18 @@ Observation shape takes the full form of `(obs_range, obs_range, 3)` where the f
 
 The state takes the full form of `(y_size, x_size, 3)`, with the same three channels as the observations, but covering the whole map instead of the `obs_range` box around each agent.
 
+### Center obstacle
+
+The `center_box_size` argument controls the size of the centered obstacle in
+grid cells. Pass a `(width, height)` tuple to set an explicit size, for example
+`center_box_size=(4, 2)`. Passing `(0, 0)` removes the obstacle entirely, while
+the default `None` preserves the obstacle dimensions used by earlier versions
+of Pursuit.
+
+Both dimensions must be non-negative integers, cannot exceed the corresponding
+map dimension, and cannot cover the entire map. This argument was introduced in
+`pursuit_v6`; code using `pursuit_v5` must update its import to use it.
+
 ### Manual Control
 
 Select different pursuers with 'J' and 'K'. The selected pursuer can be moved with the arrow keys.
@@ -40,9 +52,10 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 ### Arguments
 
 ``` python
-pursuit_v5.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,
+pursuit_v6.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,
 n_pursuers=8,obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,
-catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
+catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0,
+center_box_size=None)
 ```
 
 `x_size, y_size`: Size of environment world space
@@ -69,11 +82,14 @@ catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 
 `constraint_window`: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.
 
+`center_box_size`: Optional `(width, height)` of the center obstacle in grid cells. The default `None` preserves the original proportional obstacle size. Use `(0, 0)` for a map without a center obstacle.
+
 `max_cycles`:  After max_cycles steps all agents will return done
 
 
 ### Version History
 
+* v6: Add `center_box_size` to control or remove the center obstacle
 * v5: Add state() and state space support (1.27.0)
 * v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)
 * v3: Observation space bug fixed (1.5.0)
@@ -108,7 +124,7 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "pursuit_v5",
+        "name": "pursuit_v6",
         "is_parallelizable": True,
         "render_fps": 5,
         "has_manual_policy": True,

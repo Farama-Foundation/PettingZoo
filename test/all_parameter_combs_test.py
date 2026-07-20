@@ -46,7 +46,7 @@ from pettingzoo.classic import (
     texas_holdem_v4,
     tictactoe_v3,
 )
-from pettingzoo.sisl import multiwalker_v9, pursuit_v5
+from pettingzoo.sisl import multiwalker_v9, pursuit_v6
 from pettingzoo.test import max_cycles_test, parallel_api_test
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.render_test import render_test
@@ -230,17 +230,22 @@ parameterized_envs = [
         multiwalker_v9,
         {"terminate_on_fall": False, "remove_on_fall": False, "max_cycles": 50},
     ],
-    ["sisl/pursuit_v5", pursuit_v5, {"max_cycles": 50}],
-    ["sisl/pursuit_v5", pursuit_v5, {"x_size": 8, "y_size": 19, "max_cycles": 50}],
-    ["sisl/pursuit_v5", pursuit_v5, {"shared_reward": True, "max_cycles": 50}],
+    ["sisl/pursuit_v6", pursuit_v6, {"max_cycles": 50}],
+    ["sisl/pursuit_v6", pursuit_v6, {"x_size": 8, "y_size": 19, "max_cycles": 50}],
+    ["sisl/pursuit_v6", pursuit_v6, {"shared_reward": True, "max_cycles": 50}],
     [
-        "sisl/pursuit_v5",
-        pursuit_v5,
+        "sisl/pursuit_v6",
+        pursuit_v6,
         {"n_evaders": 5, "n_pursuers": 16, "max_cycles": 50},
     ],
-    ["sisl/pursuit_v5", pursuit_v5, {"obs_range": 15, "max_cycles": 50}],
-    ["sisl/pursuit_v5", pursuit_v5, {"n_catch": 3, "max_cycles": 50}],
-    ["sisl/pursuit_v5", pursuit_v5, {"freeze_evaders": True, "max_cycles": 50}],
+    ["sisl/pursuit_v6", pursuit_v6, {"obs_range": 15, "max_cycles": 50}],
+    ["sisl/pursuit_v6", pursuit_v6, {"n_catch": 3, "max_cycles": 50}],
+    ["sisl/pursuit_v6", pursuit_v6, {"freeze_evaders": True, "max_cycles": 50}],
+    [
+        "sisl/pursuit_v6",
+        pursuit_v6,
+        {"center_box_size": (4, 2), "max_cycles": 50},
+    ],
 ]
 
 
