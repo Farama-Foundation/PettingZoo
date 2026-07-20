@@ -31,7 +31,7 @@ from pettingzoo.atari import (
     wizard_of_wor_v3,
 )
 from pettingzoo.butterfly import (
-    cooperative_pong_v6,
+    cooperative_pong_v7,
     knights_archers_zombies_v11,
     pistonball_v6,
 )
@@ -85,10 +85,10 @@ parameterized_envs = [
         volleyball_pong_v3,
         {"num_players": 4, "max_cycles": 50},
     ],
-    ["butterfly/cooperative_pong_v6", cooperative_pong_v6, {"max_cycles": 50}],
+    ["butterfly/cooperative_pong_v7", cooperative_pong_v7, {"max_cycles": 50}],
     [
-        "butterfly/cooperative_pong_v6",
-        cooperative_pong_v6,
+        "butterfly/cooperative_pong_v7",
+        cooperative_pong_v7,
         {"bounce_randomness": True, "max_cycles": 50},
     ],
     ["classic/connect_four_v3", connect_four_v3, {}],
