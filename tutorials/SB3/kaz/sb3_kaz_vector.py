@@ -17,12 +17,12 @@ import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.ppo import CnnPolicy, MlpPolicy
 
-from pettingzoo.butterfly import knights_archers_zombies_v11
+from pettingzoo import make
 
 
-def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
+def train(env_id, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
     # Train a single model to play as each agent in an AEC environment
-    env = env_fn.parallel_env(**env_kwargs)
+    env = make("parallel", env_id, **env_kwargs)
 
     # Add black death wrapper so the number of agents stays constant
     # MarkovVectorEnv does not support environments with varying numbers of active agents unless black_death is set to True
@@ -63,9 +63,9 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
     env.close()
 
 
-def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwargs):
+def eval(env_id, num_games: int = 100, render_mode: str | None = None, **env_kwargs):
     # Evaluate a trained agent vs a random agent
-    env = env_fn.env(render_mode=render_mode, **env_kwargs)
+    env = make("aec", env_id, render_mode=render_mode, **env_kwargs)
 
     # Pre-process using SuperSuit
     visual_observation = not env.unwrapped.vector_state
@@ -123,16 +123,16 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
 
 if __name__ == "__main__":
-    env_fn = knights_archers_zombies_v11
+    env_id = "butterfly/knights_archers_zombies-v11"
 
     # Set obs_method to "image" in order to use visual observations (significantly longer training time)
     env_kwargs = {"max_cycles": 100, "max_zombies": 4, "obs_method": "vector"}
 
     # Train a model (takes ~5 minutes on a laptop CPU)
-    train(env_fn, steps=81_920, seed=0, **env_kwargs)
+    train(env_id, steps=81_920, seed=0, **env_kwargs)
 
     # Evaluate 10 games (takes ~10 seconds on a laptop CPU)
-    eval(env_fn, num_games=10, render_mode=None, **env_kwargs)
+    eval(env_id, num_games=10, render_mode=None, **env_kwargs)
 
     # Watch 2 games (takes ~10 seconds on a laptop CPU)
-    eval(env_fn, num_games=2, render_mode="human", **env_kwargs)
+    eval(env_id, num_games=2, render_mode="human", **env_kwargs)

@@ -16,7 +16,7 @@ from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
 from sb3_contrib.common.wrappers import ActionMasker
 
 import pettingzoo.utils
-from pettingzoo.classic import connect_four_v3
+from pettingzoo import make
 
 
 # To pass into other gymnasium wrappers, we need to ensure that pettingzoo's wrappper
@@ -75,9 +75,9 @@ def mask_fn(env):
     return env.action_mask()
 
 
-def train_action_mask(env_fn, steps=10_000, seed=0, **env_kwargs):
+def train_action_mask(env_id, steps=10_000, seed=0, **env_kwargs):
     """Train a single model to play as each agent in a zero-sum game environment using invalid action masking."""
-    env = env_fn.env(**env_kwargs)
+    env = make("aec", env_id, **env_kwargs)
 
     print(f"Starting training on {env.metadata['name']!s}.")
 
@@ -104,9 +104,9 @@ def train_action_mask(env_fn, steps=10_000, seed=0, **env_kwargs):
     env.close()
 
 
-def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
+def eval_action_mask(env_id, num_games=100, render_mode=None, **env_kwargs):
     # Evaluate a trained agent vs a random agent
-    env = env_fn.env(render_mode=render_mode, **env_kwargs)
+    env = make("aec", env_id, render_mode=render_mode, **env_kwargs)
 
     print(
         f"Starting evaluation vs a random agent. Trained agent will play as {env.possible_agents[1]}."
@@ -177,7 +177,7 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
 
 
 if __name__ == "__main__":
-    env_fn = connect_four_v3
+    env_id = "classic/connect_four-v3"
 
     env_kwargs = {}
 
@@ -187,10 +187,10 @@ if __name__ == "__main__":
     # 40k steps: Winrate:  0.86, loss order of 7e-06
 
     # Train a model against itself (takes ~20 seconds on a laptop CPU)
-    train_action_mask(env_fn, steps=20_480, seed=0, **env_kwargs)
+    train_action_mask(env_id, steps=20_480, seed=0, **env_kwargs)
 
     # Evaluate 100 games against a random agent (winrate should be ~80%)
-    eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs)
+    eval_action_mask(env_id, num_games=100, render_mode=None, **env_kwargs)
 
     # Watch two games vs a random agent
-    eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)
+    eval_action_mask(env_id, num_games=2, render_mode="human", **env_kwargs)

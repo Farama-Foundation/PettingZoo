@@ -5,7 +5,7 @@ Author: Will (https://github.com/WillDudley)
 Python version used: 3.8.10
 
 Requirements:
-pettingzoo == 1.22.0
+pettingzoo >= 1.27.0
 git+https://github.com/thu-ml/tianshou
 """
 
@@ -21,7 +21,7 @@ from tianshou.policy import BasePolicy, DQNPolicy, MultiAgentPolicyManager, Rand
 from tianshou.trainer import offpolicy_trainer
 from tianshou.utils.net.common import Net
 
-from pettingzoo.classic import tictactoe_v3
+from pettingzoo import make
 
 
 def _get_agents(
@@ -63,7 +63,7 @@ def _get_agents(
 
 def _get_env():
     """This function is needed to provide callables for DummyVectorEnv."""
-    return PettingZooEnv(tictactoe_v3.env())
+    return PettingZooEnv(make("aec", "classic/tictactoe-v3"))
 
 
 if __name__ == "__main__":

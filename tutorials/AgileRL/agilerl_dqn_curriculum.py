@@ -22,8 +22,7 @@ from agilerl.utils.algo_utils import obs_channels_to_first
 from agilerl.utils.utils import create_population, observation_space_channels_to_first
 from tqdm import tqdm, trange
 
-from pettingzoo import ParallelEnv
-from pettingzoo.classic import connect_four_v3
+from pettingzoo import ParallelEnv, make
 
 
 class CurriculumEnv:
@@ -577,7 +576,7 @@ if __name__ == "__main__":
         }
 
         # Define the connect four environment
-        env = connect_four_v3.env()
+        env = make("aec", "classic/connect_four-v3")
         env.reset()
 
         # Configure the algo input arguments
