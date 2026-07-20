@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import pistonball_v6`     |
+| Creation             | `make("aec", "butterfly/pistonball-v6")`             |
 |----------------------|------------------------------------------------------|
 | Actions              | Either                                               |
 | Parallel API         | Yes                                                  |
@@ -43,8 +43,10 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 ### Arguments
 
 
-``` python
-pistonball_v6.env(n_pistons=20, time_penalty=-0.1, continuous=True,
+```python
+from pettingzoo import make
+
+make("aec", "butterfly/pistonball-v6", n_pistons=20, time_penalty=-0.1, continuous=True,
 random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3,
 ball_elasticity=1.5, max_cycles=125)
 ```

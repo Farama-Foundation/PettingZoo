@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import leduc_holdem_v4` |
+| Creation           | `make("aec", "classic/leduc_holdem-v4")`         |
 |--------------------|--------------------------------------------------|
 | Actions            |                                                  |
 | Parallel API       | Yes                                              |

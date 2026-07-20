@@ -40,15 +40,33 @@ To interact with your custom parallel environment, use the following code:
    :language: python
 ```
 
+## Registering Custom Environments
+
+Once your environment is ready, register so it can be created with [`make`](basic_usage.md#initializing-environments), the same way as built-in PettingZoo environments:
+
+```python notest
+from pettingzoo import make, parallel_registry, register
+import aec_rps
+import parallel_rps
+
+register("aec", "custom/rps-v0", aec_rps.env)
+register("parallel", "custom/rps-v0", parallel_rps.parallel_env)
+
+# Confirm the environment is available in the registry
+assert "custom/rps-v0" in parallel_registry
+
+env = make("parallel", "custom/rps-v0", render_mode="human")
+```
+
 ## Using Wrappers
 
-A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides [wrappers to convert environments](/api/pz_wrappers) back and forth between the AEC API and the Parallel API and a set of simple [utility wrappers](/api/pz_wrappers) which provide input validation and other convenient reusable logic. PettingZoo also includes [wrappers](/api/supersuit_wrappers) via the SuperSuit companion package (`pip install supersuit`).
+A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides [wrappers to convert environments](../api/wrappers/pz_wrappers.md#conversion-wrappers) back and forth between the AEC API and the Parallel API and a set of simple [utility wrappers](../api/wrappers/pz_wrappers.md#utility-wrappers) which provide input validation and other convenient reusable logic. PettingZoo also includes [wrappers](../api/wrappers/supersuit_wrappers.md) via the SuperSuit companion package (`pip install supersuit`).
 
 ```python
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo import make
 from pettingzoo.utils import ClipOutOfBoundsWrapper
 
-env = pistonball_v6.env()
+env = make("aec", "butterfly/pistonball-v6")
 wrapped_env = ClipOutOfBoundsWrapper(env)
 # Wrapped environments must be reset before use
 wrapped_env.reset()
@@ -82,12 +100,12 @@ for i in range(100):
 The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.
 
 For example, when the user tries to import the `knights_archers_zombies_v0` environment, they import the following variable (defined in `pettingzoo/butterfly/__init__.py`):
-``` python
+```python
 from pettingzoo.utils.deprecated_module import DeprecatedModule
 knights_archers_zombies_v0 = DeprecatedModule("knights_archers_zombies", "v0", "v11")
 ```
 This declaration tells the user that `knights_archers_zombies_v0` is deprecated and `knights_archers_zombies_v11` should be used instead. In particular, it gives the following error:
-``` python notest
+```python notest
 from pettingzoo.butterfly import knights_archers_zombies_v0
 knights_archers_zombies_v0.env()
 # pettingzoo.utils.deprecated_module.DeprecatedEnv: knights_archers_zombies_v0 is now deprecated, use knights_archers_zombies_v11 instead

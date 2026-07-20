@@ -24,9 +24,9 @@ We provide a [tutorial](/content/environment_creation/) for creating a simple Ro
 AEC environments can be interacted with as follows:
 
 ```python
-from pettingzoo.classic import rps_v2
+from pettingzoo import make
 
-env = rps_v2.env(render_mode="human")
+env = make("aec", "classic/rps-v2", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():
@@ -46,9 +46,9 @@ AEC environments often include action masks, in order to mark valid/invalid acti
 
 To sample actions using action masking:
 ```python
-from pettingzoo.classic import chess_v6
+from pettingzoo import make
 
-env = chess_v6.env(render_mode="human")
+env = make("aec", "classic/chess-v6", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():

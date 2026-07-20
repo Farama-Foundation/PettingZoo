@@ -12,7 +12,6 @@ Authors: Costa (https://github.com/vwxyzjn), Elliot (https://github.com/elliotto
 # flake8: noqa
 
 import argparse
-import importlib
 import os
 import random
 import time
@@ -27,6 +26,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.distributions.categorical import Categorical
 from torch.utils.tensorboard import SummaryWriter
+
+from pettingzoo import make
 
 
 def parse_args():
@@ -163,7 +164,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
 
     # env setup
-    env = importlib.import_module(f"pettingzoo.atari.{args.env_id}").parallel_env()
+    env = make("parallel", f"atari/{args.env_id}")
     env = ss.max_observation_v0(env, 2)
     env = ss.frame_skip_v0(env, 4)
     env = ss.clip_reward_v0(env, lower_bound=-1, upper_bound=1)
@@ -379,9 +380,7 @@ if __name__ == "__main__":
         device = next(agent.parameters()).device
 
         # Create a fresh non-vectorized Atari env with RGB rendering.
-        env = importlib.import_module(f"pettingzoo.atari.{env_id}").parallel_env(
-            render_mode="rgb_array"
-        )
+        env = make("parallel", f"atari/{env_id}", render_mode="rgb_array")
         env = ss.color_reduction_v0(env, mode="B")
         env = ss.resize_v1(env, x_size=84, y_size=84)
         env = ss.frame_stack_v1(env, 4)
