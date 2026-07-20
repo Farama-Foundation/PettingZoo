@@ -15,20 +15,60 @@ We support and maintain PettingZoo for Python 3.10, 3.11, 3.12, 3.13, and 3.14 o
 
 ## Initializing Environments
 
-Using environments in PettingZoo is very similar to using them in Gymnasium. You initialize an environment via:
+Using environments in PettingZoo is very similar to using them in Gymnasium. You initialize an environment via the `make` function:
 
 ``` python
-from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
+from pettingzoo import make
+
+env = make("aec", "butterfly/pistonball-v6")
+```
+
+Use `"aec"` for the [Agent Environment Cycle](../api/aec.md) API and `"parallel"` for the [Parallel](../api/parallel.md) API:
+
+``` python
+from pettingzoo import make
+
+penv = make("parallel", "butterfly/pistonball-v6")
+```
+
+Not every environment provides a parallel version. Check whether an ID is available with `parallel_registry`:
+
+``` python
+from pettingzoo import parallel_registry
+
+"classic/chess-v6" in parallel_registry  # False — chess is AEC-only
+"butterfly/pistonball-v6" in parallel_registry  # True
+```
+
+Third-party environments can be added with `pettingzoo.register`:
+
+``` python
+from pettingzoo import register
+from custom_pettingzoo_env import env, parallel_env
+
+register("aec", "custom/my-awesome-env-v0", env)
+register("parallel", "custom/my-awesome-env-v0", parallel_env)
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
 
 ``` python
-from pettingzoo.butterfly import cooperative_pong_v6
+from pettingzoo import make
 
-cooperative_pong_v6.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, cake_paddle=True, max_cycles=900, bounce_randomness=False)
+make(
+    "aec",
+    "butterfly/cooperative_pong-v6",
+    ball_speed=18,
+    left_paddle_speed=25,
+    right_paddle_speed=25,
+    cake_paddle=True,
+    max_cycles=900,
+    bounce_randomness=False,
+)
+```
+
+```{warning}
+The old environment creation API (`from pettingzoo.<namespace> import <game>` then `<game>.env()` / `<game>.parallel_env()`) is deprecated in favor of the Gymnasium-like registry (`pettingzoo.make`). The old API may be removed in a future release.
 ```
 
 ## Interacting With Environments
@@ -36,9 +76,9 @@ right_paddle_speed=25, cake_paddle=True, max_cycles=900, bounce_randomness=False
 Environments can be interacted with using a similar interface to Gymnasium:
 
 ``` python
-from pettingzoo.butterfly import cooperative_pong_v6
+from pettingzoo import make
 
-env = cooperative_pong_v6.env(render_mode="human")
+env = make("aec", "butterfly/cooperative_pong-v6", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():
@@ -129,9 +169,9 @@ When an agent is terminated or truncated, it's removed from `agents`, so when th
 If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
 
 ``` python
-from pettingzoo.butterfly import knights_archers_zombies_v11
+from pettingzoo import make
 
-base_env = knights_archers_zombies_v11.env().unwrapped
+base_env = make("aec", "butterfly/knights_archers_zombies-v11").unwrapped
 ```
 
 ### Variable Numbers of Agents (Death)
@@ -145,9 +185,11 @@ In certain cases, separating agent from environment actions is helpful for study
 
 ## Raw Environments
 
-Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
+Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the environment's `raw_env` constructor directly:
 
 ``` python
+from pettingzoo.butterfly.knights_archers_zombies import knights_archers_zombies
+
 environment_parameters = {}  # any parameters to pass to the environment
-env = knights_archers_zombies_v11.raw_env(**environment_parameters)
+env = knights_archers_zombies.raw_env(**environment_parameters)
 ```

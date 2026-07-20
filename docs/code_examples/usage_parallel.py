@@ -1,6 +1,6 @@
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo import make
 
-env = pistonball_v6.parallel_env(render_mode="human")
+env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
 observations, infos = env.reset()
 
 while env.agents:

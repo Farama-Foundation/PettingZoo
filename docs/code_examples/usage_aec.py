@@ -1,6 +1,6 @@
-from pettingzoo.atari import space_invaders_v2
+from pettingzoo import make
 
-env = space_invaders_v2.env(render_mode="human")
+env = make("aec", "atari/space_invaders-v2", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():

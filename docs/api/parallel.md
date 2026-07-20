@@ -5,7 +5,7 @@ title: Parallel
 
 # Parallel API
 
-In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via `<game>.parallel_env()`. This API is based around the paradigm of *Partially Observable Stochastic Games* (POSGs) and the details are similar to [RLlib's MultiAgent environment specification](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we allow for different observation and action spaces between the agents.
+In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via `make("parallel", <game>, ...)`. This API is based around the paradigm of *Partially Observable Stochastic Games* (POSGs) and the details are similar to [RLlib's MultiAgent environment specification](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we allow for different observation and action spaces between the agents.
 
 For a comparison with the AEC API, see [About AEC](https://pettingzoo.farama.org/api/aec/#about-aec). For more information, see [*PettingZoo: A Standard API for Multi-Agent Reinforcement Learning*](https://arxiv.org/pdf/2009.14471.pdf).
 
@@ -22,8 +22,9 @@ We provide tutorials for creating two custom Parallel environments: [Rock-Paper-
 Parallel environments can be interacted with as follows:
 
 ``` python
-from pettingzoo.butterfly import pistonball_v6
-parallel_env = pistonball_v6.parallel_env(render_mode="human")
+from pettingzoo import make
+
+parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
 observations, infos = parallel_env.reset(seed=42)
 
 while parallel_env.agents:
