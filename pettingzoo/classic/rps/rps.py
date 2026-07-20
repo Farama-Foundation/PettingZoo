@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import rps_v2` |
+| Creation           | `make("aec", "classic/rps-v2")`         |
 |--------------------|-----------------------------------------|
 | Actions            | Discrete                                |
 | Parallel API       | Yes                                     |
@@ -31,7 +31,7 @@ other half. The most common expansion of this game is [Rock, Paper, Scissors, Li
 ### Arguments
 
 ``` python
-rps_v2.env(num_actions=3, max_cycles=15)
+make("aec", "classic/rps-v2", num_actions=3, max_cycles=15)
 ```
 
 `num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.

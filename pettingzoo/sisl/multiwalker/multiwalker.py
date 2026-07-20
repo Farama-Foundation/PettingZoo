@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.sisl import multiwalker_v9`   |
+| Creation             | `make("aec", "sisl/multiwalker-v9")`           |
 |----------------------|------------------------------------------------|
 | Actions              | Continuous                                     |
 | Parallel API         | Yes                                            |
@@ -77,7 +77,8 @@ This table enumerates the observation space:
 ### Arguments
 
 ``` python
-multiwalker_v9.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
+make("aec", "sisl/multiwalker-v9", n_walkers=3, position_noise=1e-3, angle_noise=1e-3,
+forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
 terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)
 ```
 

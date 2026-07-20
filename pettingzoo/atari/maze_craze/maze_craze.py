@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.atari import maze_craze_v3` |
+| Creation             | `make("aec", "atari/maze_craze-v3")`         |
 |----------------------|----------------------------------------------|
 | Actions              | Discrete                                     |
 | Parallel API         | Yes                                          |
@@ -42,7 +42,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to Maze Craze are
 
 ``` python
-maze_craze_v3.env(game_version="robbers", visibilty_level=0)
+make("aec", "atari/maze_craze-v3", game_version="robbers", visibilty_level=0)
 ```
 
 `game_version`:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above

@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.atari import combat_jet_v1` |
+| Creation           | `make("aec", "atari/combat_plane-v2")`       |
 |--------------------|----------------------------------------------|
 | Actions            | Discrete                                     |
 | Parallel API       | Yes                                          |
@@ -44,7 +44,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to combat-plane are
 
 ``` python
-combat_plane_v2.env(game_version="jet", guided_missile=True)
+make("aec", "atari/combat_plane-v2", game_version="jet", guided_missile=True)
 ```
 
 `game_version`:  Accepted arguments are "jet" or "bi-plane". Whether the plane is a bi-plane or a jet. (Jets move faster)

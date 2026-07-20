@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import texas_holdem_no_limit_v6` |
+| Creation           | `make("aec", "classic/texas_holdem_no_limit-v6")`         |
 |--------------------|-----------------------------------------------------------|
 | Actions            | Discrete                                                  |
 | Parallel API       | Yes                                                       |
@@ -29,7 +29,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-ho
 ### Arguments
 
 ``` python
-texas_holdem_no_limit_v6.env(num_players=2)
+make("aec", "classic/texas_holdem_no_limit-v6", num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.

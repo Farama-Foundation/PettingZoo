@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.classic import hanabi_v5` |
+| Creation             | `make("aec", "classic/hanabi-v5")`         |
 |----------------------|--------------------------------------------|
 | Actions              | Discrete                                   |
 | Parallel API         | Yes                                        |
@@ -32,8 +32,8 @@ played card does not satisfy these conditions, a life token is placed. The game 
 Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.
 
 ``` python
-hanabi_v5.env(colors=5, ranks=5, players=2, hand_size=5, max_information_tokens=8,
-max_life_tokens=3, observation_type='minimal')
+make("aec", "classic/hanabi-v5", colors=5, ranks=5, players=2, hand_size=5,
+max_information_tokens=8, max_life_tokens=3, observation_type="minimal")
 ```
 
 `colors`: Number of colors the cards can take (affects size of deck)

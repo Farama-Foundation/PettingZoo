@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.atari import space_invaders_v2` |
+| Creation             | `make("aec", "atari/space_invaders-v2")`         |
 |----------------------|--------------------------------------------------|
 | Actions              | Discrete                                         |
 | Parallel API         | Yes                                              |
@@ -39,7 +39,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to Space Invaders are
 
 ``` python
-space_invaders_v2.env(alternating_control=False, moving_shields=True,
+make("aec", "atari/space_invaders-v2", alternating_control=False, moving_shields=True,
 zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
 ```
 

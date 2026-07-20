@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import knights_archers_zombies_v11` |
+| Creation             | `make("aec", "butterfly/knights_archers_zombies-v11")`         |
 |----------------------|----------------------------------------------------------------|
 | Actions              | Discrete                                                       |
 | Parallel API         | Yes                                                            |
@@ -129,7 +129,7 @@ Dead agents return all pixels as black.
 ### Arguments
 
 ``` python
-knights_archers_zombies_v11.env(
+make("aec", "butterfly/knights_archers_zombies-v11",
   spawn_delay=20,
   num_archers=2,
   num_knights=2,

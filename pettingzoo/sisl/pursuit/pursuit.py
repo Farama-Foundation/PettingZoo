@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.sisl import pursuit_v5`               |
+| Creation             | `make("aec", "sisl/pursuit-v5")`                       |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -40,8 +40,8 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 ### Arguments
 
 ``` python
-pursuit_v5.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,
-n_pursuers=8,obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,
+make("aec", "sisl/pursuit-v5", max_cycles=500, x_size=16, y_size=16, shared_reward=True,
+n_evaders=30, n_pursuers=8, obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,
 catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 ```
 
