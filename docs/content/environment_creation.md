@@ -44,9 +44,10 @@ To interact with your custom parallel environment, use the following code:
 
 Once your environment is ready, register so it can be created with [`make`](basic_usage.md#initializing-environments), the same way as built-in PettingZoo environments:
 
-```python
+```python notest
 from pettingzoo import make, parallel_registry, register
-from . import aec_rps, parallel_rps
+import aec_rps
+import parallel_rps
 
 register("aec", "custom/rps-v0", aec_rps.env)
 register("parallel", "custom/rps-v0", parallel_rps.parallel_env)

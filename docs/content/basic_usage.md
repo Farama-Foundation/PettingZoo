@@ -42,7 +42,7 @@ from pettingzoo import parallel_registry
 
 Third-party environments can be added with `pettingzoo.register`:
 
-``` python
+``` python notest
 from pettingzoo import register
 from custom_pettingzoo_env import env, parallel_env
 
