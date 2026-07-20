@@ -17,7 +17,7 @@ We support and maintain PettingZoo for Python 3.10, 3.11, 3.12, 3.13, and 3.14 o
 
 Using environments in PettingZoo is very similar to using them in Gymnasium. You initialize an environment via the `make` function:
 
-``` python
+```python
 from pettingzoo import make
 
 env = make("aec", "butterfly/pistonball-v6")
@@ -25,7 +25,7 @@ env = make("aec", "butterfly/pistonball-v6")
 
 Use `"aec"` for the [Agent Environment Cycle](../api/aec.md) API and `"parallel"` for the [Parallel](../api/parallel.md) API:
 
-``` python
+```python
 from pettingzoo import make
 
 penv = make("parallel", "butterfly/pistonball-v6")
@@ -33,7 +33,7 @@ penv = make("parallel", "butterfly/pistonball-v6")
 
 Not every environment provides a parallel version. Check whether an ID is available with `parallel_registry`:
 
-``` python
+```python
 from pettingzoo import parallel_registry
 
 "classic/chess-v6" in parallel_registry  # False — chess is AEC-only
@@ -42,7 +42,7 @@ from pettingzoo import parallel_registry
 
 Third-party environments can be added with `pettingzoo.register`:
 
-``` python notest
+```python notest
 from pettingzoo import register
 from custom_pettingzoo_env import env, parallel_env
 
@@ -52,7 +52,7 @@ register("parallel", "custom/my-awesome-env-v0", parallel_env)
 
 Environments are generally highly configurable via arguments at creation, i.e.:
 
-``` python
+```python
 from pettingzoo import make
 
 make(
@@ -75,7 +75,7 @@ The old environment creation API (`from pettingzoo.<namespace> import <game>` th
 
 Environments can be interacted with using a similar interface to Gymnasium:
 
-``` python
+```python
 from pettingzoo import make
 
 env = make("aec", "butterfly/cooperative_pong-v6", render_mode="human")
@@ -168,7 +168,7 @@ When an agent is terminated or truncated, it's removed from `agents`, so when th
 
 If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
 
-``` python
+```python
 from pettingzoo import make
 
 base_env = make("aec", "butterfly/knights_archers_zombies-v11").unwrapped
@@ -187,7 +187,7 @@ In certain cases, separating agent from environment actions is helpful for study
 
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the environment's `raw_env` constructor directly:
 
-``` python
+```python
 from pettingzoo.butterfly.knights_archers_zombies import knights_archers_zombies
 
 environment_parameters = {}  # any parameters to pass to the environment

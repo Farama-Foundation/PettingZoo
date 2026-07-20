@@ -23,7 +23,7 @@ The average total reward for an environment, as presented in the documentation, 
 
 This value is important for establishing the simplest possible baseline: the random policy.
 
-``` python
+```python
 from pettingzoo import make
 from pettingzoo.utils import average_total_reward
 
@@ -42,7 +42,7 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 [//]: # (Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (from pettingzoo.butterfly knights_archers_zombies_v11)
 
@@ -60,7 +60,7 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 [//]: # (You can also easily get a quick impression of them by watching a random policy control all the actions:)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (from pettingzoo.utils import random_demo)
 
@@ -77,7 +77,7 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 [//]: # (Some games support this via:)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (import time)
 
@@ -141,7 +141,7 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
 
-``` python
+```python
 from pettingzoo import make
 from pettingzoo.utils import save_observation
 

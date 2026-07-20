@@ -100,12 +100,12 @@ for i in range(100):
 The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.
 
 For example, when the user tries to import the `knights_archers_zombies_v0` environment, they import the following variable (defined in `pettingzoo/butterfly/__init__.py`):
-``` python
+```python
 from pettingzoo.utils.deprecated_module import DeprecatedModule
 knights_archers_zombies_v0 = DeprecatedModule("knights_archers_zombies", "v0", "v11")
 ```
 This declaration tells the user that `knights_archers_zombies_v0` is deprecated and `knights_archers_zombies_v11` should be used instead. In particular, it gives the following error:
-``` python notest
+```python notest
 from pettingzoo.butterfly import knights_archers_zombies_v0
 knights_archers_zombies_v0.env()
 # pettingzoo.utils.deprecated_module.DeprecatedEnv: knights_archers_zombies_v0 is now deprecated, use knights_archers_zombies_v11 instead

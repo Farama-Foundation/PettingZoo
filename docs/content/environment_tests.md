@@ -6,7 +6,7 @@ PettingZoo has a number of compliance tests for environments through. If you are
 
 PettingZoo's API has a number of features and requirements. To make sure your environment is consistent with the API, we have the api_test. Below is an example:
 
-``` python
+```python
 from pettingzoo import make
 from pettingzoo.test import api_test
 
@@ -25,7 +25,7 @@ The optional arguments are:
 
 This is an analogous version of the API test, but for parallel environments. You can use this test like:
 
-``` python
+```python
 from pettingzoo import make
 from pettingzoo.test import parallel_api_test
 
@@ -39,7 +39,7 @@ To have a properly reproducible environment that utilizes randomness, you need t
 
 The seed test takes in a function that creates a pettingzoo environment. For example
 
-``` python
+```python
 from pettingzoo.butterfly.pistonball.pistonball import env, parallel_env
 from pettingzoo.test import seed_test, parallel_seed_test
 
@@ -62,7 +62,7 @@ The second optional argument, `test_kept_state` allows the user to disable the s
 
 The max cycles test tests that the `max_cycles` environment argument exists and the resulting environment actually runs for the correct number of cycles. If your environment does not take a `max_cycles` argument, you should not run this test. The reason this test exists is that many off-by-one errors are possible when implementing `max_cycles`. An example test usage looks like:
 
-``` python
+```python
 from pettingzoo.butterfly.pistonball import pistonball
 from pettingzoo.test import max_cycles_test
 
@@ -72,7 +72,7 @@ max_cycles_test(pistonball)
 ## Render Test
 
 The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode (only supports `'human'`, `'ansi'`, and `'rgb_array'` modes).
-``` python
+```python
 from pettingzoo.butterfly.pistonball.pistonball import env
 from pettingzoo.test import render_test
 
@@ -81,7 +81,7 @@ render_test(env)
 
 The render test method takes in an optional argument `custom_tests` that allows for additional tests in non-standard modes.
 
-``` python
+```python
 from pettingzoo.butterfly.pistonball.pistonball import env
 from pettingzoo.test import render_test
 
@@ -95,7 +95,7 @@ render_test(env, custom_tests=custom_tests)
 
 To make sure we do not have performance regressions, we have the performance benchmark test. This test simply prints out the number of steps and cycles that the environment takes in 5 seconds. This test requires manual inspection of its outputs:
 
-``` python
+```python
 from pettingzoo import make
 from pettingzoo.test import performance_benchmark
 
@@ -107,7 +107,7 @@ performance_benchmark(env)
 
 The save observation test is to visually inspect the observations of games with graphical observations to make sure they are what is intended. We have found that observations are a huge source of bugs in environments, so it is good to manually check them when possible. This test just tries to save the observations of all the agents. If it fails, then it just prints a warning. The output needs to be visually inspected for correctness.
 
-``` python
+```python
 from pettingzoo import make
 from pettingzoo.test import test_save_obs
 

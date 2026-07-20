@@ -21,7 +21,7 @@ We provide tutorials for creating two custom Parallel environments: [Rock-Paper-
 
 Parallel environments can be interacted with as follows:
 
-``` python
+```python
 from pettingzoo import make
 
 parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
