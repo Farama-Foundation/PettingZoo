@@ -386,7 +386,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;SISL environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import               | `from pettingzoo.sisl import pursuit_v5`               |</span>
+<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;sisl/pursuit-v5&quot;)`                       |</span>
 <span class="sd">|----------------------|--------------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                               |</span>
 <span class="sd">| Parallel API         | Yes                                                    |</span>
@@ -416,9 +416,11 @@
 
 <span class="sd">### Arguments</span>
 
-<span class="sd">``` python</span>
-<span class="sd">pursuit_v5.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,</span>
-<span class="sd">n_pursuers=8,obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,</span>
+<span class="sd">```python</span>
+<span class="sd">from pettingzoo import make</span>
+
+<span class="sd">make(&quot;aec&quot;, &quot;sisl/pursuit-v5&quot;, max_cycles=500, x_size=16, y_size=16, shared_reward=True,</span>
+<span class="sd">n_evaders=30, n_pursuers=8, obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,</span>
 <span class="sd">catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)</span>
 <span class="sd">```</span>
 
@@ -716,7 +718,7 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>

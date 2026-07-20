@@ -387,8 +387,8 @@
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.sisl</span> <span class="pre">import</span> <span class="pre">pursuit_v5</span></code></p></th>
+<tr class="row-odd"><th class="head"><p>Creation</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;sisl/pursuit-v5&quot;)</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -439,8 +439,10 @@ the red pursuer agents. The environment terminates when every evader has been ca
 </section>
 <section id="arguments">
 <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pursuit_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_evaders</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-<span class="n">n_pursuers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">obs_range</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n_catch</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freeze_evaders</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tag_reward</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+
+<span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;sisl/pursuit-v5&quot;</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="n">n_evaders</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_pursuers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">obs_range</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n_catch</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freeze_evaders</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tag_reward</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
 <span class="n">catch_reward</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">urgency_reward</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">surround</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint_window</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -473,9 +475,9 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.sisl</span><span class="w"> </span><span class="kn">import</span> <span class="n">pursuit_v5</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;sisl/pursuit-v5&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -495,9 +497,9 @@ the red pursuer agents. The environment terminates when every evader has been ca
 </section>
 <section id="parallel">
 <h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.sisl</span><span class="w"> </span><span class="kn">import</span> <span class="n">pursuit_v5</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">pursuit_v5</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;sisl/pursuit-v5&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
@@ -754,7 +756,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

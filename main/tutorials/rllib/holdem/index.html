@@ -392,7 +392,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic,butterfly]&gt;=1.24.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic,butterfly]&gt;=1.27.0
 Pillow&gt;=9.4.0
 ray[rllib]==2.55.0
 SuperSuit&gt;=3.9.0
@@ -425,7 +425,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">ray.rllib.utils.torch_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FLOAT_MAX</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ray.tune.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_env</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 <span class="n">torch</span><span class="p">,</span> <span class="n">nn</span> <span class="o">=</span> <span class="n">try_import_torch</span><span class="p">()</span>
 
@@ -484,7 +484,7 @@ tensorflow-probability&gt;=0.19.0
     <span class="c1"># function that outputs the environment you wish to register.</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">():</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">leduc_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/leduc_holdem-v4&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">env</span>
 
     <span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
@@ -556,7 +556,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">ray.tune.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_env</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">rllib_leduc_holdem</span><span class="w"> </span><span class="kn">import</span> <span class="n">TorchMaskedActions</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SDL_VIDEODRIVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dummy&quot;</span>
 
@@ -584,7 +584,7 @@ tensorflow-probability&gt;=0.19.0
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">():</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">leduc_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/leduc_holdem-v4&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">env</span>
 
 
@@ -795,7 +795,7 @@ tensorflow-probability&gt;=0.19.0
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

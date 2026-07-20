@@ -386,7 +386,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import             | `from pettingzoo.classic import rps_v2` |</span>
+<span class="sd">| Creation           | `make(&quot;aec&quot;, &quot;classic/rps-v2&quot;)`         |</span>
 <span class="sd">|--------------------|-----------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                                |</span>
 <span class="sd">| Parallel API       | Yes                                     |</span>
@@ -407,8 +407,10 @@
 
 <span class="sd">### Arguments</span>
 
-<span class="sd">``` python</span>
-<span class="sd">rps_v2.env(num_actions=3, max_cycles=15)</span>
+<span class="sd">```python</span>
+<span class="sd">from pettingzoo import make</span>
+
+<span class="sd">make(&quot;aec&quot;, &quot;classic/rps-v2&quot;, num_actions=3, max_cycles=15)</span>
 <span class="sd">```</span>
 
 <span class="sd">`num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.</span>
@@ -1029,7 +1031,7 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>

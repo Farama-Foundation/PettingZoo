@@ -386,7 +386,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import             | `from pettingzoo.atari import combat_jet_v1` |</span>
+<span class="sd">| Creation           | `make(&quot;aec&quot;, &quot;atari/combat_plane-v2&quot;)`       |</span>
 <span class="sd">|--------------------|----------------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                                     |</span>
 <span class="sd">| Parallel API       | Yes                                          |</span>
@@ -420,8 +420,10 @@
 
 <span class="sd">Parameters specific to combat-plane are</span>
 
-<span class="sd">``` python</span>
-<span class="sd">combat_plane_v2.env(game_version=&quot;jet&quot;, guided_missile=True)</span>
+<span class="sd">```python</span>
+<span class="sd">from pettingzoo import make</span>
+
+<span class="sd">make(&quot;aec&quot;, &quot;atari/combat_plane-v2&quot;, game_version=&quot;jet&quot;, guided_missile=True)</span>
 <span class="sd">```</span>
 
 <span class="sd">`game_version`:  Accepted arguments are &quot;jet&quot; or &quot;bi-plane&quot;. Whether the plane is a bi-plane or a jet. (Jets move faster)</span>
@@ -619,7 +621,7 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>

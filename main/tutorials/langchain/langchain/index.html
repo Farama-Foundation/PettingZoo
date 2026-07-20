@@ -395,7 +395,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.27.0
 langchain
 openai
 tenacity
@@ -545,9 +545,9 @@ tenacity
 <h3>Rock-Paper-Scissors<a class="headerlink" href="#rock-paper-scissors" title="Link to this heading">¶</a></h3>
 <p>We can now run a simulation of a multi-agent rock, paper, scissors game using the <code class="docutils literal notranslate"><span class="pre">PettingZooAgent</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rock_paper_scissors</span><span class="p">():</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">rps_v2</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/rps-v2&quot;</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">PettingZooAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -661,9 +661,9 @@ Action: None
 <h3>Tic-Tac-Toe<a class="headerlink" href="#tic-tac-toe" title="Link to this heading">¶</a></h3>
 <p>Here is an example of a Tic-Tac-Toe game that uses the <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tic_tac_toe</span><span class="p">():</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">tictactoe_v3</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/tictactoe-v3&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -902,9 +902,11 @@ Action: None
 <h3>Texas Holdem’ No Limit<a class="headerlink" href="#texas-holdem-no-limit" title="Link to this heading">¶</a></h3>
 <p>Here is an example of a Texas Hold’em No Limit game that uses the <code class="docutils literal notranslate"><span class="pre">ActionMaskAgent</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">texas_holdem_no_limit_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span>
+    <span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -1102,9 +1104,9 @@ Action: None
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">rock_paper_scissors</span><span class="p">():</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">rps_v2</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/rps-v2&quot;</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">PettingZooAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -1113,9 +1115,9 @@ Action: None
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">tic_tac_toe</span><span class="p">():</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">tictactoe_v3</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/tictactoe-v3&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -1124,9 +1126,11 @@ Action: None
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">texas_holdem_no_limit_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span>
+    <span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -1312,7 +1316,7 @@ Action: None
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

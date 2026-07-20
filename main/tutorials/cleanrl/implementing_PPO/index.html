@@ -391,7 +391,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly,atari,testing]&gt;=1.24.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly,atari,testing]&gt;=1.27.0
 SuperSuit&gt;=3.9.0
 tensorboard&gt;=2.11.2
 torch&gt;=1.13.1
@@ -418,7 +418,7 @@ imageio-ffmpeg
 <span class="kn">from</span><span class="w"> </span><span class="nn">supersuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">color_reduction_v0</span><span class="p">,</span> <span class="n">frame_stack_v1</span><span class="p">,</span> <span class="n">resize_v1</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.distributions.categorical</span><span class="w"> </span><span class="kn">import</span> <span class="n">Categorical</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Agent</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -503,8 +503,12 @@ imageio-ffmpeg
     <span class="n">total_episodes</span> <span class="o">=</span> <span class="mi">2</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; ENV SETUP &quot;&quot;&quot;</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span>
-        <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="n">max_cycles</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">,</span>
+        <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">max_cycles</span><span class="o">=</span><span class="n">max_cycles</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">frame_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">frame_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -660,7 +664,9 @@ imageio-ffmpeg
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; RENDER THE POLICY &quot;&quot;&quot;</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">stack_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -843,7 +849,7 @@ imageio-ffmpeg
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

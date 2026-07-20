@@ -387,8 +387,8 @@
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">texas_holdem_no_limit_v6</span></code></p></th>
+<tr class="row-odd"><th class="head"><p>Creation</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;classic/texas_holdem_no_limit-v6&quot;)</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -426,7 +426,9 @@
 <p>Our implementation wraps <a class="reference external" href="http://rlcard.org/games.html#no-limit-texas-hold-em">RLCard</a> and you can refer to its documentation for additional details. Please cite their work if you use this game in research.</p>
 <section id="arguments">
 <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">texas_holdem_no_limit_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+
+<span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">num_players</span></code>: Sets the number of players in the game. Minimum is 2.</p>
@@ -542,9 +544,9 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">texas_holdem_no_limit_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -752,7 +754,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

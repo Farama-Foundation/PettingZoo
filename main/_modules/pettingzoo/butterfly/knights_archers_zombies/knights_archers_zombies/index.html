@@ -386,7 +386,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;butterfly environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import               | `from pettingzoo.butterfly import knights_archers_zombies_v11` |</span>
+<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;butterfly/knights_archers_zombies-v11&quot;)`         |</span>
 <span class="sd">|----------------------|----------------------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                                       |</span>
 <span class="sd">| Parallel API         | Yes                                                            |</span>
@@ -505,8 +505,10 @@
 
 <span class="sd">### Arguments</span>
 
-<span class="sd">``` python</span>
-<span class="sd">knights_archers_zombies_v11.env(</span>
+<span class="sd">```python</span>
+<span class="sd">from pettingzoo import make</span>
+
+<span class="sd">make(&quot;aec&quot;, &quot;butterfly/knights_archers_zombies-v11&quot;,</span>
 <span class="sd">  spawn_delay=20,</span>
 <span class="sd">  num_archers=2,</span>
 <span class="sd">  num_knights=2,</span>
@@ -1426,7 +1428,7 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>

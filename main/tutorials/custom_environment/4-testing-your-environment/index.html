@@ -390,6 +390,7 @@
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>Now that our environment is complete, we can test it to make sure it works as intended. PettingZoo has a built-in testing suite that can be used to test your environment.</p>
+<p>After the API tests pass, register the environment with <code class="docutils literal notranslate"><span class="pre">pettingzoo.register</span></code> so that it can be created with <code class="docutils literal notranslate"><span class="pre">make</span></code>, then confirm it appears in <code class="docutils literal notranslate"><span class="pre">parallel_registry</span></code> (or <code class="docutils literal notranslate"><span class="pre">aec_registry</span></code> for AEC environments). See <a class="reference internal" href="../../../content/basic_usage/#initializing-environments"><span class="std std-ref">Basic Usage</span></a> for more on the registry-related APIs.</p>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Link to this heading">¶</a></h2>
@@ -400,13 +401,34 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tutorial2_adding_game_logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomEnvironment</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tutorial3_action_masking</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomActionMaskedEnvironment</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span><span class="p">,</span> <span class="n">parallel_registry</span><span class="p">,</span> <span class="n">register</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_api_test</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Sanity check</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">CustomEnvironment</span><span class="p">()</span>
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">CustomActionMaskedEnvironment</span><span class="p">()</span>
+    <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
+
+    <span class="c1"># Register custom environments so they can be created with make()</span>
+    <span class="n">register</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span><span class="p">,</span> <span class="n">CustomEnvironment</span><span class="p">)</span>
+    <span class="n">register</span><span class="p">(</span>
+        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span><span class="p">,</span>
+        <span class="n">CustomActionMaskedEnvironment</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Confirm the environments are available in the parallel registry</span>
+    <span class="k">assert</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+    <span class="k">assert</span> <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+
+    <span class="c1"># Environments can now be created via make, just like built-in ones</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span><span class="p">)</span>
+    <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span><span class="p">)</span>
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -572,7 +594,7 @@
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

@@ -388,10 +388,10 @@
 <h1>Supersuit Wrappers<a class="headerlink" href="#supersuit-wrappers" title="Link to this heading">¶</a></h1>
 <p>The <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit">SuperSuit</a> companion package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">supersuit</span></code>) includes a collection of pre-processing functions which can applied to both <a class="reference internal" href="../../aec/"><span class="doc std std-doc">AEC</span></a> and <a class="reference internal" href="../../parallel/"><span class="doc std std-doc">Parallel</span></a> environments.</p>
 <p>To convert <a class="reference internal" href="../../../environments/atari/space_invaders/"><span class="doc std std-doc">space invaders</span></a> to a greyscale observation space and stack the last 4 frames:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">space_invaders_v2</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">supersuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">color_reduction_v0</span><span class="p">,</span> <span class="n">frame_stack_v1</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">space_invaders_v2</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">)</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
@@ -727,7 +727,7 @@
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

@@ -393,7 +393,7 @@ This is a full training script including CLI, logging and integration with <a cl
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly,atari,testing]&gt;=1.24.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[butterfly,atari,testing]&gt;=1.27.0
 SuperSuit&gt;=3.9.0
 tensorboard&gt;=2.11.2
 torch&gt;=1.13.1
@@ -401,7 +401,7 @@ imageio
 imageio-ffmpeg
 </pre></div>
 </div>
-<p>Then, install ROMs using <a class="reference external" href="https://github.com/Farama-Foundation/AutoROM">AutoROM</a>, or specify the path to your Atari rom using the <code class="docutils literal notranslate"><span class="pre">rom_path</span></code> argument (see <a class="reference internal" href="#/environments/atari/#common-parameters"><span class="xref myst">Common Parameters</span></a>).</p>
+<p>Then, install ROMs using <a class="reference external" href="https://github.com/Farama-Foundation/AutoROM">AutoROM</a>, or specify the path to your Atari rom using the <code class="docutils literal notranslate"><span class="pre">rom_path</span></code> argument (see <a class="reference internal" href="../../../environments/atari/#common-parameters"><span class="std std-ref">Common Parameters</span></a>).</p>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Link to this heading">¶</a></h2>
@@ -420,7 +420,6 @@ imageio-ffmpeg
 <span class="c1"># flake8: noqa</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
@@ -435,6 +434,8 @@ imageio-ffmpeg
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.distributions.categorical</span><span class="w"> </span><span class="kn">import</span> <span class="n">Categorical</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.tensorboard</span><span class="w"> </span><span class="kn">import</span> <span class="n">SummaryWriter</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">():</span>
@@ -571,7 +572,7 @@ imageio-ffmpeg
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">cuda</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 
     <span class="c1"># env setup</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pettingzoo.atari.</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">env_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;atari/</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">env_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">max_observation_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_skip_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">clip_reward_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -787,9 +788,7 @@ imageio-ffmpeg
         <span class="n">device</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">device</span>
 
         <span class="c1"># Create a fresh non-vectorized Atari env with RGB rendering.</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pettingzoo.atari.</span><span class="si">{</span><span class="n">env_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span>
-            <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span>
-        <span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;atari/</span><span class="si">{</span><span class="n">env_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
@@ -996,7 +995,7 @@ imageio-ffmpeg
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

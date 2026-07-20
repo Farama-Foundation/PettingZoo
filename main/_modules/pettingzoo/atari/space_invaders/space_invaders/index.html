@@ -386,7 +386,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import               | `from pettingzoo.atari import space_invaders_v2` |</span>
+<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;atari/space_invaders-v2&quot;)`         |</span>
 <span class="sd">|----------------------|--------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                         |</span>
 <span class="sd">| Parallel API         | Yes                                              |</span>
@@ -415,8 +415,10 @@
 
 <span class="sd">Parameters specific to Space Invaders are</span>
 
-<span class="sd">``` python</span>
-<span class="sd">space_invaders_v2.env(alternating_control=False, moving_shields=True,</span>
+<span class="sd">```python</span>
+<span class="sd">from pettingzoo import make</span>
+
+<span class="sd">make(&quot;aec&quot;, &quot;atari/space_invaders-v2&quot;, alternating_control=False, moving_shields=True,</span>
 <span class="sd">zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)</span>
 <span class="sd">```</span>
 
@@ -612,7 +614,7 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>

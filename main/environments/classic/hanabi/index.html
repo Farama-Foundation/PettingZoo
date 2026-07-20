@@ -387,8 +387,8 @@
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">hanabi_v5</span></code></p></th>
+<tr class="row-odd"><th class="head"><p>Creation</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;classic/hanabi-v5&quot;)</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -429,8 +429,10 @@ played card does not satisfy these conditions, a life token is placed. The game 
 <section id="environment-arguments">
 <h2>Environment arguments<a class="headerlink" href="#environment-arguments" title="Link to this heading">¶</a></h2>
 <p>Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hanabi_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hand_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_information_tokens</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-<span class="n">max_life_tokens</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">observation_type</span><span class="o">=</span><span class="s1">&#39;minimal&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+
+<span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hand_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="n">max_information_tokens</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_life_tokens</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">observation_type</span><span class="o">=</span><span class="s2">&quot;minimal&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">colors</span></code>: Number of colors the cards can take (affects size of deck)</p>
@@ -699,9 +701,9 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">hanabi_v5</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">hanabi_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -1036,7 +1038,7 @@ or any other resources that should be released.</p>
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

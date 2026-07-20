@@ -419,7 +419,7 @@
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==2.2.1; python_version &gt;= &#39;3.10&#39; and python_version &lt; &#39;3.12&#39;
-pettingzoo[classic,atari]&gt;=1.23.1
+pettingzoo[classic,atari]&gt;=1.27.0
 mpe2&gt;=1.0.0
 AutoROM&gt;=0.6.1
 SuperSuit&gt;=3.9.0
@@ -457,7 +457,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.vector.pz_async_vec_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncPettingZooVecEnv</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">trange</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">space_invaders_v2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
@@ -494,7 +494,7 @@ PyYAML&gt;=5.4.1
 
     <span class="n">num_envs</span> <span class="o">=</span> <span class="mi">8</span>
     <span class="c1"># Define the space invaders environment as a parallel environment</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">space_invaders_v2</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">)</span>
 
     <span class="c1"># Environment processing for image based observations</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_skip_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
@@ -701,7 +701,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">observation_space_channels_to_first</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.atari</span><span class="w"> </span><span class="kn">import</span> <span class="n">space_invaders_v2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="c1"># Define function to return image</span>
@@ -727,7 +727,7 @@ PyYAML&gt;=5.4.1
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 
     <span class="c1"># Configure the environment</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">space_invaders_v2</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
     <span class="n">channels_last</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Needed for environments that use images as observations</span>
     <span class="k">if</span> <span class="n">channels_last</span><span class="p">:</span>
         <span class="c1"># Environment processing for image based observations</span>
@@ -1006,7 +1006,7 @@ PyYAML&gt;=5.4.1
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

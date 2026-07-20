@@ -405,7 +405,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.24.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.27.0
 stable-baselines3&gt;=2.0.0
 sb3-contrib&gt;=2.0.0
 </pre></div>
@@ -434,7 +434,7 @@ sb3-contrib&gt;=2.0.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">sb3_contrib.common.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionMasker</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pettingzoo.utils</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="c1"># To pass into other gymnasium wrappers, we need to ensure that pettingzoo&#39;s wrappper</span>
@@ -493,9 +493,9 @@ sb3-contrib&gt;=2.0.0
     <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">action_mask</span><span class="p">()</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Train a single model to play as each agent in a zero-sum game environment using invalid action masking.&quot;&quot;&quot;</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">!s}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
@@ -522,9 +522,9 @@ sb3-contrib&gt;=2.0.0
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eval_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
     <span class="c1"># Evaluate a trained agent vs a random agent</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;Starting evaluation vs a random agent. Trained agent will play as </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
@@ -595,7 +595,7 @@ sb3-contrib&gt;=2.0.0
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">env_fn</span> <span class="o">=</span> <span class="n">connect_four_v3</span>
+    <span class="n">env_id</span> <span class="o">=</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span>
 
     <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -605,13 +605,13 @@ sb3-contrib&gt;=2.0.0
     <span class="c1"># 40k steps: Winrate:  0.86, loss order of 7e-06</span>
 
     <span class="c1"># Train a model against itself (takes ~20 seconds on a laptop CPU)</span>
-    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">20_480</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">20_480</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Evaluate 100 games against a random agent (winrate should be ~80%)</span>
-    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Watch two games vs a random agent</span>
-    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -625,15 +625,7 @@ sb3-contrib&gt;=2.0.0
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">chess_v6</span><span class="p">,</span>
-    <span class="n">go_v5</span><span class="p">,</span>
-    <span class="n">hanabi_v5</span><span class="p">,</span>
-    <span class="n">leduc_holdem_v4</span><span class="p">,</span>
-    <span class="n">texas_holdem_no_limit_v6</span><span class="p">,</span>
-    <span class="n">texas_holdem_v4</span><span class="p">,</span>
-    <span class="n">tictactoe_v3</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 <span class="n">pytest</span><span class="o">.</span><span class="n">importorskip</span><span class="p">(</span><span class="s2">&quot;stable_baselines3&quot;</span><span class="p">)</span>
 <span class="n">pytest</span><span class="o">.</span><span class="n">importorskip</span><span class="p">(</span><span class="s2">&quot;sb3_contrib&quot;</span><span class="p">)</span>
@@ -643,30 +635,30 @@ sb3-contrib&gt;=2.0.0
 
 <span class="c1"># These environments do better than random even after the minimum number of timesteps</span>
 <span class="n">EASY_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">texas_holdem_no_limit_v6</span><span class="p">,</span>  <span class="c1"># texas holdem human rendered game ends instantly, but with random actions it works fine</span>
-    <span class="n">tictactoe_v3</span><span class="p">,</span>
-    <span class="n">leduc_holdem_v4</span><span class="p">,</span>
+    <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span>  <span class="c1"># texas holdem human rendered game ends instantly, but with random actions it works fine</span>
+    <span class="s2">&quot;classic/tictactoe-v3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;classic/leduc_holdem-v4&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="c1"># More difficult environments which will likely take more training time</span>
 <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">hanabi_v5</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
-    <span class="n">texas_holdem_v4</span><span class="p">,</span>  <span class="c1"># this performs poorly with updates to SB3 wrapper</span>
-    <span class="n">chess_v6</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
+    <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
+    <span class="s2">&quot;classic/texas_holdem-v4&quot;</span><span class="p">,</span>  <span class="c1"># this performs poorly with updates to SB3 wrapper</span>
+    <span class="s2">&quot;classic/chess-v6&quot;</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
 <span class="p">]</span>
 
 <span class="k">if</span> <span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;pyspiel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Hanabi needs open_spiel (Python &gt;= 3.11)</span>
-    <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">MEDIUM_ENVS</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">hanabi_v5</span><span class="p">]</span>
+    <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">MEDIUM_ENVS</span> <span class="k">if</span> <span class="n">e</span> <span class="o">!=</span> <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">]</span>
 
 <span class="c1"># Most difficult environments to train agents for (and longest games</span>
 <span class="c1"># TODO: test board_size to see if smaller go board is more easily solvable</span>
 <span class="n">HARD_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">go_v5</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, may be another issue causing poor performance</span>
+    <span class="s2">&quot;classic/go-v5&quot;</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, may be another issue causing poor performance</span>
 <span class="p">]</span>
 
 
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_fn&quot;</span><span class="p">,</span> <span class="n">EASY_ENVS</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_easy</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_id&quot;</span><span class="p">,</span> <span class="n">EASY_ENVS</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_easy</span><span class="p">(</span><span class="n">env_id</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
         <span class="n">train_action_mask</span><span class="p">,</span>
@@ -677,27 +669,27 @@ sb3-contrib&gt;=2.0.0
     <span class="n">steps</span> <span class="o">=</span> <span class="mi">8192</span> <span class="o">*</span> <span class="mi">4</span>
 
     <span class="c1"># Train a model against itself (takes ~2 minutes on GPU)</span>
-    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Evaluate 2 games against a random agent</span>
     <span class="n">round_rewards</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">,</span> <span class="n">winrate</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">eval_action_mask</span><span class="p">(</span>
-        <span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
+        <span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
-    <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="ow">or</span> <span class="p">(</span>
-        <span class="n">total_rewards</span><span class="p">[</span><span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">()</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="o">&gt;</span> <span class="n">total_rewards</span><span class="p">[</span><span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">()</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="p">),</span> <span class="s2">&quot;Trained policy should outperform random actions&quot;</span>
+    <span class="n">agents</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">)</span><span class="o">.</span><span class="n">possible_agents</span>
+    <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="ow">or</span> <span class="p">(</span><span class="n">total_rewards</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">total_rewards</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="p">(</span>
+        <span class="s2">&quot;Trained policy should outperform random actions&quot;</span>
+    <span class="p">)</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
-    <span class="c1"># eval_action_mask(env_fn, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
+    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
 
 
 <span class="c1"># @pytest.mark.skip(</span>
 <span class="c1">#     reason=&quot;training is compute intensive and hyperparameters have not been tuned, disabled for CI&quot;</span>
 <span class="c1"># )</span>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_fn&quot;</span><span class="p">,</span> <span class="n">MEDIUM_ENVS</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_medium</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_id&quot;</span><span class="p">,</span> <span class="n">MEDIUM_ENVS</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_medium</span><span class="p">(</span><span class="n">env_id</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
         <span class="n">train_action_mask</span><span class="p">,</span>
@@ -706,11 +698,11 @@ sb3-contrib&gt;=2.0.0
     <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># Train a model against itself</span>
-    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Evaluate 2 games against a random agent</span>
     <span class="n">round_rewards</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">,</span> <span class="n">winrate</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">eval_action_mask</span><span class="p">(</span>
-        <span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
+        <span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&lt;</span> <span class="mf">0.75</span><span class="p">,</span> <span class="p">(</span>
@@ -718,14 +710,14 @@ sb3-contrib&gt;=2.0.0
     <span class="p">)</span>  <span class="c1"># 30-40% for leduc, 0% for hanabi</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
-    <span class="c1"># eval_action_mask(env_fn, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
+    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
 
 
 <span class="c1"># @pytest.mark.skip(</span>
 <span class="c1">#     reason=&quot;training is compute intensive and hyperparameters have not been tuned, disabled for CI&quot;</span>
 <span class="c1"># )</span>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_fn&quot;</span><span class="p">,</span> <span class="n">HARD_ENVS</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_hard</span><span class="p">(</span><span class="n">env_fn</span><span class="p">):</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_id&quot;</span><span class="p">,</span> <span class="n">HARD_ENVS</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_hard</span><span class="p">(</span><span class="n">env_id</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
         <span class="n">train_action_mask</span><span class="p">,</span>
@@ -734,17 +726,17 @@ sb3-contrib&gt;=2.0.0
     <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># Train a model against itself</span>
-    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Evaluate 2 games against a random agent</span>
     <span class="n">round_rewards</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">,</span> <span class="n">winrate</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">eval_action_mask</span><span class="p">(</span>
-        <span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
+        <span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Policy should not perform better than 50% winrate&quot;</span>  <span class="c1"># 0% for go</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
-    <span class="c1"># eval_action_mask(env_fn, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
+    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
 </pre></div>
 </div>
 </section>
@@ -913,7 +905,7 @@ sb3-contrib&gt;=2.0.0
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

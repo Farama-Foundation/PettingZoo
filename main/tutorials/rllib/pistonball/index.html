@@ -392,7 +392,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic,butterfly]&gt;=1.24.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic,butterfly]&gt;=1.27.0
 Pillow&gt;=9.4.0
 ray[rllib]==2.55.0
 SuperSuit&gt;=3.9.0
@@ -424,7 +424,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">ray.tune.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_env</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CNNModelV2</span><span class="p">(</span><span class="n">TorchModelV2</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -455,7 +455,9 @@ tensorflow-probability&gt;=0.19.0
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
         <span class="n">n_pistons</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">time_penalty</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -548,7 +550,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">ray.tune.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_env</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CNNModelV2</span><span class="p">(</span><span class="n">TorchModelV2</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -600,7 +602,9 @@ tensorflow-probability&gt;=0.19.0
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">():</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;aec&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
         <span class="n">n_pistons</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">time_penalty</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -822,7 +826,7 @@ tensorflow-probability&gt;=0.19.0
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

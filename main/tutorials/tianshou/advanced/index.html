@@ -393,7 +393,7 @@
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy&lt;2.0.0
-pettingzoo[classic]&gt;=1.23.0
+pettingzoo[classic]&gt;=1.27.0
 packaging&gt;=21.3
 tianshou==0.5.0
 </pre></div>
@@ -409,7 +409,7 @@ tianshou==0.5.0
 <span class="sd">Python version used: 3.8.10</span>
 
 <span class="sd">Requirements:</span>
-<span class="sd">pettingzoo == 1.22.0</span>
+<span class="sd">pettingzoo &gt;= 1.27.0</span>
 <span class="sd">git+https://github.com/thu-ml/tianshou</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -429,7 +429,7 @@ tianshou==0.5.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">tianshou.utils.net.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">Net</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.tensorboard</span><span class="w"> </span><span class="kn">import</span> <span class="n">SummaryWriter</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">tictactoe_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
@@ -548,7 +548,7 @@ tianshou==0.5.0
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/tictactoe-v3&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">train_agent</span><span class="p">(</span>
@@ -821,7 +821,7 @@ tianshou==0.5.0
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>

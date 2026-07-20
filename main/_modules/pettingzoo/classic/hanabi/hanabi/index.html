@@ -386,7 +386,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import               | `from pettingzoo.classic import hanabi_v5` |</span>
+<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;classic/hanabi-v5&quot;)`         |</span>
 <span class="sd">|----------------------|--------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                   |</span>
 <span class="sd">| Parallel API         | Yes                                        |</span>
@@ -408,9 +408,11 @@
 
 <span class="sd">Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.</span>
 
-<span class="sd">``` python</span>
-<span class="sd">hanabi_v5.env(colors=5, ranks=5, players=2, hand_size=5, max_information_tokens=8,</span>
-<span class="sd">max_life_tokens=3, observation_type=&#39;minimal&#39;)</span>
+<span class="sd">```python</span>
+<span class="sd">from pettingzoo import make</span>
+
+<span class="sd">make(&quot;aec&quot;, &quot;classic/hanabi-v5&quot;, colors=5, ranks=5, players=2, hand_size=5,</span>
+<span class="sd">max_information_tokens=8, max_life_tokens=3, observation_type=&quot;minimal&quot;)</span>
 <span class="sd">```</span>
 
 <span class="sd">`colors`: Number of colors the cards can take (affects size of deck)</span>
@@ -1019,7 +1021,7 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>

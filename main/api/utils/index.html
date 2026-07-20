@@ -402,9 +402,10 @@ games.</p>
 
 <p>The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.</p>
 <p>This value is important for establishing the simplest possible baseline: the random policy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">average_total_reward</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">average_total_reward</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">)</span>
 <span class="n">average_total_reward</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">max_episodes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">10000000000</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -418,9 +419,10 @@ games.</p>
 <dd></dd></dl>
 
 <p>If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no <code class="docutils literal notranslate"><span class="pre">agent</span></code> is specified, then the current selected agent for the environment is chosen. If <code class="docutils literal notranslate"><span class="pre">all_agents</span></code> is passed in as <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If <code class="docutils literal notranslate"><span class="pre">save_dir</span></code> is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_observation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_observation</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">save_observation</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">all_agents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
@@ -812,7 +814,7 @@ games.</p>
         })()
       </script>
 
-    <script src="../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/celshast.js?v=a788a8c6"></script>

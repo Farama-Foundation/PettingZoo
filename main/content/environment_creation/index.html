@@ -846,13 +846,30 @@
 </pre></div>
 </div>
 </section>
+<section id="registering-custom-environments">
+<h2>Registering Custom Environments<a class="headerlink" href="#registering-custom-environments" title="Link to this heading">¶</a></h2>
+<p>Once your environment is ready, register so it can be created with <a class="reference internal" href="../basic_usage/#initializing-environments"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">make</span></code></span></a>, the same way as built-in PettingZoo environments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span><span class="p">,</span> <span class="n">parallel_registry</span><span class="p">,</span> <span class="n">register</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aec_rps</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">parallel_rps</span>
+
+<span class="n">register</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/rps-v0&quot;</span><span class="p">,</span> <span class="n">aec_rps</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/rps-v0&quot;</span><span class="p">,</span> <span class="n">parallel_rps</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">)</span>
+
+<span class="c1"># Confirm the environment is available in the registry</span>
+<span class="k">assert</span> <span class="s2">&quot;custom/rps-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/rps-v0&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="using-wrappers">
 <h2>Using Wrappers<a class="headerlink" href="#using-wrappers" title="Link to this heading">¶</a></h2>
-<p>A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides <a class="reference internal" href="#/api/pz_wrappers"><span class="xref myst">wrappers to convert environments</span></a> back and forth between the AEC API and the Parallel API and a set of simple <a class="reference internal" href="#/api/pz_wrappers"><span class="xref myst">utility wrappers</span></a> which provide input validation and other convenient reusable logic. PettingZoo also includes <a class="reference internal" href="#/api/supersuit_wrappers"><span class="xref myst">wrappers</span></a> via the SuperSuit companion package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">supersuit</span></code>).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
+<p>A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides <a class="reference internal" href="../../api/wrappers/pz_wrappers/#conversion-wrappers"><span class="std std-ref">wrappers to convert environments</span></a> back and forth between the AEC API and the Parallel API and a set of simple <a class="reference internal" href="../../api/wrappers/pz_wrappers/#utility-wrappers"><span class="std std-ref">utility wrappers</span></a> which provide input validation and other convenient reusable logic. PettingZoo also includes <a class="reference internal" href="../../api/wrappers/supersuit_wrappers/"><span class="std std-doc">wrappers</span></a> via the SuperSuit companion package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">supersuit</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClipOutOfBoundsWrapper</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">)</span>
 <span class="n">wrapped_env</span> <span class="o">=</span> <span class="n">ClipOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 <span class="c1"># Wrapped environments must be reset before use</span>
 <span class="n">wrapped_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -968,6 +985,7 @@
 <li><a class="reference internal" href="#">Environment Creation</a><ul>
 <li><a class="reference internal" href="#example-custom-environment">Example Custom Environment</a></li>
 <li><a class="reference internal" href="#example-custom-parallel-environment">Example Custom Parallel Environment</a></li>
+<li><a class="reference internal" href="#registering-custom-environments">Registering Custom Environments</a></li>
 <li><a class="reference internal" href="#using-wrappers">Using Wrappers</a></li>
 <li><a class="reference internal" href="#developer-utils">Developer Utils</a><ul>
 <li><a class="reference internal" href="#agent-selector">Agent selector</a></li>
@@ -1060,7 +1078,7 @@
         })()
       </script>
 
-    <script src="../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/celshast.js?v=a788a8c6"></script>

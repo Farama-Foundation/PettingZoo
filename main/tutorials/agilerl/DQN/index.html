@@ -429,7 +429,7 @@
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==2.2.1; python_version &gt;= &#39;3.10&#39; and python_version &lt; &#39;3.12&#39;
-pettingzoo[classic,atari]&gt;=1.23.1
+pettingzoo[classic,atari]&gt;=1.27.0
 mpe2&gt;=1.0.0
 AutoROM&gt;=0.6.1
 SuperSuit&gt;=3.9.0
@@ -473,7 +473,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.algorithms.core.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerWrapper</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 </pre></div>
 </div>
 </details>
@@ -1102,7 +1102,7 @@ PyYAML&gt;=5.4.1
 <span class="p">}</span>
 
 <span class="c1"># Define the connect four environment</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="c1"># Configure the algo input arguments</span>
@@ -1696,7 +1696,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl_dqn_curriculum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Opponent</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="c1"># Define function to return image</span>
@@ -1741,7 +1741,7 @@ PyYAML&gt;=5.4.1
 
     <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./models/DQN/lesson3_trained_agent.pt&quot;</span>  <span class="c1"># Path to saved agent checkpoint</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
     <span class="c1"># Configure the algo input arguments</span>
@@ -1910,8 +1910,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_population</span><span class="p">,</span> <span class="n">observation_space_channels_to_first</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParallelEnv</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">make</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CurriculumEnv</span><span class="p">:</span>
@@ -2465,7 +2464,7 @@ PyYAML&gt;=5.4.1
         <span class="p">}</span>
 
         <span class="c1"># Define the connect four environment</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span><span class="p">)</span>
         <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
         <span class="c1"># Configure the algo input arguments</span>
@@ -3127,7 +3126,7 @@ PyYAML&gt;=5.4.1
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=372fd09f"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>
