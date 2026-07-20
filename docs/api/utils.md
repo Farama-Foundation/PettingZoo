@@ -24,9 +24,10 @@ The average total reward for an environment, as presented in the documentation, 
 This value is important for establishing the simplest possible baseline: the random policy.
 
 ``` python
+from pettingzoo import make
 from pettingzoo.utils import average_total_reward
-from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
+
+env = make("aec", "butterfly/pistonball-v6")
 average_total_reward(env, max_episodes=100, max_steps=10000000000)
 ```
 
@@ -141,9 +142,10 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
 
 ``` python
+from pettingzoo import make
 from pettingzoo.utils import save_observation
-from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
+
+env = make("aec", "butterfly/pistonball-v6")
 env.reset(seed=42)
 save_observation(env, agent=None, all_agents=False)
 ```
