@@ -1,4 +1,4 @@
-pettingzoo[classic]
+pettingzoo[classic]>=1.27.0
 langchain
 openai
 tenacity

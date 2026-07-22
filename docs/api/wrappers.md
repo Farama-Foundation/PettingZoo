@@ -12,7 +12,7 @@ The following wrappers can be used with PettingZoo environments:
 
 
 
-[PettingZoo Wrappers](/api/wrappers/pz_wrappers/) include [conversion wrappers](/api/wrappers/pz_wrappers#conversion-wrappers) to convert between the [AEC](/api/aec/) and [Parallel](/api/parallel/) APIs, and a set of simple [utility wrappers](/api/wrappers/pz_wrappers#utility-wrappers) which provide input validation and other convenient reusable logic.
+[PettingZoo Wrappers](./wrappers/pz_wrappers.md) include [conversion wrappers](./wrappers/pz_wrappers.md#conversion-wrappers) to convert between the [AEC](./aec.md) and [Parallel](./parallel.md) APIs, and a set of simple [utility wrappers](./wrappers/pz_wrappers.md#utility-wrappers) which provide input validation and other convenient reusable logic.
 
 [Supersuit Wrappers](/api/wrappers/supersuit_wrappers/) include commonly used pre-processing functions such as frame-stacking and color reduction, compatible with both PettingZoo and Gymnasium.
 

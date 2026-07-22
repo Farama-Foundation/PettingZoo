@@ -5,7 +5,13 @@ This script reads documentation from /pettingzoo and puts it into md files insid
 import os
 import re
 
+from pettingzoo.env_registry.spec import _normalize_env_id
 from pettingzoo.utils.all_modules import all_environments
+
+# Placeholders in docs/code_examples/usage_*.py templates
+_AEC_USAGE_ID = "atari/space_invaders-v2"
+_PARALLEL_USAGE_ID = "butterfly/pistonball-v6"
+_ACTION_MASK_USAGE_ID = "classic/connect_four-v3"
 
 
 def add_frontmatter(text, frontmatter_options):
@@ -101,11 +107,11 @@ if __name__ == "__main__":
             if not full_env_names:
                 continue
 
-            env_name_version = full_env_names[0].split("/")[1]
+            registry_id = _normalize_env_id(full_env_names[0])
             if env_type == "classic" and env_name != "rps":
                 with open(f"{docs_dir}/code_examples/usage_aec_action_mask.py") as f:
                     usage = f.read()
-                usage = usage.replace("connect_four_v3", env_name_version)
+                usage = usage.replace(_ACTION_MASK_USAGE_ID, registry_id)
                 docs_text += f"""## Usage
 ### AEC
 ```python
@@ -115,14 +121,10 @@ if __name__ == "__main__":
             else:
                 with open(f"{docs_dir}/code_examples/usage_aec.py") as f:
                     usage = f.read()
-                usage = usage.replace("space_invaders_v2", env_name_version)
-                usage = usage.replace("atari", env_type)
+                usage = usage.replace(_AEC_USAGE_ID, registry_id)
                 with open(f"{docs_dir}/code_examples/usage_parallel.py") as f:
                     usage_parallel = f.read()
-                usage_parallel = usage_parallel.replace(
-                    "pistonball_v6", env_name_version
-                )
-                usage_parallel = usage_parallel.replace("butterfly", env_type)
+                usage_parallel = usage_parallel.replace(_PARALLEL_USAGE_ID, registry_id)
                 docs_text += f"""## Usage
 ### AEC
 ```python

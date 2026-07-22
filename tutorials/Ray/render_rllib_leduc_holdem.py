@@ -14,7 +14,7 @@ from ray.rllib.models import ModelCatalog
 from ray.tune.registry import register_env
 from rllib_leduc_holdem import TorchMaskedActions
 
-from pettingzoo.classic import leduc_holdem_v4
+from pettingzoo import make
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
@@ -42,7 +42,7 @@ ModelCatalog.register_custom_model("pa_model", TorchMaskedActions)
 
 
 def env_creator():
-    env = leduc_holdem_v4.env()
+    env = make("aec", "classic/leduc_holdem-v4")
     return env
 
 

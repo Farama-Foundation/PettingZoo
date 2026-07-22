@@ -28,10 +28,11 @@ An environment can be converted from an AEC environment to a parallel environmen
 Most parallel environments in PettingZoo only allocate rewards at the end of a cycle. In these environments, the reward scheme of the AEC API an the parallel API is equivalent.  If an AEC environment does allocate rewards within a cycle, then the rewards will be allocated at different timesteps in the AEC environment an the Parallel environment. In particular, the AEC environment will allocate all rewards from one time the agent steps to the next time, while the Parallel environment will allocate all rewards from when the first agent stepped to the last agent stepped.
 
 To convert an AEC environment into a parallel environment:
-``` python
+```python
+from pettingzoo import make
 from pettingzoo.utils.conversions import aec_to_parallel
-from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.env()
+
+env = make("aec", "butterfly/pistonball-v6")
 env = aec_to_parallel(env)
 ```
 
@@ -48,10 +49,11 @@ env = aec_to_parallel(env)
 Any parallel environment can be efficiently converted to an AEC environment with the `parallel_to_aec` wrapper.
 
 To convert a parallel environment into an AEC environment:
-``` python
+```python
+from pettingzoo import make
 from pettingzoo.utils import parallel_to_aec
-from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.parallel_env()
+
+env = make("parallel", "butterfly/pistonball-v6")
 env = parallel_to_aec(env)
 ```
 
@@ -64,9 +66,10 @@ You can apply these wrappers to your environment in a similar manner to the belo
 
 To wrap an AEC environment:
 ```python
+from pettingzoo import make
 from pettingzoo.utils import TerminateIllegalWrapper
-from pettingzoo.classic import tictactoe_v3
-env = tictactoe_v3.env()
+
+env = make("aec", "classic/tictactoe-v3")
 env = TerminateIllegalWrapper(env, illegal_reward=-1)
 
 env.reset()
@@ -83,10 +86,10 @@ Note: Most AEC environments include TerminateIllegalWrapper in their initializat
 
 To wrap a Parallel environment.
 ```python
+from pettingzoo import make
 from pettingzoo.utils import BaseParallelWrapper
-from pettingzoo.butterfly import pistonball_v6
 
-parallel_env = pistonball_v6.parallel_env(render_mode="human")
+parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
 parallel_env = BaseParallelWrapper(parallel_env)
 
 observations, infos = parallel_env.reset()
@@ -102,11 +105,11 @@ while parallel_env.agents:
     Included PettingZoo wrappers currently do not support parallel environments, to use them you must convert your environment to AEC, apply the wrapper, and convert back to parallel.
 ```
 ```python
+from pettingzoo import make
 from pettingzoo.utils import ClipOutOfBoundsWrapper
-from pettingzoo.sisl import multiwalker_v9
 from pettingzoo.utils import aec_to_parallel
 
-parallel_env = multiwalker_v9.env(render_mode="human")
+parallel_env = make("aec", "sisl/multiwalker-v9", render_mode="human")
 parallel_env = ClipOutOfBoundsWrapper(parallel_env)
 parallel_env = aec_to_parallel(parallel_env)
 

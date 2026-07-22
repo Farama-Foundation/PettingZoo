@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.atari import basketball_pong_v3` |
+| Creation           | `make("aec", "atari/basketball_pong-v3")`         |
 |--------------------|---------------------------------------------------|
 | Actions            | Discrete                                          |
 | Parallel API       | Yes                                               |
@@ -37,8 +37,10 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Basketball_Pong are
 
-``` python
-basketball_pong_v3.env(num_players=2)
+```python
+from pettingzoo import make
+
+make("aec", "atari/basketball_pong-v3", num_players=2)
 ```
 
 `num_players`:  Number of players (must be either 2 or 4)

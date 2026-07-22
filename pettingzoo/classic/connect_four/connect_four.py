@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import connect_four_v3` |
+| Creation           | `make("aec", "classic/connect_four-v3")`         |
 |--------------------|--------------------------------------------------|
 | Actions            | Discrete                                         |
 | Parallel API       | Yes                                              |

@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.atari import combat_tank_v3`     |
+| Creation           | `make("aec", "atari/combat_tank-v2")`             |
 |--------------------|---------------------------------------------------|
 | Actions            | Discrete                                          |
 | Parallel API       | Yes                                               |
@@ -38,8 +38,10 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to combat-tank are
 
-``` python
-combat_tank_v2.env(has_maze=True, is_invisible=False, billiard_hit=True)
+```python
+from pettingzoo import make
+
+make("aec", "atari/combat_tank-v2", has_maze=True, is_invisible=False, billiard_hit=True)
 ```
 
 `has_maze`:  Set to true to have the map be a maze instead of an open field

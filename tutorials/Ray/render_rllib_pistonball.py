@@ -16,7 +16,7 @@ from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.tune.registry import register_env
 from torch import nn
 
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo import make
 
 
 class CNNModelV2(TorchModelV2, nn.Module):
@@ -68,7 +68,9 @@ ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
 
 def env_creator():
-    env = pistonball_v6.env(
+    env = make(
+        "aec",
+        "butterfly/pistonball-v6",
         n_pistons=20,
         time_penalty=-0.1,
         continuous=True,

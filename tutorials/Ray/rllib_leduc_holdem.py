@@ -17,7 +17,7 @@ from ray.rllib.utils.framework import try_import_torch
 from ray.rllib.utils.torch_utils import FLOAT_MAX
 from ray.tune.registry import register_env
 
-from pettingzoo.classic import leduc_holdem_v4
+from pettingzoo import make
 
 torch, nn = try_import_torch()
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     # function that outputs the environment you wish to register.
 
     def env_creator():
-        env = leduc_holdem_v4.env()
+        env = make("aec", "classic/leduc_holdem-v4")
         return env
 
     env_name = "leduc_holdem_v4"
