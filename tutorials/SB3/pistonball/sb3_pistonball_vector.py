@@ -17,14 +17,14 @@ import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.ppo import CnnPolicy
 
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo import make
 
 
 def train_butterfly_supersuit(
-    env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs
+    env_id, steps: int = 10_000, seed: int | None = 0, **env_kwargs
 ):
     # Train a single model to play as each agent in a cooperative Parallel environment
-    env = env_fn.parallel_env(**env_kwargs)
+    env = make("parallel", env_id, **env_kwargs)
 
     # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
     env = ss.color_reduction_v0(env, mode="B")
@@ -66,9 +66,9 @@ def train_butterfly_supersuit(
     env.close()
 
 
-def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwargs):
+def eval(env_id, num_games: int = 100, render_mode: str | None = None, **env_kwargs):
     # Evaluate a trained agent vs a random agent
-    env = env_fn.env(render_mode=render_mode, **env_kwargs)
+    env = make("aec", env_id, render_mode=render_mode, **env_kwargs)
 
     # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
     env = ss.color_reduction_v0(env, mode="B")
@@ -116,7 +116,7 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
 
 if __name__ == "__main__":
-    env_fn = pistonball_v6
+    env_id = "butterfly/pistonball-v6"
 
     env_kwargs = {
         "n_pistons": 20,
@@ -132,10 +132,10 @@ if __name__ == "__main__":
 
     # Train a model (takes ~3 minutes on a laptop CPU)
     # Note: stochastic environment makes training difficult, for better results try order of 2 million (~2 hours on GPU)
-    train_butterfly_supersuit(env_fn, steps=40_960 * 2, seed=0, **env_kwargs)
+    train_butterfly_supersuit(env_id, steps=40_960 * 2, seed=0, **env_kwargs)
 
     # Evaluate 10 games (takes ~10 seconds on a laptop CPU)
-    eval(env_fn, num_games=10, render_mode=None, **env_kwargs)
+    eval(env_id, num_games=10, render_mode=None, **env_kwargs)
 
     # Watch 2 games (takes ~10 seconds on a laptop CPU)
-    eval(env_fn, num_games=2, render_mode="human", **env_kwargs)
+    eval(env_id, num_games=2, render_mode="human", **env_kwargs)

@@ -8,7 +8,7 @@ from agilerl.utils.utils import observation_space_channels_to_first
 from agilerl_dqn_curriculum import Opponent
 from PIL import Image, ImageDraw, ImageFont
 
-from pettingzoo.classic import connect_four_v3
+from pettingzoo import make
 
 
 # Define function to return image
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     path = "./models/DQN/lesson3_trained_agent.pt"  # Path to saved agent checkpoint
 
-    env = connect_four_v3.env(render_mode="rgb_array")
+    env = make("aec", "classic/connect_four-v3", render_mode="rgb_array")
     env.reset()
 
     # Configure the algo input arguments

@@ -5,7 +5,7 @@ Author: Will (https://github.com/WillDudley)
 Python version used: 3.8.10
 
 Requirements:
-pettingzoo == 1.22.0
+pettingzoo >= 1.27.0
 git+https://github.com/thu-ml/tianshou
 """
 
@@ -25,7 +25,7 @@ from tianshou.utils import TensorboardLogger
 from tianshou.utils.net.common import Net
 from torch.utils.tensorboard import SummaryWriter
 
-from pettingzoo.classic import tictactoe_v3
+from pettingzoo import make
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -144,7 +144,7 @@ def get_agents(
 
 
 def get_env(render_mode=None):
-    return PettingZooEnv(tictactoe_v3.env(render_mode=render_mode))
+    return PettingZooEnv(make("aec", "classic/tictactoe-v3", render_mode=render_mode))
 
 
 def train_agent(

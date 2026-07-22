@@ -11,6 +11,12 @@ class DeprecatedEnv(ImportError):
     pass
 
 
+CREATE_ENV_WITHOUT_REGISTRY = (
+    "The old environment creation API has been deprecated in favor of a Gymnasium-like"
+    " registry implementation, please use the make function instead.\nThe old API will"
+    " eventually be removed in a future release."
+)
+
 # Environments removed from PettingZoo entirely, mapped to the reason why. These
 # raise on attribute access rather than falling through as a missing module, so
 # that users upgrading from an older release get an actionable message.

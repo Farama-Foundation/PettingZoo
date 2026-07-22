@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.atari import ice_hockey_v2` |
+| Creation             | `make("aec", "atari/ice_hockey-v2")`         |
 |----------------------|----------------------------------------------|
 | Actions              | Discrete                                     |
 | Parallel API         | Yes                                          |

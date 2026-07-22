@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import texas_holdem_v4` |
+| Creation           | `make("aec", "classic/texas_holdem-v4")`         |
 |--------------------|--------------------------------------------------|
 | Actions            | Discrete                                         |
 | Parallel API       | Yes                                              |
@@ -24,8 +24,10 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 
 ## Arguments
 
-``` python
-texas_holdem_v4.env(num_players=2)
+```python
+from pettingzoo import make
+
+make("aec", "classic/texas_holdem-v4", num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.

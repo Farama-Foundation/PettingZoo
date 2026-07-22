@@ -5,7 +5,7 @@ Author: Will (https://github.com/WillDudley)
 Python version used: 3.8.10
 
 Requirements:
-pettingzoo == 1.22.0
+pettingzoo >= 1.27.0
 git+https://github.com/thu-ml/tianshou
 """
 
@@ -13,11 +13,11 @@ from tianshou.data import Collector
 from tianshou.env import DummyVectorEnv, PettingZooEnv
 from tianshou.policy import MultiAgentPolicyManager, RandomPolicy
 
-from pettingzoo.classic import rps_v2
+from pettingzoo import make
 
 if __name__ == "__main__":
     # Step 1: Load the PettingZoo environment
-    env = rps_v2.env(render_mode="human")
+    env = make("aec", "classic/rps-v2", render_mode="human")
 
     # Step 2: Wrap the environment for Tianshou interfacing
     env = PettingZooEnv(env)

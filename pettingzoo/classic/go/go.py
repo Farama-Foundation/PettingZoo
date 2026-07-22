@@ -9,7 +9,7 @@ r"""
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import go_v5` |
+| Creation           | `make("aec", "classic/go-v5")`         |
 |--------------------|----------------------------------------|
 | Actions            | Discrete                               |
 | Parallel API       | Yes                                    |
@@ -31,8 +31,10 @@ Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minig
 
 Go takes two optional arguments that define the board size (int) and komi compensation points (float). The default values for the board size and komi are 19 and 7.5, respectively.
 
-``` python
-go_v5.env(board_size = 19, komi = 7.5)
+```python
+from pettingzoo import make
+
+make("aec", "classic/go-v5", board_size=19, komi=7.5)
 ```
 
 `board_size`: The length of each size of the board.

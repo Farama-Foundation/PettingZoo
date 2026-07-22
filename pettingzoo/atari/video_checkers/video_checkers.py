@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.atari import video_checkers_v4` |
+| Creation             | `make("aec", "atari/video_checkers-v4")`         |
 |----------------------|--------------------------------------------------|
 | Actions              | Discrete                                         |
 | Parallel API         | Yes                                              |

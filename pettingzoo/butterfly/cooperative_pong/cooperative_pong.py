@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.butterfly import cooperative_pong_v6` |
+| Creation             | `make("aec", "butterfly/cooperative_pong-v6")`         |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -36,8 +36,10 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 
 ### Arguments
 
-``` python
-cooperative_pong_v6.env(
+```python
+from pettingzoo import make
+
+make("aec", "butterfly/cooperative_pong-v6",
     ball_speed = 9,
     left_paddle_speed = 12,
     right_paddle_speed = 12,

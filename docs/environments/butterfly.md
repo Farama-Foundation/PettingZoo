@@ -36,9 +36,9 @@ pip install 'pettingzoo[butterfly]'
 
 To launch a [Pistonball](/environments/butterfly/pistonball/) environment with random agents:
 ```python
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo import make
 
-env = pistonball_v6.parallel_env(render_mode="human")
+env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
 observations, infos = env.reset()
 
 while env.agents:
@@ -52,12 +52,13 @@ env.close()
 To launch a [Knights Archers Zombies](/environments/butterfly/knights_archers_zombies/) environment with interactive user input (see [manual_policy.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py)):
 ```python
 import pygame
-from pettingzoo.butterfly import knights_archers_zombies_v11
+from pettingzoo import make
+from pettingzoo.butterfly.knights_archers_zombies.manual_policy import ManualPolicy
 
-env = knights_archers_zombies_v11.env(render_mode="human")
+env = make("aec", "butterfly/knights_archers_zombies-v11", render_mode="human")
 env.reset(seed=42)
 
-manual_policy = knights_archers_zombies_v11.ManualPolicy(env)
+manual_policy = ManualPolicy(env)
 
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
