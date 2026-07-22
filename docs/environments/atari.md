@@ -54,9 +54,9 @@ Install ROMs using [AutoROM](https://github.com/Farama-Foundation/AutoROM), or s
 
 To launch a [Space Invaders](/environments/atari/space_invaders/) environment with random agents:
 ```python
-from pettingzoo.atari import space_invaders_v2
+from pettingzoo import make
 
-env = space_invaders_v2.env(render_mode="human")
+env = make("aec", "atari/space_invaders-v2", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():
@@ -94,9 +94,9 @@ Here is some example usage for the Atari preprocessing:
 
 ``` python
 import supersuit
-from pettingzoo.atari import space_invaders_v2
+from pettingzoo import make
 
-env = space_invaders_v2.env()
+env = make("aec", "atari/space_invaders-v2")
 
 # as per openai baseline's MaxAndSKip wrapper, maxes over the last 2 frames
 # to deal with frame flickering
@@ -122,9 +122,16 @@ All the Atari environments have the following environment parameters:
 
 ``` python
 # using space invaders as an example, but replace with any atari game
-from pettingzoo.atari import space_invaders_v2
+from pettingzoo import make
 
-space_invaders_v2.env(obs_type='rgb_image', full_action_space=True, max_cycles=100000, auto_rom_install_path=None)
+make(
+    "aec",
+    "atari/space_invaders-v2",
+    obs_type="rgb_image",
+    full_action_space=True,
+    max_cycles=100000,
+    auto_rom_install_path=None,
+)
 ```
 
 `obs_type`:  There are three possible values for this parameter:

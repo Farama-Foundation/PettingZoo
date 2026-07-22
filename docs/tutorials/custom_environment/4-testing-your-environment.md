@@ -8,6 +8,8 @@ title: "Tutorial: Testing Your Environment"
 
 Now that our environment is complete, we can test it to make sure it works as intended. PettingZoo has a built-in testing suite that can be used to test your environment.
 
+After the API tests pass, register the environment with `pettingzoo.register` so that it can be created with `make`, then confirm it appears in `parallel_registry` (or `aec_registry` for AEC environments). See [Basic Usage](../../content/basic_usage.md#initializing-environments) for more on the registry-related APIs.
+
 ## Code
 
 Note: This code can be added to the bottom of the same file, without using any imports, but it is best practice to keep tests in a separate file, and use modular imports, as shown below..

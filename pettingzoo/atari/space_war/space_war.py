@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.atari import space_war_v2` |
+| Creation             | `make("aec", "atari/space_war-v2")`         |
 |----------------------|---------------------------------------------|
 | Actions              | Discrete                                    |
 | Parallel API         | Yes                                         |

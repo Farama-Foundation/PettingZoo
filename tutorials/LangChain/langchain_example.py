@@ -26,9 +26,9 @@ def main(agents, env):
 
 
 def rock_paper_scissors():
-    from pettingzoo.classic import rps_v2
+    from pettingzoo import make
 
-    env = rps_v2.env(max_cycles=3, render_mode="human")
+    env = make("aec", "classic/rps-v2", max_cycles=3, render_mode="human")
     agents = {
         name: PettingZooAgent(name=name, model=ChatOpenAI(temperature=1), env=env)
         for name in env.possible_agents
@@ -37,9 +37,9 @@ def rock_paper_scissors():
 
 
 def tic_tac_toe():
-    from pettingzoo.classic import tictactoe_v3
+    from pettingzoo import make
 
-    env = tictactoe_v3.env(render_mode="human")
+    env = make("aec", "classic/tictactoe-v3", render_mode="human")
     agents = {
         name: ActionMaskAgent(name=name, model=ChatOpenAI(temperature=0.2), env=env)
         for name in env.possible_agents
@@ -48,9 +48,11 @@ def tic_tac_toe():
 
 
 def texas_holdem_no_limit():
-    from pettingzoo.classic import texas_holdem_no_limit_v6
+    from pettingzoo import make
 
-    env = texas_holdem_no_limit_v6.env(num_players=4, render_mode="human")
+    env = make(
+        "aec", "classic/texas_holdem_no_limit-v6", num_players=4, render_mode="human"
+    )
     agents = {
         name: ActionMaskAgent(name=name, model=ChatOpenAI(temperature=0.2), env=env)
         for name in env.possible_agents

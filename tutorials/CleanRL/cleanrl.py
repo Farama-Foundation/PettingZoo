@@ -13,7 +13,7 @@ import torch.optim as optim
 from supersuit import color_reduction_v0, frame_stack_v1, resize_v1
 from torch.distributions.categorical import Categorical
 
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo import make
 
 
 class Agent(nn.Module):
@@ -98,8 +98,12 @@ if __name__ == "__main__":
     total_episodes = 2
 
     """ ENV SETUP """
-    env = pistonball_v6.parallel_env(
-        render_mode="rgb_array", continuous=False, max_cycles=max_cycles
+    env = make(
+        "parallel",
+        "butterfly/pistonball-v6",
+        render_mode="rgb_array",
+        continuous=False,
+        max_cycles=max_cycles,
     )
     env = color_reduction_v0(env)
     env = resize_v1(env, frame_size[0], frame_size[1])
@@ -255,7 +259,9 @@ if __name__ == "__main__":
         print("\n-------------------------------------------\n")
 
     """ RENDER THE POLICY """
-    env = pistonball_v6.parallel_env(render_mode="human", continuous=False)
+    env = make(
+        "parallel", "butterfly/pistonball-v6", render_mode="human", continuous=False
+    )
     env = color_reduction_v0(env)
     env = resize_v1(env, 64, 64)
     env = frame_stack_v1(env, stack_size=4)

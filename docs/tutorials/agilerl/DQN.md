@@ -66,7 +66,7 @@ Importing the following packages, functions and classes will enable us to run th
    from agilerl.algorithms.core.wrappers import OptimizerWrapper
    from tqdm import tqdm, trange
 
-   from pettingzoo.classic import connect_four_v3
+   from pettingzoo import make
    ```
 </details>
 
@@ -644,7 +644,7 @@ Before we go any further in this tutorial, it would be helpful to define and set
    }
 
    # Define the connect four environment
-   env = connect_four_v3.env()
+   env = make("aec", "classic/connect_four-v3")
    env.reset()
 
    # Configure the algo input arguments

@@ -9,7 +9,7 @@ from agilerl.utils.algo_utils import obs_channels_to_first
 from agilerl.utils.utils import observation_space_channels_to_first
 from PIL import Image, ImageDraw
 
-from pettingzoo.atari import space_invaders_v2
+from pettingzoo import make
 
 
 # Define function to return image
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Configure the environment
-    env = space_invaders_v2.parallel_env(render_mode="rgb_array")
+    env = make("parallel", "atari/space_invaders-v2", render_mode="rgb_array")
     channels_last = True  # Needed for environments that use images as observations
     if channels_last:
         # Environment processing for image based observations

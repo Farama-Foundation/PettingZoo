@@ -16,7 +16,7 @@ from agilerl.utils.utils import create_population, observation_space_channels_to
 from agilerl.vector.pz_async_vec_env import AsyncPettingZooVecEnv
 from tqdm import trange
 
-from pettingzoo.atari import space_invaders_v2
+from pettingzoo import make
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     num_envs = 8
     # Define the space invaders environment as a parallel environment
-    env = space_invaders_v2.parallel_env()
+    env = make("parallel", "atari/space_invaders-v2")
 
     # Environment processing for image based observations
     env = ss.frame_skip_v0(env, 4)

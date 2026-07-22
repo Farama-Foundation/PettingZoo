@@ -8,11 +8,11 @@ The [SuperSuit](https://github.com/Farama-Foundation/SuperSuit) companion packag
 
 To convert [space invaders](/environments/atari/space_invaders/) to a greyscale observation space and stack the last 4 frames:
 
-``` python
-from pettingzoo.atari import space_invaders_v2
+```python
+from pettingzoo import make
 from supersuit import color_reduction_v0, frame_stack_v1
 
-env = space_invaders_v2.env()
+env = make("aec", "atari/space_invaders-v2")
 
 env = frame_stack_v1(color_reduction_v0(env, 'full'), 4)
 ```
@@ -123,7 +123,7 @@ Supersuit includes the following wrappers:
 [//]: # (Note that a multi-agent environment has a similar interface to a vector environment. Give each possible agent an index in the vector and the vector of agents can be interpreted as a vector of "environments":)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (agent_1)
 
@@ -148,7 +148,7 @@ Supersuit includes the following wrappers:
 [//]: # (You can also use the `concat_vec_envs_v0` functionality to train on several vector environments in parallel, forming a vector which looks like)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (env_1_agent_1)
 
@@ -170,7 +170,7 @@ Supersuit includes the following wrappers:
 [//]: # (So you can for example train 4 copies of pettingzoo's pistonball environment in parallel with some code like:)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (from stable_baselines3 import PPO)
 
@@ -208,7 +208,7 @@ Supersuit includes the following wrappers:
 [//]: # (On MacOS with python3.8 or higher, you will need to change the default multiprocessing setting to use fork multiprocessing instead of spawn multiprocessing, as shown below, before the multiprocessing environment is created.)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (import multiprocessing)
 
@@ -238,7 +238,7 @@ Supersuit includes the following wrappers:
 [//]: # (Adding noise to a Box observation looks like:)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (env = observation_lambda_v0&#40;env, lambda x : x + np.random.normal&#40;size=x.shape&#41;&#41;)
 
@@ -248,7 +248,7 @@ Supersuit includes the following wrappers:
 [//]: # (Adding noise to a box observation and increasing the high and low bounds to accommodate this extra noise looks like:)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (env = observation_lambda_v0&#40;env,)
 
@@ -262,7 +262,7 @@ Supersuit includes the following wrappers:
 [//]: # (Changing 1d box action space to a Discrete space by mapping the discrete actions to one-hot vectors looks like:)
 
 [//]: # ()
-[//]: # (``` python)
+[//]: # (```python)
 
 [//]: # (def one_hot&#40;x,n&#41;:)
 
