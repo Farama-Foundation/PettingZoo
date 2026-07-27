@@ -41,3 +41,44 @@ The following code should run without any issues. The comments are designed to h
 .. literalinclude:: ../../../tutorials/SB3/kaz/sb3_kaz_vector.py
    :language: python
 ```
+
+## Interpretable Vector Policy
+
+KAZ's vector observation also supports a compact policy that is useful as a
+reproducible benchmark. The controller prioritizes zombies nearest the bottom
+of the board, gives live agents of the same role separate targets when
+possible, and aims the archers using a basic projectile-intercept calculation.
+A small grid search selects three archer settings; no model checkpoint is
+required.
+
+```{figure} kaz_predictive_policy.gif
+:width: 640px
+:name: kaz-predictive-policy
+
+Vector policy on seed 2000, the earliest episode nearest the median total team
+reward in the evaluation block.
+```
+
+The following command searches on seeds 0 through 9, evaluates on the disjoint
+seed block 2000 through 2049, and renders the representative GIF:
+
+```bash
+python tutorials/SB3/kaz/predictive_kaz_policy.py \
+  --search --search-episodes 10 \
+  --episodes 50 --eval-start 2000 \
+  --render-gif docs/tutorials/sb3/kaz_predictive_policy.gif
+```
+
+On the environment defaults used by the script (`max_cycles=900`,
+`max_zombies=10`), the selected policy averaged 43.60 total team reward on
+those 50 disjoint evaluation seeds. A uniformly random-action policy, with
+each action space deterministically seeded per episode and agent, averaged
+2.44. The paired mean improvement was 41.16, with a 20,000-resample paired
+percentile-bootstrap 95% interval over seed-level differences of
+[40.62, 41.66]. The policy reached the 900-cycle limit in every evaluation
+episode; the random baseline averaged 179 cycles.
+
+```{eval-rst}
+.. literalinclude:: ../../../tutorials/SB3/kaz/predictive_kaz_policy.py
+   :language: python
+```
