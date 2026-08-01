@@ -155,6 +155,14 @@ Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.or
 
 Implementation of the card game [Coup](https://en.wikipedia.org/wiki/Coup_(card_game)).
 
+### [Drone Swarm RL (AirSim + SB3)](https://github.com/Lauqz/Drone-Swarm-RL-airsim-sb3)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.1-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/Lauqz/Drone-Swarm-RL-airsim-sb3)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/Lauqz/Drone-Swarm-RL-airsim-sb3)]()
+
+Vision-based quadrotor swarm navigation in [AirSim](https://github.com/microsoft/AirSim) and Unreal Engine 4, wrapped as a PettingZoo Parallel environment and trained with SuperSuit and Stable-Baselines3. Each drone observes a forward RGB frame plus its own position, and learns decentralized navigation through cluttered static, dynamic and forest scenes.
+
 ### [Chinese Checkers](https://github.com/masarwy/SternhalmaEnv/tree/main)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
