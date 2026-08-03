@@ -504,6 +504,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             self._seed(seed=seed)
         self.env.reset()
         self.agents = self.possible_agents[:]
+        self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards
         self._cumulative_rewards = dict.fromkeys(self.agents, 0)

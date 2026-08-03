@@ -228,6 +228,12 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         del self.infos[agent]
         self.agents.remove(agent)
 
+        # Envs used to get this for free, because the selector aliased the very
+        # list we just mutated. It owns a copy now, so drop the agent explicitly.
+        agent_selector = getattr(self, "_agent_selector", None)
+        if agent_selector is not None:
+            agent_selector.remove_agent(agent)
+
         # finds next dead agent or loads next live agent (Stored in _skip_agent_selection)
         _deads_order = [
             agent
