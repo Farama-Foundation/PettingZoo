@@ -320,26 +320,27 @@ class Pursuit:
                 ),
             )
 
+    def draw_agent_square(self, x, y, col):
+        # draw a square slightly smaller than the grid box, centered in the cell
+        size = int(self.pixel_scale * 0.8)
+        offset = (self.pixel_scale - size) // 2
+        rect = pygame.Rect(
+            int(self.pixel_scale * x) + offset,
+            int(self.pixel_scale * y) + offset,
+            size,
+            size,
+        )
+        pygame.draw.rect(self.screen, col, rect)
+
     def draw_pursuers(self):
         for i in range(self.pursuer_layer.n_agents()):
             x, y = self.pursuer_layer.get_position(i)
-            center = (
-                int(self.pixel_scale * x + self.pixel_scale / 2),
-                int(self.pixel_scale * y + self.pixel_scale / 2),
-            )
-            col = (255, 0, 0)
-            pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
+            self.draw_agent_square(x, y, (255, 0, 0))
 
     def draw_evaders(self):
         for i in range(self.evader_layer.n_agents()):
             x, y = self.evader_layer.get_position(i)
-            center = (
-                int(self.pixel_scale * x + self.pixel_scale / 2),
-                int(self.pixel_scale * y + self.pixel_scale / 2),
-            )
-            col = (0, 0, 255)
-
-            pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
+            self.draw_agent_square(x, y, (0, 0, 255))
 
     def draw_agent_counts(self):
         font = pygame.font.SysFont("Comic Sans MS", self.pixel_scale * 2 // 3)
