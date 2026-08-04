@@ -2,13 +2,41 @@ import numpy as np
 from scipy.ndimage import zoom
 
 
-def rectangle_map(xs, ys, xb=0.3, yb=0.2):
-    """Returns a 2D 'map' with a rectangle building centered in the middle.
+def rectangle_map(xs, ys, xb=0.3, yb=0.2, center_box_size=None):
+    """Returns a 2D map with a rectangle building centered in the middle.
 
-    Map is a 2D numpy array
-    xb and yb are buffers for each dim representing the raio of the map to leave open on each side
+    ``center_box_size`` is an optional ``(width, height)`` tuple measured in
+    grid cells. When omitted, the historical proportional sizing controlled by
+    ``xb`` and ``yb`` is preserved.
     """
     rmap = np.zeros((xs, ys), dtype=np.int32)
+
+    if center_box_size is not None:
+        if (
+            not isinstance(center_box_size, tuple)
+            or len(center_box_size) != 2
+            or any(
+                not isinstance(size, int) or isinstance(size, bool)
+                for size in center_box_size
+            )
+        ):
+            raise TypeError("center_box_size must be a tuple of two integers or None")
+
+        box_width, box_height = center_box_size
+        if box_width < 0 or box_height < 0:
+            raise ValueError("center_box_size dimensions must be non-negative")
+        if box_width > xs or box_height > ys:
+            raise ValueError(
+                "center_box_size dimensions cannot exceed the map dimensions"
+            )
+        if box_width == xs and box_height == ys:
+            raise ValueError("center_box_size must leave at least one free grid cell")
+
+        x_start = (xs - box_width) // 2
+        y_start = (ys - box_height) // 2
+        rmap[x_start : x_start + box_width, y_start : y_start + box_height] = -1
+        return rmap
+
     for i in range(xs):
         for j in range(ys):
             # are we in the rectnagle in x dim?

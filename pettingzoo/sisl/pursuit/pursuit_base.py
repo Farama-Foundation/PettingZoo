@@ -35,6 +35,7 @@ class Pursuit:
         surround: bool = True,
         render_mode=None,
         constraint_window: float = 1.0,
+        center_box_size: tuple[int, int] | None = None,
     ):
         """In evade pursuit a set of pursuers must 'tag' a set of evaders.
 
@@ -57,10 +58,13 @@ class Pursuit:
         urgency_reward: reward added in each step
         surround: toggles surround condition for evader removal
         constraint_window: window in which agents can randomly spawn
+        center_box_size: width and height of the center obstacle in grid cells
         """
         self.x_size = x_size
         self.y_size = y_size
-        self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
+        self.map_matrix = two_d_maps.rectangle_map(
+            self.x_size, self.y_size, center_box_size=center_box_size
+        )
         self.max_cycles = max_cycles
         self._seed()
 
