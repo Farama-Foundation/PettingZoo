@@ -58,7 +58,9 @@ def test_agents_empty_only_after_dead_steps(env_fn):
                 "agent must be removed from env.agents after step(None)"
             )
 
-    assert saw_live_agent_terminated, "never observed a terminated agent still in agents"
+    assert saw_live_agent_terminated, (
+        "never observed a terminated agent still in agents"
+    )
     assert not env.agents, "env.agents must be empty once the episode is fully done"
     assert env.num_agents == 0
     env.close()
