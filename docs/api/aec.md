@@ -132,6 +132,8 @@ Reinforcement Learning*](https://arxiv.org/pdf/2009.14471.pdf).
 
     A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
+    Terminated or truncated agents remain in this list until they take a final vacuous ``step(None)``. After every dead agent has been stepped off, the list is empty and ``not env.agents`` indicates the environment is done. Do not check ``not env.agents`` immediately when ``last()`` first reports termination or truncation for the current agent.
+
     :type: List[AgentID]
 
 .. autoattribute:: AECEnv.num_agents

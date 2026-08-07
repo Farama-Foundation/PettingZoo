@@ -37,7 +37,10 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
 
     # All agents that may appear in the environment
     possible_agents: list[AgentID]
-    agents: list[AgentID]  # Agents active at any given time
+    # Agents active at any given time. Terminated/truncated agents remain listed
+    # until they take a final vacuous step(None); then they are removed.
+    # The environment is done when this list is empty (not env.agents).
+    agents: list[AgentID]
 
     observation_spaces: dict[
         AgentID, gymnasium.spaces.Space[ObsType]
