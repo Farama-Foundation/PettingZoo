@@ -162,7 +162,37 @@ While not required by the base API, most downstream wrappers and utilities depen
 
 ### Checking if the entire environment is done
 
-When an agent is terminated or truncated, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done.
+When an agent is terminated or truncated, it stays in `agents` until it has taken one final vacuous step with action `None`. That step removes the agent from `agents` and the other changeable attributes (see [Variable Numbers of Agents (Death)](#variable-numbers-of-agents-death) below).
+
+So:
+
+* Right after `last()` first returns `termination=True` or `truncation=True` for an agent, that agent is **still** in `env.agents`. Checking `not env.agents` at that moment is incorrect and will fail (for example on `classic/connect_four`).
+* After every terminated/truncated agent has been stepped with `None`, `env.agents` becomes an empty list. At that point `not env.agents` is a simple condition for the environment being done.
+
+In the usual `agent_iter` loop you do not need an extra done check: the iterator stops once all agents have been removed. If you step without `agent_iter`, keep calling `step(None)` for dead agents until `not env.agents`.
+
+```python
+from pettingzoo import make
+
+env = make("aec", "classic/connect_four-v3")
+env.reset(seed=42)
+
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+
+    if termination or truncation:
+        # Agent is still listed in env.agents here.
+        # Removal happens only after this None step.
+        action = None
+    else:
+        mask = observation["action_mask"]
+        action = env.action_space(agent).sample(mask)
+
+    env.step(action)
+
+assert not env.agents  # environment is done
+env.close()
+```
 
 ### Unwrapping an environment
 
@@ -176,7 +206,7 @@ base_env = make("aec", "butterfly/knights_archers_zombies-v11").unwrapped
 
 ### Variable Numbers of Agents (Death)
 
-Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `terminated` dictionary is set to `True`, it become the next selected agent (or after another agent that is also terminated or truncated), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
+Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `terminations` (or `truncations`) dictionary is set to `True`, it becomes the next selected agent (or after another agent that is also terminated or truncated), and the action it takes is required to be `None`. Until that vacuous step runs, the agent is still present in `env.agents` (so `not env.agents` is false even though `last()` already reported done for that agent). After the vacuous step is taken, the agent is removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
 
 ### Environment as an Agent
 
