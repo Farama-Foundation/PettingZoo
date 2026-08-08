@@ -2,8 +2,11 @@
 
 See https://github.com/Farama-Foundation/PettingZoo/issues/1244
 
-Terminated/truncated agents stay in ``env.agents`` until they take a final
-vacuous ``step(None)``. Only after those steps is ``env.agents`` empty.
+Environments are expected to keep a terminated/truncated agent in ``env.agents``
+until it takes a final vacuous ``step(None)``, and to drop it during that step
+(this is what ``AECEnv._was_dead_step`` does). Only after those steps is
+``env.agents`` empty. ``api_test`` enforces the convention for every
+environment; these tests pin down the resulting timing on a few concrete ones.
 """
 
 from __future__ import annotations
@@ -35,7 +38,7 @@ def test_agents_empty_only_after_dead_steps(env_fn):
         done = termination or truncation
 
         if done:
-            # Contract from the docs / issue #1244: agent is still present
+            # Convention from the docs / issue #1244: agent is still present
             # when last() first reports termination/truncation.
             assert agent in env.agents, (
                 "terminated agent must still be in env.agents before step(None)"

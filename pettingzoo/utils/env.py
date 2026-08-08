@@ -37,9 +37,13 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
 
     # All agents that may appear in the environment
     possible_agents: list[AgentID]
-    # Agents active at any given time. Terminated/truncated agents remain listed
-    # until they take a final vacuous step(None); then they are removed.
-    # The environment is done when this list is empty (not env.agents).
+    # Agents active at any given time. The base class never modifies this list;
+    # keeping it up to date is the environment's job. Environments are expected
+    # to follow the convention that a terminated or truncated agent stays listed
+    # until it has taken its final vacuous step(None), which is what
+    # `_was_dead_step` performs. `api_test` checks both halves of that
+    # convention, and for an environment that follows it `not env.agents` means
+    # the episode is over.
     agents: list[AgentID]
 
     observation_spaces: dict[
@@ -207,14 +211,31 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         2. Loads next agent into .agent_selection: if another agent is dead, loads that one, otherwise load next live agent
         3. Clear the rewards dict
 
-        Examples:
-            Highly recommended to use at the beginning of step as follows:
+        Why the extra step is needed: an agent that dies must still be given one
+        more turn so that the user can call `last()` and see its final
+        observation, accumulated reward and termination/truncation flag. If the
+        agent were dropped from `.agents` as soon as it died, `agent_iter` would
+        never select it again and that final transition would be lost. The dead
+        step is where the agent is retired instead, which is why a dead agent is
+        still listed in `.agents` when `last()` first reports it done, and is
+        gone right after its `step(None)`.
 
-        def step(self, action):
-            if (self.terminations[self.agent_selection] or self.truncations[self.agent_selection]):
-                self._was_dead_step()
-                return
-            # main contents of step
+        Environments are responsible for calling this; the base class cannot do
+        it for them. Environments that skip it break the usual `not env.agents`
+        done check and can leave `agent_iter` looping forever, so implementing
+        it is effectively required rather than optional.
+
+        Examples:
+            Highly recommended to use at the beginning of step as follows::
+
+                def step(self, action):
+                    if (
+                        self.terminations[self.agent_selection]
+                        or self.truncations[self.agent_selection]
+                    ):
+                        self._was_dead_step(action)
+                        return
+                    # main contents of step
         """
         if action is not None:
             raise ValueError("when an agent is dead, the only valid action is None")

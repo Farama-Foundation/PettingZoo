@@ -132,7 +132,10 @@ Reinforcement Learning*](https://arxiv.org/pdf/2009.14471.pdf).
 
     A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
-    Terminated or truncated agents remain in this list until they take a final vacuous ``step(None)``. After every dead agent has been stepped off, the list is empty and ``not env.agents`` indicates the environment is done. Do not check ``not env.agents`` immediately when ``last()`` first reports termination or truncation for the current agent.
+    Maintaining this list is the environment's job, not the base class's. Environments are expected to keep a terminated or truncated agent listed until it has taken its final vacuous ``step(None)``, and to remove it during that step (``AECEnv._was_dead_step`` does this). Every PettingZoo environment follows this convention and ``api_test`` checks it, so for those environments:
+
+    * the agent is *still* listed when ``last()`` first reports ``termination`` or ``truncation`` for it, so ``not env.agents`` is not yet true at that point;
+    * once every dead agent has been stepped off, the list is empty and ``not env.agents`` means the environment is done.
 
     :type: List[AgentID]
 
@@ -197,5 +200,6 @@ Reinforcement Learning*](https://arxiv.org/pdf/2009.14471.pdf).
 .. automethod:: AECEnv.observe
 .. automethod:: AECEnv.render
 .. automethod:: AECEnv.close
+.. automethod:: AECEnv._was_dead_step
 
 ```

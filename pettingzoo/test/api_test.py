@@ -430,6 +430,8 @@ def play_test(env, observation_0, num_cycles):
 
     * Whether the reward returned by last is the accumulated reward
     * Whether the agents list shrinks when agents are terminated or truncated
+    * Whether a terminated or truncated agent is retired by its final step(None),
+      and not before it
     * Whether the keys of the rewards, terminations, truncations, infos are equal to the agents list
     * tests that the observation is in bounds.
     """
@@ -465,6 +467,10 @@ def play_test(env, observation_0, num_cycles):
         )
 
         if terminated or truncated:
+            assert agent in env.agents, (
+                "a terminated or truncated agent must remain in env.agents until it "
+                "has taken its final step(None)"
+            )
             live_agents.remove(agent)
             has_finished.add(agent)
 
@@ -474,6 +480,12 @@ def play_test(env, observation_0, num_cycles):
         accumulated_rewards[agent] = 0
 
         env.step(action)
+
+        if terminated or truncated:
+            assert agent not in env.agents, (
+                "a terminated or truncated agent must be removed from env.agents by "
+                "its final step(None), see AECEnv._was_dead_step"
+            )
 
         for a, rew in env.rewards.items():
             accumulated_rewards[a] += rew

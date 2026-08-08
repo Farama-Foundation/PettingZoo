@@ -162,9 +162,9 @@ While not required by the base API, most downstream wrappers and utilities depen
 
 ### Checking if the entire environment is done
 
-When an agent is terminated or truncated, it stays in `agents` until it has taken one final vacuous step with action `None`. That step removes the agent from `agents` and the other changeable attributes (see [Variable Numbers of Agents (Death)](#variable-numbers-of-agents-death) below).
+Nothing in the base `AECEnv` class updates `agents`; each environment maintains it. Environments are expected to follow the convention described in [Variable Numbers of Agents (Death)](#variable-numbers-of-agents-death) below: a terminated or truncated agent stays in `agents` until it has taken one final vacuous step with action `None`, and that step removes it from `agents` and the other changeable attributes. Every PettingZoo environment follows this convention, and `api_test` checks that a custom environment does too.
 
-So:
+For such an environment:
 
 * Right after `last()` first returns `termination=True` or `truncation=True` for an agent, that agent is **still** in `env.agents`. Checking `not env.agents` at that moment is incorrect and will fail (for example on `classic/connect_four`).
 * After every terminated/truncated agent has been stepped with `None`, `env.agents` becomes an empty list. At that point `not env.agents` is a simple condition for the environment being done.
@@ -207,6 +207,23 @@ base_env = make("aec", "butterfly/knights_archers_zombies-v11").unwrapped
 ### Variable Numbers of Agents (Death)
 
 Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `terminations` (or `truncations`) dictionary is set to `True`, it becomes the next selected agent (or after another agent that is also terminated or truncated), and the action it takes is required to be `None`. Until that vacuous step runs, the agent is still present in `env.agents` (so `not env.agents` is false even though `last()` already reported done for that agent). After the vacuous step is taken, the agent is removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
+
+This extra "dead step" exists so that a dying agent still gets one final turn: the user calls `last()` on it and sees its final observation, accumulated reward and termination/truncation flag before it disappears. If the environment removed the agent as soon as it died, `agent_iter` would never select it again and that last transition would be lost.
+
+This is a convention that environment authors have to implement, not behaviour the base `AECEnv` class provides. The [`_was_dead_step`](https://pettingzoo.farama.org/api/aec/#pettingzoo.utils.env.AECEnv._was_dead_step) helper does the retirement bookkeeping, and is meant to be called at the top of `step()`:
+
+```python notest
+def step(self, action):
+    if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        # the only valid action for a dead agent is None; this removes it from
+        # agents/terminations/truncations/rewards/_cumulative_rewards/infos and
+        # advances agent_selection
+        self._was_dead_step(action)
+        return
+    # main contents of step
+```
+
+An environment that skips this will leave dead agents in `agents` forever, which breaks the `not env.agents` done check above and can make `agent_iter` loop indefinitely. `api_test` checks both halves of the convention: that a dead agent is still listed when `last()` reports it done, and that it is gone after its `step(None)`.
 
 ### Environment as an Agent
 
