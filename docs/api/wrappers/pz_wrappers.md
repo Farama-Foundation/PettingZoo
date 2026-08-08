@@ -223,6 +223,8 @@ These classes replace SuperSuit's `frame_skip_v0` for the respective PettingZoo 
 .. autoclass:: ColorReductionObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
+.. autoclass:: FlattenObservation
+.. autoclass:: FlattenObservationParallel
 .. autoclass:: FrameSkipV1
 .. autoclass:: FrameSkipParallelV1
 .. autoclass:: FrameStackV3
