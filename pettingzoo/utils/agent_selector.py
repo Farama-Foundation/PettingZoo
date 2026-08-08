@@ -81,14 +81,21 @@ class AgentSelector:
         Mid-episode :meth:`add_agent` / :meth:`remove_agent` mutations are
         undone, so a second env episode can start cleanly even if the previous
         one dead-stepped every agent out of the cycle.
+
+        Returns:
+            The first agent of the restored order, already selected. This is a
+            step through the cycle, not just a rewind, so it is the value envs
+            assign to ``agent_selection``.
         """
-        self.agent_order = list(self._original_agent_order)
-        self._current_agent = 0
-        self.selected_agent = 0
+        self.reinit(self._original_agent_order)
         return self.next()
 
     def next(self) -> Any:
-        """Get the next agent."""
+        """Get the next agent.
+
+        Returns:
+            The agent that is now selected.
+        """
         self._current_agent = (self._current_agent + 1) % len(self.agent_order)
         self.selected_agent = self.agent_order[self._current_agent - 1]
         return self.selected_agent
