@@ -25,10 +25,19 @@ def test_add_and_remove_agent():
     assert selector.agent_order == ["a", "c"]
 
 
-def test_remove_absent_agent_is_a_noop():
-    """Envs that already dropped an agent themselves can still call this."""
+def test_remove_absent_agent_raises():
+    """remove_agent follows list.remove rather than failing quietly."""
     selector = AgentSelector(["a", "b"])
-    selector.remove_agent("not_an_agent")
+    with pytest.raises(ValueError):
+        selector.remove_agent("not_an_agent")
+    assert selector.agent_order == ["a", "b"]
+
+
+def test_add_duplicate_agent_raises():
+    """Duplicates would break remove_agent and the is_first/is_last checks."""
+    selector = AgentSelector(["a", "b"])
+    with pytest.raises(ValueError):
+        selector.add_agent("a")
     assert selector.agent_order == ["a", "b"]
 
 

@@ -61,19 +61,29 @@ class AgentSelector:
 
         Episode-local: :meth:`reset` will drop the agent again unless
         :meth:`reinit` is called with it included.
+
+        Raises:
+            ValueError: If the agent is already in the cycle. Duplicates break
+                the selector's invariants: :meth:`remove_agent` would drop only
+                the first copy, and :meth:`is_first` / :meth:`is_last` compare by
+                value, so they would fire on the wrong turn.
         """
+        if agent in self.agent_order:
+            raise ValueError(f"agent {agent!r} is already in the cycle")
         self.agent_order.append(agent)
 
     def remove_agent(self, agent: Any) -> None:
         """Remove an agent from the cycle.
 
-        Does nothing if the agent is not in the cycle, so that an env which has
-        already dropped the agent itself can still call this unconditionally.
         Episode-local: :meth:`reset` restores the agent if it was in the order
         last passed to :meth:`reinit`.
+
+        Raises:
+            ValueError: If the agent is not in the cycle, matching
+                ``list.remove``. Callers that cannot know whether the agent is
+                still there should check ``agent in selector.agent_order`` first.
         """
-        if agent in self.agent_order:
-            self.agent_order.remove(agent)
+        self.agent_order.remove(agent)
 
     def reset(self) -> Any:
         """Reset to the order last passed to :meth:`reinit`.

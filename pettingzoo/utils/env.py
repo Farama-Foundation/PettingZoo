@@ -208,8 +208,14 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         Does the following:
 
         1. Removes dead agent from .agents, .terminations, .truncations, .rewards, ._cumulative_rewards, and .infos
-        2. Loads next agent into .agent_selection: if another agent is dead, loads that one, otherwise load next live agent
-        3. Clear the rewards dict
+        2. Drops the dead agent from the env's AgentSelector, if it keeps one at ._agent_selector
+        3. Loads next agent into .agent_selection: if another agent is dead, loads that one, otherwise load next live agent
+        4. Clear the rewards dict
+
+        Step 2 is why an env that uses an :class:`AgentSelector` should store it
+        as ``self._agent_selector``. A selector held under a different name will
+        not be updated here and will keep offering the dead agent for the rest of
+        the episode. ``api_test`` checks for this.
 
         Why the extra step is needed: an agent that dies must still be given one
         more turn so that the user can call `last()` and see its final
@@ -254,8 +260,11 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
 
         # Envs used to get this for free, because the selector aliased the very
         # list we just mutated. It owns a copy now, so drop the agent explicitly.
+        # By convention the selector lives at `self._agent_selector`; every env
+        # in this repo follows it, and `api_test` fails an env whose selector
+        # still lists an agent after that agent's dead step.
         agent_selector = getattr(self, "_agent_selector", None)
-        if agent_selector is not None:
+        if agent_selector is not None and agent in agent_selector.agent_order:
             agent_selector.remove_agent(agent)
 
         # finds next dead agent or loads next live agent (Stored in _skip_agent_selection)
