@@ -23,7 +23,7 @@ pip install mpe2
 Then update your imports. The environment names and versions are unchanged, so in most
 cases swapping the import is the only edit required:
 
-```python
+```python notest
 # Before (PettingZoo <= 1.24)
 from pettingzoo.mpe import simple_spread_v3
 

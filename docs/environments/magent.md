@@ -23,7 +23,7 @@ pip install magent2
 Then update your imports. The environment names and versions are unchanged, so in most
 cases swapping the import is the only edit required:
 
-```python
+```python notest
 # Before (PettingZoo <= 1.23)
 from pettingzoo.magent import battle_v4
 
