@@ -20,9 +20,9 @@ jobs:
                 python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
                 tutorial: [Tianshou, CustomEnvironment, CleanRL, SB3/connect_four, SB3/kaz, SB3/test]  # TODO: fix tutorials and add back Ray.
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - name: Set up Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v7
               with:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies and run tutorials
@@ -51,9 +51,9 @@ jobs:
                 python-version: ['3.10', '3.11']
                 tutorial: [AgileRL]
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - name: Set up Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v7
               with:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies and run tutorials
