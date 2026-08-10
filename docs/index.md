@@ -31,6 +31,8 @@ environments/atari
 environments/butterfly
 environments/classic
 environments/sisl
+environments/magent
+environments/mpe
 environments/third_party_envs
 ```
 
