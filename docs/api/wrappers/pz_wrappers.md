@@ -100,9 +100,13 @@ while parallel_env.agents:
 ```
 
 ```{eval-rst}
-.. warning::
+.. note::
 
-    Included PettingZoo wrappers currently do not support parallel environments, to use them you must convert your environment to AEC, apply the wrapper, and convert back to parallel.
+    Wrappers are specific to either the AEC or Parallel API unless documented
+    otherwise. Parallel variants use a ``Parallel`` suffix, such as
+    :class:`DelayObservationParallel`. To apply an AEC-only wrapper to a
+    Parallel environment, convert the environment to AEC, apply the wrapper,
+    and convert it back to Parallel.
 ```
 ```python
 from pettingzoo import make
@@ -128,6 +132,8 @@ while parallel_env.agents:
 .. autoclass:: CaptureStdoutWrapper
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
+.. autoclass:: DelayObservation
+.. autoclass:: DelayObservationParallel
 .. autoclass:: OrderEnforcingWrapper
 
 ```

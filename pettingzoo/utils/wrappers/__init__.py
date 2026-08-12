@@ -3,6 +3,10 @@ from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 from pettingzoo.utils.wrappers.capture_stdout import CaptureStdoutWrapper
 from pettingzoo.utils.wrappers.clip_out_of_bounds import ClipOutOfBoundsWrapper
+from pettingzoo.utils.wrappers.delay_observation import (
+    DelayObservation,
+    DelayObservationParallel,
+)
 from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
@@ -16,6 +20,8 @@ __all__ = [
     "BaseWrapper",
     "CaptureStdoutWrapper",
     "ClipOutOfBoundsWrapper",
+    "DelayObservation",
+    "DelayObservationParallel",
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
     "OrderEnforcingWrapper",
