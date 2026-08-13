@@ -10,11 +10,11 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/utils/wrappers/assert_out_of_bounds.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/utils/wrappers/assert_out_of_bounds.html" />
 
-    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
         <title>pettingzoo.utils.wrappers.assert_out_of_bounds - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -265,7 +265,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -280,6 +279,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../../environments/sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../environments/magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../environments/mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -378,6 +379,8 @@
             <h1>Source code for pettingzoo.utils.wrappers.assert_out_of_bounds</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.wrappers.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseWrapper</span>
 
@@ -388,11 +391,12 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Asserts if the action given to step is outside of the action space.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">env</span><span class="p">,</span> <span class="n">AECEnv</span>
-        <span class="p">),</span> <span class="s2">&quot;AssertOutOfBoundsWrapper is only compatible with AEC environments&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">),</span> <span class="p">(</span>
+            <span class="s2">&quot;AssertOutOfBoundsWrapper is only compatible with AEC environments&quot;</span>
+        <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 
+    <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -400,11 +404,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
                 <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="p">)</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span>
-            <span class="n">action</span>
-        <span class="p">),</span> <span class="s2">&quot;action is not in action space&quot;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">action</span><span class="p">),</span> <span class="p">(</span>
+            <span class="s2">&quot;action is not in action space&quot;</span>
+        <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
+    <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span></div>
 
@@ -525,10 +530,10 @@
         })()
       </script>
 
-    <script src="../../../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../../../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -589,14 +594,6 @@
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -610,7 +607,14 @@
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -626,8 +630,6 @@
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -639,6 +641,13 @@
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -683,7 +692,14 @@
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 

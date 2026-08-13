@@ -10,10 +10,10 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/genindex.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/genindex.html" />
 
-    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 --><title>Index - PettingZoo Documentation</title>
+    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 --><title>Index - PettingZoo Documentation</title>
 <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -264,7 +264,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -279,6 +278,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../environments/sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../environments/magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environments/mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -409,14 +410,14 @@
           <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.action_space">(pettingzoo.utils.env.ParallelEnv method)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../api/aec/#pettingzoo.utils.env.AECEnv.action_spaces">action_spaces (pettingzoo.utils.env.AECEnv attribute)</a>
 
         <ul>
           <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.action_spaces">(pettingzoo.utils.env.ParallelEnv attribute)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../api/wrappers/pz_wrappers/#pettingzoo.utils.conversions.aec_to_parallel">aec_to_parallel() (in module pettingzoo.utils.conversions)</a>
 </li>
         <li><a href="../api/aec/#pettingzoo.utils.env.AECEnv">AECEnv (class in pettingzoo.utils.env)</a>
@@ -439,6 +440,8 @@
 </li>
         </ul></li>
         <li><a href="../api/utils/#pettingzoo.utils.agent_selector.AgentSelector">AgentSelector (class in pettingzoo.utils.agent_selector)</a>
+</li>
+        <li><a href="../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.apply_weapons">apply_weapons() (pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env method)</a>
 </li>
         <li><a href="../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper">AssertOutOfBoundsWrapper (class in pettingzoo.utils.wrappers)</a>
 </li>
@@ -588,8 +591,12 @@
           <li><a href="../api/wrappers/supersuit_wrappers/#delay_observations_v0">built-in function</a>
 </li>
         </ul></li>
+        <li><a href="../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.do_zombie_turn">do_zombie_turn() (pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env method)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.draw">draw() (pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env method)</a>
+</li>
         <li>
     dtype_v0()
 
@@ -619,8 +626,6 @@
           <li><a href="../environments/classic/go/#pettingzoo.classic.go.go.env">(class in pettingzoo.classic.go.go)</a>
 </li>
           <li><a href="../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.env">(class in pettingzoo.classic.hanabi.hanabi)</a>
-</li>
-          <li><a href="../environments/classic/gin_rummy/#pettingzoo.classic.rlcard_envs.gin_rummy.env">(class in pettingzoo.classic.rlcard_envs.gin_rummy)</a>
 </li>
           <li><a href="../environments/classic/leduc_holdem/#pettingzoo.classic.rlcard_envs.leduc_holdem.env">(class in pettingzoo.classic.rlcard_envs.leduc_holdem)</a>
 </li>
@@ -697,6 +702,10 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="../api/utils/#pettingzoo.utils.env_logger.EnvLogger.get_logger">get_logger() (pettingzoo.utils.env_logger.EnvLogger static method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.get_vector_state">get_vector_state() (pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -794,6 +803,10 @@
           <li><a href="../api/wrappers/supersuit_wrappers/#normalize_obs_v0">built-in function</a>
 </li>
         </ul></li>
+        <li><a href="../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_arrows">num_active_arrows (pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env property)</a>
+</li>
+        <li><a href="../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.num_active_swords">num_active_swords (pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env property)</a>
+</li>
         <li><a href="../api/aec/#pettingzoo.utils.env.AECEnv.num_agents">num_agents (pettingzoo.utils.env.AECEnv attribute)</a>
 
         <ul>
@@ -856,8 +869,6 @@
           <li><a href="../environments/classic/go/#pettingzoo.classic.go.go.raw_env.observe">(pettingzoo.classic.go.go.raw_env method)</a>
 </li>
           <li><a href="../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.observe">(pettingzoo.classic.hanabi.hanabi.raw_env method)</a>
-</li>
-          <li><a href="../environments/classic/gin_rummy/#pettingzoo.classic.rlcard_envs.gin_rummy.raw_env.observe">(pettingzoo.classic.rlcard_envs.gin_rummy.raw_env method)</a>
 </li>
           <li><a href="../environments/classic/rps/#pettingzoo.classic.rps.rps.raw_env.observe">(pettingzoo.classic.rps.rps.raw_env method)</a>
 </li>
@@ -1012,8 +1023,6 @@
 </li>
           <li><a href="../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env">(class in pettingzoo.classic.hanabi.hanabi)</a>
 </li>
-          <li><a href="../environments/classic/gin_rummy/#pettingzoo.classic.rlcard_envs.gin_rummy.raw_env">(class in pettingzoo.classic.rlcard_envs.gin_rummy)</a>
-</li>
           <li><a href="../environments/classic/leduc_holdem/#pettingzoo.classic.rlcard_envs.leduc_holdem.raw_env">(class in pettingzoo.classic.rlcard_envs.leduc_holdem)</a>
 </li>
           <li><a href="../environments/classic/texas_holdem/#pettingzoo.classic.rlcard_envs.texas_holdem.raw_env">(class in pettingzoo.classic.rlcard_envs.texas_holdem)</a>
@@ -1031,8 +1040,12 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="../api/utils/#pettingzoo.utils.agent_selector.AgentSelector.reinit">reinit() (pettingzoo.utils.agent_selector.AgentSelector method)</a>
+        <li><a href="../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reinit">reinit() (pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env method)</a>
+
+        <ul>
+          <li><a href="../api/utils/#pettingzoo.utils.agent_selector.AgentSelector.reinit">(pettingzoo.utils.agent_selector.AgentSelector method)</a>
 </li>
+        </ul></li>
         <li><a href="../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.render">render() (pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env method)</a>
 
         <ul>
@@ -1047,8 +1060,6 @@
           <li><a href="../environments/classic/go/#pettingzoo.classic.go.go.raw_env.render">(pettingzoo.classic.go.go.raw_env method)</a>
 </li>
           <li><a href="../environments/classic/hanabi/#pettingzoo.classic.hanabi.hanabi.raw_env.render">(pettingzoo.classic.hanabi.hanabi.raw_env method)</a>
-</li>
-          <li><a href="../environments/classic/gin_rummy/#pettingzoo.classic.rlcard_envs.gin_rummy.raw_env.render">(pettingzoo.classic.rlcard_envs.gin_rummy.raw_env method)</a>
 </li>
           <li><a href="../environments/classic/leduc_holdem/#pettingzoo.classic.rlcard_envs.leduc_holdem.raw_env.render">(pettingzoo.classic.rlcard_envs.leduc_holdem.raw_env method)</a>
 </li>
@@ -1138,6 +1149,8 @@
           <li><a href="../environments/butterfly/pistonball/#pettingzoo.butterfly.pistonball.pistonball.raw_env.state">(pettingzoo.butterfly.pistonball.pistonball.raw_env method)</a>
 </li>
           <li><a href="../environments/sisl/multiwalker/#pettingzoo.sisl.multiwalker.multiwalker.raw_env.state">(pettingzoo.sisl.multiwalker.multiwalker.raw_env method)</a>
+</li>
+          <li><a href="../environments/sisl/pursuit/#pettingzoo.sisl.pursuit.pursuit.raw_env.state">(pettingzoo.sisl.pursuit.pursuit.raw_env method)</a>
 </li>
           <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.state">(pettingzoo.utils.env.ParallelEnv method)</a>
 </li>
@@ -1344,10 +1357,10 @@
         })()
       </script>
 
-    <script src="../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../_static/documentation_options.js?v=a7653905"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -1408,14 +1421,6 @@
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -1429,7 +1434,14 @@
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -1445,8 +1457,6 @@
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -1458,6 +1468,13 @@
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -1502,7 +1519,14 @@
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 

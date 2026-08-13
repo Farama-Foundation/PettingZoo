@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="RLlib: DQN for Simple Poker" href="../holdem/" /><link rel="prev" title="Ray RLlib Tutorial" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/rllib/pistonball.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
         <title>RLlib: PPO for Pistonball - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -266,7 +266,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -281,6 +280,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments/magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments/mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -355,7 +356,7 @@
           </a>
           <div class="content-icon-container">
       <div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/rllib/pistonball.py" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/main/docs/tutorials/rllib/pistonball.py" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -393,9 +394,9 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic,butterfly]&gt;=1.24.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic,butterfly]&gt;=1.27.0
 Pillow&gt;=9.4.0
-ray[rllib]==2.55.0
+ray[rllib]==2.56.0
 SuperSuit&gt;=3.9.0
 torch&gt;=1.13.1
 tensorflow-probability&gt;=0.19.0
@@ -425,7 +426,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">ray.tune.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_env</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CNNModelV2</span><span class="p">(</span><span class="n">TorchModelV2</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -456,7 +457,9 @@ tensorflow-probability&gt;=0.19.0
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
         <span class="n">n_pistons</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">time_penalty</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -549,7 +552,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">ray.tune.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_env</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CNNModelV2</span><span class="p">(</span><span class="n">TorchModelV2</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -601,7 +604,9 @@ tensorflow-probability&gt;=0.19.0
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">():</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
+        <span class="s2">&quot;aec&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
         <span class="n">n_pistons</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">time_penalty</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -635,7 +640,7 @@ tensorflow-probability&gt;=0.19.0
 <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">_agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
     <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
     <span class="n">reward_sum</span> <span class="o">+=</span> <span class="n">reward</span>
     <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
@@ -823,10 +828,10 @@ tensorflow-probability&gt;=0.19.0
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -887,14 +892,6 @@ tensorflow-probability&gt;=0.19.0
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -908,7 +905,14 @@ tensorflow-probability&gt;=0.19.0
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -924,8 +928,6 @@ tensorflow-probability&gt;=0.19.0
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -937,6 +939,13 @@ tensorflow-probability&gt;=0.19.0
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -981,7 +990,14 @@ tensorflow-probability&gt;=0.19.0
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 

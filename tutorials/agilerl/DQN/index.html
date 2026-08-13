@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="AgileRL: Implementing MADDPG" href="../MADDPG/" /><link rel="prev" title="AgileRL Tutorial" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/agilerl/DQN.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
         <title>AgileRL: Implementing DQN - Curriculum Learning and Self-play - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -266,7 +266,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -281,6 +280,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments/magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments/mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -355,7 +356,7 @@
           </a>
           <div class="content-icon-container">
       <div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/agilerl/DQN.py" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/main/docs/tutorials/agilerl/DQN.py" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -430,7 +431,7 @@
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==2.2.1; python_version &gt;= &#39;3.10&#39; and python_version &lt; &#39;3.12&#39;
-pettingzoo[classic,atari]&gt;=1.23.1
+pettingzoo[classic,atari]&gt;=1.27.0
 mpe2&gt;=1.0.0
 AutoROM&gt;=0.6.1
 SuperSuit&gt;=3.9.0
@@ -474,7 +475,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.algorithms.core.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerWrapper</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 </pre></div>
 </div>
 </details>
@@ -1103,7 +1104,7 @@ PyYAML&gt;=5.4.1
 <span class="p">}</span>
 
 <span class="c1"># Define the connect four environment</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="c1"># Configure the algo input arguments</span>
@@ -1697,7 +1698,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl_dqn_curriculum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Opponent</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
 <span class="c1"># Define function to return image</span>
@@ -1708,7 +1709,7 @@ PyYAML&gt;=5.4.1
     <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="s2">&quot;arial.ttf&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
     <span class="n">drawer</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
         <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-        <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">episode_num</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">     Frame: </span><span class="si">{</span><span class="n">frame_no</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">episode_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">     Frame: </span><span class="si">{</span><span class="n">frame_no</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">fill</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span>
         <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
     <span class="p">)</span>
@@ -1742,7 +1743,7 @@ PyYAML&gt;=5.4.1
 
     <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./models/DQN/lesson3_trained_agent.pt&quot;</span>  <span class="c1"># Path to saved agent checkpoint</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
     <span class="c1"># Configure the algo input arguments</span>
@@ -1816,9 +1817,7 @@ PyYAML&gt;=5.4.1
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">action</span> <span class="o">=</span> <span class="n">dqn</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                             <span class="n">state</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span><span class="o">=</span><span class="n">action_mask</span>
-                        <span class="p">)[</span>
-                            <span class="mi">0</span>
-                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                 <span class="k">if</span> <span class="n">player</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
                     <span class="n">state</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span>
@@ -1835,9 +1834,7 @@ PyYAML&gt;=5.4.1
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">action</span> <span class="o">=</span> <span class="n">dqn</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                             <span class="n">state</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span><span class="o">=</span><span class="n">action_mask</span>
-                        <span class="p">)[</span>
-                            <span class="mi">0</span>
-                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                 <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>
                 <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
                 <span class="c1"># Save the frame for this step and append to frames list</span>
@@ -1861,7 +1858,7 @@ PyYAML&gt;=5.4.1
 
                 <span class="n">player</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
 
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">ep</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">ep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode length: </span><span class="si">{</span><span class="n">idx_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -1900,7 +1897,6 @@ PyYAML&gt;=5.4.1
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -1916,8 +1912,7 @@ PyYAML&gt;=5.4.1
 <span class="kn">from</span><span class="w"> </span><span class="nn">agilerl.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_population</span><span class="p">,</span> <span class="n">observation_space_channels_to_first</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParallelEnv</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_four_v3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">make</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CurriculumEnv</span><span class="p">:</span>
@@ -2098,7 +2093,7 @@ PyYAML&gt;=5.4.1
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Replay buffer warmed up.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">memory</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">check_winnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">piece</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_winnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lst</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">piece</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if four pieces in a row represent a winnable opportunity, e.g. [1, 1, 1, 0] or [2, 0, 2, 2].</span>
 
 <span class="sd">        :param lst: List of pieces in row</span>
@@ -2214,7 +2209,7 @@ PyYAML&gt;=5.4.1
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">reward</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around PettingZoo env last method.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
 
@@ -2268,8 +2263,8 @@ PyYAML&gt;=5.4.1
 
     <span class="k">def</span><span class="w"> </span><span class="nf">random_opponent</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">action_mask</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
-        <span class="n">last_opp_move</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">action_mask</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">last_opp_move</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">block_vert_coef</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes move for random opponent.</span>
@@ -2340,7 +2335,7 @@ PyYAML&gt;=5.4.1
 
     <span class="k">def</span><span class="w"> </span><span class="nf">outcome</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">return_length</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes move for weak rule-based opponent.</span>
 
 <span class="sd">        :param action: Action to take in environment</span>
@@ -2368,9 +2363,7 @@ PyYAML&gt;=5.4.1
 
         <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
             <span class="n">directions</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span>
-        <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
-        <span class="p">)</span>  <span class="c1"># |4x2x3x2|</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># |4x2x3x2|</span>
         <span class="n">valid_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
                 <span class="n">positions</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">positions</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_rows</span>
@@ -2473,7 +2466,7 @@ PyYAML&gt;=5.4.1
         <span class="p">}</span>
 
         <span class="c1"># Define the connect four environment</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span><span class="p">)</span>
         <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
         <span class="c1"># Configure the algo input arguments</span>
@@ -2501,7 +2494,7 @@ PyYAML&gt;=5.4.1
         <span class="p">)</span>
 
         <span class="c1"># Create a population ready for evolutionary hyper-parameter optimisation</span>
-        <span class="n">pop</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DQN</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_population</span><span class="p">(</span>
+        <span class="n">pop</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DQN</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_population</span><span class="p">(</span>
             <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;ALGO&quot;</span><span class="p">],</span>
             <span class="n">observation_space</span><span class="p">,</span>
             <span class="n">action_spaces</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -2585,7 +2578,7 @@ PyYAML&gt;=5.4.1
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warming up agents ...&quot;</span><span class="p">)</span>
                 <span class="n">agent</span> <span class="o">=</span> <span class="n">pop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="c1"># Train on randomly collected samples</span>
-                <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">LESSON</span><span class="p">[</span><span class="s2">&quot;agent_warm_up&quot;</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">_epoch</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">LESSON</span><span class="p">[</span><span class="s2">&quot;agent_warm_up&quot;</span><span class="p">]):</span>
                     <span class="n">experiences</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
                     <span class="n">agent</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">experiences</span><span class="p">)</span>
 
@@ -2602,7 +2595,7 @@ PyYAML&gt;=5.4.1
             <span class="n">turns_per_episode</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">train_actions_hist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">action_spaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">n</span>
             <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>  <span class="c1"># Loop through population</span>
-                <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">episodes_per_epoch</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">_episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">episodes_per_epoch</span><span class="p">):</span>
                     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># Reset environment at start of episode</span>
                     <span class="n">observation</span><span class="p">,</span> <span class="n">cumulative_reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
 
@@ -2626,7 +2619,8 @@ PyYAML&gt;=5.4.1
 
                     <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="n">turns</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Number of turns counter</span>
-                    <span class="k">for</span> <span class="n">idx_step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
+                    <span class="c1"># idx_step is used after the loop (total_steps), not unused.</span>
+                    <span class="k">for</span> <span class="n">idx_step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>  <span class="c1"># noqa: B007</span>
                         <span class="c1"># Player 0&quot;s turn</span>
                         <span class="n">p0_action_mask</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
                         <span class="n">p0_state</span><span class="p">,</span> <span class="n">p0_state_flipped</span> <span class="o">=</span> <span class="n">transform_and_flip</span><span class="p">(</span>
@@ -2647,9 +2641,7 @@ PyYAML&gt;=5.4.1
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">p0_action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                 <span class="n">p0_state</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">p0_action_mask</span>
-                            <span class="p">)[</span>
-                                <span class="mi">0</span>
-                            <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                             <span class="n">train_actions_hist</span><span class="p">[</span><span class="n">p0_action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                         <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">p0_action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>
@@ -2733,9 +2725,7 @@ PyYAML&gt;=5.4.1
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">p1_action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                     <span class="n">p1_state</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">p1_action_mask</span>
-                                <span class="p">)[</span>
-                                    <span class="mi">0</span>
-                                <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                                 <span class="n">train_actions_hist</span><span class="p">[</span><span class="n">p1_action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                             <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">p1_action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>
@@ -2851,7 +2841,7 @@ PyYAML&gt;=5.4.1
                 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
                     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
                         <span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span>
-                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">evo_loop</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">evo_loop</span><span class="p">):</span>
                             <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># Reset environment at start of episode</span>
                             <span class="p">(</span>
                                 <span class="n">observation</span><span class="p">,</span>
@@ -2874,7 +2864,7 @@ PyYAML&gt;=5.4.1
 
                             <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
 
-                            <span class="k">for</span> <span class="n">idx_step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
+                            <span class="k">for</span> <span class="n">_idx_step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
                                 <span class="n">action_mask</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
                                 <span class="k">if</span> <span class="n">player</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                                     <span class="k">if</span> <span class="n">opponent_first</span><span class="p">:</span>
@@ -2889,9 +2879,7 @@ PyYAML&gt;=5.4.1
                                         <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                                         <span class="n">action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                             <span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span>
-                                        <span class="p">)[</span>
-                                            <span class="mi">0</span>
-                                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                                         <span class="n">eval_actions_hist</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                                 <span class="k">if</span> <span class="n">player</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                                     <span class="k">if</span> <span class="ow">not</span> <span class="n">opponent_first</span><span class="p">:</span>
@@ -2907,9 +2895,7 @@ PyYAML&gt;=5.4.1
                                         <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                                         <span class="n">action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span>
                                             <span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">action_mask</span>
-                                        <span class="p">)[</span>
-                                            <span class="mi">0</span>
-                                        <span class="p">]</span>  <span class="c1"># Get next action from agent</span>
+                                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get next action from agent</span>
                                         <span class="n">eval_actions_hist</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                                 <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>  <span class="c1"># Act in environment</span>
@@ -3142,10 +3128,10 @@ PyYAML&gt;=5.4.1
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -3206,14 +3192,6 @@ PyYAML&gt;=5.4.1
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -3227,7 +3205,14 @@ PyYAML&gt;=5.4.1
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -3243,8 +3228,6 @@ PyYAML&gt;=5.4.1
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -3256,6 +3239,13 @@ PyYAML&gt;=5.4.1
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -3300,7 +3290,14 @@ PyYAML&gt;=5.4.1
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 

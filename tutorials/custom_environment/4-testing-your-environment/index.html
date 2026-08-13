@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="CleanRL Tutorial" href="../../cleanrl/" /><link rel="prev" title="Tutorial: Action Masking" href="../3-action-masking/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/custom_environment/4-testing-your-environment.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
         <title>Tutorial: Testing Your Environment - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -266,7 +266,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -281,6 +280,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../environments/sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments/magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../environments/mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -355,7 +356,7 @@
           </a>
           <div class="content-icon-container">
       <div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/custom_environment/4-testing-your-environment.py" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/main/docs/tutorials/custom_environment/4-testing-your-environment.py" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -391,6 +392,7 @@
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>Now that our environment is complete, we can test it to make sure it works as intended. PettingZoo has a built-in testing suite that can be used to test your environment.</p>
+<p>After the API tests pass, register the environment with <code class="docutils literal notranslate"><span class="pre">pettingzoo.register</span></code> so that it can be created with <code class="docutils literal notranslate"><span class="pre">make</span></code>, then confirm it appears in <code class="docutils literal notranslate"><span class="pre">parallel_registry</span></code> (or <code class="docutils literal notranslate"><span class="pre">aec_registry</span></code> for AEC environments). See <a class="reference internal" href="../../../content/basic_usage/#initializing-environments"><span class="std std-ref">Basic Usage</span></a> for more on the registry-related APIs.</p>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Link to this heading">¶</a></h2>
@@ -401,13 +403,34 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tutorial2_adding_game_logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomEnvironment</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tutorial3_action_masking</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomActionMaskedEnvironment</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span><span class="p">,</span> <span class="n">parallel_registry</span><span class="p">,</span> <span class="n">register</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_api_test</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Sanity check</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">CustomEnvironment</span><span class="p">()</span>
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">CustomActionMaskedEnvironment</span><span class="p">()</span>
+    <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
+
+    <span class="c1"># Register custom environments so they can be created with make()</span>
+    <span class="n">register</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span><span class="p">,</span> <span class="n">CustomEnvironment</span><span class="p">)</span>
+    <span class="n">register</span><span class="p">(</span>
+        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span><span class="p">,</span>
+        <span class="n">CustomActionMaskedEnvironment</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Confirm the environments are available in the parallel registry</span>
+    <span class="k">assert</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+    <span class="k">assert</span> <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+
+    <span class="c1"># Environments can now be created via make, just like built-in ones</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span><span class="p">)</span>
+    <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span><span class="p">)</span>
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -573,10 +596,10 @@
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -637,14 +660,6 @@
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -658,7 +673,14 @@
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -674,8 +696,6 @@
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -687,6 +707,13 @@
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -731,7 +758,14 @@
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 

@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="prev" title="AgileRL: Implementing MATD3" href="../tutorials/agilerl/MATD3/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/release_notes/index.html" />
 
-    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
         <title>Release Notes - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -266,7 +266,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -281,6 +280,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../environments/sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../environments/magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environments/mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -354,7 +355,7 @@
             <span>Back to top</span>
           </a>
           <div class="content-icon-container"><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/release_notes/index.md" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/main/docs/release_notes/index.md" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -387,6 +388,55 @@
             
             <section class="tex2jax_ignore mathjax_ignore" id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">¶</a></h1>
+<section id="release-1-27-0">
+<h2>PettingZoo 1.27.0<a class="headerlink" href="#release-1-27-0" title="Link to this heading">¶</a></h2>
+<p><em>Released on 2026-08-13 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.27.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.27.0/">PyPI</a></em></p>
+<h2>PettingZoo 1.27.0 release note</h2>
+<p>This release adds <code>RecordVideo</code> wrappers, a Gymnasium-style environment registry, pygame rendering for Hanabi, and <code>state()</code> support for the Pursuit environment.</p>
+<p>This release also removes the <code>gin_rummy</code> environment, drops support for Python 3.9, and deprecates the old environment creation API.</p>
+<h2>Breaking changes</h2>
+<ul>
+<li><code>gin_rummy</code> was removed from PettingZoo ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1397" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1397/hovercard">#1397</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4869248453" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1397" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1397/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1397">#1397</a>)).</li>
+<li>Support for Python 3.9 was removed ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1375" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1375/hovercard">#1375</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4751224426" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1375" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1375/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1375">#1375</a>)).</li>
+<li>The old environment creation API was deprecated in favor of the new environment registry ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1403" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1403/hovercard">#1403</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4928559870" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1403" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1403/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1403">#1403</a>)).</li>
+<li>Knights Archers Zombies was updated to v11 ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1297" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1297/hovercard">#1297</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3032066002" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1297" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1297/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1297">#1297</a>)).</li>
+</ul>
+<h2>New features and improvements</h2>
+<ul>
+<li><code>RecordVideo</code> wrappers were added ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1306" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1306/hovercard">#1306</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3349536514" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1306" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1306/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1306">#1306</a>)).</li>
+<li>A Gymnasium-style environment registry was added ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1388" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1388/hovercard">#1388</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4828932487" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1388" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1388/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1388">#1388</a>)).</li>
+<li>Pygame rendering was added to Hanabi ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1380" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1380/hovercard">#1380</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4810674181" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1380" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1380/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1380">#1380</a>)).</li>
+<li><code>state()</code> support was added to the Pursuit environment ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1342" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1342/hovercard">#1342</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4655318121" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1342" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1342/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1342">#1342</a>)).</li>
+<li>An evolved Knights Archers Zombies policy demo was added ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1384" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1384/hovercard">#1384</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4818099907" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1384" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1384/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1384">#1384</a>)).</li>
+<li>Environment startup was improved by replacing <code>pygame.init()</code> with per-subsystem initialization ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1343" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1343/hovercard">#1343</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4655709322" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1343" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1343/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1343">#1343</a>)).</li>
+<li>Drone Swarm RL (AirSim + Stable-Baselines3) was added to the third-party environments ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1406" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1406/hovercard">#1406</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4981043843" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1406" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1406/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1406">#1406</a>)).</li>
+</ul>
+<h2>Bug fixes</h2>
+<ul>
+<li>Environment registry IDs were normalized to use the <code>-v[version]</code> format ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1390" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1390/hovercard">#1390</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4837438440" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1390" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1390/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1390">#1390</a>)).</li>
+<li><code>parallel_api_test</code> was updated to accept action spaces with shapes other than <code>Discrete</code> ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1313" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1313/hovercard">#1313</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3588453435" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1313" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1313/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1313">#1313</a>)).</li>
+<li>Issues with the Custom Environment tutorial were fixed ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1324" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1324/hovercard">#1324</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3834580685" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1324" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1324/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1324">#1324</a>)).</li>
+<li>The Custom Environment tutorial action masks were fixed to use <code>np.int8</code> ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1339" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1339/hovercard">#1339</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4516377789" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1339" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1339/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1339">#1339</a>)).</li>
+<li>A broken pygame initialization test for Knights Archers Zombies was fixed ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1369" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1369/hovercard">#1369</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4742769455" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1369" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1369/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1369">#1369</a>)).</li>
+</ul>
+<h2>Documentation updates</h2>
+<ul>
+<li>Documentation and tutorials were updated to use the new environment registry ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1404" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1404/hovercard">#1404</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4931614830" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1404" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1404/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1404">#1404</a>)).</li>
+<li>MAgent and MPE users are now directed to MAgent2 and MPE2 on the documentation site ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1417" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1417/hovercard">#1417</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="5106272674" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1417" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1417/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1417">#1417</a>)).</li>
+<li>The Hanabi observation layout documentation was corrected ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1368" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1368/hovercard">#1368</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4742695848" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1368" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1368/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1368">#1368</a>)).</li>
+<li>Chip information in the Texas Hold'em environment documentation was clarified ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1316" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1316/hovercard">#1316</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3600470661" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1316" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1316/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1316">#1316</a>)).</li>
+<li>The third-party dilemmas environment documentation was updated ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1337" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1337/hovercard">#1337</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4512808842" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1337" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1337/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1337">#1337</a>)).</li>
+<li>The Stable-Baselines3 Connect Four documentation link was fixed ([<a href="https://github.com/Farama-Foundation/PettingZoo/pull/1325" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1325/hovercard">#1325</a>](<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3941595959" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1325" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1325/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1325">#1325</a>)).</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/teddytennant/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/teddytennant">@teddytennant</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4869248453" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1397" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1397/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1397">#1397</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/RewardGuard/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/RewardGuard">@RewardGuard</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4810674181" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1380" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1380/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1380">#1380</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/nightly/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/nightly">@nightly</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="3349536514" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1306" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1306/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1306">#1306</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/Lauqz/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/Lauqz">@Lauqz</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4981043843" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1406" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1406/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1406">#1406</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/tzh476/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/tzh476">@tzh476</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="4818099907" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/1384" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/1384/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/1384">#1384</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.26.1...1.27.0"><tt>1.26.1...1.27.0</tt></a></p></section>
 <section id="release-1-26-1">
 <h2>PettingZoo 1.26.1<a class="headerlink" href="#release-1-26-1" title="Link to this heading">¶</a></h2>
 <p><em>Released on 2026-04-27 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.26.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.26.1/">PyPI</a></em></p>
@@ -1219,6 +1269,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#release-1-27-0">PettingZoo 1.27.0</a></li>
 <li><a class="reference internal" href="#release-1-26-1">PettingZoo 1.26.1</a></li>
 <li><a class="reference internal" href="#release-1-26-0">PettingZoo 1.26.0</a></li>
 <li><a class="reference internal" href="#release-1-25-0">PettingZoo 1.25.0</a></li>
@@ -1346,10 +1397,10 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         })()
       </script>
 
-    <script src="../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../_static/documentation_options.js?v=a7653905"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -1410,14 +1461,6 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -1431,7 +1474,14 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -1447,8 +1497,6 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -1460,6 +1508,13 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -1504,7 +1559,14 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 

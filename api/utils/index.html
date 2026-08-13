@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Atari" href="../../environments/atari/" /><link rel="prev" title="Shimmy Compatibility Wrappers" href="../wrappers/shimmy_wrappers/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/utils.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
         <title>Utils - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -266,7 +266,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/classic/chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/classic/connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/classic/go/">Go</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/classic/hanabi/">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
@@ -281,6 +280,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../environments/sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments/magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments/mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -354,7 +355,7 @@
             <span>Back to top</span>
           </a>
           <div class="content-icon-container"><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/api/utils.md" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/main/docs/api/utils.md" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -393,7 +394,7 @@
 <span id="average-total-reward"></span><h2>Average Total Reward<a class="headerlink" href="#module-pettingzoo.utils.average_total_reward" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pettingzoo.utils.average_total_reward.average_total_reward">
-<span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.average_total_reward.</span></span><span class="sig-name descname"><span class="pre">average_total_reward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_episodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000000000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/average_total_reward/#average_total_reward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.average_total_reward.average_total_reward" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.average_total_reward.</span></span><span class="sig-name descname"><span class="pre">average_total_reward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_episodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000000000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/average_total_reward/#average_total_reward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.average_total_reward.average_total_reward" title="Link to this definition">¶</a></dt>
 <dd><p>Calculates the average total reward over the episodes for AEC environments.</p>
 <p>Runs an env object with random actions until either max_episodes or
 max_steps is reached.
@@ -403,9 +404,10 @@ games.</p>
 
 <p>The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.</p>
 <p>This value is important for establishing the simplest possible baseline: the random policy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">average_total_reward</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">average_total_reward</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">)</span>
 <span class="n">average_total_reward</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">max_episodes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">10000000000</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -419,9 +421,10 @@ games.</p>
 <dd></dd></dl>
 
 <p>If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no <code class="docutils literal notranslate"><span class="pre">agent</span></code> is specified, then the current selected agent for the environment is chosen. If <code class="docutils literal notranslate"><span class="pre">all_agents</span></code> is passed in as <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If <code class="docutils literal notranslate"><span class="pre">save_dir</span></code> is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_observation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly</span><span class="w"> </span><span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_observation</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">save_observation</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">all_agents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
@@ -591,7 +594,7 @@ games.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.utils.env_logger.EnvLogger.warn_action_out_of_bound">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">warn_action_out_of_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backup_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env_logger/#EnvLogger.warn_action_out_of_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env_logger.EnvLogger.warn_action_out_of_bound" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">warn_action_out_of_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backup_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env_logger/#EnvLogger.warn_action_out_of_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env_logger.EnvLogger.warn_action_out_of_bound" title="Link to this definition">¶</a></dt>
 <dd><p>Warns: <code class="docutils literal notranslate"><span class="pre">[WARNING]:</span> <span class="pre">Received</span> <span class="pre">an</span> <span class="pre">action</span> <span class="pre">{action}</span> <span class="pre">that</span> <span class="pre">was</span> <span class="pre">outside</span> <span class="pre">action</span> <span class="pre">space</span> <span class="pre">{action_space}.</span></code>.</p>
 </dd></dl>
 
@@ -813,10 +816,10 @@ games.</p>
         })()
       </script>
 
-    <script src="../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -877,14 +880,6 @@ games.</p>
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -898,7 +893,14 @@ games.</p>
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -914,8 +916,6 @@ games.</p>
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -927,6 +927,13 @@ games.</p>
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -971,7 +978,14 @@ games.</p>
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 

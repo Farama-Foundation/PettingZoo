@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Leduc Hold’em" href="../leduc_holdem/" /><link rel="prev" title="Go" href="../go/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/environments/classic/hanabi.html" />
 
-    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
         <title>Hanabi - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=82c8b628" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast.css?v=9fbfb63d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/celshast-extensions.css?v=42bfddca" />
     
     
 
@@ -266,7 +266,6 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../">Classic</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Classic</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../chess/">Chess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../connect_four/">Connect Four</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../gin_rummy/">Gin Rummy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../go/">Go</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hanabi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../leduc_holdem/">Leduc Hold’em</a></li>
@@ -281,6 +280,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../sisl/pursuit/">Pursuit</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../magent/">MAgent (moved to MAgent2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpe/">MPE (moved to MPE2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -388,8 +389,8 @@
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">hanabi_v5</span></code></p></th>
+<tr class="row-odd"><th class="head"><p>Creation</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;classic/hanabi-v5&quot;)</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -430,8 +431,10 @@ played card does not satisfy these conditions, a life token is placed. The game 
 <section id="environment-arguments">
 <h2>Environment arguments<a class="headerlink" href="#environment-arguments" title="Link to this heading">¶</a></h2>
 <p>Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hanabi_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hand_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_information_tokens</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-<span class="n">max_life_tokens</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">observation_type</span><span class="o">=</span><span class="s1">&#39;minimal&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+
+<span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hand_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="n">max_information_tokens</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_life_tokens</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">observation_type</span><span class="o">=</span><span class="s2">&quot;minimal&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">colors</span></code>: Number of colors the cards can take (affects size of deck)</p>
@@ -448,14 +451,16 @@ played card does not satisfy these conditions, a life token is placed. The game 
 <section id="observation-space">
 <h2>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">¶</a></h2>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
-<p>The main observation space of an agent is a 658 sized vector representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. The observation vector contains the following features, life tokens,
-information tokens, number of players, deck size, formed fireworks, legal moves, observed hands, discard pile, the hints received from other players, which are then serialized into a bit string.</p>
-<p>Each card is encoded with a 25 bit one-hot vector, where the encoding of a card is equal to its color*T + rank, where T is the max possible rank. By default this value is 5. The maximum deck size is 50. The remaining deck size is represented with unary encoding. The state of each colored
-firework is represented with a one-hot encoding. The information tokens remaining are represented with a unary encoding. The life tokens remaining are represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card. That is the
-least significant bit being set to 1 indicates the lowest rank card of that color has been discarded.</p>
-<p>As players reveal info about their cards, the information revealed per card is also observed. The first 25 bits represent whether or not that specific card could be a specific color. For example if the card could only be red, then the first 25 bits of the observed revealed info would be 11111
-followed by 20 zeros. The next 5 bits store whether the color of that card was explicitly revealed, so if the card was revealed to be red, then the next 5 bits would be 10000. Finally the last 5 bits are the revealed rank of the card. So if the card was revealed to be of rank 1, then the next 5
-bits would be 10000. These 25 bits are tracked and observed for all cards in each player’s hand.</p>
+<p>The main observation space of an agent is a 658 sized vector (for the default 2-player full game) representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. Since v5 the observation is produced by
+OpenSpiel’s canonical Hanabi encoder (via Shimmy), so its layout — and the index ranges in the table below — depend on the chosen configuration (<code class="docutils literal notranslate"><span class="pre">colors</span></code>, <code class="docutils literal notranslate"><span class="pre">ranks</span></code>, <code class="docutils literal notranslate"><span class="pre">players</span></code>, <code class="docutils literal notranslate"><span class="pre">hand_size</span></code>, <code class="docutils literal notranslate"><span class="pre">max_information_tokens</span></code>, <code class="docutils literal notranslate"><span class="pre">max_life_tokens</span></code>). The table below is for the default configuration
+(<code class="docutils literal notranslate"><span class="pre">colors=5,</span> <span class="pre">ranks=5,</span> <span class="pre">players=2,</span> <span class="pre">hand_size=5,</span> <span class="pre">max_information_tokens=8,</span> <span class="pre">max_life_tokens=3</span></code>).</p>
+<p>Each card is encoded with a <code class="docutils literal notranslate"><span class="pre">colors*ranks</span></code> bit one-hot vector (25 bits by default), where the index of the set bit is <code class="docutils literal notranslate"><span class="pre">color*ranks</span> <span class="pre">+</span> <span class="pre">rank</span></code>. The remaining deck size is represented with a unary encoding whose length is <code class="docutils literal notranslate"><span class="pre">max_deck_size</span> <span class="pre">-</span> <span class="pre">players*hand_size</span></code> (40 bits by default, since the
+<code class="docutils literal notranslate"><span class="pre">players*hand_size</span></code> cards dealt at the start can never be in the deck — note this is <em>not</em> the full deck size of 50). The state of each colored firework is represented with a one-hot encoding of the highest rank played (all-zero if no card of that color has been played yet). The information
+tokens remaining and the life tokens remaining are each represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card, that is the least significant bit being set to 1 indicates the lowest rank card of that color has been
+discarded.</p>
+<p>As players reveal info about their cards, the information revealed per card is also observed (the “card knowledge” section). Each card uses <code class="docutils literal notranslate"><span class="pre">colors*ranks</span> <span class="pre">+</span> <span class="pre">colors</span> <span class="pre">+</span> <span class="pre">ranks</span></code> bits (35 by default). The first <code class="docutils literal notranslate"><span class="pre">colors*ranks</span></code> bits represent whether or not that specific card could still be a specific
+color/rank given the hints received. The next <code class="docutils literal notranslate"><span class="pre">colors</span></code> bits store whether the color of that card was explicitly revealed, so if the card was revealed to be red, then these bits would be 10000. Finally the last <code class="docutils literal notranslate"><span class="pre">ranks</span></code> bits are the revealed rank of the card. So if the card was revealed to be of
+rank 1, then these bits would be 10000. These bits are tracked and observed for every card in every player’s hand (this player first, then the others).</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -465,132 +470,128 @@ bits would be 10000. These 25 bits are tracked and observed for all cards in eac
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-center"><p>0 - 24</p></td>
-<td><p>Vector of Card 1 in other player’s hand</p></td>
+<tr class="row-even"><td class="text-center"><p>0-124</p></td>
+<td><p>Other player’s hand: 5 cards × 25-bit one-hot</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>25 - 49</p></td>
-<td><p>Vector of Card 2 in other player’s hand</p></td>
+<tr class="row-odd"><td class="text-center"><p>125-126</p></td>
+<td><p>Per-player flag set when that player’s hand is missing a card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>50 - 74</p></td>
-<td><p>Vector of Card 3 in other player’s hand</p></td>
+<tr class="row-even"><td class="text-center"><p>127-166</p></td>
+<td><p>Unary Encoding of Remaining Deck Size (max_deck − players×hand)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>75 -100</p></td>
-<td><p>Vector of Card 4 in other player’s hand</p></td>
-<td class="text-center"><p>[0, 1]</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>100-124</p></td>
-<td><p>Vector of Card 5 in other player’s hand</p></td>
-<td class="text-center"><p>[0, 1]</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>125-174</p></td>
-<td><p>Unary Encoding of Remaining Deck Size</p></td>
-<td class="text-center"><p>[0, 1]</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>175-179</p></td>
+<tr class="row-odd"><td class="text-center"><p>167-171</p></td>
 <td><p>Vector of Red Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>180-184</p></td>
+<tr class="row-even"><td class="text-center"><p>172-176</p></td>
 <td><p>Vector of Yellow Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>185-189</p></td>
+<tr class="row-odd"><td class="text-center"><p>177-181</p></td>
 <td><p>Vector of Green Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>190-195</p></td>
+<tr class="row-even"><td class="text-center"><p>182-186</p></td>
 <td><p>Vector of White Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>195-199</p></td>
+<tr class="row-odd"><td class="text-center"><p>187-191</p></td>
 <td><p>Vector of Blue Firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>200-207</p></td>
+<tr class="row-even"><td class="text-center"><p>192-199</p></td>
 <td><p>Unary Encoding of Remaining Info Tokens</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>208-210</p></td>
+<tr class="row-odd"><td class="text-center"><p>200-202</p></td>
 <td><p>Unary Encoding of Remaining Life Tokens</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>211-260</p></td>
+<tr class="row-even"><td class="text-center"><p>203-252</p></td>
 <td><p>Thermometer Encoding of Discard Pile</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>261-262</p></td>
-<td><p>One-Hot Encoding of Previous Player ID</p></td>
+<tr class="row-odd"><td class="text-center"><p>253-254</p></td>
+<td><p>Last action: Acting Player (relative offset, one-hot)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>263-266</p></td>
-<td><p>Vector of Previous Player’s Action Type</p></td>
+<tr class="row-even"><td class="text-center"><p>255-258</p></td>
+<td><p>Last action: Move Type (play / discard / reveal color / rank)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>267-268</p></td>
-<td><p>Vector of Target from Previous Action</p></td>
+<tr class="row-odd"><td class="text-center"><p>259-260</p></td>
+<td><p>Last action: Target Player of a reveal (relative offset)</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>269-273</p></td>
-<td><p>Vector of the Color Revealed in Last Action</p></td>
+<tr class="row-even"><td class="text-center"><p>261-265</p></td>
+<td><p>Last action: Color Revealed</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>274-278</p></td>
-<td><p>Vector of the Rank Revealed in Last Action</p></td>
+<tr class="row-odd"><td class="text-center"><p>266-270</p></td>
+<td><p>Last action: Rank Revealed</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>279-280</p></td>
-<td><p>Vector of Which Cards in the Hand were Revealed</p></td>
+<tr class="row-even"><td class="text-center"><p>271-275</p></td>
+<td><p>Last action: Which Cards in the Hand were Revealed</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>281-282</p></td>
-<td><p>Position of the Card that was played or dropped</p></td>
+<tr class="row-odd"><td class="text-center"><p>276-280</p></td>
+<td><p>Last action: Position of the Card that was played or discarded</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>283-307</p></td>
-<td><p>Vector Representing Card that was last played</p></td>
+<tr class="row-even"><td class="text-center"><p>281-305</p></td>
+<td><p>Last action: Vector Representing the Card that was played/discarded</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>308-342</p></td>
-<td><p>Revealed Info of This Player’s 0th Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>306-306</p></td>
+<td><p>Last action: Whether the played card was added to a firework</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>343-377</p></td>
-<td><p>Revealed Info of This Player’s 1st Card</p></td>
+<tr class="row-even"><td class="text-center"><p>307-307</p></td>
+<td><p>Last action: Whether an info token was added</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>378-412</p></td>
-<td><p>Revealed Info of This Player’s 2nd Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>308-342</p></td>
+<td><p>Card Knowledge of This Player’s 0th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>413-447</p></td>
-<td><p>Revealed Info of This Player’s 3rd Card</p></td>
+<tr class="row-even"><td class="text-center"><p>343-377</p></td>
+<td><p>Card Knowledge of This Player’s 1st Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>445-482</p></td>
-<td><p>Revealed Info of This Player’s 4th Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>378-412</p></td>
+<td><p>Card Knowledge of This Player’s 2nd Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>483-517</p></td>
-<td><p>Revealed Info of Other Player’s 0th Card</p></td>
+<tr class="row-even"><td class="text-center"><p>413-447</p></td>
+<td><p>Card Knowledge of This Player’s 3rd Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>518-552</p></td>
-<td><p>Revealed Info of Other Player’s 1st Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>448-482</p></td>
+<td><p>Card Knowledge of This Player’s 4th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>553-587</p></td>
-<td><p>Revealed Info of Other Player’s 2nd Card</p></td>
+<tr class="row-even"><td class="text-center"><p>483-517</p></td>
+<td><p>Card Knowledge of Other Player’s 0th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>588-622</p></td>
-<td><p>Revealed Info of Other Player’s 3rd Card</p></td>
+<tr class="row-odd"><td class="text-center"><p>518-552</p></td>
+<td><p>Card Knowledge of Other Player’s 1st Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>663-657</p></td>
-<td><p>Revealed Info of Other Player’s 4th Card</p></td>
+<tr class="row-even"><td class="text-center"><p>553-587</p></td>
+<td><p>Card Knowledge of Other Player’s 2nd Card</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>588-622</p></td>
+<td><p>Card Knowledge of Other Player’s 3rd Card</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>623-657</p></td>
+<td><p>Card Knowledge of Other Player’s 4th Card</p></td>
 <td class="text-center"><p>[0, 1]</p></td>
 </tr>
 </tbody>
@@ -687,10 +688,17 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 <p>At the end of the game, the total score would be 2 + 1 + 3 = 6</p>
 <p>If an illegal action is taken, the game terminates and the one player that took the illegal action loses. Like an ordinary loss, their final reward will be the negation of all reward received so far. The reward of the other players will not be affected by the illegal action.</p>
 </section>
+<section id="rendering">
+<h2>Rendering<a class="headerlink" href="#rendering" title="Link to this heading">¶</a></h2>
+<p>Hanabi supports <code class="docutils literal notranslate"><span class="pre">human</span></code> and <code class="docutils literal notranslate"><span class="pre">rgb_array</span></code> render modes. In both modes the board
+is drawn with pygame: the fireworks piles, every player’s hand (the player
+whose turn it is is highlighted), the remaining info and life tokens, the deck
+size, and the discard pile.</p>
+</section>
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility (1.23.0)</p></li>
+<li><p>v5: Switched environment to depend on OpenSpiel (using Shimmy) for future compatibility, and replaced the <code class="docutils literal notranslate"><span class="pre">ansi</span></code> text rendering with pygame (<code class="docutils literal notranslate"><span class="pre">human</span></code>/<code class="docutils literal notranslate"><span class="pre">rgb_array</span></code>) rendering (1.23.0)</p></li>
 <li><p>v4: Fixed bug in arbitrary calls to observe() (1.8.0)</p></li>
 <li><p>v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)</p></li>
 <li><p>v2: Fixed default parameters (1.4.2)</p></li>
@@ -702,9 +710,9 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="aec">
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.classic</span><span class="w"> </span><span class="kn">import</span> <span class="n">hanabi_v5</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">hanabi_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -819,8 +827,11 @@ or any other resources that should be released.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.render">
 <span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.render" title="Link to this definition">¶</a></dt>
-<dd><p>Prints player’s data.</p>
-<p>Supports console print only.</p>
+<dd><p>Renders the current game state.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;human&quot;</span></code>: draws the board to a window using pygame.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;rgb_array&quot;</span></code>: returns the rendered board as an <code class="docutils literal notranslate"><span class="pre">(H,</span> <span class="pre">W,</span> <span class="pre">3)</span></code> array.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
@@ -839,7 +850,7 @@ or any other resources that should be released.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.step" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.step" title="Link to this definition">¶</a></dt>
 <dd><p>Advances the environment by one step. Action must be within self.legal_moves, otherwise throws error.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -934,6 +945,7 @@ or any other resources that should be released.</p>
 </li>
 <li><a class="reference internal" href="#action-space">Action Space</a></li>
 <li><a class="reference internal" href="#rewards">Rewards</a></li>
+<li><a class="reference internal" href="#rendering">Rendering</a></li>
 <li><a class="reference internal" href="#version-history">Version History</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#aec">AEC</a></li>
@@ -1039,10 +1051,10 @@ or any other resources that should be released.</p>
         })()
       </script>
 
-    <script src="../../../_static/documentation_options.js?v=4a503e8d"></script>
+    <script src="../../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/furo.js?v=7660844c"></script>
+    <script src="../../../_static/scripts/celshast.js?v=a788a8c6"></script>
     
     <script>
 
@@ -1103,14 +1115,6 @@ or any other resources that should be released.</p>
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -1124,7 +1128,14 @@ or any other resources that should be released.</p>
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -1140,8 +1151,6 @@ or any other resources that should be released.</p>
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -1153,6 +1162,13 @@ or any other resources that should be released.</p>
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -1197,7 +1213,14 @@ or any other resources that should be released.</p>
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 
