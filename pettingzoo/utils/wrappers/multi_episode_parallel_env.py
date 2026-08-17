@@ -26,11 +26,20 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
         Args:
             env (AECEnv): the base environment
             num_episodes (int): the number of episodes to run the underlying environment
+
+        Raises:
+            ValueError: If ``num_episodes`` is less than one.
         """
         super().__init__(env)
         assert isinstance(env, ParallelEnv), (
             "MultiEpisodeEnv is only compatible with ParallelEnv environments."
         )
+
+        # `_episodes_elapsed` starts at one, so any value below one compares
+        # equal to a single episode and the wrapper silently runs one episode
+        # instead of the number asked for.
+        if num_episodes < 1:
+            raise ValueError(f"`num_episodes` must be at least 1, got {num_episodes}.")
 
         self._num_episodes = num_episodes
 

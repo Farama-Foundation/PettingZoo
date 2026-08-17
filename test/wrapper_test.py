@@ -74,6 +74,24 @@ def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
     )
 
 
+@pytest.mark.parametrize("num_episodes", [0, -1, -100])
+def test_multi_episode_env_rejects_non_positive_num_episodes(num_episodes: int) -> None:
+    """A wrapper asked for zero or fewer episodes still runs exactly one.
+
+    ``_episodes_elapsed`` starts at one, so the comparison against
+    ``num_episodes`` is already satisfied at the first episode boundary and the
+    request is silently ignored instead of reported.
+
+    Args:
+        num_episodes: a value that cannot describe a number of episodes
+    """
+    with pytest.raises(ValueError, match="must be at least 1"):
+        MultiEpisodeEnv(tictactoe_v3.env(), num_episodes=num_episodes)
+
+    with pytest.raises(ValueError, match="must be at least 1"):
+        MultiEpisodeParallelEnv(pistonball_v6.parallel_env(), num_episodes=num_episodes)
+
+
 def _do_game(env: TerminateIllegalWrapper, seed: int) -> None:
     """Run a single game with reproducible random moves."""
     assert isinstance(env, TerminateIllegalWrapper), (
