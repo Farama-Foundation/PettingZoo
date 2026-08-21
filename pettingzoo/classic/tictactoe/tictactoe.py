@@ -72,12 +72,12 @@ If the game ends in a draw, both players will receive a reward of 0.
 from __future__ import annotations
 
 import os
+from typing import Any
 
 import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
-from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.tictactoe.board import TTT_GAME_NOT_OVER, TTT_TIE, Board
@@ -110,7 +110,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv, EzPickle):
+class raw_env(AECEnv):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "tictactoe_v3",
@@ -122,7 +122,6 @@ class raw_env(AECEnv, EzPickle):
         self, render_mode: str | None = None, screen_height: int | None = 1000
     ):
         super().__init__()
-        EzPickle.__init__(self, render_mode, screen_height)
         self.board = Board()
 
         self.agents = ["player_1", "player_2"]
@@ -153,6 +152,20 @@ class raw_env(AECEnv, EzPickle):
         self.screen_height = screen_height
         self.screen = None
 
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
+
+    def __getstate__(self) -> dict[str, Any]:
+        """Return environment state without process-local rendering resources."""
+        state = self.__dict__.copy()
+        state.pop("clock", None)
+        state["screen"] = None
+        return state
+
+    def __setstate__(self, state: dict[str, Any]) -> None:
+        """Restore environment state and recreate rendering resources lazily."""
+        self.__dict__.update(state)
+        self.screen = None
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
@@ -230,17 +243,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
-        if self.render_mode is not None and self.screen is None:
-            pygame.font.init()
-
-        if self.render_mode == "human":
-            pygame.display.init()
-            self.screen = pygame.display.set_mode(
-                (self.screen_height, self.screen_height)
-            )
-            pygame.display.set_caption("Tic-Tac-Toe")
-        elif self.render_mode == "rgb_array":
-            self.screen = pygame.Surface((self.screen_height, self.screen_height))
+        self._initialize_rendering(force=True)
 
     def close(self):
         pass
@@ -251,6 +254,8 @@ class raw_env(AECEnv, EzPickle):
                 "You are calling render method without specifying any render mode."
             )
             return None
+
+        self._initialize_rendering()
 
         screen_height = self.screen_height
         screen_width = self.screen_height
@@ -307,3 +312,18 @@ class raw_env(AECEnv, EzPickle):
             if self.render_mode == "rgb_array"
             else None
         )
+
+    def _initialize_rendering(self, force: bool = False) -> None:
+        """Create rendering resources when reset or after deserialization."""
+        if self.render_mode is None or (self.screen is not None and not force):
+            return
+
+        pygame.font.init()
+        if self.render_mode == "human":
+            pygame.display.init()
+            self.screen = pygame.display.set_mode(
+                (self.screen_height, self.screen_height)
+            )
+            pygame.display.set_caption("Tic-Tac-Toe")
+        elif self.render_mode == "rgb_array":
+            self.screen = pygame.Surface((self.screen_height, self.screen_height))
