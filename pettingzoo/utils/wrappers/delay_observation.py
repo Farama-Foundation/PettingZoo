@@ -74,7 +74,7 @@ class DelayObservation(BaseWrapper[AgentID, ObsType, ActionType]):
 
         if len(observation_queue) > self.delay:
             return observation_queue.popleft()
-        return cast(ObsType, _create_initial_observation(self.observation_space(agent)))
+        return _create_initial_observation(self.observation_space(agent))
 
     def _update_selected_agent_observation(self) -> None:
         if not self.agents:
@@ -113,7 +113,7 @@ class DelayObservation(BaseWrapper[AgentID, ObsType, ActionType]):
         observation = super().observe(agent)
         if observation is None:
             return None
-        return cast(ObsType, _create_initial_observation(self.observation_space(agent)))
+        return _create_initial_observation(self.observation_space(agent))
 
 
 class DelayObservationParallel(BaseParallelWrapper[AgentID, ObsType, ActionType]):
@@ -144,7 +144,7 @@ class DelayObservationParallel(BaseParallelWrapper[AgentID, ObsType, ActionType]
 
         if len(observation_queue) > self.delay:
             return observation_queue.popleft()
-        return cast(ObsType, _create_initial_observation(self.observation_space(agent)))
+        return _create_initial_observation(self.observation_space(agent))
 
     @override
     def reset(
