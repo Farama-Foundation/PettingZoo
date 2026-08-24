@@ -100,9 +100,12 @@ while parallel_env.agents:
 ```
 
 ```{eval-rst}
-.. warning::
+.. note::
 
-    Included PettingZoo wrappers currently do not support parallel environments, to use them you must convert your environment to AEC, apply the wrapper, and convert back to parallel.
+    Wrappers are specific to either the AEC or Parallel API unless documented
+    otherwise. Parallel variants use a ``Parallel`` suffix, such as
+    :class:`AgentIndicatorParallel`. To apply an AEC-only wrapper to a Parallel
+    environment, convert it to AEC, apply the wrapper, and convert it back.
 ```
 ```python
 from pettingzoo import make
@@ -129,5 +132,7 @@ while parallel_env.agents:
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: AgentIndicator
+.. autoclass:: AgentIndicatorParallel
 
 ```

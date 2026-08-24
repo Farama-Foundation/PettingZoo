@@ -1,3 +1,7 @@
+from pettingzoo.utils.wrappers.agent_indicator import (
+    AgentIndicator,
+    AgentIndicatorParallel,
+)
 from pettingzoo.utils.wrappers.assert_out_of_bounds import AssertOutOfBoundsWrapper
 from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
@@ -11,6 +15,8 @@ from pettingzoo.utils.wrappers.record_video_parallel import RecordVideoParallel
 from pettingzoo.utils.wrappers.terminate_illegal import TerminateIllegalWrapper
 
 __all__ = [
+    "AgentIndicator",
+    "AgentIndicatorParallel",
     "AssertOutOfBoundsWrapper",
     "BaseParallelWrapper",
     "BaseWrapper",
