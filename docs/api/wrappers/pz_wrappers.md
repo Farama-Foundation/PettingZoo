@@ -129,6 +129,8 @@ while parallel_env.agents:
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: ColorReductionObservation
+.. autoclass:: ColorReductionObservationParallel
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
 
