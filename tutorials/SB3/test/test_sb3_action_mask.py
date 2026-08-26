@@ -22,12 +22,13 @@ EASY_ENVS = [
 # More difficult environments which will likely take more training time
 MEDIUM_ENVS = [
     "classic/hanabi-v5",  # even with 10x as many steps, total score seems to always be tied between the two agents
-    "classic/texas_holdem-v4",  # this performs poorly with updates to SB3 wrapper
+    "classic/texas_holdem-v5",  # this performs poorly with updates to SB3 wrapper
     "classic/chess-v6",  # difficult to train because games take so long, performance varies heavily
 ]
 
-if find_spec("pyspiel") is None:  # Hanabi needs open_spiel (Python >= 3.11)
-    MEDIUM_ENVS = [e for e in MEDIUM_ENVS if e != "classic/hanabi-v5"]
+if find_spec("pyspiel") is None:  # OpenSpiel requires Python >= 3.11
+    openspiel_envs = {"classic/hanabi-v5", "classic/texas_holdem-v5"}
+    MEDIUM_ENVS = [e for e in MEDIUM_ENVS if e not in openspiel_envs]
 
 # Most difficult environments to train agents for (and longest games
 # TODO: test board_size to see if smaller go board is more easily solvable

@@ -43,7 +43,7 @@ from pettingzoo.classic import (
     leduc_holdem_v4,
     rps_v2,
     texas_holdem_no_limit_v6,
-    texas_holdem_v4,
+    texas_holdem_v5,
     tictactoe_v3,
 )
 from pettingzoo.sisl import multiwalker_v9, pursuit_v5
@@ -132,8 +132,9 @@ parameterized_envs = [
         },
     ],
     ["classic/leduc_holdem_v4", leduc_holdem_v4, {}],
-    ["classic/texas_holdem_v4", texas_holdem_v4, {"num_players": 3}],
-    ["classic/texas_holdem_v4", texas_holdem_v4, {"num_players": 4}],
+    ["classic/texas_holdem_v5", texas_holdem_v5, {}],
+    ["classic/texas_holdem_v5", texas_holdem_v5, {"num_players": 3}],
+    ["classic/texas_holdem_v5", texas_holdem_v5, {"num_players": 4}],
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, {}],
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, {"num_players": 3}],
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, {"num_players": 4}],
@@ -244,8 +245,9 @@ parameterized_envs = [
 ]
 
 
-if find_spec("pyspiel") is None:  # open_spiel (Hanabi) is unavailable on Python < 3.11
-    parameterized_envs = [e for e in parameterized_envs if "hanabi" not in e[0]]
+if find_spec("pyspiel") is None:  # OpenSpiel is unavailable on Python < 3.11
+    openspiel_envs = {"classic/hanabi_v5", "classic/texas_holdem_v5"}
+    parameterized_envs = [e for e in parameterized_envs if e[0] not in openspiel_envs]
 
 
 @pytest.mark.parametrize(["name", "env_module", "kwargs"], parameterized_envs)

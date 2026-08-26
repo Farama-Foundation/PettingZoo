@@ -9,17 +9,17 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Creation           | `make("aec", "classic/texas_holdem-v4")`         |
+| Creation           | `make("aec", "classic/texas_holdem-v5")`         |
 |--------------------|--------------------------------------------------|
 | Actions            | Discrete                                         |
-| Parallel API       | Yes                                              |
+| Parallel API       | No                                               |
 | Manual Control     | No                                               |
 | Agents             | `agents= ['player_0', 'player_1']`               |
 | Agents             | 2                                                |
-| Action Shape       | Discrete(4)                                      |
-| Action Values      | Discrete(4)                                      |
-| Observation Shape  | (72,)                                            |
-| Observation Values | [0, 1]                                           |
+| Action Shape       | Discrete(3)                                      |
+| Action Values      | Discrete(3)                                      |
+| Observation Shape  | (108,)                                           |
+| Observation Values | [0, 48]                                          |
 
 
 ## Arguments
@@ -27,27 +27,30 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 ```python
 from pettingzoo import make
 
-make("aec", "classic/texas_holdem-v4", num_players=2)
+make("aec", "classic/texas_holdem-v5", num_players=2)
 ```
 
-`num_players`: Sets the number of players in the game. Minimum is 2.
+`num_players`: Sets the number of players in the game. The supported range is 2
+to 4.
+
+The game logic is provided by OpenSpiel's `universal_poker` implementation via
+Shimmy. OpenSpiel requires Python 3.11 or newer.
 
 ### Observation Space
 
 The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-The main observation space is a vector of 72 boolean integers. The first 52 entries depict the current player's hand plus any community cards as follows
+The main observation is OpenSpiel's canonical poker observation tensor. Its
+length is `104 + 2 * num_players`, or 108 for the default two-player game.
+Cards use a 52-bit, rank-major encoding ordered as `2c, 2d, 2h, 2s, ...,
+Ac, Ad, Ah, As`.
 
-|  Index  | Description                                                 |
-|:-------:|-------------------------------------------------------------|
-|  0 - 12 | Spades<br>_`0`: A, `1`: 2, ..., `12`: K_                    |
-| 13 - 25 | Hearts<br>_`13`: A, `14`: 2, ..., `25`: K_                  |
-| 26 - 38 | Diamonds<br>_`26`: A, `27`: 2, ..., `38`: K_                |
-| 39 - 51 | Clubs<br>_`39`: A, `40`: 2, ..., `51`: K_                   |
-| 52 - 56 | Chips raised in Round 1<br>_`52`: 0, `53`: 1, ..., `56`: 4_ |
-| 57 - 61 | Chips raised in Round 2<br>_`57`: 0, `58`: 1, ..., `61`: 4_ |
-| 62 - 66 | Chips raised in Round 3<br>_`62`: 0, `63`: 1, ..., `66`: 4_ |
-| 67 - 71 | Chips raised in Round 4<br>_`67`: 0, `68`: 1, ..., `71`: 4_ |
+| Index | Description |
+|:-----:|-------------|
+| `0` to `n-1` | One-hot encoding of the observing player |
+| `n` to `n+51` | The observing player's two private cards |
+| `n+52` to `n+103` | The public community cards |
+| `n+104` to `n+103+n` | Each player's total contribution to the pot |
 
 #### Legal Actions Mask
 
@@ -58,10 +61,9 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 | Action ID | Action |
 |:---------:|--------|
-|     0     | Call   |
-|     1     | Raise  |
-|     2     | Fold   |
-|     3     | Check  |
+|     0     | Fold      |
+|     1     | Check/Call |
+|     2     | Bet/Raise  |
 
 ### Rewards
 
@@ -71,6 +73,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 ### Version History
 
+* v5: Switched the backend from RLCard to OpenSpiel via Shimmy (1.28.0)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
@@ -81,14 +84,16 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 from __future__ import annotations
 
+import json
 import os
 
 import gymnasium
 import numpy as np
 import pygame
-from gymnasium.utils import EzPickle
+from gymnasium import spaces
+from gymnasium.utils import EzPickle, seeding
 
-from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
+from pettingzoo import AECEnv
 from pettingzoo.classic.rlcard_envs.rlcard_utils import (
     calculate_height,
     calculate_offset,
@@ -109,16 +114,16 @@ def env(**kwargs):
     return env
 
 
-class raw_env(RLCardBase, EzPickle):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "texas_holdem_v4",
+        "name": "texas_holdem_v5",
         "is_parallelizable": False,
         "render_fps": 1,
     }
 
-    game_name = "limit-holdem"
-    obs_shape = (72,)
+    game_name = "universal_poker"
+    reward_scale = 0.5
 
     def __init__(
         self,
@@ -127,13 +132,163 @@ class raw_env(RLCardBase, EzPickle):
         screen_height: int | None = 1000,
     ):
         EzPickle.__init__(self, num_players, render_mode, screen_height)
-        super().__init__(self.game_name, num_players, self.obs_shape)
+        AECEnv.__init__(self)
+
+        if not 2 <= num_players <= 4:
+            raise ValueError(
+                "Texas Hold'em supports between 2 and 4 players when using "
+                "OpenSpiel's universal_poker backend."
+            )
+
+        try:
+            from shimmy.openspiel_compatibility import OpenSpielCompatibilityV0
+        except ImportError as e:
+            raise ImportError(
+                "Texas Hold'em depends on OpenSpiel via Shimmy, which requires "
+                "Python >= 3.11. Install it with: pip install open_spiel"
+            ) from e
+
+        self.num_players = num_players
+        self.np_random, self.np_random_seed = seeding.np_random(None)
+        self._config = self._game_config(small_blind=0)
+        self.texas_holdem_env = OpenSpielCompatibilityV0(
+            game_name=self.game_name, render_mode=None, config=self._config
+        )
+        self.possible_agents = self.texas_holdem_env.possible_agents
+        self.action_spaces = {
+            agent: self.texas_holdem_env.action_space(agent)
+            for agent in self.possible_agents
+        }
+        self.observation_spaces = {
+            agent: spaces.Dict(
+                {
+                    "observation": self.texas_holdem_env.observation_space(agent),
+                    "action_mask": spaces.Box(
+                        low=0,
+                        high=1,
+                        shape=(self.texas_holdem_env.action_space(agent).n,),
+                        dtype=np.int8,
+                    ),
+                }
+            )
+            for agent in self.possible_agents
+        }
+
+        assert render_mode is None or render_mode in self.metadata["render_modes"], (
+            f"{render_mode} is not a valid render mode. Available modes are: "
+            f"{self.metadata['render_modes']}"
+        )
         self.render_mode = render_mode
         self.screen_height = screen_height
         self.caption = "Texas Hold'em"
+        self.screen = None
 
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
+
+    def _game_config(self, small_blind: int) -> dict:
+        """Build a standard fixed-limit Texas Hold'em OpenSpiel configuration."""
+        big_blind = (small_blind + 1) % self.num_players
+        preflop_first = (big_blind + 1) % self.num_players
+        postflop_first = big_blind if self.num_players == 2 else small_blind
+
+        blinds = [0] * self.num_players
+        blinds[small_blind] = 1
+        blinds[big_blind] = 2
+
+        return {
+            "betting": "limit",
+            "bettingAbstraction": "fcpa",
+            "numPlayers": self.num_players,
+            "numRounds": 4,
+            "blind": " ".join(str(blind) for blind in blinds),
+            # Although ignored for limit poker, OpenSpiel's ACPC parser expects
+            # one stack entry per player for some player counts.
+            "stack": " ".join("1200" for _ in range(self.num_players)),
+            "raiseSize": "2 2 4 4",
+            "firstPlayer": (
+                f"{preflop_first + 1} "
+                f"{postflop_first + 1} "
+                f"{postflop_first + 1} "
+                f"{postflop_first + 1}"
+            ),
+            # Match OpenSpiel's canonical HULH definition. The big blind
+            # occupies the first pre-flop bet, leaving three raises there.
+            "maxRaises": "3 4 4 4",
+            "numSuits": 4,
+            "numRanks": 13,
+            "numHoleCards": 2,
+            "numBoardCards": "0 3 1 1",
+        }
+
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
+    def observe(self, agent):
+        observation = self.texas_holdem_env.observe(agent)
+        action_mask = self.infos.get(agent, {}).get("action_mask")
+        if action_mask is None:
+            action_mask = np.zeros(self.action_space(agent).n, dtype=np.int8)
+        return {"observation": observation, "action_mask": action_mask}
+
+    def reset(self, seed=None, options=None):
+        if seed is not None:
+            self.np_random, self.np_random_seed = seeding.np_random(seed)
+
+        small_blind = int(self.np_random.integers(self.num_players))
+        openspiel_seed = int(self.np_random.integers(np.iinfo(np.int32).max))
+        self._config = self._game_config(small_blind)
+        self.texas_holdem_env.config = self._config
+        self.texas_holdem_env.reset(seed=openspiel_seed)
+
+        self.agents = self.possible_agents[:]
+        self.agent_selection = self.texas_holdem_env.agent_selection
+        self.rewards = dict.fromkeys(self.agents, 0.0)
+        self._cumulative_rewards = dict.fromkeys(self.agents, 0.0)
+        self.terminations = dict(self.texas_holdem_env.terminations)
+        self.truncations = dict(self.texas_holdem_env.truncations)
+        self.infos = dict(self.texas_holdem_env.infos)
+
+    def step(self, action):
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
+
+        acting_agent = self.agent_selection
+        self._cumulative_rewards[acting_agent] = 0
+        self.texas_holdem_env.step(action)
+
+        self.agent_selection = self.texas_holdem_env.agent_selection
+        self.rewards = {
+            agent: self.texas_holdem_env.rewards[agent] * self.reward_scale
+            for agent in self.agents
+        }
+        self.terminations = {
+            agent: self.texas_holdem_env.terminations[agent] for agent in self.agents
+        }
+        self.truncations = {
+            agent: self.texas_holdem_env.truncations[agent] for agent in self.agents
+        }
+        self.infos = {
+            agent: self.texas_holdem_env.infos[agent] for agent in self.agents
+        }
+        self._accumulate_rewards()
+
+        if self.render_mode == "human":
+            self.render()
+
+    @staticmethod
+    def _parse_openspiel_cards(cards: str) -> list[str]:
+        """Convert concatenated OpenSpiel cards (Qc7h) to image names (CQ, H7)."""
+        return [
+            f"{cards[index + 1].upper()}{cards[index].upper()}"
+            for index in range(0, len(cards), 2)
+        ]
 
     def render(self):
         if self.render_mode is None:
@@ -141,6 +296,19 @@ class raw_env(RLCardBase, EzPickle):
                 "You are calling render method without specifying any render mode."
             )
             return None
+
+        if not hasattr(self.texas_holdem_env, "game_state"):
+            gymnasium.logger.warn(
+                "You are calling render method before reset() has been called."
+            )
+            return None
+
+        game_state = json.loads(self.texas_holdem_env.game_state.to_json())
+        player_hands = [
+            self._parse_openspiel_cards(hand) for hand in game_state["player_hands"]
+        ]
+        public_cards = self._parse_openspiel_cards(game_state["board_cards"])
+        player_contributions = game_state["player_contributions"]
 
         screen_height = self.screen_height
         screen_width = int(
@@ -178,9 +346,9 @@ class raw_env(RLCardBase, EzPickle):
         }
 
         # Load and blit all images for each card in each player's hand
-        for i, player in enumerate(self.possible_agents):
-            state = self.env.game.get_state(self._name_to_int(player))
-            for j, card in enumerate(state["hand"]):
+        for i, _player in enumerate(self.possible_agents):
+            hand = player_hands[i]
+            for j, card in enumerate(hand):
                 # Load specified card
                 card_img = get_image(os.path.join("img", card + ".png"))
                 card_img = pygame.transform.scale(
@@ -199,7 +367,7 @@ class raw_env(RLCardBase, EzPickle):
                                     tile_size,
                                     tile_scale=33,
                                 )
-                                - calculate_offset(state["hand"], j, tile_size)
+                                - calculate_offset(hand, j, tile_size)
                                 - tile_size
                                 * (8 / 10)
                                 * (1 - np.ceil(i / 2))
@@ -221,7 +389,7 @@ class raw_env(RLCardBase, EzPickle):
                                     tile_size,
                                     tile_scale=33,
                                 )
-                                - calculate_offset(state["hand"], j, tile_size)
+                                - calculate_offset(hand, j, tile_size)
                                 - tile_size
                                 * (8 / 10)
                                 * (1 - np.ceil((i - 1) / 2))
@@ -265,11 +433,11 @@ class raw_env(RLCardBase, EzPickle):
 
             # Load and blit number of poker chips for each player
             font = get_font(os.path.join("font", "Minecraft.ttf"), 24)
-            text = font.render(str(state["my_chips"]), True, white)
+            text = font.render(str(player_contributions[i]), True, white)
             textRect = text.get_rect()
 
             # Calculate number of each chip
-            total = state["my_chips"]
+            total = player_contributions[i]
             height = 0
             for key in chips:
                 num = total / chips[key]["value"]
@@ -377,19 +545,19 @@ class raw_env(RLCardBase, EzPickle):
             self.screen.blit(text, textRect)
 
         # Load and blit public cards
-        for i, card in enumerate(state["public_cards"]):
+        for i, card in enumerate(public_cards):
             card_img = get_image(os.path.join("img", card + ".png"))
             card_img = pygame.transform.scale(
                 card_img, (int(tile_size * (142 / 197)), int(tile_size))
             )
-            if len(state["public_cards"]) <= 3:
+            if len(public_cards) <= 3:
                 self.screen.blit(
                     card_img,
                     (
                         (
                             (
                                 ((screen_width / 2) + (tile_size * 31 / 616))
-                                - calculate_offset(state["public_cards"], i, tile_size)
+                                - calculate_offset(public_cards, i, tile_size)
                             ),
                             calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)),
                         )
@@ -403,9 +571,7 @@ class raw_env(RLCardBase, EzPickle):
                             (
                                 (
                                     ((screen_width / 2) + (tile_size * 31 / 616))
-                                    - calculate_offset(
-                                        state["public_cards"][:3], i, tile_size
-                                    )
+                                    - calculate_offset(public_cards[:3], i, tile_size)
                                 ),
                                 calculate_height(
                                     screen_height, 2, 1, tile_size, -21 / 20
@@ -421,7 +587,7 @@ class raw_env(RLCardBase, EzPickle):
                                 (
                                     ((screen_width / 2) + (tile_size * 31 / 616))
                                     - calculate_offset(
-                                        state["public_cards"][3:], i - 3, tile_size
+                                        public_cards[3:], i - 3, tile_size
                                     )
                                 ),
                                 calculate_height(
@@ -432,6 +598,7 @@ class raw_env(RLCardBase, EzPickle):
                     )
 
         if self.render_mode == "human":
+            pygame.event.pump()
             pygame.display.update()
             self.clock.tick(self.metadata["render_fps"])
 
@@ -442,3 +609,9 @@ class raw_env(RLCardBase, EzPickle):
             if self.render_mode == "rgb_array"
             else None
         )
+
+    def close(self):
+        if self.screen is not None:
+            pygame.display.quit()
+            pygame.quit()
+            self.screen = None
