@@ -70,7 +70,7 @@ list and observation_spaces, action_spaces dictionaries."""
 env_obs_dicts = [
     "leduc_holdem_v4",
     "texas_holdem_no_limit_v6",
-    "texas_holdem_v4",
+    "texas_holdem_v5",
     "go_v5",
     "chess_v6",
     "connect_four_v3",
@@ -90,7 +90,7 @@ env_all_zeros_obs = ["knights_archers_zombies_v11"]
 env_obs_space = [
     "leduc_holdem_v4",
     "texas_holdem_no_limit_v6",
-    "texas_holdem_v4",
+    "texas_holdem_v5",
     "go_v5",
     "hanabi_v5",
     "knights_archers_zombies_v11",

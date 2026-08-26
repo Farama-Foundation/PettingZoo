@@ -94,7 +94,7 @@ _classic_envs = [
     ("connect_four_v3", "pettingzoo.classic.connect_four.connect_four"),
     ("tictactoe_v3", "pettingzoo.classic.tictactoe.tictactoe"),
     ("leduc_holdem_v4", "pettingzoo.classic.rlcard_envs.leduc_holdem"),
-    ("texas_holdem_v4", "pettingzoo.classic.rlcard_envs.texas_holdem"),
+    ("texas_holdem_v5", "pettingzoo.classic.rlcard_envs.texas_holdem"),
     (
         "texas_holdem_no_limit_v6",
         "pettingzoo.classic.rlcard_envs.texas_holdem_no_limit",
