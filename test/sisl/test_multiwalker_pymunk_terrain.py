@@ -19,13 +19,13 @@ import numpy as np
 import pytest
 
 from pettingzoo.sisl.multiwalker.pymunk_terrain import (
+    _STATES_,
     GRASS,
     TERRAIN_GRASS,
     TERRAIN_HEIGHT,
     TERRAIN_LENGTH,
     TERRAIN_STARTPAD,
     TERRAIN_STEP,
-    _STATES_,
     generate_terrain,
 )
 
@@ -68,7 +68,6 @@ def box2d_reference_terrain(np_random, hardcore, terrain_length=TERRAIN_LENGTH):
     stair_height = stair_width = stair_steps = 0
 
     for i in range(terrain_length):
-        x = i * TERRAIN_STEP
         if state == GRASS and not oneshot:
             velocity = 0.8 * velocity + 0.01 * np.sign(TERRAIN_HEIGHT - y)
             if i > TERRAIN_STARTPAD:

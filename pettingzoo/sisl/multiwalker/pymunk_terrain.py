@@ -47,7 +47,7 @@ class Terrain:
     can colour or filter them.
     """
 
-    __slots__ = ("x", "y", "obstacles", "edges")
+    __slots__ = ("edges", "obstacles", "x", "y")
 
     def __init__(self, x, y, obstacles, edges):
         self.x = x
@@ -208,7 +208,7 @@ def add_terrain_to_space(space, terrain, shape_filter=None):
             seg.filter = shape_filter
         space.add(seg)
         shapes.append(seg)
-    for kind, verts in terrain.obstacles:
+    for _kind, verts in terrain.obstacles:
         poly = pymunk.Poly(static, verts)
         poly.friction = FRICTION
         if shape_filter is not None:
