@@ -47,7 +47,7 @@ class BaseWrapper(AECEnv[AgentID, ObsType, ActionType]):
         return self.env.observe(agent)
 
     @override
-    def state(self) -> np.ndarray:
+    def state(self) -> Any:
         return self.env.state()
 
     @override

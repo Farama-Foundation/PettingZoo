@@ -44,6 +44,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
     ]  # Observation space for each agent
     # Action space for each agent
     action_spaces: dict[AgentID, gymnasium.spaces.Space[ActionType]]
+    state_space: gymnasium.spaces.Space[Any]
 
     # Whether each agent has just reached a terminal state
     terminations: dict[AgentID, bool]
@@ -93,10 +94,11 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         """
         raise NotImplementedError
 
-    def state(self) -> np.ndarray:
+    def state(self) -> Any:
         """State returns a global view of the environment.
 
-        It is appropriate for centralized training decentralized execution methods like QMIX
+        It is appropriate for centralized training decentralized execution methods like QMIX.
+        The returned value must be contained in ``state_space``.
         """
         raise NotImplementedError(
             "state() method has not been implemented in the environment {}.".format(
@@ -302,6 +304,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
     action_spaces: dict[
         AgentID, gymnasium.spaces.Space[ActionType]
     ]  # Action space for each agent
+    state_space: gymnasium.spaces.Space[Any]
 
     def reset(
         self,
@@ -347,11 +350,12 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         or any other resources that should be released.
         """
 
-    def state(self) -> np.ndarray:
+    def state(self) -> Any:
         """Returns the state.
 
         State returns a global view of the environment appropriate for
-        centralized training decentralized execution methods like QMIX
+        centralized training decentralized execution methods like QMIX.
+        The returned value must be contained in ``state_space``.
         """
         raise NotImplementedError(
             "state() method has not been implemented in the environment {}.".format(
