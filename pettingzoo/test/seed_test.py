@@ -118,7 +118,11 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
         assert data_equivalence(truncations1, truncations2), "Incorrect truncations"
         assert data_equivalence(infos1, infos2), "Incorrect infos"
 
-        if iter >= max_env_iters or any(terminations1) or any(truncations1):
+        if (
+            iter >= max_env_iters
+            or any(terminations1.values())
+            or any(truncations1.values())
+        ):
             break
 
     env1.close()
