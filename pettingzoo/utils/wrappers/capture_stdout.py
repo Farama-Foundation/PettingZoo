@@ -17,7 +17,13 @@ class CaptureStdoutWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
             f"CaptureStdoutWrapper works only with human rendering mode, but found {env.render_mode} instead."
         )
         super().__init__(env)
-        self.metadata["render_modes"].append("ansi")
+        # `metadata` is a class attribute on the wrapped environment, so mutating
+        # it in place would add "ansi" to every instance of that environment for
+        # the lifetime of the process. Shadow it with a per-wrapper copy instead.
+        self.metadata = {
+            **self.env.metadata,
+            "render_modes": [*self.env.metadata["render_modes"], "ansi"],
+        }
         self.render_mode = "ansi"
 
     @override

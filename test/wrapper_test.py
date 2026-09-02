@@ -6,6 +6,7 @@ from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.classic import texas_holdem_no_limit_v6, tictactoe_v3
 from pettingzoo.utils.wrappers import (
     BaseWrapper,
+    CaptureStdoutWrapper,
     MultiEpisodeEnv,
     MultiEpisodeParallelEnv,
     TerminateIllegalWrapper,
@@ -134,3 +135,25 @@ def test_terminate_illegal() -> None:
 
     # all values must be the same, or else the wrapper and env are mismatched
     assert len(set(agent_selections)) == 1, "agent_selection mismatch"
+
+
+def test_capture_stdout_leaves_env_metadata_unchanged() -> None:
+    """Wrapping an environment must not add "ansi" to its own metadata.
+
+    `metadata` is a class attribute shared by every instance of an environment, so
+    mutating it in place hands later instances a render mode they do not implement.
+    """
+    render_modes = tictactoe_v3.raw_env.metadata["render_modes"]
+    original = list(render_modes)
+    assert "ansi" not in original
+
+    try:
+        wrapper = CaptureStdoutWrapper(tictactoe_v3.env(render_mode="human"))
+        assert "ansi" in wrapper.metadata["render_modes"]
+        assert tictactoe_v3.raw_env.metadata["render_modes"] == original
+
+        # a second wrapper must not accumulate another entry either
+        CaptureStdoutWrapper(tictactoe_v3.env(render_mode="human"))
+        assert tictactoe_v3.raw_env.metadata["render_modes"] == original
+    finally:
+        render_modes[:] = original
