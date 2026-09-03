@@ -3,8 +3,17 @@
 This module is intentionally not wired into ``multiwalker_v9``.  It is a
 prototype for reviewing the Box2D-to-Pymunk mapping before a versioned public
 environment is introduced.  The reward and observation skeleton mirrors the
-current environment, while rendering, hardcore terrain, fallen-agent removal,
-and physics parity calibration remain follow-up work.
+current environment, while rendering and fallen-agent removal remain follow-up
+work.
+
+Terrain comes from :mod:`pettingzoo.sisl.multiwalker.pymunk_terrain`, which
+reproduces ``multiwalker_base._generate_terrain`` draw for draw.  The ordering
+constraint that makes that work is easy to lose: everything the environment
+draws from ``np_random`` shares one stream, so a stage that is skipped here
+because it is cosmetic still shifts every later draw.  ``_generate_clouds`` is
+exactly such a stage -- purely visual, and 110 draws wide at the default terrain
+length -- which is why :meth:`_consume_cloud_rng_draws` exists rather than being
+dropped along with the rendering it feeds.
 """
 
 from __future__ import annotations
@@ -14,6 +23,11 @@ from dataclasses import dataclass
 import numpy as np
 import pymunk
 from gymnasium.utils import seeding
+
+from pettingzoo.sisl.multiwalker.pymunk_terrain import (
+    add_terrain_to_space,
+    generate_terrain,
+)
 
 FPS = 50
 SCALE = 30.0
@@ -238,6 +252,7 @@ class PymunkMultiWalkerPrototype:
         shared_reward=True,
         terminate_on_fall=True,
         terrain_length=TERRAIN_LENGTH,
+        hardcore=False,
         seed=None,
     ):
         self.n_walkers = n_walkers
@@ -249,6 +264,7 @@ class PymunkMultiWalkerPrototype:
         self.local_ratio = 1.0 - shared_reward
         self.terminate_on_fall = terminate_on_fall
         self.terrain_length = terrain_length
+        self.hardcore = hardcore
         self.seed(seed)
         self.reset()
 
@@ -260,7 +276,11 @@ class PymunkMultiWalkerPrototype:
         self.space = pymunk.Space(threaded=False)
         self.space.gravity = (0.0, -10.0)
         self.space.iterations = 180
-        self.terrain_shapes = self._create_flat_terrain()
+        # Box2D order: package, terrain, clouds. Only terrain and clouds draw from
+        # np_random, and they must be consumed in that order -- see the module
+        # docstring for why the cosmetic stage is still consumed here.
+        self.terrain, self.terrain_shapes = self._create_terrain()
+        self._consume_cloud_rng_draws()
 
         initial_x = TERRAIN_STEP * TERRAIN_STARTPAD / 2
         initial_y = TERRAIN_HEIGHT + 2 * LEG_H
@@ -303,19 +323,45 @@ class PymunkMultiWalkerPrototype:
         )
         return self.observations()
 
-    def _create_flat_terrain(self):
-        shapes = []
-        terrain_filter = pymunk.ShapeFilter(categories=TERRAIN_CATEGORY)
-        for index in range(self.terrain_length - 1):
-            start = (index * TERRAIN_STEP, TERRAIN_HEIGHT)
-            end = ((index + 1) * TERRAIN_STEP, TERRAIN_HEIGHT)
-            segment = pymunk.Segment(self.space.static_body, start, end, 0.0)
-            segment.friction = FRICTION
-            segment.elasticity = 0.0
-            segment.filter = terrain_filter
-            shapes.append(segment)
-        self.space.add(*shapes)
-        return shapes
+    def _create_terrain(self):
+        """Generate terrain and attach it, consuming np_random exactly as Box2D does.
+
+        Walker and package spawn heights stay pinned to the flat ``TERRAIN_HEIGHT``
+        constant rather than following the generated ground, because Box2D pins them
+        too: ``setup`` computes ``init_y`` before ``_generate_terrain`` runs. The start
+        pad is flat in both engines, so this is not a placeholder -- matching it is what
+        keeps the initial state comparable.
+        """
+        terrain = generate_terrain(
+            self.np_random,
+            hardcore=self.hardcore,
+            terrain_length=self.terrain_length,
+        )
+        shapes = add_terrain_to_space(
+            self.space,
+            terrain,
+            shape_filter=pymunk.ShapeFilter(categories=TERRAIN_CATEGORY),
+        )
+        for shape in shapes:
+            shape.elasticity = 0.0
+        return terrain, shapes
+
+    def _consume_cloud_rng_draws(self):
+        """Burn the draws ``multiwalker_base._generate_clouds`` would take.
+
+        Clouds are decorative and this prototype has no renderer, so there is nothing
+        to build -- but the draws are not optional. Box2D takes 11 per cloud and one
+        cloud per 20 terrain steps (110 at the default length), all from the same
+        stream the observation noise later reads. Skipping them would leave the
+        terrain matching Box2D while every subsequent draw silently diverged, which is
+        the failure mode that is hardest to notice: nothing errors, seeds just stop
+        meaning the same thing across engines.
+        """
+        for _ in range(self.terrain_length // 20):
+            self.np_random.uniform(0, self.terrain_length)
+            for _corner in range(5):
+                self.np_random.uniform(0, 5 * TERRAIN_STEP)
+                self.np_random.uniform(0, 5 * TERRAIN_STEP)
 
     def _update_contacts(self):
         for index, walker in enumerate(self.walkers):
