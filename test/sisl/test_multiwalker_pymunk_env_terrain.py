@@ -18,6 +18,20 @@ misread the reference the same way, both agree and the test passes. The test bel
 the actual `multiwalker_base` generator through a recording RNG and diffs the two streams
 call by call. It skips when Box2D is unavailable rather than weakening.
 
+That skip is scoped to the class that needs it, and the scoping is the point. A
+module-level `importorskip("Box2D")` sitting above those tests also silences everything
+declared before it -- the eight checks in `TestTheEnvironmentUsesTheGenerator` and the
+five in `TestCloudDrawsAreConsumed`, none of which touch Box2D. Twelve of those thirteen
+fail when the terrain wiring is reverted, so losing them costs real coverage.
+
+That matters wherever Box2D will not import. It does import on CI: `box2d-py` has no
+wheel for 3.14, but the job builds it from the sdist against the `swig` pin in
+`pyproject.toml`. Without a system SWIG that build fails, and a module-level skip then
+turns a visible skip of three cross-engine test groups into a silent loss of twenty
+pymunk-only ones. Guarding a pymunk-only test with a Box2D import is the same mistake as
+part 1 wearing different clothes: the suite stays green while the thing it protects is
+unprotected.
+
 The float32 trap, since it cost a false alarm while this was written: Box2D stores vertices
 as float32, so its polygons come back as 89.133331299 where the port has 89.13333333...
 Comparing obstacle vertices for exact equality reports a mismatch on geometry that is in
@@ -25,6 +39,8 @@ fact identical. Obstacles are therefore matched by centroid and extent within a 
 """
 
 from __future__ import annotations
+
+import importlib.util
 
 import numpy as np
 import pytest
@@ -214,9 +230,6 @@ class TestCloudDrawsAreConsumed:
         assert prototype.np_random.uniform(0.0, 1.0) == expected_next
 
 
-Box2D = pytest.importorskip("Box2D", reason="real-Box2D parity needs Box2D installed")
-
-
 def _box2d_stream(seed, hardcore, length):
     """Drive the real multiwalker_base generator and record its draws."""
     from pettingzoo.sisl.multiwalker import multiwalker_base
@@ -249,6 +262,10 @@ def _signature(vertices):
     )
 
 
+@pytest.mark.skipif(
+    importlib.util.find_spec("Box2D") is None,
+    reason="real-Box2D parity needs Box2D installed",
+)
 class TestAgainstTheRealBox2DGenerator:
     """Diffed against `multiwalker_base` itself, not against a re-reading of it."""
 

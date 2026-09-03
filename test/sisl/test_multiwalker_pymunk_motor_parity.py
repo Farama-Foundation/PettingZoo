@@ -41,18 +41,30 @@ honest:
    that test fails and says why.
 """
 
+import importlib.util
+
 import numpy as np
 import pytest
 
 pymunk = pytest.importorskip("pymunk")
-Box2D = pytest.importorskip("Box2D")
 
-from Box2D import (  # noqa: E402
-    b2FixtureDef,
-    b2PolygonShape,
-    b2RevoluteJointDef,
-    b2World,
+# Scoped, not module-level: `test_cases_are_distinct_operating_points` and
+# `test_the_budget_actually_binds` need only pymunk, and skipping the whole module
+# whenever Box2D will not import -- on 3.14 it has no wheel and is built from the sdist,
+# so this happens on any machine without a system SWIG -- would silence the two checks
+# that establish the experiment is not blind.
+requires_box2d = pytest.mark.skipif(
+    importlib.util.find_spec("Box2D") is None,
+    reason="cross-engine comparison needs Box2D installed",
 )
+
+if importlib.util.find_spec("Box2D") is not None:
+    from Box2D import (
+        b2FixtureDef,
+        b2PolygonShape,
+        b2RevoluteJointDef,
+        b2World,
+    )
 
 FPS = 50.0
 DT = 1.0 / FPS
@@ -166,6 +178,7 @@ def test_cases_are_distinct_operating_points():
 PARITY_TOLERANCE_RAD = 0.06
 
 
+@requires_box2d
 @pytest.mark.parametrize("torque,rate,steps,half_len,density", STALLING_CASES)
 def test_max_force_equals_torque_matches_box2d(torque, rate, steps, half_len, density):
     """Assigning the Box2D torque straight to `max_force` reproduces Box2D's angle.
@@ -180,6 +193,7 @@ def test_max_force_equals_torque_matches_box2d(torque, rate, steps, half_len, de
     )
 
 
+@requires_box2d
 @pytest.mark.parametrize("torque,rate,steps,half_len,density", STALLING_CASES)
 def test_dt_scaled_mapping_is_refuted(torque, rate, steps, half_len, density):
     """Control arm: `max_force = torque * dt` must be measurably WORSE.
