@@ -5,6 +5,7 @@ import pytest
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.classic import texas_holdem_no_limit_v6, tictactoe_v3
 from pettingzoo.utils.wrappers import (
+    BaseParallelWrapper,
     BaseWrapper,
     MultiEpisodeEnv,
     MultiEpisodeParallelEnv,
@@ -134,3 +135,75 @@ def test_terminate_illegal() -> None:
 
     # all values must be the same, or else the wrapper and env are mismatched
     assert len(set(agent_selections)) == 1, "agent_selection mismatch"
+
+
+class _RecordSeeds(BaseWrapper):
+    """Records the seed handed to every reset of the wrapped AEC env."""
+
+    def __init__(self, env) -> None:
+        super().__init__(env)
+        self.seeds: list[int | None] = []
+
+    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
+        self.seeds.append(seed)
+        super().reset(seed=seed, options=options)
+
+
+class _RecordSeedsParallel(BaseParallelWrapper):
+    """Records the seed handed to every reset of the wrapped parallel env."""
+
+    def __init__(self, env) -> None:
+        super().__init__(env)
+        self.seeds: list[int | None] = []
+
+    def reset(self, seed: int | None = None, options: dict | None = None):
+        self.seeds.append(seed)
+        return super().reset(seed=seed, options=options)
+
+
+@pytest.mark.parametrize(("seed"), [0, 42])
+def test_multi_episode_env_wrapper_seeds_every_episode(seed: int) -> None:
+    """Each internal reset gets the previous seed plus one, also when the first seed is 0.
+
+    Args:
+        seed: seed passed to the first reset
+    """
+    inner = _RecordSeeds(texas_holdem_no_limit_v6.env(num_players=3))
+    env = MultiEpisodeEnv(inner, num_episodes=3)
+    env.reset(seed=seed)
+
+    for agent in env.agent_iter():
+        obs, rew, term, trunc, info = env.last()
+
+        if term or trunc:
+            action = None
+        else:
+            action_space = env.action_space(agent)
+            action_space.seed(0)
+            action = action_space.sample(mask=obs["action_mask"])
+
+        env.step(action)
+
+    env.close()
+
+    assert inner.seeds == [seed, seed + 1, seed + 2]
+
+
+@pytest.mark.parametrize(("seed"), [0, 42])
+def test_multi_episode_parallel_env_wrapper_seeds_every_episode(seed: int) -> None:
+    """Each internal reset gets the previous seed plus one, also when the first seed is 0.
+
+    Args:
+        seed: seed passed to the first reset
+    """
+    inner = _RecordSeedsParallel(pistonball_v6.parallel_env())
+    env = MultiEpisodeParallelEnv(inner, num_episodes=3)
+    _ = env.reset(seed=seed)
+
+    while env.agents:
+        actions = {agent: env.action_space(agent).low for agent in env.agents}
+        _ = env.step(actions)
+
+    env.close()
+
+    assert inner.seeds == [seed, seed + 1, seed + 2]
