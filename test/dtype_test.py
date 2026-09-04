@@ -8,7 +8,7 @@ from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.utils.env import AECEnv, ParallelEnv
-from pettingzoo.utils.wrappers import DtypeObservation, DtypeObservationParallel
+from pettingzoo.utils.wrappers import DtypeObservationV1, DtypeObservationParallelV1
 
 AGENTS = ["agent_0", "agent_1"]
 
@@ -146,7 +146,7 @@ EXPECTED_FLOAT32 = {
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_observation_space(agent):
-    space = DtypeObservation(DummyAEC(), np.float32).observation_space(agent)
+    space = DtypeObservationV1(DummyAEC(), np.float32).observation_space(agent)
     shape, low, high = EXPECTED_FLOAT32[agent]
     assert isinstance(space, Box)
     assert space.dtype == np.float32
@@ -157,7 +157,7 @@ def test_aec_observation_space(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_parallel_observation_space(agent):
-    space = DtypeObservationParallel(DummyParallel(), np.float32).observation_space(
+    space = DtypeObservationParallelV1(DummyParallel(), np.float32).observation_space(
         agent
     )
     shape, low, high = EXPECTED_FLOAT32[agent]
@@ -170,7 +170,7 @@ def test_parallel_observation_space(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_observe_is_cast(agent):
-    env = DtypeObservation(DummyAEC(), np.float32)
+    env = DtypeObservationV1(DummyAEC(), np.float32)
     env.reset(seed=0)
 
     obs = env.observe(agent)
@@ -181,7 +181,7 @@ def test_aec_observe_is_cast(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_parallel_reset_and_step_are_cast(agent):
-    env = DtypeObservationParallel(DummyParallel(), np.float32)
+    env = DtypeObservationParallelV1(DummyParallel(), np.float32)
 
     obs, _ = env.reset(seed=0)
     assert obs[agent].dtype == np.float32
@@ -195,7 +195,7 @@ def test_parallel_reset_and_step_are_cast(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_last_is_cast(agent):
-    env = DtypeObservation(DummyAEC(), np.float32)
+    env = DtypeObservationV1(DummyAEC(), np.float32)
     env.reset(seed=0)
     while env.agent_selection != agent:
         env.step(0)
@@ -206,7 +206,7 @@ def test_aec_last_is_cast(agent):
 
 
 def test_uint8_image_to_float32():
-    env = DtypeObservation(DummyAEC(), np.float32)
+    env = DtypeObservationV1(DummyAEC(), np.float32)
     env.reset(seed=0)
 
     space = env.observation_space("agent_0")
@@ -221,7 +221,7 @@ def test_uint8_image_to_float32():
 
 def test_downcast_wraps_bounds_like_supersuit():
     """A cast that overflows the new dtype wraps, in the space and the value."""
-    env = DtypeObservation(WideAEC(), np.uint8)
+    env = DtypeObservationV1(WideAEC(), np.uint8)
     env.reset(seed=0)
 
     space = env.observation_space("agent_0")
@@ -235,7 +235,7 @@ def test_downcast_wraps_bounds_like_supersuit():
 
 
 def test_parallel_downcast_wraps_bounds_like_supersuit():
-    env = DtypeObservationParallel(WideParallel(), np.uint8)
+    env = DtypeObservationParallelV1(WideParallel(), np.uint8)
 
     space = env.observation_space("agent_0")
     assert space.dtype == np.uint8
@@ -250,7 +250,7 @@ def test_parallel_downcast_wraps_bounds_like_supersuit():
 def test_unbounded_space_cast_to_int_collapses():
     """Casting an infinite bound to an int dtype is undefined, as in SuperSuit."""
     with pytest.warns(RuntimeWarning, match="invalid value encountered in cast"):
-        env = DtypeObservation(UnboundedAEC(), np.int32)
+        env = DtypeObservationV1(UnboundedAEC(), np.int32)
 
     space = env.observation_space("agent_0")
     assert space.dtype == np.int32
@@ -265,23 +265,23 @@ def test_unbounded_space_cast_to_int_collapses():
 
 def test_impossible_cast_names_the_wrapper_and_agent():
     with pytest.raises(
-        ValueError, match=r"DtypeObservation cannot cast agent 'agent_0'"
+        ValueError, match=r"DtypeObservationV1 cannot cast agent 'agent_0'"
     ):
-        DtypeObservation(DummyAEC(), np.int8)
+        DtypeObservationV1(DummyAEC(), np.int8)
 
     with pytest.raises(
-        ValueError, match=r"DtypeObservationParallel cannot cast agent 'agent_0'"
+        ValueError, match=r"DtypeObservationParallelV1 cannot cast agent 'agent_0'"
     ):
-        DtypeObservationParallel(DummyParallel(), np.int8)
+        DtypeObservationParallelV1(DummyParallel(), np.int8)
 
 
 def test_str():
     inner = DummyAEC()
-    assert str(DtypeObservation(inner, np.float32)) == f"DtypeObservation<{inner!s}>"
+    assert str(DtypeObservationV1(inner, np.float32)) == f"DtypeObservationV1<{inner!s}>"
     inner = DummyParallel()
     assert (
-        str(DtypeObservationParallel(inner, np.float32))
-        == f"DtypeObservationParallel<{inner!s}>"
+        str(DtypeObservationParallelV1(inner, np.float32))
+        == f"DtypeObservationParallelV1<{inner!s}>"
     )
 
 
@@ -290,29 +290,29 @@ def test_observe_passes_through_none():
         def observe(self, agent):
             return None
 
-    env = DtypeObservation(NoneObsEnv(), np.float32)
+    env = DtypeObservationV1(NoneObsEnv(), np.float32)
     env.reset(seed=0)
     assert env.observe("agent_0") is None
 
 
 def test_aec_api():
-    api_test(DtypeObservation(DummyAEC(), np.float32), num_cycles=5)
+    api_test(DtypeObservationV1(DummyAEC(), np.float32), num_cycles=5)
 
 
 def test_parallel_api():
     parallel_api_test(
-        DtypeObservationParallel(DummyParallel(), np.float32), num_cycles=5
+        DtypeObservationParallelV1(DummyParallel(), np.float32), num_cycles=5
     )
 
 
 def test_rejects_parallel_env():
     with pytest.raises(AssertionError):
-        DtypeObservation(DummyParallel(), np.float32)
+        DtypeObservationV1(DummyParallel(), np.float32)
 
 
 def test_rejects_bad_dtype():
     with pytest.raises(TypeError):
-        DtypeObservation(DummyAEC(), "not_a_dtype")
+        DtypeObservationV1(DummyAEC(), "not_a_dtype")
 
 
 def test_rejects_non_box_space_at_construction():
@@ -325,15 +325,15 @@ def test_rejects_non_box_space_at_construction():
             return Discrete(4)
 
     with pytest.raises(
-        AssertionError, match="DtypeObservation only supports Box observation spaces"
+        AssertionError, match="DtypeObservationV1 only supports Box observation spaces"
     ):
-        DtypeObservation(DiscreteObsAEC(), np.float32)
+        DtypeObservationV1(DiscreteObsAEC(), np.float32)
 
     with pytest.raises(
         AssertionError,
-        match="DtypeObservationParallel only supports Box observation spaces",
+        match="DtypeObservationParallelV1 only supports Box observation spaces",
     ):
-        DtypeObservationParallel(DiscreteObsParallel(), np.float32)
+        DtypeObservationParallelV1(DiscreteObsParallel(), np.float32)
 
 
 def test_agent_outside_possible_agents_resolves_lazily():
@@ -343,7 +343,7 @@ def test_agent_outside_possible_agents_resolves_lazily():
                 return Box(low=0.0, high=1.0, shape=(3,), dtype=np.float64)
             return obs_space(agent)
 
-    env = DtypeObservation(ExtraAgentEnv(), np.float32)
+    env = DtypeObservationV1(ExtraAgentEnv(), np.float32)
     space = env.observation_space("agent_2")
     assert space.dtype == np.float32
     assert space.shape == (3,)

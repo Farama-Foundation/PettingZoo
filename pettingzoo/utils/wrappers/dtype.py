@@ -33,7 +33,7 @@ def _cast_space(
         ) from e
 
 
-class DtypeObservation(BaseWrapper[AgentID, Any, ActionType]):
+class DtypeObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     """Recasts each agent's observation to ``dtype``.
 
     The observation space becomes a Box with the same shape and the new dtype,
@@ -51,8 +51,8 @@ class DtypeObservation(BaseWrapper[AgentID, Any, ActionType]):
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType], dtype: Any):
         assert isinstance(env, AECEnv), (
-            "DtypeObservation is only compatible with AEC environments, "
-            "use DtypeObservationParallel instead."
+            "DtypeObservationV1 is only compatible with AEC environments, "
+            "use DtypeObservationParallelV1 instead."
         )
         super().__init__(env)
         self.dtype = np.dtype(dtype)
@@ -83,10 +83,10 @@ class DtypeObservation(BaseWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"DtypeObservation<{self.env!s}>"
+        return f"DtypeObservationV1<{self.env!s}>"
 
 
-class DtypeObservationParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
+class DtypeObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
     """Recasts each agent's observation to ``dtype``.
 
     The observation space becomes a Box with the same shape and the new dtype,
@@ -151,4 +151,4 @@ class DtypeObservationParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"DtypeObservationParallel<{self.env!s}>"
+        return f"DtypeObservationParallelV1<{self.env!s}>"
