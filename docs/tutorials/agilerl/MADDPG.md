@@ -30,7 +30,7 @@ The following code should run without any issues. The comments are designed to h
 ```
 
 ### Watch the trained agents play
-The following code allows you to load your saved MADDPG alogorithm from the previous training block, test the algorithms performance, and then visualise a number of episodes as a gif.
+The following code allows you to load your saved MADDPG algorithm from the previous training block, test the algorithms performance, and then visualise a number of episodes as a gif.
 ```{eval-rst}
 .. literalinclude:: ../../../tutorials/AgileRL/render_agilerl_maddpg.py
    :language: python
