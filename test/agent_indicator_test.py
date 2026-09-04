@@ -8,7 +8,7 @@ import pytest
 
 from pettingzoo.utils.conversions import parallel_to_aec
 from pettingzoo.utils.env import ParallelEnv
-from pettingzoo.utils.wrappers import AgentIndicator, AgentIndicatorParallel
+from pettingzoo.utils.wrappers import AgentIndicatorParallelV1, AgentIndicatorV1
 
 AGENTS = ["predator_0", "predator_1", "prey_0"]
 
@@ -51,7 +51,7 @@ class IndicatorEnv(ParallelEnv[str, Any, int]):
 def test_aec_box_agent_indicators(shape) -> None:
     observation = np.ones(shape, dtype=np.float32)
     space = gymnasium.spaces.Box(low=0, high=2, shape=shape, dtype=np.float32)
-    env = AgentIndicator(parallel_to_aec(IndicatorEnv(space, observation)))
+    env = AgentIndicatorV1(parallel_to_aec(IndicatorEnv(space, observation)))
     env.reset()
 
     for index, agent in enumerate(AGENTS):
@@ -70,7 +70,7 @@ def test_aec_box_agent_indicators(shape) -> None:
 
 def test_aec_discrete_agent_indicators() -> None:
     space = gymnasium.spaces.Discrete(4, start=2)
-    env = AgentIndicator(parallel_to_aec(IndicatorEnv(space, np.array(4))))
+    env = AgentIndicatorV1(parallel_to_aec(IndicatorEnv(space, np.array(4))))
     env.reset()
 
     for index, agent in enumerate(AGENTS):
@@ -81,7 +81,7 @@ def test_aec_discrete_agent_indicators() -> None:
 
 def test_unbounded_box_uses_finite_indicators() -> None:
     space = gymnasium.spaces.Box(low=-np.inf, high=np.inf, shape=(1,), dtype=np.float32)
-    env = AgentIndicatorParallel(IndicatorEnv(space, np.zeros(1, dtype=np.float32)))
+    env = AgentIndicatorParallelV1(IndicatorEnv(space, np.zeros(1, dtype=np.float32)))
     observations, _ = env.reset()
 
     for index, agent in enumerate(AGENTS):
@@ -93,7 +93,7 @@ def test_unbounded_box_uses_finite_indicators() -> None:
 
 def test_parallel_type_indicators_on_reset_and_step() -> None:
     space = gymnasium.spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32)
-    env = AgentIndicatorParallel(
+    env = AgentIndicatorParallelV1(
         IndicatorEnv(space, np.zeros(1, dtype=np.float32)), type_only=True
     )
 
@@ -126,4 +126,4 @@ def test_rejects_non_homogeneous_observation_spaces() -> None:
     )
 
     with pytest.raises(AssertionError, match="observation spaces must be identical"):
-        AgentIndicatorParallel(env)
+        AgentIndicatorParallelV1(env)

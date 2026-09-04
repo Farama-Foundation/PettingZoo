@@ -28,7 +28,7 @@ def _indicator_map(agents: list[AgentID], type_only: bool) -> dict[AgentID, int]
 
     if len(type_indices) == 1:
         warnings.warn(
-            "AgentIndicator is degenerate because the environment has only one agent type",
+            "AgentIndicatorV1 is degenerate because the environment has only one agent type",
             stacklevel=2,
         )
     return indicators
@@ -54,7 +54,7 @@ def _change_observation_space(
         return gymnasium.spaces.Discrete(space.n * num_indicators)
 
     assert isinstance(space, gymnasium.spaces.Box) and len(space.shape) in {1, 2, 3}, (
-        f"AgentIndicator requires a 1D, 2D, or 3D Box or Discrete observation "
+        f"AgentIndicatorV1 requires a 1D, 2D, or 3D Box or Discrete observation "
         f"space, received {space}"
     )
 
@@ -105,7 +105,7 @@ def _change_observation(
     return transformed
 
 
-class AgentIndicator(BaseWrapper[AgentID, Any, ActionType]):
+class AgentIndicatorV1(BaseWrapper[AgentID, Any, ActionType]):
     """Adds an agent indicator to each observation.
 
     With ``type_only=True``, agents named ``<type>_<n>`` share an indicator for
@@ -121,8 +121,8 @@ class AgentIndicator(BaseWrapper[AgentID, Any, ActionType]):
         type_only: bool = False,
     ):
         assert isinstance(env, AECEnv), (
-            "AgentIndicator is only compatible with AEC environments, use "
-            "AgentIndicatorParallel instead"
+            "AgentIndicatorV1 is only compatible with AEC environments, use "
+            "AgentIndicatorParallelV1 instead"
         )
         super().__init__(env)
         self._indicators = _indicator_map(env.possible_agents, type_only)
@@ -150,7 +150,7 @@ class AgentIndicator(BaseWrapper[AgentID, Any, ActionType]):
         )
 
 
-class AgentIndicatorParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
+class AgentIndicatorParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
     """Adds an agent indicator to each observation.
 
     With ``type_only=True``, agents named ``<type>_<n>`` share an indicator for
@@ -166,7 +166,7 @@ class AgentIndicatorParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
         type_only: bool = False,
     ):
         assert isinstance(env, ParallelEnv), (
-            "AgentIndicatorParallel is only compatible with parallel environments"
+            "AgentIndicatorParallelV1 is only compatible with parallel environments"
         )
         super().__init__(env)
         self._indicators = _indicator_map(env.possible_agents, type_only)

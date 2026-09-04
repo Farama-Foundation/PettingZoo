@@ -103,8 +103,8 @@ while parallel_env.agents:
 .. note::
 
     Wrappers are specific to either the AEC or Parallel API unless documented
-    otherwise. Parallel variants use a ``Parallel`` suffix, such as
-    :class:`AgentIndicatorParallel`. To apply an AEC-only wrapper to a Parallel
+    otherwise. Parallel variants include ``Parallel`` in their name, such as
+    :class:`AgentIndicatorParallelV1`. To apply an AEC-only wrapper to a Parallel
     environment, convert it to AEC, apply the wrapper, and convert it back.
 ```
 ```python
@@ -132,8 +132,8 @@ while parallel_env.agents:
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
 .. autoclass:: OrderEnforcingWrapper
-.. autoclass:: AgentIndicator
-.. autoclass:: AgentIndicatorParallel
+.. autoclass:: AgentIndicatorV1
+.. autoclass:: AgentIndicatorParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
 
