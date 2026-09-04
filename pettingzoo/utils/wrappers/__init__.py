@@ -15,6 +15,10 @@ from pettingzoo.utils.wrappers.dtype import (
     DtypeObservationParallelV1,
     DtypeObservationV1,
 )
+from pettingzoo.utils.wrappers.max_observation import (
+    MaxObservationParallelV1,
+    MaxObservationV1,
+)
 from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
@@ -46,6 +50,8 @@ __all__ = [
     "ColorReductionObservationV1",
     "DtypeObservationParallelV1",
     "DtypeObservationV1",
+    "MaxObservationParallelV1",
+    "MaxObservationV1",
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
     "OrderEnforcingWrapper",
