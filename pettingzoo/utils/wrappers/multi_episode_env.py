@@ -36,14 +36,11 @@ class MultiEpisodeEnv(BaseWrapper[AgentID, ObsType, ActionType]):
     def reset(
         self, seed: int | None = None, options: dict[str, Any] | None = None
     ) -> None:
-        """reset.
+        """Reset the environment and the episode counter.
 
         Args:
             seed (int | None): seed
             options (dict | None): options
-
-        Returns:
-            None:
         """
         self._episodes_elapsed = 1
         self._seed = copy.deepcopy(seed)
@@ -83,11 +80,5 @@ class MultiEpisodeEnv(BaseWrapper[AgentID, ObsType, ActionType]):
 
     @override
     def __str__(self) -> str:
-        """__str__.
-
-        Args:
-
-        Returns:
-            str:
-        """
+        """Return the wrapped environment's string representation."""
         return str(self.env)
