@@ -99,6 +99,7 @@ extend-select = [
     "I",    # isort (import sorting; replaces the standalone isort hook)
     "B",    # flake8-bugbear (likely bugs)
     "C4",   # flake8-comprehensions
+    "D",    # pydocstyle (replaces the standalone pydocstyle hook)
     "FURB", # refurb (modernization)
     "PERF", # perflint (performance)
     "PIE",  # flake8-pie (misc lints)
@@ -118,6 +119,13 @@ extend-select = [
 ]
 extend-ignore = [
     "E203",   # whitespace before ':' (conflicts with the formatter)
+    # -- pydocstyle -- (same add-ignore set as the previous pydocstyle hook)
+    "D100",   # missing module docstring: existing envs/tests omit these
+    "D101",   # missing class docstring
+    "D102",   # missing public method docstring
+    "D103",   # missing public function docstring
+    "D105",   # missing magic method docstring
+    "D107",   # missing __init__ docstring
     # -- pyupgrade --
     "UP031",  # printf-string -> format: no autofix, fiddly (some nested in f-strings), low value
     # -- flake8-bugbear -- (deferred: need per-site judgement, not mechanical)
@@ -141,14 +149,6 @@ extend-ignore = [
     "RUF059", # unused unpacked variable: noisy, no autofix
 ]
 
-# `# noqa` codes owned by the separate pydocstyle pre-commit hook, not by ruff.
-# Every env module carries a top-of-file `# noqa: D212, D415` (a comment before
-# the module docstring suppresses those pydocstyle checks). Declaring the codes
-# `external` stops RUF100 from treating those directives as unused (which would
-# strip them and break the pydocstyle hook), while still validating every other
-# noqa in the tree.
-external = ["D212", "D415"]
-
 [tool.ruff.lint.per-file-ignores]
 "*/__init__.py" = ["F401"]  # allow re-exports without explicit __all__
 "test/all_parameter_combs_test.py" = ["F405"]
@@ -157,6 +157,19 @@ external = ["D212", "D415"]
 # (clearer per-agent intent, and safe to copy with a mutable value) rather than
 # the `dict.fromkeys` form C420 would prefer.
 "docs/code_examples/*.py" = ["C420"]
+# Match the previous pydocstyle hook exclude: __init__.py$|^pettingzoo.test|^docs
+"__init__.py" = ["D"]
+"docs/**" = ["D"]
+"pettingzoo/test/**" = ["D"]
+"test/**" = ["D"]
+# Env families keep the D212/D415 suppression that used to live as a file-level noqa.
+"pettingzoo/atari/**" = ["D212", "D415"]
+"pettingzoo/butterfly/**" = ["D212", "D415"]
+"pettingzoo/classic/**" = ["D212", "D415"]
+"pettingzoo/sisl/**" = ["D212", "D415"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.lint.isort]
 known-first-party = ["pettingzoo"]
