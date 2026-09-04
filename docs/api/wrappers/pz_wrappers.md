@@ -134,7 +134,11 @@ while parallel_env.agents:
 .. autoclass:: OrderEnforcingWrapper
 .. autoclass:: AgentIndicatorV1
 .. autoclass:: AgentIndicatorParallelV1
+.. autoclass:: ColorReductionObservationV1
+.. autoclass:: ColorReductionObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
+.. autoclass:: PadObservationsV1
+.. autoclass:: PadObservationsParallelV1
 
 ```
