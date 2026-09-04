@@ -435,16 +435,30 @@ class PymunkMultiWalkerPrototype:
         package_shaping = self.forward_reward * 130 * self.package.position.x / SCALE
         rewards += package_shaping - self.previous_package_shaping
         self.previous_package_shaping = package_shaping
-        rewards[self.fallen_walkers] += self.fall_reward
+
+        dones = np.zeros(self.n_walkers, dtype=bool)
+
+        # Box2D applies the fall penalty PER WALKER, and when falling does not
+        # end the episode for everyone it also charges that walker the terminate
+        # reward and ends it alone -- see multiwalker_base.scroll_subroutine,
+        # `if not self.terminate_on_fall: rewards[i] += self.terminate_reward`.
+        # Collapsing this into a single global branch is off by `terminate_reward`
+        # (-100) for every fallen walker, which is two orders of magnitude larger
+        # than a typical per-step shaping delta.
+        for index in np.flatnonzero(self.fallen_walkers):
+            rewards[index] += self.fall_reward
+            if not self.terminate_on_fall:
+                rewards[index] += self.terminate_reward
+            dones[index] = True
 
         failed = bool(
             (self.terminate_on_fall and self.fallen_walkers.any())
             or self.game_over
             or self.package.position.x < 0
         )
-        dones = np.full(self.n_walkers, failed, dtype=bool)
         if failed:
             rewards += self.terminate_reward
+            dones[:] = True
         elif (
             self.package.position.x
             > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP
