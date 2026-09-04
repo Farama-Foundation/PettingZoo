@@ -28,6 +28,10 @@ from pettingzoo.utils.wrappers.reshape import (
     ReshapeObservationParallelV1,
     ReshapeObservationV1,
 )
+from pettingzoo.utils.wrappers.scale_action import (
+    ScaleActionParallelV1,
+    ScaleActionV1,
+)
 from pettingzoo.utils.wrappers.terminate_illegal import TerminateIllegalWrapper
 
 __all__ = [
@@ -51,5 +55,7 @@ __all__ = [
     "RecordVideoParallel",
     "ReshapeObservationParallelV1",
     "ReshapeObservationV1",
+    "ScaleActionParallelV1",
+    "ScaleActionV1",
     "TerminateIllegalWrapper",
 ]

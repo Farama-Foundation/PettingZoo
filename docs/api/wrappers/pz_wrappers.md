@@ -142,5 +142,7 @@ while parallel_env.agents:
 .. autoclass:: PadObservationsParallelV1
 .. autoclass:: ReshapeObservationV1
 .. autoclass:: ReshapeObservationParallelV1
+.. autoclass:: ScaleActionV1
+.. autoclass:: ScaleActionParallelV1
 
 ```
