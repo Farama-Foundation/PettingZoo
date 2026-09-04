@@ -551,6 +551,48 @@ render(), step(), observe(), state(), agent_iter()</p></li>
 </ul>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.DtypeObservationV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">DtypeObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/dtype/#DtypeObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.DtypeObservationV1" title="Link to this definition">¶</a></dt>
+<dd><p>Recasts each agent’s observation to <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p>
+<p>The observation space becomes a Box with the same shape and the new dtype,
+with the old bounds put through the same cast. Every space in
+<code class="docutils literal notranslate"><span class="pre">possible_agents</span></code> is built and checked when the wrapper is created.</p>
+<p>Bounds that do not fit the new dtype wrap around, and casting an infinite
+bound to an integer dtype is undefined in numpy, so an unbounded Box cast to
+an integer dtype collapses to a single point that will not contain the
+observations. Both match SuperSuit’s <code class="docutils literal notranslate"><span class="pre">dtype_v0</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>dtype</strong> – Anything <code class="docutils literal notranslate"><span class="pre">numpy.dtype</span></code> accepts, e.g. <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.DtypeObservationParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">DtypeObservationParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/dtype/#DtypeObservationParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Recasts each agent’s observation to <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p>
+<p>The observation space becomes a Box with the same shape and the new dtype,
+with the old bounds put through the same cast. Every space in
+<code class="docutils literal notranslate"><span class="pre">possible_agents</span></code> is built and checked when the wrapper is created.</p>
+<p>Bounds that do not fit the new dtype wrap around, and casting an infinite
+bound to an integer dtype is undefined in numpy, so an unbounded Box cast to
+an integer dtype collapses to a single point that will not contain the
+observations. Both match SuperSuit’s <code class="docutils literal notranslate"><span class="pre">dtype_v0</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>dtype</strong> – Anything <code class="docutils literal notranslate"><span class="pre">numpy.dtype</span></code> accepts, e.g. <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -642,6 +684,8 @@ render(), step(), observe(), state(), agent_iter()</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">AssertOutOfBoundsWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">ClipOutOfBoundsWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper"><code class="docutils literal notranslate"><span class="pre">OrderEnforcingWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationParallelV1</span></code></a></li>
 </ul>
 </li>
 </ul>
