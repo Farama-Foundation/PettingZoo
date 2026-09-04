@@ -129,5 +129,7 @@ while parallel_env.agents:
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: FlattenObservation
+.. autoclass:: FlattenObservationParallel
 
 ```
