@@ -111,7 +111,7 @@ for _id, _module in _classic_envs:
 
 _sisl_envs = [
     ("multiwalker_v9", "multiwalker"),
-    ("pursuit_v5", "pursuit"),
+    ("pursuit_v6", "pursuit"),
 ]
 
 for _id, _base in _sisl_envs:

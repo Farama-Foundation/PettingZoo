@@ -16,7 +16,7 @@ jobs:
             - uses: actions/checkout@v7
             - uses: actions/setup-python@v7
               with:
-                  python-version: '3.11'
+                  python-version: '3.12'
             - name: Get tag
               id: tag
               uses: dawidd6/action-get-tag@v1
@@ -47,6 +47,7 @@ jobs:
 
             - name: Upload to GitHub Pages
               uses: JamesIves/github-pages-deploy-action@v4
+              if: ${{ !contains(github.ref_name, 'a') }}
               with:
                   folder: _build
                   clean-exclude: |

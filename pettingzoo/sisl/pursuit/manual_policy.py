@@ -50,14 +50,14 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.sisl import pursuit_v5
+    from pettingzoo.sisl import pursuit_v6
 
     clock = pygame.time.Clock()
 
-    env = pursuit_v5.env()
+    env = pursuit_v6.env()
     env.reset()
 
-    manual_policy = pursuit_v5.ManualPolicy(env)
+    manual_policy = pursuit_v6.ManualPolicy(env)
 
     for agent in env.agent_iter():
         clock.tick(env.metadata["render_fps"])
