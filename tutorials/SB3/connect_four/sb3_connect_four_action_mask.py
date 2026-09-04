@@ -19,7 +19,7 @@ import pettingzoo.utils
 from pettingzoo import make
 
 
-# To pass into other gymnasium wrappers, we need to ensure that pettingzoo's wrappper
+# To pass into other gymnasium wrappers, we need to ensure that pettingzoo's wrapper
 # can also be a gymnasium Env. Thus, we subclass under gym.Env as well.
 class SB3ActionMaskWrapper(pettingzoo.utils.BaseWrapper, gym.Env):
     """Wrapper to allow PettingZoo environments to be used with SB3 illegal action masking."""

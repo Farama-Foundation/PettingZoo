@@ -13,7 +13,6 @@ from pettingzoo.butterfly.cooperative_pong.paddle import Paddle
 
 def test_bounds() -> None:
     """Run multiple ball trajectories to confirm bounce works correctly."""
-
     # make ball size, screen size, ball speed match env default
     render_ratio = 2
     width, height = 960 // render_ratio, 560 // render_ratio

@@ -151,7 +151,8 @@ expected_vector_type_masked = np.array(
 def setup_sim(env: KAZEnv, objects: dict[str, list[tuple[int | float, ...]]]) -> None:
     """Set up the env with the given objects for vector obs tests.
 
-    This puts all the objects in the specified locations with directions"""
+    This puts all the objects in the specified locations with directions.
+    """
     archer_0 = cast(Archer, env.agent_map["archer_0"])
     archer_1 = env.agent_map["archer_1"]
     knight_0 = cast(Knight, env.agent_map["knight_0"])
