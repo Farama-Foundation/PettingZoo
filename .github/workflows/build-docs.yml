@@ -8,14 +8,14 @@ permissions:
 jobs:
     docs:
         name: Generate Website
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         env:
             SPHINX_GITHUB_CHANGELOG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         steps:
             - uses: actions/checkout@v7
             - uses: actions/setup-python@v7
               with:
-                  python-version: '3.11'
+                  python-version: '3.12'
             - name: Install dependencies
               run: pip install -r docs/requirements.txt
             - name: Install PettingZoo

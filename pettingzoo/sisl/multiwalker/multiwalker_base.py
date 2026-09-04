@@ -251,7 +251,7 @@ class BipedalWalker(Agent):
             # Normalized to get -1..1 range
             0.3 * vel.x * (VIEWPORT_W / SCALE) / FPS,
             0.3 * vel.y * (VIEWPORT_H / SCALE) / FPS,
-            # This will give 1.1 on high up, but it's still OK (and there should be spikes on hiting the ground, that's normal too)
+            # This will give 1.1 on high up, but it's still OK (and there should be spikes on hitting the ground, that's normal too)
             self.joints[0].angle,
             self.joints[0].speed / SPEED_HIP,
             self.joints[1].angle + 1.0,

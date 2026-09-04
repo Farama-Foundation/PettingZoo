@@ -1,22 +1,23 @@
----
-name: pre-commit
+# https://pre-commit.com
+# This GitHub Action assumes that the repo contains a valid .pre-commit-config.yaml file.
+name: Run pre-commit
 on:
-    pull_request:
-    push:
-        branches: [main]
+  pull_request:
+  push:
+    branches: [main]
 
 permissions:
-    contents: read
+  contents: read # to fetch code (actions/checkout)
 
 jobs:
-    pre-commit:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v7
-            - uses: actions/setup-python@v7
-              with:
-                  python-version: '3.11'
-            - run: pip install pre-commit
-            - run: pre-commit --version
-            - run: pre-commit install
-            - run: pre-commit run --all-files
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==1.26
+      - run: pipx install pre-commit
+      - run: pre-commit --version
+      - run: pre-commit run --all-files
