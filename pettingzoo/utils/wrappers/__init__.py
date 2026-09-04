@@ -25,8 +25,8 @@ from pettingzoo.utils.wrappers.pad_observations import (
 from pettingzoo.utils.wrappers.record_video import RecordVideo
 from pettingzoo.utils.wrappers.record_video_parallel import RecordVideoParallel
 from pettingzoo.utils.wrappers.reshape import (
-    ReshapeObservation,
-    ReshapeObservationParallel,
+    ReshapeObservationParallelV1,
+    ReshapeObservationV1,
 )
 from pettingzoo.utils.wrappers.terminate_illegal import TerminateIllegalWrapper
 
@@ -49,7 +49,7 @@ __all__ = [
     "PadObservationsV1",
     "RecordVideo",
     "RecordVideoParallel",
-    "ReshapeObservation",
-    "ReshapeObservationParallel",
+    "ReshapeObservationParallelV1",
+    "ReshapeObservationV1",
     "TerminateIllegalWrapper",
 ]

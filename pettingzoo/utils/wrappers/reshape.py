@@ -45,7 +45,7 @@ def _reshaped_space(
     )
 
 
-class ReshapeObservation(BaseWrapper[AgentID, Any, ActionType]):
+class ReshapeObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     """Reshapes each agent's observation to the given shape.
 
     The observation space is reshaped the same way, so per-element bounds are kept.
@@ -59,8 +59,8 @@ class ReshapeObservation(BaseWrapper[AgentID, Any, ActionType]):
         self, env: AECEnv[AgentID, ObsType, ActionType], shape: tuple[int, ...]
     ):
         assert isinstance(env, AECEnv), (
-            "ReshapeObservation is only compatible with AEC environments, "
-            "use ReshapeObservationParallel instead."
+            "ReshapeObservationV1 is only compatible with AEC environments, "
+            "use ReshapeObservationParallelV1 instead."
         )
         _check_shape(shape)
         super().__init__(env)
@@ -90,10 +90,10 @@ class ReshapeObservation(BaseWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"ReshapeObservation<{self.env!s}>"
+        return f"ReshapeObservationV1<{self.env!s}>"
 
 
-class ReshapeObservationParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
+class ReshapeObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
     """Reshapes each agent's observation to the given shape.
 
     The observation space is reshaped the same way, so per-element bounds are kept.
@@ -153,4 +153,4 @@ class ReshapeObservationParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"ReshapeObservationParallel<{self.env!s}>"
+        return f"ReshapeObservationParallelV1<{self.env!s}>"

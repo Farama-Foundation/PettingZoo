@@ -8,7 +8,7 @@ from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.utils.env import AECEnv, ParallelEnv
-from pettingzoo.utils.wrappers import ReshapeObservation, ReshapeObservationParallel
+from pettingzoo.utils.wrappers import ReshapeObservationV1, ReshapeObservationParallelV1
 
 AGENTS = ["agent_0", "agent_1"]
 
@@ -162,7 +162,7 @@ class LateAgentsParallel(DummyParallel):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_observation_space_has_new_shape(agent):
-    space = ReshapeObservation(DummyAEC(), NEW_SHAPE).observation_space(agent)
+    space = ReshapeObservationV1(DummyAEC(), NEW_SHAPE).observation_space(agent)
     assert isinstance(space, Box)
     assert space.shape == NEW_SHAPE
     assert space.dtype == np.float32
@@ -170,7 +170,7 @@ def test_aec_observation_space_has_new_shape(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_parallel_observation_space_has_new_shape(agent):
-    space = ReshapeObservationParallel(DummyParallel(), NEW_SHAPE).observation_space(
+    space = ReshapeObservationParallelV1(DummyParallel(), NEW_SHAPE).observation_space(
         agent
     )
     assert isinstance(space, Box)
@@ -179,7 +179,7 @@ def test_parallel_observation_space_has_new_shape(agent):
 
 @pytest.mark.parametrize(
     "wrapper,env",
-    [(ReshapeObservation, DummyAEC), (ReshapeObservationParallel, DummyParallel)],
+    [(ReshapeObservationV1, DummyAEC), (ReshapeObservationParallelV1, DummyParallel)],
 )
 def test_per_element_bounds_are_reshaped_not_collapsed(wrapper, env):
     space = wrapper(env(), NEW_SHAPE).observation_space("agent_0")
@@ -189,7 +189,7 @@ def test_per_element_bounds_are_reshaped_not_collapsed(wrapper, env):
 
 
 def test_aec_keeps_dtype():
-    env = ReshapeObservation(Uint8AEC(), NEW_SHAPE)
+    env = ReshapeObservationV1(Uint8AEC(), NEW_SHAPE)
     env.reset(seed=0)
     space = env.observation_space("agent_0")
     assert space.dtype == np.uint8
@@ -199,7 +199,7 @@ def test_aec_keeps_dtype():
 
 
 def test_parallel_keeps_dtype():
-    env = ReshapeObservationParallel(Uint8Parallel(), NEW_SHAPE)
+    env = ReshapeObservationParallelV1(Uint8Parallel(), NEW_SHAPE)
     obs, _ = env.reset(seed=0)
     assert env.observation_space("agent_0").dtype == np.uint8
     assert obs["agent_0"].dtype == np.uint8
@@ -207,7 +207,7 @@ def test_parallel_keeps_dtype():
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_observe_matches_reshape(agent):
-    env = ReshapeObservation(DummyAEC(), NEW_SHAPE)
+    env = ReshapeObservationV1(DummyAEC(), NEW_SHAPE)
     env.reset(seed=0)
 
     obs = env.observe(agent)
@@ -218,7 +218,7 @@ def test_aec_observe_matches_reshape(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_parallel_reset_matches_reshape(agent):
-    env = ReshapeObservationParallel(DummyParallel(), NEW_SHAPE)
+    env = ReshapeObservationParallelV1(DummyParallel(), NEW_SHAPE)
     obs, _ = env.reset(seed=0)
     assert np.array_equal(obs[agent], FIXED_OBS[agent].reshape(NEW_SHAPE))
     assert env.observation_space(agent).contains(obs[agent])
@@ -226,7 +226,7 @@ def test_parallel_reset_matches_reshape(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_parallel_step_matches_reshape(agent):
-    env = ReshapeObservationParallel(DummyParallel(), NEW_SHAPE)
+    env = ReshapeObservationParallelV1(DummyParallel(), NEW_SHAPE)
     env.reset(seed=0)
     obs, _, _, _, _ = env.step(dict.fromkeys(env.agents, 0))
     assert np.array_equal(obs[agent], FIXED_OBS[agent].reshape(NEW_SHAPE))
@@ -234,7 +234,7 @@ def test_parallel_step_matches_reshape(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_last_matches_reshape(agent):
-    env = ReshapeObservation(DummyAEC(), NEW_SHAPE)
+    env = ReshapeObservationV1(DummyAEC(), NEW_SHAPE)
     env.reset(seed=0)
     while env.agent_selection != agent:
         env.step(0)
@@ -248,14 +248,14 @@ def test_observe_passes_through_none():
         def observe(self, agent):
             return None
 
-    env = ReshapeObservation(NoneObsEnv(), NEW_SHAPE)
+    env = ReshapeObservationV1(NoneObsEnv(), NEW_SHAPE)
     env.reset(seed=0)
     assert env.observe("agent_0") is None
 
 
 @pytest.mark.parametrize(
     "wrapper,env",
-    [(ReshapeObservation, DummyAEC), (ReshapeObservationParallel, DummyParallel)],
+    [(ReshapeObservationV1, DummyAEC), (ReshapeObservationParallelV1, DummyParallel)],
 )
 def test_rejects_shape_with_wrong_number_of_elements(wrapper, env):
     with pytest.raises(AssertionError, match="as many elements"):
@@ -265,41 +265,41 @@ def test_rejects_shape_with_wrong_number_of_elements(wrapper, env):
 @pytest.mark.parametrize("shape", [6, [3, 2], (3.0, 2.0), (-1, 6), (-2, -3)])
 def test_rejects_invalid_shapes(shape):
     with pytest.raises(AssertionError):
-        ReshapeObservation(DummyAEC(), shape)
+        ReshapeObservationV1(DummyAEC(), shape)
 
 
 def test_rejects_empty_shape():
     with pytest.raises(AssertionError, match="must not be empty"):
-        ReshapeObservation(DummyAEC(), ())
+        ReshapeObservationV1(DummyAEC(), ())
 
 
 def test_minus_one_message_is_only_about_minus_one():
     with pytest.raises(AssertionError, match="-1 is not supported"):
-        ReshapeObservation(DummyAEC(), (-1, 6))
+        ReshapeObservationV1(DummyAEC(), (-1, 6))
     with pytest.raises(AssertionError, match="positive ints"):
-        ReshapeObservation(DummyAEC(), (0, 6))
+        ReshapeObservationV1(DummyAEC(), (0, 6))
 
 
 def test_bad_shape_is_caught_when_agents_appear_late():
-    env = ReshapeObservation(LateAgentsAEC(), (5, 7))
+    env = ReshapeObservationV1(LateAgentsAEC(), (5, 7))
     env.reset(seed=0)
     with pytest.raises(AssertionError, match="as many elements"):
         env.observe("agent_0")
 
 
 def test_parallel_bad_shape_is_caught_when_agents_appear_late():
-    env = ReshapeObservationParallel(LateAgentsParallel(), (5, 7))
+    env = ReshapeObservationParallelV1(LateAgentsParallel(), (5, 7))
     with pytest.raises(AssertionError, match="agent_0"):
         env.reset(seed=0)
 
 
 def test_str():
     aec = DummyAEC()
-    assert str(ReshapeObservation(aec, NEW_SHAPE)) == f"ReshapeObservation<{aec!s}>"
+    assert str(ReshapeObservationV1(aec, NEW_SHAPE)) == f"ReshapeObservationV1<{aec!s}>"
     par = DummyParallel()
     assert (
-        str(ReshapeObservationParallel(par, NEW_SHAPE))
-        == f"ReshapeObservationParallel<{par!s}>"
+        str(ReshapeObservationParallelV1(par, NEW_SHAPE))
+        == f"ReshapeObservationParallelV1<{par!s}>"
     )
 
 
@@ -309,19 +309,19 @@ def test_rejects_non_box_observation_space():
             return Discrete(6)
 
     with pytest.raises(AssertionError, match="Box observation spaces"):
-        ReshapeObservation(DiscreteObsEnv(), NEW_SHAPE)
+        ReshapeObservationV1(DiscreteObsEnv(), NEW_SHAPE)
 
 
 def test_aec_api():
-    api_test(ReshapeObservation(DummyAEC(), NEW_SHAPE), num_cycles=5)
+    api_test(ReshapeObservationV1(DummyAEC(), NEW_SHAPE), num_cycles=5)
 
 
 def test_parallel_api():
     parallel_api_test(
-        ReshapeObservationParallel(DummyParallel(), NEW_SHAPE), num_cycles=5
+        ReshapeObservationParallelV1(DummyParallel(), NEW_SHAPE), num_cycles=5
     )
 
 
 def test_rejects_parallel_env():
     with pytest.raises(AssertionError):
-        ReshapeObservation(DummyParallel(), NEW_SHAPE)
+        ReshapeObservationV1(DummyParallel(), NEW_SHAPE)
