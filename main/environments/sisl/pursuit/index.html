@@ -390,7 +390,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Creation</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;sisl/pursuit-v5&quot;)</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;sisl/pursuit-v6&quot;)</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -435,6 +435,17 @@ and the evader is removed from the environment. Pursuers also receive a reward o
 the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in section 4.1 of the PettingZoo paper applied.</p>
 <p>Observation shape takes the full form of <code class="docutils literal notranslate"><span class="pre">(obs_range,</span> <span class="pre">obs_range,</span> <span class="pre">3)</span></code> where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.</p>
 <p>The state takes the full form of <code class="docutils literal notranslate"><span class="pre">(y_size,</span> <span class="pre">x_size,</span> <span class="pre">3)</span></code>, with the same three channels as the observations, but covering the whole map instead of the <code class="docutils literal notranslate"><span class="pre">obs_range</span></code> box around each agent.</p>
+<section id="center-obstacle">
+<h2>Center obstacle<a class="headerlink" href="#center-obstacle" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">center_box_size</span></code> argument controls the size of the centered obstacle in
+grid cells. Pass a <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code> tuple to set an explicit size, for example
+<code class="docutils literal notranslate"><span class="pre">center_box_size=(4,</span> <span class="pre">2)</span></code>. Passing <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code> removes the obstacle entirely, while
+the default <code class="docutils literal notranslate"><span class="pre">None</span></code> preserves the obstacle dimensions used by earlier versions
+of Pursuit.</p>
+<p>Both dimensions must be non-negative integers, cannot exceed the corresponding
+map dimension, and cannot cover the entire map. This argument was introduced in
+<code class="docutils literal notranslate"><span class="pre">pursuit_v6</span></code>; code using <code class="docutils literal notranslate"><span class="pre">pursuit_v5</span></code> must update its import to use it.</p>
+</section>
 <section id="manual-control">
 <h2>Manual Control<a class="headerlink" href="#manual-control" title="Link to this heading">¶</a></h2>
 <p>Select different pursuers with ‘J’ and ‘K’. The selected pursuer can be moved with the arrow keys.</p>
@@ -443,9 +454,10 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/pursuit-v5"</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/pursuit-v6"</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="n">n_evaders</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_pursuers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">obs_range</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n_catch</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freeze_evaders</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tag_reward</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
-<span class="n">catch_reward</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">urgency_reward</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">surround</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint_window</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">catch_reward</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">urgency_reward</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">surround</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint_window</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="n">center_box_size</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">x_size,</span> <span class="pre">y_size</span></code>: Size of environment world space</p>
@@ -460,11 +472,13 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <p><code class="docutils literal notranslate"><span class="pre">urgency_reward</span></code>:  Reward to agent added in each step</p>
 <p><code class="docutils literal notranslate"><span class="pre">surround</span></code>:  Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader</p>
 <p><code class="docutils literal notranslate"><span class="pre">constraint_window</span></code>: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.</p>
+<p><code class="docutils literal notranslate"><span class="pre">center_box_size</span></code>: Optional <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code> of the center obstacle in grid cells. The default <code class="docutils literal notranslate"><span class="pre">None</span></code> preserves the original proportional obstacle size. Use <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code> for a map without a center obstacle.</p>
 <p><code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>:  After max_cycles steps all agents will return done</p>
 </section>
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
+<li><p>v6: Add <code class="docutils literal notranslate"><span class="pre">center_box_size</span></code> to control or remove the center obstacle</p></li>
 <li><p>v5: Add state() and state space support (1.27.0)</p></li>
 <li><p>v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)</p></li>
 <li><p>v3: Observation space bug fixed (1.5.0)</p></li>
@@ -479,7 +493,7 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/pursuit-v5"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/pursuit-v6"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -501,7 +515,7 @@ the red pursuer agents. The environment terminates when every evader has been ca
 <h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"sisl/pursuit-v5"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"sisl/pursuit-v6"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
@@ -649,6 +663,7 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Pursuit</a><ul>
+<li><a class="reference internal" href="#center-obstacle">Center obstacle</a></li>
 <li><a class="reference internal" href="#manual-control">Manual Control</a></li>
 <li><a class="reference internal" href="#arguments">Arguments</a></li>
 <li><a class="reference internal" href="#version-history">Version History</a></li>
