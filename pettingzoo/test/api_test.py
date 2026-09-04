@@ -442,7 +442,7 @@ def play_test(env, observation_0, num_cycles):
     for agent in env.agent_iter(env.num_agents * num_cycles):
         generated_agents.add(agent)
         assert agent not in has_finished, (
-            "agents cannot resurect! Generate a new agent with a new name."
+            "agents cannot resurrect! Generate a new agent with a new name."
         )
         assert isinstance(env.infos[agent], dict), (
             "an environment agent's info must be a dictionary"

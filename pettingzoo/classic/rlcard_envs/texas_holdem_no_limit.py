@@ -1,4 +1,3 @@
-# noqa: D212, D415
 """
 # Texas Hold'em No Limit
 

@@ -15,7 +15,7 @@ class GymnasiumAgent:
 
         self.instructions = """
 Your goal is to maximize your return, i.e. the sum of the rewards you receive.
-I will give you an observation, reward, terminiation flag, truncation flag, and the return so far, formatted as:
+I will give you an observation, reward, termination flag, truncation flag, and the return so far, formatted as:
 
 Observation: <observation>
 Reward: <reward>

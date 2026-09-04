@@ -1,4 +1,3 @@
-# noqa: D212, D415
 """
 # Flag Capture
 
