@@ -8,8 +8,8 @@ from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
 from pettingzoo.utils.wrappers.pad_observations import (
-    PadObservations,
-    PadObservationsParallel,
+    PadObservationsParallelV1,
+    PadObservationsV1,
 )
 from pettingzoo.utils.wrappers.record_video import RecordVideo
 from pettingzoo.utils.wrappers.record_video_parallel import RecordVideoParallel
@@ -26,8 +26,8 @@ __all__ = [
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
     "OrderEnforcingWrapper",
-    "PadObservations",
-    "PadObservationsParallel",
+    "PadObservationsParallelV1",
+    "PadObservationsV1",
     "RecordVideo",
     "RecordVideoParallel",
     "TerminateIllegalWrapper",

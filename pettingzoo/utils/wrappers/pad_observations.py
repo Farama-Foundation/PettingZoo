@@ -82,7 +82,7 @@ def _pad_observation(space: Space[Any], obs: Any) -> Any:
     return _pad_to(np.asarray(obs), space.shape, 0)
 
 
-class PadObservations(BaseWrapper[AgentID, Any, ActionType]):
+class PadObservationsV1(BaseWrapper[AgentID, Any, ActionType]):
     """Pads each agent's observation up to one shared observation space.
 
     The shared space covers the observation spaces of ``possible_agents``. For Box
@@ -97,16 +97,19 @@ class PadObservations(BaseWrapper[AgentID, Any, ActionType]):
     An agent whose observation is already the full shape gets the array back without a
     copy, so writing into it writes into the environment.
 
+    Ported from SuperSuit's pad_observations_v0; the version suffix continues that
+    numbering.
+
     :param env: The AEC environment to wrap.
     """
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
         assert isinstance(env, AECEnv), (
-            "PadObservations is only compatible with AEC environments, "
-            "use PadObservationsParallel instead."
+            "PadObservationsV1 is only compatible with AEC environments, "
+            "use PadObservationsParallelV1 instead."
         )
         assert hasattr(env, "possible_agents"), (
-            "environment passed to PadObservations must have a possible_agents list."
+            "environment passed to PadObservationsV1 must have a possible_agents list."
         )
         super().__init__(env)
         spaces = [env.observation_space(agent) for agent in env.possible_agents]
@@ -123,10 +126,10 @@ class PadObservations(BaseWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"PadObservations<{self.env!s}>"
+        return f"PadObservationsV1<{self.env!s}>"
 
 
-class PadObservationsParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
+class PadObservationsParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
     """Pads each agent's observation up to one shared observation space.
 
     The shared space covers the observation spaces of ``possible_agents``. For Box
@@ -141,16 +144,19 @@ class PadObservationsParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
     An agent whose observation is already the full shape gets the array back without a
     copy, so writing into it writes into the environment.
 
+    Ported from SuperSuit's pad_observations_v0; the version suffix continues that
+    numbering.
+
     :param env: The parallel environment to wrap.
     """
 
     def __init__(self, env: ParallelEnv[AgentID, ObsType, ActionType]):
         assert isinstance(env, ParallelEnv), (
-            "PadObservationsParallel is only compatible with parallel environments, "
-            "use PadObservations instead."
+            "PadObservationsParallelV1 is only compatible with parallel environments, "
+            "use PadObservationsV1 instead."
         )
         assert hasattr(env, "possible_agents"), (
-            "environment passed to PadObservationsParallel must have a "
+            "environment passed to PadObservationsParallelV1 must have a "
             "possible_agents list."
         )
         super().__init__(env)
@@ -190,4 +196,4 @@ class PadObservationsParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"PadObservationsParallel<{self.env!s}>"
+        return f"PadObservationsParallelV1<{self.env!s}>"

@@ -8,7 +8,7 @@ from gymnasium.spaces import Box, Dict, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.utils.env import AECEnv, ParallelEnv
-from pettingzoo.utils.wrappers import PadObservations, PadObservationsParallel
+from pettingzoo.utils.wrappers import PadObservationsParallelV1, PadObservationsV1
 
 AGENTS = ["agent_0", "agent_1"]
 
@@ -122,7 +122,7 @@ class DummyParallel(ParallelEnv):
 
 @pytest.mark.parametrize(
     "wrapper,dummy",
-    [(PadObservations, DummyAEC), (PadObservationsParallel, DummyParallel)],
+    [(PadObservationsV1, DummyAEC), (PadObservationsParallelV1, DummyParallel)],
 )
 def test_every_agent_gets_the_same_padded_space(wrapper, dummy):
     env = wrapper(dummy())
@@ -142,7 +142,7 @@ def test_every_agent_gets_the_same_padded_space(wrapper, dummy):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_observe_is_padded(agent):
-    env = PadObservations(DummyAEC())
+    env = PadObservationsV1(DummyAEC())
     env.reset(seed=0)
 
     obs = env.observe(agent)
@@ -152,14 +152,14 @@ def test_aec_observe_is_padded(agent):
 
 def test_largest_agent_is_untouched():
     inner = DummyAEC()
-    env = PadObservations(inner)
+    env = PadObservationsV1(inner)
     env.reset(seed=0)
     assert np.array_equal(env.observe("agent_0"), inner.observe("agent_0"))
 
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_last_is_padded(agent):
-    env = PadObservations(DummyAEC())
+    env = PadObservationsV1(DummyAEC())
     env.reset(seed=0)
     while env.agent_selection != agent:
         env.step(0)
@@ -170,7 +170,7 @@ def test_aec_last_is_padded(agent):
 
 @pytest.mark.parametrize("agent", AGENTS)
 def test_parallel_reset_and_step_are_padded(agent):
-    env = PadObservationsParallel(DummyParallel())
+    env = PadObservationsParallelV1(DummyParallel())
 
     obs, _ = env.reset(seed=0)
     assert np.array_equal(obs[agent], PADDED_OBS[agent])
@@ -189,7 +189,7 @@ def test_padding_goes_at_the_end_of_every_axis():
         "agent_0": np.ones((3, 3), dtype=np.float32),
         "agent_1": np.array([[0.25, 0.75]], dtype=np.float32),
     }
-    env = PadObservations(DummyAEC(spaces, obs))
+    env = PadObservationsV1(DummyAEC(spaces, obs))
     env.reset(seed=0)
 
     expected = np.zeros((3, 3), dtype=np.float32)
@@ -202,7 +202,7 @@ def test_homogeneous_spaces_are_unchanged():
     space = Box(low=-1.0, high=1.0, shape=(2, 2), dtype=np.float32)
     spaces = dict.fromkeys(AGENTS, space)
     obs = dict.fromkeys(AGENTS, np.full((2, 2), 0.5, dtype=np.float32))
-    env = PadObservations(DummyAEC(spaces, obs))
+    env = PadObservationsV1(DummyAEC(spaces, obs))
     env.reset(seed=0)
 
     padded = env.observation_space("agent_0")
@@ -223,7 +223,7 @@ def test_negative_high_is_clamped_so_the_padding_fits():
         "agent_0": np.full((3,), -2.0, dtype=np.float32),
         "agent_1": np.array([-2.0], dtype=np.float32),
     }
-    env = PadObservations(DummyAEC(spaces, obs))
+    env = PadObservationsV1(DummyAEC(spaces, obs))
     env.reset(seed=0)
 
     space = env.observation_space("agent_1")
@@ -245,7 +245,7 @@ def test_negative_high_clamp_truncates_for_integer_spaces():
         "agent_0": np.full((3,), -5, dtype=np.int8),
         "agent_1": np.array([-5], dtype=np.int8),
     }
-    env = PadObservations(DummyAEC(spaces, obs))
+    env = PadObservationsV1(DummyAEC(spaces, obs))
     env.reset(seed=0)
 
     space = env.observation_space("agent_1")
@@ -265,7 +265,7 @@ def test_integer_box_spaces_keep_their_dtype():
         "agent_0": np.full((2, 2), 7, dtype=np.uint8),
         "agent_1": np.array([[1, 2]], dtype=np.uint8),
     }
-    env = PadObservations(DummyAEC(spaces, obs))
+    env = PadObservationsV1(DummyAEC(spaces, obs))
     env.reset(seed=0)
 
     space = env.observation_space("agent_1")
@@ -279,7 +279,7 @@ def test_integer_box_spaces_keep_their_dtype():
 def test_discrete_spaces_take_the_largest_n():
     spaces = {"agent_0": Discrete(3), "agent_1": Discrete(5)}
     obs = {"agent_0": 2, "agent_1": 4}
-    env = PadObservations(DummyAEC(spaces, obs))
+    env = PadObservationsV1(DummyAEC(spaces, obs))
     env.reset(seed=0)
 
     assert env.observation_space("agent_0") == Discrete(5)
@@ -288,7 +288,7 @@ def test_discrete_spaces_take_the_largest_n():
 
 @pytest.mark.parametrize(
     "wrapper,dummy",
-    [(PadObservations, DummyAEC), (PadObservationsParallel, DummyParallel)],
+    [(PadObservationsV1, DummyAEC), (PadObservationsParallelV1, DummyParallel)],
 )
 def test_discrete_spaces_take_the_largest_n_parallel_too(wrapper, dummy):
     spaces = {"agent_0": Discrete(3), "agent_1": Discrete(5)}
@@ -314,7 +314,7 @@ def test_discrete_spaces_take_the_largest_n_parallel_too(wrapper, dummy):
     ],
 )
 def test_discrete_start_is_covered(spaces, expected):
-    env = PadObservations(DummyAEC(spaces))
+    env = PadObservationsV1(DummyAEC(spaces))
     assert env.observation_space("agent_0") == expected
 
     for agent, space in spaces.items():
@@ -325,13 +325,13 @@ def test_discrete_start_is_covered(spaces, expected):
 def test_discrete_start_passes_the_api_test():
     spaces = {"agent_0": Discrete(3, start=5), "agent_1": Discrete(5)}
     obs = {"agent_0": np.int64(5), "agent_1": np.int64(4)}
-    api_test(PadObservations(DummyAEC(spaces, obs)), num_cycles=5)
+    api_test(PadObservationsV1(DummyAEC(spaces, obs)), num_cycles=5)
 
 
 def test_parallel_discrete_and_none_pass_through():
     spaces = {"agent_0": Discrete(3), "agent_1": Discrete(5)}
     obs = {"agent_0": 2, "agent_1": None}
-    env = PadObservationsParallel(DummyParallel(spaces, obs))
+    env = PadObservationsParallelV1(DummyParallel(spaces, obs))
 
     observations, _ = env.reset(seed=0)
     assert observations["agent_0"] == 2
@@ -347,7 +347,7 @@ def test_parallel_integer_box_spaces_keep_their_dtype():
         "agent_0": np.full((2, 2), 7, dtype=np.uint8),
         "agent_1": np.array([[1, 2]], dtype=np.uint8),
     }
-    env = PadObservationsParallel(DummyParallel(spaces, obs))
+    env = PadObservationsParallelV1(DummyParallel(spaces, obs))
     observations, _ = env.reset(seed=0)
 
     space = env.observation_space("agent_1")
@@ -365,9 +365,9 @@ def test_mixing_discrete_and_box_raises():
         "agent_1": Box(low=0.0, high=1.0, shape=(2,), dtype=np.float32),
     }
     with pytest.raises(AssertionError, match="Box or Discrete, not a mix"):
-        PadObservations(DummyAEC(spaces))
+        PadObservationsV1(DummyAEC(spaces))
     with pytest.raises(AssertionError, match="Box or Discrete, not a mix"):
-        PadObservationsParallel(DummyParallel(spaces))
+        PadObservationsParallelV1(DummyParallel(spaces))
 
 
 def test_different_number_of_dimensions_raises():
@@ -376,7 +376,7 @@ def test_different_number_of_dimensions_raises():
         "agent_1": Box(low=0.0, high=1.0, shape=(2,), dtype=np.float32),
     }
     with pytest.raises(AssertionError, match="same number of dimensions"):
-        PadObservations(DummyAEC(spaces))
+        PadObservationsV1(DummyAEC(spaces))
 
 
 def test_different_dtypes_raise():
@@ -385,13 +385,13 @@ def test_different_dtypes_raise():
         "agent_1": Box(low=0.0, high=1.0, shape=(2,), dtype=np.float64),
     }
     with pytest.raises(AssertionError, match="same dtype"):
-        PadObservations(DummyAEC(spaces))
+        PadObservationsV1(DummyAEC(spaces))
 
 
 def test_unsupported_space_raises():
     space = Dict({"a": Box(low=0.0, high=1.0, shape=(2,), dtype=np.float32)})
     with pytest.raises(AssertionError, match="only supports Box and Discrete"):
-        PadObservations(DummyAEC(dict.fromkeys(AGENTS, space)))
+        PadObservationsV1(DummyAEC(dict.fromkeys(AGENTS, space)))
 
 
 def test_missing_possible_agents_raises():
@@ -401,7 +401,7 @@ def test_missing_possible_agents_raises():
             del self.possible_agents
 
     with pytest.raises(AssertionError, match="possible_agents"):
-        PadObservations(NoPossibleAgents())
+        PadObservationsV1(NoPossibleAgents())
 
 
 def test_observe_passes_through_none():
@@ -409,24 +409,24 @@ def test_observe_passes_through_none():
         def observe(self, agent):
             return None
 
-    env = PadObservations(NoneObsEnv())
+    env = PadObservationsV1(NoneObsEnv())
     env.reset(seed=0)
     assert env.observe("agent_0") is None
 
 
 def test_rejects_parallel_env():
-    with pytest.raises(AssertionError, match="PadObservationsParallel"):
-        PadObservations(DummyParallel())
+    with pytest.raises(AssertionError, match="PadObservationsParallelV1"):
+        PadObservationsV1(DummyParallel())
 
 
 def test_parallel_rejects_aec_env():
-    with pytest.raises(AssertionError, match="use PadObservations instead"):
-        PadObservationsParallel(DummyAEC())
+    with pytest.raises(AssertionError, match="use PadObservationsV1 instead"):
+        PadObservationsParallelV1(DummyAEC())
 
 
 def test_aec_api():
-    api_test(PadObservations(DummyAEC()), num_cycles=5)
+    api_test(PadObservationsV1(DummyAEC()), num_cycles=5)
 
 
 def test_parallel_api():
-    parallel_api_test(PadObservationsParallel(DummyParallel()), num_cycles=5)
+    parallel_api_test(PadObservationsParallelV1(DummyParallel()), num_cycles=5)

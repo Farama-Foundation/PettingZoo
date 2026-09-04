@@ -131,7 +131,7 @@ while parallel_env.agents:
 .. autoclass:: OrderEnforcingWrapper
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
-.. autoclass:: PadObservations
-.. autoclass:: PadObservationsParallel
+.. autoclass:: PadObservationsV1
+.. autoclass:: PadObservationsParallelV1
 
 ```
