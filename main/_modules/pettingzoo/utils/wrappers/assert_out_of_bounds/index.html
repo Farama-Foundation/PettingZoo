@@ -388,11 +388,11 @@
 <div class="viewcode-block" id="AssertOutOfBoundsWrapper">
 <a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Asserts if the action given to step is outside of the action space.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Asserts if the action given to step is outside of the action space."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">&quot;AssertOutOfBoundsWrapper is only compatible with AEC environments&quot;</span>
+            <span class="s2">"AssertOutOfBoundsWrapper is only compatible with AEC environments"</span>
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 
@@ -405,7 +405,7 @@
                 <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="p">)</span>
         <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">action</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">&quot;action is not in action space&quot;</span>
+            <span class="s2">"action is not in action space"</span>
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 

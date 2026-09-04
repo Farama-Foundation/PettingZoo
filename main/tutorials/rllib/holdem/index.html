@@ -408,10 +408,10 @@ tensorflow-probability&gt;=0.19.0
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLlib. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-the-rl-agent">
 <h3>Training the RL agent<a class="headerlink" href="#training-the-rl-agent" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to train agents to play Leduc Holdem.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Uses Ray's RLlib to train agents to play Leduc Holdem.</span>
 
 <span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
@@ -433,7 +433,7 @@ tensorflow-probability&gt;=0.19.0
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">TorchMaskedActions</span><span class="p">(</span><span class="n">DQNTorchModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;PyTorch version of above ParametricActionsModel.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""PyTorch version of above ParametricActionsModel."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -458,16 +458,16 @@ tensorflow-probability&gt;=0.19.0
             <span class="n">action_space</span><span class="p">,</span>
             <span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
             <span class="n">model_config</span><span class="p">,</span>
-            <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_action_embed&quot;</span><span class="p">,</span>
+            <span class="n">name</span> <span class="o">+</span> <span class="s2">"_action_embed"</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">seq_lens</span><span class="p">):</span>
         <span class="c1"># Extract the available actions tensor from the observation.</span>
-        <span class="n">action_mask</span> <span class="o">=</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="n">action_mask</span> <span class="o">=</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">"obs"</span><span class="p">][</span><span class="s2">"action_mask"</span><span class="p">]</span>
 
         <span class="c1"># Compute the predicted action embedding</span>
         <span class="n">action_logits</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span><span class="p">(</span>
-            <span class="p">{</span><span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">][</span><span class="s2">&quot;observation&quot;</span><span class="p">]}</span>
+            <span class="p">{</span><span class="s2">"obs"</span><span class="p">:</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">"obs"</span><span class="p">][</span><span class="s2">"observation"</span><span class="p">]}</span>
         <span class="p">)</span>
         <span class="c1"># turns probit action mask into logit action mask</span>
         <span class="n">inf_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">action_mask</span><span class="p">),</span> <span class="o">-</span><span class="mf">1e10</span><span class="p">,</span> <span class="n">FLOAT_MAX</span><span class="p">)</span>
@@ -478,18 +478,18 @@ tensorflow-probability&gt;=0.19.0
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span><span class="o">.</span><span class="n">value_function</span><span class="p">()</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
-    <span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
-    <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;pa_model&quot;</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
+    <span class="n">alg_name</span> <span class="o">=</span> <span class="s2">"DQN"</span>
+    <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">"pa_model"</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
     <span class="c1"># function that outputs the environment you wish to register.</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">():</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/leduc_holdem-v4&quot;</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/leduc_holdem-v4"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">env</span>
 
-    <span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
+    <span class="n">env_name</span> <span class="o">=</span> <span class="s2">"leduc_holdem_v4"</span>
     <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
 
     <span class="n">test_env</span> <span class="o">=</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">())</span>
@@ -504,36 +504,36 @@ tensorflow-probability&gt;=0.19.0
             <span class="n">train_batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
             <span class="n">hiddens</span><span class="o">=</span><span class="p">[],</span>
             <span class="n">dueling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;custom_model&quot;</span><span class="p">:</span> <span class="s2">&quot;pa_model&quot;</span><span class="p">},</span>
+            <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">"custom_model"</span><span class="p">:</span> <span class="s2">"pa_model"</span><span class="p">},</span>
         <span class="p">)</span>
         <span class="o">.</span><span class="n">multi_agent</span><span class="p">(</span>
             <span class="n">policies</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;player_0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
-                <span class="s2">&quot;player_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
+                <span class="s2">"player_0"</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
+                <span class="s2">"player_1"</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
             <span class="p">},</span>
             <span class="n">policy_mapping_fn</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">agent_id</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">agent_id</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RLLIB_NUM_GPUS&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)))</span>
+        <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"RLLIB_NUM_GPUS"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)))</span>
         <span class="o">.</span><span class="n">debugging</span><span class="p">(</span>
-            <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span>
+            <span class="n">log_level</span><span class="o">=</span><span class="s2">"DEBUG"</span>
         <span class="p">)</span>  <span class="c1"># TODO: change to ERROR to match pistonball example</span>
-        <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">framework</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">framework</span><span class="o">=</span><span class="s2">"torch"</span><span class="p">)</span>
         <span class="o">.</span><span class="n">exploration</span><span class="p">(</span>
             <span class="n">exploration_config</span><span class="o">=</span><span class="p">{</span>
                 <span class="c1"># The Exploration class to use.</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;EpsilonGreedy&quot;</span><span class="p">,</span>
-                <span class="c1"># Config for the Exploration class&#39; constructor:</span>
-                <span class="s2">&quot;initial_epsilon&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;final_epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;epsilon_timesteps&quot;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>  <span class="c1"># Timesteps over which to anneal epsilon.</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"EpsilonGreedy"</span><span class="p">,</span>
+                <span class="c1"># Config for the Exploration class' constructor:</span>
+                <span class="s2">"initial_epsilon"</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">"final_epsilon"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">"epsilon_timesteps"</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>  <span class="c1"># Timesteps over which to anneal epsilon.</span>
             <span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
     <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="n">alg_name</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DQN&quot;</span><span class="p">,</span>
-        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">10000000</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">50000</span><span class="p">},</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">"DQN"</span><span class="p">,</span>
+        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">"timesteps_total"</span><span class="p">:</span> <span class="mi">10000000</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"CI"</span><span class="p">)</span> <span class="k">else</span> <span class="mi">50000</span><span class="p">},</span>
         <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
     <span class="p">)</span>
@@ -542,10 +542,10 @@ tensorflow-probability&gt;=0.19.0
 </section>
 <section id="watching-the-trained-rl-agent-play">
 <h3>Watching the trained RL agent play<a class="headerlink" href="#watching-the-trained-rl-agent-play" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to view trained agents playing Leduoc Holdem.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Uses Ray's RLlib to view trained agents playing Leduoc Holdem.</span>
 
 <span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -560,38 +560,38 @@ tensorflow-probability&gt;=0.19.0
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SDL_VIDEODRIVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dummy&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"dummy"</span>
 
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Render pretrained policy loaded from checkpoint&quot;</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">"Render pretrained policy loaded from checkpoint"</span>
 <span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-    <span class="s2">&quot;--checkpoint-path&quot;</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`&quot;</span><span class="p">,</span>
+    <span class="s2">"--checkpoint-path"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
 
 <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The following arguments are required: --checkpoint-path&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"The following arguments are required: --checkpoint-path"</span><span class="p">)</span>
     <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">checkpoint_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span><span class="p">)</span>
 
 
-<span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
-<span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;pa_model&quot;</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
+<span class="n">alg_name</span> <span class="o">=</span> <span class="s2">"DQN"</span>
+<span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">"pa_model"</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
 <span class="c1"># function that outputs the environment you wish to register.</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">():</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/leduc_holdem-v4&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/leduc_holdem-v4"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">env</span>
 
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">env_creator</span><span class="p">()</span>
-<span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
+<span class="n">env_name</span> <span class="o">=</span> <span class="s2">"leduc_holdem_v4"</span>
 <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
 
 
@@ -604,7 +604,7 @@ tensorflow-probability&gt;=0.19.0
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
     <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-    <span class="n">obs</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">"observation"</span><span class="p">]</span>
     <span class="n">reward_sums</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
     <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
         <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
@@ -612,9 +612,9 @@ tensorflow-probability&gt;=0.19.0
         <span class="nb">print</span><span class="p">(</span><span class="n">DQNAgent</span><span class="o">.</span><span class="n">get_policy</span><span class="p">(</span><span class="n">agent</span><span class="p">))</span>
         <span class="n">policy</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="o">.</span><span class="n">get_policy</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
         <span class="n">batch_obs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
-                <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">"obs"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"observation"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">"observation"</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="s2">"action_mask"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">"action_mask"</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
             <span class="p">}</span>
         <span class="p">}</span>
         <span class="n">batched_action</span><span class="p">,</span> <span class="n">state_out</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">compute_actions_from_input_dict</span><span class="p">(</span>
@@ -627,7 +627,7 @@ tensorflow-probability&gt;=0.19.0
     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rewards:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"rewards:"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">reward_sums</span><span class="p">)</span>
 </pre></div>
 </div>

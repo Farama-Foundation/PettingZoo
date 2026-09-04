@@ -408,7 +408,7 @@
 <span class="n">PAPER</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">SCISSORS</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">NONE</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">MOVES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ROCK&quot;</span><span class="p">,</span> <span class="s2">&quot;PAPER&quot;</span><span class="p">,</span> <span class="s2">&quot;SCISSORS&quot;</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">]</span>
+<span class="n">MOVES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ROCK"</span><span class="p">,</span> <span class="s2">"PAPER"</span><span class="p">,</span> <span class="s2">"SCISSORS"</span><span class="p">,</span> <span class="s2">"None"</span><span class="p">]</span>
 <span class="n">NUM_ITERS</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">REWARD_MAP</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">(</span><span class="n">ROCK</span><span class="p">,</span> <span class="n">ROCK</span><span class="p">):</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -424,15 +424,15 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The env function often wraps the environment in wrappers by default.</span>
 <span class="sd">    You can find full documentation for these methods</span>
 <span class="sd">    elsewhere in the developer documentation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">internal_render_mode</span> <span class="o">=</span> <span class="n">render_mode</span> <span class="k">if</span> <span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">&quot;ansi&quot;</span> <span class="k">else</span> <span class="s2">&quot;human&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">internal_render_mode</span> <span class="o">=</span> <span class="n">render_mode</span> <span class="k">if</span> <span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">"ansi"</span> <span class="k">else</span> <span class="s2">"human"</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">internal_render_mode</span><span class="p">)</span>
     <span class="c1"># This wrapper is only for environments which print results to the terminal</span>
-    <span class="k">if</span> <span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;ansi&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"ansi"</span><span class="p">:</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">CaptureStdoutWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="c1"># this wrapper helps error handling for discrete action spaces</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -443,17 +443,17 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The metadata holds environment constants. From gymnasium, we inherit the &quot;render_modes&quot;,</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    The metadata holds environment constants. From gymnasium, we inherit the "render_modes",</span>
 <span class="sd">    metadata which specifies which modes can be put into the render() method.</span>
 <span class="sd">    At least human mode should be supported.</span>
-<span class="sd">    The &quot;name&quot; metadata allows the environment to be pretty printed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    The "name" metadata allows the environment to be pretty printed.</span>
+<span class="sd">    """</span>
 
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">],</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;rps_v2&quot;</span><span class="p">}</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">],</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"rps_v2"</span><span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The init method takes in environment arguments and</span>
 <span class="sd">         should define the following attributes:</span>
 <span class="sd">        - possible_agents</span>
@@ -464,8 +464,8 @@
 <span class="sd">        If these methods are not overridden, spaces will be inferred from self.observation_spaces/action_spaces, raising a warning.</span>
 
 <span class="sd">        These attributes should not be changed after initialization.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;player_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"player_"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
 
         <span class="c1"># optional: a mapping between agent name and ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
@@ -480,7 +480,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
 
     <span class="c1"># Observation space should be defined here.</span>
-    <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent&#39;s space.</span>
+    <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
@@ -495,40 +495,40 @@
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">np_random_seed</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Renders the environment. In human mode, it can print to terminal, open</span>
 <span class="sd">        up a graphical window, or open up some other display that a human can see and understand.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
+                <span class="s2">"You are calling render method without specifying any render mode."</span>
             <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Current state: Agent1: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span><span class="si">}</span><span class="s2"> , Agent2: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Current state: Agent1: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span><span class="si">}</span><span class="s2"> , Agent2: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;Game over&quot;</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="s2">"Game over"</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Observe should return the observation of the specified agent. This function</span>
 <span class="sd">        should return a sane observation (though not necessarily the most up to date possible)</span>
 <span class="sd">        at any time after reset() is called.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># observation of one agent is the previous state of the other</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observations</span><span class="p">[</span><span class="n">agent</span><span class="p">])</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Close should release any graphical displays, subprocesses, network connections</span>
 <span class="sd">        or any other environment data which should not be kept around after the</span>
 <span class="sd">        user is no longer using the environment.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Reset needs to initialize the following attributes</span>
 <span class="sd">        - agents</span>
 <span class="sd">        - rewards</span>
@@ -540,8 +540,8 @@
 <span class="sd">        And must set up the environment so that render(), step(), and observe()</span>
 <span class="sd">        can be called without issues.</span>
 <span class="sd">        Here it sets up the state dictionary which is used by step() and the observations dictionary which is used by step() and observe()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Unlike gymnasium&#39;s Env, the environment is responsible for setting the random seed explicitly.</span>
+<span class="sd">        """</span>
+        <span class="c1"># Unlike gymnasium's Env, the environment is responsible for setting the random seed explicitly.</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">np_random</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">np_random_seed</span> <span class="o">=</span> <span class="n">seeding</span><span class="o">.</span><span class="n">np_random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
@@ -553,14 +553,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">NONE</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">NONE</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Our AgentSelector utility allows easy cyclic stepping through the agents list.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        step(action) takes in an action for the current agent (specified by</span>
 <span class="sd">        agent_selection) and needs to update</span>
 <span class="sd">        - rewards</span>
@@ -570,7 +570,7 @@
 <span class="sd">        - infos</span>
 <span class="sd">        - agent_selection (to the next agent)</span>
 <span class="sd">        And any internal state used by observe() or render()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -620,14 +620,14 @@
         <span class="c1"># Adds .rewards to ._cumulative_rewards</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>To interact with your custom AEC environment, use the following code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">aec_rps</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">aec_rps</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">aec_rps</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -660,7 +660,7 @@
 <span class="n">PAPER</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">SCISSORS</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">NO_MOVE</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">MOVES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ROCK&quot;</span><span class="p">,</span> <span class="s2">&quot;PAPER&quot;</span><span class="p">,</span> <span class="s2">&quot;SCISSORS&quot;</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">]</span>
+<span class="n">MOVES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ROCK"</span><span class="p">,</span> <span class="s2">"PAPER"</span><span class="p">,</span> <span class="s2">"SCISSORS"</span><span class="p">,</span> <span class="s2">"None"</span><span class="p">]</span>
 <span class="n">NUM_ITERS</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">REWARD_MAP</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">(</span><span class="n">ROCK</span><span class="p">,</span> <span class="n">ROCK</span><span class="p">):</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -676,15 +676,15 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The env function often wraps the environment in wrappers by default.</span>
 <span class="sd">    You can find full documentation for these methods</span>
 <span class="sd">    elsewhere in the developer documentation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">internal_render_mode</span> <span class="o">=</span> <span class="n">render_mode</span> <span class="k">if</span> <span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">&quot;ansi&quot;</span> <span class="k">else</span> <span class="s2">&quot;human&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">internal_render_mode</span> <span class="o">=</span> <span class="n">render_mode</span> <span class="k">if</span> <span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">"ansi"</span> <span class="k">else</span> <span class="s2">"human"</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">internal_render_mode</span><span class="p">)</span>
     <span class="c1"># This wrapper is only for environments which print results to the terminal</span>
-    <span class="k">if</span> <span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;ansi&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"ansi"</span><span class="p">:</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">CaptureStdoutWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="c1"># this wrapper helps error handling for discrete action spaces</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -695,20 +695,20 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    To support the AEC API, the raw_env() function just uses the from_parallel</span>
 <span class="sd">    function to convert from a ParallelEnv to an AEC env</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">parallel_to_aec</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">env</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">parallel_env</span><span class="p">(</span><span class="n">ParallelEnv</span><span class="p">):</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">],</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;rps_v2&quot;</span><span class="p">}</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">],</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"rps_v2"</span><span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The init method takes in environment arguments and should define the following attributes:</span>
 <span class="sd">        - possible_agents</span>
 <span class="sd">        - render_mode</span>
@@ -718,8 +718,8 @@
 <span class="sd">        If these methods are not overridden, spaces will be inferred from self.observation_spaces/action_spaces, raising a warning.</span>
 
 <span class="sd">        These attributes should not be changed after initialization.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;player_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"player_"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
 
         <span class="c1"># optional: a mapping between agent name and ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
@@ -728,7 +728,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
 
     <span class="c1"># Observation space should be defined here.</span>
-    <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent&#39;s space.</span>
+    <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
@@ -743,37 +743,37 @@
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">np_random_seed</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Renders the environment. In human mode, it can print to terminal, open</span>
 <span class="sd">        up a graphical window, or open up some other display that a human can see and understand.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
+                <span class="s2">"You are calling render method without specifying any render mode."</span>
             <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Current state: Agent1: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span><span class="si">}</span><span class="s2"> , Agent2: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Current state: Agent1: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span><span class="si">}</span><span class="s2"> , Agent2: </span><span class="si">{</span><span class="n">MOVES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;Game over&quot;</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="s2">"Game over"</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Close should release any graphical displays, subprocesses, network connections</span>
 <span class="sd">        or any other environment data which should not be kept around after the</span>
 <span class="sd">        user is no longer using the environment.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Reset needs to initialize the `agents` attribute and must set up the</span>
 <span class="sd">        environment so that render(), and step() can be called without issues.</span>
 <span class="sd">        Here it initializes the `num_moves` variable which counts the number of</span>
 <span class="sd">        hands that are played.</span>
 <span class="sd">        Returns the observations for each agent</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">np_random</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">np_random_seed</span> <span class="o">=</span> <span class="n">seeding</span><span class="o">.</span><span class="n">np_random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
@@ -786,7 +786,7 @@
         <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        step(action) takes in an action for each agent and should return the</span>
 <span class="sd">        - observations</span>
 <span class="sd">        - rewards</span>
@@ -794,7 +794,7 @@
 <span class="sd">        - truncations</span>
 <span class="sd">        - infos</span>
 <span class="sd">        dicts where each dict looks like {agent_1: item_1, agent_2: item_2}</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># If a user passes in actions with no agents, then just return empty observations, etc.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">actions</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
@@ -812,7 +812,7 @@
         <span class="n">env_truncation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">&gt;=</span> <span class="n">NUM_ITERS</span>
         <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env_truncation</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
 
-        <span class="c1"># Current observation is just the other player&#39;s most recent action</span>
+        <span class="c1"># Current observation is just the other player's most recent action</span>
         <span class="c1"># This is converted to a numpy value of type int to match the type</span>
         <span class="c1"># that we declared in observation_space()</span>
         <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
@@ -821,14 +821,14 @@
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">observations</span>
 
-        <span class="c1"># typically there won&#39;t be any information in the infos, but there must</span>
+        <span class="c1"># typically there won't be any information in the infos, but there must</span>
         <span class="c1"># still be an entry for each agent</span>
         <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
 
         <span class="k">if</span> <span class="n">env_truncation</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span>
 </pre></div>
@@ -836,7 +836,7 @@
 <p>To interact with your custom parallel environment, use the following code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_rps</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">parallel_rps</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">parallel_rps</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
@@ -855,13 +855,13 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">aec_rps</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">parallel_rps</span>
 
-<span class="n">register</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/rps-v0&quot;</span><span class="p">,</span> <span class="n">aec_rps</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
-<span class="n">register</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/rps-v0&quot;</span><span class="p">,</span> <span class="n">parallel_rps</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"custom/rps-v0"</span><span class="p">,</span> <span class="n">aec_rps</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"custom/rps-v0"</span><span class="p">,</span> <span class="n">parallel_rps</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">)</span>
 
 <span class="c1"># Confirm the environment is available in the registry</span>
-<span class="k">assert</span> <span class="s2">&quot;custom/rps-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+<span class="k">assert</span> <span class="s2">"custom/rps-v0"</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/rps-v0&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"custom/rps-v0"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -871,7 +871,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClipOutOfBoundsWrapper</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"butterfly/pistonball-v6"</span><span class="p">)</span>
 <span class="n">wrapped_env</span> <span class="o">=</span> <span class="n">ClipOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 <span class="c1"># Wrapped environments must be reset before use</span>
 <span class="n">wrapped_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -887,13 +887,13 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">AgentSelector</span></code> class steps through agents in a cycle</p>
 <p>It can be used as follows to cycle through the list of agents:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentSelector</span>
-<span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;agent_1&quot;</span><span class="p">,</span> <span class="s2">&quot;agent_2&quot;</span><span class="p">,</span> <span class="s2">&quot;agent_3&quot;</span><span class="p">]</span>
+<span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"agent_1"</span><span class="p">,</span> <span class="s2">"agent_2"</span><span class="p">,</span> <span class="s2">"agent_3"</span><span class="p">]</span>
 <span class="n">selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="n">agents</span><span class="p">)</span>
 <span class="n">agent_selection</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="c1"># agent_selection will be &quot;agent_1&quot;</span>
+<span class="c1"># agent_selection will be "agent_1"</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="n">agent_selection</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-    <span class="c1"># will select &quot;agent_2&quot;, &quot;agent_3&quot;, &quot;agent_1&quot;, &quot;agent_2&quot;, &quot;agent_3&quot;, ...&quot;</span>
+    <span class="c1"># will select "agent_2", "agent_3", "agent_1", "agent_2", "agent_3", ..."</span>
 </pre></div>
 </div>
 </section>
@@ -902,7 +902,7 @@
 <p>The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.</p>
 <p>For example, when the user tries to import the <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v0</span></code> environment, they import the following variable (defined in <code class="docutils literal notranslate"><span class="pre">pettingzoo/butterfly/__init__.py</span></code>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.deprecated_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeprecatedModule</span>
-<span class="n">knights_archers_zombies_v0</span> <span class="o">=</span> <span class="n">DeprecatedModule</span><span class="p">(</span><span class="s2">&quot;knights_archers_zombies&quot;</span><span class="p">,</span> <span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;v11&quot;</span><span class="p">)</span>
+<span class="n">knights_archers_zombies_v0</span> <span class="o">=</span> <span class="n">DeprecatedModule</span><span class="p">(</span><span class="s2">"knights_archers_zombies"</span><span class="p">,</span> <span class="s2">"v0"</span><span class="p">,</span> <span class="s2">"v11"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This declaration tells the user that <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v0</span></code> is deprecated and <code class="docutils literal notranslate"><span class="pre">knights_archers_zombies_v11</span></code> should be used instead. In particular, it gives the following error:</p>

@@ -691,7 +691,7 @@
     <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>The unique dependencies for this set of environments can be installed via:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;pettingzoo[atari]&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">'pettingzoo[atari]'</span>
 </pre></div>
 </div>
 <p>Install ROMs using <a class="reference external" href="https://github.com/Farama-Foundation/AutoROM">AutoROM</a>, or specify the path to your Atari rom using the <code class="docutils literal notranslate"><span class="pre">rom_path</span></code> argument (see <a class="reference internal" href="#common-parameters">Common Parameters</a>).</p>
@@ -701,7 +701,7 @@
 <p>To launch a <a class="reference internal" href="space_invaders/"><span class="doc std std-doc">Space Invaders</span></a> environment with random agents:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"atari/space_invaders-v2"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -739,9 +739,9 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">supersuit</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"atari/space_invaders-v2"</span><span class="p">)</span>
 
-<span class="c1"># as per openai baseline&#39;s MaxAndSKip wrapper, maxes over the last 2 frames</span>
+<span class="c1"># as per openai baseline's MaxAndSKip wrapper, maxes over the last 2 frames</span>
 <span class="c1"># to deal with frame flickering</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">supersuit</span><span class="o">.</span><span class="n">max_observation_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
@@ -755,7 +755,7 @@
 <span class="c1"># downscale observation for faster processing</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">supersuit</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">)</span>
 
-<span class="c1"># allow agent to see everything on the screen despite Atari&#39;s flickering screen problem</span>
+<span class="c1"># allow agent to see everything on the screen despite Atari's flickering screen problem</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">supersuit</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -767,9 +767,9 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 <span class="n">make</span><span class="p">(</span>
-    <span class="s2">&quot;aec&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">,</span>
-    <span class="n">obs_type</span><span class="o">=</span><span class="s2">&quot;rgb_image&quot;</span><span class="p">,</span>
+    <span class="s2">"aec"</span><span class="p">,</span>
+    <span class="s2">"atari/space_invaders-v2"</span><span class="p">,</span>
+    <span class="n">obs_type</span><span class="o">=</span><span class="s2">"rgb_image"</span><span class="p">,</span>
     <span class="n">full_action_space</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">max_cycles</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span>
     <span class="n">auto_rom_install_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -809,10 +809,10 @@ installed at the default AutoROM path.</p>
   <span class="n">author</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="n">Bellemare</span><span class="p">},</span> <span class="n">M</span><span class="o">.~</span><span class="n">G</span><span class="o">.</span> <span class="ow">and</span> <span class="p">{</span><span class="n">Naddaf</span><span class="p">},</span> <span class="n">Y</span><span class="o">.</span> <span class="ow">and</span> <span class="p">{</span><span class="n">Veness</span><span class="p">},</span> <span class="n">J</span><span class="o">.</span> <span class="ow">and</span> <span class="p">{</span><span class="n">Bowling</span><span class="p">},</span> <span class="n">M</span><span class="o">.</span><span class="p">},</span>
   <span class="n">title</span> <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">Arcade</span> <span class="n">Learning</span> <span class="n">Environment</span><span class="p">:</span> <span class="n">An</span> <span class="n">Evaluation</span> <span class="n">Platform</span> <span class="k">for</span> <span class="n">General</span> <span class="n">Agents</span><span class="p">},</span>
   <span class="n">journal</span> <span class="o">=</span> <span class="p">{</span><span class="n">Journal</span> <span class="n">of</span> <span class="n">Artificial</span> <span class="n">Intelligence</span> <span class="n">Research</span><span class="p">},</span>
-  <span class="n">year</span> <span class="o">=</span> <span class="s2">&quot;2013&quot;</span><span class="p">,</span>
-  <span class="n">month</span> <span class="o">=</span> <span class="s2">&quot;jun&quot;</span><span class="p">,</span>
-  <span class="n">volume</span> <span class="o">=</span> <span class="s2">&quot;47&quot;</span><span class="p">,</span>
-  <span class="n">pages</span> <span class="o">=</span> <span class="s2">&quot;253--279&quot;</span><span class="p">,</span>
+  <span class="n">year</span> <span class="o">=</span> <span class="s2">"2013"</span><span class="p">,</span>
+  <span class="n">month</span> <span class="o">=</span> <span class="s2">"jun"</span><span class="p">,</span>
+  <span class="n">volume</span> <span class="o">=</span> <span class="s2">"47"</span><span class="p">,</span>
+  <span class="n">pages</span> <span class="o">=</span> <span class="s2">"253--279"</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>

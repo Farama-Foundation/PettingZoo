@@ -406,7 +406,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span><span class="p">,</span> <span class="n">parallel_registry</span><span class="p">,</span> <span class="n">register</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_api_test</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="c1"># Sanity check</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">CustomEnvironment</span><span class="p">()</span>
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
@@ -415,22 +415,22 @@
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
 
     <span class="c1"># Register custom environments so they can be created with make()</span>
-    <span class="n">register</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span><span class="p">,</span> <span class="n">CustomEnvironment</span><span class="p">)</span>
+    <span class="n">register</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"custom/custom_environment-v0"</span><span class="p">,</span> <span class="n">CustomEnvironment</span><span class="p">)</span>
     <span class="n">register</span><span class="p">(</span>
-        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span><span class="p">,</span>
+        <span class="s2">"parallel"</span><span class="p">,</span>
+        <span class="s2">"custom/custom_action_masked_environment-v0"</span><span class="p">,</span>
         <span class="n">CustomActionMaskedEnvironment</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Confirm the environments are available in the parallel registry</span>
-    <span class="k">assert</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
-    <span class="k">assert</span> <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+    <span class="k">assert</span> <span class="s2">"custom/custom_environment-v0"</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
+    <span class="k">assert</span> <span class="s2">"custom/custom_action_masked_environment-v0"</span> <span class="ow">in</span> <span class="n">parallel_registry</span>
 
     <span class="c1"># Environments can now be created via make, just like built-in ones</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_environment-v0&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"custom/custom_environment-v0"</span><span class="p">)</span>
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;custom/custom_action_masked_environment-v0&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"custom/custom_action_masked_environment-v0"</span><span class="p">)</span>
     <span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">)</span>
 </pre></div>
 </div>

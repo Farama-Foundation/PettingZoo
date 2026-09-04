@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.butterfly.cooperative_pong.cooperative_pong</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Cooperative Pong</span>
 
 <span class="sd">```{figure} butterfly_cooperative_pong.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: cooperative_pong</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;butterfly environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;butterfly environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;butterfly/cooperative_pong-v6&quot;)`         |</span>
+<span class="sd">| Creation             | `make("aec", "butterfly/cooperative_pong-v6")`         |</span>
 <span class="sd">|----------------------|--------------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                               |</span>
 <span class="sd">| Parallel API         | Yes                                                    |</span>
 <span class="sd">| Manual Control       | Yes                                                    |</span>
-<span class="sd">| Agents               | `agents= [&#39;paddle_0&#39;, &#39;paddle_1&#39;]`                     |</span>
+<span class="sd">| Agents               | `agents= ['paddle_0', 'paddle_1']`                     |</span>
 <span class="sd">| Agents               | 2                                                      |</span>
 <span class="sd">| Action Shape         | Discrete(3)                                            |</span>
 <span class="sd">| Action Values        | [0, 1, 2]                                              |</span>
@@ -411,14 +411,14 @@
 
 <span class="sd">### Manual Control</span>
 
-<span class="sd">Move the left paddle using the &#39;W&#39; and &#39;S&#39; keys. Move the right paddle using &#39;UP&#39; and &#39;DOWN&#39; arrow keys.</span>
+<span class="sd">Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP' and 'DOWN' arrow keys.</span>
 
 <span class="sd">### Arguments</span>
 
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;butterfly/cooperative_pong-v6&quot;,</span>
+<span class="sd">make("aec", "butterfly/cooperative_pong-v6",</span>
 <span class="sd">    ball_speed = 9,</span>
 <span class="sd">    left_paddle_speed = 12,</span>
 <span class="sd">    right_paddle_speed = 12,</span>
@@ -449,7 +449,7 @@
 
 <span class="sd">`off_screen_penalty`: Negative reward penalty for each agent if the ball goes off the screen</span>
 
-<span class="sd">`render_mode`: Render mode for the env (either None, &quot;human&quot;, or &quot;rgb_array&quot;)</span>
+<span class="sd">`render_mode`: Render mode for the env (either None, "human", or "rgb_array")</span>
 
 <span class="sd">`render_ratio`: Scaling ratio for rendering the screen (controls display size, larger value gives smaller screen)</span>
 
@@ -466,7 +466,7 @@
 <span class="sd">* v1: Fixed bug in how `dones` were computed (1.3.1)</span>
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -489,17 +489,17 @@
 <span class="n">FPS</span> <span class="o">=</span> <span class="mi">15</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;env&quot;</span><span class="p">,</span> <span class="s2">&quot;parallel_env&quot;</span><span class="p">,</span> <span class="s2">&quot;raw_env&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"env"</span><span class="p">,</span> <span class="s2">"parallel_env"</span><span class="p">,</span> <span class="s2">"raw_env"</span><span class="p">]</span>
 
 
-<span class="n">AgentID</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;AgentID&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-<span class="n">ObsType</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;ObsType&quot;</span><span class="p">,</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">])</span>
+<span class="n">AgentID</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">"AgentID"</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<span class="n">ObsType</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">"ObsType"</span><span class="p">,</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">])</span>
 <span class="n">ActionType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-<span class="n">StateType</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;StateType&quot;</span><span class="p">,</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">])</span>
+<span class="n">StateType</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">"StateType"</span><span class="p">,</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">])</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_valid_angle</span><span class="p">(</span><span class="n">randomizer</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an initial angle for the ball&#39;s motion.</span>
+<span class="w">    </span><span class="sd">"""Generate an initial angle for the ball's motion.</span>
 
 <span class="sd">    This generates an angle in [0, 2*np.pi) that excludes the following</span>
 <span class="sd">    angle ranges (given in degrees):</span>
@@ -516,7 +516,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The angle generated (radians)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">ver_deg_range</span> <span class="o">=</span> <span class="mi">25</span>
     <span class="n">hor_deg_range</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">a1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">ver_deg_range</span><span class="p">)</span>
@@ -542,7 +542,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CooperativePong</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The base env for Cooperative Pong.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The base env for Cooperative Pong."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -559,7 +559,7 @@
         <span class="n">render_ratio</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">render_fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the CooperativePong game.</span>
+<span class="w">        </span><span class="sd">"""Initializes the CooperativePong game.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            randomizer: Random generator</span>
@@ -577,13 +577,13 @@
 <span class="sd">            max_reward: Total reward given to each agent over max_cycles timesteps</span>
 <span class="sd">            off_screen_penalty: Negative reward penalty for each agent if the ball</span>
 <span class="sd">              goes off the screen</span>
-<span class="sd">            render_mode: Render mode for the env (either None, &quot;human&quot;, or</span>
-<span class="sd">              &quot;rgb_array&quot;)</span>
+<span class="sd">            render_mode: Render mode for the env (either None, "human", or</span>
+<span class="sd">              "rgb_array")</span>
 <span class="sd">            render_ratio: Scaling ratio for rendering the screen (controls display</span>
 <span class="sd">              size, larger value gives smaller screen)</span>
 <span class="sd">            render_fps: Speed that the game is run (in frames per second, higher</span>
 <span class="sd">              values give faster game)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">num_agents</span> <span class="o">=</span> <span class="mi">2</span>
@@ -621,21 +621,21 @@
 
         <span class="c1"># paddles</span>
         <span class="n">l_paddle_dims</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span> <span class="o">//</span> <span class="n">render_ratio</span><span class="p">,</span> <span class="mi">80</span> <span class="o">//</span> <span class="n">render_ratio</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p0</span> <span class="o">=</span> <span class="n">Paddle</span><span class="p">(</span><span class="n">l_paddle_dims</span><span class="p">,</span> <span class="n">left_paddle_speed</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p0</span> <span class="o">=</span> <span class="n">Paddle</span><span class="p">(</span><span class="n">l_paddle_dims</span><span class="p">,</span> <span class="n">left_paddle_speed</span><span class="p">,</span> <span class="s2">"left"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cake_paddle</span><span class="p">:</span>
             <span class="n">r_paddle_dims</span> <span class="o">=</span> <span class="p">(</span><span class="mi">30</span> <span class="o">//</span> <span class="n">render_ratio</span><span class="p">,</span> <span class="mi">120</span> <span class="o">//</span> <span class="n">render_ratio</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">:</span> <span class="n">Paddle</span> <span class="o">=</span> <span class="n">CakePaddle</span><span class="p">(</span><span class="n">r_paddle_dims</span><span class="p">,</span> <span class="n">right_paddle_speed</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">:</span> <span class="n">Paddle</span> <span class="o">=</span> <span class="n">CakePaddle</span><span class="p">(</span><span class="n">r_paddle_dims</span><span class="p">,</span> <span class="n">right_paddle_speed</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">r_paddle_dims</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span> <span class="o">//</span> <span class="n">render_ratio</span><span class="p">,</span> <span class="mi">100</span> <span class="o">//</span> <span class="n">render_ratio</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">Paddle</span><span class="p">(</span><span class="n">r_paddle_dims</span><span class="p">,</span> <span class="n">right_paddle_speed</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">Paddle</span><span class="p">(</span><span class="n">r_paddle_dims</span><span class="p">,</span> <span class="n">right_paddle_speed</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">ball_speed</span> <span class="o">&gt;</span> <span class="n">l_paddle_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">ball_speed</span> <span class="o">&gt;</span> <span class="n">r_paddle_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Ball speed is larger than width of the paddle. This can cause the ball &quot;</span>
-                <span class="s2">&quot;to move through the paddle, leading to incorrect behavior.&quot;</span>
+                <span class="s2">"Ball speed is larger than width of the paddle. This can cause the ball "</span>
+                <span class="s2">"to move through the paddle, leading to incorrect behavior."</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">AgentID</span><span class="p">(</span><span class="s2">&quot;paddle_0&quot;</span><span class="p">),</span> <span class="n">AgentID</span><span class="p">(</span><span class="s2">&quot;paddle_1&quot;</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">AgentID</span><span class="p">(</span><span class="s2">"paddle_0"</span><span class="p">),</span> <span class="n">AgentID</span><span class="p">(</span><span class="s2">"paddle_1"</span><span class="p">)]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ball</span> <span class="o">=</span> <span class="n">Ball</span><span class="p">(</span>
             <span class="n">randomizer</span><span class="p">,</span>
@@ -648,11 +648,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reinit</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">render_fps</span> <span class="o">=</span> <span class="n">render_fps</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reinit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reinitialize datastructures.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Reinitialize datastructures."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)))</span>
@@ -662,7 +662,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the env for a new run.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Reset the env for a new run."""</span>
         <span class="c1"># reset ball and paddle init conditions</span>
         <span class="c1"># set the direction to an angle between [0, 2*np.pi)</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="n">get_valid_angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">randomizer</span><span class="p">)</span>
@@ -680,55 +680,55 @@
 
         <span class="c1"># Pygame surface required even for render_mode == None, as observations are taken from pixel values</span>
         <span class="c1"># Observe</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_height</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the pygame window, if open.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Close the pygame window, if open."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render the current state.</span>
+<span class="w">        </span><span class="sd">"""Render the current state.</span>
 
 <span class="sd">        The result of this call depends on the render_mode:</span>
 <span class="sd">        * None: a warning in printed and nothing else is done</span>
-<span class="sd">        * &quot;human&quot;: the image is displayed in a Pygame window</span>
-<span class="sd">        * &quot;rgb_array&quot;: an numeric array of the screen is returned</span>
+<span class="sd">        * "human": the image is displayed in a Pygame window</span>
+<span class="sd">        * "rgb_array": an numeric array of the screen is returned</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            If render_mode is &quot;rgb_array&quot;, an array of the screen</span>
+<span class="sd">            If render_mode is "rgb_array", an array of the screen</span>
 <span class="sd">            image as integers is returned. Otherwise, None is returned.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
+                <span class="s2">"You are calling render method without specifying any render mode."</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_height</span><span class="p">))</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Cooperative Pong&quot;</span><span class="p">)</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">"Cooperative Pong"</span><span class="p">)</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">render_fps</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"rgb_array"</span>
             <span class="k">else</span> <span class="kc">None</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the current screen as an array.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the current screen as an array."""</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span>
@@ -738,7 +738,7 @@
         <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">ObsType</span><span class="p">,</span> <span class="n">observation</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StateType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an observation of the global environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns an observation of the global environment."""</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -746,7 +746,7 @@
         <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">StateType</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw the paddles and ball on the screen.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Draw the paddles and ball on the screen."""</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
@@ -754,7 +754,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the env based on the action of the given agent.</span>
+<span class="w">        </span><span class="sd">"""Update the env based on the action of the given agent.</span>
 
 <span class="sd">        This will move the paddles and ball as appropriate and determine</span>
 <span class="sd">        the new state as a result.</span>
@@ -771,7 +771,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            action: the action to take</span>
 <span class="sd">            agent: which agent is acting</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># update p0, p1 accordingly</span>
         <span class="c1"># action: 0: do nothing,</span>
         <span class="c1"># action: 1: p[i] move up</span>
@@ -814,7 +814,7 @@
 <div class="viewcode-block" id="env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the wrapped environment.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Creates the wrapped environment."""</span>
     <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">aec_env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
     <span class="n">aec_env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
@@ -828,18 +828,18 @@
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">],</span> <span class="n">EzPickle</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The CooperativePong AEC environment.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The CooperativePong AEC environment."""</span>
 
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;cooperative_pong_v6&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="n">FPS</span><span class="p">,</span>
-        <span class="s2">&quot;has_manual_policy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">,</span> <span class="s2">"rgb_array"</span><span class="p">],</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"cooperative_pong_v6"</span><span class="p">,</span>
+        <span class="s2">"is_parallelizable"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"render_fps"</span><span class="p">:</span> <span class="n">FPS</span><span class="p">,</span>
+        <span class="s2">"has_manual_policy"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Initialize the environment."""</span>
         <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
 
@@ -867,22 +867,22 @@
 <div class="viewcode-block" id="raw_env.observation_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.observation_space">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the observation space for the given agent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the observation space for the given agent."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="raw_env.action_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.action_space">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the action space for the given agent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the action space for the given agent."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Seed the random number generator.</span>
+<span class="w">        </span><span class="sd">"""Seed the random number generator.</span>
 
 <span class="sd">        This also creates the underlying environment.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">randomizer</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seeding</span><span class="o">.</span><span class="n">np_random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">CooperativePong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">randomizer</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
 
@@ -891,7 +891,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Reset the environment."""</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -907,7 +907,7 @@
 <div class="viewcode-block" id="raw_env.observe">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.observe">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the observation for the given agent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the observation for the given agent."""</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">observe</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">obs</span></div>
 
@@ -915,7 +915,7 @@
 <div class="viewcode-block" id="raw_env.state">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.state">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StateType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the state for the environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the state for the environment."""</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">state</span></div>
 
@@ -923,21 +923,21 @@
 <div class="viewcode-block" id="raw_env.close">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the renderer.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Close the renderer."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="raw_env.render">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.render">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render the current state of the environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Render the current state of the environment."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="raw_env.step">
 <a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Take a step of the environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Take a step of the environment."""</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -963,7 +963,7 @@
 
 
 <span class="c1"># This was originally created, in full, by Ananth Hari in a different repo, and was</span>
-<span class="c1"># added in by J K Terry (which is why they&#39;re shown as the creator in the git history)</span>
+<span class="c1"># added in by J K Terry (which is why they're shown as the creator in the git history)</span>
 </pre></div>
           </article>
         </div>

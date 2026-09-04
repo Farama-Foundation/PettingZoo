@@ -378,22 +378,22 @@
             
             <h1>Source code for pettingzoo.classic.rlcard_envs.texas_holdem_no_limit</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd"># Texas Hold&#39;em No Limit</span>
+<span class="sd">"""</span>
+<span class="sd"># Texas Hold'em No Limit</span>
 
 <span class="sd">```{figure} classic_texas_holdem_no_limit.gif</span>
 <span class="sd">:width: 140px</span>
 <span class="sd">:name: texas_holdem_no_limit</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation           | `make(&quot;aec&quot;, &quot;classic/texas_holdem_no_limit-v6&quot;)`         |</span>
+<span class="sd">| Creation           | `make("aec", "classic/texas_holdem_no_limit-v6")`         |</span>
 <span class="sd">|--------------------|-----------------------------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                                                  |</span>
 <span class="sd">| Parallel API       | Yes                                                       |</span>
 <span class="sd">| Manual Control     | No                                                        |</span>
-<span class="sd">| Agents             | `agents= [&#39;player_0&#39;, &#39;player_1&#39;]`                        |</span>
+<span class="sd">| Agents             | `agents= ['player_0', 'player_1']`                        |</span>
 <span class="sd">| Agents             | 2                                                         |</span>
 <span class="sd">| Action Shape       | Discrete(5)                                               |</span>
 <span class="sd">| Action Values      | Discrete(5)                                               |</span>
@@ -401,7 +401,7 @@
 <span class="sd">| Observation Values | [0, 100]                                                  |</span>
 
 
-<span class="sd">Texas Hold&#39;em No Limit is a variation of Texas Hold&#39;em where there is no limit on the amount of each raise or the number of raises.</span>
+<span class="sd">Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.</span>
 
 <span class="sd">Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.</span>
 
@@ -410,23 +410,23 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;classic/texas_holdem_no_limit-v6&quot;, num_players=2)</span>
+<span class="sd">make("aec", "classic/texas_holdem_no_limit-v6", num_players=2)</span>
 <span class="sd">```</span>
 
 <span class="sd">`num_players`: Sets the number of players in the game. Minimum is 2.</span>
 
 
-<span class="sd">Texas Hold&#39;em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and</span>
-<span class="sd">the loser will get -1. This is an implementation of the standard limited version of Texas Hold&#39;m, sometimes referred to as &#39;Limit Texas Hold&#39;em&#39;.</span>
+<span class="sd">Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and</span>
+<span class="sd">the loser will get -1. This is an implementation of the standard limited version of Texas Hold'm, sometimes referred to as 'Limit Texas Hold'em'.</span>
 
 <span class="sd">Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.</span>
 
 
 <span class="sd">### Observation Space</span>
 
-<span class="sd">The observation is a dictionary which contains an `&#39;observation&#39;` element which is the usual RL observation described below, and an  `&#39;action_mask&#39;` which holds the legal moves, described in the Legal Actions Mask section.</span>
+<span class="sd">The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.</span>
 
-<span class="sd">The main observation space is similar to Texas Hold&#39;em. The first 52 entries represent the union of the current player&#39;s hand and the community cards.</span>
+<span class="sd">The main observation space is similar to Texas Hold'em. The first 52 entries represent the union of the current player's hand and the community cards.</span>
 
 <span class="sd">|  Index  | Description                                  |  Values  |</span>
 <span class="sd">|:-------:|----------------------------------------------|:--------:|</span>
@@ -468,7 +468,7 @@
 <span class="sd">* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)</span>
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -497,13 +497,13 @@
 <a class="viewcode-back" href="../../../../../environments/classic/texas_holdem_no_limit/#pettingzoo.classic.rlcard_envs.texas_holdem_no_limit.raw_env">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">TexasHoldem</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;texas_holdem_no_limit_v6&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">,</span> <span class="s2">"rgb_array"</span><span class="p">],</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"texas_holdem_no_limit_v6"</span><span class="p">,</span>
+        <span class="s2">"is_parallelizable"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">"render_fps"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="n">game_name</span> <span class="o">=</span> <span class="s2">&quot;no-limit-holdem&quot;</span>
+    <span class="n">game_name</span> <span class="o">=</span> <span class="s2">"no-limit-holdem"</span>
     <span class="n">obs_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">54</span><span class="p">,)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -518,7 +518,7 @@
             <span class="p">[</span>
                 <span class="n">spaces</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span>
                     <span class="p">{</span>
-                        <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
+                        <span class="s2">"observation"</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
                             <span class="n">low</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                                 <span class="mi">54</span><span class="p">,</span>
                             <span class="p">),</span>
@@ -530,7 +530,7 @@
                             <span class="p">),</span>
                             <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
                         <span class="p">),</span>
-                        <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
+                        <span class="s2">"action_mask"</span><span class="p">:</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
                             <span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">num_actions</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span>
                         <span class="p">),</span>
                     <span class="p">}</span>
@@ -539,7 +539,7 @@
             <span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">caption</span> <span class="o">=</span> <span class="s2">&quot;Texas Hold&#39;em No Limit&quot;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caption</span> <span class="o">=</span> <span class="s2">"Texas Hold'em No Limit"</span></div>
 
 </pre></div>
           </article>

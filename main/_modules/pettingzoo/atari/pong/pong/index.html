@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.atari.pong.pong</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Pong</span>
 
 <span class="sd">```{figure} atari_pong.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: pong</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;atari/pong-v3&quot;)`         |</span>
+<span class="sd">| Creation             | `make("aec", "atari/pong-v3")`         |</span>
 <span class="sd">|----------------------|----------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                               |</span>
 <span class="sd">| Parallel API         | Yes                                    |</span>
 <span class="sd">| Manual Control       | No                                     |</span>
-<span class="sd">| Agents               | `agents= [&#39;first_0&#39;, &#39;second_0&#39;]`      |</span>
+<span class="sd">| Agents               | `agents= ['first_0', 'second_0']`      |</span>
 <span class="sd">| Agents               | 2                                      |</span>
 <span class="sd">| Action Shape         | (1,)                                   |</span>
 <span class="sd">| Action Values        | [0,5]                                  |</span>
@@ -420,7 +420,7 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;atari/pong-v3&quot;, num_players=2)</span>
+<span class="sd">make("aec", "atari/pong-v3", num_players=2)</span>
 <span class="sd">```</span>
 
 <span class="sd">`num_players`:  Number of players (must be either 2 or 4)</span>
@@ -446,7 +446,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
@@ -460,47 +460,47 @@
 <span class="p">)</span>
 
 <span class="n">avaliable_2p_versions</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;classic&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-    <span class="s2">&quot;two_paddles&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s2">&quot;soccer&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
-    <span class="s2">&quot;foozpong&quot;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span>
-    <span class="s2">&quot;hockey&quot;</span><span class="p">:</span> <span class="mi">27</span><span class="p">,</span>
-    <span class="s2">&quot;handball&quot;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
-    <span class="s2">&quot;volleyball&quot;</span><span class="p">:</span> <span class="mi">39</span><span class="p">,</span>
-    <span class="s2">&quot;basketball&quot;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
+    <span class="s2">"classic"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">"two_paddles"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">"soccer"</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+    <span class="s2">"foozpong"</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span>
+    <span class="s2">"hockey"</span><span class="p">:</span> <span class="mi">27</span><span class="p">,</span>
+    <span class="s2">"handball"</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+    <span class="s2">"volleyball"</span><span class="p">:</span> <span class="mi">39</span><span class="p">,</span>
+    <span class="s2">"basketball"</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">avaliable_4p_versions</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;classic&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="s2">&quot;two_paddles&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
-    <span class="s2">&quot;soccer&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
-    <span class="s2">&quot;foozpong&quot;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
-    <span class="s2">&quot;hockey&quot;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span>
-    <span class="s2">&quot;quadrapong&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span>
-    <span class="s2">&quot;handball&quot;</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span>
-    <span class="s2">&quot;volleyball&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span>
-    <span class="s2">&quot;basketball&quot;</span><span class="p">:</span> <span class="mi">49</span><span class="p">,</span>
+    <span class="s2">"classic"</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="s2">"two_paddles"</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+    <span class="s2">"soccer"</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="s2">"foozpong"</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+    <span class="s2">"hockey"</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span>
+    <span class="s2">"quadrapong"</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span>
+    <span class="s2">"handball"</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span>
+    <span class="s2">"volleyball"</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span>
+    <span class="s2">"basketball"</span><span class="p">:</span> <span class="mi">49</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/atari/pong/#pettingzoo.atari.pong.pong.raw_env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span>
-    <span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">game_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classic&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">game_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"classic"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtariAECEnv</span><span class="p">:</span>
-    <span class="k">assert</span> <span class="n">num_players</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">num_players</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;pong only supports 2 or 4 players&quot;</span>
+    <span class="k">assert</span> <span class="n">num_players</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">num_players</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"pong only supports 2 or 4 players"</span>
     <span class="n">versions</span> <span class="o">=</span> <span class="n">avaliable_2p_versions</span> <span class="k">if</span> <span class="n">num_players</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">avaliable_4p_versions</span>
     <span class="k">assert</span> <span class="n">game_version</span> <span class="ow">in</span> <span class="n">versions</span><span class="p">,</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;pong version </span><span class="si">{</span><span class="n">game_version</span><span class="si">}</span><span class="s2"> not supported for number of players </span><span class="si">{</span><span class="n">num_players</span><span class="si">}</span><span class="s2">. Available options are </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"pong version </span><span class="si">{</span><span class="n">game_version</span><span class="si">}</span><span class="s2"> not supported for number of players </span><span class="si">{</span><span class="n">num_players</span><span class="si">}</span><span class="s2">. Available options are </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
     <span class="n">mode</span> <span class="o">=</span> <span class="n">versions</span><span class="p">[</span><span class="n">game_version</span><span class="p">]</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"*.py"</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">version_num</span>
+    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">version_num</span>
     <span class="k">return</span> <span class="n">BaseAtariEnv</span><span class="p">(</span>
-        <span class="n">game</span><span class="o">=</span><span class="s2">&quot;pong&quot;</span><span class="p">,</span>
+        <span class="n">game</span><span class="o">=</span><span class="s2">"pong"</span><span class="p">,</span>
         <span class="n">num_players</span><span class="o">=</span><span class="n">num_players</span><span class="p">,</span>
         <span class="n">mode_num</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
         <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>

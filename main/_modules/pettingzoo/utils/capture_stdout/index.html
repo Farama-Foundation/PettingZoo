@@ -384,18 +384,18 @@
 <div class="viewcode-block" id="capture_stdout">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.capture_stdout.capture_stdout">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">capture_stdout</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Class allowing to capture stdout.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Class allowing to capture stdout.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; from pettingzoo.utils.capture_stdout import capture_stdout</span>
 <span class="sd">        &gt;&gt;&gt; with capture_stdout() as var:</span>
-<span class="sd">        ...     print(&quot;test&quot;)</span>
+<span class="sd">        ...     print("test")</span>
 <span class="sd">        ...     data = var.getvalue()</span>
 <span class="sd">        ...</span>
 <span class="sd">        &gt;&gt;&gt; data</span>
-<span class="sd">        &#39;test\n&#39;</span>
+<span class="sd">        'test\n'</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">old_stdout</span> <span class="o">=</span> <span class="kc">None</span>

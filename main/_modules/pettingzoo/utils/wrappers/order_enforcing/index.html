@@ -399,7 +399,7 @@
 <div class="viewcode-block" id="OrderEnforcingWrapper">
 <a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.OrderEnforcingWrapper">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if function calls or attribute access are in a disallowed order.</span>
+<span class="w">    </span><span class="sd">"""Checks if function calls or attribute access are in a disallowed order.</span>
 
 <span class="sd">    The following are raised:</span>
 <span class="sd">    * AttributeError if any of the following are accessed before reset():</span>
@@ -408,11 +408,11 @@
 <span class="sd">    * An error if any of the following are called before reset:</span>
 <span class="sd">      render(), step(), observe(), state(), agent_iter()</span>
 <span class="sd">    * A warning if step() is called when there are no agents remaining.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">&quot;OrderEnforcingWrapper is only compatible with AEC environments&quot;</span>
+            <span class="s2">"OrderEnforcingWrapper is only compatible with AEC environments"</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_updated</span> <span class="o">=</span> <span class="kc">False</span>
@@ -420,21 +420,21 @@
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Raises an error if certain data is accessed before reset.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Raises an error if certain data is accessed before reset."""</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="n">name</span>
             <span class="ow">in</span> <span class="p">{</span>
-                <span class="s2">&quot;rewards&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;terminations&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;truncations&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;infos&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;agent_selection&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;num_agents&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;agents&quot;</span><span class="p">,</span>
+                <span class="s2">"rewards"</span><span class="p">,</span>
+                <span class="s2">"terminations"</span><span class="p">,</span>
+                <span class="s2">"truncations"</span><span class="p">,</span>
+                <span class="s2">"infos"</span><span class="p">,</span>
+                <span class="s2">"agent_selection"</span><span class="p">,</span>
+                <span class="s2">"num_agents"</span><span class="p">,</span>
+                <span class="s2">"agents"</span><span class="p">,</span>
             <span class="p">}</span>
             <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span>
         <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> cannot be accessed before reset&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> cannot be accessed before reset"</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="nd">@override</span>
@@ -484,11 +484,11 @@
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;metadata&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"metadata"</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="n">OrderEnforcingWrapper</span>
-                <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">!s}</span><span class="s2">&gt;&quot;</span>
+                <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">!s}</span><span class="s2">&gt;"</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
@@ -505,7 +505,7 @@
         <span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">OrderEnforcingWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">],</span> <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">OrderEnforcingWrapper</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">&quot;env must be wrapped by OrderEnforcingWrapper&quot;</span>
+            <span class="s2">"env must be wrapped by OrderEnforcingWrapper"</span>
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">)</span>
 
@@ -514,7 +514,7 @@
         <span class="n">agent</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">_has_updated</span>  <span class="c1"># type: ignore</span>
-        <span class="p">),</span> <span class="s2">&quot;need to call step() or reset() in a loop over `agent_iter`&quot;</span>
+        <span class="p">),</span> <span class="s2">"need to call step() or reset() in a loop over `agent_iter`"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">_has_updated</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="n">agent</span>
 </pre></div>

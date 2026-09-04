@@ -420,7 +420,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">¶</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==2.2.1; python_version &gt;= &#39;3.10&#39; and python_version &lt; &#39;3.12&#39;
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agilerl==2.2.1; python_version &gt;= '3.10' and python_version &lt; '3.12'
 pettingzoo[classic,atari]&gt;=1.27.0
 mpe2&gt;=1.0.0
 AutoROM&gt;=0.6.1
@@ -441,10 +441,10 @@ PyYAML&gt;=5.4.1
 <section id="train-multiple-agents-using-maddpg">
 <h3>Train multiple agents using MADDPG<a class="headerlink" href="#train-multiple-agents-using-maddpg" title="Link to this heading">¶</a></h3>
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with AgileRL. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.com/invite/eB8HyTA2ux">Discord server</a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;This tutorial shows how to train an MADDPG agent on the space invaders atari environment.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""This tutorial shows how to train an MADDPG agent on the space invaders atari environment.</span>
 
 <span class="sd">Authors: Michael (https://github.com/mikepratt1), Nick (https://github.com/nicku-a), Jaime (https://github.com/jaimesabalbermudez)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
@@ -461,47 +461,47 @@ PyYAML&gt;=5.4.1
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
 
     <span class="c1"># Define the network configuration</span>
     <span class="n">NET_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;encoder_config&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;channel_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>  <span class="c1"># CNN channel size</span>
-            <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>  <span class="c1"># CNN kernel size</span>
-            <span class="s2">&quot;stride_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>  <span class="c1"># CNN stride size</span>
+        <span class="s2">"encoder_config"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"channel_size"</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>  <span class="c1"># CNN channel size</span>
+            <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>  <span class="c1"># CNN kernel size</span>
+            <span class="s2">"stride_size"</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>  <span class="c1"># CNN stride size</span>
         <span class="p">},</span>
-        <span class="s2">&quot;head_config&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;hidden_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]},</span>  <span class="c1"># Actor head hidden size</span>
+        <span class="s2">"head_config"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"hidden_size"</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]},</span>  <span class="c1"># Actor head hidden size</span>
     <span class="p">}</span>
 
     <span class="c1"># Define the initial hyperparameters</span>
     <span class="n">INIT_HP</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;POPULATION_SIZE&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s2">&quot;ALGO&quot;</span><span class="p">:</span> <span class="s2">&quot;MADDPG&quot;</span><span class="p">,</span>  <span class="c1"># Algorithm</span>
+        <span class="s2">"POPULATION_SIZE"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"ALGO"</span><span class="p">:</span> <span class="s2">"MADDPG"</span><span class="p">,</span>  <span class="c1"># Algorithm</span>
         <span class="c1"># Swap image channels dimension from last to first [H, W, C] -&gt; [C, H, W]</span>
-        <span class="s2">&quot;CHANNELS_LAST&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;BATCH_SIZE&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>  <span class="c1"># Batch size</span>
-        <span class="s2">&quot;O_U_NOISE&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Ornstein Uhlenbeck action noise</span>
-        <span class="s2">&quot;EXPL_NOISE&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># Action noise scale</span>
-        <span class="s2">&quot;MEAN_NOISE&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># Mean action noise</span>
-        <span class="s2">&quot;THETA&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>  <span class="c1"># Rate of mean reversion in OU noise</span>
-        <span class="s2">&quot;DT&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># Timestep for OU noise</span>
-        <span class="s2">&quot;LR_ACTOR&quot;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>  <span class="c1"># Actor learning rate</span>
-        <span class="s2">&quot;LR_CRITIC&quot;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>  <span class="c1"># Critic learning rate</span>
-        <span class="s2">&quot;GAMMA&quot;</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span>  <span class="c1"># Discount factor</span>
-        <span class="s2">&quot;MEMORY_SIZE&quot;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>  <span class="c1"># Max memory buffer size</span>
-        <span class="s2">&quot;LEARN_STEP&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># Learning frequency</span>
-        <span class="s2">&quot;TAU&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># For soft update of target parameters</span>
+        <span class="s2">"CHANNELS_LAST"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"BATCH_SIZE"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>  <span class="c1"># Batch size</span>
+        <span class="s2">"O_U_NOISE"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Ornstein Uhlenbeck action noise</span>
+        <span class="s2">"EXPL_NOISE"</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># Action noise scale</span>
+        <span class="s2">"MEAN_NOISE"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># Mean action noise</span>
+        <span class="s2">"THETA"</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>  <span class="c1"># Rate of mean reversion in OU noise</span>
+        <span class="s2">"DT"</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># Timestep for OU noise</span>
+        <span class="s2">"LR_ACTOR"</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>  <span class="c1"># Actor learning rate</span>
+        <span class="s2">"LR_CRITIC"</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>  <span class="c1"># Critic learning rate</span>
+        <span class="s2">"GAMMA"</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span>  <span class="c1"># Discount factor</span>
+        <span class="s2">"MEMORY_SIZE"</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>  <span class="c1"># Max memory buffer size</span>
+        <span class="s2">"LEARN_STEP"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># Learning frequency</span>
+        <span class="s2">"TAU"</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># For soft update of target parameters</span>
     <span class="p">}</span>
 
     <span class="n">num_envs</span> <span class="o">=</span> <span class="mi">8</span>
     <span class="c1"># Define the space invaders environment as a parallel environment</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"atari/space_invaders-v2"</span><span class="p">)</span>
 
     <span class="c1"># Environment processing for image based observations</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_skip_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">clip_reward_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"B"</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">AsyncPettingZooVecEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">env</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_envs</span><span class="p">)])</span>
@@ -511,13 +511,13 @@ PyYAML&gt;=5.4.1
     <span class="c1"># Configure the multi-agent algo input arguments</span>
     <span class="n">observation_spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">single_observation_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">]</span>
     <span class="n">action_spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">single_action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;CHANNELS_LAST&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"CHANNELS_LAST"</span><span class="p">]:</span>
         <span class="n">observation_spaces</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">observation_space_channels_to_first</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="k">for</span> <span class="n">obs</span> <span class="ow">in</span> <span class="n">observation_spaces</span>
         <span class="p">]</span>
 
     <span class="c1"># Append number of agents and agent IDs to the initial hyperparameter dictionary</span>
-    <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;AGENT_IDS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span>
+    <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"AGENT_IDS"</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span>
 
     <span class="c1"># Mutation config for RL hyperparameters</span>
     <span class="n">hp_config</span> <span class="o">=</span> <span class="n">HyperparameterConfig</span><span class="p">(</span>
@@ -531,23 +531,23 @@ PyYAML&gt;=5.4.1
 
     <span class="c1"># Create a population ready for evolutionary hyper-parameter optimisation</span>
     <span class="n">agent</span> <span class="o">=</span> <span class="n">create_population</span><span class="p">(</span>
-        <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;ALGO&quot;</span><span class="p">],</span>
+        <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"ALGO"</span><span class="p">],</span>
         <span class="n">observation_spaces</span><span class="p">,</span>
         <span class="n">action_spaces</span><span class="p">,</span>
         <span class="n">NET_CONFIG</span><span class="p">,</span>
         <span class="n">INIT_HP</span><span class="p">,</span>
         <span class="n">hp_config</span><span class="p">,</span>
-        <span class="n">population_size</span><span class="o">=</span><span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;POPULATION_SIZE&quot;</span><span class="p">],</span>
+        <span class="n">population_size</span><span class="o">=</span><span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"POPULATION_SIZE"</span><span class="p">],</span>
         <span class="n">num_envs</span><span class="o">=</span><span class="n">num_envs</span><span class="p">,</span>
         <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Configure the multi-agent replay buffer</span>
-    <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">,</span> <span class="s2">&quot;next_state&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span>
+    <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"state"</span><span class="p">,</span> <span class="s2">"action"</span><span class="p">,</span> <span class="s2">"reward"</span><span class="p">,</span> <span class="s2">"next_state"</span><span class="p">,</span> <span class="s2">"done"</span><span class="p">]</span>
     <span class="n">memory</span> <span class="o">=</span> <span class="n">MultiAgentReplayBuffer</span><span class="p">(</span>
-        <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;MEMORY_SIZE&quot;</span><span class="p">],</span>
+        <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"MEMORY_SIZE"</span><span class="p">],</span>
         <span class="n">field_names</span><span class="o">=</span><span class="n">field_names</span><span class="p">,</span>
-        <span class="n">agent_ids</span><span class="o">=</span><span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;AGENT_IDS&quot;</span><span class="p">],</span>
+        <span class="n">agent_ids</span><span class="o">=</span><span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"AGENT_IDS"</span><span class="p">],</span>
         <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -562,14 +562,14 @@ PyYAML&gt;=5.4.1
     <span class="n">total_steps</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># TRAINING LOOP</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training...&quot;</span><span class="p">)</span>
-    <span class="n">pbar</span> <span class="o">=</span> <span class="n">trange</span><span class="p">(</span><span class="n">max_steps</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;step&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Training..."</span><span class="p">)</span>
+    <span class="n">pbar</span> <span class="o">=</span> <span class="n">trange</span><span class="p">(</span><span class="n">max_steps</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"step"</span><span class="p">)</span>
     <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">max_steps</span><span class="p">):</span>
         <span class="n">state</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># Reset environment at start of episode</span>
         <span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_envs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">agent_ids</span><span class="p">)))</span>
         <span class="n">completed_episode_scores</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;CHANNELS_LAST&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"CHANNELS_LAST"</span><span class="p">]:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">agent_id</span><span class="p">:</span> <span class="n">obs_channels_to_first</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent_id</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
             <span class="p">}</span>
@@ -594,7 +594,7 @@ PyYAML&gt;=5.4.1
             <span class="n">steps</span> <span class="o">+=</span> <span class="n">num_envs</span>
 
             <span class="c1"># Image processing if necessary for the environment</span>
-            <span class="k">if</span> <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;CHANNELS_LAST&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"CHANNELS_LAST"</span><span class="p">]:</span>
                 <span class="n">next_state</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="n">agent_id</span><span class="p">:</span> <span class="n">obs_channels_to_first</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">agent_id</span><span class="p">,</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">next_state</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -621,14 +621,14 @@ PyYAML&gt;=5.4.1
                 <span class="p">):</span>
                     <span class="c1"># Sample replay buffer</span>
                     <span class="n">experiences</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
-                    <span class="c1"># Learn according to agent&#39;s RL algorithm</span>
+                    <span class="c1"># Learn according to agent's RL algorithm</span>
                     <span class="n">agent</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">experiences</span><span class="p">)</span>
             <span class="c1"># Handle num_envs &gt; learn step; learn multiple times per step in env</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">agent</span><span class="o">.</span><span class="n">batch_size</span> <span class="ow">and</span> <span class="n">memory</span><span class="o">.</span><span class="n">counter</span> <span class="o">&gt;</span> <span class="n">learning_delay</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_envs</span> <span class="o">//</span> <span class="n">agent</span><span class="o">.</span><span class="n">learn_step</span><span class="p">):</span>
                     <span class="c1"># Sample replay buffer</span>
                     <span class="n">experiences</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
-                    <span class="c1"># Learn according to agent&#39;s RL algorithm</span>
+                    <span class="c1"># Learn according to agent's RL algorithm</span>
                     <span class="n">agent</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">experiences</span><span class="p">)</span>
 
             <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
@@ -652,7 +652,7 @@ PyYAML&gt;=5.4.1
         <span class="c1"># Evaluate population</span>
         <span class="n">fitness</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
             <span class="n">env</span><span class="p">,</span>
-            <span class="n">swap_channels</span><span class="o">=</span><span class="n">INIT_HP</span><span class="p">[</span><span class="s2">&quot;CHANNELS_LAST&quot;</span><span class="p">],</span>
+            <span class="n">swap_channels</span><span class="o">=</span><span class="n">INIT_HP</span><span class="p">[</span><span class="s2">"CHANNELS_LAST"</span><span class="p">],</span>
             <span class="n">max_steps</span><span class="o">=</span><span class="n">eval_steps</span><span class="p">,</span>
             <span class="n">loop</span><span class="o">=</span><span class="n">eval_loop</span><span class="p">,</span>
             <span class="n">sum_scores</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -660,26 +660,26 @@ PyYAML&gt;=5.4.1
         <span class="n">pop_episode_scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">completed_episode_scores</span><span class="p">)</span>
         <span class="n">mean_scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pop_episode_scores</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--- Global steps </span><span class="si">{</span><span class="n">total_steps</span><span class="si">}</span><span class="s2"> ---&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Steps </span><span class="si">{</span><span class="n">agent</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scores:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--- Global steps </span><span class="si">{</span><span class="n">total_steps</span><span class="si">}</span><span class="s2"> ---"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Steps </span><span class="si">{</span><span class="n">agent</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Scores:"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sub_agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">agent_ids</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">sub_agent</span><span class="si">}</span><span class="s2"> score: </span><span class="si">{</span><span class="n">mean_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitness&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">sub_agent</span><span class="si">}</span><span class="s2"> score: </span><span class="si">{</span><span class="n">mean_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Fitness"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sub_agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">agent_ids</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">sub_agent</span><span class="si">}</span><span class="s2"> fitness: </span><span class="si">{</span><span class="n">fitness</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Previous 5 fitness avgs&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">sub_agent</span><span class="si">}</span><span class="s2"> fitness: </span><span class="si">{</span><span class="n">fitness</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Previous 5 fitness avgs"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sub_agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">agent_ids</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">sub_agent</span><span class="si">}</span><span class="s2"> fitness average: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">fitness</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:],</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">sub_agent</span><span class="si">}</span><span class="s2"> fitness average: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">fitness</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:],</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="c1"># Update step counter</span>
         <span class="n">agent</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># Save the trained algorithm</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./models/MADDPG&quot;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;MADDPG_trained_agent.pt&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">"./models/MADDPG"</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s2">"MADDPG_trained_agent.pt"</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
     <span class="n">agent</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
@@ -718,24 +718,24 @@ PyYAML&gt;=5.4.1
         <span class="n">text_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">drawer</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
         <span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">20</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">18</span><span class="p">),</span>
-        <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">episode_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"Episode: </span><span class="si">{</span><span class="n">episode_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="n">fill</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">im</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
 
     <span class="c1"># Configure the environment</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;atari/space_invaders-v2&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"atari/space_invaders-v2"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"rgb_array"</span><span class="p">)</span>
     <span class="n">channels_last</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Needed for environments that use images as observations</span>
     <span class="k">if</span> <span class="n">channels_last</span><span class="p">:</span>
         <span class="c1"># Environment processing for image based observations</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_skip_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">clip_reward_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"B"</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 
@@ -763,7 +763,7 @@ PyYAML&gt;=5.4.1
     <span class="p">)</span>
 
     <span class="c1"># Load the saved algorithm into the MADDPG object</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./models/MADDPG/MADDPG_trained_agent.pt&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">"./models/MADDPG/MADDPG_trained_agent.pt"</span>
     <span class="n">maddpg</span><span class="o">.</span><span class="n">load_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="c1"># Define test loop parameters</span>
@@ -787,8 +787,8 @@ PyYAML&gt;=5.4.1
                     <span class="n">agent_id</span><span class="p">:</span> <span class="n">obs_channels_to_first</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent_id</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="p">}</span>
 
-            <span class="n">agent_mask</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agent_mask&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">env_defined_actions</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;env_defined_actions&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">agent_mask</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"agent_mask"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">env_defined_actions</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"env_defined_actions"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
             <span class="c1"># Get next action from agent</span>
             <span class="n">cont_actions</span><span class="p">,</span> <span class="n">discrete_action</span> <span class="o">=</span> <span class="n">maddpg</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -806,7 +806,7 @@ PyYAML&gt;=5.4.1
             <span class="n">action</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent_id</span><span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">agent_id</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">action</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
             <span class="n">state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-            <span class="c1"># Save agent&#39;s reward for this step in this episode</span>
+            <span class="c1"># Save agent's reward for this step in this episode</span>
             <span class="k">for</span> <span class="n">agent_id</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reward</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">agent_reward</span><span class="p">[</span><span class="n">agent_id</span><span class="p">]</span> <span class="o">+=</span> <span class="n">r</span>
 
@@ -823,18 +823,18 @@ PyYAML&gt;=5.4.1
         <span class="k">for</span> <span class="n">agent_id</span> <span class="ow">in</span> <span class="n">agent_ids</span><span class="p">:</span>
             <span class="n">indi_agent_rewards</span><span class="p">[</span><span class="n">agent_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent_reward</span><span class="p">[</span><span class="n">agent_id</span><span class="p">])</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Episode: </span><span class="si">{</span><span class="n">ep</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Episodic Reward: &quot;</span><span class="p">,</span> <span class="n">rewards</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">15</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Episode: </span><span class="si">{</span><span class="n">ep</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"-"</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Episodic Reward: "</span><span class="p">,</span> <span class="n">rewards</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">agent_id</span><span class="p">,</span> <span class="n">reward_list</span> <span class="ow">in</span> <span class="n">indi_agent_rewards</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">agent_id</span><span class="si">}</span><span class="s2"> reward: </span><span class="si">{</span><span class="n">reward_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">agent_id</span><span class="si">}</span><span class="s2"> reward: </span><span class="si">{</span><span class="n">reward_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="c1"># Save the gif to specified path</span>
-    <span class="n">gif_path</span> <span class="o">=</span> <span class="s2">&quot;./videos/&quot;</span>
+    <span class="n">gif_path</span> <span class="o">=</span> <span class="s2">"./videos/"</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">gif_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">imageio</span><span class="o">.</span><span class="n">mimwrite</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;./videos/&quot;</span><span class="p">,</span> <span class="s2">&quot;space_invaders.gif&quot;</span><span class="p">),</span> <span class="n">frames</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">10</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"./videos/"</span><span class="p">,</span> <span class="s2">"space_invaders.gif"</span><span class="p">),</span> <span class="n">frames</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">10</span>
     <span class="p">)</span>
 </pre></div>
 </div>

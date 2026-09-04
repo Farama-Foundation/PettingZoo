@@ -390,7 +390,7 @@
 <div class="viewcode-block" id="EnvLogger">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EnvLogger</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Used for logging warnings and errors for environments.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Used for logging warnings and errors for environments."""</span>
 
     <span class="n">mqueue</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -399,27 +399,27 @@
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.get_logger">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_logger</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Logger</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the logger object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns the logger object."""</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">logger</span></div>
 
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_generic_warning</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a custom generic warning to the EnvLogger.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Add a custom generic warning to the EnvLogger."""</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">EnvLogger</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">logger</span><span class="o">.</span><span class="n">hasHandlers</span><span class="p">():</span>
             <span class="n">handler</span> <span class="o">=</span> <span class="n">EnvWarningHandler</span><span class="p">(</span><span class="n">mqueue</span><span class="o">=</span><span class="n">EnvLogger</span><span class="o">.</span><span class="n">mqueue</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="c1"># needed to get the pytest runner to work correctly, and doesn&#39;t seem to have serious issues</span>
+        <span class="c1"># needed to get the pytest runner to work correctly, and doesn't seem to have serious issues</span>
         <span class="n">EnvLogger</span><span class="o">.</span><span class="n">mqueue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EnvLogger.flush">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.flush">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">flush</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Flushes EnvLogger output.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Flushes EnvLogger output."""</span>
         <span class="n">EnvLogger</span><span class="o">.</span><span class="n">mqueue</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
 
@@ -427,7 +427,7 @@
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.suppress_output">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">suppress_output</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Suppresses EnvLogger output.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Suppresses EnvLogger output."""</span>
         <span class="n">EnvLogger</span><span class="o">.</span><span class="n">_output</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
@@ -435,7 +435,7 @@
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.unsuppress_output">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">unsuppress_output</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets EnvLogger output to be printed.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Resets EnvLogger output to be printed."""</span>
         <span class="n">EnvLogger</span><span class="o">.</span><span class="n">_output</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 
@@ -443,9 +443,9 @@
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.error_possible_agents_attribute_missing">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_possible_agents_attribute_missing</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Warns: ``[ERROR]: This environment does not support {attribute}.``.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Warns: ``[ERROR]: This environment does not support {attribute}.``."""</span>
         <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;[ERROR]: This environment does not support </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">. This means that either the environment has procedurally generated agents such that this property cannot be well defined (which requires special learning code to handle) or the environment was improperly configured by the developer.&quot;</span>
+            <span class="sa">f</span><span class="s2">"[ERROR]: This environment does not support </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">. This means that either the environment has procedurally generated agents such that this property cannot be well defined (which requires special learning code to handle) or the environment was improperly configured by the developer."</span>
         <span class="p">)</span></div>
 
 
@@ -455,9 +455,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">warn_action_out_of_bound</span><span class="p">(</span>
         <span class="n">action</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">action_space</span><span class="p">:</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">backup_policy</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Warns: ``[WARNING]: Received an action {action} that was outside action space {action_space}.``.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Warns: ``[WARNING]: Received an action {action} that was outside action space {action_space}.``."""</span>
         <span class="n">EnvLogger</span><span class="o">.</span><span class="n">_generic_warning</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;[WARNING]: Received an action </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> that was outside action space </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">. Environment is </span><span class="si">{</span><span class="n">backup_policy</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"[WARNING]: Received an action </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> that was outside action space </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">. Environment is </span><span class="si">{</span><span class="n">backup_policy</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span></div>
 
 
@@ -465,9 +465,9 @@
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.warn_on_illegal_move">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">warn_on_illegal_move</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Warns: ``[WARNING]: Illegal move made, game terminating with current player losing.``.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Warns: ``[WARNING]: Illegal move made, game terminating with current player losing.``."""</span>
         <span class="n">EnvLogger</span><span class="o">.</span><span class="n">_generic_warning</span><span class="p">(</span>
-            <span class="s2">&quot;[WARNING]: Illegal move made, game terminating with current player losing. </span><span class="se">\n</span><span class="s2">obs[&#39;action_mask&#39;] contains a mask of all legal moves that can be chosen.&quot;</span>
+            <span class="s2">"[WARNING]: Illegal move made, game terminating with current player losing. </span><span class="se">\n</span><span class="s2">obs['action_mask'] contains a mask of all legal moves that can be chosen."</span>
         <span class="p">)</span></div>
 
 
@@ -475,25 +475,25 @@
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.error_observe_before_reset">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_observe_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before observe.``.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before observe.&quot;</span><span class="p">)</span></div>
+<span class="w">        </span><span class="sd">"""Error: ``reset() needs to be called before observe.``."""</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">"reset() needs to be called before observe."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_step_before_reset">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.error_step_before_reset">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_step_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before step.``.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before step.&quot;</span><span class="p">)</span></div>
+<span class="w">        </span><span class="sd">"""Error: ``reset() needs to be called before step.``."""</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">"reset() needs to be called before step."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.warn_step_after_terminated_truncated">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.warn_step_after_terminated_truncated">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">warn_step_after_terminated_truncated</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Warns: ``[WARNING]: step() called after all agents are terminated or truncated. Should reset() first.``.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Warns: ``[WARNING]: step() called after all agents are terminated or truncated. Should reset() first.``."""</span>
         <span class="n">EnvLogger</span><span class="o">.</span><span class="n">_generic_warning</span><span class="p">(</span>
-            <span class="s2">&quot;[WARNING]: step() called after all agents are terminated or truncated. Should reset() first.&quot;</span>
+            <span class="s2">"[WARNING]: step() called after all agents are terminated or truncated. Should reset() first."</span>
         <span class="p">)</span></div>
 
 
@@ -501,32 +501,32 @@
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.error_render_before_reset">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_render_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before render.``.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before render.&quot;</span><span class="p">)</span></div>
+<span class="w">        </span><span class="sd">"""Error: ``reset() needs to be called before render.``."""</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">"reset() needs to be called before render."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_agent_iter_before_reset">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.error_agent_iter_before_reset">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_agent_iter_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before agent_iter().``.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before agent_iter().&quot;</span><span class="p">)</span></div>
+<span class="w">        </span><span class="sd">"""Error: ``reset() needs to be called before agent_iter().``."""</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">"reset() needs to be called before agent_iter()."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_nan_action">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.error_nan_action">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_nan_action</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``step() cannot take in a nan action.``.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;step() cannot take in a nan action.&quot;</span><span class="p">)</span></div>
+<span class="w">        </span><span class="sd">"""Error: ``step() cannot take in a nan action.``."""</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">"step() cannot take in a nan action."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnvLogger.error_state_before_reset">
 <a class="viewcode-back" href="../../../../api/utils/#pettingzoo.utils.env_logger.EnvLogger.error_state_before_reset">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">error_state_before_reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error: ``reset() needs to be called before state.``.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;reset() needs to be called before state.&quot;</span><span class="p">)</span></div>
+<span class="w">        </span><span class="sd">"""Error: ``reset() needs to be called before state.``."""</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">"reset() needs to be called before state."</span><span class="p">)</span></div>
 </div>
 
 
@@ -538,7 +538,7 @@
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">):</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mqueue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">EnvLogger</span><span class="o">.</span><span class="n">_output</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>

@@ -408,10 +408,10 @@ tensorflow-probability&gt;=0.19.0
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLlib. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-the-rl-agent">
 <h3>Training the RL agent<a class="headerlink" href="#training-the-rl-agent" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to train agents to play Pistonball.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Uses Ray's RLlib to train agents to play Pistonball.</span>
 
 <span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
@@ -448,7 +448,7 @@ tensorflow-probability&gt;=0.19.0
         <span class="bp">self</span><span class="o">.</span><span class="n">value_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">seq_lens</span><span class="p">):</span>
-        <span class="n">model_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">model_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_dict</span><span class="p">[</span><span class="s2">"obs"</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_value_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_fn</span><span class="p">(</span><span class="n">model_out</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy_fn</span><span class="p">(</span><span class="n">model_out</span><span class="p">),</span> <span class="n">state</span>
 
@@ -458,8 +458,8 @@ tensorflow-probability&gt;=0.19.0
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
-        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
+        <span class="s2">"parallel"</span><span class="p">,</span>
+        <span class="s2">"butterfly/pistonball-v6"</span><span class="p">,</span>
         <span class="n">n_pistons</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">time_penalty</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -470,28 +470,28 @@ tensorflow-probability&gt;=0.19.0
         <span class="n">ball_elasticity</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
         <span class="n">max_cycles</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">dtype_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"B"</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">dtype_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">normalize_obs_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">env_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">env_max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">env</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
-    <span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;pistonball_v6&quot;</span>
+    <span class="n">env_name</span> <span class="o">=</span> <span class="s2">"pistonball_v6"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_make_rllib_env</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
         <span class="n">base</span> <span class="o">=</span> <span class="n">env_creator</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="n">wrapped</span> <span class="o">=</span> <span class="n">ParallelPettingZooEnv</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
-        <span class="n">wrapped</span><span class="o">.</span><span class="n">_agent_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;possible_agents&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">wrapped</span><span class="o">.</span><span class="n">_agent_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">"possible_agents"</span><span class="p">,</span> <span class="p">[]))</span>
         <span class="k">return</span> <span class="n">wrapped</span>
 
     <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="n">_make_rllib_env</span><span class="p">)</span>
 
-    <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;CNNModelV2&quot;</span><span class="p">,</span> <span class="n">CNNModelV2</span><span class="p">)</span>
+    <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">"CNNModelV2"</span><span class="p">,</span> <span class="n">CNNModelV2</span><span class="p">)</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">PPOConfig</span><span class="p">()</span>
@@ -514,17 +514,17 @@ tensorflow-probability&gt;=0.19.0
             <span class="n">sgd_minibatch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
             <span class="n">num_sgd_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="o">.</span><span class="n">debugging</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">framework</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RLLIB_NUM_GPUS&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)))</span>
+        <span class="o">.</span><span class="n">debugging</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s2">"ERROR"</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">framework</span><span class="o">=</span><span class="s2">"torch"</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"RLLIB_NUM_GPUS"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)))</span>
     <span class="p">)</span>
 
-    <span class="n">storage_uri</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;~/ray_results&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">env_name</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span>
+    <span class="n">storage_uri</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">"~/ray_results"</span><span class="p">)</span> <span class="o">/</span> <span class="n">env_name</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span>
 
     <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-        <span class="s2">&quot;PPO&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;PPO&quot;</span><span class="p">,</span>
-        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">5000000</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CI&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">50000</span><span class="p">},</span>
+        <span class="s2">"PPO"</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">"PPO"</span><span class="p">,</span>
+        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">"timesteps_total"</span><span class="p">:</span> <span class="mi">5000000</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"CI"</span><span class="p">)</span> <span class="k">else</span> <span class="mi">50000</span><span class="p">},</span>
         <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="n">storage_path</span><span class="o">=</span><span class="n">storage_uri</span><span class="p">,</span>
         <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
@@ -534,10 +534,10 @@ tensorflow-probability&gt;=0.19.0
 </section>
 <section id="watching-the-trained-rl-agent-play">
 <h3>Watching the trained RL agent play<a class="headerlink" href="#watching-the-trained-rl-agent-play" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to view trained agents playing Pistonball.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Uses Ray's RLlib to view trained agents playing Pistonball.</span>
 
 <span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -574,7 +574,7 @@ tensorflow-probability&gt;=0.19.0
         <span class="bp">self</span><span class="o">.</span><span class="n">value_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">seq_lens</span><span class="p">):</span>
-        <span class="n">model_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">model_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_dict</span><span class="p">[</span><span class="s2">"obs"</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_value_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_fn</span><span class="p">(</span><span class="n">model_out</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy_fn</span><span class="p">(</span><span class="n">model_out</span><span class="p">),</span> <span class="n">state</span>
 
@@ -582,31 +582,31 @@ tensorflow-probability&gt;=0.19.0
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value_out</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SDL_VIDEODRIVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dummy&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"dummy"</span>
 
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Render pretrained policy loaded from checkpoint&quot;</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">"Render pretrained policy loaded from checkpoint"</span>
 <span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-    <span class="s2">&quot;--checkpoint-path&quot;</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`&quot;</span><span class="p">,</span>
+    <span class="s2">"--checkpoint-path"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
 <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The following arguments are required: --checkpoint-path&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"The following arguments are required: --checkpoint-path"</span><span class="p">)</span>
     <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">checkpoint_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span><span class="p">)</span>
 
-<span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;CNNModelV2&quot;</span><span class="p">,</span> <span class="n">CNNModelV2</span><span class="p">)</span>
+<span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">"CNNModelV2"</span><span class="p">,</span> <span class="n">CNNModelV2</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env_creator</span><span class="p">():</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
-        <span class="s2">&quot;aec&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
+        <span class="s2">"aec"</span><span class="p">,</span>
+        <span class="s2">"butterfly/pistonball-v6"</span><span class="p">,</span>
         <span class="n">n_pistons</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">time_penalty</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -616,10 +616,10 @@ tensorflow-probability&gt;=0.19.0
         <span class="n">ball_friction</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
         <span class="n">ball_elasticity</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
         <span class="n">max_cycles</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span>
-        <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="o">=</span><span class="s2">"rgb_array"</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">dtype_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"B"</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">dtype_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">normalize_obs_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">env_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">env_max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -627,7 +627,7 @@ tensorflow-probability&gt;=0.19.0
 
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">env_creator</span><span class="p">()</span>
-<span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;pistonball_v6&quot;</span>
+<span class="n">env_name</span> <span class="o">=</span> <span class="s2">"pistonball_v6"</span>
 <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
 
 
@@ -658,7 +658,7 @@ tensorflow-probability&gt;=0.19.0
 
 <span class="nb">print</span><span class="p">(</span><span class="n">reward_sum</span><span class="p">)</span>
 <span class="n">frame_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
-    <span class="s2">&quot;out.gif&quot;</span><span class="p">,</span> <span class="n">save_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append_images</span><span class="o">=</span><span class="n">frame_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">0</span>
+    <span class="s2">"out.gif"</span><span class="p">,</span> <span class="n">save_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append_images</span><span class="o">=</span><span class="n">frame_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">)</span>
 </pre></div>
 </div>

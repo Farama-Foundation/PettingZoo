@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.classic.rps.rps</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Rock Paper Scissors</span>
 
 <span class="sd">```{figure} classic_rps.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: rps</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation           | `make(&quot;aec&quot;, &quot;classic/rps-v2&quot;)`         |</span>
+<span class="sd">| Creation           | `make("aec", "classic/rps-v2")`         |</span>
 <span class="sd">|--------------------|-----------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                                |</span>
 <span class="sd">| Parallel API       | Yes                                     |</span>
 <span class="sd">| Manual Control     | No                                      |</span>
-<span class="sd">| Agents             | `agents= [&#39;player_0&#39;, &#39;player_1&#39;]`      |</span>
+<span class="sd">| Agents             | `agents= ['player_0', 'player_1']`      |</span>
 <span class="sd">| Agents             | 2                                       |</span>
 <span class="sd">| Action Shape       | Discrete(3)                             |</span>
 <span class="sd">| Action Values      | Discrete(3)                             |</span>
@@ -412,7 +412,7 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;classic/rps-v2&quot;, num_actions=3, max_cycles=15)</span>
+<span class="sd">make("aec", "classic/rps-v2", num_actions=3, max_cycles=15)</span>
 <span class="sd">```</span>
 
 <span class="sd">`num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.</span>
@@ -490,7 +490,7 @@
 <span class="sd">* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)</span>
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -513,7 +513,7 @@
     <span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
 
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os_path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
     <span class="n">sfc</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">get_size</span><span class="p">(),</span> <span class="n">flags</span><span class="o">=</span><span class="n">pygame</span><span class="o">.</span><span class="n">SRCALPHA</span><span class="p">)</span>
     <span class="n">sfc</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">sfc</span>
@@ -523,7 +523,7 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">os_path</span>
 
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os_path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-    <span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">((</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">((</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="n">path</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">font</span>
 
 
@@ -543,17 +543,17 @@
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/classic/rps/#pettingzoo.classic.rps.rps.raw_env">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Two-player environment for rock paper scissors.</span>
+<span class="w">    </span><span class="sd">"""Two-player environment for rock paper scissors.</span>
 
 <span class="sd">    Expandable environment to rock paper scissors lizard spock action_6 action_7 ...</span>
 <span class="sd">    The observation is simply the last opponent action.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;rps_v2&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">,</span> <span class="s2">"rgb_array"</span><span class="p">],</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"rps_v2"</span><span class="p">,</span>
+        <span class="s2">"is_parallelizable"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"render_fps"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -568,19 +568,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span> <span class="o">=</span> <span class="n">max_cycles</span>
 
         <span class="c1"># number of actions must be odd and greater than 3</span>
-        <span class="k">assert</span> <span class="n">num_actions</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;The number of actions must be equal or greater than 3.&quot;</span>
-        <span class="k">assert</span> <span class="n">num_actions</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;The number of actions must be an odd number.&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ROCK&quot;</span><span class="p">,</span> <span class="s2">&quot;PAPER&quot;</span><span class="p">,</span> <span class="s2">&quot;SCISSORS&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">num_actions</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"The number of actions must be equal or greater than 3."</span>
+        <span class="k">assert</span> <span class="n">num_actions</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"The number of actions must be an odd number."</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ROCK"</span><span class="p">,</span> <span class="s2">"PAPER"</span><span class="p">,</span> <span class="s2">"SCISSORS"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">num_actions</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="c1"># expand to lizard, spock for first extra action pair</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="s2">&quot;SPOCK&quot;</span><span class="p">,</span> <span class="s2">&quot;LIZARD&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="s2">"SPOCK"</span><span class="p">,</span> <span class="s2">"LIZARD"</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_actions</span> <span class="o">-</span> <span class="mi">5</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ACTION_</span><span class="si">{</span><span class="n">action</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">6</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ACTION_</span><span class="si">{</span><span class="n">action</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">6</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="c1"># none is last possible action, to satisfy discrete action space</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"None"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_none</span> <span class="o">=</span> <span class="n">num_actions</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;player_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"player_"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_agents</span><span class="p">))))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">Discrete</span><span class="p">(</span><span class="n">num_actions</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
@@ -592,7 +592,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">=</span> <span class="n">screen_height</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
 
 <div class="viewcode-block" id="raw_env.observation_space">
@@ -612,7 +612,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
+                <span class="s2">"You are calling render method without specifying any render mode."</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -625,11 +625,11 @@
         <span class="n">screen_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">screen_height</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">/</span> <span class="mi">14</span><span class="p">)</span>
 
         <span class="c1"># Load and all of the necessary images</span>
-        <span class="n">paper</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;Paper.png&quot;</span><span class="p">))</span>
-        <span class="n">rock</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;Rock.png&quot;</span><span class="p">))</span>
-        <span class="n">scissors</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;Scissors.png&quot;</span><span class="p">))</span>
-        <span class="n">spock</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;Spock.png&quot;</span><span class="p">))</span>
-        <span class="n">lizard</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;Lizard.png&quot;</span><span class="p">))</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"Paper.png"</span><span class="p">))</span>
+        <span class="n">rock</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"Rock.png"</span><span class="p">))</span>
+        <span class="n">scissors</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"Scissors.png"</span><span class="p">))</span>
+        <span class="n">spock</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"Spock.png"</span><span class="p">))</span>
+        <span class="n">lizard</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"Lizard.png"</span><span class="p">))</span>
 
         <span class="c1"># Scale images in history</span>
         <span class="n">paper</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
@@ -655,12 +655,12 @@
         <span class="c1"># Set font properties</span>
         <span class="n">black</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">font</span> <span class="o">=</span> <span class="n">get_font</span><span class="p">(</span>
-            <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="s2">&quot;Minecraft.ttf&quot;</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">screen_height</span> <span class="o">/</span> <span class="mi">25</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"font"</span><span class="p">,</span> <span class="s2">"Minecraft.ttf"</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">screen_height</span> <span class="o">/</span> <span class="mi">25</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">move</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]):</span>
             <span class="c1"># Blit move history</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ROCK&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"ROCK"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                     <span class="n">rock</span><span class="p">,</span>
                     <span class="p">(</span>
@@ -670,7 +670,7 @@
                         <span class="o">+</span> <span class="p">((</span><span class="n">screen_height</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
                     <span class="p">),</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PAPER&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"PAPER"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                     <span class="n">paper</span><span class="p">,</span>
                     <span class="p">(</span>
@@ -680,7 +680,7 @@
                         <span class="o">+</span> <span class="p">((</span><span class="n">screen_height</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
                     <span class="p">),</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SCISSORS&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"SCISSORS"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                     <span class="n">scissors</span><span class="p">,</span>
                     <span class="p">(</span>
@@ -690,7 +690,7 @@
                         <span class="o">+</span> <span class="p">((</span><span class="n">screen_height</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
                     <span class="p">),</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SPOCK&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"SPOCK"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                     <span class="n">spock</span><span class="p">,</span>
                     <span class="p">(</span>
@@ -702,7 +702,7 @@
                         <span class="o">+</span> <span class="p">((</span><span class="n">screen_height</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
                     <span class="p">),</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;LIZARD&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"LIZARD"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                     <span class="n">lizard</span><span class="p">,</span>
                     <span class="p">(</span>
@@ -735,7 +735,7 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
                 <span class="c1"># Text for each agent</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">&quot;Agent &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="n">black</span><span class="p">)</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"Agent "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="n">black</span><span class="p">)</span>
                 <span class="n">textRect</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
                 <span class="n">textRect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="p">(</span><span class="n">screen_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">offset</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">screen_width</span> <span class="o">*</span> <span class="mi">11</span> <span class="o">/</span> <span class="mi">40</span><span class="p">),</span>
@@ -744,7 +744,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">textRect</span><span class="p">)</span>
 
                 <span class="c1"># Blit agent action</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">&quot;ROCK&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">"ROCK"</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                         <span class="n">rock</span><span class="p">,</span>
                         <span class="p">(</span>
@@ -753,7 +753,7 @@
                             <span class="n">screen_height</span> <span class="o">/</span> <span class="mi">12</span><span class="p">,</span>
                         <span class="p">),</span>
                     <span class="p">)</span>
-                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">&quot;PAPER&quot;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">"PAPER"</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                         <span class="n">paper</span><span class="p">,</span>
                         <span class="p">(</span>
@@ -762,7 +762,7 @@
                             <span class="n">screen_height</span> <span class="o">/</span> <span class="mi">12</span><span class="p">,</span>
                         <span class="p">),</span>
                     <span class="p">)</span>
-                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">&quot;SCISSORS&quot;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">"SCISSORS"</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                         <span class="n">scissors</span><span class="p">,</span>
                         <span class="p">(</span>
@@ -771,7 +771,7 @@
                             <span class="n">screen_height</span> <span class="o">/</span> <span class="mi">12</span><span class="p">,</span>
                         <span class="p">),</span>
                     <span class="p">)</span>
-                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">&quot;SPOCK&quot;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">"SPOCK"</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                         <span class="n">spock</span><span class="p">,</span>
                         <span class="p">(</span>
@@ -780,7 +780,7 @@
                             <span class="n">screen_height</span> <span class="o">/</span> <span class="mi">12</span><span class="p">,</span>
                         <span class="p">),</span>
                     <span class="p">)</span>
-                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">&quot;LIZARD&quot;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moves</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">==</span> <span class="s2">"LIZARD"</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                         <span class="n">lizard</span><span class="p">,</span>
                         <span class="p">(</span>
@@ -790,15 +790,15 @@
                         <span class="p">),</span>
                     <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"render_fps"</span><span class="p">])</span>
 
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"rgb_array"</span>
             <span class="k">else</span> <span class="kc">None</span>
         <span class="p">)</span></div>
 
@@ -843,10 +843,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Rock Paper Scissors&quot;</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">"Rock Paper Scissors"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span></div>
 
@@ -895,7 +895,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
                 <span class="p">]</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
             <span class="c1"># record history by pushing back</span>
@@ -908,7 +908,7 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_clear_rewards</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>

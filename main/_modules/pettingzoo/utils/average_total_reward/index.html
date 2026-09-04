@@ -392,13 +392,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">average_total_reward</span><span class="p">(</span>
     <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">max_episodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000000000</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the average total reward over the episodes for AEC environments.</span>
+<span class="w">    </span><span class="sd">"""Calculates the average total reward over the episodes for AEC environments.</span>
 
 <span class="sd">    Runs an env object with random actions until either max_episodes or</span>
 <span class="sd">    max_steps is reached.</span>
 <span class="sd">    Reward is summed across all agents, making it unsuited for use in zero-sum</span>
 <span class="sd">    games.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">total_reward</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">total_steps</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">num_episodes</span> <span class="o">=</span> <span class="mi">0</span>
@@ -415,8 +415,8 @@
             <span class="n">total_steps</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
                 <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;action_mask&quot;</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">:</span>
-                <span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"action_mask"</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">:</span>
+                <span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">"action_mask"</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
                 <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
                 <span class="n">action</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -424,7 +424,7 @@
             <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
         <span class="n">num_episodes</span> <span class="o">=</span> <span class="n">episode</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average total reward&quot;</span><span class="p">,</span> <span class="n">total_reward</span> <span class="o">/</span> <span class="n">num_episodes</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Average total reward"</span><span class="p">,</span> <span class="n">total_reward</span> <span class="o">/</span> <span class="n">num_episodes</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">total_reward</span> <span class="o">/</span> <span class="n">num_episodes</span></div>
 

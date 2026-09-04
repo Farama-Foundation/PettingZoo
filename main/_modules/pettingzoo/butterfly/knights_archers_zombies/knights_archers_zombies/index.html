@@ -378,22 +378,22 @@
             
             <h1>Source code for pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd"># Knights Archers Zombies (&#39;KAZ&#39;)</span>
+<span class="sd">"""</span>
+<span class="sd"># Knights Archers Zombies ('KAZ')</span>
 
 <span class="sd">```{figure} butterfly_knights_archers_zombies.gif</span>
 <span class="sd">:width: 200px</span>
 <span class="sd">:name: knights_archers_zombies</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;butterfly environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;butterfly environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;butterfly/knights_archers_zombies-v11&quot;)`         |</span>
+<span class="sd">| Creation             | `make("aec", "butterfly/knights_archers_zombies-v11")`         |</span>
 <span class="sd">|----------------------|----------------------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                                       |</span>
 <span class="sd">| Parallel API         | Yes                                                            |</span>
 <span class="sd">| Manual Control       | Yes                                                            |</span>
-<span class="sd">| Agents               | `agents= [&#39;archer_0&#39;, &#39;archer_1&#39;, &#39;knight_0&#39;, &#39;knight_1&#39;]`     |</span>
+<span class="sd">| Agents               | `agents= ['archer_0', 'archer_1', 'knight_0', 'knight_1']`     |</span>
 <span class="sd">| Agents               | 4                                                              |</span>
 <span class="sd">| Action Shape         | (1,)                                                           |</span>
 <span class="sd">| Action Values        | [0, 5]                                                         |</span>
@@ -405,7 +405,7 @@
 
 <span class="sd">Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise</span>
 <span class="sd">and move forward or backward. An agent that moves off the top or bottom of the screen may be killed (if this setting is enabled, otherwise they stop at the edge). Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading</span>
-<span class="sd">direction. During this attack, which takes several steps, the knight cannot take any other action. When an archer attacks, it fires an arrow in a straight line in the direction of the archer&#39;s heading. There is a slight delay after firing an arrow before an archer can fire another arrow.</span>
+<span class="sd">direction. During this attack, which takes several steps, the knight cannot take any other action. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. There is a slight delay after firing an arrow before an archer can fire another arrow.</span>
 <span class="sd">However, the archer and move and turn during this time. A zombie that is hit by either a mace or an arrow is removed. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of its arrows hits and kills a zombie. A knight or archer that is</span>
 <span class="sd">touched by a zombie is removed (unless they are set to be unkillable). The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border.</span>
 
@@ -426,7 +426,7 @@
 <span class="sd">The selection is made when the environment is created by passing a value to the `obs_method` argument.</span>
 
 <span class="sd">#### Vectorized (the default)</span>
-<span class="sd">Pass the argument `obs_method=&#39;vector&#39;` to the environment.</span>
+<span class="sd">Pass the argument `obs_method='vector'` to the environment.</span>
 
 <span class="sd">The observation is an (N+1)x5 array for each agent, where `N = num_archers + num_knights + num_swords + max_arrows + max_zombies`.</span>
 <span class="sd">&gt; Note that `num_swords = num_knights`</span>
@@ -476,7 +476,7 @@
 
 <span class="sd">#### Vectorized with typemasks</span>
 
-<span class="sd">There is an option to prepend a typemask to each row vector. This can be enabled by passing `obs_method=&#39;vector-masked&#39;` as an argument.</span>
+<span class="sd">There is an option to prepend a typemask to each row vector. This can be enabled by passing `obs_method='vector-masked'` as an argument.</span>
 
 <span class="sd">The typemask is a 6 wide vector that indicates the type of entry. A dead agent or a non-existent object (zombie, sword, arrow) is indicated by a vector (type mask and all state vector) of all zeros.</span>
 <span class="sd">Otherwise, a single value of 1 indicated, by its position, which type of entry the observation corresponds to. The possible options are:</span>
@@ -490,15 +490,15 @@
 <span class="sd">```</span>
 
 <span class="sd">The remainder of the row will be as defined by the vector observation above.</span>
-<span class="sd">As a result, setting `obs_method=&#39;vector-masked&#39;` results in the observation being a (N+1)x11 vector.</span>
+<span class="sd">As a result, setting `obs_method='vector-masked'` results in the observation being a (N+1)x11 vector.</span>
 
 <span class="sd">#### Sequence Vectorized space with typemasks</span>
 
-<span class="sd">With this option, the observations are the same as in the typemask section except that all empty rows are removed. So the size of the observation will change through the run. So the observation size is a (X+1)x11 vector where &#39;X&#39; varies within a run.</span>
-<span class="sd">Note that this is **still experimental**. It can be used by passing `obs_method=&#39;vector-sequence&#39;` as aargument during environment creation.</span>
+<span class="sd">With this option, the observations are the same as in the typemask section except that all empty rows are removed. So the size of the observation will change through the run. So the observation size is a (X+1)x11 vector where 'X' varies within a run.</span>
+<span class="sd">Note that this is **still experimental**. It can be used by passing `obs_method='vector-sequence'` as aargument during environment creation.</span>
 
 <span class="sd">#### Image-based</span>
-<span class="sd">To use a image based observation, pass `obs_method=&#39;image&#39;` to the environment during creation.</span>
+<span class="sd">To use a image based observation, pass `obs_method='image'` to the environment during creation.</span>
 
 <span class="sd">Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.</span>
 <span class="sd">Each pixel is defined as RGB values in range [0, 255]. Areas outside of the game box are returned as black pixels: (0,0,0).</span>
@@ -510,7 +510,7 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;butterfly/knights_archers_zombies-v11&quot;,</span>
+<span class="sd">make("aec", "butterfly/knights_archers_zombies-v11",</span>
 <span class="sd">  spawn_delay=20,</span>
 <span class="sd">  num_archers=2,</span>
 <span class="sd">  num_knights=2,</span>
@@ -520,7 +520,7 @@
 <span class="sd">  killable_archers=True,</span>
 <span class="sd">  line_death=False,</span>
 <span class="sd">  max_cycles=900,</span>
-<span class="sd">  obs_method=&quot;vector&quot;,</span>
+<span class="sd">  obs_method="vector",</span>
 <span class="sd">)</span>
 <span class="sd">```</span>
 
@@ -542,7 +542,7 @@
 
 <span class="sd">`max_cycles`: The maximum number of game cycles to run. One cycle is complete when one step has been made by all players and zombies.</span>
 
-<span class="sd">`obs_method`: method of observations to use. Options are &#39;vector&#39; (default), &#39;image&#39;, &#39;vector-sequence&#39;, or &#39;vector-masked&#39;. See docs for details.</span>
+<span class="sd">`obs_method`: method of observations to use. Options are 'vector' (default), 'image', 'vector-sequence', or 'vector-masked'. See docs for details.</span>
 
 
 <span class="sd">### Version History</span>
@@ -560,7 +560,7 @@
 <span class="sd">* v1: Fixes to how all environments handle premature death (1.3.0)</span>
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -596,7 +596,7 @@
 <span class="n">sys</span><span class="o">.</span><span class="n">dont_write_bytecode</span> <span class="o">=</span> <span class="kc">True</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;env&quot;</span><span class="p">,</span> <span class="s2">&quot;parallel_env&quot;</span><span class="p">,</span> <span class="s2">&quot;raw_env&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"env"</span><span class="p">,</span> <span class="s2">"parallel_env"</span><span class="p">,</span> <span class="s2">"raw_env"</span><span class="p">]</span>
 
 
 <span class="n">AgentID</span> <span class="o">=</span> <span class="nb">str</span>
@@ -610,18 +610,18 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">ObsOptions</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Types of Observations supported.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Types of Observations supported."""</span>
 
-    <span class="n">IMAGE</span> <span class="o">=</span> <span class="s2">&quot;image&quot;</span>  <span class="c1"># uses ObsTypeImage</span>
-    <span class="n">VECTOR</span> <span class="o">=</span> <span class="s2">&quot;vector&quot;</span>  <span class="c1"># uses ObsTypeVector</span>
-    <span class="n">VECTOR_SEQUENCE</span> <span class="o">=</span> <span class="s2">&quot;vector-sequence&quot;</span>  <span class="c1"># uses ObsTypeVector</span>
-    <span class="n">VECTOR_MASKED</span> <span class="o">=</span> <span class="s2">&quot;vector-masked&quot;</span>  <span class="c1"># uses ObsTypeVector</span>
+    <span class="n">IMAGE</span> <span class="o">=</span> <span class="s2">"image"</span>  <span class="c1"># uses ObsTypeImage</span>
+    <span class="n">VECTOR</span> <span class="o">=</span> <span class="s2">"vector"</span>  <span class="c1"># uses ObsTypeVector</span>
+    <span class="n">VECTOR_SEQUENCE</span> <span class="o">=</span> <span class="s2">"vector-sequence"</span>  <span class="c1"># uses ObsTypeVector</span>
+    <span class="n">VECTOR_MASKED</span> <span class="o">=</span> <span class="s2">"vector-masked"</span>  <span class="c1"># uses ObsTypeVector</span>
 
 
 <div class="viewcode-block" id="env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the wrapped KAZ environment.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Create the wrapped KAZ environment."""</span>
     <span class="n">aec_env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">aec_env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
     <span class="n">aec_env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">aec_env</span><span class="p">)</span>
@@ -635,14 +635,14 @@
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">],</span> <span class="n">EzPickle</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Knights Archers Zombies environment.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The Knights Archers Zombies environment."""</span>
 
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;knights_archers_zombies_v11&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="n">const</span><span class="o">.</span><span class="n">FPS</span><span class="p">,</span>
-        <span class="s2">&quot;has_manual_policy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">,</span> <span class="s2">"rgb_array"</span><span class="p">],</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"knights_archers_zombies_v11"</span><span class="p">,</span>
+        <span class="s2">"is_parallelizable"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"render_fps"</span><span class="p">:</span> <span class="n">const</span><span class="o">.</span><span class="n">FPS</span><span class="p">,</span>
+        <span class="s2">"has_manual_policy"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -656,10 +656,10 @@
         <span class="n">killable_archers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">line_death</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">max_cycles</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">900</span><span class="p">,</span>
-        <span class="n">obs_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;vector&quot;</span><span class="p">,</span>
+        <span class="n">obs_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"vector"</span><span class="p">,</span>
         <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the environment object.</span>
+<span class="w">        </span><span class="sd">"""Initialize the environment object.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            spawn_delay: how many cycles before a new zombie is spawned. A higher</span>
@@ -674,10 +674,10 @@
 <span class="sd">            max_cycles: The maximum number of game cycles to run. One cycle is</span>
 <span class="sd">              complete when one step has been made by all players and zombies.</span>
 <span class="sd">            obs_method: method of observations to use. Options are</span>
-<span class="sd">              &#39;vector&#39; (default), &#39;image&#39;, &#39;vector-sequence&#39;, or &#39;vector-masked&#39;.</span>
+<span class="sd">              'vector' (default), 'image', 'vector-sequence', or 'vector-masked'.</span>
 <span class="sd">              See docs for details.</span>
 <span class="sd">            render_mode: the render mode to use.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">spawn_delay</span><span class="o">=</span><span class="n">spawn_delay</span><span class="p">,</span>
@@ -692,12 +692,12 @@
             <span class="n">obs_method</span><span class="o">=</span><span class="n">obs_method</span><span class="p">,</span>
             <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="n">render_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">render_mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_modes&quot;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;render_mode: &#39;</span><span class="si">{</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">&#39; is not supported.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">render_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">render_mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"render_modes"</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"render_mode: '</span><span class="si">{</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">' is not supported."</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">obs_type</span> <span class="o">=</span> <span class="n">ObsOptions</span><span class="p">(</span><span class="n">obs_method</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid &#39;obs_method&#39;: </span><span class="si">{</span><span class="n">obs_method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid 'obs_method': </span><span class="si">{</span><span class="n">obs_method</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
         <span class="c1"># variable state space</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sequence_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_type</span> <span class="o">==</span> <span class="n">ObsOptions</span><span class="o">.</span><span class="n">VECTOR_SEQUENCE</span>
@@ -745,7 +745,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_background</span><span class="p">()</span>
@@ -754,30 +754,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reinit</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_possible_agents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">AgentID</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the list of possible agents.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the list of possible agents."""</span>
         <span class="n">possible_agents</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">AgentID</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_archers</span><span class="p">):</span>
-            <span class="n">agent_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;archer_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">agent_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"archer_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span>
             <span class="n">possible_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent_name</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_knights</span><span class="p">):</span>
-            <span class="n">agent_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;knight_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">agent_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"knight_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span>
             <span class="n">possible_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent_name</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">possible_agents</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_generate_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a background surface formed from image components.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns a background surface formed from image components."""</span>
         <span class="n">background</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">))</span>
-        <span class="n">left_wall</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;left_wall.png&quot;</span><span class="p">))</span>
-        <span class="n">right_wall</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;right_wall.png&quot;</span><span class="p">))</span>
+        <span class="n">left_wall</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"left_wall.png"</span><span class="p">))</span>
+        <span class="n">right_wall</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"right_wall.png"</span><span class="p">))</span>
         <span class="n">right_wall_rect</span> <span class="o">=</span> <span class="n">right_wall</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
         <span class="n">right_wall_rect</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">-</span> <span class="n">right_wall_rect</span><span class="o">.</span><span class="n">width</span>
-        <span class="n">floor_patch1</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;patch1.png&quot;</span><span class="p">))</span>
-        <span class="n">floor_patch2</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;patch2.png&quot;</span><span class="p">))</span>
-        <span class="n">floor_patch3</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;patch3.png&quot;</span><span class="p">))</span>
-        <span class="n">floor_patch4</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;patch4.png&quot;</span><span class="p">))</span>
+        <span class="n">floor_patch1</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"patch1.png"</span><span class="p">))</span>
+        <span class="n">floor_patch2</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"patch2.png"</span><span class="p">))</span>
+        <span class="n">floor_patch3</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"patch3.png"</span><span class="p">))</span>
+        <span class="n">floor_patch4</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"img"</span><span class="p">,</span> <span class="s2">"patch4.png"</span><span class="p">))</span>
 
         <span class="n">background</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">66</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">53</span><span class="p">))</span>
         <span class="n">background</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">left_wall</span><span class="p">,</span> <span class="n">left_wall</span><span class="o">.</span><span class="n">get_rect</span><span class="p">())</span>
@@ -790,7 +790,7 @@
         <span class="k">return</span> <span class="n">background</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_observation_spaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return the observation spaces for the object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create and return the observation spaces for the object."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequence_space</span><span class="p">:</span>
                 <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vector_width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
@@ -809,11 +809,11 @@
         <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_action_spaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return the action spaces for the object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create and return the action spaces for the object."""</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_state_space</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Box</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return the state space for the object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create and return the state space for the object."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
             <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tracked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_width</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -824,29 +824,29 @@
 <div class="viewcode-block" id="raw_env.observation_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observation_space">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the observation space for the given agent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the observation space for the given agent."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="raw_env.action_space">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.action_space">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the action space for the given agent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the action space for the given agent."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Seed the random number generator.</span>
+<span class="w">        </span><span class="sd">"""Seed the random number generator.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            seed: The seed to use.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">np_random</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seeding</span><span class="o">.</span><span class="n">np_random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
 <div class="viewcode-block" id="raw_env.do_zombie_turn">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.do_zombie_turn">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_zombie_turn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Have zombies attack, move, and then spawn.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Have zombies attack, move, and then spawn."""</span>
         <span class="c1"># Any players in comtact with zombies are killed unless</span>
         <span class="c1"># the env was created with killable players turned off</span>
         <span class="k">for</span> <span class="n">zombie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="p">:</span>
@@ -872,7 +872,7 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_remove_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">Player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mark the given agent as dead.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Mark the given agent as dead."""</span>
         <span class="n">agent</span><span class="o">.</span><span class="n">is_alive</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
@@ -884,7 +884,7 @@
 <div class="viewcode-block" id="raw_env.apply_weapons">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.apply_weapons">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">apply_weapons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Move the weapons and remove any zombies that were hit.</span>
+<span class="w">        </span><span class="sd">"""Move the weapons and remove any zombies that were hit.</span>
 
 <span class="sd">        The weapons are moved along their path.</span>
 <span class="sd">        If an arrow hits a zombie, both the arrow and the zombie are removed.</span>
@@ -892,7 +892,7 @@
 
 <span class="sd">        If a sword hits a zombie, the zombie is removed but the sword is not.</span>
 <span class="sd">        The knight wielding the sword is awarded 1 point.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">weapons</span><span class="p">):</span>
                 <span class="n">weapon</span><span class="o">.</span><span class="n">act</span><span class="p">()</span>
@@ -916,7 +916,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">num_active_arrows</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of arrows on the screen.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the number of arrows on the screen."""</span>
         <span class="n">num_arrows</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">is_archer</span><span class="p">(</span><span class="n">agent</span><span class="p">):</span>
@@ -925,7 +925,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">num_active_swords</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of swords on the screen.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the number of swords on the screen."""</span>
         <span class="n">num_swords</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">is_knight</span><span class="p">(</span><span class="n">agent</span><span class="p">):</span>
@@ -933,11 +933,11 @@
         <span class="k">return</span> <span class="n">num_swords</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_observe_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsTypeImage</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return observation for given agent as an image based observation.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return observation for given agent as an image based observation."""</span>
         <span class="c1"># the observation is based on the image, so we need to update it</span>
         <span class="c1"># this is already done in render(), which is called when render_mode</span>
-        <span class="c1"># is &quot;human&quot;, so skip in that case</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="c1"># is "human", so skip in that case</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
         <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
@@ -968,7 +968,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_observe_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsTypeVector</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return observation for given agent as a vector based observation.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return observation for given agent as a vector based observation."""</span>
         <span class="n">agent_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_map</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
 
         <span class="c1"># get the agent position</span>
@@ -1016,7 +1016,7 @@
 <div class="viewcode-block" id="raw_env.observe">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observe">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the observation for the given agent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the observation for the given agent."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observe_vector</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observe_image</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span></div>
@@ -1025,7 +1025,7 @@
 <div class="viewcode-block" id="raw_env.state">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.state">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StateType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the state of the global environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns the state of the global environment."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
             <span class="c1"># this makes a copy of the state, only including the</span>
             <span class="c1"># expected size. It is intentionally done without using</span>
@@ -1042,12 +1042,12 @@
 <div class="viewcode-block" id="raw_env.get_vector_state">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.get_vector_state">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_vector_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StateTypeVector</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the vector state of the global environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns the vector state of the global environment."""</span>
         <span class="n">state</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">StateTypeVector</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">empty_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector_width</span><span class="p">)</span>
 
         <span class="c1"># handle agents - all archers then all knights</span>
-        <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;archer&quot;</span><span class="p">,</span> <span class="s2">&quot;knight&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"archer"</span><span class="p">,</span> <span class="s2">"knight"</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">agent_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">agent_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">category</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">agent_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dead_agents</span><span class="p">:</span>
@@ -1087,11 +1087,11 @@
 <div class="viewcode-block" id="raw_env.step">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a step for one agent in the environment.</span>
+<span class="w">        </span><span class="sd">"""Perform a step for one agent in the environment.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            action: the action the agent will perform.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># check if the particular agent is done</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -1108,7 +1108,7 @@
 
         <span class="n">agent_action</span> <span class="o">=</span> <span class="n">Actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-        <span class="c1"># archer can&#39;t attack if the number of arrows exceeds</span>
+        <span class="c1"># archer can't attack if the number of arrows exceeds</span>
         <span class="c1"># the max count. In this case, change the action to no action.</span>
         <span class="k">if</span> <span class="n">is_archer</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="ow">and</span> <span class="n">agent_action</span> <span class="o">==</span> <span class="n">Actions</span><span class="o">.</span><span class="n">ACTION_ATTACK</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_active_arrows</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_arrows</span><span class="p">:</span>
@@ -1166,14 +1166,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_deads_step_first</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="raw_env.draw">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.draw">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw the screen.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Draw the screen."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 
         <span class="c1"># draw all the sprites</span>
@@ -1184,44 +1184,44 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a newly created pygame surface as the display screen.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a newly created pygame surface as the display screen."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
             <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_dims</span><span class="p">)</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Knights, Archers, Zombies&quot;</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">"Knights, Archers, Zombies"</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">screen</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"rgb_array"</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_dims</span><span class="p">)</span>
 
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown render_mode: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown render_mode: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <div class="viewcode-block" id="raw_env.render">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.render">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render the state based on the render mode.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Render the state based on the render mode."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gymnasium</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;You are calling render method without specifying any render mode.&quot;</span>
+                <span class="s2">"You are calling render method without specifying any render mode."</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
                     <span class="p">[</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">]</span>
                 <span class="p">)</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Knights, Archers, Zombies&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">:</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">"Knights, Archers, Zombies"</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"rgb_array"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"render_fps"</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"rgb_array"</span><span class="p">:</span>
             <span class="n">obs</span><span class="p">:</span> <span class="n">ObsTypeImage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
@@ -1231,29 +1231,29 @@
 <div class="viewcode-block" id="raw_env.close">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the screen, if open.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Close the screen, if open."""</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_zombie_escape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if Zombies won by reaching the end.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return True if Zombies won by reaching the end."""</span>
         <span class="k">for</span> <span class="n">zombie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">zombie</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">zombie</span><span class="o">.</span><span class="n">y_bot_limit</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_zombie_killall</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if Zombies won by killing all players.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return True if Zombies won by killing all players."""</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_game_over</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine whether game is over and set self.game_over with result.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Determine whether game is over and set self.game_over with result."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game_over</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_zombie_escape</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_zombie_killall</span><span class="p">()</span>
 
 <div class="viewcode-block" id="raw_env.reinit">
 <a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reinit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">reinit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Re-initialize the env for another run.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Re-initialize the env for another run."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game_over</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Group</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Group</span><span class="p">()</span>
@@ -1264,12 +1264,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dead_agents</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;archer&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"archer"</span><span class="p">):</span>
                 <span class="n">player</span><span class="p">:</span> <span class="n">Player</span> <span class="o">=</span> <span class="n">Archer</span><span class="p">(</span><span class="n">agent_name</span><span class="o">=</span><span class="n">agent</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">agent</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;knight&quot;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">agent</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"knight"</span><span class="p">):</span>
                 <span class="n">player</span> <span class="o">=</span> <span class="n">Knight</span><span class="p">(</span><span class="n">agent_name</span><span class="o">=</span><span class="n">agent</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown agent type: </span><span class="si">{</span><span class="n">agent</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown agent type: </span><span class="si">{</span><span class="n">agent</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
             <span class="n">player</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">agent</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">agent_map</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">=</span> <span class="n">player</span>
@@ -1287,12 +1287,12 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the env for another run.</span>
+<span class="w">        </span><span class="sd">"""Reset the env for another run.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            seed: the seed to use for the new run</span>
 <span class="sd">            options: these are ignored for this env</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span>

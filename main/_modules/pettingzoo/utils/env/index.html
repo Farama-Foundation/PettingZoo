@@ -387,9 +387,9 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
 
-<span class="n">ObsType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;ObsType&quot;</span><span class="p">)</span>
-<span class="n">ActionType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;ActionType&quot;</span><span class="p">)</span>
-<span class="n">AgentID</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;AgentID&quot;</span><span class="p">)</span>
+<span class="n">ObsType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"ObsType"</span><span class="p">)</span>
+<span class="n">ActionType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"ActionType"</span><span class="p">)</span>
+<span class="n">AgentID</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"AgentID"</span><span class="p">)</span>
 
 <span class="c1"># deprecated</span>
 <span class="n">ObsDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">]</span>
@@ -397,22 +397,22 @@
 <span class="c1"># deprecated</span>
 <span class="n">ActionDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Base environment definitions</span>
 
 <span class="sd">See docs/api.md for api documentation</span>
 <span class="sd">See docs/dev_docs.md for additional documentation and an example environment.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 
 <div class="viewcode-block" id="AECEnv">
 <a class="viewcode-back" href="../../../../api/aec/#pettingzoo.utils.env.AECEnv">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AECEnv</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The AECEnv steps agents one at a time.</span>
+<span class="w">    </span><span class="sd">"""The AECEnv steps agents one at a time.</span>
 
 <span class="sd">    If you are unsure if you have implemented a AECEnv correctly, try running</span>
 <span class="sd">    the `api_test` documented in the Developer documentation on the website.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>  <span class="c1"># Metadata for the environment</span>
 
@@ -444,10 +444,10 @@
 <div class="viewcode-block" id="AECEnv.step">
 <a class="viewcode-back" href="../../../../api/aec/#pettingzoo.utils.env.AECEnv.step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Accepts and executes the action of the current agent_selection in the environment.</span>
+<span class="w">        </span><span class="sd">"""Accepts and executes the action of the current agent_selection in the environment.</span>
 
 <span class="sd">        Automatically switches control to the next agent.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
@@ -458,7 +458,7 @@
         <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the environment to a starting state.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Resets the environment to a starting state."""</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
@@ -466,68 +466,68 @@
 <div class="viewcode-block" id="AECEnv.observe">
 <a class="viewcode-back" href="../../../../api/aec/#pettingzoo.utils.env.AECEnv.observe">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the observation an agent currently can make.</span>
+<span class="w">        </span><span class="sd">"""Returns the observation an agent currently can make.</span>
 
 <span class="sd">        `last()` calls this function.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <div class="viewcode-block" id="AECEnv.render">
 <a class="viewcode-back" href="../../../../api/aec/#pettingzoo.utils.env.AECEnv.render">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders the environment as specified by self.render_mode.</span>
+<span class="w">        </span><span class="sd">"""Renders the environment as specified by self.render_mode.</span>
 
 <span class="sd">        Render mode can be `human` to display a window.</span>
-<span class="sd">        Other render modes in the default environments are `&#39;rgb_array&#39;`</span>
+<span class="sd">        Other render modes in the default environments are `'rgb_array'`</span>
 <span class="sd">        which returns a numpy array and is supported by all environments outside of classic,</span>
-<span class="sd">        and `&#39;ansi&#39;` which returns the strings printed (specific to classic environments).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        and `'ansi'` which returns the strings printed (specific to classic environments).</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;State returns a global view of the environment.</span>
+<span class="w">        </span><span class="sd">"""State returns a global view of the environment.</span>
 
 <span class="sd">        It is appropriate for centralized training decentralized execution methods like QMIX</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-            <span class="s2">&quot;state() method has not been implemented in the environment </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="s2">"state() method has not been implemented in the environment </span><span class="si">{}</span><span class="s2">."</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="AECEnv.close">
 <a class="viewcode-back" href="../../../../api/aec/#pettingzoo.utils.env.AECEnv.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes any resources that should be released.</span>
+<span class="w">        </span><span class="sd">"""Closes any resources that should be released.</span>
 
 <span class="sd">        Closes the rendering window, subprocesses, network connections,</span>
 <span class="sd">        or any other resources that should be released.</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
+<span class="sd">        """</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">ObsType</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes in agent and returns the observation space for that agent.</span>
+<span class="w">        </span><span class="sd">"""Takes in agent and returns the observation space for that agent.</span>
 
 <span class="sd">        MUST return the same value for the same agent name</span>
 
 <span class="sd">        Default implementation is to return the observation_spaces dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute.&quot;</span>
+            <span class="s2">"Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute."</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes in agent and returns the action space for that agent.</span>
+<span class="w">        </span><span class="sd">"""Takes in agent and returns the action space for that agent.</span>
 
 <span class="sd">        MUST return the same value for the same agent name</span>
 
 <span class="sd">        Default implementation is to return the action_spaces dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Your environment should override the action_space function. Attempting to use the action_spaces dict attribute.&quot;</span>
+            <span class="s2">"Your environment should override the action_space function. Attempting to use the action_spaces dict attribute."</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
 
@@ -540,10 +540,10 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_deads_step_first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AgentID</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Makes .agent_selection point to first terminated agent.</span>
+<span class="w">        </span><span class="sd">"""Makes .agent_selection point to first terminated agent.</span>
 
 <span class="sd">        Stores old value of agent_selection so that _was_dead_step can restore the variable after the dead agent steps.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">_deads_order</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">agent</span>
             <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
@@ -555,31 +555,31 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_clear_rewards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clears all items in .rewards.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Clears all items in .rewards."""</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_accumulate_rewards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds .rewards dictionary to ._cumulative_rewards dictionary.</span>
+<span class="w">        </span><span class="sd">"""Adds .rewards dictionary to ._cumulative_rewards dictionary.</span>
 
 <span class="sd">        Typically called near the end of a step() method</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">agent</span><span class="p">,</span> <span class="n">reward</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">agent_iter</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">63</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AECIterable</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields the current agent (self.agent_selection).</span>
+<span class="w">        </span><span class="sd">"""Yields the current agent (self.agent_selection).</span>
 
 <span class="sd">        Needs to be used in a loop where you step() each iteration.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">AECIterable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">last</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">observe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)."""</span>
         <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
         <span class="k">assert</span> <span class="n">agent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">if</span> <span class="n">observe</span> <span class="k">else</span> <span class="kc">None</span>
@@ -592,7 +592,7 @@
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_was_dead_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper function that performs step() for dead agents.</span>
+<span class="w">        </span><span class="sd">"""Helper function that performs step() for dead agents.</span>
 
 <span class="sd">        Does the following:</span>
 
@@ -608,14 +608,14 @@
 <span class="sd">                self._was_dead_step()</span>
 <span class="sd">                return</span>
 <span class="sd">            # main contents of step</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;when an agent is dead, the only valid action is None&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"when an agent is dead, the only valid action is None"</span><span class="p">)</span>
 
         <span class="c1"># removes dead agent</span>
         <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="n">agent</span><span class="p">],</span> <span class="p">(</span>
-            <span class="s2">&quot;an agent that was not dead as attempted to be removed&quot;</span>
+            <span class="s2">"an agent that was not dead as attempted to be removed"</span>
         <span class="p">)</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
@@ -631,11 +631,11 @@
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="n">agent</span><span class="p">])</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="n">_deads_order</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_skip_agent_selection&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_skip_agent_selection"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_skip_agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="n">_deads_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_skip_agent_selection&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_skip_agent_selection"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skip_agent_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skip_agent_selection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_skip_agent_selection</span> <span class="o">=</span> <span class="kc">None</span>
@@ -643,9 +643,9 @@
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a name which looks like: `space_invaders_v1`.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;metadata&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Returns a name which looks like: `space_invaders_v1`."""</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"metadata"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
     <span class="nd">@property</span>
@@ -684,12 +684,12 @@
 <div class="viewcode-block" id="ParallelEnv">
 <a class="viewcode-back" href="../../../../api/parallel/#pettingzoo.utils.env.ParallelEnv">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParallelEnv</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parallel environment class.</span>
+<span class="w">    </span><span class="sd">"""Parallel environment class.</span>
 
 <span class="sd">    It steps every live agent at once. If you are unsure if you</span>
 <span class="sd">    have implemented a ParallelEnv correctly, try running the `parallel_api_test` in</span>
 <span class="sd">    the Developer documentation on the website.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
@@ -709,10 +709,10 @@
         <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the environment.</span>
+<span class="w">        </span><span class="sd">"""Resets the environment.</span>
 
 <span class="sd">        And returns a dictionary of observations (keyed by the agent name)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
@@ -727,48 +727,48 @@
         <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
         <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
     <span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Receives a dictionary of actions keyed by the agent name.</span>
+<span class="w">        </span><span class="sd">"""Receives a dictionary of actions keyed by the agent name.</span>
 
 <span class="sd">        Returns the observation dictionary, reward dictionary, terminated dictionary, truncated dictionary</span>
 <span class="sd">        and info dictionary, where each dictionary is keyed by the agent.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <div class="viewcode-block" id="ParallelEnv.render">
 <a class="viewcode-back" href="../../../../api/parallel/#pettingzoo.utils.env.ParallelEnv.render">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Displays a rendered frame from the environment, if supported.</span>
+<span class="w">        </span><span class="sd">"""Displays a rendered frame from the environment, if supported.</span>
 
-<span class="sd">        Alternate render modes in the default environments are `&#39;rgb_array&#39;`</span>
+<span class="sd">        Alternate render modes in the default environments are `'rgb_array'`</span>
 <span class="sd">        which returns a numpy array and is supported by all environments outside</span>
-<span class="sd">        of classic, and `&#39;ansi&#39;` which returns the strings printed</span>
+<span class="sd">        of classic, and `'ansi'` which returns the strings printed</span>
 <span class="sd">        (specific to classic environments).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <div class="viewcode-block" id="ParallelEnv.close">
 <a class="viewcode-back" href="../../../../api/parallel/#pettingzoo.utils.env.ParallelEnv.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes any resources that should be released.</span>
+<span class="w">        </span><span class="sd">"""Closes any resources that should be released.</span>
 
 <span class="sd">        Closes the rendering window, subprocesses, network connections,</span>
 <span class="sd">        or any other resources that should be released.</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
+<span class="sd">        """</span></div>
 
 
 <div class="viewcode-block" id="ParallelEnv.state">
 <a class="viewcode-back" href="../../../../api/parallel/#pettingzoo.utils.env.ParallelEnv.state">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the state.</span>
+<span class="w">        </span><span class="sd">"""Returns the state.</span>
 
 <span class="sd">        State returns a global view of the environment appropriate for</span>
 <span class="sd">        centralized training decentralized execution methods like QMIX</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-            <span class="s2">&quot;state() method has not been implemented in the environment </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="s2">"state() method has not been implemented in the environment </span><span class="si">{}</span><span class="s2">."</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
 
@@ -776,14 +776,14 @@
 <div class="viewcode-block" id="ParallelEnv.observation_space">
 <a class="viewcode-back" href="../../../../api/parallel/#pettingzoo.utils.env.ParallelEnv.observation_space">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">ObsType</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes in agent and returns the observation space for that agent.</span>
+<span class="w">        </span><span class="sd">"""Takes in agent and returns the observation space for that agent.</span>
 
 <span class="sd">        MUST return the same value for the same agent name</span>
 
 <span class="sd">        Default implementation is to return the observation_spaces dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute.&quot;</span>
+            <span class="s2">"Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute."</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
@@ -791,14 +791,14 @@
 <div class="viewcode-block" id="ParallelEnv.action_space">
 <a class="viewcode-back" href="../../../../api/parallel/#pettingzoo.utils.env.ParallelEnv.action_space">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">ActionType</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes in agent and returns the action space for that agent.</span>
+<span class="w">        </span><span class="sd">"""Takes in agent and returns the action space for that agent.</span>
 
 <span class="sd">        MUST return the same value for the same agent name</span>
 
 <span class="sd">        Default implementation is to return the action_spaces dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Your environment should override the action_space function. Attempting to use the action_spaces dict attribute.&quot;</span>
+            <span class="s2">"Your environment should override the action_space function. Attempting to use the action_spaces dict attribute."</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
@@ -813,12 +813,12 @@
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the name.</span>
+<span class="w">        </span><span class="sd">"""Returns the name.</span>
 
-<span class="sd">        Which looks like: &quot;space_invaders_v1&quot; by default</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;metadata&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="sd">        Which looks like: "space_invaders_v1" by default</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"metadata"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
     <span class="nd">@property</span>

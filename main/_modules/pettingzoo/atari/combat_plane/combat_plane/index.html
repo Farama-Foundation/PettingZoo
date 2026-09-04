@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.atari.combat_plane.combat_plane</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Combat: Plane</span>
 
 <span class="sd">```{figure} atari_combat_plane.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: combat_plane</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation           | `make(&quot;aec&quot;, &quot;atari/combat_plane-v2&quot;)`       |</span>
+<span class="sd">| Creation           | `make("aec", "atari/combat_plane-v2")`       |</span>
 <span class="sd">|--------------------|----------------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                                     |</span>
 <span class="sd">| Parallel API       | Yes                                          |</span>
 <span class="sd">| Manual Control     | No                                           |</span>
-<span class="sd">| Agents             | `agents= [&#39;first_0&#39;, &#39;second_0&#39;]`            |</span>
+<span class="sd">| Agents             | `agents= ['first_0', 'second_0']`            |</span>
 <span class="sd">| Agents             | 2                                            |</span>
 <span class="sd">| Action Shape       | (1,)                                         |</span>
 <span class="sd">| Action Values      | [0,17]                                       |</span>
@@ -401,8 +401,8 @@
 <span class="sd">| Observation Values | (0,255)                                      |</span>
 
 
-<span class="sd">*Combat*&#39;s plane mode is an adversarial game where timing,</span>
-<span class="sd">positioning, and keeping track of your opponent&#39;s complex</span>
+<span class="sd">*Combat*'s plane mode is an adversarial game where timing,</span>
+<span class="sd">positioning, and keeping track of your opponent's complex</span>
 <span class="sd">movements are key.</span>
 
 <span class="sd">The players fly around the map, able to control flight direction</span>
@@ -425,10 +425,10 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;atari/combat_plane-v2&quot;, game_version=&quot;jet&quot;, guided_missile=True)</span>
+<span class="sd">make("aec", "atari/combat_plane-v2", game_version="jet", guided_missile=True)</span>
 <span class="sd">```</span>
 
-<span class="sd">`game_version`:  Accepted arguments are &quot;jet&quot; or &quot;bi-plane&quot;. Whether the plane is a bi-plane or a jet. (Jets move faster)</span>
+<span class="sd">`game_version`:  Accepted arguments are "jet" or "bi-plane". Whether the plane is a bi-plane or a jet. (Jets move faster)</span>
 
 <span class="sd">`guided_missile`:  Whether the missile can be directed after being fired, or whether it is on a fixed path.</span>
 
@@ -464,7 +464,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
@@ -478,28 +478,28 @@
 <span class="p">)</span>
 
 <span class="n">avaliable_versions</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;bi-plane&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
-    <span class="s2">&quot;jet&quot;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+    <span class="s2">"bi-plane"</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="s2">"jet"</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/atari/combat_plane/#pettingzoo.atari.combat_plane.combat_plane.raw_env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span>
-    <span class="n">game_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bi-plane&quot;</span><span class="p">,</span> <span class="n">guided_missile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="n">game_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"bi-plane"</span><span class="p">,</span> <span class="n">guided_missile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtariAECEnv</span><span class="p">:</span>
     <span class="k">assert</span> <span class="n">game_version</span> <span class="ow">in</span> <span class="n">avaliable_versions</span><span class="p">,</span> <span class="p">(</span>
-        <span class="s2">&quot;game_version must be either &#39;jet&#39; or &#39;bi-plane&#39;&quot;</span>
+        <span class="s2">"game_version must be either 'jet' or 'bi-plane'"</span>
     <span class="p">)</span>
     <span class="n">mode</span> <span class="o">=</span> <span class="n">avaliable_versions</span><span class="p">[</span><span class="n">game_version</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">guided_missile</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"*.py"</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">version_num</span>
+    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">version_num</span>
     <span class="k">return</span> <span class="n">BaseAtariEnv</span><span class="p">(</span>
-        <span class="n">game</span><span class="o">=</span><span class="s2">&quot;combat&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">game</span><span class="o">=</span><span class="s2">"combat"</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span></div>
 
 

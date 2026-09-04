@@ -425,18 +425,18 @@
 <span class="n">num_eval_episodes</span> <span class="o">=</span> <span class="mi">4</span>
 
 <span class="c1"># rgb_array is needed for video recording</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">"rgb_array"</span><span class="p">)</span>
 
 <span class="c1"># Add video recording for every episode</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">RecordVideo</span><span class="p">(</span>
     <span class="n">env</span><span class="p">,</span>
-    <span class="n">video_folder</span><span class="o">=</span><span class="s2">&quot;connect-four-agent&quot;</span><span class="p">,</span>  <span class="c1"># Folder to save videos</span>
-    <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;eval&quot;</span><span class="p">,</span>                  <span class="c1"># Prefix for video filenames</span>
+    <span class="n">video_folder</span><span class="o">=</span><span class="s2">"connect-four-agent"</span><span class="p">,</span>  <span class="c1"># Folder to save videos</span>
+    <span class="n">name_prefix</span><span class="o">=</span><span class="s2">"eval"</span><span class="p">,</span>                  <span class="c1"># Prefix for video filenames</span>
     <span class="n">episode_trigger</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>       <span class="c1"># Record every episode</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting evaluation for </span><span class="si">{</span><span class="n">num_eval_episodes</span><span class="si">}</span><span class="s2"> episodes...&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Videos will be saved to: connect-four-agent/&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Starting evaluation for </span><span class="si">{</span><span class="n">num_eval_episodes</span><span class="si">}</span><span class="s2"> episodes..."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Videos will be saved to: connect-four-agent/"</span><span class="p">)</span>
 
 <span class="n">episode_returns</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">episode_lengths</span> <span class="o">=</span> <span class="p">[]</span>
@@ -453,15 +453,15 @@
         <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
             <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Replace this with your trained agent&#39;s policy.</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">])</span>
+            <span class="c1"># Replace this with your trained agent's policy.</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">"action_mask"</span><span class="p">])</span>
 
         <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="n">step_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="n">episode_returns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="s2">&quot;player_0&quot;</span><span class="p">])</span>
+    <span class="n">episode_returns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="s2">"player_0"</span><span class="p">])</span>
     <span class="n">episode_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step_count</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode </span><span class="si">{</span><span class="n">episode_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">step_count</span><span class="si">}</span><span class="s2"> steps, rewards = </span><span class="si">{</span><span class="n">rewards</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Episode </span><span class="si">{</span><span class="n">episode_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">step_count</span><span class="si">}</span><span class="s2"> steps, rewards = </span><span class="si">{</span><span class="n">rewards</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -470,9 +470,9 @@
 <span class="n">avg_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">episode_lengths</span><span class="p">)</span>
 <span class="n">std_reward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">episode_returns</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Evaluation Summary:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average player_0 reward: </span><span class="si">{</span><span class="n">avg_reward</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">std_reward</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average episode length: </span><span class="si">{</span><span class="n">avg_length</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> steps&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Evaluation Summary:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Average player_0 reward: </span><span class="si">{</span><span class="n">avg_reward</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">std_reward</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Average episode length: </span><span class="si">{</span><span class="n">avg_length</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> steps"</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="understanding-the-output">
@@ -485,8 +485,8 @@
 <li><p>Can be shared, embedded in presentations, or analyzed frame-by-frame</p></li>
 </ul>
 <p><strong>Console Output</strong>: Episode-by-episode rewards plus summary statistics</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Episode 1: 42 steps, rewards = {&#39;player_0&#39;: 1, &#39;player_1&#39;: -1}
-Episode 2: 38 steps, rewards = {&#39;player_0&#39;: -1, &#39;player_1&#39;: 1}
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Episode 1: 42 steps, rewards = {'player_0': 1, 'player_1': -1}
+Episode 2: 38 steps, rewards = {'player_0': -1, 'player_1': 1}
 
 Average player_0 reward: 0.00 ± 1.00
 Average episode length: 40.0 steps
@@ -508,23 +508,23 @@ Average episode length: 40.0 steps
 <span class="n">num_training_episodes</span> <span class="o">=</span> <span class="mi">10_000</span>  <span class="c1"># Total training episodes</span>
 
 <span class="c1"># Set up logging for episode statistics</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"</span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Create environment with periodic video recording</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">connect_four_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">"rgb_array"</span><span class="p">)</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">RecordVideo</span><span class="p">(</span>
     <span class="n">env</span><span class="p">,</span>
-    <span class="n">video_folder</span><span class="o">=</span><span class="s2">&quot;connect-four-training&quot;</span><span class="p">,</span>
-    <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;training&quot;</span><span class="p">,</span>
+    <span class="n">video_folder</span><span class="o">=</span><span class="s2">"connect-four-training"</span><span class="p">,</span>
+    <span class="n">name_prefix</span><span class="o">=</span><span class="s2">"training"</span><span class="p">,</span>
     <span class="n">episode_trigger</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="n">training_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">episode_returns</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">episode_lengths</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training for </span><span class="si">{</span><span class="n">num_training_episodes</span><span class="si">}</span><span class="s2"> episodes&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Videos will be recorded every </span><span class="si">{</span><span class="n">training_period</span><span class="si">}</span><span class="s2"> episodes&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Videos saved to: connect-four-training/&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Starting training for </span><span class="si">{</span><span class="n">num_training_episodes</span><span class="si">}</span><span class="s2"> episodes"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Videos will be recorded every </span><span class="si">{</span><span class="n">training_period</span><span class="si">}</span><span class="s2"> episodes"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Videos saved to: connect-four-training/"</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">episode_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training_episodes</span><span class="p">):</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -533,14 +533,14 @@ Average episode length: 40.0 steps
 
     <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
         <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="s2">&quot;player_0&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="s2">"player_0"</span><span class="p">:</span>
             <span class="n">episode_return</span> <span class="o">+=</span> <span class="n">reward</span>
 
         <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
             <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Replace with your actual training agent.</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">])</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">"action_mask"</span><span class="p">])</span>
 
         <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="n">step_count</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -548,7 +548,7 @@ Average episode length: 40.0 steps
     <span class="n">episode_returns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">episode_return</span><span class="p">)</span>
     <span class="n">episode_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step_count</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Episode </span><span class="si">{</span><span class="n">episode_num</span><span class="si">}</span><span class="s2">: reward=</span><span class="si">{</span><span class="n">episode_return</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, length=</span><span class="si">{</span><span class="n">step_count</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"Episode </span><span class="si">{</span><span class="n">episode_num</span><span class="si">}</span><span class="s2">: reward=</span><span class="si">{</span><span class="n">episode_return</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, length=</span><span class="si">{</span><span class="n">step_count</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 
     <span class="c1"># Additional analysis for milestone episodes</span>
@@ -556,7 +556,7 @@ Average episode length: 40.0 steps
         <span class="n">recent_rewards</span> <span class="o">=</span> <span class="n">episode_returns</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:]</span>
         <span class="k">if</span> <span class="n">recent_rewards</span><span class="p">:</span>
             <span class="n">avg_recent</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">recent_rewards</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">recent_rewards</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  -&gt; Average reward over last 100 episodes: </span><span class="si">{</span><span class="n">avg_recent</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; Average reward over last 100 episodes: </span><span class="si">{</span><span class="n">avg_recent</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -581,7 +581,7 @@ Average episode length: 40.0 steps
 <span class="n">rewards</span> <span class="o">=</span> <span class="n">episode_returns</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">episodes</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Episode Rewards&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">episodes</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Episode Rewards"</span><span class="p">)</span>
 
 <span class="c1"># Add moving average for clearer trend</span>
 <span class="n">window</span> <span class="o">=</span> <span class="mi">100</span>
@@ -589,11 +589,11 @@ Average episode length: 40.0 steps
     <span class="n">moving_avg</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">window</span><span class="p">])</span><span class="o">/</span><span class="n">window</span>
                   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rewards</span><span class="p">)</span><span class="o">-</span><span class="n">window</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rewards</span><span class="p">)),</span> <span class="n">moving_avg</span><span class="p">,</span>
-             <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">window</span><span class="si">}</span><span class="s2">-Episode Moving Average&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">window</span><span class="si">}</span><span class="s2">-Episode Moving Average"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Episode&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Reward&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Learning Progress&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Episode"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Reward"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Learning Progress"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 <span class="c1"># Use plt.show() or plt.savefig(...) in an interactive training script.</span>

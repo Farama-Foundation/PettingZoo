@@ -416,14 +416,14 @@ pillow&gt;=8.0.1
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with SB3. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-and-evaluation">
 <h3>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Stable-Baselines3 to train agents in the Knights-Archers-Zombies environment using SuperSuit vector envs.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Uses Stable-Baselines3 to train agents in the Knights-Archers-Zombies environment using SuperSuit vector envs.</span>
 
-<span class="sd">This environment requires using SuperSuit&#39;s Black Death wrapper, to handle agent death.</span>
+<span class="sd">This environment requires using SuperSuit's Black Death wrapper, to handle agent death.</span>
 
 <span class="sd">For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html</span>
 
 <span class="sd">Author: Elliot (https://github.com/elliottower)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -440,7 +440,7 @@ pillow&gt;=8.0.1
 
 <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
     <span class="c1"># Train a single model to play as each agent in an AEC environment</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Add black death wrapper so the number of agents stays constant</span>
     <span class="c1"># MarkovVectorEnv does not support environments with varying numbers of active agents unless black_death is set to True</span>
@@ -450,17 +450,17 @@ pillow&gt;=8.0.1
     <span class="n">visual_observation</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">vector_state</span>
     <span class="k">if</span> <span class="n">visual_observation</span><span class="p">:</span>
         <span class="c1"># If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"B"</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-    <span class="n">env_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;pettingzoo_env&quot;</span><span class="p">))</span>
+    <span class="n">env_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"pettingzoo_env"</span><span class="p">))</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Starting training on </span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">pettingzoo_env_to_vec_env_v1</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s2">&quot;stable_baselines3&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s2">"stable_baselines3"</span><span class="p">)</span>
 
     <span class="c1"># Use a CNN policy if the observation space is visual</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="p">(</span>
@@ -472,37 +472,37 @@ pillow&gt;=8.0.1
 
     <span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
 
-    <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model has been saved.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Model has been saved."</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished training on </span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Finished training on </span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">eval</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
     <span class="c1"># Evaluate a trained agent vs a random agent</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Pre-process using SuperSuit</span>
     <span class="n">visual_observation</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">vector_state</span>
     <span class="k">if</span> <span class="n">visual_observation</span><span class="p">:</span>
         <span class="c1"># If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"B"</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Starting evaluation on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">!s}</span><span class="s2"> (num_games=</span><span class="si">{</span><span class="n">num_games</span><span class="si">}</span><span class="s2">, render_mode=</span><span class="si">{</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Starting evaluation on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">!s}</span><span class="s2"> (num_games=</span><span class="si">{</span><span class="n">num_games</span><span class="si">}</span><span class="s2">, render_mode=</span><span class="si">{</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">)"</span>
     <span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">latest_policy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
-            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">*.zip&quot;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">*.zip"</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Policy not found.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Policy not found."</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">latest_policy</span><span class="p">)</span>
@@ -534,17 +534,17 @@ pillow&gt;=8.0.1
     <span class="n">avg_reward_per_agent</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">agent</span><span class="p">:</span> <span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">/</span> <span class="n">num_games</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
     <span class="p">}</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Avg reward: </span><span class="si">{</span><span class="n">avg_reward</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Avg reward per agent, per game: &quot;</span><span class="p">,</span> <span class="n">avg_reward_per_agent</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Full rewards: &quot;</span><span class="p">,</span> <span class="n">rewards</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Avg reward: </span><span class="si">{</span><span class="n">avg_reward</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Avg reward per agent, per game: "</span><span class="p">,</span> <span class="n">avg_reward_per_agent</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Full rewards: "</span><span class="p">,</span> <span class="n">rewards</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">avg_reward</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">env_id</span> <span class="o">=</span> <span class="s2">&quot;butterfly/knights_archers_zombies-v11&quot;</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">env_id</span> <span class="o">=</span> <span class="s2">"butterfly/knights_archers_zombies-v11"</span>
 
-    <span class="c1"># Set obs_method to &quot;image&quot; in order to use visual observations (significantly longer training time)</span>
-    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;max_cycles&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;max_zombies&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;obs_method&quot;</span><span class="p">:</span> <span class="s2">&quot;vector&quot;</span><span class="p">}</span>
+    <span class="c1"># Set obs_method to "image" in order to use visual observations (significantly longer training time)</span>
+    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"max_cycles"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">"max_zombies"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">"obs_method"</span><span class="p">:</span> <span class="s2">"vector"</span><span class="p">}</span>
 
     <span class="c1"># Train a model (takes ~5 minutes on a laptop CPU)</span>
     <span class="n">train</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">81_920</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
@@ -553,7 +553,7 @@ pillow&gt;=8.0.1
     <span class="nb">eval</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Watch 2 games (takes ~10 seconds on a laptop CPU)</span>
-    <span class="nb">eval</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -582,12 +582,12 @@ sweep before evaluation.</p>
 <span class="w">    </span>--gif-seed<span class="w"> </span><span class="m">1</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Interpretable vector-observation policy for Knights-Archers-Zombies.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Interpretable vector-observation policy for Knights-Archers-Zombies.</span>
 
 <span class="sd">The policy uses a small reproducible parameter sweep, projectile interception</span>
 <span class="sd">for the archers, and a close-range fallback for the knights. It can evaluate</span>
 <span class="sd">the policy against seeded random actions and render an episode as a GIF.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -606,7 +606,7 @@ sweep before evaluation.</p>
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PolicyParams</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tunable parameters for the deterministic KAZ policy.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Tunable parameters for the deterministic KAZ policy."""</span>
 
     <span class="n">archer_align_degrees</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">6.6</span>
     <span class="n">archer_lane_split</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.70</span>
@@ -619,12 +619,12 @@ sweep before evaluation.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">zombie_rows</span><span class="p">(</span><span class="n">observation</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return active zombie rows from a vector-masked observation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return active zombie rows from a vector-masked observation."""</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">observation</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">relative_pixels</span><span class="p">(</span><span class="n">row</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert an entity&#39;s normalized relative position to screen pixels.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Convert an entity's normalized relative position to screen pixels."""</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span>
         <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">,</span>
@@ -632,7 +632,7 @@ sweep before evaluation.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">normalized_direction</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a unit direction, defaulting upward for a zero-length vector.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return a unit direction, defaulting upward for a zero-length vector."""</span>
     <span class="n">length</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mf">1e-9</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span>
@@ -640,7 +640,7 @@ sweep before evaluation.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">intercept_direction</span><span class="p">(</span><span class="n">row</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aim where a downward-moving zombie and an arrow should intersect.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Aim where a downward-moving zombie and an arrow should intersect."""</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">relative_pixels</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
     <span class="n">zombie_speed</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">ZOMBIE_Y_SPEED</span><span class="p">)</span>
     <span class="n">arrow_speed</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">ARROW_SPEED</span><span class="p">)</span>
@@ -668,7 +668,7 @@ sweep before evaluation.</p>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">tolerance_degrees</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a turn action, or None when the agent is sufficiently aligned.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return a turn action, or None when the agent is sufficiently aligned."""</span>
     <span class="n">heading_x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">9</span><span class="p">])</span>
     <span class="n">heading_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">10</span><span class="p">])</span>
     <span class="n">dot</span> <span class="o">=</span> <span class="n">heading_x</span> <span class="o">*</span> <span class="n">target_x</span> <span class="o">+</span> <span class="n">heading_y</span> <span class="o">*</span> <span class="n">target_y</span>
@@ -682,7 +682,7 @@ sweep before evaluation.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">archer_standby_action</span><span class="p">(</span>
     <span class="n">observation</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">archer_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">PolicyParams</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fan idle archers across the board so new targets need little turning.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Fan idle archers across the board so new targets need little turning."""</span>
     <span class="n">angle_degrees</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">params</span><span class="o">.</span><span class="n">left_standby_degrees</span>
         <span class="k">if</span> <span class="n">archer_index</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
@@ -704,7 +704,7 @@ sweep before evaluation.</p>
     <span class="n">archer_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">PolicyParams</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select an urgent target while giving one archer the far-right lane.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Select an urgent target while giving one archer the far-right lane."""</span>
     <span class="n">current_x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">7</span><span class="p">])</span>
     <span class="n">primary_lane_is_left</span> <span class="o">=</span> <span class="n">archer_index</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
 
@@ -724,11 +724,11 @@ sweep before evaluation.</p>
     <span class="n">agent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">PolicyParams</span> <span class="o">=</span> <span class="n">PolicyParams</span><span class="p">(),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map a vector-masked observation to a deterministic KAZ action.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Map a vector-masked observation to a deterministic KAZ action."""</span>
     <span class="n">zombies</span> <span class="o">=</span> <span class="n">zombie_rows</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;archer&quot;</span><span class="p">):</span>
-        <span class="n">archer_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"archer"</span><span class="p">):</span>
+        <span class="n">archer_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"_"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">zombies</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">archer_standby_action</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">archer_index</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 
@@ -778,13 +778,13 @@ sweep before evaluation.</p>
     <span class="n">render</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">frame_stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run one KAZ episode and optionally capture RGB frames.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Run one KAZ episode and optionally capture RGB frames."""</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v11</span><span class="o">.</span><span class="n">env</span><span class="p">(</span>
-        <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span> <span class="k">if</span> <span class="n">render</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="o">=</span><span class="s2">"rgb_array"</span> <span class="k">if</span> <span class="n">render</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">max_cycles</span><span class="o">=</span><span class="n">max_cycles</span><span class="p">,</span>
         <span class="n">max_zombies</span><span class="o">=</span><span class="n">max_zombies</span><span class="p">,</span>
         <span class="n">max_arrows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">obs_method</span><span class="o">=</span><span class="s2">&quot;vector-masked&quot;</span><span class="p">,</span>
+        <span class="n">obs_method</span><span class="o">=</span><span class="s2">"vector-masked"</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">agent_index</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">):</span>
@@ -823,7 +823,7 @@ sweep before evaluation.</p>
     <span class="n">max_zombies</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">random_policy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate a policy on every seed in a range.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Evaluate a policy on every seed in a range."""</span>
     <span class="k">return</span> <span class="p">[</span>
         <span class="n">run_episode</span><span class="p">(</span>
             <span class="n">seed</span><span class="p">,</span>
@@ -839,11 +839,11 @@ sweep before evaluation.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">search_params</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span> <span class="n">seeds</span><span class="p">:</span> <span class="nb">range</span><span class="p">,</span> <span class="n">max_cycles</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_zombies</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PolicyParams</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a small grid search over interpretable archer parameters.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Run a small grid search over interpretable archer parameters."""</span>
     <span class="n">defaults</span> <span class="o">=</span> <span class="n">PolicyParams</span><span class="p">()</span>
     <span class="n">best_params</span> <span class="o">=</span> <span class="n">defaults</span>
     <span class="n">best_scores</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">best_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+    <span class="n">best_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"-inf"</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">align</span><span class="p">,</span> <span class="n">lane_split</span><span class="p">,</span> <span class="n">left_standby</span><span class="p">,</span> <span class="n">right_standby</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span>
         <span class="p">[</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">6.6</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span>
@@ -874,9 +874,9 @@ sweep before evaluation.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">save_gif</span><span class="p">(</span><span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">duration_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save captured RGB frames as a looping GIF.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Save captured RGB frames as a looping GIF."""</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">frames</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No frames were captured.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No frames were captured."</span><span class="p">)</span>
 
     <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
     <span class="n">output_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -890,24 +890,24 @@ sweep before evaluation.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse command-line arguments.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Parse command-line arguments."""</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--episodes&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--seed-start&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--max-cycles&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--max-zombies&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--search&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--render-gif&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gif-seed&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gif-duration-ms&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--episodes"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--seed-start"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--max-cycles"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--max-zombies"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--search"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--render-gif"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--gif-seed"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--gif-duration-ms"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">episodes</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;--episodes must be positive&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"--episodes must be positive"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">args</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate the tuned policy and optionally search or render it.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Evaluate the tuned policy and optionally search or render it."""</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
     <span class="n">seeds</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed_start</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">seed_start</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">episodes</span><span class="p">)</span>
 
@@ -919,8 +919,8 @@ sweep before evaluation.</p>
             <span class="n">max_cycles</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">max_cycles</span><span class="p">,</span>
             <span class="n">max_zombies</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">max_zombies</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best searched params:&quot;</span><span class="p">,</span> <span class="n">asdict</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Search scores:&quot;</span><span class="p">,</span> <span class="n">search_scores</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Best searched params:"</span><span class="p">,</span> <span class="n">asdict</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Search scores:"</span><span class="p">,</span> <span class="n">search_scores</span><span class="p">)</span>
 
     <span class="n">policy_scores</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span>
         <span class="n">seeds</span><span class="p">,</span>
@@ -935,11 +935,11 @@ sweep before evaluation.</p>
         <span class="n">max_zombies</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">max_zombies</span><span class="p">,</span>
         <span class="n">random_policy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Policy params:&quot;</span><span class="p">,</span> <span class="n">asdict</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Policy scores: </span><span class="si">{</span><span class="n">policy_scores</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Random scores: </span><span class="si">{</span><span class="n">random_scores</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Policy mean: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">policy_scores</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">policy_scores</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Random mean: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">random_scores</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">random_scores</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Policy params:"</span><span class="p">,</span> <span class="n">asdict</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Policy scores: </span><span class="si">{</span><span class="n">policy_scores</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Random scores: </span><span class="si">{</span><span class="n">random_scores</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Policy mean: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">policy_scores</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">policy_scores</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Random mean: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">random_scores</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">random_scores</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">render_gif</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">reward</span><span class="p">,</span> <span class="n">frames</span> <span class="o">=</span> <span class="n">run_episode</span><span class="p">(</span>
@@ -950,11 +950,11 @@ sweep before evaluation.</p>
             <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">save_gif</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">render_gif</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">gif_duration_ms</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rendered seed </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">gif_seed</span><span class="si">}</span><span class="s2"> with reward </span><span class="si">{</span><span class="n">reward</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wrote </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">render_gif</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Rendered seed </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">gif_seed</span><span class="si">}</span><span class="s2"> with reward </span><span class="si">{</span><span class="n">reward</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Wrote </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">render_gif</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>

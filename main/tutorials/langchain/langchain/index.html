@@ -422,7 +422,7 @@ tenacity
             <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">action</span> <span class="o">=</span> <span class="n">agents</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span><span class="o">.</span><span class="n">act</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Action: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -446,7 +446,7 @@ tenacity
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">docs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_docs</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">instructions</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructions</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">Your goal is to maximize your return, i.e. the sum of the rewards you receive.</span>
 <span class="s2">I will give you an observation, reward, terminiation flag, truncation flag, and the return so far, formatted as:</span>
 
@@ -462,9 +462,9 @@ tenacity
 
 <span class="s2">where you replace &lt;action&gt; with your actual action.</span>
 <span class="s2">Do nothing else but return the action.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_parser</span> <span class="o">=</span> <span class="n">RegexParser</span><span class="p">(</span>
-            <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Action: (.*)&quot;</span><span class="p">,</span> <span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">],</span> <span class="n">default_output_key</span><span class="o">=</span><span class="s2">&quot;action&quot;</span>
+            <span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">"Action: (.*)"</span><span class="p">,</span> <span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">"action"</span><span class="p">],</span> <span class="n">default_output_key</span><span class="o">=</span><span class="s2">"action"</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span> <span class="o">=</span> <span class="p">[]</span>
@@ -483,20 +483,20 @@ tenacity
     <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">term</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">trunc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ret</span> <span class="o">+=</span> <span class="n">rew</span>
 
-        <span class="n">obs_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">obs_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="s2">Observation: </span><span class="si">{</span><span class="n">obs</span><span class="si">}</span>
 <span class="s2">Reward: </span><span class="si">{</span><span class="n">rew</span><span class="si">}</span>
 <span class="s2">Termination: </span><span class="si">{</span><span class="n">term</span><span class="si">}</span>
 <span class="s2">Truncation: </span><span class="si">{</span><span class="n">trunc</span><span class="si">}</span>
 <span class="s2">Return: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ret</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span>
+<span class="s2">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">obs_message</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">obs_message</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">act_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">act_message</span><span class="p">)</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">act_message</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">&quot;action&quot;</span><span class="p">])</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">act_message</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">"action"</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">action</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -506,7 +506,7 @@ tenacity
                 <span class="n">wait</span><span class="o">=</span><span class="n">tenacity</span><span class="o">.</span><span class="n">wait_none</span><span class="p">(),</span>  <span class="c1"># No waiting time between retries</span>
                 <span class="n">retry</span><span class="o">=</span><span class="n">tenacity</span><span class="o">.</span><span class="n">retry_if_exception_type</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">),</span>
                 <span class="n">before_sleep</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry_state</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;ValueError occurred: </span><span class="si">{</span><span class="n">retry_state</span><span class="o">.</span><span class="n">outcome</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span><span class="si">}</span><span class="s2">, retrying...&quot;</span>
+                    <span class="sa">f</span><span class="s2">"ValueError occurred: </span><span class="si">{</span><span class="n">retry_state</span><span class="o">.</span><span class="n">outcome</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span><span class="si">}</span><span class="s2">, retrying..."</span>
                 <span class="p">),</span>
             <span class="p">):</span>
                 <span class="k">with</span> <span class="n">attempt</span><span class="p">:</span>
@@ -549,7 +549,7 @@ tenacity
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rock_paper_scissors</span><span class="p">():</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/rps-v2&quot;</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/rps-v2"</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">PettingZooAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -640,7 +640,7 @@ Action: None
 
     <span class="k">def</span><span class="w"> </span><span class="nf">random_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_buffer</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">])</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">"action_mask"</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">action</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -654,7 +654,7 @@ Action: None
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">valid_action_instruction</span> <span class="o">=</span> <span class="s2">&quot;Generate a valid action given by the indices of the `action_mask` that are not 0, according to the action formatting rules.&quot;</span>
+        <span class="n">valid_action_instruction</span> <span class="o">=</span> <span class="s2">"Generate a valid action given by the indices of the `action_mask` that are not 0, according to the action formatting rules."</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">valid_action_instruction</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_act</span><span class="p">()</span>
 </pre></div>
@@ -665,7 +665,7 @@ Action: None
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tic_tac_toe</span><span class="p">():</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/tictactoe-v3&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/tictactoe-v3"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -673,7 +673,7 @@ Action: None
     <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Observation: {&#39;observation&#39;: array([[[0, 0],
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Observation: {'observation': array([[[0, 0],
         [0, 0],
         [0, 0]],
 
@@ -683,7 +683,7 @@ Action: None
 
        [[0, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -700,7 +700,7 @@ _____|_____|_____
   -  |  -  |  -
      |     |
 
-Observation: {&#39;observation&#39;: array([[[0, 1],
+Observation: {'observation': array([[[0, 1],
         [0, 0],
         [0, 0]],
 
@@ -710,7 +710,7 @@ Observation: {&#39;observation&#39;: array([[[0, 1],
 
        [[0, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -727,7 +727,7 @@ _____|_____|_____
   -  |  -  |  -
      |     |
 
-Observation: {&#39;observation&#39;: array([[[1, 0],
+Observation: {'observation': array([[[1, 0],
         [0, 1],
         [0, 0]],
 
@@ -737,7 +737,7 @@ Observation: {&#39;observation&#39;: array([[[1, 0],
 
        [[0, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 0, 1, 1, 1, 1, 1, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 0, 1, 1, 1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -754,7 +754,7 @@ _____|_____|_____
   X  |  -  |  -
      |     |
 
-Observation: {&#39;observation&#39;: array([[[0, 1],
+Observation: {'observation': array([[[0, 1],
         [1, 0],
         [0, 1]],
 
@@ -764,7 +764,7 @@ Observation: {&#39;observation&#39;: array([[[0, 1],
 
        [[0, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 0, 0, 1, 1, 1, 1, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 0, 0, 1, 1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -781,7 +781,7 @@ _____|_____|_____
   X  |  -  |  -
      |     |
 
-Observation: {&#39;observation&#39;: array([[[1, 0],
+Observation: {'observation': array([[[1, 0],
         [0, 1],
         [1, 0]],
 
@@ -791,7 +791,7 @@ Observation: {&#39;observation&#39;: array([[[1, 0],
 
        [[0, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 0, 0, 0, 1, 1, 1, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 0, 0, 0, 1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -808,7 +808,7 @@ _____|_____|_____
   X  |  -  |  -
      |     |
 
-Observation: {&#39;observation&#39;: array([[[0, 1],
+Observation: {'observation': array([[[0, 1],
         [1, 0],
         [0, 1]],
 
@@ -818,7 +818,7 @@ Observation: {&#39;observation&#39;: array([[[0, 1],
 
        [[0, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 0, 0, 0, 0, 1, 1, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 0, 0, 0, 0, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -835,7 +835,7 @@ _____|_____|_____
   X  |  O  |  -
      |     |
 
-Observation: {&#39;observation&#39;: array([[[1, 0],
+Observation: {'observation': array([[[1, 0],
         [0, 1],
         [1, 0]],
 
@@ -845,7 +845,7 @@ Observation: {&#39;observation&#39;: array([[[1, 0],
 
        [[0, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 0, 0, 0, 0, 0, 1, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 0, 0, 0, 0, 0, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -862,7 +862,7 @@ _____|_____|_____
   X  |  O  |  -
      |     |
 
-Observation: {&#39;observation&#39;: array([[[0, 1],
+Observation: {'observation': array([[[0, 1],
         [1, 0],
         [0, 1]],
 
@@ -872,7 +872,7 @@ Observation: {&#39;observation&#39;: array([[[0, 1],
 
        [[0, 1],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 0, 0, 0, 0, 0, 0, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 0, 0, 0, 0, 0, 0, 1, 1], dtype=int8)}
 Reward: -1
 Termination: True
 Truncation: False
@@ -880,7 +880,7 @@ Return: -1
 
 Action: None
 
-Observation: {&#39;observation&#39;: array([[[1, 0],
+Observation: {'observation': array([[[1, 0],
         [0, 1],
         [1, 0]],
 
@@ -890,7 +890,7 @@ Observation: {&#39;observation&#39;: array([[[1, 0],
 
        [[1, 0],
         [0, 0],
-        [0, 0]]], dtype=int8), &#39;action_mask&#39;: array([0, 0, 0, 0, 0, 0, 0, 1, 1], dtype=int8)}
+        [0, 0]]], dtype=int8), 'action_mask': array([0, 0, 0, 0, 0, 0, 0, 1, 1], dtype=int8)}
 Reward: 1
 Termination: True
 Truncation: False
@@ -907,7 +907,7 @@ Action: None
     <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
-        <span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span>
+        <span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/texas_holdem_no_limit-v6"</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span>
     <span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
@@ -916,10 +916,10 @@ Action: None
     <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Observation: {&#39;observation&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 1., 0., 0., 0., 0.,
-       0., 0., 2.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 0, 1, 1], dtype=int8)}
+       0., 0., 2.], dtype=float32), 'action_mask': array([1, 1, 0, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -927,10 +927,10 @@ Return: 0
 
 Action: 1
 
-Observation: {&#39;observation&#39;: array([0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+Observation: {'observation': array([0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0.,
-       0., 0., 2.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 0, 1, 1], dtype=int8)}
+       0., 0., 2.], dtype=float32), 'action_mask': array([1, 1, 0, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -938,10 +938,10 @@ Return: 0
 
 Action: 1
 
-Observation: {&#39;observation&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 1.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 1., 2.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 1, 1, 1], dtype=int8)}
+       0., 1., 2.], dtype=float32), 'action_mask': array([1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -949,10 +949,10 @@ Return: 0
 
 Action: 1
 
-Observation: {&#39;observation&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,
+Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 2., 2.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 1, 1, 1], dtype=int8)}
+       0., 2., 2.], dtype=float32), 'action_mask': array([1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -960,10 +960,10 @@ Return: 0
 
 Action: 0
 
-Observation: {&#39;observation&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 1.,
        0., 0., 0., 0., 0., 1., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 2., 2.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 1, 1, 1], dtype=int8)}
+       0., 2., 2.], dtype=float32), 'action_mask': array([1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -971,10 +971,10 @@ Return: 0
 
 Action: 2
 
-Observation: {&#39;observation&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 1., 0., 0., 0., 0.,
-       0., 2., 6.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 1, 1, 1], dtype=int8)}
+       0., 2., 6.], dtype=float32), 'action_mask': array([1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -982,10 +982,10 @@ Return: 0
 
 Action: 2
 
-Observation: {&#39;observation&#39;: array([0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+Observation: {'observation': array([0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 1., 0., 0., 1., 0., 0., 0., 0., 0., 1., 0., 0.,
-       0., 2., 8.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 1, 1, 1], dtype=int8)}
+       0., 2., 8.], dtype=float32), 'action_mask': array([1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -993,11 +993,11 @@ Return: 0
 
 Action: 3
 
-Observation: {&#39;observation&#39;: array([ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
+Observation: {'observation': array([ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
         0.,  0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.,
         0.,  0.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  0.,  0.,  0.,
         1.,  0.,  0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
-        6., 20.], dtype=float32), &#39;action_mask&#39;: array([1, 1, 1, 1, 1], dtype=int8)}
+        6., 20.], dtype=float32), 'action_mask': array([1, 1, 1, 1, 1], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -1005,12 +1005,12 @@ Return: 0
 
 Action: 4
 
-Observation: {&#39;observation&#39;: array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,   1.,   1.,
          0.,   0.,   1.,   0.,   0.,   0.,   0.,   0.,   8., 100.],
-      dtype=float32), &#39;action_mask&#39;: array([1, 1, 0, 0, 0], dtype=int8)}
+      dtype=float32), 'action_mask': array([1, 1, 0, 0, 0], dtype=int8)}
 Reward: 0
 Termination: False
 Truncation: False
@@ -1018,14 +1018,14 @@ Return: 0
 
 Action: 4
 [WARNING]: Illegal move made, game terminating with current player losing.
-obs[&#39;action_mask&#39;] contains a mask of all legal moves that can be chosen.
+obs['action_mask'] contains a mask of all legal moves that can be chosen.
 
-Observation: {&#39;observation&#39;: array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,   1.,   1.,
          0.,   0.,   1.,   0.,   0.,   0.,   0.,   0.,   8., 100.],
-      dtype=float32), &#39;action_mask&#39;: array([1, 1, 0, 0, 0], dtype=int8)}
+      dtype=float32), 'action_mask': array([1, 1, 0, 0, 0], dtype=int8)}
 Reward: -1.0
 Termination: True
 Truncation: True
@@ -1033,12 +1033,12 @@ Return: -1.0
 
 Action: None
 
-Observation: {&#39;observation&#39;: array([  0.,   0.,   1.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+Observation: {'observation': array([  0.,   0.,   1.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,   1.,   0.,
          0.,   0.,   0.,   0.,   1.,   0.,   0.,   0.,  20., 100.],
-      dtype=float32), &#39;action_mask&#39;: array([1, 1, 0, 0, 0], dtype=int8)}
+      dtype=float32), 'action_mask': array([1, 1, 0, 0, 0], dtype=int8)}
 Reward: 0
 Termination: True
 Truncation: True
@@ -1046,12 +1046,12 @@ Return: 0
 
 Action: None
 
-Observation: {&#39;observation&#39;: array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
          1.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,   1.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 100., 100.],
-      dtype=float32), &#39;action_mask&#39;: array([1, 1, 0, 0, 0], dtype=int8)}
+      dtype=float32), 'action_mask': array([1, 1, 0, 0, 0], dtype=int8)}
 Reward: 0
 Termination: True
 Truncation: True
@@ -1059,12 +1059,12 @@ Return: 0
 
 Action: None
 
-Observation: {&#39;observation&#39;: array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
+Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   1.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,   1.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   2., 100.],
-      dtype=float32), &#39;action_mask&#39;: array([1, 1, 0, 0, 0], dtype=int8)}
+      dtype=float32), 'action_mask': array([1, 1, 0, 0, 0], dtype=int8)}
 Reward: 0
 Termination: True
 Truncation: True
@@ -1100,7 +1100,7 @@ Action: None
             <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">action</span> <span class="o">=</span> <span class="n">agents</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span><span class="o">.</span><span class="n">act</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Action: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -1108,7 +1108,7 @@ Action: None
 <span class="k">def</span><span class="w"> </span><span class="nf">rock_paper_scissors</span><span class="p">():</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/rps-v2&quot;</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/rps-v2"</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">PettingZooAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -1119,7 +1119,7 @@ Action: None
 <span class="k">def</span><span class="w"> </span><span class="nf">tic_tac_toe</span><span class="p">():</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/tictactoe-v3&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/tictactoe-v3"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
@@ -1131,7 +1131,7 @@ Action: None
     <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
-        <span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span>
+        <span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/texas_holdem_no_limit-v6"</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span>
     <span class="p">)</span>
     <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
@@ -1140,7 +1140,7 @@ Action: None
     <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">rock_paper_scissors</span><span class="p">()</span>
     <span class="n">tic_tac_toe</span><span class="p">()</span>
     <span class="n">texas_holdem_no_limit</span><span class="p">()</span>

@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.atari.quadrapong.quadrapong</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Quadrapong</span>
 
 <span class="sd">```{figure} atari_quadrapong.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: quadrapong</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;atari/quadrapong-v4&quot;)`                     |</span>
+<span class="sd">| Creation             | `make("aec", "atari/quadrapong-v4")`                     |</span>
 <span class="sd">|----------------------|----------------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                                 |</span>
 <span class="sd">| Parallel API         | Yes                                                      |</span>
 <span class="sd">| Manual Control       | No                                                       |</span>
-<span class="sd">| Agents               | `agents= [&#39;first_0&#39;, &#39;second_0&#39;, &#39;third_0&#39;, &#39;fourth_0&#39;]` |</span>
+<span class="sd">| Agents               | `agents= ['first_0', 'second_0', 'third_0', 'fourth_0']` |</span>
 <span class="sd">| Agents               | 4                                                        |</span>
 <span class="sd">| Action Shape         | (1,)                                                     |</span>
 <span class="sd">| Action Values        | [0,5]                                                    |</span>
@@ -403,7 +403,7 @@
 
 <span class="sd">Four player team battle.</span>
 
-<span class="sd">Each player controls a paddle and defends a scoring area. However, this is a team game, and so two of the 4 scoring areas belong to the same team. So a given team must try to coordinate to get the ball away from their scoring areas towards their opponent&#39;s.</span>
+<span class="sd">Each player controls a paddle and defends a scoring area. However, this is a team game, and so two of the 4 scoring areas belong to the same team. So a given team must try to coordinate to get the ball away from their scoring areas towards their opponent's.</span>
 <span class="sd">Specifically `first_0` and `third_0` are on one team and `second_0` and `fourth_0` are on the other.</span>
 
 <span class="sd">Scoring a point gives your team +1 reward and your opponent team -1 reward.</span>
@@ -439,7 +439,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
@@ -458,14 +458,14 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtariAECEnv</span><span class="p">:</span>
     <span class="n">mode</span> <span class="o">=</span> <span class="mi">33</span>
     <span class="n">num_players</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"*.py"</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">version_num</span>
+    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">version_num</span>
     <span class="k">return</span> <span class="n">BaseAtariEnv</span><span class="p">(</span>
-        <span class="n">game</span><span class="o">=</span><span class="s2">&quot;pong&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="n">num_players</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">game</span><span class="o">=</span><span class="s2">"pong"</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="n">num_players</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span></div>
 
 

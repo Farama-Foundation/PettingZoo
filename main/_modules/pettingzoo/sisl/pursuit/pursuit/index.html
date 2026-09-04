@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.sisl.pursuit.pursuit</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Pursuit</span>
 
 <span class="sd">```{figure} sisl_pursuit.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: pursuit</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;SISL environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;SISL environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;sisl/pursuit-v5&quot;)`                       |</span>
+<span class="sd">| Creation             | `make("aec", "sisl/pursuit-v5")`                       |</span>
 <span class="sd">|----------------------|--------------------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                               |</span>
 <span class="sd">| Parallel API         | Yes                                                    |</span>
 <span class="sd">| Manual Control       | Yes                                                    |</span>
-<span class="sd">| Agents               | `agents= [&#39;pursuer_0&#39;, &#39;pursuer_1&#39;, ..., &#39;pursuer_7&#39;]` |</span>
+<span class="sd">| Agents               | `agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']` |</span>
 <span class="sd">| Agents               | 8 (+/-)                                                |</span>
 <span class="sd">| Action Shape         | (5)                                                    |</span>
 <span class="sd">| Action Values        | Discrete(5)                                            |</span>
@@ -413,7 +413,7 @@
 
 <span class="sd">### Manual Control</span>
 
-<span class="sd">Select different pursuers with &#39;J&#39; and &#39;K&#39;. The selected pursuer can be moved with the arrow keys.</span>
+<span class="sd">Select different pursuers with 'J' and 'K'. The selected pursuer can be moved with the arrow keys.</span>
 
 
 <span class="sd">### Arguments</span>
@@ -421,7 +421,7 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;sisl/pursuit-v5&quot;, max_cycles=500, x_size=16, y_size=16, shared_reward=True,</span>
+<span class="sd">make("aec", "sisl/pursuit-v5", max_cycles=500, x_size=16, y_size=16, shared_reward=True,</span>
 <span class="sd">n_evaders=30, n_pursuers=8, obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,</span>
 <span class="sd">catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)</span>
 <span class="sd">```</span>
@@ -440,7 +440,7 @@
 
 <span class="sd">`freeze_evaders`:  Toggles if evaders can move or not</span>
 
-<span class="sd">`tag_reward`:  Reward for &#39;tagging&#39;, or being single evader.</span>
+<span class="sd">`tag_reward`:  Reward for 'tagging', or being single evader.</span>
 
 <span class="sd">`term_pursuit`:  Reward added when a pursuer or pursuers catch an evader</span>
 
@@ -462,7 +462,7 @@
 <span class="sd">* v1: Various fixes and environment argument changes (1.3.1)</span>
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">EzPickle</span>
@@ -473,7 +473,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentSelector</span><span class="p">,</span> <span class="n">wrappers</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.conversions</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_wrapper_fn</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ManualPolicy&quot;</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">,</span> <span class="s2">&quot;parallel_env&quot;</span><span class="p">,</span> <span class="s2">&quot;raw_env&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ManualPolicy"</span><span class="p">,</span> <span class="s2">"env"</span><span class="p">,</span> <span class="s2">"parallel_env"</span><span class="p">,</span> <span class="s2">"raw_env"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="env">
@@ -493,18 +493,18 @@
 <a class="viewcode-back" href="../../../../../environments/sisl/pursuit/#pettingzoo.sisl.pursuit.pursuit.raw_env">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;pursuit_v5&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="s2">&quot;has_manual_policy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">,</span> <span class="s2">"rgb_array"</span><span class="p">],</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"pursuit_v5"</span><span class="p">,</span>
+        <span class="s2">"is_parallelizable"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"render_fps"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">"has_manual_policy"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">_env</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;render_mode&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pursuer_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">num_agents</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"render_mode"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"pursuer_"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">num_agents</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_agents</span><span class="p">))))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">AgentSelector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
@@ -580,7 +580,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">"human"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
 

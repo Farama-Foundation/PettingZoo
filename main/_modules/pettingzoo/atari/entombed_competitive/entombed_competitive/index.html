@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.atari.entombed_competitive.entombed_competitive</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Emtombed: Competitive</span>
 
 <span class="sd">```{figure} atari_entombed_competitive.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: entombed_competitive</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation           | `make(&quot;aec&quot;, &quot;atari/entombed_competitive-v3&quot;)`         |</span>
+<span class="sd">| Creation           | `make("aec", "atari/entombed_competitive-v3")`         |</span>
 <span class="sd">|--------------------|--------------------------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                                               |</span>
 <span class="sd">| Parallel API       | Yes                                                    |</span>
 <span class="sd">| Manual Control     | No                                                     |</span>
-<span class="sd">| Agents             | `agents= [&#39;first_0&#39;, &#39;second_0&#39;]`                      |</span>
+<span class="sd">| Agents             | `agents= ['first_0', 'second_0']`                      |</span>
 <span class="sd">| Agents             | 2                                                      |</span>
 <span class="sd">| Action Shape       | (1,)                                                   |</span>
 <span class="sd">| Action Values      | [0,17]                                                 |</span>
@@ -401,7 +401,7 @@
 <span class="sd">| Observation Values | (0,255)                                                |</span>
 
 
-<span class="sd">Entombed&#39;s competitive version is a race to last the longest.</span>
+<span class="sd">Entombed's competitive version is a race to last the longest.</span>
 
 <span class="sd">You need to quickly navigate down a constantly generating</span>
 <span class="sd">maze you can only see part of. If you get stuck, you lose.</span>
@@ -449,7 +449,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
@@ -466,14 +466,14 @@
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/atari/entombed_competitive/#pettingzoo.atari.entombed_competitive.entombed_competitive.raw_env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtariAECEnv</span><span class="p">:</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"*.py"</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">version_num</span>
+    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">version_num</span>
     <span class="k">return</span> <span class="n">BaseAtariEnv</span><span class="p">(</span>
-        <span class="n">game</span><span class="o">=</span><span class="s2">&quot;entombed&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">game</span><span class="o">=</span><span class="s2">"entombed"</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span></div>
 
 

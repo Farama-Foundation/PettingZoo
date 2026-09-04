@@ -418,13 +418,13 @@ sb3-contrib&gt;=2.0.0
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with SB3. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-and-evaluation">
 <h3>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Stable-Baselines3 to train agents in the Connect Four environment using invalid action masking.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Uses Stable-Baselines3 to train agents in the Connect Four environment using invalid action masking.</span>
 
 <span class="sd">For information about invalid action masking in PettingZoo, see https://pettingzoo.farama.org/api/aec/#action-masking</span>
 <span class="sd">For more information about invalid action masking in SB3, see https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html</span>
 
 <span class="sd">Author: Elliot (https://github.com/elliottower)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -439,21 +439,21 @@ sb3-contrib&gt;=2.0.0
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
 
-<span class="c1"># To pass into other gymnasium wrappers, we need to ensure that pettingzoo&#39;s wrappper</span>
+<span class="c1"># To pass into other gymnasium wrappers, we need to ensure that pettingzoo's wrappper</span>
 <span class="c1"># can also be a gymnasium Env. Thus, we subclass under gym.Env as well.</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">pettingzoo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseWrapper</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper to allow PettingZoo environments to be used with SB3 illegal action masking.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Wrapper to allow PettingZoo environments to be used with SB3 illegal action masking."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like reset function which assigns obs/action spaces to be the same for each agent.</span>
+<span class="w">        </span><span class="sd">"""Gymnasium-like reset function which assigns obs/action spaces to be the same for each agent.</span>
 
-<span class="sd">        This is required as SB3 is designed for single-agent RL and doesn&#39;t expect obs/action spaces to be functions</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        This is required as SB3 is designed for single-agent RL and doesn't expect obs/action spaces to be functions</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 
         <span class="c1"># Strip the action mask out from the observation space</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span>
-            <span class="s2">&quot;observation&quot;</span>
+            <span class="s2">"observation"</span>
         <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -461,11 +461,11 @@ sb3-contrib&gt;=2.0.0
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">),</span> <span class="p">{}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like step function, returning observation, reward, termination, truncation, info.</span>
+<span class="w">        </span><span class="sd">"""Gymnasium-like step function, returning observation, reward, termination, truncation, info.</span>
 
 <span class="sd">        The observation is for the next agent (used to determine the next action), while the remaining</span>
 <span class="sd">        items are for the agent that just acted (used to understand what just happened).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">current_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
@@ -480,26 +480,26 @@ sb3-contrib&gt;=2.0.0
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return only raw observation, removing action mask.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">"""Return only raw observation, removing action mask."""</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)[</span><span class="s2">"observation"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">action_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Separate function used in order to access the action mask.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">"""Separate function used in order to access the action mask."""</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)[</span><span class="s2">"action_mask"</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">mask_fn</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
-    <span class="c1"># Do whatever you&#39;d like in this function to return the action mask</span>
+    <span class="c1"># Do whatever you'd like in this function to return the action mask</span>
     <span class="c1"># for the current env. In this example, we assume the env has a</span>
     <span class="c1"># helpful method we can rely on.</span>
     <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">action_mask</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">train_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train a single model to play as each agent in a zero-sum game environment using invalid action masking.&quot;&quot;&quot;</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Train a single model to play as each agent in a zero-sum game environment using invalid action masking."""</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">!s}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Starting training on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">!s}</span><span class="s2">."</span><span class="p">)</span>
 
     <span class="c1"># Custom wrapper to convert PettingZoo envs to work with SB3 action masking</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -507,7 +507,7 @@ sb3-contrib&gt;=2.0.0
     <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># Must call reset() in order to re-define the spaces</span>
 
     <span class="n">env</span> <span class="o">=</span> <span class="n">ActionMasker</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mask_fn</span><span class="p">)</span>  <span class="c1"># Wrap to enable masking (SB3 function)</span>
-    <span class="c1"># MaskablePPO behaves the same as SB3&#39;s PPO unless the env is wrapped</span>
+    <span class="c1"># MaskablePPO behaves the same as SB3's PPO unless the env is wrapped</span>
     <span class="c1"># with ActionMasker. If the wrapper is detected, the masks are automatically</span>
     <span class="c1"># retrieved and used when learning. Note that MaskablePPO does not accept</span>
     <span class="c1"># a new action_mask_fn kwarg, as it did in an earlier draft.</span>
@@ -515,29 +515,29 @@ sb3-contrib&gt;=2.0.0
     <span class="n">model</span><span class="o">.</span><span class="n">set_random_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
 
-    <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'name'</span><span class="p">)</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model has been saved.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Model has been saved."</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished training on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">!s}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Finished training on </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">!s}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
     <span class="c1"># Evaluate a trained agent vs a random agent</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="n">env_id</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Starting evaluation vs a random agent. Trained agent will play as </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="sa">f</span><span class="s2">"Starting evaluation vs a random agent. Trained agent will play as </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
     <span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">latest_policy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
-            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">*.zip&quot;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">*.zip"</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Policy not found.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Policy not found."</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">MaskablePPO</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">latest_policy</span><span class="p">)</span>
@@ -557,7 +557,7 @@ sb3-contrib&gt;=2.0.0
             <span class="n">observation</span><span class="p">,</span> <span class="n">action_mask</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
-                <span class="c1"># If there is a winner, keep track, otherwise don&#39;t change the scores (tie)</span>
+                <span class="c1"># If there is a winner, keep track, otherwise don't change the scores (tie)</span>
                 <span class="k">if</span> <span class="p">(</span>
                     <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
                     <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
@@ -589,15 +589,15 @@ sb3-contrib&gt;=2.0.0
         <span class="n">winrate</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">winrate</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rewards by round: &quot;</span><span class="p">,</span> <span class="n">round_rewards</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total rewards (incl. negative rewards): &quot;</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Winrate: &quot;</span><span class="p">,</span> <span class="n">winrate</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final scores: &quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Rewards by round: "</span><span class="p">,</span> <span class="n">round_rewards</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Total rewards (incl. negative rewards): "</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Winrate: "</span><span class="p">,</span> <span class="n">winrate</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Final scores: "</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">round_rewards</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">,</span> <span class="n">winrate</span><span class="p">,</span> <span class="n">scores</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">env_id</span> <span class="o">=</span> <span class="s2">&quot;classic/connect_four-v3&quot;</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">env_id</span> <span class="o">=</span> <span class="s2">"classic/connect_four-v3"</span>
 
     <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -613,7 +613,7 @@ sb3-contrib&gt;=2.0.0
     <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Watch two games vs a random agent</span>
-    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -621,7 +621,7 @@ sb3-contrib&gt;=2.0.0
 <h3>Testing other PettingZoo Classic environments<a class="headerlink" href="#testing-other-pettingzoo-classic-environments" title="Link to this heading">¶</a></h3>
 <p>The following script uses <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> to test all other PettingZoo environments which support action masking.</p>
 <p>This code yields decent results on simpler environments like <a class="reference internal" href="../../../environments/classic/connect_four/"><span class="doc std std-doc">Connect Four</span></a>, while more difficult environments such as <a class="reference internal" href="../../../environments/classic/chess/"><span class="doc std std-doc">Chess</span></a> or <a class="reference internal" href="../../../environments/classic/hanabi/"><span class="doc std std-doc">Hanabi</span></a> will likely take much more training time and hyperparameter tuning.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Tests that action masking code works properly with all PettingZoo classic environments.&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Tests that action masking code works properly with all PettingZoo classic environments."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_spec</span>
 
@@ -629,37 +629,37 @@ sb3-contrib&gt;=2.0.0
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">pytest</span><span class="o">.</span><span class="n">importorskip</span><span class="p">(</span><span class="s2">&quot;stable_baselines3&quot;</span><span class="p">)</span>
-<span class="n">pytest</span><span class="o">.</span><span class="n">importorskip</span><span class="p">(</span><span class="s2">&quot;sb3_contrib&quot;</span><span class="p">)</span>
+<span class="n">pytest</span><span class="o">.</span><span class="n">importorskip</span><span class="p">(</span><span class="s2">"stable_baselines3"</span><span class="p">)</span>
+<span class="n">pytest</span><span class="o">.</span><span class="n">importorskip</span><span class="p">(</span><span class="s2">"sb3_contrib"</span><span class="p">)</span>
 
 <span class="c1"># Note: Connect Four is tested in sb3_connect_four_action_mask.py</span>
 <span class="c1"># Note: Rock-Paper-Scissors has no action masking and does not seem to learn well playing against itself</span>
 
 <span class="c1"># These environments do better than random even after the minimum number of timesteps</span>
 <span class="n">EASY_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;classic/texas_holdem_no_limit-v6&quot;</span><span class="p">,</span>  <span class="c1"># texas holdem human rendered game ends instantly, but with random actions it works fine</span>
-    <span class="s2">&quot;classic/tictactoe-v3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;classic/leduc_holdem-v4&quot;</span><span class="p">,</span>
+    <span class="s2">"classic/texas_holdem_no_limit-v6"</span><span class="p">,</span>  <span class="c1"># texas holdem human rendered game ends instantly, but with random actions it works fine</span>
+    <span class="s2">"classic/tictactoe-v3"</span><span class="p">,</span>
+    <span class="s2">"classic/leduc_holdem-v4"</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="c1"># More difficult environments which will likely take more training time</span>
 <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
-    <span class="s2">&quot;classic/texas_holdem-v4&quot;</span><span class="p">,</span>  <span class="c1"># this performs poorly with updates to SB3 wrapper</span>
-    <span class="s2">&quot;classic/chess-v6&quot;</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
+    <span class="s2">"classic/hanabi-v5"</span><span class="p">,</span>  <span class="c1"># even with 10x as many steps, total score seems to always be tied between the two agents</span>
+    <span class="s2">"classic/texas_holdem-v4"</span><span class="p">,</span>  <span class="c1"># this performs poorly with updates to SB3 wrapper</span>
+    <span class="s2">"classic/chess-v6"</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, performance varies heavily</span>
 <span class="p">]</span>
 
-<span class="k">if</span> <span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;pyspiel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Hanabi needs open_spiel (Python &gt;= 3.11)</span>
-    <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">MEDIUM_ENVS</span> <span class="k">if</span> <span class="n">e</span> <span class="o">!=</span> <span class="s2">&quot;classic/hanabi-v5&quot;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">find_spec</span><span class="p">(</span><span class="s2">"pyspiel"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Hanabi needs open_spiel (Python &gt;= 3.11)</span>
+    <span class="n">MEDIUM_ENVS</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">MEDIUM_ENVS</span> <span class="k">if</span> <span class="n">e</span> <span class="o">!=</span> <span class="s2">"classic/hanabi-v5"</span><span class="p">]</span>
 
 <span class="c1"># Most difficult environments to train agents for (and longest games</span>
 <span class="c1"># TODO: test board_size to see if smaller go board is more easily solvable</span>
 <span class="n">HARD_ENVS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;classic/go-v5&quot;</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, may be another issue causing poor performance</span>
+    <span class="s2">"classic/go-v5"</span><span class="p">,</span>  <span class="c1"># difficult to train because games take so long, may be another issue causing poor performance</span>
 <span class="p">]</span>
 
 
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_id&quot;</span><span class="p">,</span> <span class="n">EASY_ENVS</span><span class="p">)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"env_id"</span><span class="p">,</span> <span class="n">EASY_ENVS</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_easy</span><span class="p">(</span><span class="n">env_id</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
@@ -678,19 +678,19 @@ sb3-contrib&gt;=2.0.0
         <span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
-    <span class="n">agents</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">&quot;aec&quot;</span><span class="p">,</span> <span class="n">env_id</span><span class="p">)</span><span class="o">.</span><span class="n">possible_agents</span>
+    <span class="n">agents</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="n">env_id</span><span class="p">)</span><span class="o">.</span><span class="n">possible_agents</span>
     <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="ow">or</span> <span class="p">(</span><span class="n">total_rewards</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">total_rewards</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="p">(</span>
-        <span class="s2">&quot;Trained policy should outperform random actions&quot;</span>
+        <span class="s2">"Trained policy should outperform random actions"</span>
     <span class="p">)</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
-    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
+    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode="human", **env_kwargs)</span>
 
 
 <span class="c1"># @pytest.mark.skip(</span>
-<span class="c1">#     reason=&quot;training is compute intensive and hyperparameters have not been tuned, disabled for CI&quot;</span>
+<span class="c1">#     reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"</span>
 <span class="c1"># )</span>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_id&quot;</span><span class="p">,</span> <span class="n">MEDIUM_ENVS</span><span class="p">)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"env_id"</span><span class="p">,</span> <span class="n">MEDIUM_ENVS</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_medium</span><span class="p">(</span><span class="n">env_id</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
@@ -708,17 +708,17 @@ sb3-contrib&gt;=2.0.0
     <span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&lt;</span> <span class="mf">0.75</span><span class="p">,</span> <span class="p">(</span>
-        <span class="s2">&quot;Policy should not perform better than 75% winrate&quot;</span>
+        <span class="s2">"Policy should not perform better than 75% winrate"</span>
     <span class="p">)</span>  <span class="c1"># 30-40% for leduc, 0% for hanabi</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
-    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
+    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode="human", **env_kwargs)</span>
 
 
 <span class="c1"># @pytest.mark.skip(</span>
-<span class="c1">#     reason=&quot;training is compute intensive and hyperparameters have not been tuned, disabled for CI&quot;</span>
+<span class="c1">#     reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"</span>
 <span class="c1"># )</span>
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;env_id&quot;</span><span class="p">,</span> <span class="n">HARD_ENVS</span><span class="p">)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"env_id"</span><span class="p">,</span> <span class="n">HARD_ENVS</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_action_mask_hard</span><span class="p">(</span><span class="n">env_id</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tutorials.SB3.connect_four.sb3_connect_four_action_mask</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
         <span class="n">eval_action_mask</span><span class="p">,</span>
@@ -735,10 +735,10 @@ sb3-contrib&gt;=2.0.0
         <span class="n">env_id</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
     <span class="p">)</span>
 
-    <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Policy should not perform better than 50% winrate&quot;</span>  <span class="c1"># 0% for go</span>
+    <span class="k">assert</span> <span class="n">winrate</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Policy should not perform better than 50% winrate"</span>  <span class="c1"># 0% for go</span>
 
     <span class="c1"># Watch two games (disabled by default)</span>
-    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode=&quot;human&quot;, **env_kwargs)</span>
+    <span class="c1"># eval_action_mask(env_id, num_games=2, render_mode="human", **env_kwargs)</span>
 </pre></div>
 </div>
 </section>

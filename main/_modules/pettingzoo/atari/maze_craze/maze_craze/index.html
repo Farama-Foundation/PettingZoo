@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.atari.maze_craze.maze_craze</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Maze Craze</span>
 
 <span class="sd">```{figure} atari_maze_craze.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: maze_craze</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;atari/maze_craze-v3&quot;)`         |</span>
+<span class="sd">| Creation             | `make("aec", "atari/maze_craze-v3")`         |</span>
 <span class="sd">|----------------------|----------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                     |</span>
 <span class="sd">| Parallel API         | Yes                                          |</span>
 <span class="sd">| Manual Control       | No                                           |</span>
-<span class="sd">| Agents               | `agents= [&#39;first_0&#39;, &#39;second_0&#39;]`            |</span>
+<span class="sd">| Agents               | `agents= ['first_0', 'second_0']`            |</span>
 <span class="sd">| Agents               | 2                                            |</span>
 <span class="sd">| Action Shape         | (1,)                                         |</span>
 <span class="sd">| Action Values        | [0,17]                                       |</span>
@@ -423,10 +423,10 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make(&quot;aec&quot;, &quot;atari/maze_craze-v3&quot;, game_version=&quot;robbers&quot;, visibilty_level=0)</span>
+<span class="sd">make("aec", "atari/maze_craze-v3", game_version="robbers", visibilty_level=0)</span>
 <span class="sd">```</span>
 
-<span class="sd">`game_version`:  Possibilities are &quot;robbers&quot;, &quot;race&quot;, &quot;capture&quot;, corresponding to the 3 game versions described above</span>
+<span class="sd">`game_version`:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above</span>
 
 <span class="sd">`visibilty_level`:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.</span>
 
@@ -463,7 +463,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
@@ -477,33 +477,33 @@
 <span class="p">)</span>
 
 <span class="n">avaliable_versions</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;robbers&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;capture&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s2">"robbers"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">"race"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">"capture"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/atari/maze_craze/#pettingzoo.atari.maze_craze.maze_craze.raw_env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span>
-    <span class="n">game_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;robbers&quot;</span><span class="p">,</span> <span class="n">visibilty_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="n">game_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"robbers"</span><span class="p">,</span> <span class="n">visibilty_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtariAECEnv</span><span class="p">:</span>
     <span class="k">assert</span> <span class="n">game_version</span> <span class="ow">in</span> <span class="n">avaliable_versions</span><span class="p">,</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;`game_version` parameter must be one of </span><span class="si">{</span><span class="n">avaliable_versions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"`game_version` parameter must be one of </span><span class="si">{</span><span class="n">avaliable_versions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
     <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">visibilty_level</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">,</span> <span class="p">(</span>
-        <span class="s2">&quot;visibility level must be between 0 and 4, where 0 is 100% visibility and 3 is 0% visibility&quot;</span>
+        <span class="s2">"visibility level must be between 0 and 4, where 0 is 100% visibility and 3 is 0% visibility"</span>
     <span class="p">)</span>
     <span class="n">base_mode</span> <span class="o">=</span> <span class="p">(</span><span class="n">avaliable_versions</span><span class="p">[</span><span class="n">game_version</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span>
     <span class="n">mode</span> <span class="o">=</span> <span class="n">base_mode</span> <span class="o">+</span> <span class="n">visibilty_level</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"*.py"</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">version_num</span>
+    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">version_num</span>
     <span class="k">return</span> <span class="n">BaseAtariEnv</span><span class="p">(</span>
-        <span class="n">game</span><span class="o">=</span><span class="s2">&quot;maze_craze&quot;</span><span class="p">,</span>
+        <span class="n">game</span><span class="o">=</span><span class="s2">"maze_craze"</span><span class="p">,</span>
         <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">mode_num</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
         <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
