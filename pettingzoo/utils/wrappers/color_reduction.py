@@ -43,7 +43,7 @@ def _reduced_space(
     return gymnasium.spaces.Box(low=low, high=high, dtype=low.dtype.type)
 
 
-class ColorReductionObservation(BaseWrapper[AgentID, Any, ActionType]):
+class ColorReductionObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     """Reduces an image observation to a single channel.
 
     ``"full"`` converts to grayscale with the luminance weights
@@ -57,8 +57,8 @@ class ColorReductionObservation(BaseWrapper[AgentID, Any, ActionType]):
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType], mode: str = "full"):
         assert isinstance(env, AECEnv), (
-            "ColorReductionObservation is only compatible with AEC environments, "
-            "use ColorReductionObservationParallel instead."
+            "ColorReductionObservationV1 is only compatible with AEC environments, "
+            "use ColorReductionObservationParallelV1 instead."
         )
         _check_mode(mode)
         super().__init__(env)
@@ -86,10 +86,10 @@ class ColorReductionObservation(BaseWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"ColorReductionObservation<{self.env!s}>"
+        return f"ColorReductionObservationV1<{self.env!s}>"
 
 
-class ColorReductionObservationParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
+class ColorReductionObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
     """Reduces an image observation to a single channel.
 
     ``"full"`` converts to grayscale with the luminance weights
@@ -146,4 +146,4 @@ class ColorReductionObservationParallel(BaseParallelWrapper[AgentID, Any, Action
 
     @override
     def __str__(self) -> str:
-        return f"ColorReductionObservationParallel<{self.env!s}>"
+        return f"ColorReductionObservationParallelV1<{self.env!s}>"

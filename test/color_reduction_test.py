@@ -9,8 +9,8 @@ from gymnasium.spaces import Box, Discrete
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import (
-    ColorReductionObservation,
-    ColorReductionObservationParallel,
+    ColorReductionObservationV1,
+    ColorReductionObservationParallelV1,
 )
 
 AGENTS = ["agent_0", "agent_1"]
@@ -138,7 +138,7 @@ def float_obs():
 @pytest.mark.parametrize("mode", ["full", "R", "G", "B"])
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_observation_space_drops_channel_axis(mode, agent):
-    space = ColorReductionObservation(DummyAEC(), mode).observation_space(agent)
+    space = ColorReductionObservationV1(DummyAEC(), mode).observation_space(agent)
     assert isinstance(space, Box)
     assert space.shape == (2, 2)
     assert space.dtype == np.uint8
@@ -148,7 +148,7 @@ def test_aec_observation_space_drops_channel_axis(mode, agent):
 
 @pytest.mark.parametrize("mode", ["full", "R", "G", "B"])
 def test_parallel_observation_space_drops_channel_axis(mode):
-    space = ColorReductionObservationParallel(DummyParallel(), mode).observation_space(
+    space = ColorReductionObservationParallelV1(DummyParallel(), mode).observation_space(
         "agent_0"
     )
     assert space.shape == (2, 2)
@@ -157,7 +157,7 @@ def test_parallel_observation_space_drops_channel_axis(mode):
 
 @pytest.mark.parametrize("mode,high", CHANNEL_HIGHS)
 def test_aec_space_bounds_follow_the_mode(mode, high):
-    space = ColorReductionObservation(
+    space = ColorReductionObservationV1(
         DummyAEC(space=CHANNEL_SPACE), mode
     ).observation_space("agent_0")
     assert np.array_equal(space.low, np.zeros((2, 2), dtype=np.uint8))
@@ -166,14 +166,14 @@ def test_aec_space_bounds_follow_the_mode(mode, high):
 
 @pytest.mark.parametrize("mode,high", CHANNEL_HIGHS)
 def test_parallel_space_bounds_follow_the_mode(mode, high):
-    space = ColorReductionObservationParallel(
+    space = ColorReductionObservationParallelV1(
         DummyParallel(space=CHANNEL_SPACE), mode
     ).observation_space("agent_0")
     assert np.array_equal(space.high, np.full((2, 2), high, dtype=np.uint8))
 
 
 def test_aec_grayscale_matches_hand_computed_values():
-    env = ColorReductionObservation(DummyAEC(), "full")
+    env = ColorReductionObservationV1(DummyAEC(), "full")
     env.reset(seed=0)
 
     obs = env.observe("agent_0")
@@ -185,7 +185,7 @@ def test_aec_grayscale_matches_hand_computed_values():
 @pytest.mark.parametrize("mode,channel", [("R", 0), ("G", 1), ("B", 2)])
 @pytest.mark.parametrize("agent", AGENTS)
 def test_aec_single_channel_modes(mode, channel, agent):
-    env = ColorReductionObservation(DummyAEC(), mode)
+    env = ColorReductionObservationV1(DummyAEC(), mode)
     env.reset(seed=0)
 
     obs = env.observe(agent)
@@ -195,7 +195,7 @@ def test_aec_single_channel_modes(mode, channel, agent):
 
 @pytest.mark.parametrize("mode,channel", [("R", 0), ("G", 1), ("B", 2)])
 def test_aec_single_channel_modes_keep_the_input_dtype(mode, channel):
-    env = ColorReductionObservation(DummyAEC(space=FLOAT_SPACE, obs=float_obs()), mode)
+    env = ColorReductionObservationV1(DummyAEC(space=FLOAT_SPACE, obs=float_obs()), mode)
     env.reset(seed=0)
 
     space = env.observation_space("agent_0")
@@ -210,7 +210,7 @@ def test_aec_single_channel_modes_keep_the_input_dtype(mode, channel):
 
 @pytest.mark.parametrize("mode,channel", [("R", 0), ("G", 1), ("B", 2)])
 def test_parallel_single_channel_modes_keep_the_input_dtype(mode, channel):
-    env = ColorReductionObservationParallel(
+    env = ColorReductionObservationParallelV1(
         DummyParallel(space=FLOAT_SPACE, obs=float_obs()), mode
     )
     obs, _ = env.reset(seed=0)
@@ -223,7 +223,7 @@ def test_parallel_single_channel_modes_keep_the_input_dtype(mode, channel):
 def test_full_mode_returns_uint8_for_a_float_space():
     # SuperSuit casts the grayscale result to uint8 whatever went in, so a float
     # space in [0, 1] comes out as a uint8 Box and the values truncate to 0.
-    env = ColorReductionObservation(
+    env = ColorReductionObservationV1(
         DummyAEC(space=FLOAT_SPACE, obs=float_obs()), "full"
     )
     env.reset(seed=0)
@@ -239,7 +239,7 @@ def test_full_mode_returns_uint8_for_a_float_space():
 
 def test_observation_does_not_alias_the_env_buffer():
     inner = DummyAEC()
-    env = ColorReductionObservation(inner, "R")
+    env = ColorReductionObservationV1(inner, "R")
     env.reset(seed=0)
 
     obs = env.observe("agent_0")
@@ -248,7 +248,7 @@ def test_observation_does_not_alias_the_env_buffer():
 
 
 def test_aec_last_is_reduced():
-    env = ColorReductionObservation(DummyAEC(), "full")
+    env = ColorReductionObservationV1(DummyAEC(), "full")
     env.reset(seed=0)
     while env.agent_selection != "agent_0":
         env.step(0)
@@ -258,7 +258,7 @@ def test_aec_last_is_reduced():
 
 
 def test_parallel_reset_and_step_are_reduced():
-    env = ColorReductionObservationParallel(DummyParallel(), "full")
+    env = ColorReductionObservationParallelV1(DummyParallel(), "full")
 
     obs, _ = env.reset(seed=0)
     assert np.array_equal(obs["agent_0"], EXPECTED_GRAY_0)
@@ -270,13 +270,13 @@ def test_parallel_reset_and_step_are_reduced():
 
 
 def test_parallel_single_channel_mode():
-    env = ColorReductionObservationParallel(DummyParallel(), "G")
+    env = ColorReductionObservationParallelV1(DummyParallel(), "G")
     obs, _ = env.reset(seed=0)
     assert np.array_equal(obs["agent_1"], FIXED_OBS["agent_1"][:, :, 1])
 
 
 def test_default_mode_is_full():
-    env = ColorReductionObservation(DummyAEC())
+    env = ColorReductionObservationV1(DummyAEC())
     env.reset(seed=0)
     assert np.array_equal(env.observe("agent_0"), EXPECTED_GRAY_0)
 
@@ -286,7 +286,7 @@ def test_observe_passes_through_none():
         def observe(self, agent):
             return None
 
-    env = ColorReductionObservation(NoneObsEnv())
+    env = ColorReductionObservationV1(NoneObsEnv())
     env.reset(seed=0)
     assert env.observe("agent_0") is None
 
@@ -294,37 +294,37 @@ def test_observe_passes_through_none():
 def test_aec_str():
     inner = DummyAEC()
     assert (
-        str(ColorReductionObservation(inner)) == f"ColorReductionObservation<{inner}>"
+        str(ColorReductionObservationV1(inner)) == f"ColorReductionObservationV1<{inner}>"
     )
 
 
 def test_parallel_str():
     inner = DummyParallel()
     assert (
-        str(ColorReductionObservationParallel(inner))
-        == f"ColorReductionObservationParallel<{inner}>"
+        str(ColorReductionObservationParallelV1(inner))
+        == f"ColorReductionObservationParallelV1<{inner}>"
     )
 
 
 def test_aec_api():
-    api_test(ColorReductionObservation(DummyAEC()), num_cycles=5)
+    api_test(ColorReductionObservationV1(DummyAEC()), num_cycles=5)
 
 
 def test_parallel_api():
-    parallel_api_test(ColorReductionObservationParallel(DummyParallel()), num_cycles=5)
+    parallel_api_test(ColorReductionObservationParallelV1(DummyParallel()), num_cycles=5)
 
 
 def test_rejects_parallel_env():
     with pytest.raises(AssertionError):
-        ColorReductionObservation(DummyParallel())
+        ColorReductionObservationV1(DummyParallel())
 
 
 @pytest.mark.parametrize("mode", ["gray", "r", "", "RGB", 0])
 def test_rejects_unknown_mode(mode):
     with pytest.raises(AssertionError):
-        ColorReductionObservation(DummyAEC(), mode)
+        ColorReductionObservationV1(DummyAEC(), mode)
     with pytest.raises(AssertionError):
-        ColorReductionObservationParallel(DummyParallel(), mode)
+        ColorReductionObservationParallelV1(DummyParallel(), mode)
 
 
 @pytest.mark.parametrize(
@@ -338,6 +338,6 @@ def test_rejects_unknown_mode(mode):
 )
 def test_rejects_non_image_observation_space(space):
     with pytest.raises(AssertionError, match="agent_0"):
-        ColorReductionObservation(DummyAEC(space=space))
+        ColorReductionObservationV1(DummyAEC(space=space))
     with pytest.raises(AssertionError, match="agent_0"):
-        ColorReductionObservationParallel(DummyParallel(space=space))
+        ColorReductionObservationParallelV1(DummyParallel(space=space))
