@@ -40,6 +40,10 @@ from pettingzoo.utils.wrappers.scale_action import (
     ScaleActionParallelV1,
     ScaleActionV1,
 )
+from pettingzoo.utils.wrappers.sticky_action import (
+    StickyActionParallelV1,
+    StickyActionV1,
+)
 from pettingzoo.utils.wrappers.terminate_illegal import TerminateIllegalWrapper
 
 __all__ = [
@@ -69,5 +73,7 @@ __all__ = [
     "ReshapeObservationV1",
     "ScaleActionParallelV1",
     "ScaleActionV1",
+    "StickyActionParallelV1",
+    "StickyActionV1",
     "TerminateIllegalWrapper",
 ]
