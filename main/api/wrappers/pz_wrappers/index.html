@@ -745,6 +745,50 @@ numbering.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.RescaleObservationV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">RescaleObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/rescale_observation/#RescaleObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.RescaleObservationV1" title="Link to this definition">¶</a></dt>
+<dd><p>Linearly rescales each agent’s Box observation into a fixed range.</p>
+<p>Every element is mapped from its own <code class="docutils literal notranslate"><span class="pre">[low,</span> <span class="pre">high]</span></code> in the wrapped space onto
+<code class="docutils literal notranslate"><span class="pre">[min_obs,</span> <span class="pre">max_obs]</span></code>, and the result is clipped so it always sits inside the
+advertised space. The wrapped space has to be a float Box whose elements all
+have finite <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> with <code class="docutils literal notranslate"><span class="pre">high</span> <span class="pre">&gt;</span> <span class="pre">low</span></code>, since anything else
+gives nothing to scale from. Every space in <code class="docutils literal notranslate"><span class="pre">possible_agents</span></code> is checked
+when the wrapper is built.</p>
+<p>Ported from SuperSuit’s normalize_obs_v0; the version suffix continues that numbering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>min_obs</strong> – Lower bound of the rescaled observations.</p></li>
+<li><p><strong>max_obs</strong> – Upper bound of the rescaled observations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.RescaleObservationParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">RescaleObservationParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/rescale_observation/#RescaleObservationParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.RescaleObservationParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Linearly rescales each agent’s Box observation into a fixed range.</p>
+<p>Every element is mapped from its own <code class="docutils literal notranslate"><span class="pre">[low,</span> <span class="pre">high]</span></code> in the wrapped space onto
+<code class="docutils literal notranslate"><span class="pre">[min_obs,</span> <span class="pre">max_obs]</span></code>, and the result is clipped so it always sits inside the
+advertised space. The wrapped space has to be a float Box whose elements all
+have finite <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> with <code class="docutils literal notranslate"><span class="pre">high</span> <span class="pre">&gt;</span> <span class="pre">low</span></code>, since anything else
+gives nothing to scale from. Every space in <code class="docutils literal notranslate"><span class="pre">possible_agents</span></code> is checked
+when the wrapper is built.</p>
+<p>Ported from SuperSuit’s normalize_obs_v0; the version suffix continues that numbering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>min_obs</strong> – Lower bound of the rescaled observations.</p></li>
+<li><p><strong>max_obs</strong> – Upper bound of the rescaled observations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ReshapeObservationV1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ReshapeObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/reshape/#ReshapeObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ReshapeObservationV1" title="Link to this definition">¶</a></dt>
 <dd><p>Reshapes each agent’s observation to the given shape.</p>
@@ -927,6 +971,8 @@ scale flips the bounds, so they are swapped to keep the Box valid.</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsParallelV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.RescaleObservationV1"><code class="docutils literal notranslate"><span class="pre">RescaleObservationV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.RescaleObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">RescaleObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ReshapeObservationV1"><code class="docutils literal notranslate"><span class="pre">ReshapeObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ReshapeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ReshapeObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ScaleActionV1"><code class="docutils literal notranslate"><span class="pre">ScaleActionV1</span></code></a></li>
