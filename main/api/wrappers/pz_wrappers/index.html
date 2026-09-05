@@ -665,6 +665,42 @@ observations. Both match SuperSuit’s <code class="docutils literal notranslate
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.MaxObservationV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">MaxObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/max_observation/#MaxObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.MaxObservationV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces each agent’s observation with the elementwise max over its last <code class="docutils literal notranslate"><span class="pre">memory</span></code> observations.</p>
+<p>This removes the flicker in environments that draw sprites on alternate frames.
+Histories are per agent and cleared on <code class="docutils literal notranslate"><span class="pre">reset</span></code>, and the observation space is
+unchanged. Only array observation spaces work: Box, MultiBinary, MultiDiscrete.
+Ported from SuperSuit’s max_observation_v0; the version suffix continues that numbering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>memory</strong> – How many observations to take the max over. Must be a positive int.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.MaxObservationParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">MaxObservationParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/max_observation/#MaxObservationParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.MaxObservationParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces each agent’s observation with the elementwise max over its last <code class="docutils literal notranslate"><span class="pre">memory</span></code> observations.</p>
+<p>This removes the flicker in environments that draw sprites on alternate frames.
+Histories are per agent and cleared on <code class="docutils literal notranslate"><span class="pre">reset</span></code>, and the observation space is
+unchanged. Only array observation spaces work: Box, MultiBinary, MultiDiscrete.
+Ported from SuperSuit’s max_observation_v0; the version suffix continues that numbering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>memory</strong> – How many observations to take the max over. Must be a positive int.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.PadObservationsV1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">PadObservationsV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/pad_observations/#PadObservationsV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.PadObservationsV1" title="Link to this definition">¶</a></dt>
 <dd><p>Pads each agent’s observation up to one shared observation space.</p>
@@ -887,6 +923,8 @@ scale flips the bounds, so they are swapped to keep the Box valid.</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsParallelV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ReshapeObservationV1"><code class="docutils literal notranslate"><span class="pre">ReshapeObservationV1</span></code></a></li>
