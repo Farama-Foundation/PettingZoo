@@ -182,6 +182,8 @@ class raw_env(AECEnv):
             # handles stepping an agent which is already dead
             # accepts a None action for the one agent, and moves the agent_selection to
             # the next dead agent,  or if there are no more dead agents, to the next live agent
+            # this is also where the agent is dropped from self.agents, which is why
+            # env.agents only empties out once every dead agent has been stepped
             self._was_dead_step(action)
             return
 
