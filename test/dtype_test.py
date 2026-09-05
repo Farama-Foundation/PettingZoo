@@ -8,7 +8,7 @@ from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.utils.env import AECEnv, ParallelEnv
-from pettingzoo.utils.wrappers import DtypeObservationV1, DtypeObservationParallelV1
+from pettingzoo.utils.wrappers import DtypeObservationParallelV1, DtypeObservationV1
 
 AGENTS = ["agent_0", "agent_1"]
 
@@ -277,7 +277,9 @@ def test_impossible_cast_names_the_wrapper_and_agent():
 
 def test_str():
     inner = DummyAEC()
-    assert str(DtypeObservationV1(inner, np.float32)) == f"DtypeObservationV1<{inner!s}>"
+    assert (
+        str(DtypeObservationV1(inner, np.float32)) == f"DtypeObservationV1<{inner!s}>"
+    )
     inner = DummyParallel()
     assert (
         str(DtypeObservationParallelV1(inner, np.float32))
