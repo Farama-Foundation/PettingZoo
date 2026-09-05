@@ -54,6 +54,12 @@ class DummyAEC(AECEnv):
         return FIXED_OBS[agent]
 
     def step(self, action):
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            self._was_dead_step(action)
+            return
         self._step_count += 1
         self._cumulative_rewards[self.agent_selection] = 0.0
         self.rewards = dict.fromkeys(self.agents, 0.0)
