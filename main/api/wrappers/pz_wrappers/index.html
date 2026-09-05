@@ -740,6 +740,56 @@ Only works on Box observation spaces.</p>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ScaleActionV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ScaleActionV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/scale_action/#ScaleActionV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ScaleActionV1" title="Link to this definition">¶</a></dt>
+<dd><p>Scales the bounds of each agent’s Box action space by a constant factor.</p>
+<p>The action space this wrapper advertises has <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> multiplied by
+<code class="docutils literal notranslate"><span class="pre">scale</span></code>. Actions are divided by <code class="docutils literal notranslate"><span class="pre">scale</span></code> before they reach the wrapped
+environment, so an action drawn from the advertised space is a valid action for
+the wrapped environment. Actions on a bound of the advertised space are clipped
+to the wrapped bound, since the round trip through <code class="docutils literal notranslate"><span class="pre">scale</span></code> is not exact in
+floating point. An action outside the advertised space is passed through as is.</p>
+<p>Scaling an integer Box narrows what can be reached: at <code class="docutils literal notranslate"><span class="pre">scale</span></code> 0.5, a
+<code class="docutils literal notranslate"><span class="pre">Box(0,</span> <span class="pre">10,</span> <span class="pre">dtype=int64)</span></code> advertises <code class="docutils literal notranslate"><span class="pre">Box(0,</span> <span class="pre">5)</span></code> and only even actions are
+reachable. A bound large enough that <code class="docutils literal notranslate"><span class="pre">bound</span> <span class="pre">*</span> <span class="pre">scale</span></code> overflows the dtype
+becomes infinite, and actions there stay infinite.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>scale</strong> – Non-zero factor applied to the action space bounds. A negative
+scale flips the bounds, so they are swapped to keep the Box valid.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ScaleActionParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ScaleActionParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/scale_action/#ScaleActionParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ScaleActionParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Scales the bounds of each agent’s Box action space by a constant factor.</p>
+<p>The action space this wrapper advertises has <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> multiplied by
+<code class="docutils literal notranslate"><span class="pre">scale</span></code>. Actions are divided by <code class="docutils literal notranslate"><span class="pre">scale</span></code> before they reach the wrapped
+environment, so an action drawn from the advertised space is a valid action for
+the wrapped environment. Actions on a bound of the advertised space are clipped
+to the wrapped bound, since the round trip through <code class="docutils literal notranslate"><span class="pre">scale</span></code> is not exact in
+floating point. An action outside the advertised space is passed through as is.</p>
+<p>Scaling an integer Box narrows what can be reached: at <code class="docutils literal notranslate"><span class="pre">scale</span></code> 0.5, a
+<code class="docutils literal notranslate"><span class="pre">Box(0,</span> <span class="pre">10,</span> <span class="pre">dtype=int64)</span></code> advertises <code class="docutils literal notranslate"><span class="pre">Box(0,</span> <span class="pre">5)</span></code> and only even actions are
+reachable. A bound large enough that <code class="docutils literal notranslate"><span class="pre">bound</span> <span class="pre">*</span> <span class="pre">scale</span></code> overflows the dtype
+becomes infinite, and actions there stay infinite.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>scale</strong> – Non-zero factor applied to the action space bounds. A negative
+scale flips the bounds, so they are swapped to keep the Box valid.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -841,6 +891,8 @@ Only works on Box observation spaces.</p>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsParallelV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ReshapeObservationV1"><code class="docutils literal notranslate"><span class="pre">ReshapeObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ReshapeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ReshapeObservationParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.ScaleActionV1"><code class="docutils literal notranslate"><span class="pre">ScaleActionV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.ScaleActionParallelV1"><code class="docutils literal notranslate"><span class="pre">ScaleActionParallelV1</span></code></a></li>
 </ul>
 </li>
 </ul>
