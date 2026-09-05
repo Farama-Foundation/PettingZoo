@@ -55,6 +55,12 @@ class DummyAEC(AECEnv):
         return OBS
 
     def step(self, action):
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            self._was_dead_step(action)
+            return
         self.received[self.agent_selection] = action
         self._step_count += 1
         self._cumulative_rewards[self.agent_selection] = 0.0
@@ -220,6 +226,9 @@ def test_action_from_advertised_space_is_valid_inside(scale, bound):
     actions += [space.sample() for _ in range(50)]
 
     for action in actions:
+        # the dummy env terminates every 8 steps
+        if any(env.terminations.values()) or any(env.truncations.values()):
+            env.reset(seed=0)
         assert space.contains(action)
         agent = env.agent_selection
         env.step(action)
