@@ -478,9 +478,12 @@ Otherwise, it will apply the <cite>parallel_to_aec_wrapper</cite> to convert the
     <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Included PettingZoo wrappers currently do not support parallel environments, to use them you must convert your environment to AEC, apply the wrapper, and convert back to parallel.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Wrappers are specific to either the AEC or Parallel API unless documented
+otherwise. Parallel variants include <code class="docutils literal notranslate"><span class="pre">Parallel</span></code> in their name, such as
+<code class="xref py py-class docutils literal notranslate"><span class="pre">AgentIndicatorParallelV1</span></code>. To apply an AEC-only wrapper to a Parallel
+environment, convert it to AEC, apply the wrapper, and convert it back.</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClipOutOfBoundsWrapper</span>
@@ -549,6 +552,38 @@ num_agents, agents.</p>
 render(), step(), observe(), state(), agent_iter()</p></li>
 <li><p>A warning if step() is called when there are no agents remaining.</p></li>
 </ul>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.AgentIndicatorV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">AgentIndicatorV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/agent_indicator/#AgentIndicatorV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.AgentIndicatorV1" title="Link to this definition">¶</a></dt>
+<dd><p>Adds an agent indicator to each observation.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">type_only=True</span></code>, agents named <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_&lt;n&gt;</span></code> share an indicator for
+their type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>type_only</strong> – Whether to indicate agent types instead of individual agents.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.AgentIndicatorParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">AgentIndicatorParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/agent_indicator/#AgentIndicatorParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.AgentIndicatorParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Adds an agent indicator to each observation.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">type_only=True</span></code>, agents named <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_&lt;n&gt;</span></code> share an indicator for
+their type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>type_only</strong> – Whether to indicate agent types instead of individual agents.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -764,6 +799,8 @@ numbering.</p>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">AssertOutOfBoundsWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">ClipOutOfBoundsWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper"><code class="docutils literal notranslate"><span class="pre">OrderEnforcingWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorParallelV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationV1</span></code></a></li>
