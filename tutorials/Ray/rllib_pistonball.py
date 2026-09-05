@@ -9,41 +9,18 @@ from pathlib import Path
 import ray
 import supersuit as ss
 from ray import tune
-from ray.rllib.algorithms.ppo import PPOConfig
+from ray.rllib.algorithms.ppo import PPO, PPOConfig
+from ray.rllib.core.rl_module.default_model_config import DefaultModelConfig
 from ray.rllib.env.wrappers.pettingzoo_env import ParallelPettingZooEnv
-from ray.rllib.models import ModelCatalog
-from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.tune.registry import register_env
-from torch import nn
 
 from pettingzoo import make
 
-
-class CNNModelV2(TorchModelV2, nn.Module):
-    def __init__(self, obs_space, act_space, num_outputs, *args, **kwargs):
-        TorchModelV2.__init__(self, obs_space, act_space, num_outputs, *args, **kwargs)
-        nn.Module.__init__(self)
-        self.model = nn.Sequential(
-            nn.Conv2d(3, 32, [8, 8], stride=(4, 4)),
-            nn.ReLU(),
-            nn.Conv2d(32, 64, [4, 4], stride=(2, 2)),
-            nn.ReLU(),
-            nn.Conv2d(64, 64, [3, 3], stride=(1, 1)),
-            nn.ReLU(),
-            nn.Flatten(),
-            (nn.Linear(3136, 512)),
-            nn.ReLU(),
-        )
-        self.policy_fn = nn.Linear(512, num_outputs)
-        self.value_fn = nn.Linear(512, 1)
-
-    def forward(self, input_dict, state, seq_lens):
-        model_out = self.model(input_dict["obs"].permute(0, 3, 1, 2))
-        self._value_out = self.value_fn(model_out)
-        return self.policy_fn(model_out), state
-
-    def value_function(self):
-        return self._value_out.flatten()
+# Conv stack applied to each agent's (84, 84, 3) observation, as
+# [num_out_channels, kernel, stride] triples. The final 7x7 layer collapses the
+# 7x7x64 feature map into a 512-wide vector, which the policy and value heads
+# read from.
+CONV_FILTERS = [[32, 8, 4], [64, 4, 2], [64, 3, 1], [512, 7, 1]]
 
 
 def env_creator(args):
@@ -81,8 +58,6 @@ if __name__ == "__main__":
 
     register_env(env_name, _make_rllib_env)
 
-    ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
-
     config = (
         PPOConfig()
         .environment(
@@ -90,7 +65,15 @@ if __name__ == "__main__":
             clip_actions=True,
             disable_env_checking=True,
         )
-        .rollouts(num_rollout_workers=4, rollout_fragment_length=128)
+        # Every piston shares one policy. Without this, RLlib treats the env as
+        # single-agent and tries to build one encoder over the full
+        # Dict(piston_0, ..., piston_19) observation space.
+        .multi_agent(
+            policies={"shared_policy"},
+            policy_mapping_fn=lambda agent_id, *args, **kwargs: "shared_policy",
+        )
+        .rl_module(model_config=DefaultModelConfig(conv_filters=CONV_FILTERS))
+        .env_runners(num_env_runners=4, rollout_fragment_length=128)
         .training(
             train_batch_size=512,
             lr=2e-5,
@@ -101,18 +84,18 @@ if __name__ == "__main__":
             grad_clip=None,
             entropy_coeff=0.1,
             vf_loss_coeff=0.25,
-            sgd_minibatch_size=64,
-            num_sgd_iter=10,
+            minibatch_size=64,
+            num_epochs=10,
         )
         .debugging(log_level="ERROR")
         .framework(framework="torch")
-        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
+        .learners(num_gpus_per_learner=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
     )
 
     storage_uri = (Path("~/ray_results") / env_name).expanduser().resolve().as_uri()
 
     tune.run(
-        "PPO",
+        PPO,
         name="PPO",
         stop={"timesteps_total": 5000000 if not os.environ.get("CI") else 50000},
         checkpoint_freq=10,
