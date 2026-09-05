@@ -7,6 +7,7 @@ from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 from pettingzoo.utils.wrappers.capture_stdout import CaptureStdoutWrapper
 from pettingzoo.utils.wrappers.clip_out_of_bounds import ClipOutOfBoundsWrapper
+from pettingzoo.utils.wrappers.clip_reward import ClipRewardParallelV1, ClipRewardV1
 from pettingzoo.utils.wrappers.color_reduction import (
     ColorReductionObservationParallelV1,
     ColorReductionObservationV1,
@@ -14,6 +15,10 @@ from pettingzoo.utils.wrappers.color_reduction import (
 from pettingzoo.utils.wrappers.dtype import (
     DtypeObservationParallelV1,
     DtypeObservationV1,
+)
+from pettingzoo.utils.wrappers.max_observation import (
+    MaxObservationParallelV1,
+    MaxObservationV1,
 )
 from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
@@ -24,6 +29,10 @@ from pettingzoo.utils.wrappers.pad_observations import (
 )
 from pettingzoo.utils.wrappers.record_video import RecordVideo
 from pettingzoo.utils.wrappers.record_video_parallel import RecordVideoParallel
+from pettingzoo.utils.wrappers.rescale_observation import (
+    RescaleObservationParallelV1,
+    RescaleObservationV1,
+)
 from pettingzoo.utils.wrappers.reshape import (
     ReshapeObservationParallelV1,
     ReshapeObservationV1,
@@ -31,6 +40,10 @@ from pettingzoo.utils.wrappers.reshape import (
 from pettingzoo.utils.wrappers.scale_action import (
     ScaleActionParallelV1,
     ScaleActionV1,
+)
+from pettingzoo.utils.wrappers.sticky_action import (
+    StickyActionParallelV1,
+    StickyActionV1,
 )
 from pettingzoo.utils.wrappers.terminate_illegal import TerminateIllegalWrapper
 
@@ -42,10 +55,14 @@ __all__ = [
     "BaseWrapper",
     "CaptureStdoutWrapper",
     "ClipOutOfBoundsWrapper",
+    "ClipRewardParallelV1",
+    "ClipRewardV1",
     "ColorReductionObservationParallelV1",
     "ColorReductionObservationV1",
     "DtypeObservationParallelV1",
     "DtypeObservationV1",
+    "MaxObservationParallelV1",
+    "MaxObservationV1",
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
     "OrderEnforcingWrapper",
@@ -53,9 +70,13 @@ __all__ = [
     "PadObservationsV1",
     "RecordVideo",
     "RecordVideoParallel",
+    "RescaleObservationParallelV1",
+    "RescaleObservationV1",
     "ReshapeObservationParallelV1",
     "ReshapeObservationV1",
     "ScaleActionParallelV1",
     "ScaleActionV1",
+    "StickyActionParallelV1",
+    "StickyActionV1",
     "TerminateIllegalWrapper",
 ]
