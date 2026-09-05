@@ -374,10 +374,10 @@ class Pursuit:
             agent_positions[(x, y)] += 1
 
         for (x, y), count in evader_positions.items():
-            self.draw_agent_count(x, y, count, font, (0, 255, 255))
+            self.draw_agent_count(x, y, count, font, (255, 255, 255))
 
         for (x, y), count in agent_positions.items():
-            self.draw_agent_count(x, y, count, font, (255, 255, 0))
+            self.draw_agent_count(x, y, count, font, (255, 255, 255))
 
     def render(self):
         if self.render_mode is None:
