@@ -870,6 +870,58 @@ scale flips the bounds, so they are swapped to keep the Box valid.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.StickyActionV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">StickyActionV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat_action_probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/sticky_action/#StickyActionV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.StickyActionV1" title="Link to this definition">¶</a></dt>
+<dd><p>Repeats an agent’s previous action with probability <code class="docutils literal notranslate"><span class="pre">repeat_action_probability</span></code>.</p>
+<p>Each agent keeps its own previous action, and an agent has nothing to repeat
+until it has acted once since the last <code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code>, so the first action
+after a reset is always passed through. Only this wrapper’s own reset clears
+the memory: an environment that auto-resets underneath it, such as
+<code class="docutils literal notranslate"><span class="pre">MultiEpisodeParallelEnv</span></code> on the inside, can still have the first action of
+a later episode repeated. The remembered action is a deep copy, so reusing an
+action buffer between steps does not defeat the wrapper.</p>
+<p>Seeding follows the usual PettingZoo pattern: <code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code> reseeds from the
+seed it is given, which means <code class="docutils literal notranslate"><span class="pre">reset(seed=None)</span></code> starts a fresh unseeded
+stream. Pass a seed on every reset if you want a whole multi-episode run to
+be reproducible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>repeat_action_probability</strong> – Probability of using the previous action,
+in the interval [0, 1).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.StickyActionParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">StickyActionParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat_action_probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/sticky_action/#StickyActionParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.StickyActionParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Repeats an agent’s previous action with probability <code class="docutils literal notranslate"><span class="pre">repeat_action_probability</span></code>.</p>
+<p>Each agent keeps its own previous action, and an agent has nothing to repeat
+until it has acted once since the last <code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code>, so the first action
+after a reset is always passed through. Only this wrapper’s own reset clears
+the memory: an environment that auto-resets underneath it, such as
+<code class="docutils literal notranslate"><span class="pre">MultiEpisodeParallelEnv</span></code> on the inside, can still have the first action of
+a later episode repeated. The remembered action is a deep copy, so reusing an
+action buffer between steps does not defeat the wrapper.</p>
+<p>Seeding follows the usual PettingZoo pattern: <code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code> reseeds from the
+seed it is given, which means <code class="docutils literal notranslate"><span class="pre">reset(seed=None)</span></code> starts a fresh unseeded
+stream. Pass a seed on every reset if you want a whole multi-episode run to
+be reproducible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>repeat_action_probability</strong> – Probability of using the previous action,
+in the interval [0, 1).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -977,6 +1029,8 @@ scale flips the bounds, so they are swapped to keep the Box valid.</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ReshapeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ReshapeObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ScaleActionV1"><code class="docutils literal notranslate"><span class="pre">ScaleActionV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ScaleActionParallelV1"><code class="docutils literal notranslate"><span class="pre">ScaleActionParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.StickyActionV1"><code class="docutils literal notranslate"><span class="pre">StickyActionV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.StickyActionParallelV1"><code class="docutils literal notranslate"><span class="pre">StickyActionParallelV1</span></code></a></li>
 </ul>
 </li>
 </ul>
