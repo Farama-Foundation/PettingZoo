@@ -8,7 +8,7 @@ from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.utils.env import AECEnv, ParallelEnv
-from pettingzoo.utils.wrappers import ReshapeObservationV1, ReshapeObservationParallelV1
+from pettingzoo.utils.wrappers import ReshapeObservationParallelV1, ReshapeObservationV1
 
 AGENTS = ["agent_0", "agent_1"]
 
