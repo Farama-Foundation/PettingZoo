@@ -552,6 +552,42 @@ render(), step(), observe(), state(), agent_iter()</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ColorReductionObservationV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ColorReductionObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'full'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/color_reduction/#ColorReductionObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ColorReductionObservationV1" title="Link to this definition">¶</a></dt>
+<dd><p>Reduces an image observation to a single channel.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;full&quot;</span></code> converts to grayscale with the luminance weights
+[0.299, 0.587, 0.114] and returns uint8 whatever the input dtype was. <code class="docutils literal notranslate"><span class="pre">&quot;R&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;G&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code> take the named channel and keep the input dtype. Either way
+the trailing channel axis is dropped, so an (H, W, 3) observation becomes (H, W).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>mode</strong> – One of “full”, “R”, “G”, “B”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ColorReductionObservationParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ColorReductionObservationParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'full'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/color_reduction/#ColorReductionObservationParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ColorReductionObservationParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Reduces an image observation to a single channel.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;full&quot;</span></code> converts to grayscale with the luminance weights
+[0.299, 0.587, 0.114] and returns uint8 whatever the input dtype was. <code class="docutils literal notranslate"><span class="pre">&quot;R&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;G&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code> take the named channel and keep the input dtype. Either way
+the trailing channel axis is dropped, so an (H, W, 3) observation becomes (H, W).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>mode</strong> – One of “full”, “R”, “G”, “B”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.DtypeObservationV1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">DtypeObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/dtype/#DtypeObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.DtypeObservationV1" title="Link to this definition">¶</a></dt>
 <dd><p>Recasts each agent’s observation to <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p>
@@ -728,6 +764,8 @@ numbering.</p>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">AssertOutOfBoundsWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">ClipOutOfBoundsWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper"><code class="docutils literal notranslate"><span class="pre">OrderEnforcingWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsV1</span></code></a></li>
