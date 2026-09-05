@@ -89,7 +89,9 @@ class ColorReductionObservationV1(BaseWrapper[AgentID, Any, ActionType]):
         return f"ColorReductionObservationV1<{self.env!s}>"
 
 
-class ColorReductionObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
+class ColorReductionObservationParallelV1(
+    BaseParallelWrapper[AgentID, Any, ActionType]
+):
     """Reduces an image observation to a single channel.
 
     ``"full"`` converts to grayscale with the luminance weights

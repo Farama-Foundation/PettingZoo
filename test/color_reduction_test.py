@@ -9,8 +9,8 @@ from gymnasium.spaces import Box, Discrete
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import (
-    ColorReductionObservationV1,
     ColorReductionObservationParallelV1,
+    ColorReductionObservationV1,
 )
 
 AGENTS = ["agent_0", "agent_1"]
@@ -148,9 +148,9 @@ def test_aec_observation_space_drops_channel_axis(mode, agent):
 
 @pytest.mark.parametrize("mode", ["full", "R", "G", "B"])
 def test_parallel_observation_space_drops_channel_axis(mode):
-    space = ColorReductionObservationParallelV1(DummyParallel(), mode).observation_space(
-        "agent_0"
-    )
+    space = ColorReductionObservationParallelV1(
+        DummyParallel(), mode
+    ).observation_space("agent_0")
     assert space.shape == (2, 2)
     assert space.dtype == np.uint8
 
@@ -195,7 +195,9 @@ def test_aec_single_channel_modes(mode, channel, agent):
 
 @pytest.mark.parametrize("mode,channel", [("R", 0), ("G", 1), ("B", 2)])
 def test_aec_single_channel_modes_keep_the_input_dtype(mode, channel):
-    env = ColorReductionObservationV1(DummyAEC(space=FLOAT_SPACE, obs=float_obs()), mode)
+    env = ColorReductionObservationV1(
+        DummyAEC(space=FLOAT_SPACE, obs=float_obs()), mode
+    )
     env.reset(seed=0)
 
     space = env.observation_space("agent_0")
@@ -294,7 +296,8 @@ def test_observe_passes_through_none():
 def test_aec_str():
     inner = DummyAEC()
     assert (
-        str(ColorReductionObservationV1(inner)) == f"ColorReductionObservationV1<{inner}>"
+        str(ColorReductionObservationV1(inner))
+        == f"ColorReductionObservationV1<{inner}>"
     )
 
 
@@ -311,7 +314,9 @@ def test_aec_api():
 
 
 def test_parallel_api():
-    parallel_api_test(ColorReductionObservationParallelV1(DummyParallel()), num_cycles=5)
+    parallel_api_test(
+        ColorReductionObservationParallelV1(DummyParallel()), num_cycles=5
+    )
 
 
 def test_rejects_parallel_env():
