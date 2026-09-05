@@ -505,6 +505,11 @@ the <cite>api_test</cite> documented in the Developer documentation on the websi
 <dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv.agents">
 <span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pettingzoo.utils.env.AECEnv.agents" title="Link to this definition">¶</a></dt>
 <dd><p>A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).</p>
+<p>Maintaining this list is the environment’s job, not the base class’s. Environments are expected to keep a terminated or truncated agent listed until it has taken its final vacuous <code class="docutils literal notranslate"><span class="pre">step(None)</span></code>, and to remove it during that step (<code class="docutils literal notranslate"><span class="pre">AECEnv._was_dead_step</span></code> does this). Every PettingZoo environment follows this convention and <code class="docutils literal notranslate"><span class="pre">api_test</span></code> checks it, so for those environments:</p>
+<ul class="simple">
+<li><p>the agent is <em>still</em> listed when <code class="docutils literal notranslate"><span class="pre">last()</span></code> first reports <code class="docutils literal notranslate"><span class="pre">termination</span></code> or <code class="docutils literal notranslate"><span class="pre">truncation</span></code> for it, so <code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">env.agents</span></code> is not yet true at that point;</p></li>
+<li><p>once every dead agent has been stepped off, the list is empty and <code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">env.agents</span></code> means the environment is done.</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[AgentID]</p>
@@ -647,6 +652,42 @@ and <cite>‘ansi’</cite> which returns the strings printed (specific to class
 or any other resources that should be released.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.AECEnv._was_dead_step">
+<span class="sig-prename descclassname"><span class="pre">AECEnv.</span></span><span class="sig-name descname"><span class="pre">_was_dead_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ActionType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pettingzoo/utils/env/#AECEnv._was_dead_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.env.AECEnv._was_dead_step" title="Link to this definition">¶</a></dt>
+<dd><p>Helper function that performs step() for dead agents.</p>
+<p>Does the following:</p>
+<ol class="arabic simple">
+<li><p>Removes dead agent from .agents, .terminations, .truncations, .rewards, ._cumulative_rewards, and .infos</p></li>
+<li><p>Loads next agent into .agent_selection: if another agent is dead, loads that one, otherwise load next live agent</p></li>
+<li><p>Clear the rewards dict</p></li>
+</ol>
+<p>Why the extra step is needed: an agent that dies must still be given one
+more turn so that the user can call <cite>last()</cite> and see its final
+observation, accumulated reward and termination/truncation flag. If the
+agent were dropped from <cite>.agents</cite> as soon as it died, <cite>agent_iter</cite> would
+never select it again and that final transition would be lost. The dead
+step is where the agent is retired instead, which is why a dead agent is
+still listed in <cite>.agents</cite> when <cite>last()</cite> first reports it done, and is
+gone right after its <cite>step(None)</cite>.</p>
+<p>Environments are responsible for calling this; the base class cannot do
+it for them. Environments that skip it break the usual <cite>not env.agents</cite>
+done check and can leave <cite>agent_iter</cite> looping forever, so implementing
+it is effectively required rather than optional.</p>
+<p class="rubric">Examples</p>
+<p>Highly recommended to use at the beginning of step as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_was_dead_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="c1"># main contents of step</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 </section>
 
@@ -750,6 +791,7 @@ or any other resources that should be released.</p>
 <li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.observe"><code class="docutils literal notranslate"><span class="pre">AECEnv.observe()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.render"><code class="docutils literal notranslate"><span class="pre">AECEnv.render()</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.close"><code class="docutils literal notranslate"><span class="pre">AECEnv.close()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv._was_dead_step"><code class="docutils literal notranslate"><span class="pre">AECEnv._was_dead_step()</span></code></a></li>
 </ul>
 </li>
 </ul>

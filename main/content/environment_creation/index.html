@@ -578,6 +578,8 @@
             <span class="c1"># handles stepping an agent which is already dead</span>
             <span class="c1"># accepts a None action for the one agent, and moves the agent_selection to</span>
             <span class="c1"># the next dead agent,  or if there are no more dead agents, to the next live agent</span>
+            <span class="c1"># this is also where the agent is dropped from self.agents, which is why</span>
+            <span class="c1"># env.agents only empties out once every dead agent has been stepped</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_was_dead_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
             <span class="k">return</span>
 

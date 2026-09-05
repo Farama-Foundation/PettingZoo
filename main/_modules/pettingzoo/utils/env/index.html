@@ -418,7 +418,14 @@
 
     <span class="c1"># All agents that may appear in the environment</span>
     <span class="n">possible_agents</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">AgentID</span><span class="p">]</span>
-    <span class="n">agents</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">AgentID</span><span class="p">]</span>  <span class="c1"># Agents active at any given time</span>
+    <span class="c1"># Agents active at any given time. The base class never modifies this list;</span>
+    <span class="c1"># keeping it up to date is the environment's job. Environments are expected</span>
+    <span class="c1"># to follow the convention that a terminated or truncated agent stays listed</span>
+    <span class="c1"># until it has taken its final vacuous step(None), which is what</span>
+    <span class="c1"># `_was_dead_step` performs. `api_test` checks both halves of that</span>
+    <span class="c1"># convention, and for an environment that follows it `not env.agents` means</span>
+    <span class="c1"># the episode is over.</span>
+    <span class="n">agents</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">AgentID</span><span class="p">]</span>
 
     <span class="n">observation_spaces</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span>
         <span class="n">AgentID</span><span class="p">,</span> <span class="n">gymnasium</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Space</span><span class="p">[</span><span class="n">ObsType</span><span class="p">]</span>
@@ -591,6 +598,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">agent</span><span class="p">],</span>
         <span class="p">)</span>
 
+<div class="viewcode-block" id="AECEnv._was_dead_step">
+<a class="viewcode-back" href="../../../../api/aec/#pettingzoo.utils.env.AECEnv._was_dead_step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">_was_dead_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Helper function that performs step() for dead agents.</span>
 
@@ -600,14 +609,31 @@
 <span class="sd">        2. Loads next agent into .agent_selection: if another agent is dead, loads that one, otherwise load next live agent</span>
 <span class="sd">        3. Clear the rewards dict</span>
 
-<span class="sd">        Examples:</span>
-<span class="sd">            Highly recommended to use at the beginning of step as follows:</span>
+<span class="sd">        Why the extra step is needed: an agent that dies must still be given one</span>
+<span class="sd">        more turn so that the user can call `last()` and see its final</span>
+<span class="sd">        observation, accumulated reward and termination/truncation flag. If the</span>
+<span class="sd">        agent were dropped from `.agents` as soon as it died, `agent_iter` would</span>
+<span class="sd">        never select it again and that final transition would be lost. The dead</span>
+<span class="sd">        step is where the agent is retired instead, which is why a dead agent is</span>
+<span class="sd">        still listed in `.agents` when `last()` first reports it done, and is</span>
+<span class="sd">        gone right after its `step(None)`.</span>
 
-<span class="sd">        def step(self, action):</span>
-<span class="sd">            if (self.terminations[self.agent_selection] or self.truncations[self.agent_selection]):</span>
-<span class="sd">                self._was_dead_step()</span>
-<span class="sd">                return</span>
-<span class="sd">            # main contents of step</span>
+<span class="sd">        Environments are responsible for calling this; the base class cannot do</span>
+<span class="sd">        it for them. Environments that skip it break the usual `not env.agents`</span>
+<span class="sd">        done check and can leave `agent_iter` looping forever, so implementing</span>
+<span class="sd">        it is effectively required rather than optional.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            Highly recommended to use at the beginning of step as follows::</span>
+
+<span class="sd">                def step(self, action):</span>
+<span class="sd">                    if (</span>
+<span class="sd">                        self.terminations[self.agent_selection]</span>
+<span class="sd">                        or self.truncations[self.agent_selection]</span>
+<span class="sd">                    ):</span>
+<span class="sd">                        self._was_dead_step(action)</span>
+<span class="sd">                        return</span>
+<span class="sd">                    # main contents of step</span>
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"when an agent is dead, the only valid action is None"</span><span class="p">)</span>
@@ -639,7 +665,8 @@
                 <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skip_agent_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skip_agent_selection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_skip_agent_selection</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_clear_rewards</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clear_rewards</span><span class="p">()</span></div>
+
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
