@@ -131,6 +131,8 @@ while parallel_env.agents:
 .. autoclass:: CaptureStdoutWrapper
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
+.. autoclass:: ClipRewardV1
+.. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper
 .. autoclass:: AgentIndicatorV1
 .. autoclass:: AgentIndicatorParallelV1

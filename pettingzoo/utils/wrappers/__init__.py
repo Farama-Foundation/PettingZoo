@@ -7,6 +7,7 @@ from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 from pettingzoo.utils.wrappers.capture_stdout import CaptureStdoutWrapper
 from pettingzoo.utils.wrappers.clip_out_of_bounds import ClipOutOfBoundsWrapper
+from pettingzoo.utils.wrappers.clip_reward import ClipRewardParallelV1, ClipRewardV1
 from pettingzoo.utils.wrappers.color_reduction import (
     ColorReductionObservationParallelV1,
     ColorReductionObservationV1,
@@ -54,6 +55,8 @@ __all__ = [
     "BaseWrapper",
     "CaptureStdoutWrapper",
     "ClipOutOfBoundsWrapper",
+    "ClipRewardParallelV1",
+    "ClipRewardV1",
     "ColorReductionObservationParallelV1",
     "ColorReductionObservationV1",
     "DtypeObservationParallelV1",
