@@ -538,6 +538,41 @@ environment, convert it to AEC, apply the wrapper, and convert it back.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ClipRewardV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ClipRewardV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/clip_reward/#ClipRewardV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ClipRewardV1" title="Link to this definition">¶</a></dt>
+<dd><p>Clips each agent’s per-step reward into <code class="docutils literal notranslate"><span class="pre">[min_reward,</span> <span class="pre">max_reward]</span></code>.</p>
+<p>After every <code class="docutils literal notranslate"><span class="pre">reset</span></code> and <code class="docutils literal notranslate"><span class="pre">step</span></code> the inner <code class="docutils literal notranslate"><span class="pre">rewards</span></code> dict is clipped and
+the running total is rebuilt from that, so <code class="xref py py-meth docutils literal notranslate"><span class="pre">last()</span></code>
+reports the sum of clipped steps. That is SuperSuit’s <code class="docutils literal notranslate"><span class="pre">clip_reward_v0</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>min_reward</strong> – Lower bound, inclusive. Default <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p></li>
+<li><p><strong>max_reward</strong> – Upper bound, inclusive. Default <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.ClipRewardParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">ClipRewardParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/clip_reward/#ClipRewardParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.ClipRewardParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Clips each agent’s per-step reward into <code class="docutils literal notranslate"><span class="pre">[min_reward,</span> <span class="pre">max_reward]</span></code>.</p>
+<p>SuperSuit’s <code class="docutils literal notranslate"><span class="pre">clip_reward_v0</span></code> has no Parallel implementation of its own.
+This one clips the reward dict that <code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code> returns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>min_reward</strong> – Lower bound, inclusive. Default <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p></li>
+<li><p><strong>max_reward</strong> – Upper bound, inclusive. Default <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.OrderEnforcingWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">OrderEnforcingWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/order_enforcing/#OrderEnforcingWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper" title="Link to this definition">¶</a></dt>
 <dd><p>Checks if function calls or attribute access are in a disallowed order.</p>
@@ -1012,6 +1047,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.CaptureStdoutWrapper"><code class="docutils literal notranslate"><span class="pre">CaptureStdoutWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">AssertOutOfBoundsWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">ClipOutOfBoundsWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardParallelV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper"><code class="docutils literal notranslate"><span class="pre">OrderEnforcingWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorParallelV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorParallelV1</span></code></a></li>
