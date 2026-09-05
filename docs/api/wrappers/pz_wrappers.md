@@ -100,9 +100,12 @@ while parallel_env.agents:
 ```
 
 ```{eval-rst}
-.. warning::
+.. note::
 
-    Included PettingZoo wrappers currently do not support parallel environments, to use them you must convert your environment to AEC, apply the wrapper, and convert back to parallel.
+    Wrappers are specific to either the AEC or Parallel API unless documented
+    otherwise. Parallel variants include ``Parallel`` in their name, such as
+    :class:`AgentIndicatorParallelV1`. To apply an AEC-only wrapper to a Parallel
+    environment, convert it to AEC, apply the wrapper, and convert it back.
 ```
 ```python
 from pettingzoo import make
@@ -128,8 +131,26 @@ while parallel_env.agents:
 .. autoclass:: CaptureStdoutWrapper
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
+.. autoclass:: ClipRewardV1
+.. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: AgentIndicatorV1
+.. autoclass:: AgentIndicatorParallelV1
+.. autoclass:: ColorReductionObservationV1
+.. autoclass:: ColorReductionObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
+.. autoclass:: MaxObservationV1
+.. autoclass:: MaxObservationParallelV1
+.. autoclass:: PadObservationsV1
+.. autoclass:: PadObservationsParallelV1
+.. autoclass:: RescaleObservationV1
+.. autoclass:: RescaleObservationParallelV1
+.. autoclass:: ReshapeObservationV1
+.. autoclass:: ReshapeObservationParallelV1
+.. autoclass:: ScaleActionV1
+.. autoclass:: ScaleActionParallelV1
+.. autoclass:: StickyActionV1
+.. autoclass:: StickyActionParallelV1
 
 ```
