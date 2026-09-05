@@ -346,6 +346,19 @@ class Pursuit:
             x, y = self.evader_layer.get_position(i)
             self.draw_agent_square(x, y, (0, 0, 255))
 
+    def draw_agent_count(self, x, y, count, font, col):
+        if count < 1:
+            return
+        count_text = str(count) if count < 10 else "+"
+        text = font.render(count_text, True, col)
+        # Center on the cell. Blitting at the cell center puts the glyph's
+        # top-left corner there, which hangs it into the neighbouring cells.
+        center = (
+            self.pixel_scale * x + self.pixel_scale // 2,
+            self.pixel_scale * y + self.pixel_scale // 2,
+        )
+        self.screen.blit(text, text.get_rect(center=center))
+
     def draw_agent_counts(self):
         font = pygame.font.SysFont("Comic Sans MS", self.pixel_scale * 2 // 3)
 
@@ -360,43 +373,11 @@ class Pursuit:
             x, y = self.pursuer_layer.get_position(i)
             agent_positions[(x, y)] += 1
 
-        for x, y in evader_positions:
-            (pos_x, pos_y) = (
-                self.pixel_scale * x + self.pixel_scale // 2,
-                self.pixel_scale * y + self.pixel_scale // 2,
-            )
+        for (x, y), count in evader_positions.items():
+            self.draw_agent_count(x, y, count, font, (0, 255, 255))
 
-            agent_count = evader_positions[(x, y)]
-            count_text: str
-            if agent_count < 1:
-                count_text = ""
-            elif agent_count < 10:
-                count_text = str(agent_count)
-            else:
-                count_text = "+"
-
-            text = font.render(count_text, False, (0, 255, 255))
-
-            self.screen.blit(text, (pos_x, pos_y))
-
-        for x, y in agent_positions:
-            (pos_x, pos_y) = (
-                self.pixel_scale * x + self.pixel_scale // 2,
-                self.pixel_scale * y + self.pixel_scale // 2,
-            )
-
-            agent_count = agent_positions[(x, y)]
-            count_text: str
-            if agent_count < 1:
-                count_text = ""
-            elif agent_count < 10:
-                count_text = str(agent_count)
-            else:
-                count_text = "+"
-
-            text = font.render(count_text, False, (255, 255, 0))
-
-            self.screen.blit(text, (pos_x, pos_y - self.pixel_scale // 2))
+        for (x, y), count in agent_positions.items():
+            self.draw_agent_count(x, y, count, font, (255, 255, 0))
 
     def render(self):
         if self.render_mode is None:
