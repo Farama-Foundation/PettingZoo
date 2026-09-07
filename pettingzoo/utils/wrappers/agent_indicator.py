@@ -18,7 +18,8 @@ def _indicator_map(agents: list[AgentID], type_only: bool) -> dict[AgentID, int]
         return {agent: index for index, agent in enumerate(agents)}
 
     assert all(
-        isinstance(agent, str) and re.match(r"[a-z]+_[0-9]+", agent) for agent in agents
+        isinstance(agent, str) and re.fullmatch(r"[a-z]+_[0-9]+", agent)
+        for agent in agents
     ), "when type_only is True, agent names must follow the <type>_<n> format"
     type_indices: dict[str, int] = {}
     indicators: dict[AgentID, int] = {}
