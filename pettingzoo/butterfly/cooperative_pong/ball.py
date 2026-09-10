@@ -113,11 +113,13 @@ class Ball(pygame.sprite.Sprite):
         if not area.contains(self._rect):
             # bottom wall
             if self._rect.bottom > area.bottom:
-                self._rect.bottom = area.bottom
+                overshoot = self._rect.bottom - area.bottom
+                self._rect.bottom = area.bottom - overshoot
                 self._speed[1] = -self._speed[1]
             # top wall
             elif self._rect.top < area.top:
-                self._rect.top = area.top
+                overshoot = area.top - self._rect.top
+                self._rect.top = area.top + overshoot
                 self._speed[1] = -self._speed[1]
 
         # after bouncing back from the top/bottom, if it is still out of
