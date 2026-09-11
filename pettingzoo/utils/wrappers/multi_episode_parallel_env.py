@@ -84,26 +84,28 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
             ]:
         """
         obs, rew, term, trunc, info = super().step(actions)
-        term = dict.fromkeys(term, False)
-        trunc = dict.fromkeys(term, False)
 
         if self.agents:
             return obs, rew, term, trunc, info
 
         # override the term trunc to only trunc when num_episodes have been elapsed
         if self._episodes_elapsed >= self._num_episodes:
-            term = dict.fromkeys(term, False)
-            trunc = dict.fromkeys(term, True)
+            term = dict.fromkeys(self.agents, False)
+            trunc = dict.fromkeys(self.agents, True)
             return obs, rew, term, trunc, info
 
         # if any agent terminates or truncates
         # and we haven't elapsed `num_episodes`
         # reset the environment
-        # we also override the observation and infos
-        # the result is that this env is no longer Markovian
-        # at the reset points
-        # increment the number of episodes and the seed for reset
+        # the observation and info are replaced with the new episode's, while the
+        # rewards and flags still describe the episode that just finished; entries
+        # are kept for both the finished and the new agent sets so the tuple is
+        # keyed to a single consistent key set
+        # the result is that this env is no longer Markovian at the reset points
         self._episodes_elapsed += 1
         self._seed = self._seed + 1 if self._seed else None
         obs, info = super().reset(seed=self._seed, options=self._options)
+        rew = {**dict.fromkeys(self.agents, 0.0), **rew}
+        term = {**dict.fromkeys(self.agents, False), **term}
+        trunc = {**dict.fromkeys(self.agents, False), **trunc}
         return obs, rew, term, trunc, info
