@@ -80,7 +80,7 @@ class OrderEnforcingWrapper(BaseWrapper[AgentID, ObsType, ActionType]):
         return super().observe(agent)
 
     @override
-    def state(self) -> np.ndarray:
+    def state(self) -> Any:
         if not self._has_reset:
             EnvLogger.error_state_before_reset()
         return super().state()
