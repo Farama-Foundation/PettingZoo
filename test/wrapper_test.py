@@ -5,6 +5,7 @@ import pytest
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.classic import texas_holdem_no_limit_v6, tictactoe_v3
 from pettingzoo.utils.wrappers import (
+    BaseParallelWrapper,
     BaseWrapper,
     MultiEpisodeEnv,
     MultiEpisodeParallelEnv,
@@ -72,6 +73,63 @@ def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
     assert steps == num_episodes * 125, (
         f"Expected to have 125 steps per episode, got {steps / num_episodes}."
     )
+
+
+def test_multi_episode_env_wrapper_seeds_every_episode() -> None:
+    """A seed of 0 is a seed: every episode after it is seeded too."""
+
+    class RecordSeeds(BaseWrapper):
+        def __init__(self, env):
+            super().__init__(env)
+            self.seeds: list[int | None] = []
+
+        def reset(self, seed=None, options=None):
+            self.seeds.append(seed)
+            super().reset(seed=seed, options=options)
+
+    inner = RecordSeeds(texas_holdem_no_limit_v6.env(num_players=3))
+    env = MultiEpisodeEnv(inner, num_episodes=3)
+    env.reset(seed=0)
+
+    for agent in env.agent_iter():
+        obs, rew, term, trunc, info = env.last()
+
+        if term or trunc:
+            action = None
+        else:
+            action_space = env.action_space(agent)
+            action_space.seed(0)
+            action = action_space.sample(mask=obs["action_mask"])
+
+        env.step(action)
+
+    env.close()
+
+    assert inner.seeds == [0, 1, 2]
+
+
+def test_multi_episode_parallel_env_wrapper_seeds_every_episode() -> None:
+    """A seed of 0 is a seed: every episode after it is seeded too."""
+
+    class RecordSeeds(BaseParallelWrapper):
+        def __init__(self, env):
+            super().__init__(env)
+            self.seeds: list[int | None] = []
+
+        def reset(self, seed=None, options=None):
+            self.seeds.append(seed)
+            return super().reset(seed=seed, options=options)
+
+    inner = RecordSeeds(pistonball_v6.parallel_env())
+    env = MultiEpisodeParallelEnv(inner, num_episodes=3)
+    env.reset(seed=0)
+
+    while env.agents:
+        env.step({agent: env.action_space(agent).low for agent in env.agents})
+
+    env.close()
+
+    assert inner.seeds == [0, 1, 2]
 
 
 def _do_game(env: TerminateIllegalWrapper, seed: int) -> None:
