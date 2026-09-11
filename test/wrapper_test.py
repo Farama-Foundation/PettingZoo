@@ -4,6 +4,8 @@ import pytest
 
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.classic import texas_holdem_no_limit_v6, tictactoe_v3
+from pettingzoo.test import parallel_api_test
+from pettingzoo.test.example_envs import generated_agents_parallel_v0
 from pettingzoo.utils.wrappers import (
     BaseWrapper,
     MultiEpisodeEnv,
@@ -72,6 +74,16 @@ def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
     assert steps == num_episodes * 125, (
         f"Expected to have 125 steps per episode, got {steps / num_episodes}."
     )
+
+
+def test_multi_episode_parallel_env_reset_consistency() -> None:
+    """The wrapped env must pass the parallel API test across internal resets.
+
+    Regression test for #1460: after an internal reset, the step tuple was keyed
+    to two different agent sets.
+    """
+    env = MultiEpisodeParallelEnv(generated_agents_parallel_v0.parallel_env(), 2)
+    parallel_api_test(env, num_cycles=60)
 
 
 def _do_game(env: TerminateIllegalWrapper, seed: int) -> None:
