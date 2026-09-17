@@ -788,7 +788,8 @@ numbering.</p>
 advertised space. The wrapped space has to be a float Box whose elements all
 have finite <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> with <code class="docutils literal notranslate"><span class="pre">high</span> <span class="pre">&gt;</span> <span class="pre">low</span></code>, since anything else
 gives nothing to scale from. Every space in <code class="docutils literal notranslate"><span class="pre">possible_agents</span></code> is checked
-when the wrapper is built.</p>
+when the wrapper is built. Finite float32 and float64 bounds are supported
+even when their difference overflows the observation dtype.</p>
 <p>Ported from SuperSuit’s normalize_obs_v0; the version suffix continues that numbering.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -810,7 +811,8 @@ when the wrapper is built.</p>
 advertised space. The wrapped space has to be a float Box whose elements all
 have finite <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> with <code class="docutils literal notranslate"><span class="pre">high</span> <span class="pre">&gt;</span> <span class="pre">low</span></code>, since anything else
 gives nothing to scale from. Every space in <code class="docutils literal notranslate"><span class="pre">possible_agents</span></code> is checked
-when the wrapper is built.</p>
+when the wrapper is built. Finite float32 and float64 bounds are supported
+even when their difference overflows the observation dtype.</p>
 <p>Ported from SuperSuit’s normalize_obs_v0; the version suffix continues that numbering.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

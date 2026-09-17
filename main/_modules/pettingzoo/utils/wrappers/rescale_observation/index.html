@@ -428,13 +428,27 @@
 <span class="sd">    The arithmetic runs in float64 whatever the space dtype is. In float32 the</span>
 <span class="sd">    intermediate width can overflow to infinity, and rounding disagrees with the</span>
 <span class="sd">    cast gymnasium applies to the target bounds, which puts endpoints just outside</span>
-<span class="sd">    the rescaled space. The clip covers what is left of that.</span>
+<span class="sd">    the rescaled space. Float64 bounds whose difference overflows use scaled</span>
+<span class="sd">    arithmetic instead. The clip covers remaining endpoint rounding.</span>
 <span class="sd">    """</span>
     <span class="n">low</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">low</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">high</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">high</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    <span class="n">scaled</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaled</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_obs</span> <span class="o">-</span> <span class="n">min_obs</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_obs</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">rescaled</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">rescaled</span><span class="o">.</span><span class="n">high</span><span class="p">)</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">over</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">):</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span>
+        <span class="n">target_width</span> <span class="o">=</span> <span class="n">max_obs</span> <span class="o">-</span> <span class="n">min_obs</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">width</span><span class="p">)):</span>
+        <span class="c1"># Halve only overflowing coordinates, preserving narrow/subnormal ranges.</span>
+        <span class="n">divisor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">low</span> <span class="o">/</span> <span class="n">divisor</span><span class="p">,</span> <span class="n">high</span> <span class="o">/</span> <span class="n">divisor</span><span class="p">,</span> <span class="n">values</span> <span class="o">/</span> <span class="n">divisor</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span>
+    <span class="n">scaled</span> <span class="o">=</span> <span class="p">(</span><span class="n">values</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="n">width</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">target_width</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">min_obs</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">max_obs</span><span class="p">):</span>
+        <span class="c1"># A convex combination avoids subtracting widely separated finite bounds.</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">scaled</span><span class="p">)</span> <span class="o">*</span> <span class="n">min_obs</span> <span class="o">+</span> <span class="n">scaled</span> <span class="o">*</span> <span class="n">max_obs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">scaled</span> <span class="o">*</span> <span class="n">target_width</span> <span class="o">+</span> <span class="n">min_obs</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="n">rescaled</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">rescaled</span><span class="o">.</span><span class="n">high</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="RescaleObservationV1">
@@ -447,7 +461,8 @@
 <span class="sd">    advertised space. The wrapped space has to be a float Box whose elements all</span>
 <span class="sd">    have finite ``low`` and ``high`` with ``high &gt; low``, since anything else</span>
 <span class="sd">    gives nothing to scale from. Every space in ``possible_agents`` is checked</span>
-<span class="sd">    when the wrapper is built.</span>
+<span class="sd">    when the wrapper is built. Finite float32 and float64 bounds are supported</span>
+<span class="sd">    even when their difference overflows the observation dtype.</span>
 
 <span class="sd">    Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.</span>
 
@@ -509,7 +524,8 @@
 <span class="sd">    advertised space. The wrapped space has to be a float Box whose elements all</span>
 <span class="sd">    have finite ``low`` and ``high`` with ``high &gt; low``, since anything else</span>
 <span class="sd">    gives nothing to scale from. Every space in ``possible_agents`` is checked</span>
-<span class="sd">    when the wrapper is built.</span>
+<span class="sd">    when the wrapper is built. Finite float32 and float64 bounds are supported</span>
+<span class="sd">    even when their difference overflows the observation dtype.</span>
 
 <span class="sd">    Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.</span>
 
