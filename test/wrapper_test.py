@@ -176,6 +176,8 @@ def test_capture_stdout_leaves_env_metadata_unchanged() -> None:
         assert tictactoe_v3.raw_env.metadata["render_modes"] == original
     finally:
         render_modes[:] = original
+
+
 class _RecordSeeds(BaseWrapper):
     """Records the seed handed to every reset of the wrapped AEC env."""
 
