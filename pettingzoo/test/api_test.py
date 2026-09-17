@@ -9,6 +9,7 @@ import gymnasium
 import numpy as np
 
 import pettingzoo
+from pettingzoo.utils.agent_selector import AgentSelector
 from pettingzoo.utils.conversions import (
     aec_to_parallel_wrapper,
     parallel_to_aec_wrapper,
@@ -390,6 +391,19 @@ def _test_observation_space_compatibility(
         )
 
 
+def _agent_selectors(env):
+    """Yield every (attribute name, AgentSelector) the env holds.
+
+    Searched by type rather than by name so that an env storing its selector
+    somewhere other than ``_agent_selector`` is still checked. That is the case
+    ``AECEnv._was_dead_step()`` cannot keep in sync.
+    """
+    unwrapped = getattr(env, "unwrapped", env)
+    for name, value in vars(unwrapped).items():
+        if isinstance(value, AgentSelector):
+            yield f"{type(unwrapped).__name__}.{name}", value
+
+
 def play_test(env, observation_0, num_cycles):
     """
     plays through environment and does dynamic checks to make
@@ -454,6 +468,12 @@ def play_test(env, observation_0, num_cycles):
                 "a terminated or truncated agent must be removed from env.agents by "
                 "its final step(None), see AECEnv._was_dead_step"
             )
+            for name, selector in _agent_selectors(env):
+                assert agent not in selector.agent_order, (
+                    f"{name} still lists {agent} after its final step(None). "
+                    "AECEnv._was_dead_step() only updates a selector stored as "
+                    "self._agent_selector, so store it under that name."
+                )
 
         for a, rew in env.rewards.items():
             accumulated_rewards[a] += rew
