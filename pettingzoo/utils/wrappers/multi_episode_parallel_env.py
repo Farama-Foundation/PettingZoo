@@ -104,6 +104,6 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
         # at the reset points
         # increment the number of episodes and the seed for reset
         self._episodes_elapsed += 1
-        self._seed = self._seed + 1 if self._seed else None
+        self._seed = self._seed + 1 if self._seed is not None else None
         obs, info = super().reset(seed=self._seed, options=self._options)
         return obs, rew, term, trunc, info
