@@ -23,5 +23,3 @@ The following code should run without any issues. The comments are designed to h
 .. literalinclude:: ../../../tutorials/Ray/rllib_pistonball.py
    :language: python
 ```
-
-
