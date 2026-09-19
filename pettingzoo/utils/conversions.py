@@ -262,7 +262,7 @@ class parallel_to_aec_wrapper(AECEnv[AgentID, ObsType, ActionType | None]):
 
         # Not every environment has the .state_space attribute implemented
         try:
-            self.state_space = self.env.state_space  # type: ignore
+            self.state_space = self.env.state_space
         except AttributeError:
             pass
 
@@ -435,7 +435,7 @@ class turn_based_aec_to_parallel_wrapper(
 
         # Not every environment has the .state_space attribute implemented
         try:
-            self.state_space = self.aec_env.state_space  # type: ignore
+            self.state_space = self.aec_env.state_space
         except AttributeError:
             pass
 

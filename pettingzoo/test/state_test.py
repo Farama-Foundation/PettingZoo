@@ -8,6 +8,8 @@ import gymnasium
 import numpy as np
 
 from pettingzoo.utils.env import AECEnv, ParallelEnv
+from pettingzoo.utils.wrappers.base import BaseWrapper
+from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 try:
     """Allows doctests to be run using pytest"""
@@ -61,13 +63,6 @@ def test_state_space(env):
     assert isinstance(env.state_space, gymnasium.spaces.Space), (
         "State space for each environment must extend gymnasium.spaces.Space"
     )
-    if not (
-        isinstance(env.state_space, gymnasium.spaces.Box)
-        or isinstance(env.state_space, gymnasium.spaces.Discrete)
-    ):
-        warnings.warn(
-            "State space for each environment probably should be gymnasium.spaces.box or gymnasium.spaces.discrete"
-        )
 
     if isinstance(env.state_space, gymnasium.spaces.Box):
         if (
@@ -118,12 +113,10 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
         assert env.state_space.contains(new_state), (
             "Environment's state is outside of it's state space"
         )
-        if (
-            not isinstance(new_state, np.ndarray)
-            and str(env.unwrapped) not in graphical_envs
-        ):
-            warnings.warn("State is not NumPy array")
-            return
+        if not isinstance(new_state, state_0.__class__):
+            warnings.warn("States are different classes")
+        if not isinstance(new_state, np.ndarray):
+            continue
         if np.isinf(new_state).any():
             warnings.warn(
                 "State contains infinity (np.inf) or negative infinity (-np.inf)"
@@ -136,8 +129,6 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
             raise AssertionError("State can not be an empty array")
         if new_state.shape == (1,):
             warnings.warn("State is a single number")
-        if not isinstance(new_state, state_0.__class__):
-            warnings.warn("State between Observations are different classes")
         if (new_state.shape != state_0.shape) and (
             len(new_state.shape) == len(state_0.shape)
         ):
@@ -179,3 +170,63 @@ def state_test(env, parallel_env, num_cycles=10):
     test_state_space(env)
     test_state(env, num_cycles)
     test_parallel_env(parallel_env)
+
+
+@pytest.mark.parametrize(
+    ("make_space", "make_state"),
+    [
+        (
+            lambda space: gymnasium.spaces.Dict({"environment": space}),
+            lambda state: {"environment": state},
+        ),
+        (
+            lambda space: gymnasium.spaces.Tuple((space,)),
+            lambda state: (state,),
+        ),
+    ],
+)
+def test_structured_state(make_space, make_state):
+    """Structured state values should be accepted throughout the public API."""
+
+    class StructuredStateAECWrapper(BaseWrapper):
+        def __init__(self, env):
+            super().__init__(env)
+            self.state_space = make_space(env.state_space)
+
+        def state(self):
+            return make_state(self.env.state())
+
+    class StructuredStateParallelWrapper(BaseParallelWrapper):
+        def __init__(self, env):
+            super().__init__(env)
+            self.state_space = make_space(env.state_space)
+
+        def state(self):
+            return make_state(self.env.state())
+
+    aec_env = StructuredStateAECWrapper(generated_agents_env_v0.env())
+    parallel_env = StructuredStateParallelWrapper(
+        generated_agents_parallel_v0.parallel_env()
+    )
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        test_state_space(aec_env)
+        test_state(aec_env, num_cycles=2)
+        test_parallel_env(parallel_env)
+
+
+def test_structured_state_outside_space():
+    """Structured states must still satisfy their declared state space."""
+
+    class InvalidStateWrapper(BaseWrapper):
+        def __init__(self, env):
+            super().__init__(env)
+            self.state_space = gymnasium.spaces.Dict({"environment": env.state_space})
+
+        def state(self):
+            return {"unexpected": self.env.state()}
+
+    env = InvalidStateWrapper(generated_agents_env_v0.env())
+    with pytest.raises(AssertionError, match="outside of it's state space"):
+        test_state(env, num_cycles=1)

@@ -154,9 +154,9 @@ While not required by the base API, most downstream wrappers and utilities depen
 
 `action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.
 
-`state()`: Returns a global observation of the current state of the environment. Not all environments will support this feature.
+`state()`: Returns a global observation of the current state of the environment. The value may use any structure supported by a Gymnasium space, and must be contained in `state_space`. Not all environments will support this feature.
 
-`state_space`: The space of a global observation of the environment. Not all environments will support this feature.
+`state_space`: The Gymnasium space describing values returned by `state()`. This can be a structured space such as `Dict` or `Tuple`; it is not limited to array-valued spaces. Not all environments will support this feature.
 
 ## Notable Idioms
 
