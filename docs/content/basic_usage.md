@@ -57,7 +57,7 @@ from pettingzoo import make
 
 make(
     "aec",
-    "butterfly/cooperative_pong-v6",
+    "butterfly/cooperative_pong-v7",
     ball_speed=18,
     left_paddle_speed=25,
     right_paddle_speed=25,
@@ -78,7 +78,7 @@ Environments can be interacted with using a similar interface to Gymnasium:
 ```python
 from pettingzoo import make
 
-env = make("aec", "butterfly/cooperative_pong-v6", render_mode="human")
+env = make("aec", "butterfly/cooperative_pong-v7", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():
