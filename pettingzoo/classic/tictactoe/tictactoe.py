@@ -1,4 +1,4 @@
-﻿"""
+"""
 # Tic Tac Toe
 
 ```{figure} classic_tictactoe.gif
