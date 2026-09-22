@@ -239,7 +239,7 @@ class raw_env(AECEnv):
         self.truncations = dict.fromkeys(self.agents, False)
         self.infos = {i: {} for i in self.agents}
         # selects the first agent
-        self._agent_selector.reinit(self.agents)
+        self._agent_selector.reinit(self.possible_agents)
         self.agent_selection = self._agent_selector.reset()
 
         self._initialize_rendering(force=True)
