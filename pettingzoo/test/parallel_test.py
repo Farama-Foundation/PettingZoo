@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import warnings
+from typing import Any
 
 from pettingzoo.test.api_test import missing_attr_warning
 from pettingzoo.utils.conversions import (
@@ -16,10 +17,14 @@ def sample_action(
     env: ParallelEnv[AgentID, ObsType, ActionType],
     obs: dict[AgentID, ObsType],
     agent: AgentID,
+    infos: dict[AgentID, dict[str, Any]] | None = None,
 ) -> ActionType:
+    """Sample an action using an observation mask, then an info mask if present."""
     agent_obs = obs[agent]
     if isinstance(agent_obs, dict) and "action_mask" in agent_obs:
         return env.action_space(agent).sample(mask=agent_obs["action_mask"])
+    if infos is not None and "action_mask" in infos.get(agent, {}):
+        return env.action_space(agent).sample(mask=infos[agent]["action_mask"])
     return env.action_space(agent).sample()
 
 
@@ -52,14 +57,14 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
         has_finished = set()
         for _ in range(num_cycles):
             actions = {
-                agent: sample_action(par_env, obs, agent)
+                agent: sample_action(par_env, obs, agent, infos)
                 for agent in par_env.agents
                 if (
                     (agent in terminated and not terminated[agent])
                     or (agent in truncated and not truncated[agent])
                 )
             }
-            obs, rew, terminated, truncated, info = par_env.step(actions)
+            obs, rew, terminated, truncated, infos = par_env.step(actions)
             for agent in par_env.agents:
                 assert agent not in has_finished, "agent cannot be revived once dead"
 
@@ -70,10 +75,10 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
             assert isinstance(rew, dict)
             assert isinstance(terminated, dict)
             assert isinstance(truncated, dict)
-            assert isinstance(info, dict)
+            assert isinstance(infos, dict)
 
             keys = ["observation", "reward", "terminated", "truncated", "info"]
-            vals = [obs, rew, terminated, truncated, info]
+            vals = [obs, rew, terminated, truncated, infos]
             for k, v in zip(keys, vals):
                 key_set = set(v.keys())
                 if key_set == live_agents:
