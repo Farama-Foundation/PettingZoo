@@ -28,12 +28,33 @@ parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
 observations, infos = parallel_env.reset(seed=42)
 
 while parallel_env.agents:
-    # this is where you would insert your policy
-    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}
+    actions = {}
+    for agent in parallel_env.agents:
+        observation = observations[agent]
+        info = infos[agent]
+        if "action_mask" in info:
+            mask = info["action_mask"]
+        elif isinstance(observation, dict) and "action_mask" in observation:
+            mask = observation["action_mask"]
+        else:
+            mask = None
+        # this is where you would insert your policy
+        action_space = parallel_env.action_space(agent)
+        if mask is None:
+            actions[agent] = action_space.sample()
+        else:
+            actions[agent] = action_space.sample(mask=mask)
 
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 parallel_env.close()
 ```
+
+Action masking is optional. A Parallel environment can provide an `action_mask` in
+each agent's `info` dict or in a dictionary observation. When both are present,
+the mask in `info` takes precedence. With neither mask, sampling remains
+unmasked. For examples of implementing action masking, see the
+[action-masking tutorial](/tutorials/custom_environment/3-action-masking/) and
+[AEC examples using observation and info masks](/api/aec/#action-masking).
 
 ## ParallelEnv
 
