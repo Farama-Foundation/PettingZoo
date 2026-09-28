@@ -24,6 +24,10 @@ from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
 from pettingzoo.utils.wrappers.nan_zeros import NanZerosParallelV1, NanZerosV1
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
+from pettingzoo.utils.wrappers.pad_action_space import (
+    PadActionSpaceParallelV1,
+    PadActionSpaceV1,
+)
 from pettingzoo.utils.wrappers.pad_observations import (
     PadObservationsParallelV1,
     PadObservationsV1,
@@ -69,6 +73,8 @@ __all__ = [
     "NanZerosParallelV1",
     "NanZerosV1",
     "OrderEnforcingWrapper",
+    "PadActionSpaceParallelV1",
+    "PadActionSpaceV1",
     "PadObservationsParallelV1",
     "PadObservationsV1",
     "RecordVideo",

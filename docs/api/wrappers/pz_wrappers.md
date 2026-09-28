@@ -144,6 +144,8 @@ while parallel_env.agents:
 .. autoclass:: DtypeObservationParallelV1
 .. autoclass:: MaxObservationV1
 .. autoclass:: MaxObservationParallelV1
+.. autoclass:: PadActionSpaceV1
+.. autoclass:: PadActionSpaceParallelV1
 .. autoclass:: PadObservationsV1
 .. autoclass:: PadObservationsParallelV1
 .. autoclass:: RescaleObservationV1
