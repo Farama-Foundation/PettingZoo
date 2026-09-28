@@ -772,6 +772,53 @@ Ported from SuperSuit’s max_observation_v0; the version suffix continues that 
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.PadActionSpaceV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">PadActionSpaceV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/pad_action_space/#PadActionSpaceV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.PadActionSpaceV1" title="Link to this definition">¶</a></dt>
+<dd><p>Pads each agent’s action space up to one shared action space.</p>
+<p>The shared space covers the action spaces of <code class="docutils literal notranslate"><span class="pre">possible_agents</span></code>, built the same
+way as <a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsV1" title="pettingzoo.utils.wrappers.PadObservationsV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">PadObservationsV1</span></code></a> builds its observation space: for Box spaces
+the largest size along each axis, for Discrete spaces the range covering all of
+them. Every agent then reports that same space.</p>
+<p>Before an action reaches the wrapped environment it is mapped back into the
+acting agent’s own space: a Box action is sliced to the agent’s original shape,
+and a Discrete action outside the agent’s own range becomes its first action
+(<code class="docutils literal notranslate"><span class="pre">0</span></code> for a space starting at zero). <code class="docutils literal notranslate"><span class="pre">None</span></code> actions of dead agents pass
+through.</p>
+<p>Box spaces have to agree on dtype and number of dimensions. Anything other than Box
+and Discrete, or a mix of both, is rejected.</p>
+<p>Ported from SuperSuit’s pad_action_space_v0; the version suffix continues that
+numbering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env</strong> – The AEC environment to wrap.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.PadActionSpaceParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">PadActionSpaceParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/pad_action_space/#PadActionSpaceParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.PadActionSpaceParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Pads each agent’s action space up to one shared action space.</p>
+<p>The shared space covers the action spaces of <code class="docutils literal notranslate"><span class="pre">possible_agents</span></code>, built the same
+way as <a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsParallelV1" title="pettingzoo.utils.wrappers.PadObservationsParallelV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">PadObservationsParallelV1</span></code></a> builds its observation space: for Box
+spaces the largest size along each axis, for Discrete spaces the range covering
+all of them. Every agent then reports that same space.</p>
+<p>Before the actions reach the wrapped environment, each one is mapped back into
+its agent’s own space: a Box action is sliced to the agent’s original shape, and
+a Discrete action outside the agent’s own range becomes its first action (<code class="docutils literal notranslate"><span class="pre">0</span></code>
+for a space starting at zero).</p>
+<p>Box spaces have to agree on dtype and number of dimensions. Anything other than Box
+and Discrete, or a mix of both, is rejected.</p>
+<p>Ported from SuperSuit’s pad_action_space_v0; the version suffix continues that
+numbering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env</strong> – The parallel environment to wrap.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.PadObservationsV1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">PadObservationsV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/pad_observations/#PadObservationsV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.PadObservationsV1" title="Link to this definition">¶</a></dt>
 <dd><p>Pads each agent’s observation up to one shared observation space.</p>
@@ -1098,6 +1145,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadActionSpaceV1"><code class="docutils literal notranslate"><span class="pre">PadActionSpaceV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadActionSpaceParallelV1"><code class="docutils literal notranslate"><span class="pre">PadActionSpaceParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadObservationsParallelV1"><code class="docutils literal notranslate"><span class="pre">PadObservationsParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.RescaleObservationV1"><code class="docutils literal notranslate"><span class="pre">RescaleObservationV1</span></code></a></li>

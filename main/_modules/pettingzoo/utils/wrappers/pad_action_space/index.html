@@ -7,11 +7,11 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/utils/wrappers/pad_observations.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/utils/wrappers/pad_observations.html" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/utils/wrappers/pad_action_space.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/utils/wrappers/pad_action_space.html" />
 
     <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
-        <title>pettingzoo.utils.wrappers.pad_observations - PettingZoo Documentation</title>
+        <title>pettingzoo.utils.wrappers.pad_action_space - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast.css?v=9fbfb63d" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast-extensions.css?v=42bfddca" />
@@ -376,12 +376,12 @@
           </div>
           <article role="main">
             
-            <h1>Source code for pettingzoo.utils.wrappers.pad_observations</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""Wrappers that pad every agent's observation up to a single shared space."""</span>
+            <h1>Source code for pettingzoo.utils.wrappers.pad_action_space</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Wrappers that pad every agent's action space up to a single shared space."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.spaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">Space</span>
@@ -390,95 +390,41 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ParallelEnv</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.wrappers.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseWrapper</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.wrappers.base_parallel</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseParallelWrapper</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.wrappers.pad_observations</span><span class="w"> </span><span class="kn">import</span> <span class="n">_check_paddable</span><span class="p">,</span> <span class="n">_padded_space</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_check_paddable</span><span class="p">(</span><span class="n">spaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]],</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"observation"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Checks that a list of ``kind`` spaces can be padded to a common space."""</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"environment must have at least one possible agent"</span>
-    <span class="n">first</span> <span class="o">=</span> <span class="n">spaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="p">(</span><span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span><span class="p">)),</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"padding only supports Box and Discrete </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> spaces, "</span>
-        <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">first</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
-    <span class="p">)</span>
-
-    <span class="n">expected</span> <span class="o">=</span> <span class="n">Box</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">Box</span><span class="p">)</span> <span class="k">else</span> <span class="n">Discrete</span>
-    <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="n">spaces</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">expected</span><span class="p">),</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"all </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> spaces must be either Box or Discrete, not a mix"</span>
-        <span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">Box</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="n">spaces</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">Box</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">first</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"all Box </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> spaces must have the same number of dimensions"</span>
-            <span class="p">)</span>
-            <span class="k">assert</span> <span class="n">first</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">space</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"all Box </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> spaces must have the same dtype"</span>
-            <span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_pad_to</span><span class="p">(</span><span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Pads ``array`` up to ``shape`` at the end of every axis."""</span>
-    <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">shape</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">array</span>
-    <span class="n">pad_widths</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">new</span> <span class="o">-</span> <span class="n">old</span><span class="p">)</span> <span class="k">for</span> <span class="n">new</span><span class="p">,</span> <span class="n">old</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">)]</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">pad_widths</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_padded_space</span><span class="p">(</span><span class="n">spaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">"""Builds the space every agent is padded up to."""</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spaces</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Discrete</span><span class="p">):</span>
-        <span class="n">discretes</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">"list[Discrete[Any]]"</span><span class="p">,</span> <span class="n">spaces</span><span class="p">)</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">start</span><span class="p">)</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="n">discretes</span><span class="p">)</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="n">discretes</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
-
-    <span class="n">boxes</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">"list[Box]"</span><span class="p">,</span> <span class="n">spaces</span><span class="p">)</span>
-    <span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">box</span><span class="o">.</span><span class="n">shape</span> <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">boxes</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-    <span class="c1"># the fill values are what SuperSuit uses: a bound wide enough that padding an</span>
-    <span class="c1"># agent's own bounds can never tighten the shared space</span>
-    <span class="n">lows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">_pad_to</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">low</span><span class="p">)))</span> <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">boxes</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="n">highs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">_pad_to</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">high</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">high</span><span class="p">)))</span> <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">boxes</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="c1"># every space has the same dtype, and padding keeps it</span>
-    <span class="k">return</span> <span class="n">Box</span><span class="p">(</span>
-        <span class="n">low</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lows</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">highs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">lows</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">type</span>
-    <span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_pad_observation</span><span class="p">(</span><span class="n">space</span><span class="p">:</span> <span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Pads a single observation up to ``space``."""</span>
-    <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_unpad_action</span><span class="p">(</span><span class="n">space</span><span class="p">:</span> <span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">action</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Maps an action from the shared space back into the agent's own ``space``."""</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">Box</span><span class="p">):</span>
-        <span class="c1"># Discrete observations already fit the shared space. SuperSuit returns the</span>
-        <span class="c1"># space here instead of the observation, which is a bug.</span>
-        <span class="k">return</span> <span class="n">obs</span>
-    <span class="k">return</span> <span class="n">_pad_to</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">obs</span><span class="p">),</span> <span class="n">space</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">Discrete</span><span class="p">):</span>
+        <span class="c1"># an action only another agent has maps to this agent's first action</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">action</span> <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">else</span> <span class="n">space</span><span class="o">.</span><span class="n">start</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">Box</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">action</span><span class="p">)[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">space</span><span class="o">.</span><span class="n">shape</span><span class="p">)]</span>
 
 
-<div class="viewcode-block" id="PadObservationsV1">
-<a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.PadObservationsV1">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">PadObservationsV1</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">"""Pads each agent's observation up to one shared observation space.</span>
+<div class="viewcode-block" id="PadActionSpaceV1">
+<a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.PadActionSpaceV1">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PadActionSpaceV1</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">"""Pads each agent's action space up to one shared action space.</span>
 
-<span class="sd">    The shared space covers the observation spaces of ``possible_agents``. For Box</span>
-<span class="sd">    spaces it takes the largest size along each axis, and each observation is padded</span>
-<span class="sd">    with zeros at the end of every axis, so the real values stay at the front. For</span>
-<span class="sd">    Discrete spaces it takes the range covering all of them and observations pass</span>
-<span class="sd">    through unchanged. Every agent then reports that same space.</span>
+<span class="sd">    The shared space covers the action spaces of ``possible_agents``, built the same</span>
+<span class="sd">    way as :class:`PadObservationsV1` builds its observation space: for Box spaces</span>
+<span class="sd">    the largest size along each axis, for Discrete spaces the range covering all of</span>
+<span class="sd">    them. Every agent then reports that same space.</span>
+
+<span class="sd">    Before an action reaches the wrapped environment it is mapped back into the</span>
+<span class="sd">    acting agent's own space: a Box action is sliced to the agent's original shape,</span>
+<span class="sd">    and a Discrete action outside the agent's own range becomes its first action</span>
+<span class="sd">    (``0`` for a space starting at zero). ``None`` actions of dead agents pass</span>
+<span class="sd">    through.</span>
 
 <span class="sd">    Box spaces have to agree on dtype and number of dimensions. Anything other than Box</span>
-<span class="sd">    and Discrete is rejected.</span>
+<span class="sd">    and Discrete, or a mix of both, is rejected.</span>
 
-<span class="sd">    An agent whose observation is already the full shape gets the array back without a</span>
-<span class="sd">    copy, so writing into it writes into the environment.</span>
-
-<span class="sd">    Ported from SuperSuit's pad_observations_v0; the version suffix continues that</span>
+<span class="sd">    Ported from SuperSuit's pad_action_space_v0; the version suffix continues that</span>
 <span class="sd">    numbering.</span>
 
 <span class="sd">    :param env: The AEC environment to wrap.</span>
@@ -486,49 +432,51 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">"PadObservationsV1 is only compatible with AEC environments, "</span>
-            <span class="s2">"use PadObservationsParallelV1 instead."</span>
+            <span class="s2">"PadActionSpaceV1 is only compatible with AEC environments, "</span>
+            <span class="s2">"use PadActionSpaceParallelV1 instead."</span>
         <span class="p">)</span>
         <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">"possible_agents"</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">"environment passed to PadObservationsV1 must have a possible_agents list."</span>
+            <span class="s2">"environment passed to PadActionSpaceV1 must have a possible_agents list."</span>
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-        <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">]</span>
-        <span class="n">_check_paddable</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_obs_space</span> <span class="o">=</span> <span class="n">_padded_space</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">]</span>
+        <span class="n">_check_paddable</span><span class="p">(</span><span class="n">spaces</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"action"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_action_space</span> <span class="o">=</span> <span class="n">_padded_space</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span>
 
     <span class="nd">@override</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_space</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_action_space</span>
 
     <span class="nd">@override</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_pad_observation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_space</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">))</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">_unpad_action</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">action</span><span class="p">))</span>
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">"PadObservationsV1&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">!s}</span><span class="s2">&gt;"</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"PadActionSpaceV1&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">!s}</span><span class="s2">&gt;"</span></div>
 
 
 
-<div class="viewcode-block" id="PadObservationsParallelV1">
-<a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.PadObservationsParallelV1">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">PadObservationsParallelV1</span><span class="p">(</span><span class="n">BaseParallelWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">"""Pads each agent's observation up to one shared observation space.</span>
+<div class="viewcode-block" id="PadActionSpaceParallelV1">
+<a class="viewcode-back" href="../../../../../api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.PadActionSpaceParallelV1">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PadActionSpaceParallelV1</span><span class="p">(</span><span class="n">BaseParallelWrapper</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">"""Pads each agent's action space up to one shared action space.</span>
 
-<span class="sd">    The shared space covers the observation spaces of ``possible_agents``. For Box</span>
-<span class="sd">    spaces it takes the largest size along each axis, and each observation is padded</span>
-<span class="sd">    with zeros at the end of every axis, so the real values stay at the front. For</span>
-<span class="sd">    Discrete spaces it takes the range covering all of them and observations pass</span>
-<span class="sd">    through unchanged. Every agent then reports that same space.</span>
+<span class="sd">    The shared space covers the action spaces of ``possible_agents``, built the same</span>
+<span class="sd">    way as :class:`PadObservationsParallelV1` builds its observation space: for Box</span>
+<span class="sd">    spaces the largest size along each axis, for Discrete spaces the range covering</span>
+<span class="sd">    all of them. Every agent then reports that same space.</span>
+
+<span class="sd">    Before the actions reach the wrapped environment, each one is mapped back into</span>
+<span class="sd">    its agent's own space: a Box action is sliced to the agent's original shape, and</span>
+<span class="sd">    a Discrete action outside the agent's own range becomes its first action (``0``</span>
+<span class="sd">    for a space starting at zero).</span>
 
 <span class="sd">    Box spaces have to agree on dtype and number of dimensions. Anything other than Box</span>
-<span class="sd">    and Discrete is rejected.</span>
+<span class="sd">    and Discrete, or a mix of both, is rejected.</span>
 
-<span class="sd">    An agent whose observation is already the full shape gets the array back without a</span>
-<span class="sd">    copy, so writing into it writes into the environment.</span>
-
-<span class="sd">    Ported from SuperSuit's pad_observations_v0; the version suffix continues that</span>
+<span class="sd">    Ported from SuperSuit's pad_action_space_v0; the version suffix continues that</span>
 <span class="sd">    numbering.</span>
 
 <span class="sd">    :param env: The parallel environment to wrap.</span>
@@ -536,51 +484,42 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">ParallelEnv</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ParallelEnv</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">"PadObservationsParallelV1 is only compatible with parallel environments, "</span>
-            <span class="s2">"use PadObservationsV1 instead."</span>
+            <span class="s2">"PadActionSpaceParallelV1 is only compatible with parallel environments, "</span>
+            <span class="s2">"use PadActionSpaceV1 instead."</span>
         <span class="p">)</span>
         <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">"possible_agents"</span><span class="p">),</span> <span class="p">(</span>
-            <span class="s2">"environment passed to PadObservationsParallelV1 must have a "</span>
+            <span class="s2">"environment passed to PadActionSpaceParallelV1 must have a "</span>
             <span class="s2">"possible_agents list."</span>
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-        <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">]</span>
-        <span class="n">_check_paddable</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_obs_space</span> <span class="o">=</span> <span class="n">_padded_space</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">]</span>
+        <span class="n">_check_paddable</span><span class="p">(</span><span class="n">spaces</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"action"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_action_space</span> <span class="o">=</span> <span class="n">_padded_space</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span>
 
     <span class="nd">@override</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obs_space</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">_pad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observations</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="n">agent</span><span class="p">:</span> <span class="n">_pad_observation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obs_space</span><span class="p">,</span> <span class="n">obs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">agent</span><span class="p">,</span> <span class="n">obs</span> <span class="ow">in</span> <span class="n">observations</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-        <span class="p">}</span>
-
-    <span class="nd">@override</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
-        <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pad</span><span class="p">(</span><span class="n">observations</span><span class="p">),</span> <span class="n">infos</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AgentID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Space</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_action_space</span>
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ActionType</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span>
-        <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="n">ObsType</span><span class="p">],</span>
         <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
         <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
         <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
         <span class="nb">dict</span><span class="p">[</span><span class="n">AgentID</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
     <span class="p">]:</span>
-        <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pad</span><span class="p">(</span><span class="n">observations</span><span class="p">),</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">agent</span><span class="p">:</span> <span class="n">_unpad_action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">),</span> <span class="n">action</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">agent</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">"PadObservationsParallelV1&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">!s}</span><span class="s2">&gt;"</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"PadActionSpaceParallelV1&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">!s}</span><span class="s2">&gt;"</span></div>
 
 </pre></div>
           </article>
