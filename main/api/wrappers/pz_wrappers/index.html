@@ -590,6 +590,42 @@ render(), step(), observe(), state(), agent_iter()</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.NanZerosV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">NanZerosV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/nan_zeros/#NanZerosV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.NanZerosV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces an action containing a NaN with the all-zeros action.</p>
+<p>The replacement has the shape and dtype of the agent’s action space, and a
+warning is emitted whenever it happens. Actions without a NaN, and the
+<code class="docutils literal notranslate"><span class="pre">None</span></code> action of a dead agent, are passed through unchanged. The advertised
+action spaces are not modified.</p>
+<p>Only floating-point <code class="docutils literal notranslate"><span class="pre">Box</span></code> action spaces whose bounds contain zero are
+supported; any other action space raises an error rather than silently
+receiving an out-of-space replacement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env</strong> – The AEC environment to wrap.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.NanZerosParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">NanZerosParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/nan_zeros/#NanZerosParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.NanZerosParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces an action containing a NaN with the all-zeros action.</p>
+<p>Each agent’s action is checked separately, so only the agents that sent a NaN
+receive the replacement. The replacement has the shape and dtype of the agent’s
+action space, and a warning is emitted whenever it happens. The advertised
+action spaces are not modified.</p>
+<p>Only floating-point <code class="docutils literal notranslate"><span class="pre">Box</span></code> action spaces whose bounds contain zero are
+supported; any other action space raises an error rather than silently
+receiving an out-of-space replacement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env</strong> – The parallel environment to wrap.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.AgentIndicatorV1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">AgentIndicatorV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/agent_indicator/#AgentIndicatorV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.AgentIndicatorV1" title="Link to this definition">¶</a></dt>
 <dd><p>Adds an agent indicator to each observation.</p>
@@ -1052,6 +1088,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardParallelV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper"><code class="docutils literal notranslate"><span class="pre">OrderEnforcingWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanZerosV1"><code class="docutils literal notranslate"><span class="pre">NanZerosV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanZerosParallelV1"><code class="docutils literal notranslate"><span class="pre">NanZerosParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorParallelV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationV1</span></code></a></li>
