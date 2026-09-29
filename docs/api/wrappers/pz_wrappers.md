@@ -123,6 +123,32 @@ while parallel_env.agents:
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 ```
 
+### Replacing NaN actions with a no-op
+
+`NanNoopV1` (AEC) and `NanNoopParallelV1` (Parallel) replace numeric actions containing a NaN with a caller-supplied no-op and emit a warning. They use the same no-op value for every agent, so choose a value that belongs to each affected agent's action space. The wrapper checks known agents when constructed and checks the affected agent again before replacing an action. Incompatible no-ops raise `ValueError`; replacements are copied so mutable arrays are not shared between agents or steps.
+
+For example, action `1` means stay still in discrete Pistonball:
+
+```python
+import numpy as np
+from pettingzoo import make
+from pettingzoo.utils.wrappers import NanNoopParallelV1
+
+env = NanNoopParallelV1(
+    make("parallel", "butterfly/pistonball-v6", continuous=False),
+    no_op_action=1,
+)
+observations, infos = env.reset(seed=42)
+actions = dict.fromkeys(env.agents, 1)
+actions[env.agents[0]] = np.nan
+observations, rewards, terminations, truncations, infos = env.step(actions)
+env.close()
+```
+
+For an AEC environment, use `NanNoopV1(env, no_op_action=...)`. Its `step(None)` for a dead agent is passed through unchanged. Both wrappers preserve actions without NaNs, even if they are otherwise invalid: they do not clip actions or choose a legal action from an action mask. Action and observation spaces are unchanged.
+
+These classes replace SuperSuit's `nan_noop_v0` for the respective PettingZoo APIs. Supply the no-op when constructing the wrapper, then call `step` normally.
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers
 
@@ -134,6 +160,8 @@ while parallel_env.agents:
 .. autoclass:: ClipRewardV1
 .. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: NanNoopV1
+.. autoclass:: NanNoopParallelV1
 .. autoclass:: NanZerosV1
 .. autoclass:: NanZerosParallelV1
 .. autoclass:: AgentIndicatorV1
