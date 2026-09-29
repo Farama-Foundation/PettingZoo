@@ -31,6 +31,8 @@ Supersuit includes the following wrappers:
 
   Clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.
 
+  PettingZoo provides native :class:`~pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper` (AEC) and :class:`~pettingzoo.utils.wrappers.ClipOutOfBoundsParallelV1` (Parallel) alternatives. Unlike ``clip_actions_v0``, they warn when clipping and reject NaN actions.
+
 .. py:function:: color_reduction_v0(env, mode='full')
 
   Simplifies color information in graphical ((x,y,3) shaped) environments. `mode='full'` fully greyscales of the observation. This can be computationally intensive. Arguments of 'R', 'G' or 'B' just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.

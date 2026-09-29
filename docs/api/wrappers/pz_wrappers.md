@@ -109,12 +109,10 @@ while parallel_env.agents:
 ```
 ```python
 from pettingzoo import make
-from pettingzoo.utils import ClipOutOfBoundsWrapper
-from pettingzoo.utils import aec_to_parallel
+from pettingzoo.utils import ClipOutOfBoundsParallelV1
 
-parallel_env = make("aec", "sisl/multiwalker-v9", render_mode="human")
-parallel_env = ClipOutOfBoundsWrapper(parallel_env)
-parallel_env = aec_to_parallel(parallel_env)
+parallel_env = make("parallel", "sisl/multiwalker-v9", render_mode="human")
+parallel_env = ClipOutOfBoundsParallelV1(parallel_env)
 
 observations, infos = parallel_env.reset()
 
@@ -131,6 +129,7 @@ while parallel_env.agents:
 .. autoclass:: CaptureStdoutWrapper
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
+.. autoclass:: ClipOutOfBoundsParallelV1
 .. autoclass:: ClipRewardV1
 .. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper
