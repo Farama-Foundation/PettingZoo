@@ -334,3 +334,62 @@ def test_parallel_api(min_obs, max_obs):
     parallel_api_test(
         RescaleObservationParallelV1(DummyParallel(), min_obs, max_obs), num_cycles=5
     )
+
+
+@pytest.mark.parametrize("api", ["aec", "parallel_reset", "parallel_step"])
+@pytest.mark.parametrize(
+    "low, high, obs, min_obs, max_obs, expected",
+    [
+        (-1e308, 1e308, [-1e308, 0.0, 1e308], 0.0, 1.0, [0.0, 0.5, 1.0]),
+        (-1.0, 1.0, [-1.0, 0.0, 1.0], -1e308, 1e308, [-1e308, 0.0, 1e308]),
+        (-1e308, 1e308, [-1e308, 0.0, 1e308], -1e308, 1e308, [-1e308, 0.0, 1e308]),
+        (-1e308, 1.5e308, [-1e308, 0.25e308, 1.5e308], 0.0, 1.0, [0.0, 0.5, 1.0]),
+        (
+            [-1e308, 0.0, 1e308],
+            [1e308, np.nextafter(0.0, 1.0), np.nextafter(1e308, np.inf)],
+            [0.0, np.nextafter(0.0, 1.0), 1e308],
+            0.0,
+            1.0,
+            [0.5, 1.0, 0.0],
+        ),
+    ],
+    ids=["source", "target", "both", "asymmetric", "mixed_widths"],
+)
+def test_wide_float64_bounds(api, low, high, obs, min_obs, max_obs, expected):
+    observation = np.asarray(obs, dtype=np.float64)
+    space = Box(
+        low=np.broadcast_to(low, observation.shape).copy(),
+        high=np.broadcast_to(high, observation.shape).copy(),
+        dtype=np.float64,
+    )
+
+    class FixedParallel(DummyParallel):
+        def observation_space(self, agent):
+            return space
+
+        def reset(self, seed=None, options=None):
+            _, infos = super().reset(seed=seed, options=options)
+            return dict.fromkeys(self.agents, observation), infos
+
+        def step(self, actions):
+            observations, *rest = super().step(actions)
+            return dict.fromkeys(observations, observation), *rest
+
+    with np.errstate(over="raise", invalid="raise", divide="raise"):
+        if api == "aec":
+            env = RescaleObservationV1(
+                aec_with_space(space, observation), min_obs, max_obs
+            )
+            env.reset(seed=0)
+            got = env.observe("agent_0")
+        else:
+            env = RescaleObservationParallelV1(FixedParallel(), min_obs, max_obs)
+            observations, _ = env.reset(seed=0)
+            if api == "parallel_step":
+                observations, *_ = env.step(dict.fromkeys(env.agents, 0))
+            got = observations["agent_0"]
+
+    assert got.dtype == np.float64
+    assert np.all(np.isfinite(got))
+    np.testing.assert_allclose(got, expected, rtol=1e-14, atol=0.0)
+    assert env.observation_space("agent_0").contains(got)

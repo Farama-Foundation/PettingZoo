@@ -29,7 +29,7 @@ def average_total_reward(
         env.reset()
         for agent in env.agent_iter():
             # Because we call env.last() this function only works with AEC envs
-            obs, reward, termination, truncation, _ = env.last(observe=False)
+            obs, reward, termination, truncation, _ = env.last()
             total_reward += reward
             total_steps += 1
             if termination or truncation:

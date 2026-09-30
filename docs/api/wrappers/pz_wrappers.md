@@ -134,6 +134,8 @@ while parallel_env.agents:
 .. autoclass:: ClipRewardV1
 .. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: NanZerosV1
+.. autoclass:: NanZerosParallelV1
 .. autoclass:: AgentIndicatorV1
 .. autoclass:: AgentIndicatorParallelV1
 .. autoclass:: ColorReductionObservationV1
@@ -142,6 +144,8 @@ while parallel_env.agents:
 .. autoclass:: DtypeObservationParallelV1
 .. autoclass:: MaxObservationV1
 .. autoclass:: MaxObservationParallelV1
+.. autoclass:: PadActionSpaceV1
+.. autoclass:: PadActionSpaceParallelV1
 .. autoclass:: PadObservationsV1
 .. autoclass:: PadObservationsParallelV1
 .. autoclass:: RescaleObservationV1
