@@ -16,6 +16,10 @@ from pettingzoo.utils.wrappers.dtype import (
     DtypeObservationParallelV1,
     DtypeObservationV1,
 )
+from pettingzoo.utils.wrappers.frame_stack import (
+    FrameStackParallelV3,
+    FrameStackV3,
+)
 from pettingzoo.utils.wrappers.max_observation import (
     MaxObservationParallelV1,
     MaxObservationV1,
@@ -66,6 +70,8 @@ __all__ = [
     "ColorReductionObservationV1",
     "DtypeObservationParallelV1",
     "DtypeObservationV1",
+    "FrameStackParallelV3",
+    "FrameStackV3",
     "MaxObservationParallelV1",
     "MaxObservationV1",
     "MultiEpisodeEnv",
