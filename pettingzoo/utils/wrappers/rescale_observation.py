@@ -49,13 +49,27 @@ def _rescale(
     The arithmetic runs in float64 whatever the space dtype is. In float32 the
     intermediate width can overflow to infinity, and rounding disagrees with the
     cast gymnasium applies to the target bounds, which puts endpoints just outside
-    the rescaled space. The clip covers what is left of that.
+    the rescaled space. Float64 bounds whose difference overflows use scaled
+    arithmetic instead. The clip covers remaining endpoint rounding.
     """
     low = space.low.astype(np.float64)
     high = space.high.astype(np.float64)
-    scaled = (np.asarray(obs, dtype=np.float64) - low) / (high - low)
-    result = (scaled * (max_obs - min_obs) + min_obs).astype(space.dtype)
-    return np.clip(result, rescaled.low, rescaled.high)
+    values = np.asarray(obs, dtype=np.float64)
+    with np.errstate(over="ignore"):
+        width = high - low
+        target_width = max_obs - min_obs
+    if np.any(np.isinf(width)):
+        # Halve only overflowing coordinates, preserving narrow/subnormal ranges.
+        divisor = np.where(np.isinf(width), 2.0, 1.0)
+        low, high, values = low / divisor, high / divisor, values / divisor
+        width = high - low
+    scaled = (values - low) / width
+    if np.isinf(target_width) and np.isfinite(min_obs) and np.isfinite(max_obs):
+        # A convex combination avoids subtracting widely separated finite bounds.
+        result = (1.0 - scaled) * min_obs + scaled * max_obs
+    else:
+        result = scaled * target_width + min_obs
+    return np.clip(result.astype(space.dtype), rescaled.low, rescaled.high)
 
 
 class RescaleObservationV1(BaseWrapper[AgentID, Any, ActionType]):
@@ -66,7 +80,8 @@ class RescaleObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     advertised space. The wrapped space has to be a float Box whose elements all
     have finite ``low`` and ``high`` with ``high > low``, since anything else
     gives nothing to scale from. Every space in ``possible_agents`` is checked
-    when the wrapper is built.
+    when the wrapper is built. Finite float32 and float64 bounds are supported
+    even when their difference overflows the observation dtype.
 
     Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.
 
@@ -125,7 +140,8 @@ class RescaleObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
     advertised space. The wrapped space has to be a float Box whose elements all
     have finite ``low`` and ``high`` with ``high > low``, since anything else
     gives nothing to scale from. Every space in ``possible_agents`` is checked
-    when the wrapper is built.
+    when the wrapper is built. Finite float32 and float64 bounds are supported
+    even when their difference overflows the observation dtype.
 
     Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.
 
