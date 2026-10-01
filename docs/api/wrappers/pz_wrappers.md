@@ -138,6 +138,7 @@ while parallel_env.agents:
 .. autoclass:: NanZerosParallelV1
 .. autoclass:: AgentIndicatorV1
 .. autoclass:: AgentIndicatorParallelV1
+.. autoclass:: BlackDeathParallelV4
 .. autoclass:: ColorReductionObservationV1
 .. autoclass:: ColorReductionObservationParallelV1
 .. autoclass:: DtypeObservationV1

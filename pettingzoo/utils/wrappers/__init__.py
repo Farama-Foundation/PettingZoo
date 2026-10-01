@@ -5,6 +5,7 @@ from pettingzoo.utils.wrappers.agent_indicator import (
 from pettingzoo.utils.wrappers.assert_out_of_bounds import AssertOutOfBoundsWrapper
 from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
+from pettingzoo.utils.wrappers.black_death import BlackDeathParallelV4
 from pettingzoo.utils.wrappers.capture_stdout import CaptureStdoutWrapper
 from pettingzoo.utils.wrappers.clip_out_of_bounds import ClipOutOfBoundsWrapper
 from pettingzoo.utils.wrappers.clip_reward import ClipRewardParallelV1, ClipRewardV1
@@ -58,6 +59,7 @@ __all__ = [
     "AssertOutOfBoundsWrapper",
     "BaseParallelWrapper",
     "BaseWrapper",
+    "BlackDeathParallelV4",
     "CaptureStdoutWrapper",
     "ClipOutOfBoundsWrapper",
     "ClipRewardParallelV1",
