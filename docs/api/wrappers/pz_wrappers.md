@@ -107,12 +107,17 @@ while parallel_env.agents:
     :class:`AgentIndicatorParallelV1`. To apply an AEC-only wrapper to a Parallel
     environment, convert it to AEC, apply the wrapper, and convert it back.
 ```
+
+`ClipOutOfBoundsWrapper` supports both APIs through the same constructor. It clips
+each Parallel agent's action to that agent's Box bounds and preserves the
+environment's reset and step return values.
+
 ```python
 from pettingzoo import make
-from pettingzoo.utils import ClipOutOfBoundsParallelV1
+from pettingzoo.utils import ClipOutOfBoundsWrapper
 
 parallel_env = make("parallel", "sisl/multiwalker-v9", render_mode="human")
-parallel_env = ClipOutOfBoundsParallelV1(parallel_env)
+parallel_env = ClipOutOfBoundsWrapper(parallel_env)
 
 observations, infos = parallel_env.reset()
 
@@ -129,7 +134,6 @@ while parallel_env.agents:
 .. autoclass:: CaptureStdoutWrapper
 .. autoclass:: AssertOutOfBoundsWrapper
 .. autoclass:: ClipOutOfBoundsWrapper
-.. autoclass:: ClipOutOfBoundsParallelV1
 .. autoclass:: ClipRewardV1
 .. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper

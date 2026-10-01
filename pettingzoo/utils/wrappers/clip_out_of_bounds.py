@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, overload
 
 import numpy as np
 from gymnasium.spaces import Box
@@ -15,8 +15,29 @@ from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
     """Clips the input action to fit in the continuous action space (emitting a warning if it does so).
 
-    Applied to continuous environments in pettingzoo.
+    Supports both AEC and Parallel environments with Box action spaces. For AEC
+    environments, ``step`` takes a single action (or ``None`` for a dead agent).
+    For Parallel environments, ``step`` takes an action dictionary and clips each
+    agent's action to that agent's bounds. In-range actions pass through unchanged;
+    NaNs and malformed shapes are rejected. The action spaces are unchanged.
     """
+
+    @overload
+    def __new__(
+        cls, env: AECEnv[Any, Any, Any] | None = None
+    ) -> ClipOutOfBoundsWrapper: ...
+
+    @overload
+    def __new__(
+        cls, env: ParallelEnv[AgentID, ObsType, Any]
+    ) -> _ClipOutOfBoundsParallelWrapper[AgentID, ObsType]: ...
+
+    def __new__(
+        cls, env: AECEnv[Any, Any, Any] | ParallelEnv[Any, Any, Any] | None = None
+    ) -> ClipOutOfBoundsWrapper | _ClipOutOfBoundsParallelWrapper[Any, Any]:
+        if isinstance(env, ParallelEnv):
+            return _ClipOutOfBoundsParallelWrapper(env)
+        return super().__new__(cls)
 
     def __init__(self, env: AECEnv[Any, Any, Any]):
         super().__init__(env)
@@ -34,21 +55,8 @@ class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
         assert isinstance(space, Box), (
             "should only use ClipOutOfBoundsWrapper for Box spaces"
         )
-        if action is not None and not space.contains(action):
-            if np.isnan(action).any():
-                EnvLogger.error_nan_action()
-            assert space.shape == action.shape, (
-                f"action should have shape {space.shape}, has shape {action.shape}"
-            )
-
-            EnvLogger.warn_action_out_of_bound(
-                action=action, action_space=space, backup_policy="clipping to space"
-            )
-            action = np.clip(
-                action,
-                space.low,
-                space.high,
-            )
+        if action is not None:
+            action = _clip_action(action, space)
 
         super().step(action)
 
@@ -57,27 +65,15 @@ class ClipOutOfBoundsWrapper(BaseWrapper[Any, Any, Any]):
         return str(self.env)
 
 
-class ClipOutOfBoundsParallelV1(BaseParallelWrapper[AgentID, ObsType, Any]):
-    """Clips each agent's Box action to that agent's action-space bounds.
-
-    In-range actions pass through unchanged. An out-of-range action is clipped
-    elementwise and emits a warning; malformed shapes and NaNs are rejected.
-    The action spaces themselves are unchanged. Unlike SuperSuit's
-    ``clip_actions_v0``, this wrapper warns when clipping and rejects NaNs,
-    matching :class:`ClipOutOfBoundsWrapper` for AEC environments.
-
-    :param env: The parallel environment to wrap.
-    """
+class _ClipOutOfBoundsParallelWrapper(BaseParallelWrapper[AgentID, ObsType, Any]):
+    """Parallel implementation selected by :class:`ClipOutOfBoundsWrapper`."""
 
     def __init__(self, env: ParallelEnv[AgentID, ObsType, Any]):
-        assert isinstance(env, ParallelEnv), (
-            "ClipOutOfBoundsParallelV1 is only compatible with parallel environments."
-        )
         super().__init__(env)
         assert all(
             isinstance(self.action_space(agent), Box)
             for agent in getattr(self, "possible_agents", [])
-        ), "should only use ClipOutOfBoundsParallelV1 for Box spaces"
+        ), "should only use ClipOutOfBoundsWrapper for Box spaces"
 
     @override
     def step(
@@ -93,25 +89,27 @@ class ClipOutOfBoundsParallelV1(BaseParallelWrapper[AgentID, ObsType, Any]):
         for agent, action in actions.items():
             space = self.action_space(agent)
             assert isinstance(space, Box), (
-                "should only use ClipOutOfBoundsParallelV1 for Box spaces"
+                "should only use ClipOutOfBoundsWrapper for Box spaces"
             )
-            if space.contains(action):
-                clipped_actions[agent] = action
-                continue
-
-            action_array = np.asarray(action)
-            if np.isnan(action_array).any():
-                EnvLogger.error_nan_action()
-            assert space.shape == action_array.shape, (
-                f"action should have shape {space.shape}, has shape {action_array.shape}"
-            )
-            EnvLogger.warn_action_out_of_bound(
-                action=action, action_space=space, backup_policy="clipping to space"
-            )
-            clipped_actions[agent] = np.clip(action_array, space.low, space.high)
+            clipped_actions[agent] = _clip_action(action, space)
 
         return self.env.step(clipped_actions)
 
     @override
     def __str__(self) -> str:
-        return f"ClipOutOfBoundsParallelV1<{self.env!s}>"
+        return str(self.env)
+
+
+def _clip_action(action: Any, space: Box) -> Any:
+    if space.contains(action):
+        return action
+    action_array = np.asarray(action)
+    if np.isnan(action_array).any():
+        EnvLogger.error_nan_action()
+    assert space.shape == action_array.shape, (
+        f"action should have shape {space.shape}, has shape {action_array.shape}"
+    )
+    EnvLogger.warn_action_out_of_bound(
+        action=action, action_space=space, backup_policy="clipping to space"
+    )
+    return np.clip(action_array, space.low, space.high)

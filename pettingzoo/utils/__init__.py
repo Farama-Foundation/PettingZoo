@@ -13,7 +13,6 @@ from pettingzoo.utils.wrappers import (
     BaseParallelWrapper,
     BaseWrapper,
     CaptureStdoutWrapper,
-    ClipOutOfBoundsParallelV1,
     ClipOutOfBoundsWrapper,
     OrderEnforcingWrapper,
     TerminateIllegalWrapper,
