@@ -8,7 +8,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Creation             | `make("aec", "butterfly/cooperative_pong-v6")`         |
+| Creation             | `make("aec", "butterfly/cooperative_pong-v7")`         |
 |----------------------|--------------------------------------------------------|
 | Actions              | Discrete                                               |
 | Parallel API         | Yes                                                    |
@@ -38,7 +38,7 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 ```python
 from pettingzoo import make
 
-make("aec", "butterfly/cooperative_pong-v6",
+make("aec", "butterfly/cooperative_pong-v7",
     ball_speed = 9,
     left_paddle_speed = 12,
     right_paddle_speed = 12,
@@ -78,6 +78,7 @@ make("aec", "butterfly/cooperative_pong-v6",
 
 ### Version History
 
+* v7: Fixed incorrect ball bounce physics against the paddles and the top/bottom walls (1.26.1)
 * v6: Fixed incorrect termination condition and random bounce behaviour (1.25.5)
 * v5: Fixed ball teleporting bugs
 * v4: Added max_reward and off_screen_penalty arguments and changed default, fixed glitch where ball would occasionally teleport, reward redesign (1.14.0)
@@ -447,7 +448,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "cooperative_pong_v6",
+        "name": "cooperative_pong_v7",
         "is_parallelizable": True,
         "render_fps": FPS,
         "has_manual_policy": True,
