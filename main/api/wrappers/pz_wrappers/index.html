@@ -502,6 +502,7 @@ environment’s reset and step return values.</p>
     <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>BlackDeathParallelV4 keeps the agents present at reset visible until the underlying episode finishes. After an agent leaves, later steps use a zero observation, zero reward, and empty info for that agent, and actions for it are ignored. Early termination/truncation flags are held back while the wrapped agent set remains active; on the final step, each agent’s original termination versus truncation cause is reported. Environments that add new agents after reset are not supported.</p>
 <section id="replacing-nan-actions-with-a-random-action">
 <h3>Replacing NaN actions with a random action<a class="headerlink" href="#replacing-nan-actions-with-a-random-action" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">NanRandomV1</span></code> (AEC) and <code class="docutils literal notranslate"><span class="pre">NanRandomParallelV1</span></code> (Parallel) replace numeric actions containing a NaN with a random action from the acting agent’s own action space and emit a warning. If the agent has an <code class="docutils literal notranslate"><span class="pre">action_mask</span></code>, in its dictionary observation or otherwise in its info, the replacement is drawn only from the actions the mask allows. Masks are supported for <code class="docutils literal notranslate"><span class="pre">Discrete</span></code> action spaces; a mask with the wrong shape, values other than 0 and 1, or no allowed action raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Replacements come from the wrapper’s own RNG, which <code class="docutils literal notranslate"><span class="pre">reset(seed=...)</span></code> reseeds, so seeded runs are reproducible.</p>
@@ -524,6 +525,29 @@ environment’s reset and step return values.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">BaseWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/base/#BaseWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.BaseWrapper" title="Link to this definition">¶</a></dt>
 <dd><p>Creates a wrapper around <cite>env</cite> parameter.</p>
 <p>All AECEnv wrappers should inherit from this base class</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.BlackDeathParallelV4">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">BlackDeathParallelV4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/black_death/#BlackDeathParallelV4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.BlackDeathParallelV4" title="Link to this definition">¶</a></dt>
+<dd><p>Keep the reset-time agent set visible until the whole episode ends.</p>
+<p>When an agent leaves the wrapped environment early, subsequent steps expose
+a zero-valued observation with the same shape and dtype as that agent’s Box
+observation space, zero reward, and an empty info dictionary. Actions for
+departed agents are ignored and only actions for currently active wrapped
+agents are forwarded.</p>
+<p>To keep the public agent set stable, an early departure is reported as
+terminated=False and truncated=False until the underlying episode ends.
+The wrapper remembers the original cause of each departure and reports those
+per-agent termination and truncation flags on the final step instead of
+collapsing both causes into one done flag.</p>
+<p>Agents that appear after reset are not supported because they would change
+the fixed agent set exposed by this wrapper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env</strong> – The Parallel environment to wrap.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -1199,6 +1223,7 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#utility-wrappers">Utility Wrappers</a><ul>
 <li><a class="reference internal" href="#replacing-nan-actions-with-a-random-action">Replacing NaN actions with a random action</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BaseWrapper"><code class="docutils literal notranslate"><span class="pre">BaseWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.BlackDeathParallelV4"><code class="docutils literal notranslate"><span class="pre">BlackDeathParallelV4</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.TerminateIllegalWrapper"><code class="docutils literal notranslate"><span class="pre">TerminateIllegalWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.CaptureStdoutWrapper"><code class="docutils literal notranslate"><span class="pre">CaptureStdoutWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AssertOutOfBoundsWrapper"><code class="docutils literal notranslate"><span class="pre">AssertOutOfBoundsWrapper</span></code></a></li>
