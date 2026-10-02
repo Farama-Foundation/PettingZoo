@@ -156,7 +156,26 @@ While not required by the base API, most downstream wrappers and utilities depen
 
 `state()`: Returns a global observation of the current state of the environment. Not all environments will support this feature.
 
-`state_space`: The space of a global observation of the environment. Not all environments will support this feature.
+`state_space`: The space of a global observation of the environment. Not all environments will support this feature. The state can use any Gymnasium space, including structured spaces such as `Dict`; it does not have to be a NumPy array.
+
+For example, a custom environment can expose a structured global state:
+
+```python
+import gymnasium
+import numpy as np
+
+self.state_space = gymnasium.spaces.Dict(
+    {
+        "positions": gymnasium.spaces.Box(
+            low=-1.0, high=1.0, shape=(4, 2), dtype=np.float32
+        ),
+        "phase": gymnasium.spaces.Discrete(3),
+    }
+)
+
+def state(self):
+    return {"positions": self.positions.copy(), "phase": self.phase}
+```
 
 ## Notable Idioms
 
