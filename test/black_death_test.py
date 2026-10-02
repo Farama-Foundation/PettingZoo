@@ -10,7 +10,6 @@ from pettingzoo.test import parallel_api_test
 from pettingzoo.utils.env import ParallelEnv
 from pettingzoo.utils.wrappers import BlackDeathParallelV4
 
-
 AGENTS = ["agent_0", "agent_1", "agent_2"]
 
 
@@ -56,9 +55,7 @@ class EarlyDepartureParallel(ParallelEnv[str, np.ndarray, int]):
         self.received_actions = dict(actions)
 
         if self.step_count == 0:
-            observations = {
-                agent: self._observation(agent) for agent in self.agents
-            }
+            observations = {agent: self._observation(agent) for agent in self.agents}
             rewards = {"agent_0": -1.0, "agent_1": 1.0, "agent_2": 2.0}
             terminations = {"agent_0": True, "agent_1": False, "agent_2": False}
             truncations = dict.fromkeys(self.agents, False)
@@ -69,9 +66,7 @@ class EarlyDepartureParallel(ParallelEnv[str, np.ndarray, int]):
             }
             self.agents = ["agent_1", "agent_2"]
         else:
-            observations = {
-                agent: self._observation(agent) for agent in self.agents
-            }
+            observations = {agent: self._observation(agent) for agent in self.agents}
             rewards = {"agent_1": 3.0, "agent_2": 4.0}
             if self.final_truncates:
                 terminations = dict.fromkeys(self.agents, False)

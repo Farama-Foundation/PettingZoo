@@ -13,9 +13,7 @@ from pettingzoo.utils.env import ActionType, AgentID, ParallelEnv
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 
-def _box_observation_space(
-    space: gymnasium.spaces.Space[Any], agent: AgentID
-) -> Box:
+def _box_observation_space(space: gymnasium.spaces.Space[Any], agent: AgentID) -> Box:
     """Return a Box observation space or raise a clear compatibility error."""
     if not isinstance(space, Box):
         raise TypeError(
@@ -74,9 +72,7 @@ class BlackDeathParallelV4(BaseParallelWrapper[AgentID, Any, ActionType]):
 
         return (
             {
-                agent: observations.get(
-                    agent, self._zero_observations[agent].copy()
-                )
+                agent: observations.get(agent, self._zero_observations[agent].copy())
                 for agent in self._episode_agents
             },
             {agent: infos.get(agent, {}) for agent in self._episode_agents},
