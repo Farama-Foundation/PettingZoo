@@ -10,7 +10,7 @@ import numpy as np
 from gymnasium.spaces import Box, Discrete
 from typing_extensions import override
 
-from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ObsType, ParallelEnv
+from pettingzoo.utils.env import ActionType, AECEnv, AgentID, ParallelEnv
 from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
@@ -152,8 +152,12 @@ def _check_possible_agents(stacker: _FrameStacker[Any], env: Any) -> None:
         stacker.observation_space(agent)
 
 
-class FrameStackV3(BaseWrapper[AgentID, Any, ActionType]):
+class FrameStackV3:
     """Stacks each agent's last ``stack_size`` observations into one observation.
+
+    Works on both AEC and parallel environments: ``FrameStackV3(env)`` returns an
+    AEC wrapper for an ``AECEnv`` and a parallel wrapper for a ``ParallelEnv``, and
+    either one is an instance of ``FrameStackV3``.
 
     Box observations with 1, 2 or 3 dimensions are stacked as in SuperSuit: 1D
     frames are concatenated, 2D frames get a new last (``stack_dim=-1``) or first
@@ -169,33 +173,59 @@ class FrameStackV3(BaseWrapper[AgentID, Any, ActionType]):
     the Box bounds are widened to include 0. The version suffix continues SuperSuit's
     numbering.
 
-    An agent's history advances at the start of each of its turns, after ``reset`` or
-    ``step``, so ``observe`` never changes it: reading an observation any number of
-    times, or reading another agent's, returns the same stack until the next turn.
-    Histories are per agent and cleared on ``reset``. An agent that has not had a
-    turn yet sees the stack its current observation would start. An agent's history
-    is dropped when it leaves ``agents``, so an agent that comes back starts fresh.
+    Histories are per agent and cleared on ``reset``. When a history advances:
 
-    :param env: The AEC environment to wrap.
+    * AEC: at the start of each of the agent's turns, after ``reset`` or ``step``, so
+      ``observe`` never changes it. Reading an observation any number of times, or
+      reading another agent's, returns the same stack until the next turn. An agent
+      that has not had a turn yet sees the stack its current observation would start.
+      An agent's history is dropped when it leaves ``agents``.
+    * Parallel: each time ``reset`` or ``step`` returns an observation for the agent.
+      An agent's history is dropped once a step returns no observation for it.
+
+    Either way, an agent that comes back starts a fresh history.
+
+    :param env: The AEC or parallel environment to wrap.
     :param stack_size: How many observations to stack. Must be a positive int.
     :param stack_dim: The axis to stack along, ``-1`` (last) or ``0`` (first).
     :param initial: ``"first_obs"`` or ``"zeros"``, what fills the history at first.
     """
 
+    env: Any
+    stack_size: int
+    stack_dim: int
+    initial: str
+
+    def __new__(
+        cls,
+        env: AECEnv[Any, Any, Any] | ParallelEnv[Any, Any, Any] | None = None,
+        stack_size: int = 4,
+        stack_dim: int = -1,
+        initial: str = "first_obs",
+    ) -> FrameStackV3:
+        # Unpickling calls this with no arguments, already on the right class.
+        if cls is not FrameStackV3:
+            return super().__new__(cls)
+        if isinstance(env, AECEnv):
+            return super().__new__(_FrameStackAEC)
+        if isinstance(env, ParallelEnv):
+            return super().__new__(_FrameStackParallel)
+        raise TypeError(
+            f"FrameStackV3 wraps an AECEnv or a ParallelEnv, got {type(env).__name__}."
+        )
+
     def __init__(
         self,
-        env: AECEnv[AgentID, ObsType, ActionType],
+        env: AECEnv[Any, Any, Any] | ParallelEnv[Any, Any, Any],
         stack_size: int = 4,
         stack_dim: int = -1,
         initial: str = "first_obs",
     ):
-        assert isinstance(env, AECEnv), (
-            "FrameStackV3 is only compatible with AEC environments, "
-            "use FrameStackParallelV3 instead."
-        )
-        super().__init__(env)
-        self._stacker = _FrameStacker(
-            type(self).__name__,
+        # BaseWrapper or BaseParallelWrapper, whichever the subclass also inherits.
+        # The type checker only sees object.__init__ here.
+        super().__init__(env)  # ty: ignore[too-many-positional-arguments]
+        self._stacker: _FrameStacker[Any] = _FrameStacker(
+            "FrameStackV3",
             self.env.observation_space,
             stack_size,
             stack_dim,
@@ -204,12 +234,19 @@ class FrameStackV3(BaseWrapper[AgentID, Any, ActionType]):
         self.stack_size = self._stacker.stack_size
         self.stack_dim = self._stacker.stack_dim
         self.initial = self._stacker.initial
-        self._history: dict[AgentID, deque[Any]] = {}
+        self._history: dict[Any, deque[Any]] = {}
         _check_possible_agents(self._stacker, env)
 
-    @override
-    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
+    def observation_space(self, agent: Any) -> gymnasium.spaces.Space[Any]:
         return self._stacker.observation_space(agent)
+
+    @override
+    def __str__(self) -> str:
+        return f"FrameStackV3<{self.env!s}>"
+
+
+class _FrameStackAEC(FrameStackV3, BaseWrapper[AgentID, Any, ActionType]):
+    """The AEC implementation of :class:`FrameStackV3`."""
 
     def _record(self, agent: AgentID) -> None:
         """Add an agent's current observation to its history.
@@ -258,67 +295,9 @@ class FrameStackV3(BaseWrapper[AgentID, Any, ActionType]):
             history = self._stacker.new_history(agent, self._stacker.frame(agent, obs))
         return self._stacker.build(agent, history)
 
-    @override
-    def __str__(self) -> str:
-        return f"FrameStackV3<{self.env!s}>"
 
-
-class FrameStackParallelV3(BaseParallelWrapper[AgentID, Any, ActionType]):
-    """Stacks each agent's last ``stack_size`` observations into one observation.
-
-    Box observations with 1, 2 or 3 dimensions are stacked as in SuperSuit: 1D
-    frames are concatenated, 2D frames get a new last (``stack_dim=-1``) or first
-    (``stack_dim=0``) axis, and 3D frames are concatenated along the last or first
-    (channel) axis. A ``Discrete(n)`` observation becomes one ``Discrete(n**stack_size)``
-    observation with the newest frame as the least significant base-``n`` digit
-    (each digit is the observation minus the space's ``start``).
-    The observation space is updated to match and keeps the dtype.
-
-    ``initial`` says what fills the history before an agent has ``stack_size`` frames:
-    ``"first_obs"`` repeats the agent's first observation (SuperSuit's frame_stack_v2)
-    and ``"zeros"`` fills it with zeros (SuperSuit's frame_stack_v1). In ``"zeros"`` mode
-    the Box bounds are widened to include 0. The version suffix continues SuperSuit's
-    numbering.
-
-    An agent's history advances each time ``reset`` or ``step`` returns an observation
-    for it. Histories are per agent and cleared on ``reset``. An agent's history starts
-    with the first observation returned for it, and is dropped once a step returns no
-    observation for it, so an agent that comes back starts fresh.
-
-    :param env: The parallel environment to wrap.
-    :param stack_size: How many observations to stack. Must be a positive int.
-    :param stack_dim: The axis to stack along, ``-1`` (last) or ``0`` (first).
-    :param initial: ``"first_obs"`` or ``"zeros"``, what fills the history at first.
-    """
-
-    def __init__(
-        self,
-        env: ParallelEnv[AgentID, ObsType, ActionType],
-        stack_size: int = 4,
-        stack_dim: int = -1,
-        initial: str = "first_obs",
-    ):
-        assert isinstance(env, ParallelEnv), (
-            "FrameStackParallelV3 is only compatible with parallel environments, "
-            "use FrameStackV3 instead."
-        )
-        super().__init__(env)
-        self._stacker = _FrameStacker(
-            type(self).__name__,
-            self.env.observation_space,
-            stack_size,
-            stack_dim,
-            initial,
-        )
-        self.stack_size = self._stacker.stack_size
-        self.stack_dim = self._stacker.stack_dim
-        self.initial = self._stacker.initial
-        self._history: dict[AgentID, deque[Any]] = {}
-        _check_possible_agents(self._stacker, env)
-
-    @override
-    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space[Any]:
-        return self._stacker.observation_space(agent)
+class _FrameStackParallel(FrameStackV3, BaseParallelWrapper[AgentID, Any, ActionType]):
+    """The parallel implementation of :class:`FrameStackV3`."""
 
     def _stack_observations(
         self, observations: dict[AgentID, Any]
@@ -364,7 +343,3 @@ class FrameStackParallelV3(BaseParallelWrapper[AgentID, Any, ActionType]):
             truncations,
             infos,
         )
-
-    @override
-    def __str__(self) -> str:
-        return f"FrameStackParallelV3<{self.env!s}>"

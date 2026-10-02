@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import pickle
 
 import numpy as np
 import pytest
@@ -13,7 +14,7 @@ from pettingzoo.test.example_envs import (
 )
 from pettingzoo.utils.conversions import parallel_to_aec
 from pettingzoo.utils.env import AECEnv, ParallelEnv
-from pettingzoo.utils.wrappers import FrameStackParallelV3, FrameStackV3
+from pettingzoo.utils.wrappers import FrameStackV3
 
 AGENTS = ["agent_0", "agent_1"]
 MAX_CYCLES = 6
@@ -276,7 +277,7 @@ def test_box_space_shape_and_dtype(initial, dims, stack_dim, dtype):
     shape = SHAPES[dims][stack_dim]
     for env in (
         FrameStackV3(DummyAEC(shape, dtype), 3, stack_dim, initial),
-        FrameStackParallelV3(DummyParallel(shape, dtype), 3, stack_dim, initial),
+        FrameStackV3(DummyParallel(shape, dtype), 3, stack_dim, initial),
     ):
         space = env.observation_space("agent_0")
         assert isinstance(space, Box)
@@ -309,7 +310,7 @@ def test_aec_matches_hand_computed_stack(initial, dims, stack_dim, stack_size):
 @pytest.mark.parametrize("initial", INITIALS)
 def test_parallel_matches_hand_computed_stack(initial, dims, stack_dim, stack_size):
     shape = SHAPES[dims][stack_dim]
-    env = FrameStackParallelV3(DummyParallel(shape), stack_size, stack_dim, initial)
+    env = FrameStackV3(DummyParallel(shape), stack_size, stack_dim, initial)
     obs, _ = env.reset(seed=0)
     for frame in range(MAX_CYCLES):
         if frame > 0:
@@ -427,7 +428,7 @@ def test_reset_clears_history(initial):
 
 @pytest.mark.parametrize("initial", INITIALS)
 def test_parallel_reset_clears_history(initial):
-    env = FrameStackParallelV3(DummyParallel(), 3, initial=initial)
+    env = FrameStackV3(DummyParallel(), 3, initial=initial)
     env.reset(seed=0)
     for _ in range(3):
         env.step(dict.fromkeys(env.agents, 0))
@@ -450,7 +451,7 @@ def test_agent_without_a_turn_yet_sees_the_stack_its_first_turn_starts(initial):
 
 @pytest.mark.parametrize("initial", INITIALS)
 def test_parallel_agent_leaving_and_coming_back_starts_fresh(initial):
-    env = FrameStackParallelV3(RejoinParallel(), 3, initial=initial)
+    env = FrameStackV3(RejoinParallel(), 3, initial=initial)
     obs, _ = env.reset(seed=0)
     for frame in range(1, MAX_CYCLES):
         obs, _, _, _, _ = env.step(dict.fromkeys(env.agents, 0))
@@ -525,7 +526,7 @@ def test_rejects_unsupported_spaces(space, match):
     with pytest.raises(ValueError, match=match):
         FrameStackV3(Env(), 2)
     with pytest.raises(ValueError, match=match):
-        FrameStackParallelV3(ParEnv(), 2)
+        FrameStackV3(ParEnv(), 2)
 
 
 def test_rejects_dict_observations_from_generated_agents():
@@ -540,7 +541,7 @@ def test_rejects_bad_stack_size(stack_size):
     with pytest.raises((TypeError, ValueError)):
         FrameStackV3(DummyAEC(), stack_size)
     with pytest.raises((TypeError, ValueError)):
-        FrameStackParallelV3(DummyParallel(), stack_size)
+        FrameStackV3(DummyParallel(), stack_size)
 
 
 @pytest.mark.parametrize("stack_dim", [1, 2, -2, -1.0, None, True, False])
@@ -548,7 +549,7 @@ def test_rejects_bad_stack_dim(stack_dim):
     with pytest.raises(ValueError, match="stack_dim"):
         FrameStackV3(DummyAEC(), 2, stack_dim)
     with pytest.raises(ValueError, match="stack_dim"):
-        FrameStackParallelV3(DummyParallel(), 2, stack_dim)
+        FrameStackV3(DummyParallel(), 2, stack_dim)
 
 
 @pytest.mark.parametrize("initial", ["first", "zero", None, "v1"])
@@ -556,21 +557,36 @@ def test_rejects_bad_initial(initial):
     with pytest.raises(ValueError, match="initial"):
         FrameStackV3(DummyAEC(), 2, initial=initial)
     with pytest.raises(ValueError, match="initial"):
-        FrameStackParallelV3(DummyParallel(), 2, initial=initial)
+        FrameStackV3(DummyParallel(), 2, initial=initial)
 
 
-def test_rejects_mismatched_env_type():
-    with pytest.raises(AssertionError):
-        FrameStackV3(DummyParallel(), 2)
-    with pytest.raises(AssertionError):
-        FrameStackParallelV3(DummyAEC(), 2)
+def test_one_wrapper_for_both_apis():
+    aec = FrameStackV3(DummyAEC(), 2)
+    par = FrameStackV3(DummyParallel(), 2)
+    assert isinstance(aec, FrameStackV3) and isinstance(aec, AECEnv)
+    assert not isinstance(aec, ParallelEnv)
+    assert isinstance(par, FrameStackV3) and isinstance(par, ParallelEnv)
+    assert not isinstance(par, AECEnv)
+
+
+@pytest.mark.parametrize("env", [None, object(), "env", DummyAEC])
+def test_rejects_things_that_are_not_envs(env):
+    with pytest.raises(TypeError, match="AECEnv or a ParallelEnv"):
+        FrameStackV3(env, 2)
+
+
+@pytest.mark.parametrize("make_env", [DummyAEC, DummyParallel])
+def test_pickle_round_trip(make_env):
+    env = FrameStackV3(make_env(), 3, 0, "zeros")
+    copy = pickle.loads(pickle.dumps(env))
+    assert type(copy) is type(env)
+    assert (copy.stack_size, copy.stack_dim, copy.initial) == (3, 0, "zeros")
+    assert copy.observation_space("agent_0") == env.observation_space("agent_0")
 
 
 def test_str():
     assert str(FrameStackV3(DummyAEC(), 2)).startswith("FrameStackV3<")
-    assert str(FrameStackParallelV3(DummyParallel(), 2)).startswith(
-        "FrameStackParallelV3<"
-    )
+    assert str(FrameStackV3(DummyParallel(), 2)).startswith("FrameStackV3<")
 
 
 @pytest.mark.parametrize("initial", INITIALS)
@@ -604,8 +620,8 @@ def test_aec_api_with_generated_agents(initial):
 @pytest.mark.parametrize("dims", SHAPES)
 def test_parallel_api(dims, stack_dim, initial):
     env = DummyParallel(SHAPES[dims][stack_dim])
-    parallel_api_test(FrameStackParallelV3(env, 3, stack_dim, initial), num_cycles=10)
+    parallel_api_test(FrameStackV3(env, 3, stack_dim, initial), num_cycles=10)
 
 
 def test_parallel_api_with_leaving_agents():
-    parallel_api_test(FrameStackParallelV3(LeavingParallel(), 3), num_cycles=10)
+    parallel_api_test(FrameStackV3(LeavingParallel(), 3), num_cycles=10)

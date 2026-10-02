@@ -143,7 +143,6 @@ while parallel_env.agents:
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
 .. autoclass:: FrameStackV3
-.. autoclass:: FrameStackParallelV3
 .. autoclass:: MaxObservationV1
 .. autoclass:: MaxObservationParallelV1
 .. autoclass:: PadActionSpaceV1
