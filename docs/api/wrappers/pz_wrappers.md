@@ -107,14 +107,17 @@ while parallel_env.agents:
     :class:`AgentIndicatorParallelV1`. To apply an AEC-only wrapper to a Parallel
     environment, convert it to AEC, apply the wrapper, and convert it back.
 ```
+
+`ClipOutOfBoundsWrapper` supports both APIs through the same constructor. It clips
+each Parallel agent's action to that agent's Box bounds and preserves the
+environment's reset and step return values.
+
 ```python
 from pettingzoo import make
 from pettingzoo.utils import ClipOutOfBoundsWrapper
-from pettingzoo.utils import aec_to_parallel
 
-parallel_env = make("aec", "sisl/multiwalker-v9", render_mode="human")
+parallel_env = make("parallel", "sisl/multiwalker-v9", render_mode="human")
 parallel_env = ClipOutOfBoundsWrapper(parallel_env)
-parallel_env = aec_to_parallel(parallel_env)
 
 observations, infos = parallel_env.reset()
 
@@ -122,6 +125,8 @@ while parallel_env.agents:
     actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 ```
+
+BlackDeathParallelV4 keeps the agents present at reset visible until the underlying episode finishes. After an agent leaves, later steps use a zero observation, zero reward, and empty info for that agent, and actions for it are ignored. Early termination/truncation flags are held back while the wrapped agent set remains active; on the final step, each agent's original termination versus truncation cause is reported. Environments that add new agents after reset are not supported.
 
 ### Replacing NaN actions with a no-op
 
@@ -149,10 +154,32 @@ For an AEC environment, use `NanNoopV1(env, no_op_action=...)`. Its `step(None)`
 
 These classes replace SuperSuit's `nan_noop_v0` for the respective PettingZoo APIs. Supply the no-op when constructing the wrapper, then call `step` normally.
 
+### Replacing NaN actions with a random action
+
+`NanRandomV1` (AEC) and `NanRandomParallelV1` (Parallel) replace numeric actions containing a NaN with a random action from the acting agent's own action space and emit a warning. If the agent has an `action_mask`, in its dictionary observation or otherwise in its info, the replacement is drawn only from the actions the mask allows. Masks are supported for `Discrete` action spaces; a mask with the wrong shape, values other than 0 and 1, or no allowed action raises `ValueError`. Replacements come from the wrapper's own RNG, which `reset(seed=...)` reseeds, so seeded runs are reproducible.
+
+For example, every NaN below becomes a random legal Connect Four move:
+
+```python
+import numpy as np
+from pettingzoo import make
+from pettingzoo.utils.wrappers import NanRandomV1
+
+env = NanRandomV1(make("aec", "classic/connect_four-v3"))
+env.reset(seed=42)
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+    env.step(None if termination or truncation else np.nan)
+env.close()
+```
+
+Actions without NaNs pass through unchanged, even if the mask forbids them, and `step(None)` for a dead AEC agent is passed through. Action and observation spaces are unchanged. These classes replace SuperSuit's `nan_random_v0`, which looked for the mask under the key `"action mask"` and so ignored PettingZoo's `action_mask`.
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers
 
 .. autoclass:: BaseWrapper
+.. autoclass:: BlackDeathParallelV4
 .. autoclass:: TerminateIllegalWrapper
 .. autoclass:: CaptureStdoutWrapper
 .. autoclass:: AssertOutOfBoundsWrapper
@@ -162,6 +189,8 @@ These classes replace SuperSuit's `nan_noop_v0` for the respective PettingZoo AP
 .. autoclass:: OrderEnforcingWrapper
 .. autoclass:: NanNoopV1
 .. autoclass:: NanNoopParallelV1
+.. autoclass:: NanRandomV1
+.. autoclass:: NanRandomParallelV1
 .. autoclass:: NanZerosV1
 .. autoclass:: NanZerosParallelV1
 .. autoclass:: AgentIndicatorV1
