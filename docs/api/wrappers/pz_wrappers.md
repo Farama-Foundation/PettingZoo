@@ -126,6 +126,8 @@ while parallel_env.agents:
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 ```
 
+BlackDeathParallelV4 keeps the agents present at reset visible until the underlying episode finishes. After an agent leaves, later steps use a zero observation, zero reward, and empty info for that agent, and actions for it are ignored. Early termination/truncation flags are held back while the wrapped agent set remains active; on the final step, each agent's original termination versus truncation cause is reported. Environments that add new agents after reset are not supported.
+
 ### Replacing NaN actions with a random action
 
 `NanRandomV1` (AEC) and `NanRandomParallelV1` (Parallel) replace numeric actions containing a NaN with a random action from the acting agent's own action space and emit a warning. If the agent has an `action_mask`, in its dictionary observation or otherwise in its info, the replacement is drawn only from the actions the mask allows. Masks are supported for `Discrete` action spaces; a mask with the wrong shape, values other than 0 and 1, or no allowed action raises `ValueError`. Replacements come from the wrapper's own RNG, which `reset(seed=...)` reseeds, so seeded runs are reproducible.
@@ -151,6 +153,7 @@ Actions without NaNs pass through unchanged, even if the mask forbids them, and 
 .. currentmodule:: pettingzoo.utils.wrappers
 
 .. autoclass:: BaseWrapper
+.. autoclass:: BlackDeathParallelV4
 .. autoclass:: TerminateIllegalWrapper
 .. autoclass:: CaptureStdoutWrapper
 .. autoclass:: AssertOutOfBoundsWrapper
