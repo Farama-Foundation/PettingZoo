@@ -501,6 +501,23 @@ environment, convert it to AEC, apply the wrapper, and convert it back.</p>
     <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 </pre></div>
 </div>
+<section id="replacing-nan-actions-with-a-random-action">
+<h3>Replacing NaN actions with a random action<a class="headerlink" href="#replacing-nan-actions-with-a-random-action" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">NanRandomV1</span></code> (AEC) and <code class="docutils literal notranslate"><span class="pre">NanRandomParallelV1</span></code> (Parallel) replace numeric actions containing a NaN with a random action from the acting agent’s own action space and emit a warning. If the agent has an <code class="docutils literal notranslate"><span class="pre">action_mask</span></code>, in its dictionary observation or otherwise in its info, the replacement is drawn only from the actions the mask allows. Masks are supported for <code class="docutils literal notranslate"><span class="pre">Discrete</span></code> action spaces; a mask with the wrong shape, values other than 0 and 1, or no allowed action raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Replacements come from the wrapper’s own RNG, which <code class="docutils literal notranslate"><span class="pre">reset(seed=...)</span></code> reseeds, so seeded runs are reproducible.</p>
+<p>For example, every NaN below becomes a random legal Connect Four move:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NanRandomV1</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">NanRandomV1</span><span class="p">(</span><span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"classic/connect_four-v3"</span><span class="p">))</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Actions without NaNs pass through unchanged, even if the mask forbids them, and <code class="docutils literal notranslate"><span class="pre">step(None)</span></code> for a dead AEC agent is passed through. Action and observation spaces are unchanged. These classes replace SuperSuit’s <code class="docutils literal notranslate"><span class="pre">nan_random_v0</span></code>, which looked for the mask under the key <code class="docutils literal notranslate"><span class="pre">&quot;action</span> <span class="pre">mask&quot;</span></code> and so ignored PettingZoo’s <code class="docutils literal notranslate"><span class="pre">action_mask</span></code>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.BaseWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">BaseWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/base/#BaseWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.BaseWrapper" title="Link to this definition">¶</a></dt>
@@ -588,6 +605,50 @@ num_agents, agents.</p>
 render(), step(), observe(), state(), agent_iter()</p></li>
 <li><p>A warning if step() is called when there are no agents remaining.</p></li>
 </ul>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.NanRandomV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">NanRandomV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/nan_random/#NanRandomV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.NanRandomV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces a numeric action containing a NaN with a random action.</p>
+<p>The replacement is sampled from the acting agent’s action space, and a
+warning is emitted for each one. If the agent has an <code class="docutils literal notranslate"><span class="pre">action_mask</span></code>, in its
+dictionary observation or else in its info, the replacement is drawn
+uniformly from the actions the mask allows. Masks are supported for
+<code class="docutils literal notranslate"><span class="pre">Discrete</span></code> action spaces; a mask on any other space, or one with the wrong
+shape, values other than 0 and 1, or no allowed action, raises a
+<code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
+<p>Numeric scalars and arrays are supported. Actions without NaNs, and <code class="docutils literal notranslate"><span class="pre">None</span></code>
+actions for dead agents, pass through unchanged. The advertised action
+spaces are not modified.</p>
+<p>The random actions come from the wrapper’s own RNG, which <code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code>
+reseeds from the seed it is given, so a seeded reset gives reproducible
+replacements. As with <code class="docutils literal notranslate"><span class="pre">StickyActionV1</span></code>, <code class="docutils literal notranslate"><span class="pre">reset(seed=None)</span></code> starts a fresh
+unseeded stream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env</strong> – The AEC environment to wrap.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.NanRandomParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">NanRandomParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/nan_random/#NanRandomParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.NanRandomParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces each numeric action containing a NaN with a random action.</p>
+<p>Each supplied action is checked independently. A replacement is sampled from
+that agent’s action space, restricted to its <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> when the
+agent’s latest dictionary observation or else its latest info has one, and a
+warning is emitted for each replacement. Masks follow the same rules as in
+<a class="reference internal" href="#pettingzoo.utils.wrappers.NanRandomV1" title="pettingzoo.utils.wrappers.NanRandomV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">NanRandomV1</span></code></a>.</p>
+<p>Numeric scalars and arrays are supported. Actions without NaNs pass through
+unchanged, and the input dictionary is not modified. The advertised action
+spaces are not modified. Seeding works as in <a class="reference internal" href="#pettingzoo.utils.wrappers.NanRandomV1" title="pettingzoo.utils.wrappers.NanRandomV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">NanRandomV1</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env</strong> – The parallel environment to wrap.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -1045,6 +1106,7 @@ in the interval [0, 1).</p></li>
 
 </section>
 </section>
+</section>
 
           </article>
         </div>
@@ -1128,6 +1190,7 @@ in the interval [0, 1).</p></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#utility-wrappers">Utility Wrappers</a><ul>
+<li><a class="reference internal" href="#replacing-nan-actions-with-a-random-action">Replacing NaN actions with a random action</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BaseWrapper"><code class="docutils literal notranslate"><span class="pre">BaseWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.TerminateIllegalWrapper"><code class="docutils literal notranslate"><span class="pre">TerminateIllegalWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.CaptureStdoutWrapper"><code class="docutils literal notranslate"><span class="pre">CaptureStdoutWrapper</span></code></a></li>
@@ -1136,6 +1199,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardParallelV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper"><code class="docutils literal notranslate"><span class="pre">OrderEnforcingWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanRandomV1"><code class="docutils literal notranslate"><span class="pre">NanRandomV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanRandomParallelV1"><code class="docutils literal notranslate"><span class="pre">NanRandomParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanZerosV1"><code class="docutils literal notranslate"><span class="pre">NanZerosV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanZerosParallelV1"><code class="docutils literal notranslate"><span class="pre">NanZerosParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorV1</span></code></a></li>
@@ -1158,6 +1223,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ScaleActionParallelV1"><code class="docutils literal notranslate"><span class="pre">ScaleActionParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.StickyActionV1"><code class="docutils literal notranslate"><span class="pre">StickyActionV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.StickyActionParallelV1"><code class="docutils literal notranslate"><span class="pre">StickyActionParallelV1</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
