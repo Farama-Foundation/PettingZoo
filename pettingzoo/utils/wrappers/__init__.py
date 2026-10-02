@@ -5,6 +5,7 @@ from pettingzoo.utils.wrappers.agent_indicator import (
 from pettingzoo.utils.wrappers.assert_out_of_bounds import AssertOutOfBoundsWrapper
 from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
+from pettingzoo.utils.wrappers.black_death import BlackDeathParallelV4
 from pettingzoo.utils.wrappers.capture_stdout import CaptureStdoutWrapper
 from pettingzoo.utils.wrappers.clip_out_of_bounds import ClipOutOfBoundsWrapper
 from pettingzoo.utils.wrappers.clip_reward import ClipRewardParallelV1, ClipRewardV1
@@ -22,6 +23,7 @@ from pettingzoo.utils.wrappers.max_observation import (
 )
 from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
+from pettingzoo.utils.wrappers.nan_random import NanRandomParallelV1, NanRandomV1
 from pettingzoo.utils.wrappers.nan_zeros import NanZerosParallelV1, NanZerosV1
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
 from pettingzoo.utils.wrappers.pad_action_space import (
@@ -58,6 +60,7 @@ __all__ = [
     "AssertOutOfBoundsWrapper",
     "BaseParallelWrapper",
     "BaseWrapper",
+    "BlackDeathParallelV4",
     "CaptureStdoutWrapper",
     "ClipOutOfBoundsWrapper",
     "ClipRewardParallelV1",
@@ -70,6 +73,8 @@ __all__ = [
     "MaxObservationV1",
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
+    "NanRandomParallelV1",
+    "NanRandomV1",
     "NanZerosParallelV1",
     "NanZerosV1",
     "OrderEnforcingWrapper",
