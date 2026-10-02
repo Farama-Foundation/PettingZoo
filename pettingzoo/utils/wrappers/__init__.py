@@ -22,6 +22,7 @@ from pettingzoo.utils.wrappers.max_observation import (
 )
 from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
+from pettingzoo.utils.wrappers.nan_random import NanRandomParallelV1, NanRandomV1
 from pettingzoo.utils.wrappers.nan_zeros import NanZerosParallelV1, NanZerosV1
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
 from pettingzoo.utils.wrappers.pad_action_space import (
@@ -70,6 +71,8 @@ __all__ = [
     "MaxObservationV1",
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
+    "NanRandomParallelV1",
+    "NanRandomV1",
     "NanZerosParallelV1",
     "NanZerosV1",
     "OrderEnforcingWrapper",

@@ -123,6 +123,27 @@ while parallel_env.agents:
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 ```
 
+### Replacing NaN actions with a random action
+
+`NanRandomV1` (AEC) and `NanRandomParallelV1` (Parallel) replace numeric actions containing a NaN with a random action from the acting agent's own action space and emit a warning. If the agent has an `action_mask`, in its dictionary observation or otherwise in its info, the replacement is drawn only from the actions the mask allows. Masks are supported for `Discrete` action spaces; a mask with the wrong shape, values other than 0 and 1, or no allowed action raises `ValueError`. Replacements come from the wrapper's own RNG, which `reset(seed=...)` reseeds, so seeded runs are reproducible.
+
+For example, every NaN below becomes a random legal Connect Four move:
+
+```python
+import numpy as np
+from pettingzoo import make
+from pettingzoo.utils.wrappers import NanRandomV1
+
+env = NanRandomV1(make("aec", "classic/connect_four-v3"))
+env.reset(seed=42)
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+    env.step(None if termination or truncation else np.nan)
+env.close()
+```
+
+Actions without NaNs pass through unchanged, even if the mask forbids them, and `step(None)` for a dead AEC agent is passed through. Action and observation spaces are unchanged. These classes replace SuperSuit's `nan_random_v0`, which looked for the mask under the key `"action mask"` and so ignored PettingZoo's `action_mask`.
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers
 
@@ -134,6 +155,8 @@ while parallel_env.agents:
 .. autoclass:: ClipRewardV1
 .. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: NanRandomV1
+.. autoclass:: NanRandomParallelV1
 .. autoclass:: NanZerosV1
 .. autoclass:: NanZerosParallelV1
 .. autoclass:: AgentIndicatorV1
