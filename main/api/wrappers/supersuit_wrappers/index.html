@@ -412,6 +412,7 @@
 <dt class="sig sig-object py" id="clip_actions_v0">
 <span class="sig-name descname"><span class="pre">clip_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clip_actions_v0" title="Link to this definition">¶</a></dt>
 <dd><p>Clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.</p>
+<p>PettingZoo provides the native <a class="reference internal" href="../pz_wrappers/#pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper" title="pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClipOutOfBoundsWrapper</span></code></a> for both AEC and Parallel environments. Unlike <code class="docutils literal notranslate"><span class="pre">clip_actions_v0</span></code>, it warns when clipping and rejects NaN actions.</p>
 </dd></dl>
 
 <dl class="py function">
