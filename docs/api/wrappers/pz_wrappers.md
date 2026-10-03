@@ -199,6 +199,7 @@ Actions without NaNs pass through unchanged, even if the mask forbids them, and 
 .. autoclass:: ColorReductionObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
+.. autoclass:: FrameStackV3
 .. autoclass:: MaxObservationV1
 .. autoclass:: MaxObservationParallelV1
 .. autoclass:: PadActionSpaceV1
