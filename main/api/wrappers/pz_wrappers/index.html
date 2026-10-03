@@ -503,6 +503,28 @@ environment’s reset and step return values.</p>
 </pre></div>
 </div>
 <p>BlackDeathParallelV4 keeps the agents present at reset visible until the underlying episode finishes. After an agent leaves, later steps use a zero observation, zero reward, and empty info for that agent, and actions for it are ignored. Early termination/truncation flags are held back while the wrapped agent set remains active; on the final step, each agent’s original termination versus truncation cause is reported. Environments that add new agents after reset are not supported.</p>
+<section id="replacing-nan-actions-with-a-no-op">
+<h3>Replacing NaN actions with a no-op<a class="headerlink" href="#replacing-nan-actions-with-a-no-op" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">NanNoopV1</span></code> (AEC) and <code class="docutils literal notranslate"><span class="pre">NanNoopParallelV1</span></code> (Parallel) replace numeric actions containing a NaN with a caller-supplied no-op and emit a warning. They use the same no-op value for every agent, so choose a value that belongs to each affected agent’s action space. The wrapper checks known agents when constructed and checks the affected agent again before replacing an action. Incompatible no-ops raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>; replacements are copied so mutable arrays are not shared between agents or steps.</p>
+<p>For example, action <code class="docutils literal notranslate"><span class="pre">1</span></code> means stay still in discrete Pistonball:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NanNoopParallelV1</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">NanNoopParallelV1</span><span class="p">(</span>
+    <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"butterfly/pistonball-v6"</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">no_op_action</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">actions</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For an AEC environment, use <code class="docutils literal notranslate"><span class="pre">NanNoopV1(env,</span> <span class="pre">no_op_action=...)</span></code>. Its <code class="docutils literal notranslate"><span class="pre">step(None)</span></code> for a dead agent is passed through unchanged. Both wrappers preserve actions without NaNs, even if they are otherwise invalid: they do not clip actions or choose a legal action from an action mask. Action and observation spaces are unchanged.</p>
+<p>These classes replace SuperSuit’s <code class="docutils literal notranslate"><span class="pre">nan_noop_v0</span></code> for the respective PettingZoo APIs. Supply the no-op when constructing the wrapper, then call <code class="docutils literal notranslate"><span class="pre">step</span></code> normally.</p>
+</section>
 <section id="replacing-nan-actions-with-a-random-action">
 <h3>Replacing NaN actions with a random action<a class="headerlink" href="#replacing-nan-actions-with-a-random-action" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">NanRandomV1</span></code> (AEC) and <code class="docutils literal notranslate"><span class="pre">NanRandomParallelV1</span></code> (Parallel) replace numeric actions containing a NaN with a random action from the acting agent’s own action space and emit a warning. If the agent has an <code class="docutils literal notranslate"><span class="pre">action_mask</span></code>, in its dictionary observation or otherwise in its info, the replacement is drawn only from the actions the mask allows. Masks are supported for <code class="docutils literal notranslate"><span class="pre">Discrete</span></code> action spaces; a mask with the wrong shape, values other than 0 and 1, or no allowed action raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Replacements come from the wrapper’s own RNG, which <code class="docutils literal notranslate"><span class="pre">reset(seed=...)</span></code> reseeds, so seeded runs are reproducible.</p>
@@ -636,6 +658,48 @@ num_agents, agents.</p>
 render(), step(), observe(), state(), agent_iter()</p></li>
 <li><p>A warning if step() is called when there are no agents remaining.</p></li>
 </ul>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.NanNoopV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">NanNoopV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_op_action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ActionType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/nan_noop/#NanNoopV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.NanNoopV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces a numeric action containing a NaN with a supplied no-op action.</p>
+<p>A warning is emitted for each replacement. Numeric scalars and arrays are
+supported. Actions without NaNs, and <code class="docutils literal notranslate"><span class="pre">None</span></code> actions for dead agents, pass
+through unchanged. The advertised action spaces are not modified.</p>
+<p>The same caller-supplied no-op value is used for every agent. It must belong
+to each agent’s action space, including its shape and dtype, or a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>
+is raised. Known agents are checked at construction and the affected agent is
+checked on each replacement. Each replacement receives a copy of the value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>no_op_action</strong> – The no-op action, valid for all affected agents.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.NanNoopParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">NanNoopParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_op_action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ActionType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/nan_noop/#NanNoopParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.NanNoopParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces each numeric action containing a NaN with a supplied no-op action.</p>
+<p>Each supplied action is checked independently and a warning is emitted for
+each replacement. Numeric scalars and arrays are supported. Actions without
+NaNs pass through unchanged, and the input dictionary is not modified.</p>
+<p>As in <a class="reference internal" href="#pettingzoo.utils.wrappers.NanNoopV1" title="pettingzoo.utils.wrappers.NanNoopV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">NanNoopV1</span></code></a>, the same caller-supplied no-op value must be valid
+in every affected agent’s action space. Known agents are checked at
+construction and the affected agent is checked on each replacement. Each
+replacement receives a copy. The advertised action spaces are not modified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>no_op_action</strong> – The no-op action, valid for all affected agents.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -1221,6 +1285,7 @@ in the interval [0, 1).</p></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#utility-wrappers">Utility Wrappers</a><ul>
+<li><a class="reference internal" href="#replacing-nan-actions-with-a-no-op">Replacing NaN actions with a no-op</a></li>
 <li><a class="reference internal" href="#replacing-nan-actions-with-a-random-action">Replacing NaN actions with a random action</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BaseWrapper"><code class="docutils literal notranslate"><span class="pre">BaseWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BlackDeathParallelV4"><code class="docutils literal notranslate"><span class="pre">BlackDeathParallelV4</span></code></a></li>
@@ -1231,6 +1296,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ClipRewardParallelV1"><code class="docutils literal notranslate"><span class="pre">ClipRewardParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.OrderEnforcingWrapper"><code class="docutils literal notranslate"><span class="pre">OrderEnforcingWrapper</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanNoopV1"><code class="docutils literal notranslate"><span class="pre">NanNoopV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanNoopParallelV1"><code class="docutils literal notranslate"><span class="pre">NanNoopParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanRandomV1"><code class="docutils literal notranslate"><span class="pre">NanRandomV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanRandomParallelV1"><code class="docutils literal notranslate"><span class="pre">NanRandomParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.NanZerosV1"><code class="docutils literal notranslate"><span class="pre">NanZerosV1</span></code></a></li>
