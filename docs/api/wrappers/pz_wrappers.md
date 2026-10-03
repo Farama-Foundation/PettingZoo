@@ -8,6 +8,9 @@ PettingZoo includes the following types of wrappers:
 * [Conversion Wrappers](#conversion-wrappers): wrappers for converting environments between the [AEC](/api/aec/) and [Parallel](/api/parallel/) APIs
 * [Utility Wrappers](#utility-wrappers): a set of wrappers which provide convenient reusable logic, such as enforcing turn order or clipping out-of-bounds actions.
 
+Import utility wrappers from `pettingzoo.wrappers`. Existing imports from
+`pettingzoo.utils` and `pettingzoo.utils.wrappers` remain supported.
+
 ## Conversion wrappers
 
 ### AEC to Parallel
@@ -67,7 +70,7 @@ You can apply these wrappers to your environment in a similar manner to the belo
 To wrap an AEC environment:
 ```python
 from pettingzoo import make
-from pettingzoo.utils import TerminateIllegalWrapper
+from pettingzoo.wrappers import TerminateIllegalWrapper
 
 env = make("aec", "classic/tictactoe-v3")
 env = TerminateIllegalWrapper(env, illegal_reward=-1)
@@ -87,7 +90,7 @@ Note: Most AEC environments include TerminateIllegalWrapper in their initializat
 To wrap a Parallel environment.
 ```python
 from pettingzoo import make
-from pettingzoo.utils import BaseParallelWrapper
+from pettingzoo.wrappers import BaseParallelWrapper
 
 parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
 parallel_env = BaseParallelWrapper(parallel_env)
@@ -114,7 +117,7 @@ environment's reset and step return values.
 
 ```python
 from pettingzoo import make
-from pettingzoo.utils import ClipOutOfBoundsWrapper
+from pettingzoo.wrappers import ClipOutOfBoundsWrapper
 
 parallel_env = make("parallel", "sisl/multiwalker-v9", render_mode="human")
 parallel_env = ClipOutOfBoundsWrapper(parallel_env)
@@ -176,7 +179,7 @@ env.close()
 Actions without NaNs pass through unchanged, even if the mask forbids them, and `step(None)` for a dead AEC agent is passed through. Action and observation spaces are unchanged. These classes replace SuperSuit's `nan_random_v0`, which looked for the mask under the key `"action mask"` and so ignored PettingZoo's `action_mask`.
 
 ```{eval-rst}
-.. currentmodule:: pettingzoo.utils.wrappers
+.. currentmodule:: pettingzoo.wrappers
 
 .. autoclass:: BaseWrapper
 .. autoclass:: BlackDeathParallelV4
