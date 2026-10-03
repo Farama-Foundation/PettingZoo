@@ -18,7 +18,7 @@ from pettingzoo.classic import (
     texas_holdem_v4,
     tictactoe_v3,
 )
-from pettingzoo.sisl import multiwalker_v9, pursuit_v6
+from pettingzoo.sisl import multiwalker_v10, pursuit_v6
 
 pygame_envs = [
     cooperative_pong_v6,
@@ -31,7 +31,7 @@ pygame_envs = [
     rps_v2,
     texas_holdem_v4,
     tictactoe_v3,
-    multiwalker_v9,
+    multiwalker_v10,
     pursuit_v6,
 ]
 
