@@ -164,17 +164,22 @@ For example, a custom environment can expose a structured global state:
 import gymnasium
 import numpy as np
 
-self.state_space = gymnasium.spaces.Dict(
-    {
-        "positions": gymnasium.spaces.Box(
-            low=-1.0, high=1.0, shape=(4, 2), dtype=np.float32
-        ),
-        "phase": gymnasium.spaces.Discrete(3),
-    }
-)
 
-def state(self):
-    return {"positions": self.positions.copy(), "phase": self.phase}
+class StructuredStateEnv:
+    def __init__(self):
+        self.positions = np.zeros((4, 2), dtype=np.float32)
+        self.phase = 0
+        self.state_space = gymnasium.spaces.Dict(
+            {
+                "positions": gymnasium.spaces.Box(
+                    low=-1.0, high=1.0, shape=(4, 2), dtype=np.float32
+                ),
+                "phase": gymnasium.spaces.Discrete(3),
+            }
+        )
+
+    def state(self):
+        return {"positions": self.positions.copy(), "phase": self.phase}
 ```
 
 ## Notable Idioms
