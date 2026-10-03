@@ -115,9 +115,7 @@ def _check_state(env, new_state: Any, state_0: Any) -> None:
         return
 
     if np.isinf(new_state).any():
-        warnings.warn(
-            "State contains infinity (np.inf) or negative infinity (-np.inf)"
-        )
+        warnings.warn("State contains infinity (np.inf) or negative infinity (-np.inf)")
     if np.isnan(new_state).any():
         warnings.warn("State contains NaNs")
     if len(new_state.shape) > 3:
