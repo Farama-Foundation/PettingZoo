@@ -25,13 +25,13 @@ import numpy as np
 import supersuit as ss
 from stable_baselines3 import PPO
 
-from pettingzoo.sisl import multiwalker_v9
+from pettingzoo.sisl import multiwalker_v10
 
 MODEL = "multiwalker_ppo"
 
 
 def make_env(n_envs: int = 8):
-    env = multiwalker_v9.parallel_env(max_cycles=500)
+    env = multiwalker_v10.parallel_env(max_cycles=500)
     env = ss.pettingzoo_env_to_vec_env_v1(env)
     return ss.concat_vec_envs_v1(
         env, n_envs, num_cpus=1, base_class="stable_baselines3"
@@ -86,7 +86,7 @@ def render(path: str, seed: int, stride: int, scale: int) -> None:
         raise SystemExit("writing a GIF needs imageio: pip install imageio") from None
 
     model = PPO.load(MODEL)
-    env = multiwalker_v9.parallel_env(max_cycles=500, render_mode="rgb_array")
+    env = multiwalker_v10.parallel_env(max_cycles=500, render_mode="rgb_array")
     observations, _ = env.reset(seed=seed)
     inner = env.unwrapped.env
     start_x = float(inner.package.position[0])
