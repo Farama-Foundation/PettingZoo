@@ -194,29 +194,19 @@ def test_parallel_env(
 class _DictStateAEC(BaseWrapper):
     def __init__(self, env: AECEnv):
         super().__init__(env)
-        self.state_space = gymnasium.spaces.Dict(
-            {
-                "base": env.state_space,
-                "agent_count": gymnasium.spaces.Discrete(env.max_num_agents + 1),
-            }
-        )
+        self.state_space = gymnasium.spaces.Dict({"base": env.state_space})
 
     def state(self) -> dict[str, Any]:
-        return {"base": self.env.state(), "agent_count": len(self.agents)}
+        return {"base": self.env.state()}
 
 
 class _DictStateParallel(BaseParallelWrapper):
     def __init__(self, env: ParallelEnv):
         super().__init__(env)
-        self.state_space = gymnasium.spaces.Dict(
-            {
-                "base": env.state_space,
-                "agent_count": gymnasium.spaces.Discrete(env.max_num_agents + 1),
-            }
-        )
+        self.state_space = gymnasium.spaces.Dict({"base": env.state_space})
 
     def state(self) -> dict[str, Any]:
-        return {"base": self.env.state(), "agent_count": len(self.agents)}
+        return {"base": self.env.state()}
 
 
 def test_dict_state_space(env, parallel_env):
