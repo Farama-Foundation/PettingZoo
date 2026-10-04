@@ -76,10 +76,10 @@ if __name__ == "__main__":
     # function that outputs the environment you wish to register.
 
     def env_creator():
-        env = make("aec", "classic/leduc_holdem-v4")
+        env = make("aec", "classic/leduc_holdem-v5")
         return env
 
-    env_name = "leduc_holdem_v4"
+    env_name = "leduc_holdem_v5"
     register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
     test_env = PettingZooEnv(env_creator())

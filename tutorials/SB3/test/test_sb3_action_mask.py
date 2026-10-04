@@ -16,7 +16,7 @@ pytest.importorskip("sb3_contrib")
 EASY_ENVS = [
     "classic/texas_holdem_no_limit-v6",  # texas holdem human rendered game ends instantly, but with random actions it works fine
     "classic/tictactoe-v3",
-    "classic/leduc_holdem-v4",
+    "classic/leduc_holdem-v5",
 ]
 
 # More difficult environments which will likely take more training time
