@@ -103,12 +103,17 @@ def test_state_space(env):
             )
 
 
-def _check_state(env, new_state: Any, state_0: Any) -> None:
+def _check_state(
+    env,
+    new_state: Any,
+    state_type: type[Any],
+    state_shape: tuple[int, ...] | None,
+) -> None:
     assert env.state_space.contains(new_state), (
         "Environment's state is outside of it's state space"
     )
 
-    if not isinstance(new_state, state_0.__class__):
+    if not isinstance(new_state, state_type):
         warnings.warn("States are different classes")
 
     if not isinstance(new_state, np.ndarray):
@@ -124,12 +129,12 @@ def _check_state(env, new_state: Any, state_0: Any) -> None:
         raise AssertionError("State can not be an empty array")
     if new_state.shape == (1,):
         warnings.warn("State is a single number")
-    if isinstance(state_0, np.ndarray):
-        if (new_state.shape != state_0.shape) and (
-            len(new_state.shape) == len(state_0.shape)
+    if state_shape is not None:
+        if (new_state.shape != state_shape) and (
+            len(new_state.shape) == len(state_shape)
         ):
             warnings.warn("States are different shapes")
-        if len(new_state.shape) != len(state_0.shape):
+        if len(new_state.shape) != len(state_shape):
             warnings.warn("States have different number of dimensions")
     if not np.can_cast(new_state.dtype, np.dtype("float64")):
         warnings.warn("State numpy array is not a numeric dtype")
@@ -153,7 +158,12 @@ def _check_state(env, new_state: Any, state_0: Any) -> None:
 def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
     env.reset(seed=seed)
     state_0 = env.state()
-    _check_state(env, state_0, state_0)
+    state_type = state_0.__class__
+    state_shape = state_0.shape if isinstance(state_0, np.ndarray) else None
+    _check_state(env, state_0, state_type, state_shape)
+    # Some environments return borrowed views whose lifetime can lock resources
+    # (for example, pygame.surfarray views). Keep only comparison metadata.
+    del state_0
 
     for agent in env.agent_iter(env.num_agents * num_cycles):
         _, _, terminated, truncated, _ = env.last(observe=False)
@@ -163,7 +173,7 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
             action = env.action_space(agent).sample()
 
         env.step(action)
-        _check_state(env, env.state(), state_0)
+        _check_state(env, env.state(), state_type, state_shape)
 
 
 def test_parallel_env(
@@ -176,7 +186,10 @@ def test_parallel_env(
     )
 
     state_0 = parallel_env.state()
-    _check_state(parallel_env, state_0, state_0)
+    state_type = state_0.__class__
+    state_shape = state_0.shape if isinstance(state_0, np.ndarray) else None
+    _check_state(parallel_env, state_0, state_type, state_shape)
+    del state_0
 
     for _ in range(num_cycles):
         if not parallel_env.agents:
@@ -186,7 +199,7 @@ def test_parallel_env(
             for agent in parallel_env.agents
         }
         observations, _, _, _, _ = parallel_env.step(actions)
-        _check_state(parallel_env, parallel_env.state(), state_0)
+        _check_state(parallel_env, parallel_env.state(), state_type, state_shape)
 
 
 class _DictStateAEC(BaseWrapper):
