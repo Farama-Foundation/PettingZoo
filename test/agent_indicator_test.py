@@ -141,3 +141,67 @@ def test_rejects_non_homogeneous_observation_spaces() -> None:
 
     with pytest.raises(AssertionError, match="observation spaces must be identical"):
         AgentIndicatorParallelV1(env)
+
+
+@pytest.mark.parametrize("api", ["aec", "parallel"])
+@pytest.mark.parametrize("shape", [(1024,), (32, 32), (16, 16, 4)])
+@pytest.mark.parametrize("bound", ["low", "high"])
+@pytest.mark.parametrize("close", [False, True])
+def test_rejects_box_bounds_hidden_by_array_truncation(api, shape, bound, close):
+    low = np.zeros(shape, dtype=np.float32)
+    high = np.ones(shape, dtype=np.float32)
+    low.flat[low.size // 2] = -2
+    high.flat[high.size // 2] = 2
+    first = gymnasium.spaces.Box(low=low, high=high, dtype=np.float32)
+    changed = low.copy() if bound == "low" else high.copy()
+    direction = -np.inf if bound == "low" else np.inf
+    changed.flat[changed.size // 2] = (
+        np.nextafter(changed.flat[changed.size // 2], direction, dtype=np.float32)
+        if close
+        else (-3 if bound == "low" else 3)
+    )
+    second = gymnasium.spaces.Box(
+        low=changed if bound == "low" else low,
+        high=changed if bound == "high" else high,
+        dtype=np.float32,
+    )
+    env = IndicatorEnv(first, high)
+    env.observation_space = lambda agent: first if agent == AGENTS[0] else second
+
+    with np.printoptions(threshold=1000):
+        assert repr(first) == repr(second)
+        if close:
+            # Box equality allows rounding tolerance; the returned bounds must
+            # also contain observations exactly on either agent's endpoint.
+            assert first == second
+        wrapper = AgentIndicatorParallelV1
+        if api == "aec":
+            env = parallel_to_aec(env)
+            wrapper = AgentIndicatorV1
+        with pytest.raises(
+            AssertionError, match="observation spaces must be identical"
+        ):
+            wrapper(env)
+
+
+@pytest.mark.parametrize("api", ["aec", "parallel"])
+@pytest.mark.parametrize("shape", [(1024,), (32, 32), (16, 16, 4)])
+def test_accepts_separate_boxes_with_identical_bounds(api, shape):
+    low = np.zeros(shape, dtype=np.float32)
+    high = np.ones(shape, dtype=np.float32)
+    low.flat[low.size // 2] = -2
+    high.flat[high.size // 2] = 2
+    first = gymnasium.spaces.Box(low=low, high=high, dtype=np.float32)
+    env = IndicatorEnv(first, high)
+    env.observation_space = lambda agent: gymnasium.spaces.Box(
+        low=low.copy(), high=high.copy(), dtype=np.float32
+    )
+    if api == "aec":
+        wrapped = AgentIndicatorV1(parallel_to_aec(env))
+        wrapped.reset()
+        observations = {agent: wrapped.observe(agent) for agent in AGENTS}
+    else:
+        wrapped = AgentIndicatorParallelV1(env)
+        observations, _ = wrapped.reset()
+    for agent, observation in observations.items():
+        assert wrapped.observation_space(agent).contains(observation)
