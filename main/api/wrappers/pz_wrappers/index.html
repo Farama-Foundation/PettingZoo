@@ -893,6 +893,48 @@ observations. Both match SuperSuit’s <code class="docutils literal notranslate
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.FrameStackV3">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">FrameStackV3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'first_obs'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/frame_stack/#FrameStackV3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.FrameStackV3" title="Link to this definition">¶</a></dt>
+<dd><p>Stacks each agent’s last <code class="docutils literal notranslate"><span class="pre">stack_size</span></code> observations into one observation.</p>
+<p>Works on both AEC and parallel environments: <code class="docutils literal notranslate"><span class="pre">FrameStackV3(env)</span></code> returns an
+AEC wrapper for an <code class="docutils literal notranslate"><span class="pre">AECEnv</span></code> and a parallel wrapper for a <code class="docutils literal notranslate"><span class="pre">ParallelEnv</span></code>, and
+either one is an instance of <code class="docutils literal notranslate"><span class="pre">FrameStackV3</span></code>.</p>
+<p>Box observations with 1, 2 or 3 dimensions are stacked as in SuperSuit: 1D
+frames are concatenated, 2D frames get a new last (<code class="docutils literal notranslate"><span class="pre">stack_dim=-1</span></code>) or first
+(<code class="docutils literal notranslate"><span class="pre">stack_dim=0</span></code>) axis, and 3D frames are concatenated along the last or first
+(channel) axis. A <code class="docutils literal notranslate"><span class="pre">Discrete(n)</span></code> observation becomes one <code class="docutils literal notranslate"><span class="pre">Discrete(n**stack_size)</span></code>
+observation with the newest frame as the least significant base-<code class="docutils literal notranslate"><span class="pre">n</span></code> digit
+(each digit is the observation minus the space’s <code class="docutils literal notranslate"><span class="pre">start</span></code>).
+The observation space is updated to match and keeps the dtype.</p>
+<p><code class="docutils literal notranslate"><span class="pre">initial</span></code> says what fills the history before an agent has <code class="docutils literal notranslate"><span class="pre">stack_size</span></code> frames:
+<code class="docutils literal notranslate"><span class="pre">&quot;first_obs&quot;</span></code> repeats the agent’s first observation (SuperSuit’s frame_stack_v2)
+and <code class="docutils literal notranslate"><span class="pre">&quot;zeros&quot;</span></code> fills it with zeros (SuperSuit’s frame_stack_v1). In <code class="docutils literal notranslate"><span class="pre">&quot;zeros&quot;</span></code> mode
+the Box bounds are widened to include 0. The version suffix continues SuperSuit’s
+numbering.</p>
+<p>Histories are per agent and cleared on <code class="docutils literal notranslate"><span class="pre">reset</span></code>. When a history advances:</p>
+<ul class="simple">
+<li><p>AEC: at the start of each of the agent’s turns, after <code class="docutils literal notranslate"><span class="pre">reset</span></code> or <code class="docutils literal notranslate"><span class="pre">step</span></code>, so
+<code class="docutils literal notranslate"><span class="pre">observe</span></code> never changes it. Reading an observation any number of times, or
+reading another agent’s, returns the same stack until the next turn. An agent
+that has not had a turn yet sees the stack its current observation would start.
+An agent’s history is dropped when it leaves <code class="docutils literal notranslate"><span class="pre">agents</span></code>.</p></li>
+<li><p>Parallel: each time <code class="docutils literal notranslate"><span class="pre">reset</span></code> or <code class="docutils literal notranslate"><span class="pre">step</span></code> returns an observation for the agent.
+An agent’s history is dropped once a step returns no observation for it.</p></li>
+</ul>
+<p>Either way, an agent that comes back starts a fresh history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC or parallel environment to wrap.</p></li>
+<li><p><strong>stack_size</strong> – How many observations to stack. Must be a positive int.</p></li>
+<li><p><strong>stack_dim</strong> – The axis to stack along, <code class="docutils literal notranslate"><span class="pre">-1</span></code> (last) or <code class="docutils literal notranslate"><span class="pre">0</span></code> (first).</p></li>
+<li><p><strong>initial</strong> – <code class="docutils literal notranslate"><span class="pre">&quot;first_obs&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;zeros&quot;</span></code>, what fills the history at first.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.MaxObservationV1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">MaxObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/max_observation/#MaxObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.MaxObservationV1" title="Link to this definition">¶</a></dt>
 <dd><p>Replaces each agent’s observation with the elementwise max over its last <code class="docutils literal notranslate"><span class="pre">memory</span></code> observations.</p>
@@ -1308,6 +1350,7 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.FrameStackV3"><code class="docutils literal notranslate"><span class="pre">FrameStackV3</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.PadActionSpaceV1"><code class="docutils literal notranslate"><span class="pre">PadActionSpaceV1</span></code></a></li>
