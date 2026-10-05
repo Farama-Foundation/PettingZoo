@@ -17,11 +17,11 @@ classic_environments = {
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
     "classic/tictactoe_v3": tictactoe_v3,
-    "classic/leduc_holdem_v5": leduc_holdem_v5,
     "classic/texas_holdem_v4": texas_holdem_v4,
     "classic/texas_holdem_no_limit_v6": texas_holdem_no_limit_v6,
     "classic/go_v5": go_v5,
 }
 
-if find_spec("pyspiel") is not None:  # Hanabi needs open_spiel (Python >= 3.11)
+if find_spec("pyspiel") is not None:  # These games need open_spiel (Python >= 3.11)
+    classic_environments["classic/leduc_holdem_v5"] = leduc_holdem_v5
     classic_environments["classic/hanabi_v5"] = hanabi_v5

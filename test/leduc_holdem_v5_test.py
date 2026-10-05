@@ -1,12 +1,20 @@
 from __future__ import annotations
 
+from importlib.util import find_spec
+
 import numpy as np
+import pytest
 
 from pettingzoo import make
 from pettingzoo.classic.leduc_holdem_v5 import env, raw_env
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.render_test import render_test
 from pettingzoo.test.seed_test import seed_test
+
+pytestmark = pytest.mark.skipif(
+    find_spec("pyspiel") is None,
+    reason="Leduc Hold'em requires OpenSpiel (Python >= 3.11)",
+)
 
 
 def test_leduc_holdem_v5_api():

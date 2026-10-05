@@ -249,8 +249,12 @@ parameterized_envs = [
 ]
 
 
-if find_spec("pyspiel") is None:  # open_spiel (Hanabi) is unavailable on Python < 3.11
-    parameterized_envs = [e for e in parameterized_envs if "hanabi" not in e[0]]
+if find_spec("pyspiel") is None:  # open_spiel games are unavailable on Python < 3.11
+    parameterized_envs = [
+        e
+        for e in parameterized_envs
+        if not any(game in e[0] for game in ("hanabi", "leduc"))
+    ]
 
 
 @pytest.mark.parametrize(["name", "env_module", "kwargs"], parameterized_envs)
