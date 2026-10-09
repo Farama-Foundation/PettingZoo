@@ -214,6 +214,17 @@ These classes replace SuperSuit's `delay_observations_v0`. Import them from
 unchanged. An action mask is delayed with its observation, so a historical mask
 may differ from the environment's current legal actions.
 
+### Flattening observations
+
+`FlattenObservationV1` (AEC) and `FlattenObservationParallelV1` (Parallel) flatten
+each agent's observation using Gymnasium's `flatten` function and advertise the
+corresponding `flatten_space`. Box observations become one-dimensional arrays;
+Discrete observations become one-hot arrays, and Dict and Tuple components are
+combined in their space order. Each agent keeps its own observation space.
+
+These classes replace SuperSuit's `flatten_v0`. Import them from
+`pettingzoo.utils.wrappers` and wrap the environment for the corresponding API.
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers
 
@@ -240,6 +251,8 @@ may differ from the environment's current legal actions.
 .. autoclass:: DelayObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
+.. autoclass:: FlattenObservationV1
+.. autoclass:: FlattenObservationParallelV1
 .. autoclass:: FrameSkipV1
 .. autoclass:: FrameSkipParallelV1
 .. autoclass:: FrameStackV3
