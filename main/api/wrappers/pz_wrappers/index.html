@@ -562,6 +562,20 @@ environment’s reset and step return values.</p>
 <p><code class="docutils literal notranslate"><span class="pre">FrameSkipParallelV1</span></code> also accepts a range <code class="docutils literal notranslate"><span class="pre">num_frames=(low,</span> <span class="pre">high)</span></code>. The number of steps is then drawn on every call from the <code class="docutils literal notranslate"><span class="pre">np_random</span></code> generator of <code class="docutils literal notranslate"><span class="pre">env.unwrapped</span></code>, which the environment seeds on <code class="docutils literal notranslate"><span class="pre">reset(seed=...)</span></code>. Agents added partway through a call use <code class="docutils literal notranslate"><span class="pre">default_action</span></code> until the next call, and a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised if none was given.</p>
 <p><code class="docutils literal notranslate"><span class="pre">FrameSkipV1</span></code> takes a fixed <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> only. An agent’s action is replayed on its next <code class="docutils literal notranslate"><span class="pre">num_frames</span> <span class="pre">-</span> <span class="pre">1</span></code> turns, and the caller is asked for an action whenever the wrapped environment selects an agent with nothing left to replay, so the turn order is unchanged. <code class="docutils literal notranslate"><span class="pre">last()</span></code> reports the rewards the agent collected since it last acted. Agents that finish during replaying still get their <code class="docutils literal notranslate"><span class="pre">step(None)</span></code> from the caller.</p>
 <p>These classes replace SuperSuit’s <code class="docutils literal notranslate"><span class="pre">frame_skip_v0</span></code> for the respective PettingZoo APIs.</p>
+</section>
+<section id="delaying-observations">
+<h3>Delaying observations<a class="headerlink" href="#delaying-observations" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">DelayObservationV1</span></code> (AEC) and <code class="docutils literal notranslate"><span class="pre">DelayObservationParallelV1</span></code> (Parallel) delay each
+agent’s observations by a non-negative integer number of observation updates.
+Each agent has an independent history, which is cleared on reset. Repeated AEC
+<code class="docutils literal notranslate"><span class="pre">observe()</span></code> calls do not advance that history. Initial observations use a valid
+zero-like value from the agent’s space; dictionary observations containing
+<code class="docutils literal notranslate"><span class="pre">observation</span></code> and <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> use an all-ones initial action mask.</p>
+<p>These classes replace SuperSuit’s <code class="docutils literal notranslate"><span class="pre">delay_observations_v0</span></code>. Import them from
+<code class="docutils literal notranslate"><span class="pre">pettingzoo.utils.wrappers</span></code> and wrap the corresponding environment with
+<code class="docutils literal notranslate"><span class="pre">delay=...</span></code>. Rewards, termination flags, infos, and observation spaces are
+unchanged. An action mask is delayed with its observation, so a historical mask
+may differ from the environment’s current legal actions.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.BaseWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">BaseWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/base/#BaseWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.BaseWrapper" title="Link to this definition">¶</a></dt>
@@ -865,6 +879,51 @@ the trailing channel axis is dropped, so an (H, W, 3) observation becomes (H, W)
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
 <li><p><strong>mode</strong> – One of “full”, “R”, “G”, “B”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.DelayObservationV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">DelayObservationV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/delay_observation/#DelayObservationV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.DelayObservationV1" title="Link to this definition">¶</a></dt>
+<dd><p>Add a fixed, per-agent delay to observations from an AEC environment.</p>
+<p>Each agent has an independent observation history. Before an agent has
+accumulated <code class="docutils literal notranslate"><span class="pre">delay</span></code> previous observations, the wrapper returns a valid
+zero-like observation from that agent’s observation space. For observation
+dictionaries containing <code class="docutils literal notranslate"><span class="pre">&quot;observation&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;action_mask&quot;</span></code>, the
+initial action mask contains ones so that it does not mark every action as
+illegal.</p>
+<p>Observation histories advance only when the environment progresses to an
+agent. Calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">observe()</span></code> repeatedly does not advance the delay.
+Histories are cleared whenever the environment is reset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>delay</strong> – The number of that agent’s observation updates to delay. Must be
+a non-negative integer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.DelayObservationParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">DelayObservationParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/delay_observation/#DelayObservationParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.DelayObservationParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Add a fixed, per-agent delay to observations from a Parallel environment.</p>
+<p>Each agent has an independent observation history. Before an agent has
+accumulated <code class="docutils literal notranslate"><span class="pre">delay</span></code> previous observations, the wrapper returns a valid
+zero-like observation from that agent’s observation space. For observation
+dictionaries containing <code class="docutils literal notranslate"><span class="pre">&quot;observation&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;action_mask&quot;</span></code>, the
+initial action mask contains ones so that it does not mark every action as
+illegal. Histories are cleared whenever the environment is reset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The Parallel environment to wrap.</p></li>
+<li><p><strong>delay</strong> – The number of that agent’s observation updates to delay. Must be
+a non-negative integer.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1407,7 +1466,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#utility-wrappers">Utility Wrappers</a><ul>
 <li><a class="reference internal" href="#replacing-nan-actions-with-a-no-op">Replacing NaN actions with a no-op</a></li>
 <li><a class="reference internal" href="#replacing-nan-actions-with-a-random-action">Replacing NaN actions with a random action</a></li>
-<li><a class="reference internal" href="#repeating-actions-for-several-steps">Repeating actions for several steps</a><ul>
+<li><a class="reference internal" href="#repeating-actions-for-several-steps">Repeating actions for several steps</a></li>
+<li><a class="reference internal" href="#delaying-observations">Delaying observations</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BaseWrapper"><code class="docutils literal notranslate"><span class="pre">BaseWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BlackDeathParallelV4"><code class="docutils literal notranslate"><span class="pre">BlackDeathParallelV4</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.TerminateIllegalWrapper"><code class="docutils literal notranslate"><span class="pre">TerminateIllegalWrapper</span></code></a></li>
@@ -1427,6 +1487,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.AgentIndicatorParallelV1"><code class="docutils literal notranslate"><span class="pre">AgentIndicatorParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.DelayObservationV1"><code class="docutils literal notranslate"><span class="pre">DelayObservationV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.DelayObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DelayObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.FrameSkipV1"><code class="docutils literal notranslate"><span class="pre">FrameSkipV1</span></code></a></li>
