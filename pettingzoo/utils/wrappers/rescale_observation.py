@@ -12,6 +12,10 @@ from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 
 def _check_range(min_obs: float, max_obs: float) -> None:
+    assert np.isfinite(min_obs) and np.isfinite(max_obs), (
+        "min_obs and max_obs must be finite, "
+        f"got min_obs={min_obs} and max_obs={max_obs}."
+    )
     assert max_obs > min_obs, (
         f"max_obs must be greater than min_obs, got min_obs={min_obs} and max_obs={max_obs}."
     )
@@ -86,8 +90,8 @@ class RescaleObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.
 
     :param env: The AEC environment to wrap.
-    :param min_obs: Lower bound of the rescaled observations.
-    :param max_obs: Upper bound of the rescaled observations.
+    :param min_obs: Finite lower bound of the rescaled observations.
+    :param max_obs: Finite upper bound of the rescaled observations.
     """
 
     def __init__(
@@ -146,8 +150,8 @@ class RescaleObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
     Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.
 
     :param env: The parallel environment to wrap.
-    :param min_obs: Lower bound of the rescaled observations.
-    :param max_obs: Upper bound of the rescaled observations.
+    :param min_obs: Finite lower bound of the rescaled observations.
+    :param max_obs: Finite upper bound of the rescaled observations.
     """
 
     def __init__(
