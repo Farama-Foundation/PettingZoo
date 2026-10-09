@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 from typing import Any
 
 import gymnasium.spaces
@@ -81,6 +82,10 @@ def test_aec_discrete_agent_indicators() -> None:
 
 @pytest.mark.parametrize("dtype", [np.int64, np.uint64, np.int32, np.uint32])
 @pytest.mark.parametrize("aec", [False, True])
+@pytest.mark.skipif(
+    "dtype" not in inspect.signature(gymnasium.spaces.Discrete).parameters,
+    reason="This Gymnasium version does not support Discrete integer dtypes",
+)
 def test_discrete_agent_indicators_with_integer_dtypes(dtype, aec) -> None:
     space = gymnasium.spaces.Discrete(4, start=2, dtype=dtype)
     base_env = IndicatorEnv(space, np.array(4, dtype=dtype))
