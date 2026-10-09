@@ -41,7 +41,7 @@ def _create_initial_observation(space: Space[ObsType]) -> ObsType:
     return cast(ObsType, observation)
 
 
-class DelayObservation(BaseWrapper[AgentID, ObsType, ActionType]):
+class DelayObservationV1(BaseWrapper[AgentID, ObsType, ActionType]):
     """Add a fixed, per-agent delay to observations from an AEC environment.
 
     Each agent has an independent observation history. Before an agent has
@@ -116,7 +116,7 @@ class DelayObservation(BaseWrapper[AgentID, ObsType, ActionType]):
         return _create_initial_observation(self.observation_space(agent))
 
 
-class DelayObservationParallel(BaseParallelWrapper[AgentID, ObsType, ActionType]):
+class DelayObservationParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionType]):
     """Add a fixed, per-agent delay to observations from a Parallel environment.
 
     Each agent has an independent observation history. Before an agent has

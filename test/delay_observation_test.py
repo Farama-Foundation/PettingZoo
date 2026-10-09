@@ -14,7 +14,7 @@ from pettingzoo.test.example_envs import (
 )
 from pettingzoo.utils.agent_selector import AgentSelector
 from pettingzoo.utils.env import AECEnv, ParallelEnv
-from pettingzoo.utils.wrappers import DelayObservation, DelayObservationParallel
+from pettingzoo.utils.wrappers import DelayObservationParallelV1, DelayObservationV1
 
 AGENTS = ["agent_0", "agent_1"]
 
@@ -170,11 +170,11 @@ class DeterministicParallelEnv(ParallelEnv[str, Any, int]):
         return None
 
 
-@pytest.mark.parametrize("wrapper", [DelayObservation, DelayObservationParallel])
+@pytest.mark.parametrize("wrapper", [DelayObservationV1, DelayObservationParallelV1])
 def test_delay_validation(wrapper) -> None:
     env = (
         DeterministicAECEnv()
-        if wrapper is DelayObservation
+        if wrapper is DelayObservationV1
         else DeterministicParallelEnv()
     )
 
@@ -196,7 +196,7 @@ def test_delay_validation(wrapper) -> None:
     ],
 )
 def test_aec_delay_timeline_and_observe_idempotency(delay, expected) -> None:
-    env = DelayObservation(DeterministicAECEnv(), delay=delay)
+    env = DelayObservationV1(DeterministicAECEnv(), delay=delay)
     env.reset()
     observations = {agent: [] for agent in AGENTS}
 
@@ -216,7 +216,7 @@ def test_aec_delay_timeline_and_observe_idempotency(delay, expected) -> None:
 
 @pytest.mark.parametrize("delay", [0, 1, 2])
 def test_parallel_delay_timeline(delay) -> None:
-    env = DelayObservationParallel(DeterministicParallelEnv(), delay=delay)
+    env = DelayObservationParallelV1(DeterministicParallelEnv(), delay=delay)
     observations, reset_infos = env.reset()
     timeline = {agent: [int(observations[agent][0])] for agent in env.possible_agents}
     assert reset_infos == {agent: {"reset": True} for agent in AGENTS}
@@ -241,7 +241,7 @@ def test_parallel_delay_timeline(delay) -> None:
 
 
 def test_aec_reset_clears_delay_history() -> None:
-    env = DelayObservation(DeterministicAECEnv(), delay=1)
+    env = DelayObservationV1(DeterministicAECEnv(), delay=1)
     env.reset()
     env.step(0)
     env.step(0)
@@ -252,7 +252,7 @@ def test_aec_reset_clears_delay_history() -> None:
 
 
 def test_parallel_reset_clears_delay_history() -> None:
-    env = DelayObservationParallel(DeterministicParallelEnv(), delay=1)
+    env = DelayObservationParallelV1(DeterministicParallelEnv(), delay=1)
     env.reset()
     observations, *_ = env.step(dict.fromkeys(env.agents, 0))
     np.testing.assert_array_equal(observations["agent_0"], [10])
@@ -262,7 +262,7 @@ def test_parallel_reset_clears_delay_history() -> None:
 
 
 def test_aec_unselected_agent_observation_does_not_start_history() -> None:
-    env = DelayObservation(DeterministicAECEnv(), delay=1)
+    env = DelayObservationV1(DeterministicAECEnv(), delay=1)
     env.reset()
 
     for _ in range(20):
@@ -281,7 +281,7 @@ def test_initial_observation_is_valid_when_box_excludes_zero() -> None:
         agent: gymnasium.spaces.Box(low=5, high=100, shape=(1,), dtype=np.int64)
         for agent in base_env.possible_agents
     }
-    env = DelayObservation(base_env, delay=1)
+    env = DelayObservationV1(base_env, delay=1)
     env.reset()
 
     observation = env.observe("agent_0")
@@ -291,7 +291,7 @@ def test_initial_observation_is_valid_when_box_excludes_zero() -> None:
 
 def test_aec_step_handles_episode_end_without_selected_agent() -> None:
     base_env = DeterministicAECEnv()
-    env = DelayObservation(base_env, delay=1)
+    env = DelayObservationV1(base_env, delay=1)
     env.reset()
 
     def terminate(_: int) -> None:
@@ -305,13 +305,13 @@ def test_aec_step_handles_episode_end_without_selected_agent() -> None:
 @pytest.mark.parametrize(
     "wrapper,env",
     [
-        (DelayObservation, DeterministicAECEnv(masked=True)),
-        (DelayObservationParallel, DeterministicParallelEnv(masked=True)),
+        (DelayObservationV1, DeterministicAECEnv(masked=True)),
+        (DelayObservationParallelV1, DeterministicParallelEnv(masked=True)),
     ],
 )
 def test_action_mask_placeholder_is_all_ones(wrapper, env) -> None:
     wrapped_env = wrapper(env, delay=1)
-    if isinstance(wrapped_env, DelayObservation):
+    if isinstance(wrapped_env, DelayObservationV1):
         wrapped_env.reset()
         observation = wrapped_env.observe(wrapped_env.agent_selection)
     else:
@@ -325,7 +325,7 @@ def test_action_mask_placeholder_is_all_ones(wrapper, env) -> None:
 
 
 def test_aec_action_mask_is_delayed_with_observation() -> None:
-    env = DelayObservation(DeterministicAECEnv(masked=True), delay=1)
+    env = DelayObservationV1(DeterministicAECEnv(masked=True), delay=1)
     env.reset()
     env.step(0)
     env.step(0)
@@ -337,7 +337,7 @@ def test_aec_action_mask_is_delayed_with_observation() -> None:
 
 
 def test_parallel_action_mask_is_delayed_with_observation() -> None:
-    env = DelayObservationParallel(DeterministicParallelEnv(masked=True), delay=1)
+    env = DelayObservationParallelV1(DeterministicParallelEnv(masked=True), delay=1)
     env.reset()
     observations, *_ = env.step(dict.fromkeys(env.agents, 0))
 
@@ -346,12 +346,12 @@ def test_parallel_action_mask_is_delayed_with_observation() -> None:
 
 
 def test_aec_api() -> None:
-    api_test(DelayObservation(generated_agents_env_v0.raw_env(max_cycles=5), delay=2))
+    api_test(DelayObservationV1(generated_agents_env_v0.raw_env(max_cycles=5), delay=2))
 
 
 def test_parallel_api() -> None:
     parallel_api_test(
-        DelayObservationParallel(
+        DelayObservationParallelV1(
             generated_agents_parallel_v0.parallel_env(max_cycles=5), delay=2
         ),
         num_cycles=10,
