@@ -49,6 +49,8 @@ Supersuit includes the following wrappers:
 
   Skips `num_frames` number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari's frameskip parameter, `num_frames` can also be a tuple `(min_skip, max_skip)`, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).
 
+  PettingZoo provides the native :class:`~pettingzoo.utils.wrappers.FrameSkipV1` and :class:`~pettingzoo.utils.wrappers.FrameSkipParallelV1` wrappers. The Parallel version also accepts a ``(low, high)`` range.
+
 .. py:function:: delay_observations_v0(env, delay)
 
   Delays observation by `delay` frames. Before `delay` frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.
