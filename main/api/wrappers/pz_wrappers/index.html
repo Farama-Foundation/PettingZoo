@@ -542,6 +542,26 @@ environment’s reset and step return values.</p>
 </pre></div>
 </div>
 <p>Actions without NaNs pass through unchanged, even if the mask forbids them, and <code class="docutils literal notranslate"><span class="pre">step(None)</span></code> for a dead AEC agent is passed through. Action and observation spaces are unchanged. These classes replace SuperSuit’s <code class="docutils literal notranslate"><span class="pre">nan_random_v0</span></code>, which looked for the mask under the key <code class="docutils literal notranslate"><span class="pre">&quot;action</span> <span class="pre">mask&quot;</span></code> and so ignored PettingZoo’s <code class="docutils literal notranslate"><span class="pre">action_mask</span></code>.</p>
+</section>
+<section id="repeating-actions-for-several-steps">
+<h3>Repeating actions for several steps<a class="headerlink" href="#repeating-actions-for-several-steps" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">FrameSkipV1</span></code> (AEC) and <code class="docutils literal notranslate"><span class="pre">FrameSkipParallelV1</span></code> (Parallel) use each action for <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> steps of the wrapped environment. Rewards from those steps are added up. The observation, termination, truncation and info are the latest ones from the wrapped environment, and stepping stops early when the episode ends.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">FrameSkipParallelV1</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">FrameSkipParallelV1</span><span class="p">(</span>
+    <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"butterfly/pistonball-v6"</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">num_frames</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">)</span>
+<span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">FrameSkipParallelV1</span></code> also accepts a range <code class="docutils literal notranslate"><span class="pre">num_frames=(low,</span> <span class="pre">high)</span></code>. The number of steps is then drawn on every call from the <code class="docutils literal notranslate"><span class="pre">np_random</span></code> generator of <code class="docutils literal notranslate"><span class="pre">env.unwrapped</span></code>, which the environment seeds on <code class="docutils literal notranslate"><span class="pre">reset(seed=...)</span></code>. Agents added partway through a call use <code class="docutils literal notranslate"><span class="pre">default_action</span></code> until the next call, and a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised if none was given.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FrameSkipV1</span></code> takes a fixed <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> only. An agent’s action is replayed on its next <code class="docutils literal notranslate"><span class="pre">num_frames</span> <span class="pre">-</span> <span class="pre">1</span></code> turns, and the caller is asked for an action whenever the wrapped environment selects an agent with nothing left to replay, so the turn order is unchanged. <code class="docutils literal notranslate"><span class="pre">last()</span></code> reports the rewards the agent collected since it last acted. Agents that finish during replaying still get their <code class="docutils literal notranslate"><span class="pre">step(None)</span></code> from the caller.</p>
+<p>These classes replace SuperSuit’s <code class="docutils literal notranslate"><span class="pre">frame_skip_v0</span></code> for the respective PettingZoo APIs.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.utils.wrappers.BaseWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">BaseWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/base/#BaseWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.BaseWrapper" title="Link to this definition">¶</a></dt>
@@ -887,6 +907,64 @@ observations. Both match SuperSuit’s <code class="docutils literal notranslate
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
 <li><p><strong>dtype</strong> – Anything <code class="docutils literal notranslate"><span class="pre">numpy.dtype</span></code> accepts, e.g. <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.FrameSkipV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">FrameSkipV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../aec/#pettingzoo.utils.env.AECEnv" title="pettingzoo.utils.env.AECEnv"><span class="pre">AECEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/frame_skip/#FrameSkipV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.FrameSkipV1" title="Link to this definition">¶</a></dt>
+<dd><p>Repeats each agent’s action for <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> of that agent’s turns.</p>
+<p>When an agent acts, its action is replayed on the agent’s next
+<code class="docutils literal notranslate"><span class="pre">num_frames</span> <span class="pre">-</span> <span class="pre">1</span></code> turns of the wrapped environment without asking the
+caller. Control returns to the caller as soon as the wrapped environment
+selects an agent that has no action left to replay, so the turn order the
+caller sees is the wrapped environment’s own order. Rewards from every
+replayed turn are added up, and <code class="docutils literal notranslate"><span class="pre">last()</span></code> reports them as the agent’s
+cumulative reward since it last acted.</p>
+<p>Agents that terminate or truncate while actions are being replayed are
+handed back to the caller for their usual <code class="docutils literal notranslate"><span class="pre">step(None)</span></code>, and replaying
+continues after it. Their final observation is the wrapped environment’s.
+Agents added during replaying appear in <code class="docutils literal notranslate"><span class="pre">agents</span></code> and get their first turn
+from the caller.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num_frames=1</span></code> leaves the environment unchanged. Unlike
+<a class="reference internal" href="#pettingzoo.utils.wrappers.FrameSkipParallelV1" title="pettingzoo.utils.wrappers.FrameSkipParallelV1"><code class="xref py py-class docutils literal notranslate"><span class="pre">FrameSkipParallelV1</span></code></a>, only a fixed count is supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The AEC environment to wrap.</p></li>
+<li><p><strong>num_frames</strong> – Number of turns each supplied action is used for, at least 1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.wrappers.FrameSkipParallelV1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.wrappers.</span></span><span class="sig-name descname"><span class="pre">FrameSkipParallelV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../parallel/#pettingzoo.utils.env.ParallelEnv" title="pettingzoo.utils.env.ParallelEnv"><span class="pre">ParallelEnv</span></a><span class="p"><span class="pre">[</span></span><span class="pre">AgentID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ActionType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/utils/wrappers/frame_skip/#FrameSkipParallelV1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.utils.wrappers.FrameSkipParallelV1" title="Link to this definition">¶</a></dt>
+<dd><p>Repeats each step’s actions for several steps of the wrapped environment.</p>
+<p>Each call to <code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code> steps the wrapped environment <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> times
+with the same actions, or fewer if every agent is done earlier. Rewards are
+added up per agent. The observation, termination, truncation and info of each
+agent are the last ones the wrapped environment returned for it, so an agent
+that finishes partway through still reports its final transition.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num_frames</span></code> can also be a tuple <code class="docutils literal notranslate"><span class="pre">(low,</span> <span class="pre">high)</span></code>. The number of steps is
+then drawn uniformly from <code class="docutils literal notranslate"><span class="pre">low</span></code> to <code class="docutils literal notranslate"><span class="pre">high</span></code> (inclusive) on every call, using
+the <code class="docutils literal notranslate"><span class="pre">np_random</span></code> generator of <code class="docutils literal notranslate"><span class="pre">env.unwrapped</span></code>, which the environment seeds
+on <code class="docutils literal notranslate"><span class="pre">reset(seed=...)</span></code>.</p>
+<p>An agent added by the wrapped environment partway through has no action
+from the caller yet, so it uses <code class="docutils literal notranslate"><span class="pre">default_action</span></code> until the next call to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code>. A <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised if that happens without a
+<code class="docutils literal notranslate"><span class="pre">default_action</span></code>. Agents that are added and removed again within one call
+are not reported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> – The parallel environment to wrap.</p></li>
+<li><p><strong>num_frames</strong> – Number of steps per call, at least 1, or a <code class="docutils literal notranslate"><span class="pre">(low,</span> <span class="pre">high)</span></code>
+range with <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">low</span> <span class="pre">&lt;=</span> <span class="pre">high</span></code>.</p></li>
+<li><p><strong>default_action</strong> – Action used for agents added partway through a call.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1328,7 +1406,8 @@ in the interval [0, 1).</p></li>
 </li>
 <li><a class="reference internal" href="#utility-wrappers">Utility Wrappers</a><ul>
 <li><a class="reference internal" href="#replacing-nan-actions-with-a-no-op">Replacing NaN actions with a no-op</a></li>
-<li><a class="reference internal" href="#replacing-nan-actions-with-a-random-action">Replacing NaN actions with a random action</a><ul>
+<li><a class="reference internal" href="#replacing-nan-actions-with-a-random-action">Replacing NaN actions with a random action</a></li>
+<li><a class="reference internal" href="#repeating-actions-for-several-steps">Repeating actions for several steps</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BaseWrapper"><code class="docutils literal notranslate"><span class="pre">BaseWrapper</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.BlackDeathParallelV4"><code class="docutils literal notranslate"><span class="pre">BlackDeathParallelV4</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.TerminateIllegalWrapper"><code class="docutils literal notranslate"><span class="pre">TerminateIllegalWrapper</span></code></a></li>
@@ -1350,6 +1429,8 @@ in the interval [0, 1).</p></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.ColorReductionObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">ColorReductionObservationParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.DtypeObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">DtypeObservationParallelV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.FrameSkipV1"><code class="docutils literal notranslate"><span class="pre">FrameSkipV1</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.wrappers.FrameSkipParallelV1"><code class="docutils literal notranslate"><span class="pre">FrameSkipParallelV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.FrameStackV3"><code class="docutils literal notranslate"><span class="pre">FrameStackV3</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationV1</span></code></a></li>
 <li><a class="reference internal" href="#pettingzoo.utils.wrappers.MaxObservationParallelV1"><code class="docutils literal notranslate"><span class="pre">MaxObservationParallelV1</span></code></a></li>
