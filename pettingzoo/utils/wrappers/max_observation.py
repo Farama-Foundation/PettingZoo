@@ -64,8 +64,9 @@ class MaxObservationV1(BaseWrapper[AgentID, ObsType, ActionType]):
     """Replaces each agent's observation with the elementwise max over its last ``memory`` observations.
 
     This removes the flicker in environments that draw sprites on alternate frames.
-    Histories are per agent and cleared on ``reset``, and the observation space is
-    unchanged. Only array observation spaces work: Box, MultiBinary, MultiDiscrete.
+    Histories are per agent, cleared on ``reset``, and dropped when agents leave.
+    The observation space is unchanged. Only array observation spaces work:
+    Box, MultiBinary, MultiDiscrete.
     Ported from SuperSuit's max_observation_v0; the version suffix continues that numbering.
 
     :param env: The AEC environment to wrap.
@@ -109,6 +110,12 @@ class MaxObservationV1(BaseWrapper[AgentID, ObsType, ActionType]):
     @override
     def step(self, action: ActionType) -> None:
         super().step(action)
+        active_agents = set(self.agents)
+        self._history = {
+            agent: history
+            for agent, history in self._history.items()
+            if agent in active_agents
+        }
         if self.agent_selection in self.agents:
             self._record(self.agent_selection)
 
@@ -128,8 +135,9 @@ class MaxObservationParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionType]
     """Replaces each agent's observation with the elementwise max over its last ``memory`` observations.
 
     This removes the flicker in environments that draw sprites on alternate frames.
-    Histories are per agent and cleared on ``reset``, and the observation space is
-    unchanged. Only array observation spaces work: Box, MultiBinary, MultiDiscrete.
+    Histories are per agent, cleared on ``reset``, and dropped when agents leave.
+    The observation space is unchanged. Only array observation spaces work:
+    Box, MultiBinary, MultiDiscrete.
     Ported from SuperSuit's max_observation_v0; the version suffix continues that numbering.
 
     :param env: The parallel environment to wrap.
@@ -178,8 +186,15 @@ class MaxObservationParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionType]
         dict[AgentID, dict[str, Any]],
     ]:
         observations, rewards, terminations, truncations, infos = self.env.step(actions)
+        maxed = self._max_observations(observations)
+        active_agents = set(self.agents)
+        self._history = {
+            agent: history
+            for agent, history in self._history.items()
+            if agent in active_agents
+        }
         return (
-            self._max_observations(observations),
+            maxed,
             rewards,
             terminations,
             truncations,
