@@ -110,7 +110,7 @@ for _id, _module in _classic_envs:
 # SISL environments
 
 _sisl_envs = [
-    ("multiwalker_v9", "multiwalker"),
+    ("multiwalker_v10", "multiwalker"),
     ("pursuit_v6", "pursuit"),
 ]
 
