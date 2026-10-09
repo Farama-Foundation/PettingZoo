@@ -11,7 +11,7 @@ from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 
-class FlattenObservation(BaseWrapper[AgentID, Any, ActionType]):
+class FlattenObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     """Flattens each agent's observation into a 1D array.
 
     :param env: The AEC environment to wrap.
@@ -19,8 +19,8 @@ class FlattenObservation(BaseWrapper[AgentID, Any, ActionType]):
 
     def __init__(self, env: AECEnv[AgentID, ObsType, ActionType]):
         assert isinstance(env, AECEnv), (
-            "FlattenObservation is only compatible with AEC environments, "
-            "use FlattenObservationParallel instead."
+            "FlattenObservationV1 is only compatible with AEC environments, "
+            "use FlattenObservationParallelV1 instead."
         )
         super().__init__(env)
         self._obs_spaces: dict[AgentID, gymnasium.spaces.Space[Any]] = {}
@@ -40,10 +40,10 @@ class FlattenObservation(BaseWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"FlattenObservation<{self.env!s}>"
+        return f"FlattenObservationV1<{self.env!s}>"
 
 
-class FlattenObservationParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
+class FlattenObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
     """Flattens each agent's observation into a 1D array.
 
     :param env: The parallel environment to wrap.
@@ -87,4 +87,4 @@ class FlattenObservationParallel(BaseParallelWrapper[AgentID, Any, ActionType]):
 
     @override
     def __str__(self) -> str:
-        return f"FlattenObservationParallel<{self.env!s}>"
+        return f"FlattenObservationParallelV1<{self.env!s}>"

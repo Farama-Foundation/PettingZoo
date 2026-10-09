@@ -199,6 +199,17 @@ env.close()
 
 These classes replace SuperSuit's `frame_skip_v0` for the respective PettingZoo APIs.
 
+### Flattening observations
+
+`FlattenObservationV1` (AEC) and `FlattenObservationParallelV1` (Parallel) flatten
+each agent's observation using Gymnasium's `flatten` function and advertise the
+corresponding `flatten_space`. Box observations become one-dimensional arrays;
+Discrete observations become one-hot arrays, and Dict and Tuple components are
+combined in their space order. Each agent keeps its own observation space.
+
+These classes replace SuperSuit's `flatten_v0`. Import them from
+`pettingzoo.utils.wrappers` and wrap the environment for the corresponding API.
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers
 
@@ -223,8 +234,8 @@ These classes replace SuperSuit's `frame_skip_v0` for the respective PettingZoo 
 .. autoclass:: ColorReductionObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
-.. autoclass:: FlattenObservation
-.. autoclass:: FlattenObservationParallel
+.. autoclass:: FlattenObservationV1
+.. autoclass:: FlattenObservationParallelV1
 .. autoclass:: FrameSkipV1
 .. autoclass:: FrameSkipParallelV1
 .. autoclass:: FrameStackV3
