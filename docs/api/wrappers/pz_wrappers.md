@@ -199,6 +199,21 @@ env.close()
 
 These classes replace SuperSuit's `frame_skip_v0` for the respective PettingZoo APIs.
 
+### Delaying observations
+
+`DelayObservationV1` (AEC) and `DelayObservationParallelV1` (Parallel) delay each
+agent's observations by a non-negative integer number of observation updates.
+Each agent has an independent history, which is cleared on reset. Repeated AEC
+`observe()` calls do not advance that history. Initial observations use a valid
+zero-like value from the agent's space; dictionary observations containing
+`observation` and `action_mask` use an all-ones initial action mask.
+
+These classes replace SuperSuit's `delay_observations_v0`. Import them from
+`pettingzoo.utils.wrappers` and wrap the corresponding environment with
+`delay=...`. Rewards, termination flags, infos, and observation spaces are
+unchanged. An action mask is delayed with its observation, so a historical mask
+may differ from the environment's current legal actions.
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers
 
@@ -221,6 +236,8 @@ These classes replace SuperSuit's `frame_skip_v0` for the respective PettingZoo 
 .. autoclass:: AgentIndicatorParallelV1
 .. autoclass:: ColorReductionObservationV1
 .. autoclass:: ColorReductionObservationParallelV1
+.. autoclass:: DelayObservationV1
+.. autoclass:: DelayObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
 .. autoclass:: FrameSkipV1
