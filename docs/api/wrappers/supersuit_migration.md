@@ -4,7 +4,7 @@ title: Migrating from SuperSuit
 
 # Migrating from SuperSuit
 
-[SuperSuit](https://github.com/Farama-Foundation/SuperSuit) has preprocessing wrappers for Gymnasium, PettingZoo AEC, and PettingZoo Parallel environments. PettingZoo is migrating multi-agent wrappers into its own package (see [#1365](https://github.com/Farama-Foundation/PettingZoo/issues/1365)). This inventory supports [#1481](https://github.com/Farama-Foundation/PettingZoo/issues/1481): it lists exported SuperSuit APIs, candidate destinations, and outstanding decisions.
+[SuperSuit](https://github.com/Farama-Foundation/SuperSuit) has preprocessing wrappers for Gymnasium, PettingZoo AEC, and PettingZoo Parallel environments. PettingZoo is migrating multi-agent wrappers into its own package (see [#1365](https://github.com/Farama-Foundation/PettingZoo/issues/1365)). This initial inventory supports [#1481](https://github.com/Farama-Foundation/PettingZoo/issues/1481): it lists exported SuperSuit APIs, candidate destinations, and outstanding decisions.
 
 **Important:** "Native" means the corresponding class exists in the inspected PettingZoo source, **not** that every old argument, supported space, edge case, or release has been tested for parity. At the time of this inventory, native classes are exposed through `pettingzoo.utils.wrappers`; the shorter `pettingzoo.wrappers` import path is separately tracked in [#1478](https://github.com/Farama-Foundation/PettingZoo/issues/1478). Check installed package versions before changing imports.
 
@@ -12,19 +12,19 @@ title: Migrating from SuperSuit
 
 | SuperSuit API | PettingZoo destination | Migration note |
 | --- | --- | --- |
-| `clip_reward_v0` | `ClipRewardV1`, `ClipRewardParallelV1` | Native; parameters min_reward/max_reward replace lower_bound/upper_bound |
-| `clip_actions_v0` | `ClipOutOfBoundsWrapper (AEC and Parallel)` | Native; warns on clipping and rejects NaNs; see [PR #1489](https://github.com/Farama-Foundation/PettingZoo/pull/1489) |
+| `clip_reward_v0` | `ClipRewardV1`, `ClipRewardParallelV1` | Native; parameters `min_reward` / `max_reward` replace `lower_bound` / `upper_bound` |
+| `clip_actions_v0` | `ClipOutOfBoundsWrapper` (AEC and Parallel) | Native; warns on clipping and rejects NaNs; see [PR #1489](https://github.com/Farama-Foundation/PettingZoo/pull/1489) |
 | `color_reduction_v0` | `ColorReductionObservationV1`, `ColorReductionObservationParallelV1` | Native; verify image layout and mode |
 | `dtype_v0` | `DtypeObservationV1`, `DtypeObservationParallelV1` | Native; verify dtype behavior |
 | `flatten_v0` | **Pending —** No identified native AEC/Parallel wrapper | Pending; Gymnasium FlattenObservation applies to Gymnasium environments, not directly to PettingZoo |
-| `normalize_obs_v0` | `RescaleObservationV1`, `RescaleObservationParallelV1` | Native; new arguments min_obs/max_obs; finite float Box bounds required |
+| `normalize_obs_v0` | `RescaleObservationV1`, `RescaleObservationParallelV1` | Native; new arguments `min_obs` / `max_obs`; finite float Box bounds required |
 | `reshape_v0` | `ReshapeObservationV1`, `ReshapeObservationParallelV1` | Native; Box observation constraints apply |
 | `resize_v1` | **Pending —** No identified native AEC/Parallel wrapper | Pending under [#1471](https://github.com/Farama-Foundation/PettingZoo/issues/1471) |
 | `scale_actions_v0` | `ScaleActionV1`, `ScaleActionParallelV1` | Native; check scale and bounds semantics |
 | `delay_observations_v0` | **Pending —** No identified native AEC/Parallel wrapper | Pending; needs narrow follow-up or maintainer decision |
 | `frame_skip_v0` | `FrameSkipV1`, `FrameSkipParallelV1` | Native; check repeated steps and dynamic agents; [#1469](https://github.com/Farama-Foundation/PettingZoo/issues/1469) |
-| `frame_stack_v1` | `FrameStackV3 (dispatches by environment API)` | Native; verify stack_dim and initial padding; [#1470](https://github.com/Farama-Foundation/PettingZoo/issues/1470) |
-| `frame_stack_v2` | `FrameStackV3 (dispatches by environment API)` | Native; verify differences in initialization and stack_dim; exported by SuperSuit through wildcard |
+| `frame_stack_v1` | `FrameStackV3` (dispatches by environment API) | Native; verify `stack_dim` and initial padding; [#1470](https://github.com/Farama-Foundation/PettingZoo/issues/1470) |
+| `frame_stack_v2` | `FrameStackV3 (dispatches by environment API)` | Native; verify differences in initialization and `stack_dim`; exported by SuperSuit through wildcard |
 | `max_observation_v0` | `MaxObservationV1`, `MaxObservationParallelV1` | Native; check per-agent history and supported spaces |
 | `nan_noop_v0` | `NanNoopV1`, `NanNoopParallelV1` | Native; check no-op configuration |
 | `nan_random_v0` | `NanRandomV1`, `NanRandomParallelV1` | Native; check mask handling |
@@ -35,7 +35,7 @@ title: Migrating from SuperSuit
 
 | SuperSuit API | PettingZoo destination | Migration note |
 | --- | --- | --- |
-| `agent_indicator_v0` | `AgentIndicatorV1`, `AgentIndicatorParallelV1` | Native; verify type_only and observation shape |
+| `agent_indicator_v0` | `AgentIndicatorV1`, `AgentIndicatorParallelV1` | Native; verify `type_only` and observation shape |
 | `black_death_v3` | `BlackDeathParallelV4` | Native for Parallel; semantics of departed agents and termination flags differ, not an AEC replacement |
 | `pad_action_space_v0` | `PadActionSpaceV1`, `PadActionSpaceParallelV1` | Native; check padding for heterogeneous agents |
 | `pad_observations_v0` | `PadObservationsV1`, `PadObservationsParallelV1` | Native; check observation-space support |
