@@ -7,6 +7,10 @@ import pytest
 from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
+from pettingzoo.test.example_envs import (
+    generated_agents_env_v0,
+    generated_agents_parallel_v0,
+)
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import RescaleObservationParallelV1, RescaleObservationV1
 
@@ -393,3 +397,33 @@ def test_wide_float64_bounds(api, low, high, obs, min_obs, max_obs, expected):
     assert np.all(np.isfinite(got))
     np.testing.assert_allclose(got, expected, rtol=1e-14, atol=0.0)
     assert env.observation_space("agent_0").contains(got)
+
+
+@pytest.mark.parametrize("api", ["aec", "parallel"])
+def test_generated_agents_resolve_current_spaces_after_reset(api):
+    if api == "aec":
+        inner = generated_agents_env_v0.env()
+        env = RescaleObservationV1(inner, -2.0, 4.0)
+    else:
+        inner = generated_agents_parallel_v0.parallel_env()
+        env = RescaleObservationParallelV1(inner, -2.0, 4.0)
+
+    for seed in (0, 1):
+        env.reset(seed=seed)
+        for _ in range(100):
+            if api == "aec":
+                agent = env.agent_selection
+                observation = env.observe(agent)
+                space = env.observation_space(agent)
+                assert space.shape == inner.observation_space(agent).shape
+                assert space.contains(observation)
+                dead = env.terminations[agent] or env.truncations[agent]
+                env.step(None if dead else env.action_space(agent).sample())
+            else:
+                observations, *_ = env.step(
+                    {agent: env.action_space(agent).sample() for agent in env.agents}
+                )
+                for agent, observation in observations.items():
+                    space = env.observation_space(agent)
+                    assert space.shape == inner.observation_space(agent).shape
+                    assert space.contains(observation)

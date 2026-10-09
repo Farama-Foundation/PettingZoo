@@ -79,9 +79,11 @@ class RescaleObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     ``[min_obs, max_obs]``, and the result is clipped so it always sits inside the
     advertised space. The wrapped space has to be a float Box whose elements all
     have finite ``low`` and ``high`` with ``high > low``, since anything else
-    gives nothing to scale from. Every space in ``possible_agents`` is checked
-    when the wrapper is built. Finite float32 and float64 bounds are supported
-    even when their difference overflows the observation dtype.
+    gives nothing to scale from. If ``possible_agents`` is available, its spaces
+    are checked when the wrapper is built. Generated agents are checked when
+    their spaces are first used, and cached spaces are cleared on ``reset``.
+    Finite float32 and float64 bounds are supported even when their difference
+    overflows the observation dtype.
 
     Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.
 
@@ -105,7 +107,7 @@ class RescaleObservationV1(BaseWrapper[AgentID, Any, ActionType]):
         self.min_obs = min_obs
         self.max_obs = max_obs
         self._spaces: dict[AgentID, tuple[Box, Box]] = {}
-        for agent in self.env.possible_agents:
+        for agent in getattr(self.env, "possible_agents", []):
             self._spaces_for(agent)
 
     def _spaces_for(self, agent: AgentID) -> tuple[Box, Box]:
@@ -118,6 +120,13 @@ class RescaleObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     @override
     def observation_space(self, agent: AgentID) -> Box:
         return self._spaces_for(agent)[1]
+
+    @override
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
+        self._spaces = {}
+        super().reset(seed=seed, options=options)
 
     @override
     def observe(self, agent: AgentID) -> Any:
@@ -139,9 +148,11 @@ class RescaleObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
     ``[min_obs, max_obs]``, and the result is clipped so it always sits inside the
     advertised space. The wrapped space has to be a float Box whose elements all
     have finite ``low`` and ``high`` with ``high > low``, since anything else
-    gives nothing to scale from. Every space in ``possible_agents`` is checked
-    when the wrapper is built. Finite float32 and float64 bounds are supported
-    even when their difference overflows the observation dtype.
+    gives nothing to scale from. If ``possible_agents`` is available, its spaces
+    are checked when the wrapper is built. Generated agents are checked when
+    their spaces are first used, and cached spaces are cleared on ``reset``.
+    Finite float32 and float64 bounds are supported even when their difference
+    overflows the observation dtype.
 
     Ported from SuperSuit's normalize_obs_v0; the version suffix continues that numbering.
 
@@ -161,7 +172,7 @@ class RescaleObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
         self.min_obs = min_obs
         self.max_obs = max_obs
         self._spaces: dict[AgentID, tuple[Box, Box]] = {}
-        for agent in self.env.possible_agents:
+        for agent in getattr(self.env, "possible_agents", []):
             self._spaces_for(agent)
 
     def _spaces_for(self, agent: AgentID) -> tuple[Box, Box]:
@@ -185,6 +196,7 @@ class RescaleObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
     def reset(
         self, seed: int | None = None, options: dict[str, Any] | None = None
     ) -> tuple[dict[AgentID, Any], dict[AgentID, dict[str, Any]]]:
+        self._spaces = {}
         observations, infos = self.env.reset(seed=seed, options=options)
         return self._rescale_all(observations), infos
 
