@@ -458,3 +458,36 @@ def test_aec_api_with_generated_agents():
 
 def test_parallel_api():
     parallel_api_test(MaxObservationParallelV1(DummyParallel(), 2), num_cycles=10)
+
+
+def test_aec_releases_histories_after_dead_steps():
+    env = MaxObservationV1(DummyAEC(), 2)
+    env.reset(seed=0)
+    while env.agents:
+        agent = env.agent_selection
+        dead = env.terminations[agent] or env.truncations[agent]
+        env.step(None if dead else 0)
+        assert set(env._history).issubset(env.agents)
+    assert env._history == {}
+
+
+def test_parallel_releases_departed_agents_history():
+    env = MaxObservationParallelV1(LeavingParallel(), 2)
+    env.reset(seed=0)
+    for _ in range(3):
+        env.step(dict.fromkeys(env.agents, 0))
+    assert "agent_1" not in env._history
+    assert "agent_0" in env._history
+
+
+def test_parallel_keeps_final_observation_before_releasing_history():
+    env = MaxObservationParallelV1(DummyParallel(), 3)
+    env.reset(seed=0)
+    for _ in range(MAX_CYCLES):
+        observations, _, terminations, _, _ = env.step(dict.fromkeys(env.agents, 0))
+    for agent in AGENTS:
+        assert terminations[agent]
+        np.testing.assert_array_equal(
+            observations[agent], expected_max(agent, MAX_CYCLES, 3)
+        )
+    assert env._history == {}
