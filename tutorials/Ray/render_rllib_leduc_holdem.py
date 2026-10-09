@@ -5,6 +5,7 @@ Author: Rohan (https://github.com/Rohan138)
 
 import argparse
 import os
+import sys
 
 import numpy as np
 import ray
@@ -31,7 +32,7 @@ args = parser.parse_args()
 
 if args.checkpoint_path is None:
     print("The following arguments are required: --checkpoint-path")
-    exit(0)
+    sys.exit(0)
 
 checkpoint_path = os.path.expanduser(args.checkpoint_path)
 
@@ -42,12 +43,12 @@ ModelCatalog.register_custom_model("pa_model", TorchMaskedActions)
 
 
 def env_creator():
-    env = make("aec", "classic/leduc_holdem-v4")
+    env = make("aec", "classic/leduc_holdem-v5")
     return env
 
 
 env = env_creator()
-env_name = "leduc_holdem_v4"
+env_name = "leduc_holdem_v5"
 register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
 
@@ -55,7 +56,6 @@ ray.init()
 DQNAgent = Algorithm.from_checkpoint(checkpoint_path)
 
 reward_sums = dict.fromkeys(env.possible_agents, 0)
-i = 0
 env.reset()
 
 for agent in env.agent_iter():
@@ -80,7 +80,6 @@ for agent in env.agent_iter():
         action = single_action
 
     env.step(action)
-    i += 1
     env.render()
 
 print("rewards:")

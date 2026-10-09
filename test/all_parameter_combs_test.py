@@ -40,7 +40,7 @@ from pettingzoo.classic import (
     connect_four_v3,
     go_v5,
     hanabi_v5,
-    leduc_holdem_v4,
+    leduc_holdem_v5,
     rps_v2,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
@@ -131,7 +131,7 @@ parameterized_envs = [
             "max_cycles": 50,
         },
     ],
-    ["classic/leduc_holdem_v4", leduc_holdem_v4, {}],
+    ["classic/leduc_holdem_v5", leduc_holdem_v5, {}],
     ["classic/texas_holdem_v4", texas_holdem_v4, {"num_players": 3}],
     ["classic/texas_holdem_v4", texas_holdem_v4, {"num_players": 4}],
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, {}],
@@ -249,8 +249,12 @@ parameterized_envs = [
 ]
 
 
-if find_spec("pyspiel") is None:  # open_spiel (Hanabi) is unavailable on Python < 3.11
-    parameterized_envs = [e for e in parameterized_envs if "hanabi" not in e[0]]
+if find_spec("pyspiel") is None:  # open_spiel games are unavailable on Python < 3.11
+    parameterized_envs = [
+        e
+        for e in parameterized_envs
+        if not any(game in e[0] for game in ("hanabi", "leduc"))
+    ]
 
 
 @pytest.mark.parametrize(["name", "env_module", "kwargs"], parameterized_envs)
