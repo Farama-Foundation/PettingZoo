@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from typing import Any
 
 import numpy as np
@@ -119,6 +120,9 @@ class FrameSkipParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionType]):
     agent are the last ones the wrapped environment returned for it, so an agent
     that finishes partway through still reports its final transition.
 
+    Final observations and infos of departed agents are copied before advancing
+    the remaining agents, so reused environment buffers cannot overwrite them.
+
     ``num_frames`` can also be a tuple ``(low, high)``. The number of steps is
     then drawn uniformly from ``low`` to ``high`` (inclusive) on every call, using
     the ``np_random`` generator of ``env.unwrapped``, which the environment seeds
@@ -200,6 +204,16 @@ class FrameSkipParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionType]):
                 break
             if all(terms[a] or truncs[a] for a in terms):
                 break
+
+            # Later steps can reuse observation and info buffers, including ones
+            # shared with an agent whose final transition we must retain.
+            live_agents = set(self.env.agents)
+            for agent in obs:
+                if agent not in live_agents:
+                    observations[agent] = copy.deepcopy(observations[agent])
+            for agent in step_infos:
+                if agent not in live_agents:
+                    infos[agent] = copy.deepcopy(infos[agent])
 
             next_actions = {}
             for agent in self.env.agents:
