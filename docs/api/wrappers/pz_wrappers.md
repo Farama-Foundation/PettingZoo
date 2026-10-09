@@ -128,6 +128,32 @@ while parallel_env.agents:
 
 BlackDeathParallelV4 keeps the agents present at reset visible until the underlying episode finishes. After an agent leaves, later steps use a zero observation, zero reward, and empty info for that agent, and actions for it are ignored. Early termination/truncation flags are held back while the wrapped agent set remains active; on the final step, each agent's original termination versus truncation cause is reported. Environments that add new agents after reset are not supported.
 
+### Replacing NaN actions with a no-op
+
+`NanNoopV1` (AEC) and `NanNoopParallelV1` (Parallel) replace numeric actions containing a NaN with a caller-supplied no-op and emit a warning. They use the same no-op value for every agent, so choose a value that belongs to each affected agent's action space. The wrapper checks known agents when constructed and checks the affected agent again before replacing an action. Incompatible no-ops raise `ValueError`; replacements are copied so mutable arrays are not shared between agents or steps.
+
+For example, action `1` means stay still in discrete Pistonball:
+
+```python
+import numpy as np
+from pettingzoo import make
+from pettingzoo.utils.wrappers import NanNoopParallelV1
+
+env = NanNoopParallelV1(
+    make("parallel", "butterfly/pistonball-v6", continuous=False),
+    no_op_action=1,
+)
+observations, infos = env.reset(seed=42)
+actions = dict.fromkeys(env.agents, 1)
+actions[env.agents[0]] = np.nan
+observations, rewards, terminations, truncations, infos = env.step(actions)
+env.close()
+```
+
+For an AEC environment, use `NanNoopV1(env, no_op_action=...)`. Its `step(None)` for a dead agent is passed through unchanged. Both wrappers preserve actions without NaNs, even if they are otherwise invalid: they do not clip actions or choose a legal action from an action mask. Action and observation spaces are unchanged.
+
+These classes replace SuperSuit's `nan_noop_v0` for the respective PettingZoo APIs. Supply the no-op when constructing the wrapper, then call `step` normally.
+
 ### Replacing NaN actions with a random action
 
 `NanRandomV1` (AEC) and `NanRandomParallelV1` (Parallel) replace numeric actions containing a NaN with a random action from the acting agent's own action space and emit a warning. If the agent has an `action_mask`, in its dictionary observation or otherwise in its info, the replacement is drawn only from the actions the mask allows. Masks are supported for `Discrete` action spaces; a mask with the wrong shape, values other than 0 and 1, or no allowed action raises `ValueError`. Replacements come from the wrapper's own RNG, which `reset(seed=...)` reseeds, so seeded runs are reproducible.
@@ -149,6 +175,45 @@ env.close()
 
 Actions without NaNs pass through unchanged, even if the mask forbids them, and `step(None)` for a dead AEC agent is passed through. Action and observation spaces are unchanged. These classes replace SuperSuit's `nan_random_v0`, which looked for the mask under the key `"action mask"` and so ignored PettingZoo's `action_mask`.
 
+### Repeating actions for several steps
+
+`FrameSkipV1` (AEC) and `FrameSkipParallelV1` (Parallel) use each action for `num_frames` steps of the wrapped environment. Rewards from those steps are added up. The observation, termination, truncation and info are the latest ones from the wrapped environment, and stepping stops early when the episode ends.
+
+```python
+from pettingzoo import make
+from pettingzoo.utils.wrappers import FrameSkipParallelV1
+
+env = FrameSkipParallelV1(
+    make("parallel", "butterfly/pistonball-v6", continuous=False), num_frames=4
+)
+observations, infos = env.reset(seed=42)
+while env.agents:
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
+    observations, rewards, terminations, truncations, infos = env.step(actions)
+env.close()
+```
+
+`FrameSkipParallelV1` also accepts a range `num_frames=(low, high)`. The number of steps is then drawn on every call from the `np_random` generator of `env.unwrapped`, which the environment seeds on `reset(seed=...)`. Agents added partway through a call use `default_action` until the next call, and a `ValueError` is raised if none was given.
+
+`FrameSkipV1` takes a fixed `num_frames` only. An agent's action is replayed on its next `num_frames - 1` turns, and the caller is asked for an action whenever the wrapped environment selects an agent with nothing left to replay, so the turn order is unchanged. `last()` reports the rewards the agent collected since it last acted. Agents that finish during replaying still get their `step(None)` from the caller.
+
+These classes replace SuperSuit's `frame_skip_v0` for the respective PettingZoo APIs.
+
+### Delaying observations
+
+`DelayObservationV1` (AEC) and `DelayObservationParallelV1` (Parallel) delay each
+agent's observations by a non-negative integer number of observation updates.
+Each agent has an independent history, which is cleared on reset. Repeated AEC
+`observe()` calls do not advance that history. Initial observations use a valid
+zero-like value from the agent's space; dictionary observations containing
+`observation` and `action_mask` use an all-ones initial action mask.
+
+These classes replace SuperSuit's `delay_observations_v0`. Import them from
+`pettingzoo.utils.wrappers` and wrap the corresponding environment with
+`delay=...`. Rewards, termination flags, infos, and observation spaces are
+unchanged. An action mask is delayed with its observation, so a historical mask
+may differ from the environment's current legal actions.
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.wrappers
 
@@ -161,6 +226,8 @@ Actions without NaNs pass through unchanged, even if the mask forbids them, and 
 .. autoclass:: ClipRewardV1
 .. autoclass:: ClipRewardParallelV1
 .. autoclass:: OrderEnforcingWrapper
+.. autoclass:: NanNoopV1
+.. autoclass:: NanNoopParallelV1
 .. autoclass:: NanRandomV1
 .. autoclass:: NanRandomParallelV1
 .. autoclass:: NanZerosV1
@@ -169,8 +236,13 @@ Actions without NaNs pass through unchanged, even if the mask forbids them, and 
 .. autoclass:: AgentIndicatorParallelV1
 .. autoclass:: ColorReductionObservationV1
 .. autoclass:: ColorReductionObservationParallelV1
+.. autoclass:: DelayObservationV1
+.. autoclass:: DelayObservationParallelV1
 .. autoclass:: DtypeObservationV1
 .. autoclass:: DtypeObservationParallelV1
+.. autoclass:: FrameSkipV1
+.. autoclass:: FrameSkipParallelV1
+.. autoclass:: FrameStackV3
 .. autoclass:: MaxObservationV1
 .. autoclass:: MaxObservationParallelV1
 .. autoclass:: PadActionSpaceV1

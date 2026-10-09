@@ -13,16 +13,23 @@ from pettingzoo.utils.wrappers.color_reduction import (
     ColorReductionObservationParallelV1,
     ColorReductionObservationV1,
 )
+from pettingzoo.utils.wrappers.delay_observation import (
+    DelayObservationParallelV1,
+    DelayObservationV1,
+)
 from pettingzoo.utils.wrappers.dtype import (
     DtypeObservationParallelV1,
     DtypeObservationV1,
 )
+from pettingzoo.utils.wrappers.frame_skip import FrameSkipParallelV1, FrameSkipV1
+from pettingzoo.utils.wrappers.frame_stack import FrameStackV3
 from pettingzoo.utils.wrappers.max_observation import (
     MaxObservationParallelV1,
     MaxObservationV1,
 )
 from pettingzoo.utils.wrappers.multi_episode_env import MultiEpisodeEnv
 from pettingzoo.utils.wrappers.multi_episode_parallel_env import MultiEpisodeParallelEnv
+from pettingzoo.utils.wrappers.nan_noop import NanNoopParallelV1, NanNoopV1
 from pettingzoo.utils.wrappers.nan_random import NanRandomParallelV1, NanRandomV1
 from pettingzoo.utils.wrappers.nan_zeros import NanZerosParallelV1, NanZerosV1
 from pettingzoo.utils.wrappers.order_enforcing import OrderEnforcingWrapper
@@ -67,12 +74,19 @@ __all__ = [
     "ClipRewardV1",
     "ColorReductionObservationParallelV1",
     "ColorReductionObservationV1",
+    "DelayObservationParallelV1",
+    "DelayObservationV1",
     "DtypeObservationParallelV1",
     "DtypeObservationV1",
+    "FrameSkipParallelV1",
+    "FrameSkipV1",
+    "FrameStackV3",
     "MaxObservationParallelV1",
     "MaxObservationV1",
     "MultiEpisodeEnv",
     "MultiEpisodeParallelEnv",
+    "NanNoopParallelV1",
+    "NanNoopV1",
     "NanRandomParallelV1",
     "NanRandomV1",
     "NanZerosParallelV1",
