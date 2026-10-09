@@ -79,6 +79,25 @@ def test_aec_discrete_agent_indicators() -> None:
         assert env.observation_space(agent).contains(observation)
 
 
+@pytest.mark.parametrize("dtype", [np.int64, np.uint64, np.int32, np.uint32])
+@pytest.mark.parametrize("aec", [False, True])
+def test_discrete_agent_indicators_with_integer_dtypes(dtype, aec) -> None:
+    space = gymnasium.spaces.Discrete(4, start=2, dtype=dtype)
+    base_env = IndicatorEnv(space, np.array(4, dtype=dtype))
+    env = (
+        AgentIndicatorV1(parallel_to_aec(base_env))
+        if aec
+        else AgentIndicatorParallelV1(base_env)
+    )
+    reset_result = env.reset()
+
+    for index, agent in enumerate(AGENTS):
+        observation = env.observe(agent) if aec else reset_result[0][agent]
+        assert env.observation_space(agent).n == 4 * len(AGENTS)
+        assert observation == 2 * len(AGENTS) + index
+        assert env.observation_space(agent).contains(observation)
+
+
 def test_unbounded_box_uses_finite_indicators() -> None:
     space = gymnasium.spaces.Box(low=-np.inf, high=np.inf, shape=(1,), dtype=np.float32)
     env = AgentIndicatorParallelV1(IndicatorEnv(space, np.zeros(1, dtype=np.float32)))
