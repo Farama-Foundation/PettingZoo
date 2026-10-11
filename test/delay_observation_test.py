@@ -240,6 +240,88 @@ def test_parallel_delay_timeline(delay) -> None:
     assert timeline == expected
 
 
+@pytest.mark.parametrize("wrapper", [DelayObservationV1, DelayObservationParallelV1])
+@pytest.mark.parametrize("masked", [False, True], ids=["box", "dict"])
+@pytest.mark.parametrize("delay", [0, 1, 3])
+@pytest.mark.parametrize("reuse_buffer", [False, True], ids=["fresh", "reused"])
+def test_delay_preserves_observation_snapshots(
+    wrapper, masked, delay, reuse_buffer, monkeypatch
+) -> None:
+    is_aec = wrapper is DelayObservationV1
+    base_env = (
+        DeterministicAECEnv(masked=masked)
+        if is_aec
+        else DeterministicParallelEnv(masked=masked)
+    )
+    method = "observe" if is_aec else "_observe"
+    observe = getattr(base_env, method)
+    buffers = {}
+
+    def observe_buffer(agent):
+        observation = observe(agent)
+        if masked:
+            observation["action_mask"][1] = observation["observation"][0] % 2
+        if not reuse_buffer or agent not in buffers:
+            buffers[agent] = observation
+        elif masked:
+            for key in observation:
+                np.copyto(buffers[agent][key], observation[key])
+        else:
+            np.copyto(buffers[agent], observation)
+        return buffers[agent]
+
+    monkeypatch.setattr(base_env, method, observe_buffer)
+    env = wrapper(base_env, delay=delay)
+
+    for _ in range(2):
+        if is_aec:
+            env.reset()
+            observations = {env.agent_selection: env.observe(env.agent_selection)}
+        else:
+            observations, infos = env.reset()
+            assert infos == {agent: {"reset": True} for agent in AGENTS}
+        updates = dict.fromkeys(AGENTS, 0)
+
+        for _ in range(12 if is_aec else 6):
+            for agent, observation in observations.items():
+                initial = updates[agent] < delay
+                start = 10 * (AGENTS.index(agent) + 1)
+                if is_aec and agent == "agent_1":
+                    start += 1
+                value = 0 if initial else start + updates[agent] - delay
+                expected = np.array([value], dtype=np.int64)
+                if masked:
+                    expected = {
+                        "observation": expected,
+                        "action_mask": np.array(
+                            [1, 1 if initial else value % 2, 1], dtype=np.int8
+                        ),
+                    }
+                np.testing.assert_equal(observation, expected)
+                assert env.observation_space(agent) is base_env.observation_space(agent)
+                assert env.observation_space(agent).contains(observation)
+                if delay == 0:
+                    assert observation is buffers[agent]
+                if is_aec:
+                    np.testing.assert_equal(env.observe(agent), expected)
+                    np.testing.assert_equal(env.last()[0], expected)
+                updates[agent] += 1
+
+            if is_aec:
+                env.step(0)
+                observations = {env.agent_selection: env.observe(env.agent_selection)}
+            else:
+                observations, rewards, terminations, truncations, infos = env.step(
+                    dict.fromkeys(env.agents, 0)
+                )
+                assert rewards == {"agent_0": 0.0, "agent_1": 1.0}
+                assert terminations == dict.fromkeys(AGENTS, False)
+                assert truncations == dict.fromkeys(AGENTS, False)
+                assert infos == {
+                    agent: {"step": base_env._step_count} for agent in AGENTS
+                }
+
+
 def test_aec_reset_clears_delay_history() -> None:
     env = DelayObservationV1(DeterministicAECEnv(), delay=1)
     env.reset()
