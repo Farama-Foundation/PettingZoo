@@ -21,6 +21,10 @@ from pettingzoo.utils.wrappers.dtype import (
     DtypeObservationParallelV1,
     DtypeObservationV1,
 )
+from pettingzoo.utils.wrappers.flatten import (
+    FlattenObservationParallelV1,
+    FlattenObservationV1,
+)
 from pettingzoo.utils.wrappers.frame_skip import FrameSkipParallelV1, FrameSkipV1
 from pettingzoo.utils.wrappers.frame_stack import FrameStackV3
 from pettingzoo.utils.wrappers.max_observation import (
@@ -78,6 +82,8 @@ __all__ = [
     "DelayObservationV1",
     "DtypeObservationParallelV1",
     "DtypeObservationV1",
+    "FlattenObservationParallelV1",
+    "FlattenObservationV1",
     "FrameSkipParallelV1",
     "FrameSkipV1",
     "FrameStackV3",
