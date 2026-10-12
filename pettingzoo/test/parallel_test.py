@@ -35,7 +35,11 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
     assert not isinstance(par_env.unwrapped, BaseWrapper)
 
     # checks that reset takes arguments seed and options
-    par_env.reset(seed=0, options={"options": 1})
+    obs, _ = par_env.reset(seed=0, options={"options": 1})
+    for agent in par_env.agents:
+        assert par_env.observation_space(agent).contains(obs[agent]), (
+            f"Observation for agent {agent!r} is not contained in its observation space after reset()"
+        )
 
     MAX_RESETS = 2
     for _ in range(MAX_RESETS):
@@ -46,6 +50,10 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
         # Note: obs and info dicts must contain all AgentIDs, but can also have other additional keys (e.g., "common")
         assert set(par_env.agents).issubset(set(obs.keys()))
         assert set(par_env.agents).issubset(set(infos.keys()))
+        for agent in par_env.agents:
+            assert par_env.observation_space(agent).contains(obs[agent]), (
+                f"Observation for agent {agent!r} is not contained in its observation space after reset()"
+            )
         terminated = dict.fromkeys(par_env.agents, False)
         truncated = dict.fromkeys(par_env.agents, False)
         live_agents = set(par_env.agents[:])
@@ -101,6 +109,11 @@ def parallel_api_test(par_env: ParallelEnv, num_cycles=1000):
                 warnings.warn("No agents present")
 
             for agent in par_env.agents:
+                # Missing observations are reported by the key checks above.
+                if agent in obs:
+                    assert par_env.observation_space(agent).contains(obs[agent]), (
+                        f"Observation for agent {agent!r} is not contained in its observation space after step()"
+                    )
                 assert par_env.observation_space(agent) is par_env.observation_space(
                     agent
                 ), (
