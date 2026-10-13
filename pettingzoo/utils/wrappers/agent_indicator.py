@@ -18,7 +18,8 @@ def _indicator_map(agents: list[AgentID], type_only: bool) -> dict[AgentID, int]
         return {agent: index for index, agent in enumerate(agents)}
 
     assert all(
-        isinstance(agent, str) and re.match(r"[a-z]+_[0-9]+", agent) for agent in agents
+        isinstance(agent, str) and re.fullmatch(r"[a-z]+_[0-9]+", agent)
+        for agent in agents
     ), "when type_only is True, agent names must follow the <type>_<n> format"
     type_indices: dict[str, int] = {}
     indicators: dict[AgentID, int] = {}
@@ -51,7 +52,7 @@ def _change_observation_space(
     space: gymnasium.spaces.Space[Any], num_indicators: int
 ) -> gymnasium.spaces.Space[Any]:
     if isinstance(space, gymnasium.spaces.Discrete):
-        return gymnasium.spaces.Discrete(space.n * num_indicators)
+        return gymnasium.spaces.Discrete(int(space.n) * num_indicators)
 
     assert isinstance(space, gymnasium.spaces.Box) and len(space.shape) in {1, 2, 3}, (
         f"AgentIndicatorV1 requires a 1D, 2D, or 3D Box or Discrete observation "

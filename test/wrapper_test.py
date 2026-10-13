@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import pytest
 
+from pettingzoo import ParallelEnv
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.classic import texas_holdem_no_limit_v6, tictactoe_v3
 from pettingzoo.test import parallel_api_test
 from pettingzoo.test.example_envs import generated_agents_parallel_v0
 from pettingzoo.utils.wrappers import (
+    BaseParallelWrapper,
     BaseWrapper,
+    CaptureStdoutWrapper,
     MultiEpisodeEnv,
     MultiEpisodeParallelEnv,
     TerminateIllegalWrapper,
@@ -82,8 +85,28 @@ def test_multi_episode_parallel_env_reset_consistency() -> None:
     Regression test for #1460: after an internal reset, the step tuple was keyed
     to two different agent sets.
     """
-    env = MultiEpisodeParallelEnv(generated_agents_parallel_v0.parallel_env(), 2)
-    parallel_api_test(env, num_cycles=60)
+    env = MultiEpisodeParallelEnv(
+        generated_agents_parallel_v0.parallel_env(max_cycles=2), 2
+    )
+    parallel_api_test(env, num_cycles=10)
+
+
+@pytest.mark.parametrize("num_episodes", [0, -1, -100])
+def test_multi_episode_env_rejects_non_positive_num_episodes(num_episodes: int) -> None:
+    """A wrapper asked for zero or fewer episodes still runs exactly one.
+
+    ``_episodes_elapsed`` starts at one, so the comparison against
+    ``num_episodes`` is already satisfied at the first episode boundary and the
+    request is silently ignored instead of reported.
+
+    Args:
+        num_episodes: a value that cannot describe a number of episodes
+    """
+    with pytest.raises(ValueError, match="must be at least 1"):
+        MultiEpisodeEnv(tictactoe_v3.env(), num_episodes=num_episodes)
+
+    with pytest.raises(ValueError, match="must be at least 1"):
+        MultiEpisodeParallelEnv(pistonball_v6.parallel_env(), num_episodes=num_episodes)
 
 
 def _do_game(env: TerminateIllegalWrapper, seed: int) -> None:
@@ -146,3 +169,152 @@ def test_terminate_illegal() -> None:
 
     # all values must be the same, or else the wrapper and env are mismatched
     assert len(set(agent_selections)) == 1, "agent_selection mismatch"
+
+
+def test_capture_stdout_leaves_env_metadata_unchanged() -> None:
+    """Wrapping an environment must not add "ansi" to its own metadata.
+
+    `metadata` is a class attribute shared by every instance of an environment, so
+    mutating it in place hands later instances a render mode they do not implement.
+    """
+    render_modes = tictactoe_v3.raw_env.metadata["render_modes"]
+    original = list(render_modes)
+    assert "ansi" not in original
+
+    try:
+        wrapper = CaptureStdoutWrapper(tictactoe_v3.env(render_mode="human"))
+        assert "ansi" in wrapper.metadata["render_modes"]
+        assert tictactoe_v3.raw_env.metadata["render_modes"] == original
+
+        # a second wrapper must not accumulate another entry either
+        CaptureStdoutWrapper(tictactoe_v3.env(render_mode="human"))
+        assert tictactoe_v3.raw_env.metadata["render_modes"] == original
+    finally:
+        render_modes[:] = original
+
+
+class _RecordSeeds(BaseWrapper):
+    """Records the seed handed to every reset of the wrapped AEC env."""
+
+    def __init__(self, env) -> None:
+        super().__init__(env)
+        self.seeds: list[int | None] = []
+
+    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
+        self.seeds.append(seed)
+        super().reset(seed=seed, options=options)
+
+
+class _RecordSeedsParallel(BaseParallelWrapper):
+    """Records the seed handed to every reset of the wrapped parallel env."""
+
+    def __init__(self, env) -> None:
+        super().__init__(env)
+        self.seeds: list[int | None] = []
+
+    def reset(self, seed: int | None = None, options: dict | None = None):
+        self.seeds.append(seed)
+        return super().reset(seed=seed, options=options)
+
+
+@pytest.mark.parametrize(("seed"), [0, 42])
+def test_multi_episode_env_wrapper_seeds_every_episode(seed: int) -> None:
+    """Each internal reset gets the previous seed plus one, also when the first seed is 0.
+
+    Args:
+        seed: seed passed to the first reset
+    """
+    inner = _RecordSeeds(texas_holdem_no_limit_v6.env(num_players=3))
+    env = MultiEpisodeEnv(inner, num_episodes=3)
+    env.reset(seed=seed)
+
+    for agent in env.agent_iter():
+        obs, rew, term, trunc, info = env.last()
+
+        if term or trunc:
+            action = None
+        else:
+            action_space = env.action_space(agent)
+            action_space.seed(0)
+            action = action_space.sample(mask=obs["action_mask"])
+
+        env.step(action)
+
+    env.close()
+
+    assert inner.seeds == [seed, seed + 1, seed + 2]
+
+
+@pytest.mark.parametrize(("seed"), [0, 42])
+def test_multi_episode_parallel_env_wrapper_seeds_every_episode(seed: int) -> None:
+    """Each internal reset gets the previous seed plus one, also when the first seed is 0.
+
+    Args:
+        seed: seed passed to the first reset
+    """
+    inner = _RecordSeedsParallel(pistonball_v6.parallel_env())
+    env = MultiEpisodeParallelEnv(inner, num_episodes=3)
+    _ = env.reset(seed=seed)
+
+    while env.agents:
+        actions = {agent: env.action_space(agent).low for agent in env.agents}
+        _ = env.step(actions)
+
+    env.close()
+
+    assert inner.seeds == [seed, seed + 1, seed + 2]
+
+
+@pytest.mark.parametrize("same_agents", [False, True])
+def test_multi_episode_parallel_env_boundary_values(same_agents):
+    """Reset tuples retain departing agents and do not terminate returning agents."""
+
+    class EpisodeEnv(ParallelEnv):
+        metadata = {}
+
+        def __init__(self):
+            self.episode = 0
+
+        def reset(self, seed=None, options=None):
+            self.episode += 1
+            self.agents = ["player" if same_agents else f"player_{self.episode}"]
+            agent = self.agents[0]
+            return {agent: 0}, {agent: {"reset": True}}
+
+        def step(self, actions):
+            agent = self.agents[0]
+            assert set(actions) == {agent}
+            self.agents = []
+            return (
+                {agent: 99},
+                {agent: 3.5},
+                {agent: True},
+                {agent: False},
+                {agent: {"reset": False}},
+            )
+
+    env = MultiEpisodeParallelEnv(EpisodeEnv(), 2)
+    env.reset(seed=0)
+    departing = env.agents[0]
+    obs, rew, term, trunc, info = env.step({departing: 0})
+    returning = env.agents[0]
+    for values in (obs, rew, term, trunc, info):
+        assert set(values) == {departing, returning}
+    assert obs[returning] == 0
+    assert info[returning] == {"reset": True}
+    assert rew[departing] == 3.5
+    assert not term[returning]
+    assert not trunc[returning]
+    if not same_agents:
+        assert obs[departing] == 99
+        assert info[departing] == {"reset": False}
+        assert term[departing]
+        assert rew[returning] == 0.0
+
+    final = env.step({returning: 0})
+    assert env.agents == []
+    for values in final:
+        assert set(values) == {returning}
+    assert final[1][returning] == 3.5
+    assert final[2][returning] is False
+    assert final[3][returning] is True

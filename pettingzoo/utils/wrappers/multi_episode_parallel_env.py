@@ -14,7 +14,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
 
     This is useful for creating evaluation environments.
     When there are no more valid agents in the underlying environment, the environment is automatically reset.
-    When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
+    At an internal reset, observations and infos use reset values for returning agents and retain final values for departing agents.
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
     """
 
@@ -26,11 +26,20 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
         Args:
             env (AECEnv): the base environment
             num_episodes (int): the number of episodes to run the underlying environment
+
+        Raises:
+            ValueError: If ``num_episodes`` is less than one.
         """
         super().__init__(env)
         assert isinstance(env, ParallelEnv), (
             "MultiEpisodeEnv is only compatible with ParallelEnv environments."
         )
+
+        # `_episodes_elapsed` starts at one, so any value below one compares
+        # equal to a single episode and the wrapper silently runs one episode
+        # instead of the number asked for.
+        if num_episodes < 1:
+            raise ValueError(f"`num_episodes` must be at least 1, got {num_episodes}.")
 
         self._num_episodes = num_episodes
 
@@ -68,7 +77,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
         """Steps the environment.
 
         When there are no more valid agents in the underlying environment, the environment is automatically reset.
-        When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
+        At an internal reset, observations and infos use reset values for returning agents and retain final values for departing agents.
         The result of this wrapper is that the environment is no longer Markovian around the environment reset.
 
         Args:
@@ -90,22 +99,22 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
 
         # override the term trunc to only trunc when num_episodes have been elapsed
         if self._episodes_elapsed >= self._num_episodes:
-            term = dict.fromkeys(self.agents, False)
-            trunc = dict.fromkeys(self.agents, True)
+            term = dict.fromkeys(term, False)
+            trunc = dict.fromkeys(trunc, True)
             return obs, rew, term, trunc, info
 
         # if any agent terminates or truncates
         # and we haven't elapsed `num_episodes`
         # reset the environment
-        # the observation and info are replaced with the new episode's, while the
-        # rewards and flags still describe the episode that just finished; entries
-        # are kept for both the finished and the new agent sets so the tuple is
-        # keyed to a single consistent key set
+        # Retain final values for departing agents and use reset values for new
+        # agents. Agents present again after reset continue the wrapped episode.
         # the result is that this env is no longer Markovian at the reset points
         self._episodes_elapsed += 1
-        self._seed = self._seed + 1 if self._seed else None
-        obs, info = super().reset(seed=self._seed, options=self._options)
+        self._seed = self._seed + 1 if self._seed is not None else None
+        new_obs, new_info = super().reset(seed=self._seed, options=self._options)
+        obs = {**obs, **new_obs}
+        info = {**info, **new_info}
         rew = {**dict.fromkeys(self.agents, 0.0), **rew}
-        term = {**dict.fromkeys(self.agents, False), **term}
-        trunc = {**dict.fromkeys(self.agents, False), **trunc}
+        term = {**term, **dict.fromkeys(self.agents, False)}
+        trunc = {**trunc, **dict.fromkeys(self.agents, False)}
         return obs, rew, term, trunc, info

@@ -503,7 +503,7 @@ class turn_based_aec_to_parallel_wrapper(
     @override
     def step(self, actions):
         if not self.agents:
-            return {}, {}, {}, {}
+            return {}, {}, {}, {}, {}
         self.aec_env.step(actions[self.aec_env.agent_selection])
         rewards = {**self.aec_env.rewards}
         terminations = {**self.aec_env.terminations}
