@@ -113,10 +113,12 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
         assert env.state_space.contains(new_state), (
             "Environment's state is outside of it's state space"
         )
-        if not isinstance(new_state, state_0.__class__):
-            warnings.warn("States are different classes")
         if not isinstance(new_state, np.ndarray):
             continue
+        if isinstance(state_0, np.ndarray) and not isinstance(
+            new_state, state_0.__class__
+        ):
+            warnings.warn("States are different classes")
         if np.isinf(new_state).any():
             warnings.warn(
                 "State contains infinity (np.inf) or negative infinity (-np.inf)"
@@ -129,12 +131,13 @@ def test_state(env: AECEnv, num_cycles: int, seed: int | None = 0):
             raise AssertionError("State can not be an empty array")
         if new_state.shape == (1,):
             warnings.warn("State is a single number")
-        if (new_state.shape != state_0.shape) and (
-            len(new_state.shape) == len(state_0.shape)
-        ):
-            warnings.warn("States are different shapes")
-        if len(new_state.shape) != len(state_0.shape):
-            warnings.warn("States have different number of dimensions")
+        if isinstance(state_0, np.ndarray):
+            if (new_state.shape != state_0.shape) and (
+                len(new_state.shape) == len(state_0.shape)
+            ):
+                warnings.warn("States are different shapes")
+            if len(new_state.shape) != len(state_0.shape):
+                warnings.warn("States have different number of dimensions")
         if not np.can_cast(new_state.dtype, np.dtype("float64")):
             warnings.warn("State numpy array is not a numeric dtype")
         if np.array_equal(new_state, np.zeros(new_state.shape)):
@@ -230,3 +233,29 @@ def test_structured_state_outside_space():
     env = InvalidStateWrapper(generated_agents_env_v0.env())
     with pytest.raises(AssertionError, match="outside of it's state space"):
         test_state(env, num_cycles=1)
+
+
+@pytest.mark.parametrize("initial_array", [False, True])
+def test_state_concrete_type_can_change(initial_array):
+    """Containment permits Python/NumPy scalars and array-like state values."""
+
+    class MixedStateWrapper(BaseWrapper):
+        def __init__(self, env):
+            super().__init__(env)
+            self.state_space = (
+                gymnasium.spaces.Box(0, 3, shape=(2,), dtype=np.float64)
+                if initial_array
+                else gymnasium.spaces.Discrete(3)
+            )
+            self.calls = 0
+
+        def state(self):
+            self.calls += 1
+            if initial_array:
+                return (1.0, 2.0) if self.calls == 1 else np.array([1.0, 2.0])
+            return 1 if self.calls % 2 else np.int64(1)
+
+    env = MixedStateWrapper(generated_agents_env_v0.env())
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        test_state(env, num_cycles=2)
