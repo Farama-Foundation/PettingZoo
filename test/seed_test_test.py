@@ -81,6 +81,26 @@ def test_parallel_seed_test_accepts_deterministic_env():
     parallel_seed_test(DivergingParallelEnv, num_cycles=NUM_CYCLES)
 
 
+@pytest.mark.parametrize("field", ["observations", "infos"])
+def test_parallel_seed_test_checks_reset_outputs(field):
+    # Model reset randomness that ignores its seed, without a flaky regression.
+    reset_random = random.Random(0)
+
+    class RandomResetEnv(DivergingParallelEnv):
+        def reset(self, seed=None, options=None):
+            observations, infos = super().reset(seed=seed, options=options)
+            for agent in self.agents:
+                value = reset_random.random()
+                if field == "observations":
+                    observations[agent][:] = value
+                else:
+                    infos[agent]["value"] = value
+            return observations, infos
+
+    with pytest.raises(AssertionError, match=f"Incorrect {field} after reset"):
+        parallel_seed_test(RandomResetEnv, num_cycles=NUM_CYCLES)
+
+
 @pytest.mark.parametrize("diverge_after", [1, 3, 5])
 def test_parallel_seed_test_detects_late_divergence(diverge_after):
     """An env that only diverges after a few steps must still fail the seed test."""
