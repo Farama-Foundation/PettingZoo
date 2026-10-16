@@ -152,7 +152,7 @@ save_observation(env, agent=None, all_agents=False)
 
 ### Capture Stdout
 
-Base class which is used by [CaptureStdoutWrapper](https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.CaptureStdoutWrapper). Captures system standard out as a string value in a variable.
+Base class which is used by [CaptureStdoutWrapper](https://pettingzoo.farama.org/api/wrappers/pz_wrappers/#pettingzoo.wrappers.CaptureStdoutWrapper). Captures system standard out as a string value in a variable.
 
 
 ```{eval-rst}
