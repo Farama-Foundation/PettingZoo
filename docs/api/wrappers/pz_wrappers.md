@@ -221,6 +221,8 @@ each agent's observation using Gymnasium's `flatten` function and advertise the
 corresponding `flatten_space`. Box observations become one-dimensional arrays;
 Discrete observations become one-hot arrays, and Dict and Tuple components are
 combined in their space order. Each agent keeps its own observation space.
+Flattened observation spaces are cached during an episode and refreshed on reset
+to support generated-agent environments that recreate their spaces.
 
 These classes replace SuperSuit's `flatten_v0`. Import them from
 `pettingzoo.utils.wrappers` and wrap the environment for the corresponding API.
