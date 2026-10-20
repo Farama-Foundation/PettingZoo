@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import warnings
 
 import numpy as np
 import pytest
@@ -267,6 +268,26 @@ def test_unbounded_space_cast_to_int_collapses():
     assert not space.contains(env.observe("agent_0"))
     with pytest.raises(AssertionError, match="Out of bounds observation"):
         api_test(env, num_cycles=2)
+
+
+@pytest.mark.parametrize(
+    "dtype",
+    [np.int8, np.int16, np.int32, np.int64, np.uint8, np.uint16, np.uint32, np.uint64],
+)
+def test_unbounded_space_cast_to_int_does_not_depend_on_the_cpu(dtype):
+    """Infinite bounds collapse to the dtype minimum on every platform.
+
+    NumPy leaves the float to int cast of an infinity undefined: x86 and ARM
+    give different integers, so the cast bounds are pinned explicitly.
+    """
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        env = DtypeObservationV1(UnboundedAEC(), dtype)
+
+    space = env.observation_space("agent_0")
+    expected = np.full(2, np.iinfo(dtype).min, dtype=dtype)
+    assert np.array_equal(space.low, expected)
+    assert np.array_equal(space.high, expected)
 
 
 def test_impossible_cast_names_the_wrapper_and_agent():
