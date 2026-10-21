@@ -15,7 +15,8 @@ from pettingzoo.utils.wrappers import (
     StickyActionV1,
 )
 
-AGENTS = ["agent_0", "agent_1"]
+from . import dummy_envs
+from .dummy_envs import AGENTS
 
 # Close enough to 1 that a non-repeat is a one-in-a-billion event.
 ALWAYS = 1.0 - 1e-9
@@ -32,14 +33,13 @@ def obs_space(agent):
     return Box(low=0.0, high=1.0, shape=(2,), dtype=np.float32)
 
 
-class DummyAEC(AECEnv):
+class DummyAEC(dummy_envs.DummyAEC):
     """Records the action each agent was actually stepped with."""
 
-    metadata = {"render_modes": [], "name": "dummy_aec"}
+    max_steps = 20
 
     def __init__(self):
         super().__init__()
-        self.possible_agents = list(AGENTS)
         self.received = []
         self.seen_seed = "unset"
 
@@ -52,36 +52,15 @@ class DummyAEC(AECEnv):
 
     def reset(self, seed=None, options=None):
         self.seen_seed = seed
-        self.agents = list(self.possible_agents)
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._cumulative_rewards = dict.fromkeys(self.agents, 0.0)
-        self.terminations = dict.fromkeys(self.agents, False)
-        self.truncations = dict.fromkeys(self.agents, False)
-        self.infos = {a: {} for a in self.agents}
+        super().reset(seed=seed, options=options)
         self.received = []
-        self._idx = 0
-        self._step_count = 0
-        self.agent_selection = self.agents[0]
 
     def observe(self, agent):
         return OBS
 
     def step(self, action):
         self.received.append((self.agent_selection, action))
-        self._step_count += 1
-        self._cumulative_rewards[self.agent_selection] = 0.0
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        if self._step_count >= 20:
-            self.terminations = dict.fromkeys(self.agents, True)
-        self._idx = (self._idx + 1) % len(self.agents)
-        self.agent_selection = self.agents[self._idx]
-        self._accumulate_rewards()
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+        super().step(action)
 
 
 class DyingAEC(AECEnv):
@@ -144,14 +123,13 @@ class DyingAEC(AECEnv):
         pass
 
 
-class DummyParallel(ParallelEnv):
+class DummyParallel(dummy_envs.DummyParallel):
     """Records the actions dict each step was actually called with."""
 
-    metadata = {"render_modes": [], "name": "dummy_parallel"}
+    max_steps = 40
 
     def __init__(self):
         super().__init__()
-        self.possible_agents = list(AGENTS)
         self.received = []
         self.seen_seed = "unset"
 
@@ -164,29 +142,15 @@ class DummyParallel(ParallelEnv):
 
     def reset(self, seed=None, options=None):
         self.seen_seed = seed
-        self.agents = list(self.possible_agents)
         self.received = []
-        self._step_count = 0
-        return dict.fromkeys(self.agents, OBS), {a: {} for a in self.agents}
+        return super().reset(seed=seed, options=options)
+
+    def observe(self, agent):
+        return OBS
 
     def step(self, actions):
         self.received.append(dict(actions))
-        self._step_count += 1
-        done = self._step_count >= 40
-        obs = dict.fromkeys(self.agents, OBS)
-        rewards = dict.fromkeys(self.agents, 0.0)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+        return super().step(actions)
 
 
 class DyingParallel(DummyParallel):
@@ -196,14 +160,14 @@ class DyingParallel(DummyParallel):
 
     def step(self, actions):
         self.received.append(dict(actions))
-        self._step_count += 1
+        self.frame += 1
         acting = list(self.agents)
         terminations = dict.fromkeys(acting, False)
         truncations = dict.fromkeys(acting, False)
-        if self._step_count == 1:
+        if self.frame == 1:
             terminations["agent_1"] = True
             self.agents = ["agent_0"]
-        elif self._step_count == 2:
+        elif self.frame == 2:
             self.agents = list(AGENTS)
         obs = dict.fromkeys(self.agents, OBS)
         rewards = dict.fromkeys(acting, 0.0)
