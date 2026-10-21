@@ -4,13 +4,14 @@ import functools
 
 import numpy as np
 import pytest
-from gymnasium.spaces import Box, Discrete
+from gymnasium.spaces import Box
 
 from pettingzoo.test import api_test, parallel_api_test
-from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import ClipRewardParallelV1, ClipRewardV1
 
-AGENTS = ["agent_0", "agent_1"]
+from . import dummy_envs
+from .dummy_envs import AGENTS
+
 OBS = np.array([0.25, 0.75], dtype=np.float32)
 RAW_REWARD = 10.0
 
@@ -20,113 +21,30 @@ def obs_space(agent):
     return Box(low=0.0, high=1.0, shape=(2,), dtype=np.float32)
 
 
-class DummyAEC(AECEnv):
+class DummyAEC(dummy_envs.DummyAEC):
     """Gives RAW_REWARD to the agent that just stepped."""
 
-    metadata = {"render_modes": [], "name": "dummy_aec"}
-
-    def __init__(self):
-        super().__init__()
-        self.possible_agents = list(AGENTS)
+    reward = RAW_REWARD
 
     def observation_space(self, agent):
         return obs_space(agent)
-
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._cumulative_rewards = dict.fromkeys(self.agents, 0.0)
-        self.terminations = dict.fromkeys(self.agents, False)
-        self.truncations = dict.fromkeys(self.agents, False)
-        self.infos = {a: {} for a in self.agents}
-        self._idx = 0
-        self._step_count = 0
-        self.agent_selection = self.agents[0]
 
     def observe(self, agent):
         return OBS
 
-    def step(self, action):
-        if (
-            self.terminations[self.agent_selection]
-            or self.truncations[self.agent_selection]
-        ):
-            self._was_dead_step(action)
-            return
-        self._step_count += 1
-        self._clear_rewards()
-        self.rewards[self.agent_selection] = RAW_REWARD
-        if self._step_count >= 8:
-            self.terminations = dict.fromkeys(self.agents, True)
-        self._idx = (self._idx + 1) % len(self.agents)
-        self.agent_selection = self.agents[self._idx]
-        self._accumulate_rewards()
 
-    def render(self):
-        return None
-
-    def close(self):
-        pass
-
-
-class DummyParallel(ParallelEnv):
-    metadata = {"render_modes": [], "name": "dummy_parallel"}
-
-    def __init__(self):
-        super().__init__()
-        self.possible_agents = list(AGENTS)
+class DummyParallel(dummy_envs.DummyParallel):
+    reward = RAW_REWARD
 
     def observation_space(self, agent):
         return obs_space(agent)
 
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self._step_count = 0
-        return dict.fromkeys(self.agents, OBS), {a: {} for a in self.agents}
-
-    def step(self, actions):
-        self._step_count += 1
-        done = self._step_count >= 8
-        obs = dict.fromkeys(self.agents, OBS)
-        rewards = dict.fromkeys(self.agents, RAW_REWARD)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+    def observe(self, agent):
+        return OBS
 
 
 class NegativeAEC(DummyAEC):
-    def step(self, action):
-        if (
-            self.terminations[self.agent_selection]
-            or self.truncations[self.agent_selection]
-        ):
-            self._was_dead_step(action)
-            return
-        self._step_count += 1
-        self._clear_rewards()
-        self.rewards[self.agent_selection] = -RAW_REWARD
-        if self._step_count >= 8:
-            self.terminations = dict.fromkeys(self.agents, True)
-        self._idx = (self._idx + 1) % len(self.agents)
-        self.agent_selection = self.agents[self._idx]
-        self._accumulate_rewards()
+    reward = -RAW_REWARD
 
 
 def test_aec_clips_step_reward():
