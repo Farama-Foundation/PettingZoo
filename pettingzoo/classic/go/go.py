@@ -17,7 +17,7 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Agents             | 2                                      |
 | Action Shape       | Discrete(362)                          |
 | Action Values      | Discrete(362)                          |
-| Observation Shape  | (19, 19, 3)                            |
+| Observation Shape  | (19, 19, 17)                           |
 | Observation Values | [0, 1]                                 |
 
 
@@ -45,8 +45,9 @@ make("aec", "classic/go-v5", board_size=19, komi=7.5)
 The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 
-The main observation shape is a function of the board size _N_ and has a shape of (N, N, 3). The first plane, (:, :, 0), represent the stones on the board for the current player while the second plane, (:, :, 1), encodes the stones of the opponent. The third plane, (:, :, 2), is all 1 if the
-current player is `black_0` or all 0 if the player is `white_0`. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is
+The main observation shape is a function of the board size _N_ and has a shape of (N, N, 17). The first 16 planes hold the last 8 board positions, newest first, two planes per position: the stones of the player who made the move that produced the position, then the stones of
+their opponent. For the agent about to move, planes 0 and 1 are therefore its opponent's stones and its own stones, planes 2 and 3 its own stones and its opponent's, and so on. Planes for positions before the start of the game are all 0. The last plane, (:, :, 16), is all 0 if the observing
+agent is `black_0` or all 1 if it is `white_0`. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is
 ```
    0 1 2 3 4 5 6 7 8
  0 . . . . . . . . .  0
@@ -61,11 +62,12 @@ current player is `black_0` or all 0 if the player is `white_0`. The state of th
    0 1 2 3 4 5 6 7 8
 ```
 
-|  Plane  | Description                                               |
-|:-------:|-----------------------------------------------------------|
-|    0    | Current Player's stones<br>_'`0`: no stone, `1`: stone_   |
-|    1    | Opponent Player's stones<br>_'`0`: no stone, `1`: stone_  |
-|    2    | Player<br>_'`0`: white, `1`: black_                       |
+|  Plane   | Description                                                                          |
+|:--------:|--------------------------------------------------------------------------------------|
+|    0     | Stones of the player who made the most recent move<br>_'`0`: no stone, `1`: stone_   |
+|    1     | Stones of that player's opponent<br>_'`0`: no stone, `1`: stone_                     |
+| 2 ... 15 | The same two planes for each of the 7 earlier positions, newest first                |
+|    16    | Observing agent<br>_'`0`: `black_0`, `1`: `white_0`_                                 |
 
 While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/).
 
