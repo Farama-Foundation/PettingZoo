@@ -14,6 +14,10 @@ For non-visual environments, we use [MLP](https://stable-baselines3.readthedocs.
 
 * [Action Masked PPO for Connect Four](/tutorials/sb3/connect_four/): _Train agents using Action Masked PPO in an AEC environment_
 
+Not every documentation GIF needs a trained model. Where a hand-written rule already plays the environment well, it is cheaper to reproduce and easier to review.
+
+* [Cooperative Pong: a scripted policy](/tutorials/sb3/cooperative_pong/): _Keep the ball in play with pixel arithmetic instead of training_
+
 ```{eval-rst}
 .. warning::
 
@@ -50,4 +54,5 @@ For more information, see the [Stable-Baselines3 v1.0 Blog Post](https://araffin
 
 kaz
 connect_four
+cooperative_pong
 ```

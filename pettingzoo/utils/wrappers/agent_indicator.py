@@ -52,7 +52,7 @@ def _change_observation_space(
     space: gymnasium.spaces.Space[Any], num_indicators: int
 ) -> gymnasium.spaces.Space[Any]:
     if isinstance(space, gymnasium.spaces.Discrete):
-        return gymnasium.spaces.Discrete(space.n * num_indicators)
+        return gymnasium.spaces.Discrete(int(space.n) * num_indicators)
 
     assert isinstance(space, gymnasium.spaces.Box) and len(space.shape) in {1, 2, 3}, (
         f"AgentIndicatorV1 requires a 1D, 2D, or 3D Box or Discrete observation "
