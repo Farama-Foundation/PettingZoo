@@ -404,7 +404,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.spaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">MultiDiscrete</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gymnasium.spaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">MultiBinary</span><span class="p">,</span> <span class="n">MultiDiscrete</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParallelEnv</span>
 
@@ -612,7 +612,15 @@
     <span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="c1"># gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/</span>
-        <span class="k">return</span> <span class="n">MultiDiscrete</span><span class="p">([</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># Each observation is a dict holding the encoded positions and the action mask.</span>
+        <span class="c1"># Positions are encoded as x + 7 * y on the 7x7 grid, so each value ranges from 0 to 48.</span>
+        <span class="c1"># The action mask has one binary entry for each of the four actions.</span>
+        <span class="k">return</span> <span class="n">Dict</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">"observation"</span><span class="p">:</span> <span class="n">MultiDiscrete</span><span class="p">([</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="s2">"action_mask"</span><span class="p">:</span> <span class="n">MultiBinary</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="c1"># Action space should be defined here.</span>
     <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
