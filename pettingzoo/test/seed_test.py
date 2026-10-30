@@ -95,8 +95,11 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
     iter = 0
     max_env_iters = num_cycles * len(env1.agents)
 
-    env1.reset(seed=42)
-    env2.reset(seed=42)
+    obs1, infos1 = env1.reset(seed=42)
+    obs2, infos2 = env2.reset(seed=42)
+
+    assert data_equivalence(obs1, obs2), "Incorrect observations after reset"
+    assert data_equivalence(infos1, infos2), "Incorrect infos after reset"
 
     seed_action_spaces(env1)
     seed_action_spaces(env2)
