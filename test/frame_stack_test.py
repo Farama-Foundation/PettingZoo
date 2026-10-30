@@ -480,6 +480,37 @@ def test_aec_agent_leaving_and_coming_back_starts_fresh(initial):
     assert np.array_equal(env.observe("agent_1"), np.concatenate(want))
 
 
+@pytest.mark.parametrize("num_agents", [16, 64])
+def test_aec_history_cleanup_scales_linearly_with_agents(num_agents):
+    class AgentID(str):
+        comparisons = 0
+        __hash__ = str.__hash__
+
+        def __eq__(self, other):
+            type(self).comparisons += 1
+            return super().__eq__(other)
+
+    class ManyAgentsAEC(DummyAEC):
+        def __init__(self):
+            super().__init__()
+            self.possible_agents = [AgentID(f"agent_{i}") for i in range(num_agents)]
+
+        def observe(self, agent):
+            return np.full(self.shape, self.frame, dtype=self.dtype)
+
+    env = FrameStackV3(ManyAgentsAEC(), 2)
+    env.reset(seed=0)
+    for _ in range(num_agents):
+        env.step(0)
+
+    # Count equality work rather than wall time so this regression is independent
+    # of machine load. Each agent has a history after the first full cycle.
+    AgentID.comparisons = 0
+    env.step(0)
+    assert AgentID.comparisons <= 4 * num_agents
+    assert set(env._history) == set(env.agents)
+
+
 def test_returned_observation_is_not_aliased():
     env = FrameStackV3(DummyAEC(), 2)
     env.reset(seed=0)

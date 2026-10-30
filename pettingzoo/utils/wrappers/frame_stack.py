@@ -275,12 +275,13 @@ class _FrameStackAEC(FrameStackV3, BaseWrapper[AgentID, Any, ActionType]):
     @override
     def step(self, action: ActionType) -> None:
         super().step(action)
+        active_agents = set(self.env.agents)
         self._history = {
             agent: history
             for agent, history in self._history.items()
-            if agent in self.env.agents
+            if agent in active_agents
         }
-        if self.agent_selection in self.env.agents:
+        if self.agent_selection in active_agents:
             self._record(self.agent_selection)
 
     @override
