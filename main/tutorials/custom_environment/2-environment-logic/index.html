@@ -587,6 +587,42 @@
 </div>
 </div>
 </section>
+<section id="parallel-and-aec-environments">
+<h2>Parallel and AEC environments<a class="headerlink" href="#parallel-and-aec-environments" title="Link to this heading">¶</a></h2>
+<p>The example above implements a <code class="docutils literal notranslate"><span class="pre">ParallelEnv</span></code>. Its <code class="docutils literal notranslate"><span class="pre">step(actions)</span></code> accepts
+actions for all active agents and returns the observations, rewards,
+terminations, truncations, and infos together. When this game finishes, it
+sets <code class="docutils literal notranslate"><span class="pre">self.agents</span> <span class="pre">=</span> <span class="pre">[]</span></code>. It does <strong>not</strong> use the AEC-specific agent selector,
+dead steps, or cumulative reward bookkeeping.</p>
+<p>An <code class="docutils literal notranslate"><span class="pre">AECEnv</span></code> instead processes <strong>one selected agent per step</strong>. If you are
+writing an AEC environment, you must account for two kinds of reward state:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">self.rewards[agent]</span></code> is the reward assigned to that agent by the current
+transition. It is cleared when there is no new reward; it is <strong>not</strong> a running
+episode score.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self._cumulative_rewards[agent]</span></code> accumulates rewards until that agent
+next takes a turn. <code class="docutils literal notranslate"><span class="pre">env.last()</span></code> reads the cumulative reward for the
+currently selected agent. After its live action is processed, the
+environment resets that agent’s cumulative entry, and
+<code class="docutils literal notranslate"><span class="pre">self._accumulate_rewards()</span></code> adds the transition’s <code class="docutils literal notranslate"><span class="pre">self.rewards</span></code> to the
+cumulative entries for <strong>all</strong> agents.</p></li>
+</ul>
+<p>For example, suppose the last move in a two-player AEC game gives the winner
+<code class="docutils literal notranslate"><span class="pre">1</span></code> and the loser <code class="docutils literal notranslate"><span class="pre">0</span></code>, with no earlier rewards. That move sets
+<code class="docutils literal notranslate"><span class="pre">self.rewards</span></code>, marks both agents terminated, and accumulates the rewards.
+Each terminated agent can still be selected once more: the caller reads its
+final reward and termination flag with <code class="docutils literal notranslate"><span class="pre">env.last()</span></code>, then calls
+<code class="docutils literal notranslate"><span class="pre">env.step(None)</span></code>. That final <em>dead step</em> removes the agent and its reward
+entries. Having empty reward dictionaries <strong>after</strong> both dead steps is
+expected; the rewards were available through <code class="docutils literal notranslate"><span class="pre">last()</span></code> before removal.</p>
+<p>An AEC environment’s <code class="docutils literal notranslate"><span class="pre">step()</span></code> should handle a selected agent that is
+already terminated or truncated with <code class="docutils literal notranslate"><span class="pre">self._was_dead_step(action)</span></code> and
+return immediately. It must also update cumulative rewards after assigning
+new rewards, including terminal rewards. For a concrete implementation, see
+<a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/main/pettingzoo/classic/rps/rps.py">the Rock–Paper–Scissors AEC <code class="docutils literal notranslate"><span class="pre">step()</span></code> method</a>;
+for the dead-step lifecycle and a caller-side <code class="docutils literal notranslate"><span class="pre">agent_iter()</span></code> example, see
+<a class="reference internal" href="../../../content/basic_usage/#variable-numbers-of-agents-death"><span class="std std-ref">Basic Usage: Variable Numbers of Agents (Death)</span></a>.</p>
+</section>
 </section>
 
           </article>
@@ -661,6 +697,7 @@
 <li><a class="reference internal" href="#">Tutorial: Environment Logic</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#code">Code</a></li>
+<li><a class="reference internal" href="#parallel-and-aec-environments">Parallel and AEC environments</a></li>
 </ul>
 </li>
 </ul>
