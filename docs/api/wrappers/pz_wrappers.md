@@ -116,7 +116,7 @@ environment's reset and step return values.
 from pettingzoo import make
 from pettingzoo.utils import ClipOutOfBoundsWrapper
 
-parallel_env = make("parallel", "sisl/multiwalker-v9", render_mode="human")
+parallel_env = make("parallel", "sisl/multiwalker-v10", render_mode="human")
 parallel_env = ClipOutOfBoundsWrapper(parallel_env)
 
 observations, infos = parallel_env.reset()
