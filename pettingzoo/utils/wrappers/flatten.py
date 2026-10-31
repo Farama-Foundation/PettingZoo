@@ -39,6 +39,14 @@ class FlattenObservationV1(BaseWrapper[AgentID, Any, ActionType]):
         return flatten(self.env.observation_space(agent), obs)
 
     @override
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
+        self.env.reset(seed=seed, options=options)
+        # Generated-agent environments can recreate spaces for reused agent IDs.
+        self._obs_spaces.clear()
+
+    @override
     def __str__(self) -> str:
         return f"FlattenObservationV1<{self.env!s}>"
 
@@ -70,6 +78,7 @@ class FlattenObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
         self, seed: int | None = None, options: dict[str, Any] | None = None
     ) -> tuple[dict[AgentID, Any], dict[AgentID, dict[str, Any]]]:
         observations, infos = self.env.reset(seed=seed, options=options)
+        self._obs_spaces.clear()
         return self._flatten(observations), infos
 
     @override
