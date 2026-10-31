@@ -33,6 +33,12 @@ env = make("parallel", "butterfly/pistonball-v6")
 parallel_api_test(env, num_cycles=1000)
 ```
 
+The test checks that each current agent's observation returned by `reset()` and
+`step()` is contained in that agent's `observation_space(agent)`. This uses the
+space's `contains()` method, including checks of nested `Dict` observations such
+as those containing an action mask. An invalid observation raises an assertion
+identifying the agent and whether it came from `reset()` or `step()`.
+
 ## Seed Test
 
 To have a properly reproducible environment that utilizes randomness, you need to be able to make it deterministic during evaluation by setting a seed for the random number generator that defines the random behavior. The seed test checks that calling the `seed()` method with a constant actually makes the environment deterministic.
