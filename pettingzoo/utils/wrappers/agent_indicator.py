@@ -88,7 +88,7 @@ def _change_observation(
     num_indicators: int,
 ) -> Any:
     if isinstance(space, gymnasium.spaces.Discrete):
-        return (observation - space.start) * num_indicators + indicator
+        return (int(observation) - int(space.start)) * num_indicators + indicator
 
     assert isinstance(space, gymnasium.spaces.Box)
     if len(space.shape) == 1:
