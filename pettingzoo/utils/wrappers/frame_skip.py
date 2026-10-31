@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from typing import Any
 
 import numpy as np
@@ -30,6 +31,9 @@ class FrameSkipV1(BaseWrapper[AgentID, ObsType, ActionType]):
     caller sees is the wrapped environment's own order. Rewards from every
     replayed turn are added up, and ``last()`` reports them as the agent's
     cumulative reward since it last acted.
+
+    Actions are copied when submitted and on each replay, so caller or environment
+    mutations cannot change the controls remembered for later turns.
 
     Agents that terminate or truncate while actions are being replayed are
     handed back to the caller for their usual ``step(None)``, and replaying
@@ -71,7 +75,7 @@ class FrameSkipV1(BaseWrapper[AgentID, ObsType, ActionType]):
         return self.env.terminations[agent] or self.env.truncations[agent]
 
     def _inner_step(self, agent: AgentID) -> None:
-        action = self._actions[agent]
+        action = copy.deepcopy(self._actions[agent])
         self._turns_left[agent] -= 1
         if self._turns_left[agent] == 0:
             del self._actions[agent]
@@ -89,7 +93,7 @@ class FrameSkipV1(BaseWrapper[AgentID, ObsType, ActionType]):
             self.env.step(action)
         else:
             self._cumulative_rewards[agent] = 0.0
-            self._actions[agent] = action
+            self._actions[agent] = copy.deepcopy(action)
             self._turns_left[agent] = self.num_frames
             self._inner_step(agent)
 
@@ -118,6 +122,9 @@ class FrameSkipParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionType]):
     added up per agent. The observation, termination, truncation and info of each
     agent are the last ones the wrapped environment returned for it, so an agent
     that finishes partway through still reports its final transition.
+
+    Each underlying step receives a fresh copy of each action, including the
+    default action, so in-place changes cannot affect subsequent repeats.
 
     ``num_frames`` can also be a tuple ``(low, high)``. The number of steps is
     then drawn uniformly from ``low`` to ``high`` (inclusive) on every call, using
@@ -188,7 +195,9 @@ class FrameSkipParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionType]):
         infos: dict[AgentID, dict[str, Any]] = {}
 
         for i in range(num_steps):
-            obs, rews, terms, truncs, step_infos = self.env.step(actions)
+            obs, rews, terms, truncs, step_infos = self.env.step(
+                {agent: copy.deepcopy(action) for agent, action in actions.items()}
+            )
             observations.update(obs)
             terminations.update(terms)
             truncations.update(truncs)
