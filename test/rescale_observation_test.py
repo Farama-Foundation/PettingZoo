@@ -7,10 +7,10 @@ import pytest
 from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
-from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import RescaleObservationParallelV1, RescaleObservationV1
 
-AGENTS = ["agent_0", "agent_1"]
+from . import dummy_envs
+from .dummy_envs import AGENTS
 
 # (0.0, 1.0) is the one range where the float32 arithmetic happens to be exact.
 RANGES = [(0.0, 1.0), (0.1, 0.7), (-2.0, 4.0)]
@@ -42,93 +42,20 @@ def obs_space(agent):
     return SPACES[agent]
 
 
-class DummyAEC(AECEnv):
-    metadata = {"render_modes": [], "name": "dummy_aec"}
-
-    def __init__(self):
-        super().__init__()
-        self.possible_agents = list(AGENTS)
-
+class DummyAEC(dummy_envs.DummyAEC):
     def observation_space(self, agent):
         return obs_space(agent)
-
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._cumulative_rewards = dict.fromkeys(self.agents, 0.0)
-        self.terminations = dict.fromkeys(self.agents, False)
-        self.truncations = dict.fromkeys(self.agents, False)
-        self.infos = {a: {} for a in self.agents}
-        self._idx = 0
-        self._step_count = 0
-        self.agent_selection = self.agents[0]
 
     def observe(self, agent):
         return FIXED_OBS[agent]
 
-    def step(self, action):
-        if (
-            self.terminations[self.agent_selection]
-            or self.truncations[self.agent_selection]
-        ):
-            self._was_dead_step(action)
-            return
-        self._step_count += 1
-        self._cumulative_rewards[self.agent_selection] = 0.0
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        if self._step_count >= 8:
-            self.terminations = dict.fromkeys(self.agents, True)
-        self._idx = (self._idx + 1) % len(self.agents)
-        self.agent_selection = self.agents[self._idx]
-        self._accumulate_rewards()
 
-    def render(self):
-        return None
-
-    def close(self):
-        pass
-
-
-class DummyParallel(ParallelEnv):
-    metadata = {"render_modes": [], "name": "dummy_parallel"}
-
-    def __init__(self):
-        super().__init__()
-        self.possible_agents = list(AGENTS)
-
+class DummyParallel(dummy_envs.DummyParallel):
     def observation_space(self, agent):
         return obs_space(agent)
 
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self._step_count = 0
-        return dict(FIXED_OBS), {a: {} for a in self.agents}
-
-    def step(self, actions):
-        self._step_count += 1
-        done = self._step_count >= 8
-        obs = dict(FIXED_OBS)
-        rewards = dict.fromkeys(self.agents, 0.0)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+    def observe(self, agent):
+        return FIXED_OBS[agent]
 
 
 def aec_with_space(space, obs=None):
