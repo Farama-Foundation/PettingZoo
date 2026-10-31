@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from importlib.util import find_spec
+
 import numpy as np
 import pygame
 import pytest
@@ -13,7 +15,7 @@ from pettingzoo.classic import (
     chess_v6,
     connect_four_v3,
     go_v5,
-    leduc_holdem_v4,
+    leduc_holdem_v5,
     rps_v2,
     texas_holdem_v4,
     tictactoe_v3,
@@ -27,13 +29,16 @@ pygame_envs = [
     chess_v6,
     connect_four_v3,
     go_v5,
-    leduc_holdem_v4,
+    leduc_holdem_v5,
     rps_v2,
     texas_holdem_v4,
     tictactoe_v3,
     multiwalker_v9,
     pursuit_v6,
 ]
+
+if find_spec("pyspiel") is None:
+    pygame_envs.remove(leduc_holdem_v5)
 
 
 @pytest.mark.parametrize("env_module", pygame_envs)
