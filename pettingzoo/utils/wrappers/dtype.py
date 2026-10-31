@@ -20,12 +20,18 @@ def _cast_space(
         f"{wrapper} only supports Box observation spaces, "
         f"agent {agent!r} has a {type(space).__name__}."
     )
+    low = space.low.astype(dtype)
+    high = space.high.astype(dtype)
+    if np.issubdtype(dtype, np.integer):
+        # Casting an infinite bound to an integer dtype is undefined in numpy and
+        # no longer reliably collapses to a single point, so pin every infinite
+        # bound to the dtype's minimum. The collapsed space holds nothing, which is
+        # the behaviour SuperSuit's dtype_v0 and the original wrapper documented.
+        min_value = np.iinfo(dtype).min
+        low = np.where(~np.isfinite(space.low), min_value, low)
+        high = np.where(~np.isfinite(space.high), min_value, high)
     try:
-        return Box(
-            low=space.low.astype(dtype),
-            high=space.high.astype(dtype),
-            dtype=dtype.type,
-        )
+        return Box(low=low, high=high, dtype=dtype.type)
     except ValueError as e:
         raise ValueError(
             f"{wrapper} cannot cast agent {agent!r}'s observation space "
