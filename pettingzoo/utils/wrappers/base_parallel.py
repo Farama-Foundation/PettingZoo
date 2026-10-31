@@ -52,7 +52,7 @@ class BaseParallelWrapper(ParallelEnv[AgentID, ObsType, ActionType]):
         return self.env.unwrapped
 
     @override
-    def state(self) -> np.ndarray:
+    def state(self) -> Any:
         return self.env.state()
 
     @override
