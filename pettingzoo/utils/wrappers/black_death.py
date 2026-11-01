@@ -32,6 +32,10 @@ class BlackDeathParallelV4(BaseParallelWrapper[AgentID, Any, ActionType]):
     departed agents are ignored and only actions for currently active wrapped
     agents are forwarded.
 
+    The advertised Box bounds include zero so these placeholder observations
+    remain valid, even when the wrapped space excludes zero. Observations from
+    active agents and the wrapped environment's spaces are unchanged.
+
     To keep the public agent set stable, an early departure is reported as
     terminated=False and truncated=False until the underlying episode ends.
     The wrapper remembers the original cause of each departure and reports those
@@ -50,9 +54,27 @@ class BlackDeathParallelV4(BaseParallelWrapper[AgentID, Any, ActionType]):
         self._zero_observations: dict[AgentID, np.ndarray] = {}
         self._stored_terminations: dict[AgentID, bool] = {}
         self._stored_truncations: dict[AgentID, bool] = {}
+        self._observation_spaces: dict[AgentID, tuple[Box, Box]] = {}
 
         for agent in getattr(env, "possible_agents", []):
-            _box_observation_space(self.env.observation_space(agent), agent)
+            self.observation_space(agent)
+
+    @override
+    def observation_space(self, agent: AgentID) -> Box:
+        space = _box_observation_space(self.env.observation_space(agent), agent)
+        cached = self._observation_spaces.get(agent)
+        if cached is None or cached[0] is not space:
+            if np.all(space.low <= 0) and np.all(space.high >= 0):
+                advertised = space
+            else:
+                advertised = Box(
+                    low=np.minimum(space.low, 0),
+                    high=np.maximum(space.high, 0),
+                    shape=space.shape,
+                    dtype=space.dtype,
+                )
+            self._observation_spaces[agent] = (space, advertised)
+        return self._observation_spaces[agent][1]
 
     @override
     def reset(
@@ -65,9 +87,15 @@ class BlackDeathParallelV4(BaseParallelWrapper[AgentID, Any, ActionType]):
         self._stored_terminations = dict.fromkeys(self._episode_agents, False)
         self._stored_truncations = dict.fromkeys(self._episode_agents, False)
         self._zero_observations = {}
+        # Keep stable spaces (and their RNG state), but release previous agents.
+        self._observation_spaces = {
+            agent: self._observation_spaces[agent]
+            for agent in self._episode_agents
+            if agent in self._observation_spaces
+        }
 
         for agent in self._episode_agents:
-            space = _box_observation_space(self.env.observation_space(agent), agent)
+            space = self.observation_space(agent)
             self._zero_observations[agent] = np.zeros(space.shape, dtype=space.dtype)
 
         return (
