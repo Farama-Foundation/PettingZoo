@@ -12,7 +12,7 @@ def pytest_markdown_docs_globals():
         "shimmy": shimmy,
         "supersuit": supersuit,
     }
-    # Format: {"go_v5": <module ' pettingzoo.classic.go_v5'>, ...}
+    # Format: {"go_v6": <module ' pettingzoo.classic.go_v6'>, ...}
     envs = {name.split("/")[1]: module for name, module in all_environments.items()}
     libs.update(envs)
     return libs

@@ -8,7 +8,7 @@ r"""
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Creation           | `make("aec", "classic/go-v5")`         |
+| Creation           | `make("aec", "classic/go-v6")`         |
 |--------------------|----------------------------------------|
 | Actions            | Discrete                               |
 | Parallel API       | Yes                                    |
@@ -33,7 +33,7 @@ Go takes two optional arguments that define the board size (int) and komi compen
 ```python
 from pettingzoo import make
 
-make("aec", "classic/go-v5", board_size=19, komi=7.5)
+make("aec", "classic/go-v6", board_size=19, komi=7.5)
 ```
 
 `board_size`: The length of each size of the board.
@@ -93,12 +93,13 @@ $N^2+1$.
 
 ### Rewards
 
-| Winner | Loser |
-| :----: | :---: |
-| +1     | -1    |
+| Winner | Loser | Draw |
+| :----: | :---: | :--: |
+| +1     | -1    | 0    |
 
 ### Version History
 
+* v6: Fixed rewards for drawn games
 * v5: Changed observation space to proper AlphaZero style frame stacking (1.11.0)
 * v4: Fixed bug in how black and white pieces were saved in observation space (1.10.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
@@ -145,7 +146,7 @@ def env(**kwargs):
 class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "go_v5",
+        "name": "go_v6",
         "is_parallelizable": False,
         "render_fps": 2,
     }
@@ -266,7 +267,7 @@ class raw_env(AECEnv, EzPickle):
         return np.where(actions == 1)[0]
 
     def _encode_rewards(self, result):
-        return [1, -1] if result == 1 else [-1, 1]
+        return [result, -result]
 
     def observe(self, agent):
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
