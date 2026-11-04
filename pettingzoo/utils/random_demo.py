@@ -21,12 +21,17 @@ def random_demo(
             if render:
                 env.render()
 
-            obs, reward, termination, truncation, _ = env.last()
+            obs, reward, termination, truncation, info = env.last()
             total_reward += reward
             if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
                 actions = np.flatnonzero(obs["action_mask"]).tolist()
+                assert not isinstance(actions, int)
+                action = random.choice(actions)
+            elif isinstance(info, dict) and "action_mask" in info:
+                # Same precedence as api_test: an observation mask wins, then the info mask.
+                actions = np.flatnonzero(info["action_mask"]).tolist()
                 assert not isinstance(actions, int)
                 action = random.choice(actions)
             else:
