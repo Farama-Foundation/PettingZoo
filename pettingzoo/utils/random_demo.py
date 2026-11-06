@@ -28,12 +28,12 @@ def random_demo(
             elif isinstance(obs, dict) and "action_mask" in obs:
                 actions = np.flatnonzero(obs["action_mask"]).tolist()
                 assert not isinstance(actions, int)
-                action = random.choice(actions)
+                action = random.choice(actions) + env.action_space(agent).start
             elif isinstance(info, dict) and "action_mask" in info:
                 # Same precedence as api_test: an observation mask wins, then the info mask.
                 actions = np.flatnonzero(info["action_mask"]).tolist()
                 assert not isinstance(actions, int)
-                action = random.choice(actions)
+                action = random.choice(actions) + env.action_space(agent).start
             else:
                 action = env.action_space(agent).sample()
             env.step(action)

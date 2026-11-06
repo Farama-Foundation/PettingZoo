@@ -30,11 +30,21 @@ class InfoMaskEnv(AECEnv[str, np.ndarray, int | None]):
     num_actions = 4
     max_cycles = 5
 
-    def __init__(self):
+    def __init__(self, start=0, mask_in_observation=False):
         super().__init__()
         self.possible_agents = ["player_0", "player_1"]
         self._obs_space = gymnasium.spaces.Box(0.0, 1.0, shape=(2,), dtype=np.float32)
-        self._act_space = gymnasium.spaces.Discrete(self.num_actions)
+        if mask_in_observation:
+            self._obs_space = gymnasium.spaces.Dict(
+                {
+                    "observation": self._obs_space,
+                    "action_mask": gymnasium.spaces.Box(
+                        0, 1, (self.num_actions,), dtype=np.int8
+                    ),
+                }
+            )
+        self._act_space = gymnasium.spaces.Discrete(self.num_actions, start=start)
+        self.mask_in_observation = mask_in_observation
         self.rng = np.random.default_rng(0)
 
     def observation_space(self, agent):
@@ -44,7 +54,13 @@ class InfoMaskEnv(AECEnv[str, np.ndarray, int | None]):
         return self._act_space
 
     def observe(self, agent):
-        return np.zeros(2, dtype=np.float32)
+        observation = np.zeros(2, dtype=np.float32)
+        if self.mask_in_observation:
+            return {
+                "observation": observation,
+                "action_mask": self.infos[agent]["action_mask"],
+            }
+        return observation
 
     def _new_mask(self):
         return np.eye(self.num_actions, dtype=np.int8)[
@@ -67,7 +83,11 @@ class InfoMaskEnv(AECEnv[str, np.ndarray, int | None]):
         if self.terminations[agent] or self.truncations[agent]:
             self._was_dead_step(action)
             return
-        if not self.infos[agent]["action_mask"][action]:
+        # The mask is indexed from 0, while a Discrete action starts at ``start``.
+        assert self._act_space.contains(action), (
+            f"{action} is outside {self._act_space}"
+        )
+        if not self.infos[agent]["action_mask"][action - self._act_space.start]:
             raise AssertionError(f"{agent} took masked-out action {action}")
         self._cumulative_rewards[agent] = 0
         self.rewards = dict.fromkeys(self.agents, 0)
@@ -89,6 +109,8 @@ class InfoMaskEnv(AECEnv[str, np.ndarray, int | None]):
     ],
     ids=["average_total_reward", "random_demo"],
 )
-def test_random_rollout_honors_action_mask_in_info(rollout):
+@pytest.mark.parametrize("mask_in_observation", [False, True], ids=["info", "obs"])
+@pytest.mark.parametrize("start", [0, 5, -5])
+def test_random_rollout_honors_action_mask(rollout, start, mask_in_observation):
     with redirect_stdout(io.StringIO()):
-        rollout(InfoMaskEnv())
+        rollout(InfoMaskEnv(start=start, mask_in_observation=mask_in_observation))
