@@ -187,7 +187,7 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        infos = dict(**self.aec_env.infos)
+        infos = dict(self.aec_env.infos)
         return observations, infos
 
     @override
@@ -211,9 +211,9 @@ class aec_to_parallel_wrapper(ParallelEnv[AgentID, ObsType, ActionType]):
             for agent in self.aec_env.agents:
                 rewards[agent] += self.aec_env.rewards[agent]
 
-        terminations = dict(**self.aec_env.terminations)
-        truncations = dict(**self.aec_env.truncations)
-        infos = dict(**self.aec_env.infos)
+        terminations = dict(self.aec_env.terminations)
+        truncations = dict(self.aec_env.truncations)
+        infos = dict(self.aec_env.infos)
         observations = {
             agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
         }
