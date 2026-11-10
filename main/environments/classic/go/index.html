@@ -417,7 +417,7 @@
 <td><p>Discrete(362)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Observation Shape</p></td>
-<td><p>(19, 19, 3)</p></td>
+<td><p>(19, 19, 17)</p></td>
 </tr>
 <tr class="row-even"><td><p>Observation Values</p></td>
 <td><p>[0, 1]</p></td>
@@ -442,8 +442,9 @@ ends if both players sequentially decide to pass.</p>
 <section id="observation-space">
 <h2>Observation Space<a class="headerlink" href="#observation-space" title="Link to this heading">¶</a></h2>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
-<p>The main observation shape is a function of the board size <em>N</em> and has a shape of (N, N, 3). The first plane, (:, :, 0), represent the stones on the board for the current player while the second plane, (:, :, 1), encodes the stones of the opponent. The third plane, (:, :, 2), is all 1 if the
-current player is <code class="docutils literal notranslate"><span class="pre">black_0</span></code> or all 0 if the player is <code class="docutils literal notranslate"><span class="pre">white_0</span></code>. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is</p>
+<p>The main observation shape is a function of the board size <em>N</em> and has a shape of (N, N, 17). The first 16 planes hold the last 8 board positions, newest first, two planes per position: the stones of the player who made the move that produced the position, then the stones of
+their opponent. For the agent about to move, planes 0 and 1 are therefore its opponent’s stones and its own stones, planes 2 and 3 its own stones and its opponent’s, and so on. Planes for positions before the start of the game are all 0. The last plane, (:, :, 16), is all 0 if the observing
+agent is <code class="docutils literal notranslate"><span class="pre">black_0</span></code> or all 1 if it is <code class="docutils literal notranslate"><span class="pre">white_0</span></code>. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="mi">0</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span> <span class="mi">8</span>
  <span class="mi">0</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span>  <span class="mi">0</span>
  <span class="mi">1</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span>  <span class="mi">1</span>
@@ -466,13 +467,16 @@ current player is <code class="docutils literal notranslate"><span class="pre">b
 </thead>
 <tbody>
 <tr class="row-even"><td class="text-center"><p>0</p></td>
-<td><p>Current Player’s stones<br><em>’<code class="docutils literal notranslate"><span class="pre">0</span></code>: no stone, <code class="docutils literal notranslate"><span class="pre">1</span></code>: stone</em></p></td>
+<td><p>Stones of the player who made the most recent move<br><em>’<code class="docutils literal notranslate"><span class="pre">0</span></code>: no stone, <code class="docutils literal notranslate"><span class="pre">1</span></code>: stone</em></p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>1</p></td>
-<td><p>Opponent Player’s stones<br><em>’<code class="docutils literal notranslate"><span class="pre">0</span></code>: no stone, <code class="docutils literal notranslate"><span class="pre">1</span></code>: stone</em></p></td>
+<td><p>Stones of that player’s opponent<br><em>’<code class="docutils literal notranslate"><span class="pre">0</span></code>: no stone, <code class="docutils literal notranslate"><span class="pre">1</span></code>: stone</em></p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>2</p></td>
-<td><p>Player<br><em>’<code class="docutils literal notranslate"><span class="pre">0</span></code>: white, <code class="docutils literal notranslate"><span class="pre">1</span></code>: black</em></p></td>
+<tr class="row-even"><td class="text-center"><p>2 … 15</p></td>
+<td><p>The same two planes for each of the 7 earlier positions, newest first</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>16</p></td>
+<td><p>Observing agent<br><em>’<code class="docutils literal notranslate"><span class="pre">0</span></code>: <code class="docutils literal notranslate"><span class="pre">black_0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>: <code class="docutils literal notranslate"><span class="pre">white_0</span></code></em></p></td>
 </tr>
 </tbody>
 </table>
