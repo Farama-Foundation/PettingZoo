@@ -421,6 +421,7 @@
 <section id="seed-test">
 <h2>Seed Test<a class="headerlink" href="#seed-test" title="Link to this heading">¶</a></h2>
 <p>To have a properly reproducible environment that utilizes randomness, you need to be able to make it deterministic during evaluation by setting a seed for the random number generator that defines the random behavior. The seed test checks that calling the <code class="docutils literal notranslate"><span class="pre">seed()</span></code> method with a constant actually makes the environment deterministic.</p>
+<p>For Parallel environments, <code class="docutils literal notranslate"><span class="pre">parallel_seed_test</span></code> also checks that the observations and infos returned by the seeded <code class="docutils literal notranslate"><span class="pre">reset()</span></code> match, before comparing the steps that follow.</p>
 <p>The seed test takes in a function that creates a pettingzoo environment. For example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.butterfly.pistonball.pistonball</span><span class="w"> </span><span class="kn">import</span> <span class="n">env</span><span class="p">,</span> <span class="n">parallel_env</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">seed_test</span><span class="p">,</span> <span class="n">parallel_seed_test</span>
