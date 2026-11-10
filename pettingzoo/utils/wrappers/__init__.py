@@ -13,9 +13,17 @@ from pettingzoo.utils.wrappers.color_reduction import (
     ColorReductionObservationParallelV1,
     ColorReductionObservationV1,
 )
+from pettingzoo.utils.wrappers.delay_observation import (
+    DelayObservationParallelV1,
+    DelayObservationV1,
+)
 from pettingzoo.utils.wrappers.dtype import (
     DtypeObservationParallelV1,
     DtypeObservationV1,
+)
+from pettingzoo.utils.wrappers.flatten import (
+    FlattenObservationParallelV1,
+    FlattenObservationV1,
 )
 from pettingzoo.utils.wrappers.frame_skip import FrameSkipParallelV1, FrameSkipV1
 from pettingzoo.utils.wrappers.frame_stack import FrameStackV3
@@ -70,8 +78,12 @@ __all__ = [
     "ClipRewardV1",
     "ColorReductionObservationParallelV1",
     "ColorReductionObservationV1",
+    "DelayObservationParallelV1",
+    "DelayObservationV1",
     "DtypeObservationParallelV1",
     "DtypeObservationV1",
+    "FlattenObservationParallelV1",
+    "FlattenObservationV1",
     "FrameSkipParallelV1",
     "FrameSkipV1",
     "FrameStackV3",
