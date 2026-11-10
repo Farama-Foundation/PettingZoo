@@ -391,7 +391,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Creation</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;sisl/multiwalker-v9&quot;)</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">make(&quot;aec&quot;,</span> <span class="pre">&quot;sisl/multiwalker-v10&quot;)</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -545,7 +545,7 @@ observations have normally distributed signal noise controlled by <code class="d
 <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/multiwalker-v9"</span><span class="p">,</span> <span class="n">n_walkers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">position_noise</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">angle_noise</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+<span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/multiwalker-v10"</span><span class="p">,</span> <span class="n">n_walkers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">position_noise</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">angle_noise</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
 <span class="n">forward_reward</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">terminate_reward</span><span class="o">=-</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">fall_reward</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">shared_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="n">terminate_on_fall</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">remove_on_fall</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">terrain_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
@@ -560,11 +560,12 @@ observations have normally distributed signal noise controlled by <code class="d
 <p><code class="docutils literal notranslate"><span class="pre">terminate_on_fall</span></code>: If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), a single walker falling causes all agents to be done, and they all receive an additional <code class="docutils literal notranslate"><span class="pre">terminate_reward</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, then only the fallen agent(s) receive <code class="docutils literal notranslate"><span class="pre">fall_reward</span></code>, and the rest of the agents are not done i.e. the environment continues.</p>
 <p><code class="docutils literal notranslate"><span class="pre">remove_on_fall</span></code>: Remove a walker when it falls (only works when <code class="docutils literal notranslate"><span class="pre">terminate_on_fall</span></code> is False)</p>
 <p><code class="docutils literal notranslate"><span class="pre">terrain_length</span></code>: length of terrain in number of steps</p>
-<p><code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>:  after max_cycles steps all agents will return done</p>
+<p><code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>: after max_cycles joint steps, active agents are truncated. Natural episode endings are reported as terminations.</p>
 </section>
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Link to this heading">¶</a></h2>
 <ul class="simple">
+<li><p>v10: Report max_cycles as truncation, preserving natural terminations (unreleased)</p></li>
 <li><p>v9: Fixed reward sharing and termination logic, refactored rendering to use pygame (1.18.0)</p></li>
 <li><p>v8: Replaced local_ratio, fixed rewards, terrain length as an argument and documentation (1.15.0)</p></li>
 <li><p>v7: Fixed problem with walker collisions (1.8.2)</p></li>
@@ -583,7 +584,7 @@ observations have normally distributed signal noise controlled by <code class="d
 <h3>AEC<a class="headerlink" href="#aec" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/multiwalker-v9"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"aec"</span><span class="p">,</span> <span class="s2">"sisl/multiwalker-v10"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
@@ -605,7 +606,7 @@ observations have normally distributed signal noise controlled by <code class="d
 <h3>Parallel<a class="headerlink" href="#parallel" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo</span><span class="w"> </span><span class="kn">import</span> <span class="n">make</span>
 
-<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"sisl/multiwalker-v9"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"sisl/multiwalker-v10"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">)</span>
 <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>

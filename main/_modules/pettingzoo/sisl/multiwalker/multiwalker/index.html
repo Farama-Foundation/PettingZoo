@@ -388,7 +388,7 @@
 
 <span class="sd">This environment is part of the &lt;a href='..'&gt;SISL environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make("aec", "sisl/multiwalker-v9")`           |</span>
+<span class="sd">| Creation             | `make("aec", "sisl/multiwalker-v10")`           |</span>
 <span class="sd">|----------------------|------------------------------------------------|</span>
 <span class="sd">| Actions              | Continuous                                     |</span>
 <span class="sd">| Parallel API         | Yes                                            |</span>
@@ -458,7 +458,7 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make("aec", "sisl/multiwalker-v9", n_walkers=3, position_noise=1e-3, angle_noise=1e-3,</span>
+<span class="sd">make("aec", "sisl/multiwalker-v10", n_walkers=3, position_noise=1e-3, angle_noise=1e-3,</span>
 <span class="sd">forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,</span>
 <span class="sd">terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)</span>
 <span class="sd">```</span>
@@ -485,10 +485,11 @@
 
 <span class="sd">`terrain_length`: length of terrain in number of steps</span>
 
-<span class="sd">`max_cycles`:  after max_cycles steps all agents will return done</span>
+<span class="sd">`max_cycles`: after max_cycles joint steps, active agents are truncated. Natural episode endings are reported as terminations.</span>
 
 
 <span class="sd">### Version History</span>
+<span class="sd">* v10: Report max_cycles as truncation, preserving natural terminations (unreleased)</span>
 <span class="sd">* v9: Fixed reward sharing and termination logic, refactored rendering to use pygame (1.18.0)</span>
 <span class="sd">* v8: Replaced local_ratio, fixed rewards, terrain length as an argument and documentation (1.15.0)</span>
 <span class="sd">* v7: Fixed problem with walker collisions (1.8.2)</span>
@@ -530,7 +531,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">,</span> <span class="s2">"rgb_array"</span><span class="p">],</span>
-        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"multiwalker_v9"</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"multiwalker_v10"</span><span class="p">,</span>
         <span class="s2">"is_parallelizable"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="s2">"render_fps"</span><span class="p">:</span> <span class="n">FPS</span><span class="p">,</span>
     <span class="p">}</span>
@@ -645,7 +646,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">frames</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">max_cycles</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">]))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span>
