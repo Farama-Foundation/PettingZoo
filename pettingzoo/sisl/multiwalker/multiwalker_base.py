@@ -317,7 +317,7 @@ class MultiWalkerEnv:
         terminate_reward: reward applied for each fallen walker in environment
         terminate_on_fall: toggles whether agent is done if it falls down
         terrain_length: length of terrain in number of steps
-        max_cycles: after max_cycles steps all agents will return done
+        max_cycles: after max_cycles joint steps, active agents are truncated
         """
         self.n_walkers = n_walkers
         self.position_noise = position_noise

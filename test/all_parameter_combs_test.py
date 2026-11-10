@@ -46,7 +46,7 @@ from pettingzoo.classic import (
     texas_holdem_v4,
     tictactoe_v3,
 )
-from pettingzoo.sisl import multiwalker_v9, pursuit_v6
+from pettingzoo.sisl import multiwalker_v10, pursuit_v6
 from pettingzoo.test import max_cycles_test, parallel_api_test
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.render_test import render_test
@@ -218,16 +218,20 @@ parameterized_envs = [
     ["classic/hanabi_v5", hanabi_v5, {"observation_type": "minimal"}],
     ["classic/hanabi_v5", hanabi_v5, {"observation_type": "seer"}],
     ["classic/hanabi_v5", hanabi_v5, {"random_start_player": True}],
-    ["sisl/multiwalker_v9", multiwalker_v9, {"n_walkers": 10, "max_cycles": 50}],
-    ["sisl/multiwalker_v9", multiwalker_v9, {"shared_reward": False, "max_cycles": 50}],
+    ["sisl/multiwalker_v10", multiwalker_v10, {"n_walkers": 10, "max_cycles": 50}],
     [
-        "sisl/multiwalker_v9",
-        multiwalker_v9,
+        "sisl/multiwalker_v10",
+        multiwalker_v10,
+        {"shared_reward": False, "max_cycles": 50},
+    ],
+    [
+        "sisl/multiwalker_v10",
+        multiwalker_v10,
         {"terminate_on_fall": False, "max_cycles": 50},
     ],
     [
-        "sisl/multiwalker_v9",
-        multiwalker_v9,
+        "sisl/multiwalker_v10",
+        multiwalker_v10,
         {"terminate_on_fall": False, "remove_on_fall": False, "max_cycles": 50},
     ],
     ["sisl/pursuit_v6", pursuit_v6, {"max_cycles": 50}],

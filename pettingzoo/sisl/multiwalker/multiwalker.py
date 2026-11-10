@@ -8,7 +8,7 @@
 
 This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
-| Creation             | `make("aec", "sisl/multiwalker-v9")`           |
+| Creation             | `make("aec", "sisl/multiwalker-v10")`           |
 |----------------------|------------------------------------------------|
 | Actions              | Continuous                                     |
 | Parallel API         | Yes                                            |
@@ -78,7 +78,7 @@ This table enumerates the observation space:
 ```python
 from pettingzoo import make
 
-make("aec", "sisl/multiwalker-v9", n_walkers=3, position_noise=1e-3, angle_noise=1e-3,
+make("aec", "sisl/multiwalker-v10", n_walkers=3, position_noise=1e-3, angle_noise=1e-3,
 forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
 terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)
 ```
@@ -105,10 +105,11 @@ terminate_on_fall=True, remove_on_fall=True, terrain_length=200, max_cycles=500)
 
 `terrain_length`: length of terrain in number of steps
 
-`max_cycles`:  after max_cycles steps all agents will return done
+`max_cycles`: after max_cycles joint steps, active agents are truncated. Natural episode endings are reported as terminations.
 
 
 ### Version History
+* v10: Report max_cycles as truncation, preserving natural terminations (unreleased)
 * v9: Fixed reward sharing and termination logic, refactored rendering to use pygame (1.18.0)
 * v8: Replaced local_ratio, fixed rewards, terrain length as an argument and documentation (1.15.0)
 * v7: Fixed problem with walker collisions (1.8.2)
@@ -145,7 +146,7 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "multiwalker_v9",
+        "name": "multiwalker_v10",
         "is_parallelizable": True,
         "render_fps": FPS,
     }
@@ -237,7 +238,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_selection = self._agent_selector.next()
 
         if self.env.frames >= self.env.max_cycles:
-            self.terminations = dict(zip(self.agents, [True for _ in self.agents]))
+            self.truncations = dict(zip(self.agents, [True for _ in self.agents]))
 
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()

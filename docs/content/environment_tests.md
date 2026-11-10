@@ -37,6 +37,8 @@ parallel_api_test(env, num_cycles=1000)
 
 To have a properly reproducible environment that utilizes randomness, you need to be able to make it deterministic during evaluation by setting a seed for the random number generator that defines the random behavior. The seed test checks that calling the `seed()` method with a constant actually makes the environment deterministic.
 
+For Parallel environments, `parallel_seed_test` also checks that the observations and infos returned by the seeded `reset()` match, before comparing the steps that follow.
+
 The seed test takes in a function that creates a pettingzoo environment. For example
 
 ```python
