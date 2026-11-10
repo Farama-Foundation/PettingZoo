@@ -56,6 +56,8 @@ def save_observation(
             "Observation must be different than None to save as an image"
         )
         rescaled = observation.astype(np.uint8)
+        if rescaled.ndim == 3 and rescaled.shape[2] == 1:
+            rescaled = rescaled[:, :, 0]
         im = Image.fromarray(rescaled)
         fname = os.path.join(save_folder, str(a) + ".png")
         im.save(fname)
