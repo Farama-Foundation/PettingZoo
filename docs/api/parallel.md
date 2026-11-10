@@ -28,12 +28,28 @@ parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
 observations, infos = parallel_env.reset(seed=42)
 
 while parallel_env.agents:
-    # this is where you would insert your policy
-    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}
+    actions = {}
+    for agent in parallel_env.agents:
+        agent_observation = observations[agent]
+        action_mask = infos[agent].get("action_mask")
+        if isinstance(agent_observation, dict) and "action_mask" in agent_observation:
+            # When both locations provide a mask, the observation mask takes precedence.
+            action_mask = agent_observation["action_mask"]
+
+        action_space = parallel_env.action_space(agent)
+        if action_mask is None:
+            actions[agent] = action_space.sample()
+        else:
+            actions[agent] = action_space.sample(mask=action_mask)
 
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 parallel_env.close()
 ```
+
+Parallel environments can provide an action mask in `infos[agent]["action_mask"]` or, when the
+observation is a dictionary, in `observations[agent]["action_mask"]`. If both are present, the
+dictionary observation takes precedence. The [custom action-masking tutorial](/tutorials/custom_environment/3-action-masking/)
+shows a working environment that supplies masks in dictionary observations.
 
 ## ParallelEnv
 
