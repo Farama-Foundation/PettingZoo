@@ -14,7 +14,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
 
     This is useful for creating evaluation environments.
     When there are no more valid agents in the underlying environment, the environment is automatically reset.
-    When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
+    At an internal reset, observations and infos use reset values for returning agents and retain final values for departing agents.
     The result of this wrapper is that the environment is no longer Markovian around the environment reset.
     """
 
@@ -77,7 +77,7 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
         """Steps the environment.
 
         When there are no more valid agents in the underlying environment, the environment is automatically reset.
-        When this happens, the `observation` and `info` returned by `step()` are replaced with that of the reset environment.
+        At an internal reset, observations and infos use reset values for returning agents and retain final values for departing agents.
         The result of this wrapper is that the environment is no longer Markovian around the environment reset.
 
         Args:
@@ -93,8 +93,6 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
             ]:
         """
         obs, rew, term, trunc, info = super().step(actions)
-        term = dict.fromkeys(term, False)
-        trunc = dict.fromkeys(term, False)
 
         if self.agents:
             return obs, rew, term, trunc, info
@@ -102,17 +100,21 @@ class MultiEpisodeParallelEnv(BaseParallelWrapper[AgentID, ObsType, ActionType])
         # override the term trunc to only trunc when num_episodes have been elapsed
         if self._episodes_elapsed >= self._num_episodes:
             term = dict.fromkeys(term, False)
-            trunc = dict.fromkeys(term, True)
+            trunc = dict.fromkeys(trunc, True)
             return obs, rew, term, trunc, info
 
         # if any agent terminates or truncates
         # and we haven't elapsed `num_episodes`
         # reset the environment
-        # we also override the observation and infos
-        # the result is that this env is no longer Markovian
-        # at the reset points
-        # increment the number of episodes and the seed for reset
+        # Retain final values for departing agents and use reset values for new
+        # agents. Agents present again after reset continue the wrapped episode.
+        # the result is that this env is no longer Markovian at the reset points
         self._episodes_elapsed += 1
         self._seed = self._seed + 1 if self._seed is not None else None
-        obs, info = super().reset(seed=self._seed, options=self._options)
+        new_obs, new_info = super().reset(seed=self._seed, options=self._options)
+        obs = {**obs, **new_obs}
+        info = {**info, **new_info}
+        rew = {**dict.fromkeys(self.agents, 0.0), **rew}
+        term = {**term, **dict.fromkeys(self.agents, False)}
+        trunc = {**trunc, **dict.fromkeys(self.agents, False)}
         return obs, rew, term, trunc, info

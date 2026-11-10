@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import pytest
 
+from pettingzoo import ParallelEnv
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.classic import texas_holdem_no_limit_v6, tictactoe_v3
+from pettingzoo.test import parallel_api_test
+from pettingzoo.test.example_envs import generated_agents_parallel_v0
 from pettingzoo.utils.wrappers import (
     BaseParallelWrapper,
     BaseWrapper,
@@ -74,6 +77,18 @@ def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
     assert steps == num_episodes * 125, (
         f"Expected to have 125 steps per episode, got {steps / num_episodes}."
     )
+
+
+def test_multi_episode_parallel_env_reset_consistency() -> None:
+    """The wrapped env must pass the parallel API test across internal resets.
+
+    Regression test for #1460: after an internal reset, the step tuple was keyed
+    to two different agent sets.
+    """
+    env = MultiEpisodeParallelEnv(
+        generated_agents_parallel_v0.parallel_env(max_cycles=2), 2
+    )
+    parallel_api_test(env, num_cycles=10)
 
 
 @pytest.mark.parametrize("num_episodes", [0, -1, -100])
@@ -248,3 +263,58 @@ def test_multi_episode_parallel_env_wrapper_seeds_every_episode(seed: int) -> No
     env.close()
 
     assert inner.seeds == [seed, seed + 1, seed + 2]
+
+
+@pytest.mark.parametrize("same_agents", [False, True])
+def test_multi_episode_parallel_env_boundary_values(same_agents):
+    """Reset tuples retain departing agents and do not terminate returning agents."""
+
+    class EpisodeEnv(ParallelEnv):
+        metadata = {}
+
+        def __init__(self):
+            self.episode = 0
+
+        def reset(self, seed=None, options=None):
+            self.episode += 1
+            self.agents = ["player" if same_agents else f"player_{self.episode}"]
+            agent = self.agents[0]
+            return {agent: 0}, {agent: {"reset": True}}
+
+        def step(self, actions):
+            agent = self.agents[0]
+            assert set(actions) == {agent}
+            self.agents = []
+            return (
+                {agent: 99},
+                {agent: 3.5},
+                {agent: True},
+                {agent: False},
+                {agent: {"reset": False}},
+            )
+
+    env = MultiEpisodeParallelEnv(EpisodeEnv(), 2)
+    env.reset(seed=0)
+    departing = env.agents[0]
+    obs, rew, term, trunc, info = env.step({departing: 0})
+    returning = env.agents[0]
+    for values in (obs, rew, term, trunc, info):
+        assert set(values) == {departing, returning}
+    assert obs[returning] == 0
+    assert info[returning] == {"reset": True}
+    assert rew[departing] == 3.5
+    assert not term[returning]
+    assert not trunc[returning]
+    if not same_agents:
+        assert obs[departing] == 99
+        assert info[departing] == {"reset": False}
+        assert term[departing]
+        assert rew[returning] == 0.0
+
+    final = env.step({returning: 0})
+    assert env.agents == []
+    for values in final:
+        assert set(values) == {returning}
+    assert final[1][returning] == 3.5
+    assert final[2][returning] is False
+    assert final[3][returning] is True
