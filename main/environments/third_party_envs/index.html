@@ -399,11 +399,12 @@
 <a class="reference internal" href="#"><span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/xihuai18/gfootball-gymnasium-pettingzoo" /></span></a></p>
 <p>Google Research Football (<a class="reference external" href="https://github.com/google-research/football">GRF</a>) with Gymnasium and PettingZoo Compatibility.</p>
 </section>
-<section id="smac-and-smacv2-with-latest-pettingzoo-apis">
-<h3><a class="reference external" href="https://github.com/xihuai18/SMAC-PettingZoo">SMAC and SMACv2 with latest PettingZoo APIs</a><a class="headerlink" href="#smac-and-smacv2-with-latest-pettingzoo-apis" title="Link to this heading">¶</a></h3>
-<p><a class="reference internal" href="#"><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.24.3-blue" /></span></a>
-<a class="reference internal" href="#"><span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/xihuai18/gfootball-gymnasium-pettingzoo" /></span></a></p>
-<p><a class="reference external" href="https://github.com/oxwhirl/smac">SMAC</a> and <a class="reference external" href="https://github.com/oxwhirl/smacv2">SMACv2</a> with the latest PettingZoo Parallel APIs.</p>
+<section id="smac-and-smacv2">
+<span id="smac-and-smacv2-with-latest-pettingzoo-apis"></span><h3><a class="reference external" href="https://github.com/xihuai18/SMAC-PettingZoo">SMAC and SMACv2</a><a class="headerlink" href="#smac-and-smacv2" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/xihuai18/SMAC-PettingZoo/blob/08434598359a3e8f013fde1b88c3d06f4c304b6c/setup.py"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-%3E%3D1.24.3-blue" /></a>
+<a class="reference external" href="https://github.com/xihuai18/SMAC-PettingZoo"><img alt="GitHub stars" src="https://img.shields.io/github/stars/xihuai18/SMAC-PettingZoo" /></a></p>
+<p><a class="reference external" href="https://github.com/oxwhirl/smac">SMAC</a> and <a class="reference external" href="https://github.com/oxwhirl/smacv2">SMACv2</a> wrappers for the PettingZoo Parallel API. The integration declares <code class="docutils literal notranslate"><span class="pre">pettingzoo&gt;=1.24.3</span></code>.</p>
+<p><strong>Installation check (2026-10-23):</strong> With Python 3.12.3 and PettingZoo 1.27.0, a non-editable wheel built from integration commit <a class="reference external" href="https://github.com/xihuai18/SMAC-PettingZoo/commit/08434598359a3e8f013fde1b88c3d06f4c304b6c">0843459</a> contained no wrapper modules. Both wrapper imports failed with <code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError</span></code>. See the <a class="reference external" href="https://github.com/xihuai18/SMAC-PettingZoo/issues/2">upstream packaging issue</a> for reproduction steps and status. This is a packaging failure; runtime compatibility with PettingZoo 1.27.0 remains unverified. No SMAC or SMACv2 reset/step checks ran.</p>
 </section>
 <section id="sumo-rl">
 <h3><a class="reference external" href="https://github.com/LucasAlegre/sumo-rl">Sumo-RL</a><a class="headerlink" href="#sumo-rl" title="Link to this heading">¶</a></h3>
@@ -681,7 +682,7 @@
 <li><a class="reference internal" href="#">Third-Party Environments</a><ul>
 <li><a class="reference internal" href="#environments-using-the-latest-versions-of-pettingzoo">Environments using the latest versions of PettingZoo</a><ul>
 <li><a class="reference internal" href="#gfootball-gymnasium-pettingzoo">gfootball-gymnasium-pettingzoo</a></li>
-<li><a class="reference internal" href="#smac-and-smacv2-with-latest-pettingzoo-apis">SMAC and SMACv2 with latest PettingZoo APIs</a></li>
+<li><a class="reference internal" href="#smac-and-smacv2">SMAC and SMACv2</a></li>
 <li><a class="reference internal" href="#sumo-rl">Sumo-RL</a></li>
 <li><a class="reference internal" href="#pogema">POGEMA</a></li>
 <li><a class="reference internal" href="#racecar-gym">Racecar Gym</a></li>
