@@ -573,7 +573,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="n">agent</span><span class="p">])</span>
         <span class="p">}</span>
 
-        <span class="n">infos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">infos</span><span class="p">)</span>
+        <span class="n">infos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">infos</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span>
 
     <span class="nd">@override</span>
@@ -597,9 +597,9 @@
             <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
                 <span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
 
-        <span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">terminations</span><span class="p">)</span>
-        <span class="n">truncations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">truncations</span><span class="p">)</span>
-        <span class="n">infos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">infos</span><span class="p">)</span>
+        <span class="n">terminations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">terminations</span><span class="p">)</span>
+        <span class="n">truncations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">truncations</span><span class="p">)</span>
+        <span class="n">infos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">infos</span><span class="p">)</span>
         <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">agent</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aec_env</span><span class="o">.</span><span class="n">agents</span>
         <span class="p">}</span>
