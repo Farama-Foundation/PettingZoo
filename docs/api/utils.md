@@ -141,6 +141,8 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
 
+Image observations must have a Box space with bounds from 0 to 255. Grayscale observations can have shape `(height, width)` or `(height, width, 1)`, and both are saved as grayscale PNGs. RGB observations have shape `(height, width, 3)`.
+
 ```python
 from pettingzoo import make
 from pettingzoo.utils import save_observation
