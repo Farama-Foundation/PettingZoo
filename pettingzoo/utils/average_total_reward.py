@@ -14,7 +14,8 @@ def average_total_reward(
     """Calculates the average total reward over the episodes for AEC environments.
 
     Runs an env object with random actions until either max_episodes or
-    max_steps is reached.
+    max_steps is reached. Steps count individual agent turns, including dead-agent
+    steps. The final episode may be incomplete when max_steps is reached.
     Reward is summed across all agents, making it unsuited for use in zero-sum
     games.
     """
@@ -27,7 +28,7 @@ def average_total_reward(
             break
 
         env.reset()
-        for agent in env.agent_iter():
+        for agent in env.agent_iter(max_iter=max_steps - total_steps):
             # Because we call env.last() this function only works with AEC envs
             obs, reward, termination, truncation, _ = env.last()
             total_reward += reward
