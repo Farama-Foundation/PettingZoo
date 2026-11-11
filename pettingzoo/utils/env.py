@@ -51,6 +51,8 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
     ]  # Observation space for each agent
     # Action space for each agent
     action_spaces: dict[AgentID, gymnasium.spaces.Space[ActionType]]
+    # Optional global state space for environments implementing state().
+    state_space: gymnasium.spaces.Space[Any]
 
     # Whether each agent has just reached a terminal state
     terminations: dict[AgentID, bool]
@@ -100,7 +102,7 @@ class AECEnv(Generic[AgentID, ObsType, ActionType]):
         """
         raise NotImplementedError
 
-    def state(self) -> np.ndarray:
+    def state(self) -> Any:
         """State returns a global view of the environment.
 
         It is appropriate for centralized training decentralized execution methods like QMIX
@@ -326,6 +328,8 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
     action_spaces: dict[
         AgentID, gymnasium.spaces.Space[ActionType]
     ]  # Action space for each agent
+    # Optional global state space for environments implementing state().
+    state_space: gymnasium.spaces.Space[Any]
 
     def reset(
         self,
@@ -371,7 +375,7 @@ class ParallelEnv(Generic[AgentID, ObsType, ActionType]):
         or any other resources that should be released.
         """
 
-    def state(self) -> np.ndarray:
+    def state(self) -> Any:
         """Returns the state.
 
         State returns a global view of the environment appropriate for
