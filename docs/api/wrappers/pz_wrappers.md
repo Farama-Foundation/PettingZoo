@@ -208,6 +208,10 @@ Each agent has an independent history, which is cleared on reset. Repeated AEC
 zero-like value from the agent's space; dictionary observations containing
 `observation` and `action_mask` use an all-ones initial action mask.
 
+For positive delays, observations are deep-copied into the history so that
+environments can reuse observation buffers without overwriting past observations.
+With `delay=0`, observations are passed through without copying.
+
 These classes replace SuperSuit's `delay_observations_v0`. Import them from
 `pettingzoo.utils.wrappers` and wrap the corresponding environment with
 `delay=...`. Rewards, termination flags, infos, and observation spaces are
