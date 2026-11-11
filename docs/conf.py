@@ -44,7 +44,13 @@ extensions = [
     "sphinx.ext.viewcode",
     "myst_parser",
     "sphinx_github_changelog",
+    "sphinx_copybutton",
 ]
+
+# Strip Python prompts, copying only input lines in console examples.
+# Blocks without prompts are copied in full, including indentation and blank lines.
+copybutton_prompt_text = r">>> |\.\.\. "
+copybutton_prompt_is_regexp = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -93,7 +99,7 @@ html_theme_options = {
 }
 
 html_static_path = ["_static"]
-html_css_files = []
+html_css_files = ["css/copybutton.css"]
 
 # -- Options for MyST parser -------------------------------------------------
 
