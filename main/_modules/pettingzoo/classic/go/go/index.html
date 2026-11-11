@@ -390,7 +390,7 @@
 
 <span class="sd">This environment is part of the &lt;a href='..'&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation           | `make("aec", "classic/go-v5")`         |</span>
+<span class="sd">| Creation           | `make("aec", "classic/go-v6")`         |</span>
 <span class="sd">|--------------------|----------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                               |</span>
 <span class="sd">| Parallel API       | Yes                                    |</span>
@@ -415,7 +415,7 @@
 <span class="sd">```python</span>
 <span class="sd">from pettingzoo import make</span>
 
-<span class="sd">make("aec", "classic/go-v5", board_size=19, komi=7.5)</span>
+<span class="sd">make("aec", "classic/go-v6", board_size=19, komi=7.5)</span>
 <span class="sd">```</span>
 
 <span class="sd">`board_size`: The length of each size of the board.</span>
@@ -477,12 +477,13 @@
 
 <span class="sd">### Rewards</span>
 
-<span class="sd">| Winner | Loser |</span>
-<span class="sd">| :----: | :---: |</span>
-<span class="sd">| +1     | -1    |</span>
+<span class="sd">| Winner | Loser | Draw |</span>
+<span class="sd">| :----: | :---: | :--: |</span>
+<span class="sd">| +1     | -1    | 0    |</span>
 
 <span class="sd">### Version History</span>
 
+<span class="sd">* v6: Fixed rewards for drawn games</span>
 <span class="sd">* v5: Changed observation space to proper AlphaZero style frame stacking (1.11.0)</span>
 <span class="sd">* v4: Fixed bug in how black and white pieces were saved in observation space (1.10.0)</span>
 <span class="sd">* v3: Fixed bug in arbitrary calls to observe() (1.8.0)</span>
@@ -534,7 +535,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">"render_modes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"human"</span><span class="p">,</span> <span class="s2">"rgb_array"</span><span class="p">],</span>
-        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"go_v5"</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"go_v6"</span><span class="p">,</span>
         <span class="s2">"is_parallelizable"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">"render_fps"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="p">}</span>
@@ -661,7 +662,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">actions</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_encode_rewards</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">result</span><span class="p">,</span> <span class="o">-</span><span class="n">result</span><span class="p">]</span>
 
 <div class="viewcode-block" id="raw_env.observe">
 <a class="viewcode-back" href="../../../../../environments/classic/go/#pettingzoo.classic.go.go.raw_env.observe">[docs]</a>
