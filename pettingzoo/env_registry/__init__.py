@@ -99,7 +99,7 @@ _classic_envs = [
         "texas_holdem_no_limit_v6",
         "pettingzoo.classic.rlcard_envs.texas_holdem_no_limit",
     ),
-    ("go_v5", "pettingzoo.classic.go.go"),
+    ("go_v6", "pettingzoo.classic.go.go"),
     ("hanabi_v5", "pettingzoo.classic.hanabi.hanabi"),
 ]
 
