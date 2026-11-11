@@ -13,7 +13,10 @@ from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 
 def _cast_space(
-    space: gymnasium.spaces.Space[Any], dtype: np.dtype, agent: AgentID, wrapper: str
+    space: gymnasium.spaces.Space[Any],
+    dtype: np.dtype[Any],
+    agent: AgentID,
+    wrapper: str,
 ) -> Box:
     """Returns ``space`` with its bounds and dtype cast to ``dtype``."""
     assert isinstance(space, Box), (
@@ -31,6 +34,33 @@ def _cast_space(
             f"{wrapper} cannot cast agent {agent!r}'s observation space "
             f"{space} to {dtype}: the cast bounds are not a valid Box."
         ) from e
+
+
+def _cached_space(
+    space: gymnasium.spaces.Space[Any],
+    dtype: np.dtype[Any],
+    agent: AgentID,
+    wrapper: str,
+    spaces: dict[AgentID, Box],
+    base_spaces: dict[AgentID, gymnasium.spaces.Space[Any]],
+) -> Box:
+    """Returns a cast space, retaining seeded state for equivalent replacements."""
+    if base_spaces.get(agent) is not space:
+        converted = _cast_space(space, dtype, agent, wrapper)
+        cached = spaces.get(agent)
+        # Equivalent replacements can occur after unpickling cached source spaces.
+        # Retain the converted space's identity and seeded sampling state.
+        if (
+            cached is not None
+            and cached.dtype == converted.dtype
+            and cached.shape == converted.shape
+            and np.array_equal(cached.low, converted.low)
+            and np.array_equal(cached.high, converted.high)
+        ):
+            converted = cached
+        spaces[agent] = converted
+        base_spaces[agent] = space
+    return spaces[agent]
 
 
 class DtypeObservationV1(BaseWrapper[AgentID, Any, ActionType]):
@@ -56,23 +86,29 @@ class DtypeObservationV1(BaseWrapper[AgentID, Any, ActionType]):
         )
         super().__init__(env)
         self.dtype = np.dtype(dtype)
-        self._obs_spaces: dict[AgentID, Box] = {
-            agent: _cast_space(
-                env.observation_space(agent), self.dtype, agent, type(self).__name__
-            )
-            for agent in getattr(env, "possible_agents", [])
-        }
-
-    @override
-    def observation_space(self, agent: AgentID) -> Box:
-        if agent not in self._obs_spaces:
-            self._obs_spaces[agent] = _cast_space(
-                self.env.observation_space(agent),
+        self._obs_spaces: dict[AgentID, Box] = {}
+        self._base_obs_spaces: dict[AgentID, gymnasium.spaces.Space[Any]] = {}
+        for agent in getattr(env, "possible_agents", []):
+            _cached_space(
+                env.observation_space(agent),
                 self.dtype,
                 agent,
                 type(self).__name__,
+                self._obs_spaces,
+                self._base_obs_spaces,
             )
-        return self._obs_spaces[agent]
+
+    @override
+    def observation_space(self, agent: AgentID) -> Box:
+        # Older pickles contain only the converted-space cache.
+        return _cached_space(
+            self.env.observation_space(agent),
+            self.dtype,
+            agent,
+            type(self).__name__,
+            self._obs_spaces,
+            self.__dict__.setdefault("_base_obs_spaces", {}),
+        )
 
     @override
     def observe(self, agent: AgentID) -> Any:
@@ -105,23 +141,28 @@ class DtypeObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]):
     def __init__(self, env: ParallelEnv[AgentID, ObsType, ActionType], dtype: Any):
         super().__init__(env)
         self.dtype = np.dtype(dtype)
-        self._obs_spaces: dict[AgentID, Box] = {
-            agent: _cast_space(
-                env.observation_space(agent), self.dtype, agent, type(self).__name__
-            )
-            for agent in getattr(env, "possible_agents", [])
-        }
-
-    @override
-    def observation_space(self, agent: AgentID) -> Box:
-        if agent not in self._obs_spaces:
-            self._obs_spaces[agent] = _cast_space(
-                self.env.observation_space(agent),
+        self._obs_spaces: dict[AgentID, Box] = {}
+        self._base_obs_spaces: dict[AgentID, gymnasium.spaces.Space[Any]] = {}
+        for agent in getattr(env, "possible_agents", []):
+            _cached_space(
+                env.observation_space(agent),
                 self.dtype,
                 agent,
                 type(self).__name__,
+                self._obs_spaces,
+                self._base_obs_spaces,
             )
-        return self._obs_spaces[agent]
+
+    @override
+    def observation_space(self, agent: AgentID) -> Box:
+        return _cached_space(
+            self.env.observation_space(agent),
+            self.dtype,
+            agent,
+            type(self).__name__,
+            self._obs_spaces,
+            self.__dict__.setdefault("_base_obs_spaces", {}),
+        )
 
     def _cast(self, observations: dict[AgentID, Any]) -> dict[AgentID, Any]:
         return {
