@@ -316,3 +316,76 @@ def test_parallel_api():
 def test_rejects_parallel_env():
     with pytest.raises(AssertionError):
         ScaleActionV1(DummyParallel(), 2.0)
+
+
+@pytest.mark.parametrize(
+    "wrapper,env_type",
+    [(ScaleActionV1, DummyAEC), (ScaleActionParallelV1, DummyParallel)],
+)
+@pytest.mark.parametrize("scale", [2.0, -2.0])
+def test_generated_agent_spaces_refresh_on_reset(wrapper, env_type, scale):
+    class GeneratedAgents(env_type):
+        def __init__(self):
+            super().__init__()
+            del self.possible_agents
+            self.spaces = {}
+
+        def action_space(self, agent):
+            return self.spaces[agent]
+
+        def reset(self, seed=None, options=None):
+            self.last_seed = seed
+            self.last_options = options
+            self.possible_agents = list(AGENTS)
+            result = super().reset(seed=seed, options=options)
+            del self.possible_agents
+            self.spaces = {
+                agent: Box(1.0, 3.0, (options["size"],), options["dtype"])
+                for agent in self.agents
+            }
+            self.reset_result = result
+            return result
+
+    inner = GeneratedAgents()
+    env = wrapper(inner, scale)
+    for size, dtype in [(1, np.float32), (3, np.float64)]:
+        options = {"size": size, "dtype": dtype}
+        result = env.reset(seed=17, options=options)
+        assert result is inner.reset_result
+        assert inner.last_seed == 17
+        assert inner.last_options is options
+        actions = {}
+        for agent in inner.agents:
+            space = env.action_space(agent)
+            assert space.shape == (size,)
+            assert space.dtype == dtype
+            assert env.action_space(agent) is space
+            np.testing.assert_array_equal(
+                space.low,
+                inner.action_space(agent).low * scale
+                if scale > 0
+                else inner.action_space(agent).high * scale,
+            )
+            actions[agent] = space.high.copy()
+        if isinstance(inner, AECEnv):
+            for action in actions.values():
+                env.step(action)
+        else:
+            env.step(actions)
+        for agent, action in inner.received.items():
+            assert inner.action_space(agent).contains(action)
+
+
+@pytest.mark.parametrize(
+    "wrapper,env_type",
+    [(ScaleActionV1, DummyAEC), (ScaleActionParallelV1, DummyParallel)],
+)
+def test_fixed_agent_space_cache_survives_reset(wrapper, env_type):
+    env = wrapper(env_type(), 2.0)
+    space = env.action_space("agent_0")
+    space.seed(42)
+    reference = Box(space.low, space.high, dtype=space.dtype, seed=42)
+    for _ in range(2):
+        env.reset(seed=0)
+        assert env.action_space("agent_0") is space
+        np.testing.assert_array_equal(space.sample(), reference.sample())
