@@ -67,6 +67,9 @@ class ScaleActionV1(BaseWrapper[AgentID, ObsType, Any]):
     reachable. A bound large enough that ``bound * scale`` overflows the dtype
     becomes infinite, and actions there stay infinite.
 
+    For environments without ``possible_agents``, cached action spaces are cleared
+    on reset so regenerated agents can have different spaces in the next episode.
+
     :param env: The AEC environment to wrap.
     :param scale: Non-zero factor applied to the action space bounds. A negative
         scale flips the bounds, so they are swapped to keep the Box valid.
@@ -83,6 +86,14 @@ class ScaleActionV1(BaseWrapper[AgentID, ObsType, Any]):
         self._action_spaces: dict[AgentID, Box] = {}
         for agent in getattr(env, "possible_agents", []):
             self.action_space(agent)
+
+    @override
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> None:
+        self.env.reset(seed=seed, options=options)
+        if not hasattr(self.env, "possible_agents"):
+            self._action_spaces.clear()
 
     @override
     def action_space(self, agent: AgentID) -> Box:
@@ -125,6 +136,9 @@ class ScaleActionParallelV1(BaseParallelWrapper[AgentID, ObsType, Any]):
     reachable. A bound large enough that ``bound * scale`` overflows the dtype
     becomes infinite, and actions there stay infinite.
 
+    For environments without ``possible_agents``, cached action spaces are cleared
+    on reset so regenerated agents can have different spaces in the next episode.
+
     :param env: The parallel environment to wrap.
     :param scale: Non-zero factor applied to the action space bounds. A negative
         scale flips the bounds, so they are swapped to keep the Box valid.
@@ -137,6 +151,15 @@ class ScaleActionParallelV1(BaseParallelWrapper[AgentID, ObsType, Any]):
         self._action_spaces: dict[AgentID, Box] = {}
         for agent in getattr(env, "possible_agents", []):
             self.action_space(agent)
+
+    @override
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> tuple[dict[AgentID, ObsType], dict[AgentID, dict[str, Any]]]:
+        result = self.env.reset(seed=seed, options=options)
+        if not hasattr(self.env, "possible_agents"):
+            self._action_spaces.clear()
+        return result
 
     @override
     def action_space(self, agent: AgentID) -> Box:
