@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 from typing import Any
 
 import numpy as np
@@ -35,14 +34,11 @@ def average_total_reward(
             if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
-                actions = np.flatnonzero(obs["action_mask"]).tolist()
-                assert not isinstance(actions, int)
-                action = random.choice(actions) + env.action_space(agent).start
+                mask = np.asarray(obs["action_mask"], dtype=np.int8)
+                action = env.action_space(agent).sample(mask=mask)
             elif isinstance(info, dict) and "action_mask" in info:
-                # Same precedence as api_test: an observation mask wins, then the info mask.
-                actions = np.flatnonzero(info["action_mask"]).tolist()
-                assert not isinstance(actions, int)
-                action = random.choice(actions) + env.action_space(agent).start
+                mask = np.asarray(info["action_mask"], dtype=np.int8)
+                action = env.action_space(agent).sample(mask=mask)
             else:
                 action = env.action_space(agent).sample()
             env.step(action)

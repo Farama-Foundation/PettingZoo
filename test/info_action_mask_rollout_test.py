@@ -83,7 +83,6 @@ class InfoMaskEnv(AECEnv[str, np.ndarray, int | None]):
         if self.terminations[agent] or self.truncations[agent]:
             self._was_dead_step(action)
             return
-        # The mask is indexed from 0, while a Discrete action starts at ``start``.
         assert self._act_space.contains(action), (
             f"{action} is outside {self._act_space}"
         )
