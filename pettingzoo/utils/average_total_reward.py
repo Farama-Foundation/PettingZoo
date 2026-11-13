@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 from typing import Any
 
 import numpy as np
@@ -29,15 +28,17 @@ def average_total_reward(
         env.reset()
         for agent in env.agent_iter():
             # Because we call env.last() this function only works with AEC envs
-            obs, reward, termination, truncation, _ = env.last()
+            obs, reward, termination, truncation, info = env.last()
             total_reward += reward
             total_steps += 1
             if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
-                actions = np.flatnonzero(obs["action_mask"]).tolist()
-                assert not isinstance(actions, int)
-                action = random.choice(actions)
+                mask = np.asarray(obs["action_mask"], dtype=np.int8)
+                action = env.action_space(agent).sample(mask=mask)
+            elif isinstance(info, dict) and "action_mask" in info:
+                mask = np.asarray(info["action_mask"], dtype=np.int8)
+                action = env.action_space(agent).sample(mask=mask)
             else:
                 action = env.action_space(agent).sample()
             env.step(action)
