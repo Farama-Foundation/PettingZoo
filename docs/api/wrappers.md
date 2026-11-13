@@ -16,6 +16,8 @@ The following wrappers can be used with PettingZoo environments:
 
 [Supersuit Wrappers](/api/wrappers/supersuit_wrappers/) include commonly used pre-processing functions such as frame-stacking and color reduction, compatible with both PettingZoo and Gymnasium.
 
+[SuperSuit Migration Guide](./wrappers/supersuit_migration.md) maps legacy SuperSuit APIs to available PettingZoo replacements and documents the remaining migration gaps.
+
 [Shimmy Compatibility Wrappers](/api/wrappers/shimmy_wrappers/) allow commonly used external reinforcement learning environments to be used with PettingZoo and Gymnasium.
 
 
@@ -23,5 +25,6 @@ The following wrappers can be used with PettingZoo environments:
 :hidden:
 wrappers/pz_wrappers
 wrappers/supersuit_wrappers
+wrappers/supersuit_migration
 wrappers/shimmy_wrappers
 ```
