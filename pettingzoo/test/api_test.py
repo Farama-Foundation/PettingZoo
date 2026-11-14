@@ -639,3 +639,25 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
         warnings.warn("Environment has not defined a render() method")
 
     print("Passed API test")
+
+
+def test_agent_selector_dead_step_does_not_mutate_selector_cycle():
+    """Regression test for #1332.
+
+    ``AgentSelector.reinit()`` must copy ``agent_order`` so that
+    ``AECEnv._was_dead_step``'s ``self.agents.remove(agent)`` cannot empty
+    the selector's cycle in place (which raised ``ZeroDivisionError`` in
+    ``next()`` after every agent died mid-episode).
+    """
+    from pettingzoo.utils import AgentSelector
+
+    agent_order = ["player_1", "player_2"]
+    selector = AgentSelector(agent_order)
+    selector.reset()
+
+    # simulate AECEnv._was_dead_step removing dead agents from the env list
+    agent_order.remove("player_1")
+    agent_order.remove("player_2")
+
+    assert selector.agent_order == ["player_1", "player_2"], selector.agent_order
+    assert selector.next() == "player_2"
