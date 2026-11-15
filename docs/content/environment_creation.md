@@ -64,7 +64,7 @@ A wrapper is an environment transformation that takes in an environment as input
 
 ```python
 from pettingzoo import make
-from pettingzoo.utils import ClipOutOfBoundsWrapper
+from pettingzoo.wrappers import ClipOutOfBoundsWrapper
 
 env = make("aec", "butterfly/pistonball-v6")
 wrapped_env = ClipOutOfBoundsWrapper(env)
