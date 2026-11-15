@@ -205,3 +205,79 @@ def test_record_video_snapshots_explicit_list_render(tmp_path, parallel):
         np.testing.assert_array_equal(env.recorded_frames, [expected])
     finally:
         env.close()
+
+
+@pytest.mark.parametrize("parallel", [False, True])
+def test_record_video_captures_complete_frame_batches(tmp_path, parallel, monkeypatch):
+    par_env = pistonball_v6.parallel_env(n_pistons=3, render_mode="rgb_array")
+    base = par_env if parallel else parallel_to_aec(par_env)
+    wrapper = RecordVideoParallel if parallel else RecordVideo
+    env = wrapper(
+        base,
+        video_folder=str(tmp_path / "video"),
+        episode_trigger=lambda _: False,
+        gc_trigger=None,
+    )
+    frames = [np.full((8, 8, 3), value, dtype=np.uint8) for value in (10, 20, 30)]
+    expected = [frame.copy() for frame in frames]
+    batches = iter([frames, [], frames[:1], []])
+    monkeypatch.setattr(base, "render", lambda: next(batches))
+    try:
+        env.reset(seed=123)
+        env.start_recording("frame-batches")
+        env._capture_frame()
+        np.testing.assert_array_equal(env.recorded_frames, expected)
+
+        env._capture_frame()
+        np.testing.assert_array_equal(env.recorded_frames, expected)
+        env._capture_frame()
+        expected.append(expected[0].copy())
+        np.testing.assert_array_equal(env.recorded_frames, expected)
+
+        for frame in frames:
+            frame.fill(0)
+        history = env.render()
+        np.testing.assert_array_equal(history, expected)
+        for frame in history:
+            frame.fill(0)
+        np.testing.assert_array_equal(env.recorded_frames, expected)
+    finally:
+        env.close()
+
+
+@pytest.mark.parametrize("parallel", [False, True])
+@pytest.mark.parametrize("valid_prefix", [False, True])
+def test_record_video_stops_at_invalid_batch_entry(
+    tmp_path, parallel, valid_prefix, monkeypatch
+):
+    from moviepy import VideoFileClip
+
+    par_env = pistonball_v6.parallel_env(n_pistons=3, render_mode="rgb_array")
+    base = par_env if parallel else parallel_to_aec(par_env)
+    wrapper = RecordVideoParallel if parallel else RecordVideo
+    folder = tmp_path / "video"
+    env = wrapper(
+        base,
+        video_folder=str(folder),
+        episode_trigger=lambda _: True,
+        gc_trigger=None,
+    )
+    first = np.full((16, 16, 3), 40, dtype=np.uint8)
+    last = np.full((16, 16, 3), 200, dtype=np.uint8)
+    frames = [first, None, last] if valid_prefix else [None, last]
+    monkeypatch.setattr(base, "render", lambda: frames)
+    try:
+        with pytest.warns(UserWarning, match="Recording stopped"):
+            env.reset(seed=123)
+        assert not env.recording
+        assert env.recorded_frames == []
+        paths = list(folder.glob("*.mp4"))
+        assert len(paths) == int(valid_prefix)
+        if valid_prefix:
+            with VideoFileClip(str(paths[0])) as clip:
+                decoded = list(clip.iter_frames())
+            assert len(decoded) == 1
+            # H.264 encoding can shift channel values slightly.
+            np.testing.assert_allclose(decoded[0], first, atol=3)
+    finally:
+        env.close()
