@@ -11,7 +11,7 @@ import argparse
 import numpy as np
 from stable_baselines3 import PPO
 
-from pettingzoo.sisl import multiwalker_v9 as mw
+from pettingzoo.sisl import multiwalker_v10 as mw
 
 
 def episode(policy, seed, max_cycles):

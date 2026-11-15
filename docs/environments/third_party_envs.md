@@ -18,11 +18,14 @@ lastpage:
 
 Google Research Football ([GRF](https://github.com/google-research/football)) with Gymnasium and PettingZoo Compatibility.
 
-### [SMAC and SMACv2 with latest PettingZoo APIs](https://github.com/xihuai18/SMAC-PettingZoo)
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.24.3-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/xihuai18/gfootball-gymnasium-pettingzoo)]()
+(smac-and-smacv2-with-latest-pettingzoo-apis)=
+### [SMAC and SMACv2](https://github.com/xihuai18/SMAC-PettingZoo)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-%3E%3D1.24.3-blue)](https://github.com/xihuai18/SMAC-PettingZoo/blob/08434598359a3e8f013fde1b88c3d06f4c304b6c/setup.py)
+[![GitHub stars](https://img.shields.io/github/stars/xihuai18/SMAC-PettingZoo)](https://github.com/xihuai18/SMAC-PettingZoo)
 
-[SMAC](https://github.com/oxwhirl/smac) and [SMACv2](https://github.com/oxwhirl/smacv2) with the latest PettingZoo Parallel APIs.
+[SMAC](https://github.com/oxwhirl/smac) and [SMACv2](https://github.com/oxwhirl/smacv2) wrappers for the PettingZoo Parallel API. The integration declares `pettingzoo>=1.24.3`.
+
+**Installation check (2026-10-23):** With Python 3.12.3 and PettingZoo 1.27.0, a non-editable wheel built from integration commit [0843459](https://github.com/xihuai18/SMAC-PettingZoo/commit/08434598359a3e8f013fde1b88c3d06f4c304b6c) contained no wrapper modules. Both wrapper imports failed with `ModuleNotFoundError`. See the [upstream packaging issue](https://github.com/xihuai18/SMAC-PettingZoo/issues/2) for reproduction steps and status. This is a packaging failure; runtime compatibility with PettingZoo 1.27.0 remains unverified. No SMAC or SMACv2 reset/step checks ran.
 
 ### [Sumo-RL](https://github.com/LucasAlegre/sumo-rl)
 

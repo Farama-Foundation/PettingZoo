@@ -21,7 +21,10 @@ def test_getattr_default_still_works():
     assert getattr(classic, "not_an_env", "default") == "default"
 
 
-def test_outdated_version_still_deprecated():
+@pytest.mark.parametrize(
+    "name, old_version, new_version", [("tictactoe", 2, 3), ("go", 5, 6)]
+)
+def test_outdated_version_still_deprecated(name, old_version, new_version):
     """Superseded versions keep their existing 'use the newer one' behavior."""
-    with pytest.raises(DeprecatedEnv, match="use tictactoe_v3 instead"):
-        classic.tictactoe_v2.env()
+    with pytest.raises(DeprecatedEnv, match=f"use {name}_v{new_version} instead"):
+        getattr(classic, f"{name}_v{old_version}").env()

@@ -3,7 +3,7 @@ import random
 from copy import copy
 
 import numpy as np
-from gymnasium.spaces import Discrete, MultiDiscrete
+from gymnasium.spaces import Dict, Discrete, MultiBinary, MultiDiscrete
 
 from pettingzoo import ParallelEnv
 
@@ -211,7 +211,15 @@ class CustomActionMaskedEnvironment(ParallelEnv):
     @functools.cache
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
-        return MultiDiscrete([7 * 7 - 1] * 3)
+        # Each observation is a dict holding the encoded positions and the action mask.
+        # Positions are encoded as x + 7 * y on the 7x7 grid, so each value ranges from 0 to 48.
+        # The action mask has one binary entry for each of the four actions.
+        return Dict(
+            {
+                "observation": MultiDiscrete([7 * 7] * 3),
+                "action_mask": MultiBinary(4),
+            }
+        )
 
     # Action space should be defined here.
     # If your spaces change over time, remove this line (disable caching).

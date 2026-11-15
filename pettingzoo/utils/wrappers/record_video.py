@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import gc
 import os
 from collections.abc import Callable
@@ -30,6 +31,8 @@ class RecordVideo(BaseWrapper[AgentID, ObsType, ActionType]):
         gc_trigger: Callable[[int], bool] | None = lambda episode: True,
     ):
         """Wraps an AEC environment with to output interval-based recordings.
+
+        Frames are copied when retained, so renderers may reuse their output buffers.
 
         Args:
             env (ParallelEnv): The parallel environment that will be trapped.
@@ -113,11 +116,11 @@ class RecordVideo(BaseWrapper[AgentID, ObsType, ActionType]):
         if isinstance(frame, list):
             if len(frame) == 0:
                 return
-            self.render_history += frame
+            self.render_history.extend(copy.copy(image) for image in frame)
             frame = frame[-1]
 
         if isinstance(frame, np.ndarray):
-            self.recorded_frames.append(frame)
+            self.recorded_frames.append(frame.copy())
         else:
             self.stop_recording()
             gymnasium.logger.warn(
@@ -161,7 +164,7 @@ class RecordVideo(BaseWrapper[AgentID, ObsType, ActionType]):
         """Compute the render frames as specified by render_mode attribute during initialization of the environment."""
         render_out = self.env.render()
         if self.recording and isinstance(render_out, list):
-            self.recorded_frames += render_out
+            self.recorded_frames.extend(copy.copy(frame) for frame in render_out)
 
         if len(self.render_history) > 0:
             tmp_history = self.render_history
