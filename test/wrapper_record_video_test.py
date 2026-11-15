@@ -243,3 +243,41 @@ def test_record_video_captures_complete_frame_batches(tmp_path, parallel, monkey
         np.testing.assert_array_equal(env.recorded_frames, expected)
     finally:
         env.close()
+
+
+@pytest.mark.parametrize("parallel", [False, True])
+@pytest.mark.parametrize("valid_prefix", [False, True])
+def test_record_video_stops_at_invalid_batch_entry(
+    tmp_path, parallel, valid_prefix, monkeypatch
+):
+    from moviepy import VideoFileClip
+
+    par_env = pistonball_v6.parallel_env(n_pistons=3, render_mode="rgb_array")
+    base = par_env if parallel else parallel_to_aec(par_env)
+    wrapper = RecordVideoParallel if parallel else RecordVideo
+    folder = tmp_path / "video"
+    env = wrapper(
+        base,
+        video_folder=str(folder),
+        episode_trigger=lambda _: True,
+        gc_trigger=None,
+    )
+    first = np.full((16, 16, 3), 40, dtype=np.uint8)
+    last = np.full((16, 16, 3), 200, dtype=np.uint8)
+    frames = [first, None, last] if valid_prefix else [None, last]
+    monkeypatch.setattr(base, "render", lambda: frames)
+    try:
+        with pytest.warns(UserWarning, match="Recording stopped"):
+            env.reset(seed=123)
+        assert not env.recording
+        assert env.recorded_frames == []
+        paths = list(folder.glob("*.mp4"))
+        assert len(paths) == int(valid_prefix)
+        if valid_prefix:
+            with VideoFileClip(str(paths[0])) as clip:
+                decoded = list(clip.iter_frames())
+            assert len(decoded) == 1
+            # H.264 encoding can shift channel values slightly.
+            np.testing.assert_allclose(decoded[0], first, atol=3)
+    finally:
+        env.close()
