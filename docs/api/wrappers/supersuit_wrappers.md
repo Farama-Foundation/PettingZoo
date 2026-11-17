@@ -31,6 +31,8 @@ Supersuit includes the following wrappers:
 
   Clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.
 
+  PettingZoo provides the native :class:`~pettingzoo.utils.wrappers.ClipOutOfBoundsWrapper` for both AEC and Parallel environments. Unlike ``clip_actions_v0``, it warns when clipping and rejects NaN actions.
+
 .. py:function:: color_reduction_v0(env, mode='full')
 
   Simplifies color information in graphical ((x,y,3) shaped) environments. `mode='full'` fully greyscales of the observation. This can be computationally intensive. Arguments of 'R', 'G' or 'B' just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.
@@ -46,6 +48,8 @@ Supersuit includes the following wrappers:
 .. py:function:: frame_skip_v0(env, num_frames)
 
   Skips `num_frames` number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari's frameskip parameter, `num_frames` can also be a tuple `(min_skip, max_skip)`, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).
+
+  PettingZoo provides the native :class:`~pettingzoo.utils.wrappers.FrameSkipV1` and :class:`~pettingzoo.utils.wrappers.FrameSkipParallelV1` wrappers. The Parallel version also accepts a ``(low, high)`` range.
 
 .. py:function:: delay_observations_v0(env, delay)
 

@@ -13,29 +13,29 @@ from pettingzoo.utils.wrappers.base import BaseWrapper
 from pettingzoo.utils.wrappers.base_parallel import BaseParallelWrapper
 
 
-def _check_paddable(spaces: list[Space[Any]]) -> None:
-    """Checks that a list of observation spaces can be padded to a common space."""
+def _check_paddable(spaces: list[Space[Any]], kind: str = "observation") -> None:
+    """Checks that a list of ``kind`` spaces can be padded to a common space."""
     assert len(spaces) > 0, "environment must have at least one possible agent"
     first = spaces[0]
     assert isinstance(first, (Box, Discrete)), (
-        "padding only supports Box and Discrete observation spaces, "
+        f"padding only supports Box and Discrete {kind} spaces, "
         f"got {type(first).__name__}"
     )
 
     expected = Box if isinstance(first, Box) else Discrete
     for space in spaces:
         assert isinstance(space, expected), (
-            "all observation spaces must be either Box or Discrete, not a mix"
+            f"all {kind} spaces must be either Box or Discrete, not a mix"
         )
 
     if isinstance(first, Box):
         for space in spaces:
             assert isinstance(space, Box)
             assert len(first.shape) == len(space.shape), (
-                "all Box observation spaces must have the same number of dimensions"
+                f"all Box {kind} spaces must have the same number of dimensions"
             )
             assert first.dtype == space.dtype, (
-                "all Box observation spaces must have the same dtype"
+                f"all Box {kind} spaces must have the same dtype"
             )
 
 

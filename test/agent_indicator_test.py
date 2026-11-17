@@ -113,6 +113,20 @@ def test_parallel_type_indicators_on_reset_and_step() -> None:
         assert env.observation_space(agent).contains(step_expected)
 
 
+def test_type_only_rejects_agent_names_with_a_suffix() -> None:
+    env = IndicatorEnv(
+        gymnasium.spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32),
+        np.zeros(1, dtype=np.float32),
+    )
+    env.possible_agents = ["predator_0", "predator_0_suffix"]
+
+    with pytest.raises(
+        AssertionError,
+        match="agent names must follow the <type>_<n> format",
+    ):
+        AgentIndicatorParallelV1(env, type_only=True)
+
+
 def test_rejects_non_homogeneous_observation_spaces() -> None:
     env = IndicatorEnv(
         gymnasium.spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32),

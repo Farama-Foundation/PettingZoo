@@ -32,7 +32,7 @@ if find_spec("pyspiel") is None:  # Hanabi needs open_spiel (Python >= 3.11)
 # Most difficult environments to train agents for (and longest games
 # TODO: test board_size to see if smaller go board is more easily solvable
 HARD_ENVS = [
-    "classic/go-v5",  # difficult to train because games take so long, may be another issue causing poor performance
+    "classic/go-v6",  # difficult to train because games take so long, may be another issue causing poor performance
 ]
 
 

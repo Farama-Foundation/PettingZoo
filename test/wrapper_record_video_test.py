@@ -3,11 +3,16 @@ from __future__ import annotations
 import os
 import shutil
 
+import numpy as np
 import pytest
 
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.utils import parallel_to_aec
-from pettingzoo.utils.wrappers import RecordVideo, RecordVideoParallel
+from pettingzoo.utils.wrappers import (
+    BaseParallelWrapper,
+    RecordVideo,
+    RecordVideoParallel,
+)
 
 
 def test_video_folder_and_filenames_base(
@@ -108,3 +113,95 @@ def test_incompatible_render_mode(wrapper, env_fn):
     half_built = wrapper.__new__(wrapper)
     half_built.env = env
     half_built.__del__()
+
+
+class ReusableRenderBuffer(BaseParallelWrapper):
+    """Render real Pistonball frames into a reusable output buffer."""
+
+    def __init__(self, env, as_list):
+        super().__init__(env)
+        self.as_list = as_list
+        self.buffer = None
+        self.render_mode = "rgb_array_list" if as_list else "rgb_array"
+        self.metadata = {**env.metadata, "render_modes": [self.render_mode]}
+
+    def render(self):
+        frame = self.env.render()
+        if self.buffer is None:
+            self.buffer = np.empty_like(frame)
+        np.copyto(self.buffer, frame)
+        return [self.buffer] if self.as_list else self.buffer
+
+
+@pytest.mark.parametrize("parallel", [False, True])
+@pytest.mark.parametrize("as_list", [False, True])
+def test_record_video_preserves_reused_render_buffers(tmp_path, parallel, as_list):
+    par_env = ReusableRenderBuffer(
+        pistonball_v6.parallel_env(n_pistons=3, render_mode="rgb_array", max_cycles=20),
+        as_list=as_list,
+    )
+    base = par_env if parallel else parallel_to_aec(par_env)
+    wrapper = RecordVideoParallel if parallel else RecordVideo
+    env = wrapper(
+        base,
+        video_folder=str(tmp_path / "video"),
+        episode_trigger=lambda _: True,
+        gc_trigger=None,
+    )
+    try:
+        env.reset(seed=123)
+        expected = [par_env.buffer.copy()]
+        for _ in range(8):
+            action = np.array([1.0], dtype=np.float32)
+            env.step(dict.fromkeys(env.agents, action) if parallel else action)
+            expected.append(par_env.buffer.copy())
+
+        # The physical scene changed; retained frames must not all become its
+        # final state when the renderer overwrites its output array.
+        assert not np.array_equal(expected[0], expected[-1])
+        np.testing.assert_array_equal(env.recorded_frames, expected)
+        assert not np.shares_memory(env.recorded_frames[0], par_env.buffer)
+
+        rendered = env.render()
+        if as_list:
+            np.testing.assert_array_equal(rendered, [*expected, expected[-1]])
+            np.testing.assert_array_equal(
+                env.recorded_frames, [*expected, expected[-1]]
+            )
+            # Neither the returned history nor the current render result is
+            # allowed to mutate frames already retained for the video.
+            for frame in rendered:
+                frame.fill(0)
+            np.testing.assert_array_equal(
+                env.recorded_frames, [*expected, expected[-1]]
+            )
+        else:
+            assert rendered is par_env.buffer
+    finally:
+        env.close()
+
+
+@pytest.mark.parametrize("parallel", [False, True])
+def test_record_video_snapshots_explicit_list_render(tmp_path, parallel):
+    par_env = ReusableRenderBuffer(
+        pistonball_v6.parallel_env(n_pistons=3, render_mode="rgb_array"),
+        as_list=True,
+    )
+    base = par_env if parallel else parallel_to_aec(par_env)
+    wrapper = RecordVideoParallel if parallel else RecordVideo
+    env = wrapper(
+        base,
+        video_folder=str(tmp_path / "video"),
+        episode_trigger=lambda _: False,
+        gc_trigger=None,
+    )
+    try:
+        env.reset(seed=123)
+        assert env.render_history == []
+        env.start_recording("explicit-render")
+        rendered = env.render()
+        expected = rendered[0].copy()
+        rendered[0].fill(0)
+        np.testing.assert_array_equal(env.recorded_frames, [expected])
+    finally:
+        env.close()
