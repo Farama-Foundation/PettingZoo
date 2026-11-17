@@ -16,7 +16,9 @@ from pettingzoo.utils.conversions import parallel_to_aec
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import FrameStackV3
 
-AGENTS = ["agent_0", "agent_1"]
+from . import dummy_envs
+from .dummy_envs import AGENTS
+
 MAX_CYCLES = 6
 INITIALS = ["first_obs", "zeros"]
 STACK_DIMS = [-1, 0]
@@ -80,14 +82,13 @@ def assert_stack(stack, agent, frame, shape, stack_dim, k, initial):
         assert np.array_equal(slot(stack, shape, stack_dim, i), want), (i, frame)
 
 
-class DummyAEC(AECEnv):
+class DummyAEC(dummy_envs.DummyAEC):
     """Observations change once per cycle, not once per turn, like every real AEC env."""
 
-    metadata = {"render_modes": [], "name": "dummy_aec"}
+    max_steps = MAX_CYCLES * len(AGENTS)
 
     def __init__(self, shape=(3,), dtype=np.float32):
         super().__init__()
-        self.possible_agents = list(AGENTS)
         self.shape = shape
         self.dtype = dtype
 
@@ -95,44 +96,8 @@ class DummyAEC(AECEnv):
     def observation_space(self, agent):
         return Box(low=0, high=255, shape=self.shape, dtype=self.dtype)
 
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._cumulative_rewards = dict.fromkeys(self.agents, 0.0)
-        self.terminations = dict.fromkeys(self.agents, False)
-        self.truncations = dict.fromkeys(self.agents, False)
-        self.infos = {a: {} for a in self.agents}
-        self.frame = 0
-        self._idx = 0
-        self.agent_selection = self.agents[0]
-
     def observe(self, agent):
         return frame_obs(agent, self.frame, self.shape, self.dtype)
-
-    def step(self, action):
-        agent = self.agent_selection
-        if self.terminations[agent] or self.truncations[agent]:
-            self._was_dead_step(action)
-            return
-        self._cumulative_rewards[agent] = 0.0
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._idx = (self._idx + 1) % len(self.agents)
-        if self._idx == 0:
-            self.frame += 1
-            if self.frame >= MAX_CYCLES:
-                self.terminations = dict.fromkeys(self.agents, True)
-        self.agent_selection = self.agents[self._idx]
-        self._accumulate_rewards()
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
 
 
 class DiscreteAEC(DummyAEC):
@@ -163,12 +128,11 @@ class DictObsAEC(DummyAEC):
         return Dict({"observation": Box(0, 1, (3,)), "action_mask": Discrete(2)})
 
 
-class DummyParallel(ParallelEnv):
-    metadata = {"render_modes": [], "name": "dummy_parallel"}
+class DummyParallel(dummy_envs.DummyParallel):
+    max_steps = MAX_CYCLES
 
     def __init__(self, shape=(3,), dtype=np.float32):
         super().__init__()
-        self.possible_agents = list(AGENTS)
         self.shape = shape
         self.dtype = dtype
 
@@ -176,37 +140,8 @@ class DummyParallel(ParallelEnv):
     def observation_space(self, agent):
         return Box(low=0, high=255, shape=self.shape, dtype=self.dtype)
 
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def _obs(self):
-        return {
-            a: frame_obs(a, self.frame, self.shape, self.dtype) for a in self.agents
-        }
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.frame = 0
-        return self._obs(), {a: {} for a in self.agents}
-
-    def step(self, actions):
-        self.frame += 1
-        done = self.frame >= MAX_CYCLES
-        obs = self._obs()
-        rewards = dict.fromkeys(self.agents, 0.0)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+    def observe(self, agent):
+        return frame_obs(agent, self.frame, self.shape, self.dtype)
 
 
 class DictObsParallel(DummyParallel):
@@ -217,24 +152,12 @@ class DictObsParallel(DummyParallel):
 class RejoinParallel(DummyParallel):
     """agent_1 is gone for frames 2 and 3, and back from frame 4."""
 
-    def _obs(self):
+    def _observations(self):
         if 2 <= self.frame <= 3:
             self.agents = ["agent_0"]
         else:
             self.agents = list(self.possible_agents)
-        return super()._obs()
-
-    def step(self, actions):
-        self.frame += 1
-        obs = self._obs()
-        done = self.frame >= MAX_CYCLES
-        rewards = dict.fromkeys(self.agents, 0.0)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
+        return super()._observations()
 
 
 class LeavingParallel(DummyParallel):
@@ -247,10 +170,10 @@ class LeavingParallel(DummyParallel):
             self.agents = [a for a in self.agents if a != "agent_1"]
         return obs, rewards, terminations, truncations, infos
 
-    def _obs(self):
+    def _observations(self):
         if self.frame > 2:
             self.agents = [a for a in self.agents if a != "agent_1"]
-        return super()._obs()
+        return super()._observations()
 
 
 def drive_aec(env, cycles, out_of_turn=False):

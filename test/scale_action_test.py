@@ -7,10 +7,10 @@ import pytest
 from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
-from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import ScaleActionParallelV1, ScaleActionV1
 
-AGENTS = ["agent_0", "agent_1"]
+from . import dummy_envs
+from .dummy_envs import AGENTS
 
 OBS = np.array([0.5, -0.5], dtype=np.float32)
 OBS_SPACE = Box(low=-1.0, high=1.0, shape=(2,), dtype=np.float32)
@@ -23,12 +23,11 @@ def act_space(agent):
     return Box(low=0.0, high=10.0, shape=(3,), dtype=np.float32)
 
 
-class DummyAEC(AECEnv):
-    metadata = {"render_modes": [], "name": "dummy_aec"}
+class DummyAEC(dummy_envs.DummyAEC):
+    """Records the last action each live agent was stepped with."""
 
     def __init__(self, action_space_fn=act_space):
         super().__init__()
-        self.possible_agents = list(AGENTS)
         self._action_space_fn = action_space_fn
         self.received = {}
 
@@ -40,50 +39,24 @@ class DummyAEC(AECEnv):
         return self._action_space_fn(agent)
 
     def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._cumulative_rewards = dict.fromkeys(self.agents, 0.0)
-        self.terminations = dict.fromkeys(self.agents, False)
-        self.truncations = dict.fromkeys(self.agents, False)
-        self.infos = {a: {} for a in self.agents}
+        super().reset(seed=seed, options=options)
         self.received = {}
-        self._idx = 0
-        self._step_count = 0
-        self.agent_selection = self.agents[0]
 
     def observe(self, agent):
         return OBS
 
     def step(self, action):
-        if (
-            self.terminations[self.agent_selection]
-            or self.truncations[self.agent_selection]
-        ):
-            self._was_dead_step(action)
-            return
-        self.received[self.agent_selection] = action
-        self._step_count += 1
-        self._cumulative_rewards[self.agent_selection] = 0.0
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        if self._step_count >= 8:
-            self.terminations = dict.fromkeys(self.agents, True)
-        self._idx = (self._idx + 1) % len(self.agents)
-        self.agent_selection = self.agents[self._idx]
-        self._accumulate_rewards()
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+        agent = self.agent_selection
+        if not (self.terminations[agent] or self.truncations[agent]):
+            self.received[agent] = action
+        super().step(action)
 
 
-class DummyParallel(ParallelEnv):
-    metadata = {"render_modes": [], "name": "dummy_parallel"}
+class DummyParallel(dummy_envs.DummyParallel):
+    """Records the actions dict of the last step."""
 
     def __init__(self, action_space_fn=act_space):
         super().__init__()
-        self.possible_agents = list(AGENTS)
         self._action_space_fn = action_space_fn
         self.received = {}
 
@@ -95,29 +68,15 @@ class DummyParallel(ParallelEnv):
         return self._action_space_fn(agent)
 
     def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
         self.received = {}
-        self._step_count = 0
-        return dict.fromkeys(self.agents, OBS), {a: {} for a in self.agents}
+        return super().reset(seed=seed, options=options)
+
+    def observe(self, agent):
+        return OBS
 
     def step(self, actions):
         self.received = dict(actions)
-        self._step_count += 1
-        done = self._step_count >= 8
-        obs = dict.fromkeys(self.agents, OBS)
-        rewards = dict.fromkeys(self.agents, 0.0)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+        return super().step(actions)
 
 
 def discrete_space(agent):

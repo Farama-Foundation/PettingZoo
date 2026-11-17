@@ -12,10 +12,11 @@ from pettingzoo.test.example_envs import (
     generated_agents_env_v0,
 )
 from pettingzoo.utils.conversions import parallel_to_aec
-from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import MaxObservationParallelV1, MaxObservationV1
 
-AGENTS = ["agent_0", "agent_1"]
+from . import dummy_envs
+from .dummy_envs import AGENTS
+
 MAX_CYCLES = 6
 
 # agent_0 counts down and agent_1 counts up, so a max over a window is easy to
@@ -41,56 +42,16 @@ def expected_max(agent, frame, memory):
     return functools.reduce(np.maximum, [frame_obs(agent, f) for f in frames])
 
 
-class DummyAEC(AECEnv):
+class DummyAEC(dummy_envs.DummyAEC):
     """Observations change once per cycle, not once per turn, like every real AEC env."""
 
-    metadata = {"render_modes": [], "name": "dummy_aec"}
-
-    def __init__(self):
-        super().__init__()
-        self.possible_agents = list(AGENTS)
+    max_steps = MAX_CYCLES * len(AGENTS)
 
     def observation_space(self, agent):
         return OBS_SPACE
 
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._cumulative_rewards = dict.fromkeys(self.agents, 0.0)
-        self.terminations = dict.fromkeys(self.agents, False)
-        self.truncations = dict.fromkeys(self.agents, False)
-        self.infos = {a: {} for a in self.agents}
-        self.frame = 0
-        self._idx = 0
-        self.agent_selection = self.agents[0]
-
     def observe(self, agent):
         return frame_obs(agent, self.frame)
-
-    def step(self, action):
-        agent = self.agent_selection
-        if self.terminations[agent] or self.truncations[agent]:
-            self._was_dead_step(action)
-            return
-        self._cumulative_rewards[agent] = 0.0
-        self.rewards = dict.fromkeys(self.agents, 0.0)
-        self._idx = (self._idx + 1) % len(self.agents)
-        if self._idx == 0:
-            self.frame += 1
-            if self.frame >= MAX_CYCLES:
-                self.terminations = dict.fromkeys(self.agents, True)
-        self.agent_selection = self.agents[self._idx]
-        self._accumulate_rewards()
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
 
 
 class DictObsAEC(DummyAEC):
@@ -103,43 +64,14 @@ class DiscreteObsAEC(DummyAEC):
         return Discrete(4)
 
 
-class DummyParallel(ParallelEnv):
-    metadata = {"render_modes": [], "name": "dummy_parallel"}
-
-    def __init__(self):
-        super().__init__()
-        self.possible_agents = list(AGENTS)
+class DummyParallel(dummy_envs.DummyParallel):
+    max_steps = MAX_CYCLES
 
     def observation_space(self, agent):
         return OBS_SPACE
 
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.frame = 0
-        obs = {a: frame_obs(a, self.frame) for a in self.agents}
-        return obs, {a: {} for a in self.agents}
-
-    def step(self, actions):
-        self.frame += 1
-        done = self.frame >= MAX_CYCLES
-        obs = {a: frame_obs(a, self.frame) for a in self.agents}
-        rewards = dict.fromkeys(self.agents, 0.0)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+    def observe(self, agent):
+        return frame_obs(agent, self.frame)
 
 
 class DictObsParallel(DummyParallel):
@@ -159,50 +91,19 @@ class LeavingParallel(DummyParallel):
         return obs, rewards, terminations, truncations, infos
 
 
-class FlickerParallel(ParallelEnv):
+class FlickerParallel(DummyParallel):
     """One pixel is lit on even cycles, the other on odd cycles."""
 
     metadata = {"render_modes": [], "name": "flicker"}
-
-    def __init__(self):
-        super().__init__()
-        self.possible_agents = list(AGENTS)
 
     @functools.cache
     def observation_space(self, agent):
         return Box(low=0.0, high=1.0, shape=(2,), dtype=np.float32)
 
-    @functools.cache
-    def action_space(self, agent):
-        return Discrete(2)
-
-    def _obs(self):
+    def observe(self, agent):
         v = np.zeros(2, dtype=np.float32)
         v[self.frame % 2] = 1.0
-        return {a: v.copy() for a in self.agents}
-
-    def reset(self, seed=None, options=None):
-        self.agents = list(self.possible_agents)
-        self.frame = 0
-        return self._obs(), {a: {} for a in self.agents}
-
-    def step(self, actions):
-        self.frame += 1
-        done = self.frame >= MAX_CYCLES
-        obs = self._obs()
-        rewards = dict.fromkeys(self.agents, 0.0)
-        terminations = dict.fromkeys(self.agents, done)
-        truncations = dict.fromkeys(self.agents, False)
-        infos = {a: {} for a in self.agents}
-        if done:
-            self.agents = []
-        return obs, rewards, terminations, truncations, infos
-
-    def render(self):
-        return None
-
-    def close(self):
-        pass
+        return v
 
 
 def drive_aec(env, cycles, out_of_turn=False):
