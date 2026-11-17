@@ -10,11 +10,11 @@
     <meta property="og:url" content="https://pettingzoo.farama.org/_modules/pettingzoo/atari/surround/surround.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../../../../../genindex/" /><link rel="search" title="Search" href="../../../../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/_modules/pettingzoo/atari/surround/surround.html" />
 
-    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
+    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.2 -->
         <title>pettingzoo.atari.surround.surround - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast.css?v=9fbfb63d" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast-extensions.css?v=42bfddca" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast.css?v=c1bb3f29" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/celshast-extensions.css?v=88aa31df" />
     
     
 
@@ -378,7 +378,7 @@
             
             <h1>Source code for pettingzoo.atari.surround.surround</h1><div class="highlight"><pre>
 <span></span><span class="c1"># noqa: D212, D415</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd"># Surround</span>
 
 <span class="sd">```{figure} atari_surround.gif</span>
@@ -386,14 +386,14 @@
 <span class="sd">:name: surround</span>
 <span class="sd">```</span>
 
-<span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
+<span class="sd">This environment is part of the &lt;a href='..'&gt;Atari environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Creation             | `make(&quot;aec&quot;, &quot;atari/surround-v2&quot;)`         |</span>
+<span class="sd">| Creation             | `make("aec", "atari/surround-v2")`         |</span>
 <span class="sd">|----------------------|--------------------------------------------|</span>
 <span class="sd">| Actions              | Discrete                                   |</span>
 <span class="sd">| Parallel API         | Yes                                        |</span>
 <span class="sd">| Manual Control       | No                                         |</span>
-<span class="sd">| Agents               | `agents= [&#39;first_0&#39;, &#39;second_0&#39;]`          |</span>
+<span class="sd">| Agents               | `agents= ['first_0', 'second_0']`          |</span>
 <span class="sd">| Agents               | 2                                          |</span>
 <span class="sd">| Action Shape         | (1,)                                       |</span>
 <span class="sd">| Action Values        | [0,4]                                      |</span>
@@ -434,7 +434,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
@@ -451,14 +451,14 @@
 <div class="viewcode-block" id="raw_env">
 <a class="viewcode-back" href="../../../../../environments/atari/surround/#pettingzoo.atari.surround.surround.raw_env">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtariAECEnv</span><span class="p">:</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">parent_file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*.py&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"*.py"</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">version_num</span>
+    <span class="n">version_num</span> <span class="o">=</span> <span class="n">parent_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">version_num</span>
     <span class="k">return</span> <span class="n">BaseAtariEnv</span><span class="p">(</span>
-        <span class="n">game</span><span class="o">=</span><span class="s2">&quot;surround&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">game</span><span class="o">=</span><span class="s2">"surround"</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span></div>
 
 
@@ -479,6 +479,7 @@
               <div class="copyright">
                 Copyright &#169; 2023 Farama Foundation
               </div>
+              <script defer src="../../../../../_static/farama/copyright-year.js"></script>
               <!--
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -585,182 +586,9 @@
     <script src="../../../../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../../../_static/scripts/celshast.js?v=a788a8c6"></script>
+    <script src="../../../../../_static/scripts/celshast.js?v=704c8ef9"></script>
     
-    <script>
-
-      const createProjectsList = (projects, displayImages) => {
-        const ulElem = Object.assign(document.createElement('ul'),
-          {
-            className:'farama-header-menu-list',
-          }
-        )
-        for (let project of projects) {
-          const liElem = document.createElement("li");
-          const aElem = Object.assign(document.createElement("a"),
-            {
-              href: project.link
-            }
-          );
-          liElem.appendChild(aElem);
-          if (displayImages) {
-            const imgElem = Object.assign(document.createElement("img"),
-              {
-                src: project.image ? imagesBasepath + project.image : imagesBasepath + "/farama_black.svg",
-                alt: `${project.name} logo`,
-                className: "farama-black-logo-invert"
-              }
-            );
-            aElem.appendChild(imgElem);
-          }
-          aElem.appendChild(document.createTextNode(project.name));
-          ulElem.appendChild(liElem);
-        }
-        return ulElem;
-      }
-
-      // Create menu with Farama projects by using the API at farama.org/api/projects.json
-      const createCORSRequest = (method, url) => {
-        let xhr = new XMLHttpRequest();
-        xhr.responseType = 'json';
-
-        if ("withCredentials" in xhr) {
-          xhr.open(method, url, true);
-        } else if (typeof XDomainRequest != "undefined") {
-          // IE8 & IE9
-          xhr = new XDomainRequest();
-          xhr.open(method, url);
-        } else {
-          // CORS not supported.
-          xhr = null;
-        }
-        return xhr;
-      };
-
-      const url = 'https://farama.org/api/projects.json';
-      const imagesBasepath = "https://farama.org/assets/images"
-      const method = 'GET';
-      let xhr = createCORSRequest(method, url);
-
-      xhr.onload = () => {
-        const jsonResponse = xhr.response;
-        const sections = {
-          "Core Projects": [],
-          "Foundation": [
-            {
-              name: "About",
-              link: "https://farama.org/about"
-            },
-            {
-              name: "Standards",
-              link: "https://farama.org/project_standards",
-            },
-            {
-              name: "Donate",
-              link: "https://farama.org/donations"
-            }
-          ],
-          "Mature Projects": {
-            "Documentation": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          }
-        }
-
-        // Categorize projects
-        Object.keys(jsonResponse).forEach(key => {
-          projectJson = jsonResponse[key];
-          if (projectJson.website !== null) {
-            projectJson.link = projectJson.website;
-          } else {
-            projectJson.link = projectJson.github;
-          }
-          if (projectJson.type === "core") {
-            sections["Core Projects"].push(projectJson)
-          } else if (projectJson.type == "mature") {
-            if (projectJson.website !== null) {
-              sections["Mature Projects"]["Documentation"].push(projectJson)
-            }
-          } else {
-            if (projectJson.website !== null) {
-              sections["Incubating Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Incubating Projects"]["Repositories"].push(projectJson)
-            }
-          }
-        })
-
-        const menuContainer = document.querySelector(".farama-header-menu__body");
-
-        const stackedColumnElem = Object.assign(
-          document.createElement('div'), {
-            style: 'display: flex; flex-direction: column;'
-          }
-        );
-        const stackedKeys = new Set(["Core Projects", "Foundation"]);
-
-        Object.keys(sections).forEach((key, i) => {
-          const sectionElem = Object.assign(
-            document.createElement('div'), {
-              className:'farama-header-menu__section',
-            }
-          )
-          sectionElem.appendChild(Object.assign(document.createElement('span'),
-            {
-              className:'farama-header-menu__section-title' ,
-              innerText: key
-            }
-          ))
-          // is not a list
-          if (sections[key].constructor !== Array) {
-            const subSections = sections[key];
-            const subSectionContainerElem = Object.assign(
-                document.createElement('div'), {
-                  className:'farama-header-menu__subsections-container',
-                  style: 'display: flex'
-                }
-            )
-            Object.keys(subSections).forEach((subKey, i) => {
-              const subSectionElem = Object.assign(
-                document.createElement('div'), {
-                  className:'farama-header-menu__subsection',
-                }
-              )
-              subSectionElem.appendChild(Object.assign(document.createElement('span'),
-                {
-                  className:'farama-header-menu__subsection-title' ,
-                  innerText: subKey
-                }
-              ))
-              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
-              subSectionElem.appendChild(ulElem);
-              subSectionContainerElem.appendChild(subSectionElem);
-            })
-            sectionElem.appendChild(subSectionContainerElem);
-          } else {
-            const projects = sections[key];
-            const ulElem = createProjectsList(projects, true);
-            sectionElem.appendChild(ulElem);
-          }
-          if (stackedKeys.has(key)) {
-            if (!stackedColumnElem.parentNode) {
-              menuContainer.appendChild(stackedColumnElem);
-            }
-            stackedColumnElem.appendChild(sectionElem);
-          } else {
-            menuContainer.appendChild(sectionElem);
-          }
-        });
-      }
-
-      xhr.onerror = function() {
-        console.error("Unable to load projects");
-      };
-
-      xhr.send();
-    </script>
+    <script defer src="https://farama.org/assets/docs/shared.js"></script>
 
     
     <script>

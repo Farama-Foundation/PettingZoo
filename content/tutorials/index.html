@@ -11,11 +11,11 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/content/tutorials.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.1 -->
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.4.7 and Celshast 0.0.2 -->
         <title>Tutorials - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/celshast.css?v=9fbfb63d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/celshast-extensions.css?v=42bfddca" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/celshast.css?v=c1bb3f29" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/celshast-extensions.css?v=88aa31df" />
     
     
 
@@ -390,13 +390,13 @@
 <h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
 <section id="recommended-start">
 <h2>Recommended start<a class="headerlink" href="#recommended-start" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Basic code which shows what it&#39;s like to run PPO on the Pistonball env using the parallel API, this code is inspired by CleanRL.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Basic code which shows what it's like to run PPO on the Pistonball env using the parallel API, this code is inspired by CleanRL.</span>
 
 <span class="sd">This code is exceedingly basic, with no logging or weights saving.</span>
 <span class="sd">The intention was for users to have a (relatively clean) ~200 line file to refer to when they want to design their own learning algorithm.</span>
 
 <span class="sd">Author: Jet (https://github.com/jjshoots)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -447,7 +447,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">batchify_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts PZ style observations to batch of torch arrays.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Converts PZ style observations to batch of torch arrays."""</span>
     <span class="c1"># convert to list of np arrays</span>
     <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">obs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># transpose to be (batch, channel, height, width)</span>
@@ -459,7 +459,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">batchify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts PZ style returns to batch of torch arrays.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Converts PZ style returns to batch of torch arrays."""</span>
     <span class="c1"># convert to list of np arrays</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># convert to torch</span>
@@ -469,16 +469,16 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">unbatchify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts np array to PZ style arguments.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Converts np array to PZ style arguments."""</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)}</span>
 
     <span class="k">return</span> <span class="n">x</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;ALGO PARAMS&quot;&quot;&quot;</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""ALGO PARAMS"""</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
     <span class="n">ent_coef</span> <span class="o">=</span> <span class="mf">0.1</span>
     <span class="n">vf_coef</span> <span class="o">=</span> <span class="mf">0.1</span>
     <span class="n">clip_coef</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -489,11 +489,11 @@
     <span class="n">max_cycles</span> <span class="o">=</span> <span class="mi">125</span>
     <span class="n">total_episodes</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; ENV SETUP &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" ENV SETUP """</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
-        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span>
-        <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">,</span>
+        <span class="s2">"parallel"</span><span class="p">,</span>
+        <span class="s2">"butterfly/pistonball-v6"</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="o">=</span><span class="s2">"rgb_array"</span><span class="p">,</span>
         <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">max_cycles</span><span class="o">=</span><span class="n">max_cycles</span><span class="p">,</span>
     <span class="p">)</span>
@@ -504,11 +504,11 @@
     <span class="n">num_actions</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">n</span>
     <span class="n">observation_size</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; LEARNER SETUP &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" LEARNER SETUP """</span>
     <span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">num_actions</span><span class="o">=</span><span class="n">num_actions</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; ALGO LOGIC: EPISODE STORAGE&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" ALGO LOGIC: EPISODE STORAGE"""</span>
     <span class="n">end_step</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">total_episodic_return</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">rb_obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">max_cycles</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">,</span> <span class="n">stack_size</span><span class="p">,</span> <span class="o">*</span><span class="n">frame_size</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
@@ -518,7 +518,7 @@
     <span class="n">rb_terms</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">max_cycles</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">rb_values</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">max_cycles</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; TRAINING LOGIC &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" TRAINING LOGIC """</span>
     <span class="c1"># train for n number of episodes</span>
     <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total_episodes</span><span class="p">):</span>
         <span class="c1"># collect an episode</span>
@@ -638,21 +638,21 @@
         <span class="n">var_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
         <span class="n">explained_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">var_y</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">/</span> <span class="n">var_y</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training episode </span><span class="si">{</span><span class="n">episode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episodic Return: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">total_episodic_return</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode Length: </span><span class="si">{</span><span class="n">end_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Training episode </span><span class="si">{</span><span class="n">episode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Episodic Return: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">total_episodic_return</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Episode Length: </span><span class="si">{</span><span class="n">end_step</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Value Loss: </span><span class="si">{</span><span class="n">v_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Policy Loss: </span><span class="si">{</span><span class="n">pg_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Old Approx KL: </span><span class="si">{</span><span class="n">old_approx_kl</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Approx KL: </span><span class="si">{</span><span class="n">approx_kl</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Clip Fraction: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">clip_fracs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Explained Variance: </span><span class="si">{</span><span class="n">explained_var</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Value Loss: </span><span class="si">{</span><span class="n">v_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Policy Loss: </span><span class="si">{</span><span class="n">pg_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Old Approx KL: </span><span class="si">{</span><span class="n">old_approx_kl</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Approx KL: </span><span class="si">{</span><span class="n">approx_kl</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Clip Fraction: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">clip_fracs</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Explained Variance: </span><span class="si">{</span><span class="n">explained_var</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">-------------------------------------------</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; RENDER THE POLICY &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""" RENDER THE POLICY """</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span>
-        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span> <span class="s2">&quot;butterfly/pistonball-v6&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span>
+        <span class="s2">"parallel"</span><span class="p">,</span> <span class="s2">"butterfly/pistonball-v6"</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">"human"</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
@@ -691,6 +691,7 @@
               <div class="copyright">
                 Copyright &#169; 2023 Farama Foundation
               </div>
+              <script defer src="../../_static/farama/copyright-year.js"></script>
               <!--
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -816,182 +817,9 @@
     <script src="../../_static/documentation_options.js?v=a7653905"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/celshast.js?v=a788a8c6"></script>
+    <script src="../../_static/scripts/celshast.js?v=704c8ef9"></script>
     
-    <script>
-
-      const createProjectsList = (projects, displayImages) => {
-        const ulElem = Object.assign(document.createElement('ul'),
-          {
-            className:'farama-header-menu-list',
-          }
-        )
-        for (let project of projects) {
-          const liElem = document.createElement("li");
-          const aElem = Object.assign(document.createElement("a"),
-            {
-              href: project.link
-            }
-          );
-          liElem.appendChild(aElem);
-          if (displayImages) {
-            const imgElem = Object.assign(document.createElement("img"),
-              {
-                src: project.image ? imagesBasepath + project.image : imagesBasepath + "/farama_black.svg",
-                alt: `${project.name} logo`,
-                className: "farama-black-logo-invert"
-              }
-            );
-            aElem.appendChild(imgElem);
-          }
-          aElem.appendChild(document.createTextNode(project.name));
-          ulElem.appendChild(liElem);
-        }
-        return ulElem;
-      }
-
-      // Create menu with Farama projects by using the API at farama.org/api/projects.json
-      const createCORSRequest = (method, url) => {
-        let xhr = new XMLHttpRequest();
-        xhr.responseType = 'json';
-
-        if ("withCredentials" in xhr) {
-          xhr.open(method, url, true);
-        } else if (typeof XDomainRequest != "undefined") {
-          // IE8 & IE9
-          xhr = new XDomainRequest();
-          xhr.open(method, url);
-        } else {
-          // CORS not supported.
-          xhr = null;
-        }
-        return xhr;
-      };
-
-      const url = 'https://farama.org/api/projects.json';
-      const imagesBasepath = "https://farama.org/assets/images"
-      const method = 'GET';
-      let xhr = createCORSRequest(method, url);
-
-      xhr.onload = () => {
-        const jsonResponse = xhr.response;
-        const sections = {
-          "Core Projects": [],
-          "Foundation": [
-            {
-              name: "About",
-              link: "https://farama.org/about"
-            },
-            {
-              name: "Standards",
-              link: "https://farama.org/project_standards",
-            },
-            {
-              name: "Donate",
-              link: "https://farama.org/donations"
-            }
-          ],
-          "Mature Projects": {
-            "Documentation": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          }
-        }
-
-        // Categorize projects
-        Object.keys(jsonResponse).forEach(key => {
-          projectJson = jsonResponse[key];
-          if (projectJson.website !== null) {
-            projectJson.link = projectJson.website;
-          } else {
-            projectJson.link = projectJson.github;
-          }
-          if (projectJson.type === "core") {
-            sections["Core Projects"].push(projectJson)
-          } else if (projectJson.type == "mature") {
-            if (projectJson.website !== null) {
-              sections["Mature Projects"]["Documentation"].push(projectJson)
-            }
-          } else {
-            if (projectJson.website !== null) {
-              sections["Incubating Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Incubating Projects"]["Repositories"].push(projectJson)
-            }
-          }
-        })
-
-        const menuContainer = document.querySelector(".farama-header-menu__body");
-
-        const stackedColumnElem = Object.assign(
-          document.createElement('div'), {
-            style: 'display: flex; flex-direction: column;'
-          }
-        );
-        const stackedKeys = new Set(["Core Projects", "Foundation"]);
-
-        Object.keys(sections).forEach((key, i) => {
-          const sectionElem = Object.assign(
-            document.createElement('div'), {
-              className:'farama-header-menu__section',
-            }
-          )
-          sectionElem.appendChild(Object.assign(document.createElement('span'),
-            {
-              className:'farama-header-menu__section-title' ,
-              innerText: key
-            }
-          ))
-          // is not a list
-          if (sections[key].constructor !== Array) {
-            const subSections = sections[key];
-            const subSectionContainerElem = Object.assign(
-                document.createElement('div'), {
-                  className:'farama-header-menu__subsections-container',
-                  style: 'display: flex'
-                }
-            )
-            Object.keys(subSections).forEach((subKey, i) => {
-              const subSectionElem = Object.assign(
-                document.createElement('div'), {
-                  className:'farama-header-menu__subsection',
-                }
-              )
-              subSectionElem.appendChild(Object.assign(document.createElement('span'),
-                {
-                  className:'farama-header-menu__subsection-title' ,
-                  innerText: subKey
-                }
-              ))
-              const ulElem = createProjectsList(subSections[subKey], key !== 'Foundation');
-              subSectionElem.appendChild(ulElem);
-              subSectionContainerElem.appendChild(subSectionElem);
-            })
-            sectionElem.appendChild(subSectionContainerElem);
-          } else {
-            const projects = sections[key];
-            const ulElem = createProjectsList(projects, true);
-            sectionElem.appendChild(ulElem);
-          }
-          if (stackedKeys.has(key)) {
-            if (!stackedColumnElem.parentNode) {
-              menuContainer.appendChild(stackedColumnElem);
-            }
-            stackedColumnElem.appendChild(sectionElem);
-          } else {
-            menuContainer.appendChild(sectionElem);
-          }
-        });
-      }
-
-      xhr.onerror = function() {
-        console.error("Unable to load projects");
-      };
-
-      xhr.send();
-    </script>
+    <script defer src="https://farama.org/assets/docs/shared.js"></script>
 
     
     <script>
