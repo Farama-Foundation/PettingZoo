@@ -8,6 +8,10 @@ from gymnasium.spaces import Box, Dict, Discrete
 from gymnasium.spaces.utils import flatten
 
 from pettingzoo.test import api_test, parallel_api_test
+from pettingzoo.test.example_envs import (
+    generated_agents_env_v0,
+    generated_agents_parallel_v0,
+)
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import FlattenObservationParallelV1, FlattenObservationV1
 
@@ -199,3 +203,38 @@ def test_parallel_api():
 def test_rejects_parallel_env():
     with pytest.raises(AssertionError):
         FlattenObservationV1(DummyParallel())
+
+
+@pytest.mark.parametrize("seed", [1, 3])
+def test_aec_observation_spaces_after_reset(seed):
+    env = FlattenObservationV1(generated_agents_env_v0.env())
+    env.reset(seed=1)
+    for agent in env.agents:
+        assert env.observation_space(agent).contains(env.observe(agent))
+
+    env.reset(seed=seed)
+    for agent in env.agents:
+        space = env.observation_space(agent)
+        assert space is env.observation_space(agent)
+        assert space.contains(env.observe(agent))
+    env.step(env.action_space(env.agent_selection).sample())
+    assert env.observation_space(env.agent_selection).contains(env.last()[0])
+
+
+@pytest.mark.parametrize("seed", [1, 3])
+def test_parallel_observation_spaces_after_reset(seed):
+    env = FlattenObservationParallelV1(generated_agents_parallel_v0.parallel_env())
+    observations, _ = env.reset(seed=1)
+    for agent, obs in observations.items():
+        assert env.observation_space(agent).contains(obs)
+
+    observations, _ = env.reset(seed=seed)
+    for agent, obs in observations.items():
+        space = env.observation_space(agent)
+        assert space is env.observation_space(agent)
+        assert space.contains(obs)
+    observations, _, _, _, _ = env.step(
+        {agent: env.action_space(agent).sample() for agent in env.agents}
+    )
+    for agent, obs in observations.items():
+        assert env.observation_space(agent).contains(obs)
