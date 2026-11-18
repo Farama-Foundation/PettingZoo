@@ -173,6 +173,12 @@ Vision-based quadrotor swarm navigation in [AirSim](https://github.com/microsoft
 
 Implementation of the game [Chinese Checkers](https://en.wikipedia.org/wiki/Chinese_checkers).
 
+### [GridHunt](https://github.com/ajuanijustus/gridhunt)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-%3E%3D1.24.2-blue)](https://github.com/ajuanijustus/gridhunt/blob/main/pyproject.toml)
+[![GitHub stars](https://img.shields.io/github/stars/ajuanijustus/gridhunt)](https://github.com/ajuanijustus/gridhunt)
+
+Heterogeneous predator-prey environments for multi-agent RL and human-agent teaming. Eight Parallel API scenarios (stag hunts, role specialisation, land and sea, swarms of ten predators) where agents differ in speed, vision and the terrain they can enter, registered with `pettingzoo.make` on PettingZoo 1.27 or later. It ships IPPO, MAPPO and HAPPO benchmark results, pretrained teams that run with NumPy alone, and a toolkit for running human-agent teaming studies. Install with `pip install gridhunt`; see the [documentation](https://ajuanijustus.github.io/gridhunt/).
 
 ___
 
