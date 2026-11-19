@@ -1,7 +1,7 @@
 from importlib.util import find_spec
 
 from pettingzoo.classic import (
-    chess_v6,
+    chess_v7,
     connect_four_v3,
     go_v6,
     hanabi_v5,
@@ -13,7 +13,7 @@ from pettingzoo.classic import (
 )
 
 classic_environments = {
-    "classic/chess_v6": chess_v6,
+    "classic/chess_v7": chess_v7,
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
     "classic/tictactoe_v3": tictactoe_v3,

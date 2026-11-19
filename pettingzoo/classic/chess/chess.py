@@ -8,7 +8,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Creation           | `make("aec", "classic/chess-v6")`  |
+| Creation           | `make("aec", "classic/chess-v7")`  |
 |--------------------|------------------------------------|
 | Actions            | Discrete                           |
 | Parallel API       | Yes                                |
@@ -30,17 +30,17 @@ The observation is a dictionary which contains an `'observation'` element which 
 Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 111 channels representing:
 
 * Channels 0 - 3: Castling rights:
-  * Channel 0: All ones if white can castle queenside
-  * Channel 1: All ones if white can castle kingside
-  * Channel 2: All ones if black can castle queenside
-  * Channel 3: All ones if black can castle kingside
-* Channel 4: Is black or white
-* Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
+  * Channel 0: All ones if the observing player can castle queenside
+  * Channel 1: All ones if the observing player can castle kingside
+  * Channel 2: All ones if the opponent can castle queenside
+  * Channel 3: All ones if the opponent can castle kingside
+* Channel 4: All ones if the observing player is black (`player_1`)
+* Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element (counting from 0) in the flattened channel is set if there have been *n* moves since the last capture or pawn move, i.e. *n* is the half-move clock divided by 2 and rounded down
 * Channel 6: All ones to help neural networks find board edges in padded convolutions
-* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0.
+* Channel 7 - 18: One channel for each piece type and player combination. Channels 7 - 12 hold the observing player's pawns, knights, bishops, rooks, queens and king, and channels 13 - 18 the opponent's. For example, an index of channel 14 is set to 1 if one of the opponent's knights is in the corresponding spot on the game board, otherwise, it is set to 0.
 Similar to LeelaChessZero, en passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
 * Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)
-* Channel 20 - 111 represents the previous 7 boards, with each board represented by 13 channels. The latest board occupies the first 13 channels, followed by the second latest board, and so on. These 13 channels correspond to channels 7 - 20.
+* Channel 20 - 110 represents the previous 7 boards, with each board represented by 13 channels. The latest board occupies the first 13 channels, followed by the second latest board, and so on. These 13 channels correspond to channels 7 - 19. Boards from before the start of the game are all zeros.
 
 
 Similar to AlphaZero, our observation space follows a stacking approach, where it accumulates the previous 8 board observations.
@@ -92,6 +92,7 @@ Note: the coordinates (6, 0, 12) correspond to column 6, row 0, plane 12. In che
 
 ### Version History
 
+* v7: Fixed the observation: added the start position to the board history, made the move clock channel the same for both players, and fixed the order of the castling channels (unreleased)
 * v6: Fixed wrong player starting first, check for insufficient material/50-turn rule/three fold repetition (1.23.2)
 * v5: Changed python-chess version to version 1.7 (1.13.1)
 * v4: Changed observation space to proper AlphaZero style frame stacking (1.11.0)
@@ -130,7 +131,7 @@ def env(**kwargs):
 class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "ansi", "rgb_array"],
-        "name": "chess_v6",
+        "name": "chess_v7",
         "is_parallelizable": False,
         "render_fps": 2,
     }
@@ -214,8 +215,8 @@ class raw_env(AECEnv, EzPickle):
         observation = np.dstack((observation[:, :, :7], self.board_history))
         # We need to swap the white 6 channels with black 6 channels
         if current_index == 1:
-            # 1. Mirror the board
-            observation = np.flip(observation, axis=0)
+            # 1. Mirror the boards. Channels 0 - 6 already are from black's perspective.
+            observation[:, :, 7:] = np.flip(observation[:, :, 7:], axis=0)
             # 2. Swap the white 6 channels with the black 6 channels
             for i in range(1, 9):
                 tmp = observation[..., 13 * i - 6 : 13 * i].copy()
@@ -247,7 +248,11 @@ class raw_env(AECEnv, EzPickle):
         self.truncations = dict.fromkeys(self.agents, False)
         self.infos = {name: {} for name in self.agents}
 
-        self.board_history = np.zeros((8, 8, 104), dtype=bool)
+        # The current board followed by the previous 7 (all zeros before the game starts)
+        start_board = chess_utils.get_observation(self.board, player=0)
+        self.board_history = np.dstack(
+            (start_board[:, :, 7:], np.zeros((8, 8, 91), dtype=bool))
+        )
 
         if self.render_mode == "human":
             self.render()
