@@ -597,7 +597,7 @@ class Pursuit:
         neighbors = self.surround_mask + np.array([x, y])
         for n in neighbors:
             xn, yn = n
-            if not 0 < xn < self.x_size or not 0 < yn < self.y_size:
+            if not 0 <= xn < self.x_size or not 0 <= yn < self.y_size:
                 continue
             if self.model_state[0][xn, yn] == -1:
                 tosur -= 1
