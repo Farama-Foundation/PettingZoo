@@ -93,5 +93,36 @@ def test_bounce_randomness() -> None:
             raise AssertionError("Unknown error in test (seed test code)")
 
 
+@pytest.mark.parametrize(
+    "angle",
+    [
+        math.pi / 4 - 0.3,
+        -math.pi / 4 + 0.3,
+        3 * math.pi / 4 + 0.3,
+        -3 * math.pi / 4 - 0.3,
+    ],
+)
+def test_speed_and_direction(angle: float) -> None:
+    """The ball moves at its speed and angle, whichever way it goes."""
+    area = pygame.Rect(0, 0, 4000, 4000)
+    p0 = Paddle((20, 80), 0, "left")
+    p1 = Paddle((20, 80), 0, "right")
+    p0.reset(area, 0)
+    p1.reset(area, 0)
+    randomizer, _ = seeding.np_random(0)
+    ball = Ball(randomizer, (20, 20), 9.0)
+    ball.reset(area.center, angle)
+
+    x0, y0 = ball._rect.center
+    n_steps = 100
+    for _ in range(n_steps):
+        ball.update2(area, p0, p1)
+    x1, y1 = ball._rect.center
+
+    assert not ball.is_out_of_bounds()
+    assert math.hypot(x1 - x0, y1 - y0) / n_steps == pytest.approx(9.0, abs=0.01)
+    assert math.atan2(y1 - y0, x1 - x0) == pytest.approx(angle, abs=0.01)
+
+
 if __name__ == "__main__":
     test_bounce_randomness()

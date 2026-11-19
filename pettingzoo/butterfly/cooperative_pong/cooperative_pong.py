@@ -78,7 +78,7 @@ make("aec", "butterfly/cooperative_pong-v7",
 
 ### Version History
 
-* v7: Fixed the observations and state being blank when `render_mode=None`
+* v7: Fixed the observations and state being blank when `render_mode=None`, and the ball's speed and direction depending on which way it moves
 * v6: Fixed incorrect termination condition and random bounce behaviour (1.25.5)
 * v5: Fixed ball teleporting bugs
 * v4: Added max_reward and off_screen_penalty arguments and changed default, fixed glitch where ball would occasionally teleport, reward redesign (1.14.0)
