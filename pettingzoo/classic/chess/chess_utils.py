@@ -163,6 +163,32 @@ def make_move_mapping(uci_move):
     actions_to_moves[cur_action] = uci_move
 
 
+def make_all_move_mappings():
+    """Fills `moves_to_actions` and `actions_to_moves` with every move that has an action.
+
+    These are the queen-like and knight moves that stay on the board, and the
+    promotions from the 7th rank. Queen promotions share the action of the plain
+    pawn move (see `action_to_move`).
+    """
+    for from_square in chess.SQUARES:
+        for to_square in chess.SQUARES:
+            dx, dy = diff(square_to_coord(from_square), square_to_coord(to_square))
+            if dx == dy == 0:
+                continue
+            if dx == 0 or dy == 0 or abs(dx) == abs(dy) or is_knight_move((dx, dy)):
+                uci_move = chess.Move(from_square, to_square).uci()
+                make_move_mapping(uci_move)
+                if chess.square_rank(from_square) == 6 and dy == 1 and abs(dx) <= 1:
+                    for promotion in "nbr":
+                        make_move_mapping(uci_move + promotion)
+                    moves_to_actions[uci_move + "q"] = moves_to_actions[uci_move]
+
+
+# Filled once at import, so that `action_to_move` does not depend on `legal_moves`
+# having been called first (e.g. when replaying recorded actions without observing).
+make_all_move_mappings()
+
+
 def legal_moves(orig_board: chess.Board):
     """Returns legal moves.
 
@@ -181,16 +207,7 @@ def legal_moves(orig_board: chess.Board):
     else:
         board = orig_board
 
-    legal_moves = []
-    for move in board.legal_moves:
-        uci_move = move.uci()
-        if uci_move in moves_to_actions:
-            legal_moves.append(moves_to_actions[move.uci()])
-        else:
-            make_move_mapping(uci_move)
-            legal_moves.append(moves_to_actions[move.uci()])
-
-    return legal_moves
+    return [moves_to_actions[move.uci()] for move in board.legal_moves]
 
 
 def get_observation(orig_board: chess.Board, player: int):
