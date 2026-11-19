@@ -37,7 +37,7 @@ import numpy as np
 try:  # pragma: no cover - exercised by whichever version is installed
     from pettingzoo.butterfly import cooperative_pong_v7 as cooperative_pong
 except ImportError:
-    from pettingzoo.butterfly import cooperative_pong_v6 as cooperative_pong
+    from pettingzoo.butterfly import cooperative_pong_v7 as cooperative_pong
 
 STAY, UP, DOWN = 0, 1, 2
 
