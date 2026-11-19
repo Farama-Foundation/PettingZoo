@@ -47,18 +47,27 @@ def create_agents(
 
 
 def feasible_position_exp(randomizer, map_matrix, expanded_mat, constraints=None):
-    """Returns a feasible position on map (map_matrix)."""
+    """Returns a feasible position on map (map_matrix).
+
+    The position is not an obstacle, and it is not on or next to an agent that was
+    placed before (marked in expanded_mat) unless every free cell in the window
+    given by constraints is.
+    """
     xs, ys = map_matrix.shape
+    if constraints is None:
+        (xl, xu), (yl, yu) = (0, xs), (0, ys)
+    else:
+        (xl, xu), (yl, yu) = constraints
+    free = map_matrix[xl:xu, yl:yu] != -1
+    if not np.any(free):
+        raise ValueError("There is no free cell to place an agent in")
+    keep_apart = np.any(free & (expanded_mat[xl + 1 : xu + 1, yl + 1 : yu + 1] != -1))
     while True:
-        if constraints is None:
-            x = randomizer.integers(0, xs)
-            y = randomizer.integers(0, ys)
-        else:
-            xl, xu = constraints[0]
-            yl, yu = constraints[1]
-            x = randomizer.integers(xl, xu)
-            y = randomizer.integers(yl, yu)
-        if map_matrix[x, y] != -1 and expanded_mat[x + 1, y + 1] != -1:
+        x = randomizer.integers(xl, xu)
+        y = randomizer.integers(yl, yu)
+        if map_matrix[x, y] != -1 and (
+            not keep_apart or expanded_mat[x + 1, y + 1] != -1
+        ):
             return (x, y)
 
 

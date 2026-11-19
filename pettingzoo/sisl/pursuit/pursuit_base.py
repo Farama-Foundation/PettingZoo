@@ -159,6 +159,8 @@ class Pursuit:
 
         self.render_mode = render_mode
         self.screen = None
+        if not 0.0 <= constraint_window <= 1.0:
+            raise ValueError("constraint_window must be between 0 and 1")
         self.constraint_window = constraint_window
 
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
@@ -208,16 +210,26 @@ class Pursuit:
     def reset(self):
         self.evaders_gone.fill(False)
 
-        x_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
-        y_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
-        xlb, xub = (
-            int(self.x_size * x_window_start),
-            int(self.x_size * (x_window_start + self.constraint_window)),
-        )
-        ylb, yub = (
-            int(self.y_size * y_window_start),
-            int(self.y_size * (y_window_start + self.constraint_window)),
-        )
+        # agents spawn in a window at a random position on the map, which is
+        # at least one cell wide and is drawn again if it only covers obstacles
+        for _ in range(1000):
+            x_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
+            y_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
+            xlb = int(self.x_size * x_window_start)
+            xub = max(
+                int(self.x_size * (x_window_start + self.constraint_window)), xlb + 1
+            )
+            ylb = int(self.y_size * y_window_start)
+            yub = max(
+                int(self.y_size * (y_window_start + self.constraint_window)), ylb + 1
+            )
+            if np.any(self.map_matrix[xlb:xub, ylb:yub] != -1):
+                break
+        else:
+            raise ValueError(
+                f"Could not find a spawn window of constraint_window={self.constraint_window} "
+                "that is not fully covered by obstacles"
+            )
         constraints = [[xlb, xub], [ylb, yub]]
 
         self.pursuers = agent_utils.create_agents(
