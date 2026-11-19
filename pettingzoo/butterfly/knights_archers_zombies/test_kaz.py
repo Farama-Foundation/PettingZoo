@@ -55,21 +55,32 @@ def test_kaz_obs_modes() -> None:
                 _ = KAZEnv(obs_method=method_str)  # type: ignore[arg-type]
 
 
-def test_kaz_image_state() -> None:
-    """Confirm image state is a mapping of the screen"""
-    env = KAZEnv(
-        obs_method="image",
-    )
-    env.reset()
+@pytest.mark.parametrize("render_mode", [None, "rgb_array", "human"])
+def test_kaz_image_state(render_mode: str | None) -> None:
+    """Confirm image state is a copy of the current frame of the screen"""
+    env = KAZEnv(obs_method="image", render_mode=render_mode)
+    env.reset(seed=0)
+    # move all agents, so the frame differs from the one at reset
+    for _ in env.agents:
+        env.step(const.Actions.ACTION_FORWARD.value)
     image_state = env.state()
+    assert env.state_space.contains(image_state), "state is not in the state space"
+    assert not env.screen.get_locked(), "state() left the screen locked"
 
-    assert env.screen is not None
+    env.draw()
     image: npt.NDArray[np.uint8] = pygame.surfarray.array3d(env.screen)
     height, width = const.SCREEN_HEIGHT, const.SCREEN_WIDTH
-    expected_state = image[:width, :height, :]
-    # no idea why these are done
-    expected_state = np.rot90(np.fliplr(expected_state), k=3)
-    assert np.all(image_state == expected_state)
+    expected_state = np.swapaxes(image[:width, :height, :], 1, 0)
+    assert np.all(image_state == expected_state), "state is not the current frame"
+    if render_mode == "rgb_array":
+        assert np.all(image_state == env.render()), "state does not match render()"
+
+    # the returned state must not change when the env does
+    old_state = image_state.copy()
+    for _ in env.agents:
+        env.step(const.Actions.ACTION_FORWARD.value)
+    assert np.all(image_state == old_state), "returned state changed"
+    assert not np.all(env.state() == old_state), "state did not change"
 
 
 def test_kaz_image_observation() -> None:
@@ -91,20 +102,24 @@ def test_kaz_image_observation() -> None:
     assert np.all(obs == expected_obs)
 
 
-def test_kaz_zombie_spawn() -> None:
+@pytest.mark.parametrize("spawn_delay", [5, 1, 0])
+def test_kaz_zombie_spawn(spawn_delay: int) -> None:
     """Confirm zombies spawn as expected."""
-    spawn_delay = 5
     max_zombies = 4
+    # a spawn_delay of 0 spawns a zombie every cycle, like a spawn_delay of 1
+    cycles_per_zombie = max(spawn_delay, 1)
 
-    env = KAZEnv(max_zombies=4, spawn_delay=5)
+    env = KAZEnv(max_zombies=max_zombies, spawn_delay=spawn_delay)
     assert len(env.zombie_list) == 0, "should start with zero zombies"
 
-    for i in range(spawn_delay * 2 * max_zombies):
+    for i in range(cycles_per_zombie * 2 * max_zombies):
         n_zombies = len(env.zombie_list)
         env.do_zombie_turn()
-        if i + 1 % spawn_delay == 0 and n_zombies < max_zombies:
+        if (i + 1) % cycles_per_zombie == 0 and n_zombies < max_zombies:
             assert len(env.zombie_list) == n_zombies + 1, "zombie didn't spawn"
-        assert len(env.zombie_list) <= max_zombies, "too many zombies"
+        else:
+            assert len(env.zombie_list) == n_zombies, "unexpected zombie spawn"
+    assert len(env.zombie_list) == max_zombies, "wrong number of zombies"
 
 
 # objects for vector obs tests. tuples are x,y,vx,vy  where vx,vy are directions
@@ -246,6 +261,19 @@ def test_kaz_agent_management() -> None:
     assert env.dead_agents == [agent_to_kill], "dead_agents list is wrong"
 
 
+def test_kaz_agent_start_positions() -> None:
+    """Confirm agents of each type start in a row, 50 pixels apart."""
+    env = KAZEnv(num_archers=12, num_knights=12)
+    env.reset()
+    for agent_type in ["archer", "knight"]:
+        names = [name for name in env.possible_agents if name.startswith(agent_type)]
+        x0, y0 = env.agent_map[names[0]].rect.topleft
+        for i, name in enumerate(names):
+            assert env.agent_map[name].rect.topleft == (x0 + 50 * i, y0), (
+                f"{name} has the wrong start position"
+            )
+
+
 obs_modes = ["vector", "image", "vector-masked", "vector-sequence"]
 render_modes = [None, "rgb_array", "human"]
 
@@ -314,6 +342,18 @@ def test_kaz_killable_agents() -> None:
             )
             assert ("knight_0" in env.kill_list) == is_knight_killable, (
                 "knight death status is wrong"
+            )
+            # killed agents leave player_list, unkillable ones stay in it
+            # (so they are still drawn and can't end the game)
+            assert (env.agent_map["archer_0"] in env.player_list) != (
+                is_archer_killable
+            ), "archer player_list membership is wrong"
+            assert (env.agent_map["knight_0"] in env.player_list) != (
+                is_knight_killable
+            ), "knight player_list membership is wrong"
+            env._check_game_over()
+            assert env.game_over == (is_archer_killable and is_knight_killable), (
+                "game over status is wrong"
             )
 
 
