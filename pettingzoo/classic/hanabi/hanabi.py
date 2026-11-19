@@ -41,7 +41,8 @@ max_information_tokens=8, max_life_tokens=3, observation_type="minimal")
 
 `ranks`: Number of ranks the cards can take (affects size of deck)
 
-`hand_size`: Size of player's hands. Standard game is (4 if players >= 4 else 5)
+`hand_size`: Size of player's hands. Standard game is (4 if players >= 4 else 5). All hands are dealt from the deck at the start, so `players * hand_size` can be at most the deck size,
+`2 * colors * ranks` (each color has three 1s, one card of the highest rank and two of every rank in between)
 
 `max_information_tokens`: Maximum number of information tokens (more tokens makes the game easier by allowing more information to be revealed)
 
@@ -226,7 +227,8 @@ class raw_env(AECEnv, EzPickle):
               - colors: int, Number of colors in [2,5].
               - ranks: int, Number of ranks in [2,5].
               - players: int, Number of players in [2,5].
-              - hand_size: int, Hand size in [2,5].
+              - hand_size: int, Hand size in [2,5]. players * hand_size must not
+                exceed the number of cards in the deck, 2 * colors * ranks.
               - max_information_tokens: int, Number of information tokens (>=0).
               - max_life_tokens: int, Number of life tokens (>=1).
               - observation_type: str.
@@ -242,23 +244,12 @@ class raw_env(AECEnv, EzPickle):
                 "players": 2,
                 "max_information_tokens": 8,
                 "max_life_tokens": 3,
-                "hand_size": (4 if players >= 4 else 5)
+                "hand_size": (4 if players >= 4 else 5),
                 "observation_type": "card_knowledge",
-                "hand_size": 2,
                 }
 
             Hanabi-Small : {
                 "colors": 2,
-                "ranks": 5,
-                "players": 2,
-                "max_information_tokens": 3,
-                "hand_size": 2,
-                "max_life_tokens": 1,
-                "observation_type": "card_knowledge",
-                }
-
-            Hanabi-Very-Small : {
-                "colors": 1,
                 "ranks": 5,
                 "players": 2,
                 "max_information_tokens": 3,
@@ -380,14 +371,18 @@ class raw_env(AECEnv, EzPickle):
                 f"Config parameter {players} is out of bounds. See description in hanabi.py."
             )
 
-        if not (players <= colors):
-            raise ValueError(
-                f"Config parameter colors: {colors} is smaller than players: {players}, which is not allowed. See description in hanabi.py."
-            )
-
         if not (2 <= hand_size <= 5):
             raise ValueError(
                 f"Config parameter {hand_size} is out of bounds. See description in hanabi.py."
+            )
+
+        # Each color has three 1s, one card of the highest rank and two of every
+        # rank in between, so 2 * ranks cards for ranks >= 2. OpenSpiel aborts
+        # the process if the initial deal needs more cards than the deck has.
+        deck_size = colors * 2 * ranks
+        if players * hand_size > deck_size:
+            raise ValueError(
+                f"Config parameters players: {players} and hand_size: {hand_size} need {players * hand_size} cards for the initial deal, but a deck with colors: {colors} and ranks: {ranks} has only {deck_size} cards. See description in hanabi.py."
             )
 
         if not (max_information_tokens >= 0):
