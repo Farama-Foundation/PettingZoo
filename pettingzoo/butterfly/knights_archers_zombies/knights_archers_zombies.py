@@ -8,7 +8,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Creation             | `make("aec", "butterfly/knights_archers_zombies-v11")`         |
+| Creation             | `make("aec", "butterfly/knights_archers_zombies-v12")`         |
 |----------------------|----------------------------------------------------------------|
 | Actions              | Discrete                                                       |
 | Parallel API         | Yes                                                            |
@@ -26,7 +26,7 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
 and move forward or backward. An agent that moves off the top or bottom of the screen may be killed (if this setting is enabled, otherwise they stop at the edge). Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading
 direction. During this attack, which takes several steps, the knight cannot take any other action. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. There is a slight delay after firing an arrow before an archer can fire another arrow.
-However, the archer and move and turn during this time. A zombie that is hit by either a mace or an arrow is removed. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of its arrows hits and kills a zombie. A knight or archer that is
+However, the archer can move and turn during this time. A zombie that is hit by either a mace or an arrow is removed. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of its arrows hits and kills a zombie. A knight or archer that is
 touched by a zombie is removed (unless they are set to be unkillable). The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border.
 
 ### Actions
@@ -130,7 +130,7 @@ Dead agents return all pixels as black.
 ```python
 from pettingzoo import make
 
-make("aec", "butterfly/knights_archers_zombies-v11",
+make("aec", "butterfly/knights_archers_zombies-v12",
   spawn_delay=20,
   num_archers=2,
   num_knights=2,
@@ -167,6 +167,7 @@ make("aec", "butterfly/knights_archers_zombies-v11",
 
 ### Version History
 
+* v12: The archer attack delay counts steps instead of attack attempts, and `reset()` resets the zombie spawn timer and the list of agents to remove (unreleased)
 * v11: Code rewrite and numerous fixes (1.25.1)
 * v10: Add vectorizable state space (1.17.0)
 * v9: Code rewrite and numerous fixes (1.16.0)
@@ -254,7 +255,7 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "knights_archers_zombies_v11",
+        "name": "knights_archers_zombies_v12",
         "is_parallelizable": True,
         "render_fps": const.FPS,
         "has_manual_policy": True,
@@ -835,12 +836,14 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def reinit(self) -> None:
         """Re-initialize the env for another run."""
         self.game_over = False
+        self.zombie_spawn_interval.reset()
 
         self.zombie_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
         self.player_list: pygame.sprite.Group[Any] = pygame.sprite.Group()
 
         self.agent_map = {}
         self.agents = []
+        self.kill_list = []
         self.dead_agents = []
 
         for agent in self.possible_agents:

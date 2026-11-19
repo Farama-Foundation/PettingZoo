@@ -146,10 +146,9 @@ class Archer(Player):
 
         Archers are blocked from attacking for a short time after attacking.
         """
-        # only the attack action is blocked
-        if action != Actions.ACTION_ATTACK:
-            return False
-        return super().is_timed_out(action)
+        # the timeout advances on every step, but only the attack is blocked
+        blocked = super().is_timed_out(action)
+        return blocked and action == Actions.ACTION_ATTACK
 
     def attack(self) -> None:
         """Perform an attack.
