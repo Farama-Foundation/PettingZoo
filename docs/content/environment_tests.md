@@ -10,7 +10,7 @@ PettingZoo's API has a number of features and requirements. To make sure your en
 from pettingzoo import make
 from pettingzoo.test import api_test
 
-env = make("aec", "butterfly/pistonball-v6")
+env = make("aec", "butterfly/pistonball-v7")
 api_test(env, num_cycles=1000, verbose_progress=False)
 ```
 
@@ -29,7 +29,7 @@ This is an analogous version of the API test, but for parallel environments. You
 from pettingzoo import make
 from pettingzoo.test import parallel_api_test
 
-env = make("parallel", "butterfly/pistonball-v6")
+env = make("parallel", "butterfly/pistonball-v7")
 parallel_api_test(env, num_cycles=1000)
 ```
 
@@ -101,7 +101,7 @@ To make sure we do not have performance regressions, we have the performance ben
 from pettingzoo import make
 from pettingzoo.test import performance_benchmark
 
-env = make("aec", "butterfly/pistonball-v6")
+env = make("aec", "butterfly/pistonball-v7")
 performance_benchmark(env)
 ```
 
@@ -113,6 +113,6 @@ The save observation test is to visually inspect the observations of games with 
 from pettingzoo import make
 from pettingzoo.test import test_save_obs
 
-env = make("aec", "butterfly/pistonball-v6")
+env = make("aec", "butterfly/pistonball-v7")
 test_save_obs(env)
 ```

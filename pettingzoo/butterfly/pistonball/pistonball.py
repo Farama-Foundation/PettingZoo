@@ -8,7 +8,7 @@
 
 This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
 
-| Creation             | `make("aec", "butterfly/pistonball-v6")`             |
+| Creation             | `make("aec", "butterfly/pistonball-v7")`             |
 |----------------------|------------------------------------------------------|
 | Actions              | Either                                               |
 | Parallel API         | Yes                                                  |
@@ -45,7 +45,7 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 ```python
 from pettingzoo import make
 
-make("aec", "butterfly/pistonball-v6", n_pistons=20, time_penalty=-0.1, continuous=True,
+make("aec", "butterfly/pistonball-v7", n_pistons=20, time_penalty=-0.1, continuous=True,
 random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3,
 ball_elasticity=1.5, max_cycles=125)
 ```
@@ -71,6 +71,7 @@ ball_elasticity=1.5, max_cycles=125)
 
 ### Version History
 
+* v7: Fix the observations and state not showing the ball and pistons moving when `render_mode=None`
 * v6: Fix ball bouncing off of left wall.
 * v5: Ball moving into the left column due to physics engine imprecision no longer gives additional reward
 * v4: Changed default arguments for `max_cycles` and `continuous`, bumped PyMunk version (1.6.0)
@@ -126,7 +127,7 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "pistonball_v6",
+        "name": "pistonball_v7",
         "is_parallelizable": True,
         "render_fps": FPS,
         "has_manual_policy": True,
@@ -531,8 +532,6 @@ class raw_env(AECEnv, EzPickle):
             x_pos += self.piston_width
 
     def draw(self):
-        if self.render_mode is None:
-            return
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
             # self.screen.blit(self.background, (0, 0))

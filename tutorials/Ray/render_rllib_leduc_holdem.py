@@ -23,7 +23,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     "--checkpoint-path",
-    help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`",
+    help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v7/PPO/PPO_pistonball_v7_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`",
 )
 
 args = parser.parse_args()

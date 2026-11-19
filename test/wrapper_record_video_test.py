@@ -6,7 +6,7 @@ import shutil
 import numpy as np
 import pytest
 
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo.butterfly import pistonball_v7
 from pettingzoo.utils import parallel_to_aec
 from pettingzoo.utils.wrappers import (
     BaseParallelWrapper,
@@ -18,7 +18,7 @@ from pettingzoo.utils.wrappers import (
 def test_video_folder_and_filenames_base(
     video_folder="custom_video_folder/aec", name_prefix="video-prefix"
 ):
-    par_env = pistonball_v6.parallel_env(render_mode="rgb_array", max_cycles=30)
+    par_env = pistonball_v7.parallel_env(render_mode="rgb_array", max_cycles=30)
     aec_env = parallel_to_aec(par_env)
     env = RecordVideo(
         aec_env,
@@ -54,7 +54,7 @@ def test_video_folder_and_filenames_base(
 def test_video_folder_and_filenames_parallel(
     video_folder="custom_video_folder/parallel", name_prefix="video-prefix"
 ):
-    par_env = pistonball_v6.parallel_env(render_mode="rgb_array", max_cycles=30)
+    par_env = pistonball_v7.parallel_env(render_mode="rgb_array", max_cycles=30)
     env = RecordVideoParallel(
         par_env,
         video_folder=video_folder,
@@ -86,8 +86,8 @@ def test_video_folder_and_filenames_parallel(
 @pytest.mark.parametrize(
     "wrapper,env_fn",
     [
-        (RecordVideo, lambda: parallel_to_aec(pistonball_v6.parallel_env())),
-        (RecordVideoParallel, lambda: pistonball_v6.parallel_env()),
+        (RecordVideo, lambda: parallel_to_aec(pistonball_v7.parallel_env())),
+        (RecordVideoParallel, lambda: pistonball_v7.parallel_env()),
     ],
 )
 def test_incompatible_render_mode(wrapper, env_fn):
@@ -137,7 +137,7 @@ class ReusableRenderBuffer(BaseParallelWrapper):
 @pytest.mark.parametrize("as_list", [False, True])
 def test_record_video_preserves_reused_render_buffers(tmp_path, parallel, as_list):
     par_env = ReusableRenderBuffer(
-        pistonball_v6.parallel_env(n_pistons=3, render_mode="rgb_array", max_cycles=20),
+        pistonball_v7.parallel_env(n_pistons=3, render_mode="rgb_array", max_cycles=20),
         as_list=as_list,
     )
     base = par_env if parallel else parallel_to_aec(par_env)
@@ -184,7 +184,7 @@ def test_record_video_preserves_reused_render_buffers(tmp_path, parallel, as_lis
 @pytest.mark.parametrize("parallel", [False, True])
 def test_record_video_snapshots_explicit_list_render(tmp_path, parallel):
     par_env = ReusableRenderBuffer(
-        pistonball_v6.parallel_env(n_pistons=3, render_mode="rgb_array"),
+        pistonball_v7.parallel_env(n_pistons=3, render_mode="rgb_array"),
         as_list=True,
     )
     base = par_env if parallel else parallel_to_aec(par_env)

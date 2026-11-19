@@ -10,7 +10,7 @@ from pettingzoo.utils.all_modules import all_environments
 
 # Placeholders in docs/code_examples/usage_*.py templates
 _AEC_USAGE_ID = "atari/space_invaders-v2"
-_PARALLEL_USAGE_ID = "butterfly/pistonball-v6"
+_PARALLEL_USAGE_ID = "butterfly/pistonball-v7"
 _ACTION_MASK_USAGE_ID = "classic/connect_four-v3"
 
 

@@ -32,7 +32,7 @@ To convert an AEC environment into a parallel environment:
 from pettingzoo import make
 from pettingzoo.utils.conversions import aec_to_parallel
 
-env = make("aec", "butterfly/pistonball-v6")
+env = make("aec", "butterfly/pistonball-v7")
 env = aec_to_parallel(env)
 ```
 
@@ -53,7 +53,7 @@ To convert a parallel environment into an AEC environment:
 from pettingzoo import make
 from pettingzoo.utils import parallel_to_aec
 
-env = make("parallel", "butterfly/pistonball-v6")
+env = make("parallel", "butterfly/pistonball-v7")
 env = parallel_to_aec(env)
 ```
 
@@ -89,7 +89,7 @@ To wrap a Parallel environment.
 from pettingzoo import make
 from pettingzoo.utils import BaseParallelWrapper
 
-parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
+parallel_env = make("parallel", "butterfly/pistonball-v7", render_mode="human")
 parallel_env = BaseParallelWrapper(parallel_env)
 
 observations, infos = parallel_env.reset()
@@ -140,7 +140,7 @@ from pettingzoo import make
 from pettingzoo.utils.wrappers import NanNoopParallelV1
 
 env = NanNoopParallelV1(
-    make("parallel", "butterfly/pistonball-v6", continuous=False),
+    make("parallel", "butterfly/pistonball-v7", continuous=False),
     no_op_action=1,
 )
 observations, infos = env.reset(seed=42)
@@ -184,7 +184,7 @@ from pettingzoo import make
 from pettingzoo.utils.wrappers import FrameSkipParallelV1
 
 env = FrameSkipParallelV1(
-    make("parallel", "butterfly/pistonball-v6", continuous=False), num_frames=4
+    make("parallel", "butterfly/pistonball-v7", continuous=False), num_frames=4
 )
 observations, infos = env.reset(seed=42)
 while env.agents:

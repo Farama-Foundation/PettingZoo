@@ -33,7 +33,7 @@ from pettingzoo.atari import (
 from pettingzoo.butterfly import (
     cooperative_pong_v6,
     knights_archers_zombies_v11,
-    pistonball_v6,
+    pistonball_v7,
 )
 from pettingzoo.classic import (
     chess_v6,
@@ -187,12 +187,12 @@ parameterized_envs = [
         knights_archers_zombies_v11,
         {"max_zombies": 2, "max_arrows": 60, "max_cycles": 50},
     ],
-    ["butterfly/pistonball_v6", pistonball_v6, {"max_cycles": 50}],
-    ["butterfly/pistonball_v6", pistonball_v6, {"n_pistons": 30, "max_cycles": 50}],
-    ["butterfly/pistonball_v6", pistonball_v6, {"continuous": False, "max_cycles": 50}],
+    ["butterfly/pistonball_v7", pistonball_v7, {"max_cycles": 50}],
+    ["butterfly/pistonball_v7", pistonball_v7, {"n_pistons": 30, "max_cycles": 50}],
+    ["butterfly/pistonball_v7", pistonball_v7, {"continuous": False, "max_cycles": 50}],
     [
-        "butterfly/pistonball_v6",
-        pistonball_v6,
+        "butterfly/pistonball_v7",
+        pistonball_v7,
         {"random_drop": False, "random_rotate": False, "max_cycles": 50},
     ],
     ["classic/go_v6", go_v6, {"board_size": 13, "komi": 2.5}],

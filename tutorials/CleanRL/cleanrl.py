@@ -100,7 +100,7 @@ if __name__ == "__main__":
     """ ENV SETUP """
     env = make(
         "parallel",
-        "butterfly/pistonball-v6",
+        "butterfly/pistonball-v7",
         render_mode="rgb_array",
         continuous=False,
         max_cycles=max_cycles,
@@ -260,7 +260,7 @@ if __name__ == "__main__":
 
     """ RENDER THE POLICY """
     env = make(
-        "parallel", "butterfly/pistonball-v6", render_mode="human", continuous=False
+        "parallel", "butterfly/pistonball-v7", render_mode="human", continuous=False
     )
     env = color_reduction_v0(env)
     env = resize_v1(env, 64, 64)
