@@ -20,7 +20,7 @@ Using environments in PettingZoo is very similar to using them in Gymnasium. You
 ```python
 from pettingzoo import make
 
-env = make("aec", "butterfly/pistonball-v6")
+env = make("aec", "butterfly/pistonball-v7")
 ```
 
 Use `"aec"` for the [Agent Environment Cycle](../api/aec.md) API and `"parallel"` for the [Parallel](../api/parallel.md) API:
@@ -28,7 +28,7 @@ Use `"aec"` for the [Agent Environment Cycle](../api/aec.md) API and `"parallel"
 ```python
 from pettingzoo import make
 
-penv = make("parallel", "butterfly/pistonball-v6")
+penv = make("parallel", "butterfly/pistonball-v7")
 ```
 
 Not every environment provides a parallel version. Check whether an ID is available with `parallel_registry`:
@@ -37,7 +37,7 @@ Not every environment provides a parallel version. Check whether an ID is availa
 from pettingzoo import parallel_registry
 
 "classic/chess-v6" in parallel_registry  # False — chess is AEC-only
-"butterfly/pistonball-v6" in parallel_registry  # True
+"butterfly/pistonball-v7" in parallel_registry  # True
 ```
 
 Third-party environments can be added with `pettingzoo.register`:

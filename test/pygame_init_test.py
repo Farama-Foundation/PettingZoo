@@ -7,7 +7,7 @@ import pytest
 from pettingzoo.butterfly import (
     cooperative_pong_v6,
     knights_archers_zombies_v11,
-    pistonball_v6,
+    pistonball_v7,
 )
 from pettingzoo.classic import (
     chess_v6,
@@ -23,7 +23,7 @@ from pettingzoo.sisl import multiwalker_v10, pursuit_v6
 pygame_envs = [
     cooperative_pong_v6,
     knights_archers_zombies_v11,
-    pistonball_v6,
+    pistonball_v7,
     chess_v6,
     connect_four_v3,
     go_v6,

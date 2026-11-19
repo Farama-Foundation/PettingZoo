@@ -49,13 +49,13 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import pistonball_v6
+    from pettingzoo.butterfly import pistonball_v7
 
-    env = pistonball_v6.env(render_mode="human")
+    env = pistonball_v7.env(render_mode="human")
     env.reset()
 
     clock = pygame.time.Clock()
-    manual_policy = pistonball_v6.ManualPolicy(env)
+    manual_policy = pistonball_v7.ManualPolicy(env)
 
     for agent in env.agent_iter():
         clock.tick(env.metadata["render_fps"])

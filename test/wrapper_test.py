@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo.butterfly import pistonball_v7
 from pettingzoo.classic import texas_holdem_no_limit_v6, tictactoe_v3
 from pettingzoo.utils.wrappers import (
     BaseParallelWrapper,
@@ -57,7 +57,7 @@ def test_multi_episode_parallel_env_wrapper(num_episodes) -> None:
     Args:
         num_episodes: number of episodes to run the MultiEpisodeEnv
     """
-    env = pistonball_v6.parallel_env()
+    env = pistonball_v7.parallel_env()
     env = MultiEpisodeParallelEnv(env, num_episodes=num_episodes)
     _ = env.reset(seed=42)
 
@@ -91,7 +91,7 @@ def test_multi_episode_env_rejects_non_positive_num_episodes(num_episodes: int) 
         MultiEpisodeEnv(tictactoe_v3.env(), num_episodes=num_episodes)
 
     with pytest.raises(ValueError, match="must be at least 1"):
-        MultiEpisodeParallelEnv(pistonball_v6.parallel_env(), num_episodes=num_episodes)
+        MultiEpisodeParallelEnv(pistonball_v7.parallel_env(), num_episodes=num_episodes)
 
 
 def _do_game(env: TerminateIllegalWrapper, seed: int) -> None:
@@ -237,7 +237,7 @@ def test_multi_episode_parallel_env_wrapper_seeds_every_episode(seed: int) -> No
     Args:
         seed: seed passed to the first reset
     """
-    inner = _RecordSeedsParallel(pistonball_v6.parallel_env())
+    inner = _RecordSeedsParallel(pistonball_v7.parallel_env())
     env = MultiEpisodeParallelEnv(inner, num_episodes=3)
     _ = env.reset(seed=seed)
 

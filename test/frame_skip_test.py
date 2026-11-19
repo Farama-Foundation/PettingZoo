@@ -7,7 +7,7 @@ import pytest
 from gymnasium.spaces import Box, Discrete
 from gymnasium.utils import seeding
 
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo.butterfly import pistonball_v7
 from pettingzoo.classic import tictactoe_v3
 from pettingzoo.test import api_test, parallel_api_test
 from pettingzoo.test.example_envs import (
@@ -277,7 +277,7 @@ def test_aec_rejects_parallel_env():
     "make_env",
     [
         tictactoe_v3.env,
-        lambda: pistonball_v6.env(continuous=False),
+        lambda: pistonball_v7.env(continuous=False),
         generated_agents_env_v0.env,
         lambda: TurnAEC(done_at=30, kill={7: "agent_1"}, add_at=3),
     ],
@@ -452,7 +452,7 @@ def test_parallel_rejects_invalid_num_frames(num_frames):
 @pytest.mark.parametrize(
     "make_env",
     [
-        lambda: pistonball_v6.parallel_env(continuous=False),
+        lambda: pistonball_v7.parallel_env(continuous=False),
         generated_agents_parallel_v0.parallel_env,
         lambda: CountingParallel(done_at=12, kill={3: "agent_1"}, add={5: "agent_2"}),
     ],

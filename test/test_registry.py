@@ -179,22 +179,22 @@ class TestSpec:
 
 class TestBuiltInRegistryIds:
     def test_builtin_canonical_id_uses_gymnasium_suffix(self):
-        s = spec("aec", "butterfly/pistonball-v6")
-        assert s.id == "butterfly/pistonball-v6"
+        s = spec("aec", "butterfly/pistonball-v7")
+        assert s.id == "butterfly/pistonball-v7"
         assert s.name == "pistonball"
-        assert s.version == 6
+        assert s.version == 7
 
     def test_builtin_pettingzoo_suffix_alias_resolves(self):
-        s = spec("aec", "butterfly/pistonball_v6")
-        assert s.id == "butterfly/pistonball-v6"
+        s = spec("aec", "butterfly/pistonball_v7")
+        assert s.id == "butterfly/pistonball-v7"
         assert s.name == "pistonball"
-        assert s.version == 6
+        assert s.version == 7
 
     def test_builtin_unversioned_resolves_latest(self):
         s = spec("aec", "butterfly/pistonball")
-        assert s.id == "butterfly/pistonball-v6"
+        assert s.id == "butterfly/pistonball-v7"
         assert s.name == "pistonball"
-        assert s.version == 6
+        assert s.version == 7
 
 
 class TestHelperEdgeCases:
