@@ -56,7 +56,8 @@ ball_elasticity=1.5, max_cycles=125)
 
 `continuous`:  If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
 
-`random_drop`:  If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
+`random_drop`:  If True, the ball spawns at a random position up to 30 pixels left or right and up to 15 pixels up or down from where it spawns when False. If False, the ball always spawns at the same position
+near the right wall, which depends on `n_pistons` (the ball's center is at x=770 for the default 20 pistons)
 
 `random_rotate`:  If True, ball will spawn with a random angular momentum
 

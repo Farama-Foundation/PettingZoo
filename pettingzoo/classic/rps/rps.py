@@ -35,7 +35,7 @@ from pettingzoo import make
 make("aec", "classic/rps-v2", num_actions=3, max_cycles=15)
 ```
 
-`num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.
+`num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an odd integer greater than or equal to 3. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.
 
 `max_cycles`:  after max_cycles steps all agents will return done.
 
@@ -56,7 +56,7 @@ Therefore, 3 represents no action taken yet. Rock is represented with 0, paper w
 #### Expanded Game
 
 If the number of actions required in the game is greater than 3, the observation is still the last opponent action and its space is a scalar with 1 + n possible values, where n is the number of actions. The observation will as well be None until both players have acted and the largest possible
-scalar value for the space, 1 + n, represents no action taken yet. The additional actions are encoded in increasing order starting from the 0 Rock action. If 5 actions are required the game is expanded to Rock, Paper, Scissors, Lizard, Spock. The following table shows an example of an observation
+scalar value for the space, n, represents no action taken yet. The additional actions are encoded in increasing order starting from the 0 Rock action. If 5 actions are required the game is expanded to Rock, Paper, Scissors, Lizard, Spock. The following table shows an example of an observation
 space with 7 possible actions.
 
 | Value  |  Observation |
@@ -64,8 +64,8 @@ space with 7 possible actions.
 | 0      | Rock         |
 | 1      | Paper        |
 | 2      | Scissors     |
-| 3      | Lizard       |
-| 4      | Spock        |
+| 3      | Spock        |
+| 4      | Lizard       |
 | 5      | Action_6     |
 | 6      | Action_7     |
 | 7      | None         |
@@ -84,15 +84,15 @@ The action space is a scalar value with 3 possible values. The values are encode
 
 #### Expanded Game
 
-The action space is a scalar value with n possible values, where n is the number of additional action pairs. The values for 7 possible actions are encoded as in the following table.
+The action space is a scalar value with n possible values, where n is the number of actions. The values for 7 possible actions are encoded as in the following table.
 
 | Value  |  Action |
 | :----: | :---------:  |
 | 0      | Rock         |
 | 1      | Paper        |
 | 2      | Scissors     |
-| 3      | Lizard       |
-| 4      | Spock        |
+| 3      | Spock        |
+| 4      | Lizard       |
 | 5      | Action_6     |
 | 6      | Action_7     |
 
@@ -182,12 +182,12 @@ class raw_env(AECEnv, EzPickle):
         super().__init__()
         self.max_cycles = max_cycles
 
-        # number of actions must be odd and greater than 3
+        # number of actions must be odd and at least 3
         assert num_actions > 2, "The number of actions must be equal or greater than 3."
         assert num_actions % 2 != 0, "The number of actions must be an odd number."
         self._moves = ["ROCK", "PAPER", "SCISSORS"]
         if num_actions > 3:
-            # expand to lizard, spock for first extra action pair
+            # expand to spock, lizard for first extra action pair
             self._moves.extend(("SPOCK", "LIZARD"))
             for action in range(num_actions - 5):
                 self._moves.append(f"ACTION_{action + 6}")
