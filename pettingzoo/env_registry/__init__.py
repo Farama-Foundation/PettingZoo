@@ -89,7 +89,7 @@ for _id, _base in _butterfly_envs:
 # Classic environments
 
 _classic_envs = [
-    ("chess_v6", "pettingzoo.classic.chess.chess"),
+    ("chess_v7", "pettingzoo.classic.chess.chess"),
     ("rps_v2", "pettingzoo.classic.rps.rps"),
     ("connect_four_v3", "pettingzoo.classic.connect_four.connect_four"),
     ("tictactoe_v3", "pettingzoo.classic.tictactoe.tictactoe"),

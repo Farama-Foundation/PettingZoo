@@ -36,7 +36,7 @@ Not every environment provides a parallel version. Check whether an ID is availa
 ```python
 from pettingzoo import parallel_registry
 
-"classic/chess-v6" in parallel_registry  # False — chess is AEC-only
+"classic/chess-v7" in parallel_registry  # False — chess is AEC-only
 "butterfly/pistonball-v6" in parallel_registry  # True
 ```
 

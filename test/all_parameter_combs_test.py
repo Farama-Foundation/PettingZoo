@@ -36,7 +36,7 @@ from pettingzoo.butterfly import (
     pistonball_v6,
 )
 from pettingzoo.classic import (
-    chess_v6,
+    chess_v7,
     connect_four_v3,
     go_v6,
     hanabi_v5,
@@ -93,7 +93,7 @@ parameterized_envs = [
     ],
     ["classic/connect_four_v3", connect_four_v3, {}],
     ["classic/rps_v2", rps_v2, {}],
-    ["classic/chess_v6", chess_v6, {}],
+    ["classic/chess_v7", chess_v7, {}],
     ["classic/tictactoe_v3", tictactoe_v3, {}],
     ["atari/boxing_v2", boxing_v2, {"max_cycles": 50}],
     ["atari/boxing_v2", boxing_v2, {"obs_type": "grayscale_image", "max_cycles": 50}],

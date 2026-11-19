@@ -23,7 +23,7 @@ EASY_ENVS = [
 MEDIUM_ENVS = [
     "classic/hanabi-v5",  # even with 10x as many steps, total score seems to always be tied between the two agents
     "classic/texas_holdem-v4",  # this performs poorly with updates to SB3 wrapper
-    "classic/chess-v6",  # difficult to train because games take so long, performance varies heavily
+    "classic/chess-v7",  # difficult to train because games take so long, performance varies heavily
 ]
 
 if find_spec("pyspiel") is None:  # Hanabi needs open_spiel (Python >= 3.11)
