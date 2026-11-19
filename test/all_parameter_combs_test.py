@@ -32,7 +32,7 @@ from pettingzoo.atari import (
 )
 from pettingzoo.butterfly import (
     cooperative_pong_v6,
-    knights_archers_zombies_v11,
+    knights_archers_zombies_v12,
     pistonball_v6,
 )
 from pettingzoo.classic import (
@@ -138,53 +138,53 @@ parameterized_envs = [
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, {"num_players": 3}],
     ["classic/texas_holdem_no_limit_v6", texas_holdem_no_limit_v6, {"num_players": 4}],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"spawn_delay": 50, "max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"num_knights": 4, "num_archers": 5, "max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"killable_knights": False, "killable_archers": False, "max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"obs_method": "image", "max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"obs_method": "vector", "max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"obs_method": "vector-sequence", "max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"obs_method": "vector-masked", "max_cycles": 50},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"max_cycles": 100},
     ],
     [
-        "butterfly/knights_archers_zombies_v11",
-        knights_archers_zombies_v11,
+        "butterfly/knights_archers_zombies_v12",
+        knights_archers_zombies_v12,
         {"max_zombies": 2, "max_arrows": 60, "max_cycles": 50},
     ],
     ["butterfly/pistonball_v6", pistonball_v6, {"max_cycles": 50}],

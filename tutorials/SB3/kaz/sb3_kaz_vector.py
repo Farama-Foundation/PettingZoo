@@ -123,7 +123,7 @@ def eval(env_id, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
 
 if __name__ == "__main__":
-    env_id = "butterfly/knights_archers_zombies-v11"
+    env_id = "butterfly/knights_archers_zombies-v12"
 
     # Set obs_method to "image" in order to use visual observations (significantly longer training time)
     env_kwargs = {"max_cycles": 100, "max_zombies": 4, "obs_method": "vector"}

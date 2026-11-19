@@ -67,17 +67,17 @@ very uncommon and these features should be included whenever possible as all
 standard learning code requires these properties. Also not that if you do not
 have {name} it should also not be possible for you to expose the possible_agents
 list and observation_spaces, action_spaces dictionaries."""
-env_graphical_obs = ["knights_archers_zombies_v11"]
+env_graphical_obs = ["knights_archers_zombies_v12"]
 env_diff_obs_shapes = [
     "simple_adversary_v3",
     "simple_world_comm_v3",
     "simple_tag_v3",
-    "knights_archers_zombies_v11",
+    "knights_archers_zombies_v12",
     "simple_push_v3",
     "simple_speaker_listener_v4",
     "simple_crypto_v3",
 ]
-env_all_zeros_obs = ["knights_archers_zombies_v11"]
+env_all_zeros_obs = ["knights_archers_zombies_v12"]
 env_diff_agent_obs_size = [
     "simple_adversary_v3",
     "simple_world_comm_v3",

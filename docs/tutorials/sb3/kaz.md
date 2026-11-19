@@ -59,7 +59,7 @@ policy against a random baseline, and can render an episode as a GIF.
 
 On the default demo configuration below (`max_cycles=900`, `max_zombies=10`),
 the tuned policy averaged `43.7` total reward over seeds 0-49, compared with
-`2.4` for seeded random actions. Pass `--search` to repeat the small parameter
+`4.6` for seeded random actions. Pass `--search` to repeat the small parameter
 sweep before evaluation.
 
 ```bash

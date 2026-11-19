@@ -76,7 +76,7 @@ for _id, _base in _atari_envs:
 # Butterfly environments
 
 _butterfly_envs = [
-    ("knights_archers_zombies_v11", "knights_archers_zombies"),
+    ("knights_archers_zombies_v12", "knights_archers_zombies"),
     ("pistonball_v6", "pistonball"),
     ("cooperative_pong_v6", "cooperative_pong"),
 ]

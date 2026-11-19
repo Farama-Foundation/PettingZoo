@@ -494,3 +494,78 @@ def test_kaz_player_directions() -> None:
         assert knight.direction.magnitude() == approx_one, (
             "Direction is not a unit vector"
         )
+
+
+@pytest.mark.parametrize(
+    "action",
+    [
+        const.Actions.ACTION_FORWARD,
+        const.Actions.ACTION_TURN_CW,
+        const.Actions.ACTION_NONE,
+    ],
+)
+def test_kaz_archer_attack_delay(action: const.Actions) -> None:
+    """Confirm the archer attack delay counts steps, not attack attempts."""
+    env = KAZEnv(num_archers=1, num_knights=0)
+    env.reset(seed=0)
+    archer = env.agent_map["archer_0"]
+    attack = const.Actions.ACTION_ATTACK.value
+
+    env.step(attack)
+    assert len(archer.weapons) == 1, "arrow did not appear as expected"
+    # other actions during the delay count towards it
+    for _ in range(const.ARROW_TIMEOUT - 2):
+        env.step(action.value)
+    env.step(attack)
+    assert len(archer.weapons) == 1, "archer attacked before the delay was over"
+    # ARROW_TIMEOUT steps after the first attack, the archer can attack again
+    env.step(attack)
+    assert len(archer.weapons) == 2, "archer could not attack after the delay"
+
+
+def run_kaz_episode(
+    env: KAZEnv, seed: int, n_cycles: int
+) -> list[tuple[str, npt.NDArray[np.float64], float, bool, bool]]:
+    """Reset with the seed and play random actions, recording what is observed."""
+    env.reset(seed=seed)
+    rng = np.random.default_rng(seed)
+    history = []
+    for agent in env.agent_iter(n_cycles * env.num_agents):
+        obs, reward, termination, truncation, _ = env.last()
+        history.append((agent, obs.copy(), reward, termination, truncation))
+        action = None if termination or truncation else int(rng.integers(6))
+        env.step(action)
+    return history
+
+
+def test_kaz_reset_is_reproducible() -> None:
+    """Confirm reset with a seed gives the same episode on a reused env."""
+    # stop the first episode between zombie spawns
+    n_cycles = 30
+    env = KAZEnv(spawn_delay=20)
+    first = run_kaz_episode(env, 0, n_cycles)
+    second = run_kaz_episode(env, 0, n_cycles)
+    new_env = run_kaz_episode(KAZEnv(spawn_delay=20), 0, n_cycles)
+    for history in [second, new_env]:
+        assert len(history) == len(first), "episodes have different lengths"
+        for step, expected in zip(history, first):
+            assert step[0] == expected[0], "agent order differs"
+            assert np.array_equal(step[1], expected[1]), "observations differ"
+            assert step[2:] == expected[2:], "rewards or terminations differ"
+
+
+def test_kaz_reset_clears_kill_list() -> None:
+    """Confirm an agent removed mid-cycle is not removed after reset."""
+    env = KAZEnv(num_archers=2, num_knights=0, line_death=True)
+    env.reset(seed=0)
+    # archer_0 walks off the bottom of the screen
+    env.agent_map["archer_0"].rect.bottom = const.SCREEN_HEIGHT - 1
+    env.step(const.Actions.ACTION_BACKWARD.value)
+    assert env.kill_list == ["archer_0"], "archer_0 was not removed"
+
+    # reset before the end of the cycle, then play a full cycle
+    env.reset(seed=0)
+    for _ in env.agents:
+        env.step(const.Actions.ACTION_NONE.value)
+    assert not any(env.terminations.values()), "agent terminated after reset"
+    assert env.dead_agents == [], "agent removed after reset"

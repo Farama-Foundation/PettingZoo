@@ -55,7 +55,7 @@ import pygame
 from pettingzoo import make
 from pettingzoo.butterfly.knights_archers_zombies.manual_policy import ManualPolicy
 
-env = make("aec", "butterfly/knights_archers_zombies-v11", render_mode="human")
+env = make("aec", "butterfly/knights_archers_zombies-v12", render_mode="human")
 env.reset(seed=42)
 
 manual_policy = ManualPolicy(env)
