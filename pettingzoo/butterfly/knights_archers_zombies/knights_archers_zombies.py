@@ -17,11 +17,14 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | Agents               | 4                                                              |
 | Action Shape         | (1,)                                                           |
 | Action Values        | [0, 5]                                                         |
-| Observation Shape    | (512, 512, 3)                                                  |
-| Observation Values   | (0, 255)                                                       |
-| State Shape          | (720, 1280, 3)                                                 |
-| State Values         | (0, 255)                                                       |
+| Observation Shape    | (27, 5)                                                        |
+| Observation Values   | [-1, 1]                                                        |
+| State Shape          | (26, 4)                                                        |
+| State Values         | [-1, 1]                                                        |
 
+The shapes above are for the default arguments, which use vector observations (see Observations below).
+The vector state has one row per entity, in the same order as the observation without its first (current agent) row, holding the entity's absolute position and heading (and typemask, if enabled).
+With `obs_method='image'`, the observation shape is (512, 512, 3), the state shape is (720, 1280, 3), and both have values in [0, 255].
 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
 and move forward or backward. An agent that moves off the top or bottom of the screen may be killed (if this setting is enabled, otherwise they stop at the edge). Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading
@@ -454,11 +457,13 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
 
     def do_zombie_turn(self) -> None:
         """Have zombies attack, move, and then spawn."""
-        # Any players in comtact with zombies are killed unless
-        # the env was created with killable players turned off
+        # Any players in contact with zombies are killed unless
+        # the env was created with killable players turned off.
+        # Killed players are removed from player_list by _remove_agent,
+        # so spritecollide must not remove (unkillable) players itself.
         for zombie in self.zombie_list:
             zombie_hit_list = pygame.sprite.spritecollide(
-                zombie, self.player_list, True
+                zombie, self.player_list, False
             )
             for player in zombie_hit_list:
                 if is_archer(player) and not self.killable_archers:
@@ -625,15 +630,19 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
     def state(self) -> StateType:
         """Returns the state of the global environment."""
         if not self.vector_state:
-            # this makes a copy of the state, only including the
-            # expected size. It is intentionally done without using
-            # the .copy() function to accommodate a future case where
-            # the screen may be larger than the expected size.
-            state: StateTypeImage = pygame.surfarray.pixels3d(self.screen)[
-                : const.SCREEN_WIDTH, : const.SCREEN_HEIGHT, :
-            ]
-            state = np.rot90(state, k=3)
-            return np.fliplr(state)
+            # the state is based on the image, so we need to update it.
+            # This is already done in render(), which is called when
+            # render_mode is "human", so skip in that case
+            if self.render_mode != "human":
+                self.draw()
+            # copy the pixels (only the expected size, in case the screen
+            # is larger) so the returned array doesn't keep the screen locked
+            state: StateTypeImage = np.array(
+                pygame.surfarray.pixels3d(self.screen)[
+                    : const.SCREEN_WIDTH, : const.SCREEN_HEIGHT, :
+                ]
+            )
+            return np.transpose(state, axes=(1, 0, 2))
         return self.get_vector_state()
 
     def get_vector_state(self) -> StateTypeVector:
@@ -851,7 +860,9 @@ class raw_env(AECEnv[AgentID, ObsType, ActionType], EzPickle):
             else:
                 raise ValueError(f"Unknown agent type: {agent}")
             self.player_list.add(player)
-            player.offset(int(agent[-1]) * 50, 0)
+            # agents of each type start in a row, 50 pixels apart
+            type_index = int(agent.split("_")[-1])
+            player.offset(type_index * 50, 0)
             self.agent_map[agent] = player
             self.agents.append(agent)
 

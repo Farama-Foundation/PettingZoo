@@ -42,7 +42,8 @@ class Interval:
         If the interval expired, it will be reset to its original value.
         """
         self._current_step += 1
-        if self._current_step == self.step_interval:
+        # >= so that an interval of 0 (or less) triggers on every step
+        if self._current_step >= self.step_interval:
             self.reset()
             return True
         return False
