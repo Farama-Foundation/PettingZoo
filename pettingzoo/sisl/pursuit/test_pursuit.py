@@ -48,6 +48,30 @@ def test_parallel_state():
     assert par_env.state_space.contains(state)
 
 
+@pytest.mark.parametrize("constraint_window", [0.0, 0.05, 0.1, 0.3, 0.5, 0.7, 1.0])
+def test_constraint_window_spawn(constraint_window):
+    env = pursuit_v6.env(constraint_window=constraint_window)
+    base_env = env.unwrapped.env
+    for seed in range(10):
+        env.reset(seed=seed)
+        positions = np.array(
+            [base_env.pursuer_layer.get_position(i) for i in range(8)]
+            + [base_env.evader_layer.get_position(i) for i in range(30)]
+        )
+        # no agent spawns in the obstacle
+        assert np.all(base_env.map_matrix[positions[:, 0], positions[:, 1]] != -1)
+        # all agents spawn in one window of the given size
+        spread = positions.max(axis=0) - positions.min(axis=0)
+        assert spread[0] <= base_env.x_size * constraint_window
+        assert spread[1] <= base_env.y_size * constraint_window
+
+
+@pytest.mark.parametrize("constraint_window", [-0.1, 1.5])
+def test_invalid_constraint_window(constraint_window):
+    with pytest.raises(ValueError):
+        pursuit_v6.env(constraint_window=constraint_window)
+
+
 def test_center_box_size():
     env = pursuit_v6.env(
         x_size=8,
