@@ -87,7 +87,7 @@ html_theme = "celshast"
 html_title = "PettingZoo Documentation"
 html_baseurl = "https://pettingzoo.farama.org"
 html_copy_source = False
-html_favicon = "_static/img/favicon.png"
+html_favicon = "_static/img/favicon.svg"
 html_theme_options = {
     "light_logo": "img/PettingZoo.svg",
     "dark_logo": "img/PettingZoo_White.svg",
