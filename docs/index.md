@@ -60,6 +60,7 @@ Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/mas
 
 ```{project-logo} _static/img/pettingzoo-text.png
 :alt: PettingZoo Logo
+:class: farama-black-logo-invert
 ```
 
 ```{project-heading}
