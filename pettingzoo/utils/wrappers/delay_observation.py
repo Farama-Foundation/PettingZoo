@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 from collections import deque
 from typing import Any, Final, cast
 
@@ -54,6 +55,8 @@ class DelayObservationV1(BaseWrapper[AgentID, ObsType, ActionType]):
     Observation histories advance only when the environment progresses to an
     agent. Calling :meth:`observe` repeatedly does not advance the delay.
     Histories are cleared whenever the environment is reset.
+    For positive delays, observations are deep-copied into the history so that
+    later updates to reused observation buffers do not alter past observations.
 
     Args:
         env: The AEC environment to wrap.
@@ -69,8 +72,11 @@ class DelayObservationV1(BaseWrapper[AgentID, ObsType, ActionType]):
         self._delayed_observations: dict[AgentID, ObsType | None] = {}
 
     def _delay_observation(self, agent: AgentID, observation: ObsType) -> ObsType:
+        if self.delay == 0:
+            return observation
+
         observation_queue = self._observation_queues.setdefault(agent, deque())
-        observation_queue.append(observation)
+        observation_queue.append(copy.deepcopy(observation))
 
         if len(observation_queue) > self.delay:
             return observation_queue.popleft()
@@ -125,6 +131,8 @@ class DelayObservationParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionTyp
     dictionaries containing ``"observation"`` and ``"action_mask"``, the
     initial action mask contains ones so that it does not mark every action as
     illegal. Histories are cleared whenever the environment is reset.
+    For positive delays, observations are deep-copied into the history so that
+    later updates to reused observation buffers do not alter past observations.
 
     Args:
         env: The Parallel environment to wrap.
@@ -139,8 +147,11 @@ class DelayObservationParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionTyp
         self._observation_queues: dict[AgentID, deque[ObsType]] = {}
 
     def _delay_observation(self, agent: AgentID, observation: ObsType) -> ObsType:
+        if self.delay == 0:
+            return observation
+
         observation_queue = self._observation_queues.setdefault(agent, deque())
-        observation_queue.append(observation)
+        observation_queue.append(copy.deepcopy(observation))
 
         if len(observation_queue) > self.delay:
             return observation_queue.popleft()
