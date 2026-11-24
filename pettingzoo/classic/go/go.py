@@ -234,7 +234,16 @@ class raw_env(AECEnv, EzPickle):
             )
             for x, y in go_base.ALL_COORDS
         }
-        return
+        # These globals are shared by all Go environments in the process. Keep this
+        # environment's values, so that they can be set again before using go_base.
+        self._go_global_variables = {
+            name: getattr(go_base, name)
+            for name in ["N", "ALL_COORDS", "EMPTY_BOARD", "NEIGHBORS", "DIAGONALS"]
+        }
+
+    def _set_go_global_variables(self):
+        for name, value in self._go_global_variables.items():
+            setattr(go_base, name, value)
 
     def _check_bounds(self, c):
         return 0 <= c[0] < self._N and 0 <= c[1] < self._N
@@ -290,6 +299,7 @@ class raw_env(AECEnv, EzPickle):
             or self.truncations[self.agent_selection]
         ):
             return self._was_dead_step(action)
+        self._set_go_global_variables()
         self._go = self._go.play_move(coords.from_flat(action))
         self._last_obs = self.observe(self.agent_selection)
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(
@@ -318,6 +328,7 @@ class raw_env(AECEnv, EzPickle):
             self.render()
 
     def reset(self, seed=None, options=None):
+        self._set_go_global_variables()
         self._go = go_base.Position(board=None, komi=self._komi)
 
         self.agents = self.possible_agents[:]
@@ -353,7 +364,7 @@ class raw_env(AECEnv, EzPickle):
             else:
                 self.screen = pygame.Surface((self.screen_width, self.screen_height))
 
-        size = go_base.N
+        size = self._N
 
         # Load and scale all of the necessary images
         tile_size = self.screen_width / size
