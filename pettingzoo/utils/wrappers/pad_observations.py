@@ -48,7 +48,7 @@ def _pad_to(array: np.ndarray, shape: tuple[int, ...], value: Any) -> np.ndarray
 
 
 def _padded_space(spaces: list[Space[Any]]) -> Space[Any]:
-    """Builds the space every agent is padded up to."""
+    """Builds the shared space, including Box spaces with zero-sized dimensions."""
     if isinstance(spaces[0], Discrete):
         discretes = cast("list[Discrete[Any]]", spaces)
         start = min(int(space.start) for space in discretes)
@@ -60,10 +60,13 @@ def _padded_space(spaces: list[Space[Any]]) -> Space[Any]:
     # the fill values are what SuperSuit uses: a bound wide enough that padding an
     # agent's own bounds can never tighten the shared space
     lows = np.stack(
-        [_pad_to(box.low, shape, np.minimum(0, np.min(box.low))) for box in boxes]
+        [_pad_to(box.low, shape, np.min(box.low, initial=0)) for box in boxes]
     )
     highs = np.stack(
-        [_pad_to(box.high, shape, np.maximum(1e-5, np.max(box.high))) for box in boxes]
+        [
+            _pad_to(box.high, shape, np.maximum(1e-5, np.max(box.high, initial=0)))
+            for box in boxes
+        ]
     )
     # every space has the same dtype, and padding keeps it
     return Box(
