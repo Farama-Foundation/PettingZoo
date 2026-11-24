@@ -53,7 +53,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     "--checkpoint-path",
-    help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`",
+    help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v7/PPO/PPO_pistonball_v7_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`",
 )
 
 args = parser.parse_args()
@@ -70,7 +70,7 @@ ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 def env_creator():
     env = make(
         "aec",
-        "butterfly/pistonball-v6",
+        "butterfly/pistonball-v7",
         n_pistons=20,
         time_penalty=-0.1,
         continuous=True,
@@ -91,7 +91,7 @@ def env_creator():
 
 
 env = env_creator()
-env_name = "pistonball_v6"
+env_name = "pistonball_v7"
 register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
 

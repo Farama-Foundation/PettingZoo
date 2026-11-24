@@ -43,7 +43,7 @@ Using environments in PettingZoo is very similar to Gymnasium, i.e. you initiali
 
 ```python
 from pettingzoo import make
-env = make("aec", "butterfly/pistonball-v6")  # need to specify aec or parallel API
+env = make("aec", "butterfly/pistonball-v7")  # need to specify aec or parallel API
 ```
 
 Environments can be interacted with in a manner very similar to Gymnasium:

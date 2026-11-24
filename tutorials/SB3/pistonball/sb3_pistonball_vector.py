@@ -116,7 +116,7 @@ def eval(env_id, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
 
 if __name__ == "__main__":
-    env_id = "butterfly/pistonball-v6"
+    env_id = "butterfly/pistonball-v7"
 
     env_kwargs = {
         "n_pistons": 20,

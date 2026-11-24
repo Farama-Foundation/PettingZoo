@@ -178,11 +178,11 @@ Supersuit includes the following wrappers:
 
 [//]: # (from stable_baselines3 import PPO)
 
-[//]: # (from pettingzoo.butterfly import pistonball_v6)
+[//]: # (from pettingzoo.butterfly import pistonball_v7)
 
 [//]: # (import supersuit as ss)
 
-[//]: # (env = pistonball_v6.parallel_env&#40;&#41;)
+[//]: # (env = pistonball_v7.parallel_env&#40;&#41;)
 
 [//]: # (env = ss.color_reduction_v0&#40;env, mode='B'&#41;)
 

@@ -24,7 +24,7 @@ Parallel environments can be interacted with as follows:
 ```python
 from pettingzoo import make
 
-parallel_env = make("parallel", "butterfly/pistonball-v6", render_mode="human")
+parallel_env = make("parallel", "butterfly/pistonball-v7", render_mode="human")
 observations, infos = parallel_env.reset(seed=42)
 
 while parallel_env.agents:

@@ -49,7 +49,7 @@ class CNNModelV2(TorchModelV2, nn.Module):
 def env_creator(args):
     env = make(
         "parallel",
-        "butterfly/pistonball-v6",
+        "butterfly/pistonball-v7",
         n_pistons=20,
         time_penalty=-0.1,
         continuous=True,
@@ -71,7 +71,7 @@ def env_creator(args):
 if __name__ == "__main__":
     ray.init()
 
-    env_name = "pistonball_v6"
+    env_name = "pistonball_v7"
 
     def _make_rllib_env(config):
         base = env_creator(config)

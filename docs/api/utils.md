@@ -27,7 +27,7 @@ This value is important for establishing the simplest possible baseline: the ran
 from pettingzoo import make
 from pettingzoo.utils import average_total_reward
 
-env = make("aec", "butterfly/pistonball-v6")
+env = make("aec", "butterfly/pistonball-v7")
 average_total_reward(env, max_episodes=100, max_steps=10000000000)
 ```
 
@@ -147,7 +147,7 @@ Image observations must have a Box space with bounds from 0 to 255. Grayscale ob
 from pettingzoo import make
 from pettingzoo.utils import save_observation
 
-env = make("aec", "butterfly/pistonball-v6")
+env = make("aec", "butterfly/pistonball-v7")
 env.reset(seed=42)
 save_observation(env, agent=None, all_agents=False)
 ```
