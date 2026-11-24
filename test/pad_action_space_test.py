@@ -68,6 +68,45 @@ def test_parallel_each_agent_is_unpadded():
     assert env.unwrapped.received == {"agent_0": 4, "agent_1": 0}
 
 
+@pytest.mark.parametrize(
+    "wrapper,dummy",
+    [(PadActionSpaceV1, DummyAEC), (PadActionSpaceParallelV1, DummyParallel)],
+)
+@pytest.mark.parametrize("dtype", [np.float32, np.int16])
+@pytest.mark.parametrize(
+    "empty_shape,other_shape",
+    [((0,), (3,)), ((0, 2), (2, 3)), ((2, 0), (3, 2)), ((0,), (0,))],
+)
+def test_empty_box_actions(wrapper, dummy, dtype, empty_shape, other_shape):
+    spaces = {
+        "agent_0": Box(2, 5, shape=empty_shape, dtype=dtype),
+        "agent_1": Box(2, 5, shape=other_shape, dtype=dtype),
+    }
+    inner = dummy(spaces.__getitem__)
+    env = wrapper(inner)
+    try:
+        env.reset(seed=0)
+        action = np.full(other_shape, 3, dtype=dtype)
+        for agent in spaces:
+            assert env.action_space(agent).shape == other_shape
+            assert env.action_space(agent).dtype == dtype
+            assert env.action_space(agent).contains(action)
+
+        if isinstance(env, PadActionSpaceV1):
+            env.step(action)
+            env.step(action)
+        else:
+            env.step(dict.fromkeys(spaces, action))
+
+        for agent, space in spaces.items():
+            expected = np.full(space.shape, 3, dtype=dtype)
+            np.testing.assert_array_equal(inner.received[agent], expected)
+            assert inner.received[agent].dtype == dtype
+            assert space.contains(inner.received[agent])
+    finally:
+        env.close()
+
+
 def test_discrete_with_start_maps_to_its_first_action():
     spaces = {"agent_0": Discrete(4), "agent_1": Discrete(2, start=1)}
     env = PadActionSpaceParallelV1(DummyParallel(spaces.__getitem__))

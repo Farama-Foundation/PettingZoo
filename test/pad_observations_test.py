@@ -218,6 +218,46 @@ def test_homogeneous_spaces_are_unchanged():
     assert np.array_equal(env.observe("agent_0"), obs["agent_0"])
 
 
+@pytest.mark.parametrize(
+    "wrapper,dummy",
+    [(PadObservationsV1, DummyAEC), (PadObservationsParallelV1, DummyParallel)],
+)
+@pytest.mark.parametrize("dtype", [np.float32, np.int16])
+@pytest.mark.parametrize(
+    "empty_shape,other_shape",
+    [((0,), (3,)), ((0, 2), (2, 3)), ((2, 0), (3, 2)), ((0,), (0,))],
+)
+def test_empty_box_observations(wrapper, dummy, dtype, empty_shape, other_shape):
+    spaces = {
+        "agent_0": Box(2, 5, shape=empty_shape, dtype=dtype),
+        "agent_1": Box(2, 5, shape=other_shape, dtype=dtype),
+    }
+    obs = {
+        agent: np.full(space.shape, 3, dtype=dtype) for agent, space in spaces.items()
+    }
+    env = wrapper(dummy(spaces, obs))
+    try:
+        if isinstance(env, PadObservationsV1):
+            env.reset(seed=0)
+            observations = {agent: env.observe(agent) for agent in AGENTS}
+            env.step(0)
+            stepped = {agent: env.observe(agent) for agent in AGENTS}
+        else:
+            observations, _ = env.reset(seed=0)
+            stepped, _, _, _, _ = env.step(dict.fromkeys(AGENTS, 0))
+
+        expected = np.zeros(other_shape, dtype=dtype)
+        for result in [observations, stepped]:
+            np.testing.assert_array_equal(result["agent_0"], expected)
+            np.testing.assert_array_equal(result["agent_1"], obs["agent_1"])
+            for agent in AGENTS:
+                assert result[agent].dtype == dtype
+                assert env.observation_space(agent).shape == other_shape
+                assert env.observation_space(agent).contains(result[agent])
+    finally:
+        env.close()
+
+
 def test_negative_high_is_clamped_so_the_padding_fits():
     # the padded entries are zeros, which sit above every real high here, so the
     # shared high has to be raised to 1e-5 for them
