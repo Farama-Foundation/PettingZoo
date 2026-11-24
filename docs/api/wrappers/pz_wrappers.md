@@ -126,7 +126,7 @@ while parallel_env.agents:
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 ```
 
-BlackDeathParallelV4 keeps the agents present at reset visible until the underlying episode finishes. After an agent leaves, later steps use a zero observation, zero reward, and empty info for that agent, and actions for it are ignored. Early termination/truncation flags are held back while the wrapped agent set remains active; on the final step, each agent's original termination versus truncation cause is reported. Environments that add new agents after reset are not supported.
+BlackDeathParallelV4 keeps the agents present at reset visible until the underlying episode finishes. After an agent leaves, later steps use a zero observation, zero reward, and empty info for that agent, and actions for it are ignored. The advertised Box bounds are extended to include zero, without changing observations from active agents or the wrapped environment's spaces. Early termination/truncation flags are held back while the wrapped agent set remains active; on the final step, each agent's original termination versus truncation cause is reported. Environments that add new agents after reset are not supported.
 
 ### Replacing NaN actions with a no-op
 
