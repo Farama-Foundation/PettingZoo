@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import deque
+from copy import deepcopy
 from typing import Any, Final, cast
 
 import numpy as np
@@ -54,6 +55,8 @@ class DelayObservationV1(BaseWrapper[AgentID, ObsType, ActionType]):
     Observation histories advance only when the environment progresses to an
     agent. Calling :meth:`observe` repeatedly does not advance the delay.
     Histories are cleared whenever the environment is reset.
+    Observations stored for a positive delay are copied so that an environment
+    reusing its observation buffers cannot overwrite the history.
 
     Args:
         env: The AEC environment to wrap.
@@ -70,7 +73,7 @@ class DelayObservationV1(BaseWrapper[AgentID, ObsType, ActionType]):
 
     def _delay_observation(self, agent: AgentID, observation: ObsType) -> ObsType:
         observation_queue = self._observation_queues.setdefault(agent, deque())
-        observation_queue.append(observation)
+        observation_queue.append(deepcopy(observation) if self.delay else observation)
 
         if len(observation_queue) > self.delay:
             return observation_queue.popleft()
@@ -125,6 +128,8 @@ class DelayObservationParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionTyp
     dictionaries containing ``"observation"`` and ``"action_mask"``, the
     initial action mask contains ones so that it does not mark every action as
     illegal. Histories are cleared whenever the environment is reset.
+    Observations stored for a positive delay are copied so that an environment
+    reusing its observation buffers cannot overwrite the history.
 
     Args:
         env: The Parallel environment to wrap.
@@ -140,7 +145,7 @@ class DelayObservationParallelV1(BaseParallelWrapper[AgentID, ObsType, ActionTyp
 
     def _delay_observation(self, agent: AgentID, observation: ObsType) -> ObsType:
         observation_queue = self._observation_queues.setdefault(agent, deque())
-        observation_queue.append(observation)
+        observation_queue.append(deepcopy(observation) if self.delay else observation)
 
         if len(observation_queue) > self.delay:
             return observation_queue.popleft()
