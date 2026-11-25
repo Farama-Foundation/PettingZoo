@@ -9,7 +9,7 @@ In addition to the main API, we have a secondary parallel API for environments w
 
 For a comparison with the AEC API, see [About AEC](https://pettingzoo.farama.org/api/aec/#about-aec). For more information, see [*PettingZoo: A Standard API for Multi-Agent Reinforcement Learning*](https://arxiv.org/pdf/2009.14471.pdf).
 
-[PettingZoo Wrappers](/api/wrappers/pz_wrappers/) can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle).
+[PettingZoo Wrappers](/api/wrappers/pz_wrappers/) can be used to convert between Parallel and AEC environments, with some restrictions (e.g., an AEC env must only update once at the end of each cycle). For running multiple Parallel worlds simultaneously as a Gymnasium `VectorEnv` (synchronously or across worker processes), see [Vectorized Parallel Environments](/api/utils/#vectorized-parallel-environments).
 
 ## Examples
 

@@ -558,6 +558,15 @@ class SyncParallelVectorEnv(_BaseParallelVectorEnv):
     Executes ``E`` homogeneous ``ParallelEnv`` instances sequentially in the main
     process while exposing standard Gymnasium ``VectorEnv`` ``(E * N, ...)`` arrays
     alongside CTDE ``states()`` and per-world ``call()`` inspection.
+
+    Args:
+        env_fns: Sequence of zero-argument factories returning homogeneous
+            ``ParallelEnv`` instances.
+        autoreset_mode: Auto-reset mode for finished worlds (``"same_step"`` /
+            ``AutoresetMode.SAME_STEP`` default, or ``"next_step"`` /
+            ``AutoresetMode.NEXT_STEP``).
+        copy: Whether to return copies of internal observation, reward, done,
+            and state buffers from ``reset()``, ``step()``, and ``states()``.
     """
 
     def __init__(
@@ -780,6 +789,18 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
     ``spawn``-safe worker processes (serialized with ``cloudpickle``) while preserving
     exact ``SyncParallelVectorEnv`` slot ordering, auto-reset behavior, ``states()``,
     and per-world ``call()`` semantics.
+
+    Args:
+        env_fns: Sequence of zero-argument factories returning homogeneous
+            ``ParallelEnv`` instances.
+        num_workers: Number of worker processes (defaults to
+            ``min(len(env_fns), os.cpu_count() or 1)``; clamped to ``len(env_fns)``).
+        autoreset_mode: Auto-reset mode for finished worlds (``"same_step"`` /
+            ``AutoresetMode.SAME_STEP`` default, or ``"next_step"`` /
+            ``AutoresetMode.NEXT_STEP``).
+        copy: Whether to return copies of internal observation, reward, done,
+            and state buffers from ``reset()``, ``step()``, and ``states()``.
+        context: Multiprocessing start method (defaults to ``"spawn"``).
     """
 
     def __init__(
