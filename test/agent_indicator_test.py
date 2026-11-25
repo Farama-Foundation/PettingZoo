@@ -141,3 +141,78 @@ def test_rejects_non_homogeneous_observation_spaces() -> None:
 
     with pytest.raises(AssertionError, match="observation spaces must be identical"):
         AgentIndicatorParallelV1(env)
+
+
+@pytest.mark.parametrize("aec", [False, True], ids=["parallel", "aec"])
+@pytest.mark.parametrize("bound", ["low", "high"])
+@pytest.mark.parametrize("difference", [0.25, 1e-6], ids=["large", "within-allclose"])
+def test_rejects_bounds_hidden_by_array_representation(aec, bound, difference) -> None:
+    """Space validation must see bounds omitted from NumPy's printed arrays."""
+    low = np.ones(1024, dtype=np.float32)
+    low[0] = -1
+    high = np.full(1024, 3, dtype=np.float32)
+    high[0] = 4
+    first = gymnasium.spaces.Box(low=low, high=high, dtype=np.float32)
+    other_low, other_high = low.copy(), high.copy()
+    (other_low if bound == "low" else other_high)[512] += difference
+    other = gymnasium.spaces.Box(low=other_low, high=other_high, dtype=np.float32)
+    env = IndicatorEnv(first, np.full(1024, 2, dtype=np.float32))
+    env.observation_space = lambda agent: first if agent == AGENTS[0] else other
+    wrapped = parallel_to_aec(env) if aec else env
+    wrapper = AgentIndicatorV1 if aec else AgentIndicatorParallelV1
+
+    with np.printoptions(threshold=1000):
+        assert repr(first) == repr(other)
+        assert not np.array_equal(getattr(first, bound), getattr(other, bound))
+        with pytest.raises(
+            AssertionError, match="observation spaces must be identical"
+        ):
+            wrapper(wrapped)
+
+
+@pytest.mark.parametrize("aec", [False, True], ids=["parallel", "aec"])
+@pytest.mark.parametrize("dtype", [np.float32, np.float64])
+def test_accepts_distinct_boxes_with_identical_bounds(aec, dtype) -> None:
+    """Equivalent separate Box objects still produce valid indicated observations."""
+    low = np.array([-1, 0, 1], dtype=dtype)
+    high = np.array([1, 2, 3], dtype=dtype)
+    spaces = {
+        agent: gymnasium.spaces.Box(low=low.copy(), high=high.copy(), dtype=dtype)
+        for agent in AGENTS
+    }
+    env = IndicatorEnv(spaces[AGENTS[0]], np.array([0, 1, 2], dtype=dtype))
+    env.observation_space = lambda agent: spaces[agent]
+
+    if aec:
+        indicated = AgentIndicatorV1(parallel_to_aec(env))
+        indicated.reset()
+        observations = {agent: indicated.observe(agent) for agent in AGENTS}
+    else:
+        indicated = AgentIndicatorParallelV1(env)
+        observations, _ = indicated.reset()
+
+    for index, agent in enumerate(AGENTS):
+        expected = np.array([0, 1, 2] + [0] * len(AGENTS), dtype=dtype)
+        expected[3 + index] = 3
+        np.testing.assert_array_equal(observations[agent], expected)
+        assert indicated.observation_space(agent).contains(observations[agent])
+
+
+@pytest.mark.parametrize("aec", [False, True], ids=["parallel", "aec"])
+def test_accepts_distinct_equivalent_discrete_spaces(aec) -> None:
+    """Separate Discrete spaces retain the existing start-offset mapping."""
+    spaces = {agent: gymnasium.spaces.Discrete(4, start=2) for agent in AGENTS}
+    env = IndicatorEnv(spaces[AGENTS[0]], np.array(4))
+    env.observation_space = lambda agent: spaces[agent]
+
+    if aec:
+        indicated = AgentIndicatorV1(parallel_to_aec(env))
+        indicated.reset()
+        observations = {agent: indicated.observe(agent) for agent in AGENTS}
+    else:
+        indicated = AgentIndicatorParallelV1(env)
+        observations, _ = indicated.reset()
+
+    for index, agent in enumerate(AGENTS):
+        assert observations[agent] == 2 * len(AGENTS) + index
+        assert indicated.observation_space(agent).contains(observations[agent])

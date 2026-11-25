@@ -38,10 +38,23 @@ def _indicator_map(agents: list[AgentID], type_only: bool) -> dict[AgentID, int]
 def _validate_observation_spaces(
     spaces: list[gymnasium.spaces.Space[Any]],
 ) -> None:
-    assert spaces and all(repr(space) == repr(spaces[0]) for space in spaces), (
-        "observation spaces must be identical to add an agent indicator"
-    )
-    _change_observation_space(spaces[0], 1)
+    message = "observation spaces must be identical to add an agent indicator"
+    assert spaces, message
+    first = spaces[0]
+    for space in spaces[1:]:
+        if isinstance(first, gymnasium.spaces.Box) and isinstance(
+            space, gymnasium.spaces.Box
+        ):
+            # Box equality uses allclose, which can accept different bounds.
+            identical = (
+                first.dtype == space.dtype
+                and np.array_equal(first.low, space.low)
+                and np.array_equal(first.high, space.high)
+            )
+        else:
+            identical = first == space
+        assert identical, message
+    _change_observation_space(first, 1)
 
 
 def _indicator_value(space: gymnasium.spaces.Box) -> Any:
