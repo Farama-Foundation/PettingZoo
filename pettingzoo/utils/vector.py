@@ -29,9 +29,7 @@ def _validate_world(
 ]:
     """Validates a ParallelEnv for homogeneous vectorized slot batching."""
     if not isinstance(env, ParallelEnv):
-        raise TypeError(
-            f"Expected a PettingZoo ParallelEnv, got {type(env).__name__}."
-        )
+        raise TypeError(f"Expected a PettingZoo ParallelEnv, got {type(env).__name__}.")
 
     possible_agents = list(getattr(env, "possible_agents", []))
     if not possible_agents:
@@ -78,10 +76,38 @@ def _require_full_agent_set(
     """Ensures all possible_agents remain active, directing users to BlackDeathParallelV4."""
     active = list(env.agents)
     if len(active) != len(possible_agents) or set(active) != set(possible_agents):
-        raise RuntimeError(
+        raise ValueError(
             f"Agent set changed during {phase} (expected {possible_agents}, got {active}). "
             "Wrap environments with BlackDeathParallelV4 when agents can depart early."
         )
+
+
+def _resolve_autoreset_mode(autoreset_mode: str | AutoresetMode) -> AutoresetMode:
+    """Normalizes Gymnasium AutoresetMode enums and snake/pascal strings."""
+    if isinstance(autoreset_mode, AutoresetMode):
+        mode = autoreset_mode
+    elif isinstance(autoreset_mode, str):
+        normalized = autoreset_mode.strip().lower().replace("-", "_")
+        if normalized in ("same_step", "samestep"):
+            mode = AutoresetMode.SAME_STEP
+        elif normalized in ("next_step", "nextstep"):
+            mode = AutoresetMode.NEXT_STEP
+        elif normalized == "disabled":
+            mode = AutoresetMode.DISABLED
+        else:
+            raise ValueError(
+                f"Unsupported autoreset_mode {autoreset_mode!r}; "
+                "expected 'same_step' or 'next_step'."
+            )
+    else:
+        raise TypeError(
+            f"Expected AutoresetMode or str, got {type(autoreset_mode).__name__}."
+        )
+    if mode not in (AutoresetMode.SAME_STEP, AutoresetMode.NEXT_STEP):
+        raise ValueError(
+            f"Unsupported autoreset_mode {mode!r}; expected SAME_STEP or NEXT_STEP."
+        )
+    return mode
 
 
 def _reset_world(
@@ -141,10 +167,10 @@ def _step_world(
         )
 
     _require_full_agent_set(env, possible_agents, phase="step()")
-    actions_dict = {
-        agent: actions_slice[i] for i, agent in enumerate(possible_agents)
-    }
+    actions_dict = {agent: actions_slice[i] for i, agent in enumerate(possible_agents)}
     obs_dict, rew_dict, term_dict, trunc_dict, info_dict = env.step(actions_dict)
+    if env.agents:
+        _require_full_agent_set(env, possible_agents, phase="step()")
 
     obs_list = [obs_dict[agent] for agent in possible_agents]
     rew_list = [float(rew_dict[agent]) for agent in possible_agents]
@@ -222,17 +248,11 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
     ) -> None:
         super().__init__()
         if num_worlds < 1:
-            raise ValueError(f"Expected at least 1 environment factory, got {num_worlds}.")
-
-        mode = (
-            autoreset_mode
-            if isinstance(autoreset_mode, AutoresetMode)
-            else AutoresetMode(autoreset_mode)
-        )
-        if mode not in (AutoresetMode.SAME_STEP, AutoresetMode.NEXT_STEP):
             raise ValueError(
-                f"Unsupported autoreset_mode {mode!r}; expected SAME_STEP or NEXT_STEP."
+                f"Expected at least 1 environment factory, got {num_worlds}."
             )
+
+        mode = _resolve_autoreset_mode(autoreset_mode)
 
         self.num_worlds = int(num_worlds)
         self.possible_agents = list(possible_agents)
@@ -386,7 +406,9 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
             )
         return [
             flat_actions[
-                world_idx * self.agents_per_world : (world_idx + 1) * self.agents_per_world
+                world_idx
+                * self.agents_per_world : (world_idx + 1)
+                * self.agents_per_world
             ]
             for world_idx in range(self.num_worlds)
         ]
@@ -409,7 +431,11 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
 
     @abstractmethod
     def call(
-        self, name: str, *args: Any, world_indices: Sequence[int] | None = None, **kwargs: Any
+        self,
+        name: str,
+        *args: Any,
+        world_indices: Sequence[int] | None = None,
+        **kwargs: Any,
     ) -> list[Any]:
         """Calls a method or fetches an attribute value on selected Parallel worlds."""
 
@@ -426,9 +452,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
                 f"Operation called on closed {self.__class__.__name__}."
             )
 
-    def _resolve_reset_seeds(
-        self, seed: int | list[int] | None
-    ) -> list[int | None]:
+    def _resolve_reset_seeds(self, seed: int | list[int] | None) -> list[int | None]:
         """Expands an integer or sequence seed into per-world reset seeds."""
         if seed is None:
             return [None] * self.num_worlds
@@ -440,9 +464,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
             )
         return list(seed)
 
-    def _resolve_world_indices(
-        self, world_indices: Sequence[int] | None
-    ) -> list[int]:
+    def _resolve_world_indices(self, world_indices: Sequence[int] | None) -> list[int]:
         """Normalizes optional world indices with bounds validation."""
         if world_indices is None:
             return list(range(self.num_worlds))
@@ -469,6 +491,57 @@ def _call_on_world(
     return target
 
 
+_WorldSpec = tuple[
+    list[AgentID],
+    gymnasium.spaces.Space[Any],
+    gymnasium.spaces.Space[Any],
+    gymnasium.spaces.Space[Any] | None,
+]
+
+_StepWorldResult = tuple[
+    list[Any],
+    list[float],
+    list[bool],
+    list[bool],
+    list[dict[str, Any]],
+    Any,
+    list[Any] | None,
+    list[dict[str, Any]] | None,
+    Any,
+    bool,
+]
+
+
+def _check_world_spec_match(
+    expected: _WorldSpec, actual: _WorldSpec, world_idx: int
+) -> None:
+    """Ensures every world matches the reference agents and spaces."""
+    exp_agents, exp_obs, exp_act, exp_state = expected
+    act_agents, act_obs, act_act, act_state = actual
+    if act_agents != exp_agents:
+        raise ValueError(
+            f"World {world_idx} possible_agents {act_agents} != {exp_agents}."
+        )
+    if act_obs != exp_obs:
+        raise ValueError(f"World {world_idx} observation_space {act_obs} != {exp_obs}.")
+    if act_act != exp_act:
+        raise ValueError(f"World {world_idx} action_space {act_act} != {exp_act}.")
+    if act_state != exp_state:
+        raise ValueError(f"World {world_idx} state_space {act_state} != {exp_state}.")
+
+
+def _verify_homogeneous_envs(
+    envs: Sequence[ParallelEnv[Any, Any, Any]], world_offset: int = 0
+) -> _WorldSpec:
+    """Validates a sequence of worlds and ensures matching specs."""
+    reference = _validate_world(envs[0])
+    for local_idx, env in enumerate(envs[1:], start=1):
+        _check_world_spec_match(
+            reference, _validate_world(env), world_offset + local_idx
+        )
+    return reference
+
+
 class SyncParallelVectorEnv(_BaseParallelVectorEnv):
     """Synchronous single-process vector runner for PettingZoo Parallel environments.
 
@@ -491,25 +564,9 @@ class SyncParallelVectorEnv(_BaseParallelVectorEnv):
             for env_fn in env_fns:
                 envs.append(env_fn())
 
-            possible_agents, obs_space, act_space, state_space = _validate_world(envs[0])
-            for world_idx, env in enumerate(envs[1:], start=1):
-                w_agents, w_obs, w_act, w_state = _validate_world(env)
-                if w_agents != possible_agents:
-                    raise ValueError(
-                        f"World {world_idx} possible_agents {w_agents} != {possible_agents}."
-                    )
-                if w_obs != obs_space:
-                    raise ValueError(
-                        f"World {world_idx} observation_space {w_obs} != {obs_space}."
-                    )
-                if w_act != act_space:
-                    raise ValueError(
-                        f"World {world_idx} action_space {w_act} != {act_space}."
-                    )
-                if w_state != state_space:
-                    raise ValueError(
-                        f"World {world_idx} state_space {w_state} != {state_space}."
-                    )
+            possible_agents, obs_space, act_space, state_space = (
+                _verify_homogeneous_envs(envs)
+            )
         except Exception:
             for env in envs:
                 env.close()
@@ -584,9 +641,371 @@ class SyncParallelVectorEnv(_BaseParallelVectorEnv):
     ) -> list[Any]:
         self._ensure_open()
         indices = self._resolve_world_indices(world_indices)
-        return [_call_on_world(self.envs[idx], name, *args, **kwargs) for idx in indices]
+        return [
+            _call_on_world(self.envs[idx], name, *args, **kwargs) for idx in indices
+        ]
 
     @override
     def close_extras(self, **kwargs: Any) -> None:
         for env in self.envs:
             env.close()
+
+
+def _shard_world_slices(num_worlds: int, num_workers: int | None) -> list[slice]:
+    """Partitions ``num_worlds`` evenly into contiguous slices across workers."""
+    if num_worlds < 1:
+        raise ValueError(f"Expected at least 1 world, got {num_worlds}.")
+    if num_workers is None:
+        effective = min(num_worlds, os.cpu_count() or 1)
+    else:
+        if num_workers < 1:
+            raise ValueError(f"num_workers must be >= 1, got {num_workers}.")
+        effective = min(num_worlds, num_workers)
+
+    base, remainder = divmod(num_worlds, effective)
+    slices: list[slice] = []
+    start = 0
+    for worker_idx in range(effective):
+        stop = start + base + (1 if worker_idx < remainder else 0)
+        slices.append(slice(start, stop))
+        start = stop
+    return slices
+
+
+def _send_worker_error(pipe: Any, exc: Exception) -> None:
+    """Sends an exception over a pipe, falling back to RuntimeError if unpicklable."""
+    try:
+        pipe.send(("error", exc))
+    except Exception:
+        pipe.send(("error", RuntimeError(f"{type(exc).__name__}: {exc}")))
+
+
+def _async_worker(
+    pipe: Any,
+    pickled_fns: bytes,
+    autoreset_mode: AutoresetMode,
+    world_offset: int,
+) -> None:
+    """Subprocess worker loop owning a contiguous shard of ParallelEnv worlds."""
+    envs: list[ParallelEnv[Any, Any, Any]] = []
+    try:
+        env_fns = cloudpickle.loads(pickled_fns)
+        envs = [fn() for fn in env_fns]
+        spec = _verify_homogeneous_envs(envs, world_offset=world_offset)
+        possible_agents, _, _, state_space = spec
+        has_state = state_space is not None
+        needs_reset = [False] * len(envs)
+        metadata = dict(getattr(envs[0], "metadata", {}))
+        render_mode = getattr(envs[0], "render_mode", None)
+        pipe.send(("init_ok", cloudpickle.dumps((spec, metadata, render_mode))))
+    except Exception as exc:
+        _send_worker_error(pipe, exc)
+        for env in envs:
+            env.close()
+        pipe.close()
+        return
+
+    try:
+        while True:
+            try:
+                cmd, payload = pipe.recv()
+            except EOFError:
+                break
+
+            if cmd == "close":
+                pipe.send(("ok", None))
+                break
+
+            try:
+                if cmd == "reset":
+                    world_seeds, options = payload
+                    reset_results = []
+                    for i, (env, w_seed) in enumerate(zip(envs, world_seeds)):
+                        res = _reset_world(
+                            env,
+                            possible_agents,
+                            has_state,
+                            seed=w_seed,
+                            options=options,
+                        )
+                        needs_reset[i] = res[-1]
+                        reset_results.append(res)
+                    pipe.send(("ok", reset_results))
+                elif cmd == "step":
+                    shard_actions = payload
+                    step_results: list[_StepWorldResult] = []
+                    for i, env in enumerate(envs):
+                        res = _step_world(
+                            env,
+                            possible_agents,
+                            shard_actions[i],
+                            autoreset_mode,
+                            needs_reset[i],
+                            has_state,
+                        )
+                        needs_reset[i] = res[-1]
+                        step_results.append(res)
+                    pipe.send(("ok", step_results))
+                elif cmd == "render":
+                    pipe.send(("ok", tuple(env.render() for env in envs)))
+                elif cmd == "call":
+                    local_indices, name, pickled_args = payload
+                    args, kwargs = cloudpickle.loads(pickled_args)
+                    out = [
+                        _call_on_world(envs[i], name, *args, **kwargs)
+                        for i in local_indices
+                    ]
+                    pipe.send(("ok", out))
+                else:
+                    raise ValueError(f"Unknown worker command: {cmd!r}.")
+            except Exception as exc:
+                _send_worker_error(pipe, exc)
+    finally:
+        for env in envs:
+            env.close()
+        pipe.close()
+
+
+class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
+    """Multiprocess vector runner sharding Parallel environments across worker processes.
+
+    Shards ``E`` homogeneous ``ParallelEnv`` instances evenly across ``num_workers``
+    ``spawn``-safe worker processes (serialized with ``cloudpickle``) while preserving
+    exact ``SyncParallelVectorEnv`` slot ordering, auto-reset behavior, ``states()``,
+    and per-world ``call()`` semantics.
+    """
+
+    def __init__(
+        self,
+        env_fns: Sequence[Callable[[], ParallelEnv[Any, Any, Any]]],
+        num_workers: int | None = None,
+        autoreset_mode: str | AutoresetMode = AutoresetMode.SAME_STEP,
+        copy: bool = True,
+        context: str = "spawn",
+    ) -> None:
+        if not env_fns:
+            raise ValueError("Expected at least 1 environment factory in 'env_fns'.")
+
+        mode = _resolve_autoreset_mode(autoreset_mode)
+        self.env_fns = list(env_fns)
+        num_worlds = len(self.env_fns)
+        self._world_slices = _shard_world_slices(num_worlds, num_workers)
+        self.num_workers = len(self._world_slices)
+
+        self._world_lookup: list[tuple[int, int]] = []
+        for worker_idx, sl in enumerate(self._world_slices):
+            for local_idx in range(sl.stop - sl.start):
+                self._world_lookup.append((worker_idx, local_idx))
+
+        mp_ctx = mp.get_context(context)
+        self._parent_pipes: list[Any] = []
+        self._processes: list[Any] = []
+        self._pending_step = False
+
+        try:
+            worker_specs: list[tuple[_WorldSpec, dict[str, Any], str | None]] = []
+            for sl in self._world_slices:
+                parent_pipe, child_pipe = mp_ctx.Pipe()
+                pickled_fns = cloudpickle.dumps(self.env_fns[sl])
+                proc = mp_ctx.Process(
+                    target=_async_worker,
+                    args=(child_pipe, pickled_fns, mode, sl.start),
+                    daemon=True,
+                )
+                proc.start()
+                child_pipe.close()
+                self._parent_pipes.append(parent_pipe)
+                self._processes.append(proc)
+
+            for sl, pipe in zip(self._world_slices, self._parent_pipes):
+                tag, payload = self._recv_packet(pipe)
+                if tag == "error":
+                    raise payload
+                assert tag == "init_ok"
+                worker_specs.append(cloudpickle.loads(payload))
+
+            reference_spec, env_metadata, render_mode = worker_specs[0]
+            for sl, (worker_spec, _, _) in zip(
+                self._world_slices[1:], worker_specs[1:]
+            ):
+                _check_world_spec_match(reference_spec, worker_spec, sl.start)
+        except Exception:
+            self._shutdown_workers(timeout=2.0)
+            raise
+
+        possible_agents, obs_space, act_space, state_space = reference_spec
+        super().__init__(
+            num_worlds=num_worlds,
+            possible_agents=possible_agents,
+            single_obs_space=obs_space,
+            single_act_space=act_space,
+            single_state_space=state_space,
+            env_metadata=env_metadata,
+            render_mode=render_mode,
+            autoreset_mode=mode,
+            copy=copy,
+        )
+
+    def _recv_packet(self, pipe: Any) -> tuple[str, Any]:
+        """Receives a message from a worker pipe or raises on worker crash."""
+        try:
+            tag, payload = pipe.recv()
+        except (EOFError, BrokenPipeError) as exc:
+            raise RuntimeError(
+                "AsyncParallelVectorEnv worker process terminated unexpectedly."
+            ) from exc
+        if tag == "error":
+            raise payload
+        return tag, payload
+
+    def _recv_ok(self, pipe: Any) -> Any:
+        """Receives an ``('ok', value)`` response from a worker pipe."""
+        tag, payload = self._recv_packet(pipe)
+        if tag != "ok":
+            raise RuntimeError(f"Unexpected worker message tag: {tag!r}.")
+        return payload
+
+    def _ensure_idle(self) -> None:
+        """Ensures the runner is open and no ``step_async()`` is awaiting wait."""
+        self._ensure_open()
+        if self._pending_step:
+            raise RuntimeError(
+                "Operation disallowed while an async step is awaiting step_wait()."
+            )
+
+    @override
+    def reset(
+        self,
+        *,
+        seed: int | list[int] | None = None,
+        options: dict[str, Any] | None = None,
+    ) -> tuple[Any, dict[str, Any]]:
+        self._ensure_idle()
+
+        seeds = self._resolve_reset_seeds(seed)
+        for sl, pipe in zip(self._world_slices, self._parent_pipes):
+            pipe.send(("reset", (seeds[sl], options)))
+
+        results = []
+        for pipe in self._parent_pipes:
+            results.extend(self._recv_ok(pipe))
+        return self._collate_reset_results(results)
+
+    def step_async(self, actions: Any) -> None:
+        """Dispatches batched actions to all worker processes without blocking."""
+        self._ensure_idle()
+        world_actions = self._split_world_actions(actions)
+        for sl, pipe in zip(self._world_slices, self._parent_pipes):
+            pipe.send(("step", world_actions[sl]))
+        self._pending_step = True
+
+    def step_wait(
+        self,
+    ) -> tuple[Any, np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
+        """Waits for an in-flight ``step_async()`` and collates all world results."""
+        self._ensure_open()
+        if not self._pending_step:
+            raise RuntimeError(
+                "Cannot call step_wait() without a pending step_async()."
+            )
+        self._pending_step = False
+        results: list[_StepWorldResult] = []
+        for pipe in self._parent_pipes:
+            results.extend(self._recv_ok(pipe))
+        return self._collate_step_results(results)
+
+    @override
+    def step(
+        self, actions: Any
+    ) -> tuple[Any, np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
+        self.step_async(actions)
+        return self.step_wait()
+
+    @override
+    def render(self) -> tuple[Any, ...]:
+        self._ensure_idle()
+        for pipe in self._parent_pipes:
+            pipe.send(("render", None))
+        frames: list[Any] = []
+        for pipe in self._parent_pipes:
+            frames.extend(self._recv_ok(pipe))
+        return tuple(frames)
+
+    @override
+    def call(
+        self,
+        name: str,
+        *args: Any,
+        world_indices: Sequence[int] | None = None,
+        **kwargs: Any,
+    ) -> list[Any]:
+        self._ensure_idle()
+        indices = self._resolve_world_indices(world_indices)
+        if not indices:
+            return []
+
+        per_worker_reqs: dict[int, list[tuple[int, int]]] = {}
+        for out_pos, world_idx in enumerate(indices):
+            worker_idx, local_idx = self._world_lookup[world_idx]
+            per_worker_reqs.setdefault(worker_idx, []).append((out_pos, local_idx))
+
+        pickled_args = cloudpickle.dumps((args, kwargs))
+        for worker_idx, pairs in per_worker_reqs.items():
+            local_indices = [local_idx for _, local_idx in pairs]
+            self._parent_pipes[worker_idx].send(
+                ("call", (local_indices, name, pickled_args))
+            )
+
+        outputs: list[Any] = [None] * len(indices)
+        for worker_idx, pairs in per_worker_reqs.items():
+            worker_out = self._recv_ok(self._parent_pipes[worker_idx])
+            for (out_pos, _), val in zip(pairs, worker_out):
+                outputs[out_pos] = val
+        return outputs
+
+    def _shutdown_workers(self, timeout: float = 5.0) -> None:
+        """Closes pipes and terminates worker subprocesses cleanly."""
+        if getattr(self, "_pending_step", False):
+            for pipe in getattr(self, "_parent_pipes", []):
+                try:
+                    pipe.recv()
+                except Exception:
+                    pass
+            self._pending_step = False
+
+        for pipe, proc in zip(
+            getattr(self, "_parent_pipes", []), getattr(self, "_processes", [])
+        ):
+            if proc.is_alive():
+                try:
+                    pipe.send(("close", None))
+                    pipe.recv()
+                except Exception:
+                    pass
+
+        for proc in getattr(self, "_processes", []):
+            proc.join(timeout=timeout)
+            if proc.is_alive():
+                proc.terminate()
+                proc.join(timeout=1.0)
+
+        for pipe in getattr(self, "_parent_pipes", []):
+            try:
+                pipe.close()
+            except Exception:
+                pass
+
+        self._parent_pipes = []
+        self._processes = []
+
+    @override
+    def close_extras(self, **kwargs: Any) -> None:
+        timeout = float(kwargs.get("timeout", 5.0))
+        self._shutdown_workers(timeout=timeout)
+
+    def __del__(self) -> None:
+        if not getattr(self, "closed", True):
+            self.close()
+
+
+__all__ = ["SyncParallelVectorEnv", "AsyncParallelVectorEnv"]
