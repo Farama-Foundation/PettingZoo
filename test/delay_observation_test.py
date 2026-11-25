@@ -240,6 +240,95 @@ def test_parallel_delay_timeline(delay) -> None:
     assert timeline == expected
 
 
+@pytest.fixture
+def reuse_observation_buffers(monkeypatch):
+    """Make the deterministic environments reuse arrays across observation updates."""
+
+    def install(env):
+        method_name = "observe" if isinstance(env, AECEnv) else "_observe"
+        original_observe = getattr(env, method_name)
+        buffers = {}
+
+        def observe(agent):
+            observation = original_observe(agent)
+            if isinstance(observation, dict):
+                observation["action_mask"][1] = observation["observation"][0] % 2
+            if agent not in buffers:
+                buffers[agent] = observation
+            elif isinstance(observation, dict):
+                for key, value in observation.items():
+                    np.copyto(buffers[agent][key], value)
+            else:
+                np.copyto(buffers[agent], observation)
+            return buffers[agent]
+
+        monkeypatch.setattr(env, method_name, observe)
+        return buffers
+
+    return install
+
+
+@pytest.mark.parametrize("aec", [False, True], ids=["parallel", "aec"])
+@pytest.mark.parametrize("masked", [False, True], ids=["array", "dict"])
+@pytest.mark.parametrize("delay", [1, 2])
+def test_delayed_observations_snapshot_reused_buffers(
+    reuse_observation_buffers, aec, masked, delay
+) -> None:
+    """Later writes to an environment buffer must not change a delayed frame or mask."""
+    base = DeterministicAECEnv(masked) if aec else DeterministicParallelEnv(masked)
+    buffers = reuse_observation_buffers(base)
+    if aec:
+        env = DelayObservationV1(base, delay=delay)
+        env.reset()
+        for _ in range(2 * delay):
+            env.step(0)
+        observation = env.observe(AGENTS[0])
+    else:
+        env = DelayObservationParallelV1(base, delay=delay)
+        env.reset()
+        for _ in range(delay):
+            observations, *_ = env.step(dict.fromkeys(env.agents, 0))
+        observation = observations[AGENTS[0]]
+
+    if masked:
+        np.testing.assert_array_equal(observation["observation"], [10])
+        np.testing.assert_array_equal(observation["action_mask"], [1, 0, 1])
+    else:
+        np.testing.assert_array_equal(observation, [10])
+    assert observation is not buffers[AGENTS[0]]
+
+    if aec:
+        env.step(0)
+        env.step(0)
+    else:
+        env.step(dict.fromkeys(env.agents, 0))
+    if masked:
+        np.testing.assert_array_equal(observation["observation"], [10])
+        np.testing.assert_array_equal(observation["action_mask"], [1, 0, 1])
+    else:
+        np.testing.assert_array_equal(observation, [10])
+
+
+@pytest.mark.parametrize("aec", [False, True], ids=["parallel", "aec"])
+@pytest.mark.parametrize("masked", [False, True], ids=["array", "dict"])
+def test_zero_delay_preserves_observation_identity(
+    reuse_observation_buffers, aec, masked
+):
+    """Zero delay keeps the original observation without an unnecessary copy."""
+    base = DeterministicAECEnv(masked) if aec else DeterministicParallelEnv(masked)
+    buffers = reuse_observation_buffers(base)
+    if aec:
+        env = DelayObservationV1(base, delay=0)
+        env.reset()
+        observation = env.observe(AGENTS[0])
+    else:
+        env = DelayObservationParallelV1(base, delay=0)
+        observations, _ = env.reset()
+        observation = observations[AGENTS[0]]
+
+    assert observation is buffers[AGENTS[0]]
+
+
 def test_aec_reset_clears_delay_history() -> None:
     env = DelayObservationV1(DeterministicAECEnv(), delay=1)
     env.reset()
