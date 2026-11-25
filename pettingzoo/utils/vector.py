@@ -406,8 +406,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
             )
         return [
             flat_actions[
-                world_idx
-                * self.agents_per_world : (world_idx + 1)
+                world_idx * self.agents_per_world : (world_idx + 1)
                 * self.agents_per_world
             ]
             for world_idx in range(self.num_worlds)
@@ -1032,4 +1031,4 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
             self.close()
 
 
-__all__ = ["SyncParallelVectorEnv", "AsyncParallelVectorEnv"]
+__all__ = ["AsyncParallelVectorEnv", "SyncParallelVectorEnv"]

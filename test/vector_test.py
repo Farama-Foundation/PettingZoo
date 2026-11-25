@@ -82,7 +82,9 @@ class CounterStateParallelEnv(ParallelEnv[str, np.ndarray, int]):
         }
         return self._make_obs(), infos
 
-    def step(self, actions: dict[str, int]) -> tuple[
+    def step(
+        self, actions: dict[str, int]
+    ) -> tuple[
         dict[str, np.ndarray],
         dict[str, float],
         dict[str, bool],
@@ -146,7 +148,9 @@ class NoStateParallelEnv(ParallelEnv[str, np.ndarray, int]):
             {agent: {} for agent in self.agents},
         )
 
-    def step(self, actions: dict[str, int]) -> tuple[
+    def step(
+        self, actions: dict[str, int]
+    ) -> tuple[
         dict[str, np.ndarray],
         dict[str, float],
         dict[str, bool],
@@ -191,7 +195,9 @@ class EarlyDepartureParallelEnv(ParallelEnv[str, np.ndarray, int]):
             {agent: {} for agent in self.agents},
         )
 
-    def step(self, actions: dict[str, int]) -> tuple[
+    def step(
+        self, actions: dict[str, int]
+    ) -> tuple[
         dict[str, np.ndarray],
         dict[str, float],
         dict[str, bool],
@@ -585,7 +591,9 @@ class DictObsParallelEnv(ParallelEnv[str, dict[str, Any], int]):
         }
         return obs, {agent: {} for agent in self.agents}
 
-    def step(self, actions: dict[str, int]) -> tuple[
+    def step(
+        self, actions: dict[str, int]
+    ) -> tuple[
         dict[str, dict[str, Any]],
         dict[str, float],
         dict[str, bool],
@@ -648,9 +656,7 @@ def test_constructor_and_worker_error_validation() -> None:
     with pytest.raises(TypeError, match="ParallelEnv"):
         SyncParallelVectorEnv([lambda: "not_an_env"])  # type: ignore[list-item,return-value]
     with pytest.raises(TypeError, match="ParallelEnv"):
-        AsyncParallelVectorEnv(
-            [lambda: "not_an_env"], context="spawn"
-        )  # type: ignore[list-item,return-value]
+        AsyncParallelVectorEnv([lambda: "not_an_env"], context="spawn")  # type: ignore[list-item,return-value]
 
     async_vec = AsyncParallelVectorEnv(
         [CounterStateParallelEnv, CounterStateParallelEnv],
