@@ -9,6 +9,7 @@ import os
 from typing import Any
 
 import cloudpickle
+from gymnasium.error import ClosedEnvironmentError
 import gymnasium.spaces
 from gymnasium.vector import AutoresetMode, VectorEnv
 from gymnasium.vector.utils import batch_space, concatenate, create_empty_array, iterate
@@ -256,6 +257,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
             if single_state_space is not None
             else None
         )
+        self.closed = False
 
         self._observations = create_empty_array(
             self.single_observation_space, n=self.num_envs, fn=np.zeros
@@ -416,3 +418,175 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
     ) -> list[Any]:
         """Gets an attribute or property from each selected Parallel world."""
         return self.call(name, world_indices=world_indices)
+
+    def _ensure_open(self) -> None:
+        """Raises ClosedEnvironmentError if the vector runner has already been closed."""
+        if self.closed:
+            raise ClosedEnvironmentError(
+                f"Operation called on closed {self.__class__.__name__}."
+            )
+
+    def _resolve_reset_seeds(
+        self, seed: int | list[int] | None
+    ) -> list[int | None]:
+        """Expands an integer or sequence seed into per-world reset seeds."""
+        if seed is None:
+            return [None] * self.num_worlds
+        if isinstance(seed, int):
+            return [seed + idx for idx in range(self.num_worlds)]
+        if len(seed) != self.num_worlds:
+            raise ValueError(
+                f"Expected {self.num_worlds} seeds (one per world), got {len(seed)}."
+            )
+        return list(seed)
+
+    def _resolve_world_indices(
+        self, world_indices: Sequence[int] | None
+    ) -> list[int]:
+        """Normalizes optional world indices with bounds validation."""
+        if world_indices is None:
+            return list(range(self.num_worlds))
+        indices = list(world_indices)
+        for idx in indices:
+            if idx < 0 or idx >= self.num_worlds:
+                raise IndexError(
+                    f"World index {idx} out of range [0, {self.num_worlds})."
+                )
+        return indices
+
+
+def _call_on_world(
+    env: ParallelEnv[Any, Any, Any], name: str, *args: Any, **kwargs: Any
+) -> Any:
+    """Invokes a method or fetches an attribute on a single ParallelEnv."""
+    target = getattr(env, name)
+    if callable(target):
+        return target(*args, **kwargs)
+    if args or kwargs:
+        raise TypeError(
+            f"Attribute {name!r} on {env!s} is not callable, cannot pass arguments."
+        )
+    return target
+
+
+class SyncParallelVectorEnv(_BaseParallelVectorEnv):
+    """Synchronous single-process vector runner for PettingZoo Parallel environments.
+
+    Executes ``E`` homogeneous ``ParallelEnv`` instances sequentially in the main
+    process while exposing standard Gymnasium ``VectorEnv`` ``(E * N, ...)`` arrays
+    alongside CTDE ``states()`` and per-world ``call()`` inspection.
+    """
+
+    def __init__(
+        self,
+        env_fns: Sequence[Callable[[], ParallelEnv[Any, Any, Any]]],
+        autoreset_mode: str | AutoresetMode = AutoresetMode.SAME_STEP,
+        copy: bool = True,
+    ) -> None:
+        if not env_fns:
+            raise ValueError("Expected at least 1 environment factory in 'env_fns'.")
+
+        envs: list[ParallelEnv[Any, Any, Any]] = []
+        try:
+            for env_fn in env_fns:
+                envs.append(env_fn())
+
+            possible_agents, obs_space, act_space, state_space = _validate_world(envs[0])
+            for world_idx, env in enumerate(envs[1:], start=1):
+                w_agents, w_obs, w_act, w_state = _validate_world(env)
+                if w_agents != possible_agents:
+                    raise ValueError(
+                        f"World {world_idx} possible_agents {w_agents} != {possible_agents}."
+                    )
+                if w_obs != obs_space:
+                    raise ValueError(
+                        f"World {world_idx} observation_space {w_obs} != {obs_space}."
+                    )
+                if w_act != act_space:
+                    raise ValueError(
+                        f"World {world_idx} action_space {w_act} != {act_space}."
+                    )
+                if w_state != state_space:
+                    raise ValueError(
+                        f"World {world_idx} state_space {w_state} != {state_space}."
+                    )
+        except Exception:
+            for env in envs:
+                env.close()
+            raise
+
+        self.env_fns = list(env_fns)
+        self.envs = envs
+        super().__init__(
+            num_worlds=len(envs),
+            possible_agents=possible_agents,
+            single_obs_space=obs_space,
+            single_act_space=act_space,
+            single_state_space=state_space,
+            env_metadata=getattr(envs[0], "metadata", {}),
+            render_mode=getattr(envs[0], "render_mode", None),
+            autoreset_mode=autoreset_mode,
+            copy=copy,
+        )
+
+    @override
+    def reset(
+        self,
+        *,
+        seed: int | list[int] | None = None,
+        options: dict[str, Any] | None = None,
+    ) -> tuple[Any, dict[str, Any]]:
+        self._ensure_open()
+        seeds = self._resolve_reset_seeds(seed)
+        results = [
+            _reset_world(
+                env,
+                self.possible_agents,
+                self.has_state,
+                seed=world_seed,
+                options=options,
+            )
+            for env, world_seed in zip(self.envs, seeds)
+        ]
+        return self._collate_reset_results(results)
+
+    @override
+    def step(
+        self, actions: Any
+    ) -> tuple[Any, np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
+        self._ensure_open()
+        world_actions = self._split_world_actions(actions)
+        results = [
+            _step_world(
+                env,
+                self.possible_agents,
+                world_actions[world_idx],
+                self.autoreset_mode,
+                self._needs_reset[world_idx],
+                self.has_state,
+            )
+            for world_idx, env in enumerate(self.envs)
+        ]
+        return self._collate_step_results(results)
+
+    @override
+    def render(self) -> tuple[Any, ...]:
+        self._ensure_open()
+        return tuple(env.render() for env in self.envs)
+
+    @override
+    def call(
+        self,
+        name: str,
+        *args: Any,
+        world_indices: Sequence[int] | None = None,
+        **kwargs: Any,
+    ) -> list[Any]:
+        self._ensure_open()
+        indices = self._resolve_world_indices(world_indices)
+        return [_call_on_world(self.envs[idx], name, *args, **kwargs) for idx in indices]
+
+    @override
+    def close_extras(self, **kwargs: Any) -> None:
+        for env in self.envs:
+            env.close()
