@@ -3,11 +3,11 @@ from __future__ import annotations
 import functools
 from typing import Any
 
+import numpy as np
+import pytest
 from gymnasium.error import ClosedEnvironmentError
 from gymnasium.spaces import Box, Discrete
 from gymnasium.vector import AutoresetMode
-import numpy as np
-import pytest
 
 from pettingzoo.utils.env import ParallelEnv
 from pettingzoo.utils.vector import AsyncParallelVectorEnv, SyncParallelVectorEnv
@@ -78,7 +78,7 @@ class CounterStateParallelEnv(ParallelEnv[str, np.ndarray, int]):
         self.last_action_sum = 0.0
         infos = {
             agent: {"seed": -1 if seed is None else seed, "step": 0}
-            for idx, agent in enumerate(self.agents)
+            for agent in self.agents
         }
         return self._make_obs(), infos
 

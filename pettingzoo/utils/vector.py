@@ -2,18 +2,23 @@
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from collections.abc import Callable, Sequence
 import multiprocessing as mp
 import os
+from abc import ABC, abstractmethod
+from collections.abc import Callable, Sequence
 from typing import Any
 
 import cloudpickle
-from gymnasium.error import ClosedEnvironmentError
 import gymnasium.spaces
-from gymnasium.vector import AutoresetMode, VectorEnv
-from gymnasium.vector.utils import batch_space, concatenate, create_empty_array, iterate
 import numpy as np
+from gymnasium.error import ClosedEnvironmentError
+from gymnasium.vector import AutoresetMode, VectorEnv
+from gymnasium.vector.utils import (
+    batch_space,
+    concatenate,
+    create_empty_array,
+    iterate,
+)
 from typing_extensions import override
 
 from pettingzoo.utils.env import AgentID, ParallelEnv
@@ -27,7 +32,7 @@ def _validate_world(
     gymnasium.spaces.Space[Any],
     gymnasium.spaces.Space[Any] | None,
 ]:
-    """Validates a ParallelEnv for homogeneous vectorized slot batching."""
+    """Validate a ParallelEnv for homogeneous vectorized slot batching."""
     if not isinstance(env, ParallelEnv):
         raise TypeError(f"Expected a PettingZoo ParallelEnv, got {type(env).__name__}.")
 
@@ -59,7 +64,7 @@ def _validate_world(
 
 
 def _snapshot_state(env: ParallelEnv[Any, Any, Any], has_state: bool) -> Any:
-    """Fetches the world's global state when supported, returning None otherwise."""
+    """Fetch the world's global state when supported, returning None otherwise."""
     if not has_state:
         return None
     try:
@@ -73,7 +78,7 @@ def _require_full_agent_set(
     possible_agents: list[AgentID],
     phase: str,
 ) -> None:
-    """Ensures all possible_agents remain active, directing users to BlackDeathParallelV4."""
+    """Ensure all possible_agents remain active, directing users to BlackDeathParallelV4."""
     active = list(env.agents)
     if len(active) != len(possible_agents) or set(active) != set(possible_agents):
         raise ValueError(
@@ -83,7 +88,7 @@ def _require_full_agent_set(
 
 
 def _resolve_autoreset_mode(autoreset_mode: str | AutoresetMode) -> AutoresetMode:
-    """Normalizes Gymnasium AutoresetMode enums and snake/pascal strings."""
+    """Normalize Gymnasium AutoresetMode enums and snake/pascal strings."""
     if isinstance(autoreset_mode, AutoresetMode):
         mode = autoreset_mode
     elif isinstance(autoreset_mode, str):
@@ -117,7 +122,7 @@ def _reset_world(
     seed: int | None = None,
     options: dict[str, Any] | None = None,
 ) -> tuple[list[Any], list[dict[str, Any]], Any, bool]:
-    """Resets one world and unpacks ordered agent observations and infos."""
+    """Reset one world and unpacks ordered agent observations and infos."""
     obs_dict, info_dict = env.reset(seed=seed, options=options)
     _require_full_agent_set(env, possible_agents, phase="reset()")
     obs_list = [obs_dict[agent] for agent in possible_agents]
@@ -146,7 +151,7 @@ def _step_world(
     Any,
     bool,
 ]:
-    """Steps one Parallel world and handles SAME_STEP / NEXT_STEP autoresets."""
+    """Step one Parallel world and handles SAME_STEP / NEXT_STEP autoresets."""
     num_agents = len(possible_agents)
 
     if autoreset_mode == AutoresetMode.NEXT_STEP and needs_reset:
@@ -219,7 +224,7 @@ def _step_world(
 
 
 def _copy_tree(data: Any) -> Any:
-    """Recursively copies NumPy arrays inside nested Gymnasium space outputs."""
+    """Recursively copy NumPy arrays inside nested Gymnasium space outputs."""
     if isinstance(data, np.ndarray):
         return data.copy()
     if isinstance(data, dict):
@@ -292,7 +297,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
         self,
         world_results: Sequence[tuple[list[Any], list[dict[str, Any]], Any, bool]],
     ) -> tuple[Any, dict[str, Any]]:
-        """Concatenates per-world reset outputs into VectorEnv arrays and infos."""
+        """Concatenate per-world reset outputs into VectorEnv arrays and infos."""
         flat_obs: list[Any] = []
         vector_infos: dict[str, Any] = {}
 
@@ -330,7 +335,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
             ]
         ],
     ) -> tuple[Any, np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
-        """Concatenates per-world step outputs, preserving final_obs and final_state."""
+        """Concatenate per-world step outputs, preserving final_obs and final_state."""
         flat_obs: list[Any] = []
         vector_infos: dict[str, Any] = {}
         final_states: list[tuple[int, Any]] = []
@@ -398,7 +403,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
         )
 
     def _split_world_actions(self, actions: Any) -> list[list[Any]]:
-        """Iterates batched VectorEnv actions into per-world slices."""
+        """Split batched VectorEnv actions into per-world slices."""
         flat_actions = list(iterate(self.action_space, actions))
         if len(flat_actions) != self.num_envs:
             raise ValueError(
@@ -414,7 +419,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
         ]
 
     def states(self) -> Any:
-        """Returns batched CTDE global states across all ``num_worlds`` worlds."""
+        """Return batched CTDE global states across all ``num_worlds`` worlds."""
         if not self.has_state or self.single_state_space is None:
             raise NotImplementedError(
                 "Wrapped ParallelEnv does not declare a Gymnasium 'state_space'."
@@ -437,23 +442,23 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
         world_indices: Sequence[int] | None = None,
         **kwargs: Any,
     ) -> list[Any]:
-        """Calls a method or fetches an attribute value on selected Parallel worlds."""
+        """Call a method or fetches an attribute value on selected Parallel worlds."""
 
     def get_attr(
         self, name: str, world_indices: Sequence[int] | None = None
     ) -> list[Any]:
-        """Gets an attribute or property from each selected Parallel world."""
+        """Get an attribute or property from each selected Parallel world."""
         return self.call(name, world_indices=world_indices)
 
     def _ensure_open(self) -> None:
-        """Raises ClosedEnvironmentError if the vector runner has already been closed."""
+        """Raise ClosedEnvironmentError if the vector runner has already been closed."""
         if self.closed:
             raise ClosedEnvironmentError(
                 f"Operation called on closed {self.__class__.__name__}."
             )
 
     def _resolve_reset_seeds(self, seed: int | list[int] | None) -> list[int | None]:
-        """Expands an integer or sequence seed into per-world reset seeds."""
+        """Expand an integer or sequence seed into per-world reset seeds."""
         if seed is None:
             return [None] * self.num_worlds
         if isinstance(seed, int):
@@ -465,7 +470,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
         return list(seed)
 
     def _resolve_world_indices(self, world_indices: Sequence[int] | None) -> list[int]:
-        """Normalizes optional world indices with bounds validation."""
+        """Normalize optional world indices with bounds validation."""
         if world_indices is None:
             return list(range(self.num_worlds))
         indices = list(world_indices)
@@ -480,7 +485,7 @@ class _BaseParallelVectorEnv(VectorEnv[Any, Any, Any], ABC):
 def _call_on_world(
     env: ParallelEnv[Any, Any, Any], name: str, *args: Any, **kwargs: Any
 ) -> Any:
-    """Invokes a method or fetches an attribute on a single ParallelEnv."""
+    """Invoke a method or fetches an attribute on a single ParallelEnv."""
     target = getattr(env, name)
     if callable(target):
         return target(*args, **kwargs)
@@ -515,7 +520,7 @@ _StepWorldResult = tuple[
 def _check_world_spec_match(
     expected: _WorldSpec, actual: _WorldSpec, world_idx: int
 ) -> None:
-    """Ensures every world matches the reference agents and spaces."""
+    """Ensure every world matches the reference agents and spaces."""
     exp_agents, exp_obs, exp_act, exp_state = expected
     act_agents, act_obs, act_act, act_state = actual
     if act_agents != exp_agents:
@@ -533,7 +538,7 @@ def _check_world_spec_match(
 def _verify_homogeneous_envs(
     envs: Sequence[ParallelEnv[Any, Any, Any]], world_offset: int = 0
 ) -> _WorldSpec:
-    """Validates a sequence of worlds and ensures matching specs."""
+    """Validate a sequence of worlds and ensures matching specs."""
     reference = _validate_world(envs[0])
     for local_idx, env in enumerate(envs[1:], start=1):
         _check_world_spec_match(
@@ -652,7 +657,7 @@ class SyncParallelVectorEnv(_BaseParallelVectorEnv):
 
 
 def _shard_world_slices(num_worlds: int, num_workers: int | None) -> list[slice]:
-    """Partitions ``num_worlds`` evenly into contiguous slices across workers."""
+    """Partition ``num_worlds`` evenly into contiguous slices across workers."""
     if num_worlds < 1:
         raise ValueError(f"Expected at least 1 world, got {num_worlds}.")
     if num_workers is None:
@@ -673,7 +678,7 @@ def _shard_world_slices(num_worlds: int, num_workers: int | None) -> list[slice]
 
 
 def _send_worker_error(pipe: Any, exc: Exception) -> None:
-    """Sends an exception over a pipe, falling back to RuntimeError if unpicklable."""
+    """Send an exception over a pipe, falling back to RuntimeError if unpicklable."""
     try:
         pipe.send(("error", exc))
     except Exception:
@@ -817,11 +822,10 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
                 self._parent_pipes.append(parent_pipe)
                 self._processes.append(proc)
 
-            for sl, pipe in zip(self._world_slices, self._parent_pipes):
+            for pipe in self._parent_pipes:
                 tag, payload = self._recv_packet(pipe)
-                if tag == "error":
-                    raise payload
-                assert tag == "init_ok"
+                if tag != "init_ok":
+                    raise RuntimeError(f"Unexpected worker handshake tag: {tag!r}.")
                 worker_specs.append(cloudpickle.loads(payload))
 
             reference_spec, env_metadata, render_mode = worker_specs[0]
@@ -847,7 +851,7 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
         )
 
     def _recv_packet(self, pipe: Any) -> tuple[str, Any]:
-        """Receives a message from a worker pipe or raises on worker crash."""
+        """Receive a message from a worker pipe or raises on worker crash."""
         try:
             tag, payload = pipe.recv()
         except (EOFError, BrokenPipeError) as exc:
@@ -859,14 +863,14 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
         return tag, payload
 
     def _recv_ok(self, pipe: Any) -> Any:
-        """Receives an ``('ok', value)`` response from a worker pipe."""
+        """Receive an ``('ok', value)`` response from a worker pipe."""
         tag, payload = self._recv_packet(pipe)
         if tag != "ok":
             raise RuntimeError(f"Unexpected worker message tag: {tag!r}.")
         return payload
 
     def _ensure_idle(self) -> None:
-        """Ensures the runner is open and no ``step_async()`` is awaiting wait."""
+        """Ensure the runner is open and no ``step_async()`` is awaiting wait."""
         self._ensure_open()
         if self._pending_step:
             raise RuntimeError(
@@ -892,7 +896,7 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
         return self._collate_reset_results(results)
 
     def step_async(self, actions: Any) -> None:
-        """Dispatches batched actions to all worker processes without blocking."""
+        """Dispatch batched actions to all worker processes without blocking."""
         self._ensure_idle()
         world_actions = self._split_world_actions(actions)
         for sl, pipe in zip(self._world_slices, self._parent_pipes):
@@ -902,7 +906,7 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
     def step_wait(
         self,
     ) -> tuple[Any, np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
-        """Waits for an in-flight ``step_async()`` and collates all world results."""
+        """Wait for an in-flight ``step_async()`` and collates all world results."""
         self._ensure_open()
         if not self._pending_step:
             raise RuntimeError(
@@ -964,7 +968,7 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
         return outputs
 
     def _shutdown_workers(self, timeout: float = 5.0) -> None:
-        """Closes pipes and terminates worker subprocesses cleanly."""
+        """Close pipes and terminates worker subprocesses cleanly."""
         if getattr(self, "_pending_step", False):
             for pipe in getattr(self, "_parent_pipes", []):
                 try:
