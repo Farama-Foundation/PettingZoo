@@ -547,6 +547,17 @@ def _verify_homogeneous_envs(
     return reference
 
 
+def _close_envs_quietly(envs: Sequence[Any]) -> None:
+    """Close instantiated environments without masking prior initialization errors."""
+    for env in envs:
+        close_fn = getattr(env, "close", None)
+        if callable(close_fn):
+            try:
+                close_fn()
+            except Exception:
+                pass
+
+
 class SyncParallelVectorEnv(_BaseParallelVectorEnv):
     """Synchronous single-process vector runner for PettingZoo Parallel environments.
 
@@ -573,8 +584,7 @@ class SyncParallelVectorEnv(_BaseParallelVectorEnv):
                 _verify_homogeneous_envs(envs)
             )
         except Exception:
-            for env in envs:
-                env.close()
+            _close_envs_quietly(envs)
             raise
 
         self.env_fns = list(env_fns)
@@ -705,8 +715,7 @@ def _async_worker(
         pipe.send(("init_ok", cloudpickle.dumps((spec, metadata, render_mode))))
     except Exception as exc:
         _send_worker_error(pipe, exc)
-        for env in envs:
-            env.close()
+        _close_envs_quietly(envs)
         pipe.close()
         return
 
@@ -766,8 +775,7 @@ def _async_worker(
             except Exception as exc:
                 _send_worker_error(pipe, exc)
     finally:
-        for env in envs:
-            env.close()
+        _close_envs_quietly(envs)
         pipe.close()
 
 
@@ -869,6 +877,20 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
             raise RuntimeError(f"Unexpected worker message tag: {tag!r}.")
         return payload
 
+    def _recv_all_ok(self, pipes: Sequence[Any]) -> list[Any]:
+        """Drain every targeted pipe before raising the first worker error."""
+        results: list[Any] = []
+        first_error: Exception | None = None
+        for pipe in pipes:
+            try:
+                results.append(self._recv_ok(pipe))
+            except Exception as exc:
+                if first_error is None:
+                    first_error = exc
+        if first_error is not None:
+            raise first_error
+        return results
+
     def _ensure_idle(self) -> None:
         """Ensure the runner is open and no ``step_async()`` is awaiting wait."""
         self._ensure_open()
@@ -891,8 +913,8 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
             pipe.send(("reset", (seeds[sl], options)))
 
         results = []
-        for pipe in self._parent_pipes:
-            results.extend(self._recv_ok(pipe))
+        for worker_results in self._recv_all_ok(self._parent_pipes):
+            results.extend(worker_results)
         return self._collate_reset_results(results)
 
     def step_async(self, actions: Any) -> None:
@@ -914,8 +936,8 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
             )
         self._pending_step = False
         results: list[_StepWorldResult] = []
-        for pipe in self._parent_pipes:
-            results.extend(self._recv_ok(pipe))
+        for worker_results in self._recv_all_ok(self._parent_pipes):
+            results.extend(worker_results)
         return self._collate_step_results(results)
 
     @override
@@ -931,8 +953,8 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
         for pipe in self._parent_pipes:
             pipe.send(("render", None))
         frames: list[Any] = []
-        for pipe in self._parent_pipes:
-            frames.extend(self._recv_ok(pipe))
+        for worker_frames in self._recv_all_ok(self._parent_pipes):
+            frames.extend(worker_frames)
         return tuple(frames)
 
     @override
@@ -954,15 +976,18 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
             per_worker_reqs.setdefault(worker_idx, []).append((out_pos, local_idx))
 
         pickled_args = cloudpickle.dumps((args, kwargs))
-        for worker_idx, pairs in per_worker_reqs.items():
+        target_workers = list(per_worker_reqs.items())
+        for worker_idx, pairs in target_workers:
             local_indices = [local_idx for _, local_idx in pairs]
             self._parent_pipes[worker_idx].send(
                 ("call", (local_indices, name, pickled_args))
             )
 
+        worker_outputs = self._recv_all_ok(
+            [self._parent_pipes[worker_idx] for worker_idx, _ in target_workers]
+        )
         outputs: list[Any] = [None] * len(indices)
-        for worker_idx, pairs in per_worker_reqs.items():
-            worker_out = self._recv_ok(self._parent_pipes[worker_idx])
+        for (_, pairs), worker_out in zip(target_workers, worker_outputs):
             for (out_pos, _), val in zip(pairs, worker_out):
                 outputs[out_pos] = val
         return outputs

@@ -6,7 +6,7 @@ from typing import Any
 import numpy as np
 import pytest
 from gymnasium.error import ClosedEnvironmentError
-from gymnasium.spaces import Box, Discrete
+from gymnasium.spaces import Box, Dict, Discrete
 from gymnasium.vector import AutoresetMode
 
 from pettingzoo.utils.env import ParallelEnv
@@ -549,3 +549,185 @@ def test_no_state_mismatch_validation_and_closed_errors(
             ],
         )
         bad_agents.close()
+
+
+class DictObsParallelEnv(ParallelEnv[str, dict[str, Any], int]):
+    """Minimal ParallelEnv with Dict observation space for copy_tree tests."""
+
+    metadata = {"name": "dict_obs_parallel_v0"}
+
+    def __init__(self) -> None:
+        self.possible_agents = ["a0", "a1"]
+        self.agents: list[str] = []
+        self.step_count = 0
+
+    @functools.cache
+    def observation_space(self, agent: str) -> Dict:
+        return Dict(
+            {
+                "vec": Box(-10.0, 10.0, shape=(2,), dtype=np.float32),
+                "flag": Discrete(2),
+            }
+        )
+
+    @functools.cache
+    def action_space(self, agent: str) -> Discrete:
+        return Discrete(2)
+
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+        self.agents = list(self.possible_agents)
+        self.step_count = 0
+        obs = {
+            agent: {"vec": np.array([1.0, 2.0], dtype=np.float32), "flag": 1}
+            for agent in self.agents
+        }
+        return obs, {agent: {} for agent in self.agents}
+
+    def step(self, actions: dict[str, int]) -> tuple[
+        dict[str, dict[str, Any]],
+        dict[str, float],
+        dict[str, bool],
+        dict[str, bool],
+        dict[str, dict[str, Any]],
+    ]:
+        self.step_count += 1
+        active = list(self.agents)
+        obs = {
+            agent: {
+                "vec": np.array([float(self.step_count), 3.0], dtype=np.float32),
+                "flag": actions[agent] % 2,
+            }
+            for agent in active
+        }
+        return (
+            obs,
+            dict.fromkeys(active, 0.0),
+            dict.fromkeys(active, False),
+            dict.fromkeys(active, False),
+            {agent: {} for agent in active},
+        )
+
+
+def test_dict_observation_space_and_copy_semantics() -> None:
+    copy_vec = SyncParallelVectorEnv(
+        [DictObsParallelEnv, DictObsParallelEnv], copy=True
+    )
+    try:
+        obs_c, _ = copy_vec.reset()
+        obs_c["vec"][:] = -99.0
+        np.testing.assert_allclose(
+            copy_vec._observations["vec"], np.tile([1.0, 2.0], (4, 1))
+        )
+    finally:
+        copy_vec.close()
+
+    view_vec = SyncParallelVectorEnv(
+        [DictObsParallelEnv, DictObsParallelEnv], copy=False
+    )
+    try:
+        obs_v, _ = view_vec.reset()
+        assert obs_v is view_vec._observations
+        obs_v2, _, _, _, _ = view_vec.step(np.array([1, 0, 1, 0], dtype=np.int64))
+        assert obs_v2 is view_vec._observations
+        np.testing.assert_array_equal(obs_v2["flag"], [1, 0, 1, 0])
+    finally:
+        view_vec.close()
+
+
+def test_constructor_and_worker_error_validation() -> None:
+    with pytest.raises(ValueError, match="at least 1"):
+        SyncParallelVectorEnv([])
+    with pytest.raises(ValueError, match="at least 1"):
+        AsyncParallelVectorEnv([])
+    with pytest.raises(ValueError, match="num_workers"):
+        AsyncParallelVectorEnv([NoStateParallelEnv], num_workers=0)
+    with pytest.raises(ValueError, match="autoreset_mode"):
+        SyncParallelVectorEnv([NoStateParallelEnv], autoreset_mode="disabled")
+    with pytest.raises(TypeError, match="ParallelEnv"):
+        SyncParallelVectorEnv([lambda: "not_an_env"])  # type: ignore[list-item,return-value]
+    with pytest.raises(TypeError, match="ParallelEnv"):
+        AsyncParallelVectorEnv(
+            [lambda: "not_an_env"], context="spawn"
+        )  # type: ignore[list-item,return-value]
+
+    async_vec = AsyncParallelVectorEnv(
+        [CounterStateParallelEnv, CounterStateParallelEnv],
+        num_workers=2,
+        context="spawn",
+    )
+    try:
+        async_vec.reset(seed=0)
+        with pytest.raises(AttributeError):
+            async_vec.call("nonexistent_method")
+        assert async_vec.call("ping") == [(0.0, 0), (0.0, 0)]
+    finally:
+        async_vec.close()
+
+
+@pytest.mark.parametrize("runner_cls", [SyncParallelVectorEnv, AsyncParallelVectorEnv])
+def test_builtin_rps_v2_vector_rollout(
+    runner_cls: type[SyncParallelVectorEnv] | type[AsyncParallelVectorEnv],
+) -> None:
+    from pettingzoo.classic.rps import rps
+
+    env_fns = [lambda: rps.parallel_env(max_cycles=3) for _ in range(3)]
+    vec = _make_runner(runner_cls, env_fns, num_workers=2)
+    try:
+        obs, _ = vec.reset(seed=7)
+        assert obs.shape == (6,)
+        assert vec.num_worlds == 3
+        assert vec.agents_per_world == 2
+        assert not vec.has_state
+
+        for step_idx in range(4):
+            actions = vec.action_space.sample()
+            obs, rew, term, trunc, infos = vec.step(actions)
+            assert vec.observation_space.contains(obs)
+            assert rew.shape == (6,)
+            if step_idx == 2:
+                assert np.all(trunc)
+                assert not np.any(term)
+                assert np.all(infos["_final_obs"])
+            else:
+                assert not np.any(term)
+                assert not np.any(trunc)
+    finally:
+        vec.close()
+
+
+@pytest.mark.parametrize("runner_cls", [SyncParallelVectorEnv, AsyncParallelVectorEnv])
+def test_builtin_kaz_v11_black_death_and_states(
+    runner_cls: type[SyncParallelVectorEnv] | type[AsyncParallelVectorEnv],
+) -> None:
+    pytest.importorskip("pygame")
+    from pettingzoo.butterfly.knights_archers_zombies import (
+        knights_archers_zombies,
+    )
+
+    env_fns = [
+        lambda: BlackDeathParallelV4(knights_archers_zombies.parallel_env(max_cycles=4))
+        for _ in range(2)
+    ]
+    vec = _make_runner(runner_cls, env_fns, num_workers=2)
+    try:
+        obs, _ = vec.reset(seed=11)
+        assert vec.num_worlds == 2
+        assert vec.agents_per_world == 4
+        assert vec.num_envs == 8
+        assert vec.has_state
+        assert vec.state_space is not None
+        assert obs.shape == (8, *vec.single_observation_space.shape)
+        assert vec.states().shape == (2, *vec.single_state_space.shape)
+
+        for _ in range(5):
+            actions = np.zeros(vec.num_envs, dtype=np.int64)
+            obs, rew, term, trunc, _ = vec.step(actions)
+            assert vec.observation_space.contains(obs)
+            assert rew.shape == (8,)
+            assert term.shape == (8,)
+            assert trunc.shape == (8,)
+            assert vec.states().shape == (2, *vec.single_state_space.shape)
+    finally:
+        vec.close()
