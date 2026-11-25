@@ -143,7 +143,7 @@ class NoStateParallelEnv(ParallelEnv[str, np.ndarray, int]):
         self.agents = list(self.possible_agents)
         return (
             {agent: np.zeros(2, dtype=np.float32) for agent in self.agents},
-            dict.fromkeys(self.agents, {}),
+            {agent: {} for agent in self.agents},
         )
 
     def step(self, actions: dict[str, int]) -> tuple[
@@ -159,7 +159,7 @@ class NoStateParallelEnv(ParallelEnv[str, np.ndarray, int]):
             dict.fromkeys(active, 1.0),
             dict.fromkeys(active, False),
             dict.fromkeys(active, False),
-            dict.fromkeys(active, {}),
+            {agent: {} for agent in active},
         )
 
 
@@ -702,9 +702,7 @@ def test_builtin_kaz_v11_black_death_and_states(
     runner_cls: type[SyncParallelVectorEnv] | type[AsyncParallelVectorEnv],
 ) -> None:
     pytest.importorskip("pygame")
-    from pettingzoo.butterfly.knights_archers_zombies import (
-        knights_archers_zombies,
-    )
+    from pettingzoo.butterfly.knights_archers_zombies import knights_archers_zombies
 
     env_fns = [
         lambda: BlackDeathParallelV4(knights_archers_zombies.parallel_env(max_cycles=4))

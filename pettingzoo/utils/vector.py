@@ -13,12 +13,7 @@ import gymnasium.spaces
 import numpy as np
 from gymnasium.error import ClosedEnvironmentError
 from gymnasium.vector import AutoresetMode, VectorEnv
-from gymnasium.vector.utils import (
-    batch_space,
-    concatenate,
-    create_empty_array,
-    iterate,
-)
+from gymnasium.vector.utils import batch_space, concatenate, create_empty_array, iterate
 from typing_extensions import override
 
 from pettingzoo.utils.env import AgentID, ParallelEnv
@@ -810,7 +805,7 @@ class AsyncParallelVectorEnv(_BaseParallelVectorEnv):
             for local_idx in range(sl.stop - sl.start):
                 self._world_lookup.append((worker_idx, local_idx))
 
-        mp_ctx = mp.get_context(context)
+        mp_ctx: Any = mp.get_context(context)
         self._parent_pipes: list[Any] = []
         self._processes: list[Any] = []
         self._pending_step = False
