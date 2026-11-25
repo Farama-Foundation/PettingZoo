@@ -7,6 +7,7 @@ import pytest
 from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
+from pettingzoo.test.example_envs import generated_agents_env_v0
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import ClipRewardParallelV1, ClipRewardV1
 
@@ -145,6 +146,61 @@ def test_aec_last_reports_clipped_reward():
     # agent_0 has just become current again; last() is its clipped step.
     _, cumulative, _, _, _ = env.last()
     assert cumulative == 1.0
+
+
+def test_aec_accumulates_rewards_for_new_agents():
+    class JoiningAEC(DummyAEC):
+        def step(self, action):
+            super().step(action)
+            if self._step_count == 1:
+                self.agents.append("agent_2")
+                self.terminations["agent_2"] = False
+                self.truncations["agent_2"] = False
+                self.infos["agent_2"] = {}
+                self.rewards["agent_2"] = -RAW_REWARD
+                self._cumulative_rewards["agent_2"] = -RAW_REWARD
+
+    env = ClipRewardV1(JoiningAEC())
+    env.reset(seed=0)
+    env.step(0)
+    assert env.rewards == {"agent_0": 1.0, "agent_1": 0.0, "agent_2": -1.0}
+    assert env._cumulative_rewards == env.rewards
+
+    env.step(0)
+    assert env.agent_selection == "agent_2"
+    assert env.last()[1] == -1.0
+    assert env._cumulative_rewards == {
+        "agent_0": 1.0,
+        "agent_1": 1.0,
+        "agent_2": -1.0,
+    }
+    env.step(0)
+    assert env.agent_selection == "agent_0"
+    assert env.last()[1] == 1.0
+    assert env._cumulative_rewards["agent_2"] == 1.0
+
+
+def test_aec_discards_rewards_for_removed_agents():
+    env = ClipRewardV1(DummyAEC())
+    env.reset(seed=0)
+    for _ in range(8):
+        env.step(0)
+    assert env.last()[1] == 1.0
+
+    env.step(None)
+    assert env.agents == ["agent_1"]
+    assert env._cumulative_rewards == {"agent_1": 1.0}
+    assert env.last()[1] == 1.0
+    env.step(None)
+    assert env.agents == []
+    assert env._cumulative_rewards == {}
+
+    env.reset(seed=0)
+    assert env._cumulative_rewards == dict.fromkeys(AGENTS, 0.0)
+
+
+def test_aec_api_with_generated_agents():
+    api_test(ClipRewardV1(generated_agents_env_v0.env()), num_cycles=20)
 
 
 def test_aec_clips_negative_rewards():

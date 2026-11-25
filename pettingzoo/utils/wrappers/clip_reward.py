@@ -57,8 +57,13 @@ class ClipRewardV1(BaseWrapper[AgentID, ObsType, ActionType]):
             self._cumulative_rewards = dict.fromkeys(self.env._cumulative_rewards, 0.0)
         else:
             # Zero the agent that just stepped, matching SuperSuit, then add
-            # this step's clipped rewards onto the running totals.
-            self._cumulative_rewards[agent] = 0.0
+            # this step's clipped rewards onto the running totals. Agents may
+            # join or leave during step(), so keep totals only for current agents
+            # and start newly added agents at zero before accumulating.
+            self._cumulative_rewards = {
+                a: 0.0 if a == agent else self._cumulative_rewards.get(a, 0.0)
+                for a in self.rewards
+            }
         self._accumulate_rewards()
 
     @override
