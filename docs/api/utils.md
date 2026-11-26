@@ -218,3 +218,61 @@ EnvLogger provides functionality for common warnings and errors for environments
    :members:
    :undoc-members:
 ```
+
+### Vectorized Parallel Environments
+
+`SyncParallelVectorEnv` and `AsyncParallelVectorEnv` (under `pettingzoo.utils.vector`) wrap `E` homogeneous [Parallel](/api/parallel/) environments with `N` agents each as a standard Gymnasium `VectorEnv` with `num_envs = E * N`.
+
+* **Slot Ordering & Seeding**: Slots are ordered world-major, then `possible_agents`-minor (`world_idx * agents_per_world + agent_offset`). Passing an integer `seed` seeds world `i` with `seed + i`.
+* **Early Agent Exit**: Vectorized environments must keep the full `possible_agents` set active throughout an episode. Wrap environments where agents can terminate early with [BlackDeathParallelV4](/api/wrappers/pz_wrappers/#pettingzoo.utils.wrappers.BlackDeathParallelV4).
+* **Autoreset Modes**: Supports `AutoresetMode.SAME_STEP` (`"same_step"`, default — resets finished worlds immediately and exposes `final_obs`, `final_info`, and `final_state`/`_final_state` in `infos`) and `AutoresetMode.NEXT_STEP` (`"next_step"`).
+* **CTDE & World Inspection**: Exposes `num_worlds`, `agents_per_world`, `state_space`, `states()` (batched `(E, ...)` global states when the underlying environment defines `state_space`), `call()`, and `get_attr()`.
+
+Synchronous single-process usage (`SyncParallelVectorEnv`):
+
+```python
+from pettingzoo import make
+from pettingzoo.utils.vector import SyncParallelVectorEnv
+
+vec = SyncParallelVectorEnv(
+    [lambda: make("parallel", "classic/rps-v2", max_cycles=4) for _ in range(3)]
+)
+obs, infos = vec.reset(seed=42)
+actions = vec.action_space.sample()
+obs, rewards, terminations, truncations, infos = vec.step(actions)
+vec.close()
+```
+
+Multiprocess sharded usage (`AsyncParallelVectorEnv`) with `BlackDeathParallelV4` and CTDE `states()`:
+
+```python
+from pettingzoo import make
+from pettingzoo.utils.vector import AsyncParallelVectorEnv
+from pettingzoo.utils.wrappers import BlackDeathParallelV4
+
+
+def make_env():
+    return BlackDeathParallelV4(
+        make("parallel", "butterfly/knights_archers_zombies-v11", max_cycles=4)
+    )
+
+
+vec = AsyncParallelVectorEnv([make_env, make_env], num_workers=2)
+obs, infos = vec.reset(seed=42)
+actions = vec.action_space.sample()
+obs, rewards, terminations, truncations, infos = vec.step(actions)
+global_states = vec.states()
+vec.close()
+```
+
+Note: on Windows and macOS (`context="spawn"`), guard scripts that create `AsyncParallelVectorEnv` with `if __name__ == "__main__":`.
+
+```{eval-rst}
+.. currentmodule:: pettingzoo.utils.vector
+
+.. autoclass:: SyncParallelVectorEnv
+   :members: reset, step, render, call, get_attr, states, close
+
+.. autoclass:: AsyncParallelVectorEnv
+   :members: reset, step, step_async, step_wait, render, call, get_attr, states, close
+```
