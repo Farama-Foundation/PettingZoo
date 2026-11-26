@@ -17,6 +17,10 @@ env = make("aec", "atari/space_invaders-v2")
 env = frame_stack_v1(color_reduction_v0(env, 'full'), 4)
 ```
 
+## SuperSuit migration guide
+
+For an inventory of native PettingZoo wrappers, outstanding SuperSuit APIs, and separately tracked vectorization, see [Migrating from SuperSuit](supersuit_migration.md). This guide does not assume that all wrappers have identical arguments or behavior.
+
 ## Included Functions
 
 Supersuit includes the following wrappers:
