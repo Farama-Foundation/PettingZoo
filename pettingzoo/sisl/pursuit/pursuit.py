@@ -81,7 +81,7 @@ center_box_size=None)
 
 `surround`:  Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader
 
-`constraint_window`: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.
+`constraint_window`: Size of the box, as a fraction of the map size, that agents spawn in at the start of each episode. The box is placed at a random position on the map and is at least one cell wide. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the same cell. Agents spawn apart from each other while the box has room for it, and otherwise next to or on top of each other.
 
 `center_box_size`: Optional `(width, height)` of the center obstacle in grid cells. The default `None` preserves the original proportional obstacle size. Use `(0, 0)` for a map without a center obstacle.
 
