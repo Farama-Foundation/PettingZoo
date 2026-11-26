@@ -110,22 +110,25 @@ class RecordVideoParallel(BaseParallelWrapper[AgentID, ObsType, ActionType]):
             ) from e
 
     def _capture_frame(self) -> None:
+        """Capture every frame returned by the renderer, including frame lists."""
         assert self.recording, "Cannot capture a frame, recording wasn't started."
 
         frame = self.env.render()
         if isinstance(frame, list):
-            if len(frame) == 0:
-                return
             self.render_history.extend(copy.copy(image) for image in frame)
-            frame = frame[-1]
-
-        if isinstance(frame, np.ndarray):
-            self.recorded_frames.append(frame.copy())
+            frames = frame
         else:
-            self.stop_recording()
-            gymnasium.logger.warn(
-                f"Recording stopped: expected type of frame returned by render to be a numpy array, got instead {type(frame)}."
-            )
+            frames = [frame]
+
+        for frame in frames:
+            if isinstance(frame, np.ndarray):
+                self.recorded_frames.append(frame.copy())
+            else:
+                self.stop_recording()
+                gymnasium.logger.warn(
+                    f"Recording stopped: expected type of frame returned by render to be a numpy array, got instead {type(frame)}."
+                )
+                break
 
     @override
     def reset(
