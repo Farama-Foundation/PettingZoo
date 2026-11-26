@@ -8,10 +8,10 @@ The [Shimmy](https://shimmy.farama.org/) package (`pip install shimmy`) allows c
 
 ## Supported multi-agent environments:
 
-### [OpenSpiel](https://shimmy.farama.org/contents/open_spiel/)
+### [OpenSpiel](https://shimmy.farama.org/environments/open_spiel/)
 * 70+ implementations of various board games
 
-### [DeepMind Control Soccer](https://shimmy.farama.org/contents/dm_multi/)
+### [DeepMind Control Soccer](https://shimmy.farama.org/environments/dm_multi/)
 * Multi-agent robotics environment where teams of agents compete in soccer.
 
 ### [DeepMind Melting Pot](https://github.com/deepmind/meltingpot)

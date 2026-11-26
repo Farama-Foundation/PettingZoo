@@ -16,7 +16,7 @@ These tutorials show you how to use [Ray](https://docs.ray.io/en/latest/index.ht
 It is a part of [Ray](https://github.com/ray-project/ray), a popular library for distributed ML and scaling python applications.
 
 See the [documentation](https://docs.ray.io/en/latest/rllib/index.html) for more information.
- * [PettingZoo Env](https://docs.ray.io/en/latest/rllib/rllib-env.html#pettingzoo-multi-agent-environments)
+ * [PettingZoo Env](https://docs.ray.io/en/latest/rllib/multi-agent-envs.html)
  * [Implemented Algorithms](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html)
 
 ## Examples using PettingZoo:
