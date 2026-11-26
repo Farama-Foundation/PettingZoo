@@ -31,7 +31,7 @@ Recording agent behavior serves several important purposes in RL development:
 - Create timelapse videos of learning
 
 ```{eval-rst}
-.. py:currentmodule: pettingzoo.utils.wrappers
+.. py:currentmodule: pettingzoo.wrappers
 
 PettingZoo provides :class:`RecordVideo` for AEC environments and :class:`RecordVideoParallel` for `Parallel` environments. Both wrappers function the same, using the underlying `render()` function of the environment, but `AEC` and `Parallel` environments have different interfaces. They generate MP4 videos from environment renderings. Create the environment with an image-producing render mode such as ``rgb_array`` and install the optional dependency with ``pip install "pettingzoo[other]"``.
 
@@ -41,14 +41,14 @@ We'll show how to record every episode during evaluation and periodically during
 ## Recording Every Episode (Evaluation)
 
 ```{eval-rst}
-.. py:currentmodule: pettingzoo.utils.wrappers
+.. py:currentmodule: pettingzoo.wrappers
 
 When evaluating a trained agent, you typically want to record several episodes to understand average performance and consistency. Here is how to use :class:`RecordVideo` with an AEC environment.
 ```
 
 ```python
 from pettingzoo.classic import connect_four_v3
-from pettingzoo.utils.wrappers import RecordVideo
+from pettingzoo.wrappers import RecordVideo
 import numpy as np
 
 # Configuration
@@ -124,7 +124,7 @@ Average episode length: 40.0 steps
 ```
 
 ```{eval-rst}
-.. py:currentmodule: pettingzoo.utils.wrappers
+.. py:currentmodule: pettingzoo.wrappers
 
 In the script above, :class:`RecordVideo` saves videos with filenames like ``eval-episode-0.mp4`` in the specified folder. The ``episode_trigger=lambda x: True`` ensures every episode is recorded. PettingZoo does not include a ``RecordEpisodeStatistics`` wrapper, so the example collects its own per-episode returns and lengths.
 ```
@@ -137,7 +137,7 @@ During training, you'll run hundreds or thousands of episodes, so recording ever
 import logging
 
 from pettingzoo.classic import connect_four_v3
-from pettingzoo.utils.wrappers import RecordVideo
+from pettingzoo.wrappers import RecordVideo
 
 # Training configuration
 training_period = 250           # Record video every 250 episodes
