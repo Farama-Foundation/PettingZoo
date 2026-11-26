@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import functools
+import pickle
 
 import numpy as np
 import pytest
 from gymnasium.spaces import Box, Discrete
 
 from pettingzoo.test import api_test, parallel_api_test
+from pettingzoo.test.example_envs import (
+    generated_agents_env_v0,
+    generated_agents_parallel_v0,
+)
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import DtypeObservationParallelV1, DtypeObservationV1
 
@@ -136,6 +141,7 @@ class WideParallel(DummyParallel):
 
 
 class UnboundedAEC(DummyAEC):
+    @functools.cache
     def observation_space(self, agent):
         return Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
 
@@ -355,3 +361,104 @@ def test_agent_outside_possible_agents_resolves_lazily():
     space = env.observation_space("agent_2")
     assert space.dtype == np.float32
     assert space.shape == (3,)
+
+
+@pytest.mark.parametrize(
+    "make_env, wrapper",
+    [
+        (generated_agents_env_v0.env, DtypeObservationV1),
+        (generated_agents_parallel_v0.parallel_env, DtypeObservationParallelV1),
+    ],
+)
+@pytest.mark.parametrize("dtype", [np.uint8, np.float32, np.float64])
+def test_generated_agents_spaces_follow_reset(make_env, wrapper, dtype):
+    env = wrapper(make_env(), dtype)
+    for seed in (1, 3):
+        result = env.reset(seed=seed)
+        for _ in range(10):
+            observations = (
+                {agent: env.observe(agent) for agent in env.agents}
+                if isinstance(env, AECEnv)
+                else result[0]
+            )
+            for agent, observation in observations.items():
+                base = env.env.observation_space(agent)
+                space = env.observation_space(agent)
+                assert space.shape == base.shape
+                assert space.dtype == dtype
+                assert np.array_equal(space.low, base.low.astype(dtype))
+                assert np.array_equal(space.high, base.high.astype(dtype))
+                assert space.contains(observation)
+                assert env.observation_space(agent) is space
+            if isinstance(env, AECEnv):
+                env.step(env.action_space(env.agent_selection).sample())
+            else:
+                result = env.step(
+                    {agent: env.action_space(agent).sample() for agent in env.agents}
+                )
+    env.close()
+
+
+@pytest.mark.parametrize(
+    "make_env, wrapper",
+    [(DummyAEC, DtypeObservationV1), (DummyParallel, DtypeObservationParallelV1)],
+)
+def test_unchanged_spaces_keep_identity_and_seed_after_reset(make_env, wrapper):
+    env = wrapper(make_env(), np.float32)
+    space = env.observation_space("agent_0")
+    space.seed(7)
+    reference = Box(space.low, space.high, dtype=space.dtype)
+    reference.seed(7)
+    for seed in (1, 3):
+        env.reset(seed=seed)
+        assert env.observation_space("agent_0") is space
+        assert np.array_equal(space.sample(), reference.sample())
+
+
+@pytest.mark.parametrize(
+    "make_env, wrapper",
+    [(DummyAEC, DtypeObservationV1), (DummyParallel, DtypeObservationParallelV1)],
+)
+def test_replaced_space_with_same_shape_updates_bounds(make_env, wrapper, monkeypatch):
+    inner = make_env()
+    spaces = {agent: inner.observation_space(agent) for agent in AGENTS}
+    monkeypatch.setattr(inner, "observation_space", spaces.__getitem__)
+    env = wrapper(inner, np.float32)
+    previous = env.observation_space("agent_0")
+    unchanged = env.observation_space("agent_1")
+    spaces["agent_0"] = Box(0, 100, shape=previous.shape, dtype=np.uint8)
+    space = env.observation_space("agent_0")
+    assert space is not previous
+    assert space.shape == previous.shape
+    assert np.all(space.high == 100)
+    assert env.observation_space("agent_0") is space
+    assert env.observation_space("agent_1") is unchanged
+
+
+@pytest.mark.parametrize(
+    "make_env, wrapper",
+    [(DummyAEC, DtypeObservationV1), (DummyParallel, DtypeObservationParallelV1)],
+)
+def test_pickle_preserves_seeded_space(make_env, wrapper):
+    env = wrapper(make_env(), np.float32)
+    space = env.observation_space("agent_0")
+    space.seed(7)
+    restored = pickle.loads(pickle.dumps(env))
+    restored_space = restored.observation_space("agent_0")
+    assert restored.observation_space("agent_0") is restored_space
+    assert np.array_equal(space.sample(), restored_space.sample())
+
+
+@pytest.mark.parametrize(
+    "make_env, wrapper",
+    [(DummyAEC, DtypeObservationV1), (DummyParallel, DtypeObservationParallelV1)],
+)
+def test_spaces_created_before_source_cache_keep_seed(make_env, wrapper):
+    env = wrapper(make_env(), np.float32)
+    space = env.observation_space("agent_0")
+    space.seed(7)
+    reference = Box(space.low, space.high, dtype=space.dtype)
+    reference.seed(7)
+    env.__dict__.pop("_base_obs_spaces", None)
+    assert env.observation_space("agent_0") is space
+    assert np.array_equal(space.sample(), reference.sample())
