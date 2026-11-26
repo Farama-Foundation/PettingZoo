@@ -6,6 +6,7 @@ import multiprocessing as mp
 import os
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
+from copy import deepcopy
 from typing import Any
 
 import cloudpickle
@@ -184,9 +185,7 @@ def _step_world(
     )
 
     if episode_done and autoreset_mode == AutoresetMode.SAME_STEP:
-        final_obs = obs_list
-        final_infos = info_list
-        final_state = state
+        final_obs, final_infos, final_state = deepcopy((obs_list, info_list, state))
         obs_list, info_list, state, next_needs_reset = _reset_world(
             env, possible_agents, has_state, seed=autoreset_seed, options=None
         )

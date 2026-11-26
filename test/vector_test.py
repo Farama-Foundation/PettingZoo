@@ -735,3 +735,70 @@ def test_builtin_kaz_v11_black_death_and_states(
             assert vec.states().shape == (2, *vec.single_state_space.shape)
     finally:
         vec.close()
+
+
+class ReusingCounterParallelEnv(CounterStateParallelEnv):
+    """Counter env reusing observation, state, and info buffers across resets."""
+
+    def __init__(self) -> None:
+        super().__init__(horizon=1)
+        self.obs_buffers = {
+            agent: np.zeros(2, dtype=np.float32) for agent in self.possible_agents
+        }
+        self.state_buffer = np.zeros(3, dtype=np.float32)
+        self.info_buffers: dict[str, dict[str, Any]] = {
+            agent: {} for agent in self.possible_agents
+        }
+
+    def _make_obs(self) -> dict[str, np.ndarray]:
+        for agent, obs in super()._make_obs().items():
+            self.obs_buffers[agent][:] = obs
+        return {agent: self.obs_buffers[agent] for agent in self.agents}
+
+    def state(self) -> np.ndarray:
+        self.state_buffer[:] = super().state()
+        return self.state_buffer
+
+    def _reuse_info(
+        self, infos: dict[str, dict[str, Any]]
+    ) -> dict[str, dict[str, Any]]:
+        for agent, info in infos.items():
+            self.info_buffers[agent].clear()
+            self.info_buffers[agent].update(info)
+        return {agent: self.info_buffers[agent] for agent in infos}
+
+    def reset(
+        self, seed: int | None = None, options: dict[str, Any] | None = None
+    ) -> tuple[dict[str, np.ndarray], dict[str, dict[str, Any]]]:
+        obs, infos = super().reset(seed=seed, options=options)
+        return obs, self._reuse_info(infos)
+
+    def step(
+        self, actions: dict[str, int]
+    ) -> tuple[
+        dict[str, np.ndarray],
+        dict[str, float],
+        dict[str, bool],
+        dict[str, bool],
+        dict[str, dict[str, Any]],
+    ]:
+        obs, rewards, terms, truncs, infos = super().step(actions)
+        return obs, rewards, terms, truncs, self._reuse_info(infos)
+
+
+@pytest.mark.parametrize("runner_cls", [SyncParallelVectorEnv, AsyncParallelVectorEnv])
+def test_same_step_snapshots_reused_buffers(
+    runner_cls: type[SyncParallelVectorEnv] | type[AsyncParallelVectorEnv],
+) -> None:
+    vec = _make_runner(runner_cls, [ReusingCounterParallelEnv])
+    try:
+        vec.reset()
+        obs, _, terminated, _, infos = vec.step(np.array([1, 2], dtype=np.int64))
+        assert terminated.all()
+        np.testing.assert_array_equal(obs[:, 1], [0, 0])
+        np.testing.assert_array_equal(infos["final_obs"][0], [0, 1])
+        np.testing.assert_array_equal(infos["final_obs"][1], [0, 2])
+        np.testing.assert_array_equal(infos["final_state"][0], [0, 1, 3])
+        np.testing.assert_array_equal(infos["final_info"]["step"], [1, 1])
+    finally:
+        vec.close()
