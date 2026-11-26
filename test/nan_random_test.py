@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import warnings
 
 import numpy as np
@@ -326,3 +327,37 @@ def test_parallel_api():
     parallel_api_test(
         NanRandomParallelV1(MaskedParallel(obs_masks=None, info_masks=MASKS)), 5
     )
+
+
+@pytest.mark.parametrize("location", ["observation", "info"])
+@pytest.mark.parametrize(
+    "dtype,start",
+    [
+        (np.int8, -3),
+        (np.uint8, 2),
+        (np.int64, -3),
+        (np.uint64, 2),
+        (np.uint64, 2**63 + 8),
+    ],
+)
+def test_masked_replacements_preserve_integer_actions(api, location, dtype, start):
+    if "dtype" not in inspect.signature(Discrete).parameters:
+        pytest.skip("This Gymnasium version does not support Discrete dtypes")
+    wrapper, _, masked = api
+    space = Discrete(N_ACTIONS, start=start, dtype=dtype)
+    kwargs = {"space_fn": lambda agent: space}
+    if location == "observation":
+        inner = masked(obs_masks=MASKS, **kwargs)
+    else:
+        inner = masked(obs_masks=None, info_masks=MASKS, **kwargs)
+    env = wrapper(inner)
+    seen = []
+    for _ in range(2):
+        env.reset(seed=7)
+        actions = nan_step(env)
+        for agent, action in actions.items():
+            assert isinstance(action, (int, np.integer))
+            assert space.contains(action)
+            assert MASKS[agent][int(action) - start] == 1
+        seen.append(actions)
+    assert seen[0] == seen[1]

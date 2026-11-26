@@ -69,7 +69,7 @@ def _random_action(
     allowed = np.flatnonzero(mask)
     if allowed.size == 0:
         raise ValueError(f"The action mask for agent {agent!r} allows no actions.")
-    return space.start + np_random.choice(allowed)
+    return int(space.start) + int(np_random.choice(allowed))
 
 
 def _replace_nan(
@@ -98,7 +98,8 @@ class NanRandomV1(BaseWrapper[AgentID, ObsType, Any]):
     The replacement is sampled from the acting agent's action space, and a
     warning is emitted for each one. If the agent has an ``action_mask``, in its
     dictionary observation or else in its info, the replacement is drawn
-    uniformly from the actions the mask allows. Masks are supported for
+    uniformly from the actions the mask allows. Masked replacements are Python
+    integers, including for unsigned Discrete spaces. Masks are supported for
     ``Discrete`` action spaces; a mask on any other space, or one with the wrong
     shape, values other than 0 and 1, or no allowed action, raises a
     ``ValueError``.
