@@ -49,7 +49,8 @@ class ReshapeObservationV1(BaseWrapper[AgentID, Any, ActionType]):
     """Reshapes each agent's observation to the given shape.
 
     The observation space is reshaped the same way, so per-element bounds are kept.
-    Only works on Box observation spaces.
+    Only works on Box observation spaces. The reshaped space is refreshed when
+    the environment replaces an agent's source space.
 
     :param env: The AEC environment to wrap.
     :param shape: The new observation shape. Must have as many elements as the old one.
@@ -66,6 +67,7 @@ class ReshapeObservationV1(BaseWrapper[AgentID, Any, ActionType]):
         super().__init__(env)
         self.shape = shape
         self._obs_spaces: dict[AgentID, Box] = {}
+        self._source_spaces: dict[AgentID, gymnasium.spaces.Space[Any]] = {}
         # Fail on construction for envs that already know their agents. Envs that
         # only fill possible_agents in reset() are caught on the first observation.
         for agent in getattr(env, "possible_agents", []):
@@ -73,10 +75,11 @@ class ReshapeObservationV1(BaseWrapper[AgentID, Any, ActionType]):
 
     @override
     def observation_space(self, agent: AgentID) -> Box:
-        if agent not in self._obs_spaces:
-            self._obs_spaces[agent] = _reshaped_space(
-                self.env.observation_space(agent), self.shape, agent
-            )
+        source = self.env.observation_space(agent)
+        sources = self.__dict__.setdefault("_source_spaces", {})
+        if agent not in self._obs_spaces or sources.get(agent) is not source:
+            self._obs_spaces[agent] = _reshaped_space(source, self.shape, agent)
+            sources[agent] = source
         return self._obs_spaces[agent]
 
     @override
@@ -97,7 +100,8 @@ class ReshapeObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
     """Reshapes each agent's observation to the given shape.
 
     The observation space is reshaped the same way, so per-element bounds are kept.
-    Only works on Box observation spaces.
+    Only works on Box observation spaces. The reshaped space is refreshed when
+    the environment replaces an agent's source space.
 
     :param env: The parallel environment to wrap.
     :param shape: The new observation shape. Must have as many elements as the old one.
@@ -110,6 +114,7 @@ class ReshapeObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
         super().__init__(env)
         self.shape = shape
         self._obs_spaces: dict[AgentID, Box] = {}
+        self._source_spaces: dict[AgentID, gymnasium.spaces.Space[Any]] = {}
         # Fail on construction for envs that already know their agents. Envs that
         # only fill possible_agents in reset() are caught on the first observation.
         for agent in getattr(env, "possible_agents", []):
@@ -117,10 +122,11 @@ class ReshapeObservationParallelV1(BaseParallelWrapper[AgentID, Any, ActionType]
 
     @override
     def observation_space(self, agent: AgentID) -> Box:
-        if agent not in self._obs_spaces:
-            self._obs_spaces[agent] = _reshaped_space(
-                self.env.observation_space(agent), self.shape, agent
-            )
+        source = self.env.observation_space(agent)
+        sources = self.__dict__.setdefault("_source_spaces", {})
+        if agent not in self._obs_spaces or sources.get(agent) is not source:
+            self._obs_spaces[agent] = _reshaped_space(source, self.shape, agent)
+            sources[agent] = source
         return self._obs_spaces[agent]
 
     def _reshape(self, observations: dict[AgentID, Any]) -> dict[AgentID, np.ndarray]:
