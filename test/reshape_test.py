@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import pickle
 
 import numpy as np
 import pytest
@@ -331,3 +332,108 @@ def test_parallel_api():
 def test_rejects_parallel_env():
     with pytest.raises(AssertionError):
         ReshapeObservationV1(DummyParallel(), NEW_SHAPE)
+
+
+@pytest.mark.parametrize(
+    "wrapper,base_env",
+    [(ReshapeObservationV1, DummyAEC), (ReshapeObservationParallelV1, DummyParallel)],
+)
+@pytest.mark.parametrize("dtype", [np.float32, np.uint8])
+def test_replaced_source_space_refreshes_reshaped_bounds(wrapper, base_env, dtype):
+    class ChangingSpaceEnv(base_env):
+        def __init__(self):
+            super().__init__()
+            self.current_space = Box(0, 1, shape=(2, 3), dtype=dtype)
+
+        def observation_space(self, agent):
+            return self.current_space
+
+        def reset(self, seed=None, options=None):
+            self.current_space = Box(10, 20, shape=(2, 3), dtype=dtype)
+            result = super().reset(seed=seed, options=options)
+            if isinstance(self, ParallelEnv):
+                observations, infos = result
+                return dict.fromkeys(observations, self.current_space.high), infos
+            return result
+
+        def observe(self, agent):
+            return self.current_space.high
+
+    inner = ChangingSpaceEnv()
+    env = wrapper(inner, NEW_SHAPE)
+    old_space = env.observation_space("agent_0")
+    result = env.reset(seed=0)
+    observation = (
+        result[0]["agent_0"]
+        if isinstance(inner, ParallelEnv)
+        else env.observe("agent_0")
+    )
+    current_space = env.observation_space("agent_0")
+
+    assert current_space is not old_space
+    assert current_space.contains(observation)
+    assert np.array_equal(current_space.low, inner.current_space.low.reshape(NEW_SHAPE))
+    assert np.array_equal(
+        current_space.high, inner.current_space.high.reshape(NEW_SHAPE)
+    )
+    assert current_space.dtype == dtype
+    assert old_space.low.max() == 0
+    assert old_space.high.max() == 1
+    assert env.observation_space("agent_0") is current_space
+
+
+@pytest.mark.parametrize(
+    "wrapper,base_env",
+    [(ReshapeObservationV1, DummyAEC), (ReshapeObservationParallelV1, DummyParallel)],
+)
+@pytest.mark.parametrize("replacement", [Box(0, 1, shape=(4,)), Discrete(6)])
+def test_replaced_source_space_is_validated(wrapper, base_env, replacement):
+    class ChangingSpaceEnv(base_env):
+        def __init__(self):
+            super().__init__()
+            self.current_space = Box(0, 1, shape=(2, 3))
+
+        def observation_space(self, agent):
+            return self.current_space
+
+    inner = ChangingSpaceEnv()
+    env = wrapper(inner, NEW_SHAPE)
+    env.observation_space("agent_0")
+    inner.current_space = replacement
+
+    with pytest.raises(AssertionError, match="agent_0"):
+        env.observation_space("agent_0")
+
+
+@pytest.mark.parametrize(
+    "wrapper,base_env",
+    [(ReshapeObservationV1, DummyAEC), (ReshapeObservationParallelV1, DummyParallel)],
+)
+def test_unchanged_source_keeps_reshaped_space_and_rng(wrapper, base_env):
+    env = wrapper(base_env(), NEW_SHAPE)
+    space = env.observation_space("agent_0")
+    space.seed(12)
+    expected = [space.sample(), space.sample()]
+    space.seed(12)
+    assert np.array_equal(space.sample(), expected[0])
+
+    env.reset(seed=0)
+
+    assert env.observation_space("agent_0") is space
+    assert np.array_equal(space.sample(), expected[1])
+
+
+@pytest.mark.parametrize(
+    "wrapper,base_env",
+    [(ReshapeObservationV1, DummyAEC), (ReshapeObservationParallelV1, DummyParallel)],
+)
+@pytest.mark.parametrize("legacy", [False, True])
+def test_reshaped_space_survives_serialization(wrapper, base_env, legacy):
+    env = wrapper(base_env(), NEW_SHAPE)
+    env.reset(seed=0)
+    if legacy:
+        del env.__dict__["_source_spaces"]
+    restored = pickle.loads(pickle.dumps(env))
+    space = restored.observation_space("agent_0")
+    assert space.contains(FIXED_OBS["agent_0"].reshape(NEW_SHAPE))
+    assert restored.observation_space("agent_0") is space
