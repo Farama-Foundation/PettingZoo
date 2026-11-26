@@ -13,7 +13,7 @@ def test_removed_env_raises_with_guidance():
 def test_unknown_env_raises_attribute_error():
     """An env that never existed under this module is a plain AttributeError."""
     with pytest.raises(AttributeError, match="cannot import name"):
-        _ = classic.knights_archers_zombies_v11
+        _ = classic.knights_archers_zombies_v12
 
 
 def test_getattr_default_still_works():

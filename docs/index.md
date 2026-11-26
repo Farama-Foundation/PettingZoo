@@ -82,7 +82,7 @@ Environments can be interacted with using a similar interface to [Gymnasium](htt
 ```python
 from pettingzoo import make
 
-env = make("aec", "butterfly/knights_archers_zombies-v11", render_mode="human")
+env = make("aec", "butterfly/knights_archers_zombies-v12", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():

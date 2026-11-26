@@ -16,7 +16,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from pettingzoo.butterfly import knights_archers_zombies_v11
+from pettingzoo.butterfly import knights_archers_zombies_v12
 from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
 
 
@@ -195,7 +195,7 @@ def run_episode(
     frame_stride: int = 5,
 ) -> tuple[float, list[np.ndarray]]:
     """Run one KAZ episode and optionally capture RGB frames."""
-    env = knights_archers_zombies_v11.env(
+    env = knights_archers_zombies_v12.env(
         render_mode="rgb_array" if render else None,
         max_cycles=max_cycles,
         max_zombies=max_zombies,

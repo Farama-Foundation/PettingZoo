@@ -201,7 +201,7 @@ If you have a wrapped environment, and you want to get the unwrapped environment
 ```python
 from pettingzoo import make
 
-base_env = make("aec", "butterfly/knights_archers_zombies-v11").unwrapped
+base_env = make("aec", "butterfly/knights_archers_zombies-v12").unwrapped
 ```
 
 ### Variable Numbers of Agents (Death)
