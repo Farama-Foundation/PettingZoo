@@ -48,7 +48,7 @@ To sample actions using action masking:
 ```python
 from pettingzoo import make
 
-env = make("aec", "classic/chess-v6", render_mode="human")
+env = make("aec", "classic/chess-v7", render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():

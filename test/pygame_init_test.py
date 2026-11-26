@@ -10,7 +10,7 @@ from pettingzoo.butterfly import (
     pistonball_v6,
 )
 from pettingzoo.classic import (
-    chess_v6,
+    chess_v7,
     connect_four_v3,
     go_v6,
     leduc_holdem_v4,
@@ -24,7 +24,7 @@ pygame_envs = [
     cooperative_pong_v6,
     knights_archers_zombies_v11,
     pistonball_v6,
-    chess_v6,
+    chess_v7,
     connect_four_v3,
     go_v6,
     leduc_holdem_v4,

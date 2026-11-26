@@ -227,13 +227,14 @@ def get_observation(orig_board: chess.Board, player: int):
     }
     if (board.castlings().they_can_00()) result[kAuxPlaneBase + 3].SetAll();
     """
-    if board.castling_rights & chess.BB_H1:
-        result[AUX_OFF + 0] = all_squares
+    # `board` is mirrored for black, so white is the observing player here.
     if board.castling_rights & chess.BB_A1:
+        result[AUX_OFF + 0] = all_squares
+    if board.castling_rights & chess.BB_H1:
         result[AUX_OFF + 1] = all_squares
-    if board.castling_rights & chess.BB_H8:
-        result[AUX_OFF + 2] = all_squares
     if board.castling_rights & chess.BB_A8:
+        result[AUX_OFF + 2] = all_squares
+    if board.castling_rights & chess.BB_H8:
         result[AUX_OFF + 3] = all_squares
     """
         if (we_are_black) result[kAuxPlaneBase + 4].SetAll();
@@ -245,7 +246,9 @@ def get_observation(orig_board: chess.Board, player: int):
       """
     if player:
         result[AUX_OFF + 4] = all_squares
-    result[AUX_OFF + 5].add(board.halfmove_clock // 2)
+    # Set the n-th element of the flattened channel after n moves without a capture
+    # or pawn move. The first row of the observation is the 8th rank, hence the mirror.
+    result[AUX_OFF + 5].add(chess.square_mirror(board.halfmove_clock // 2))
     result[AUX_OFF + 6] = all_squares
     """
       bool flip = false;
