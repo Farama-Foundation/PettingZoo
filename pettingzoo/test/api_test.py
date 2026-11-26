@@ -544,14 +544,17 @@ def test_action_flexibility(env):
         elif "action_mask" in info:
             action = env.action_space(agent).sample(info["action_mask"])
         else:
-            action = 0
+            action = int(action_space.start)
         env.step(action)
         env.reset(seed=0)
         env.step(np.int32(action))
     elif isinstance(action_space, gymnasium.spaces.Box):
-        env.step(np.zeros_like(action_space.low))
+        # Zero is not necessarily in the action space (e.g. Box(1, 2)).
+        action = np.zeros_like(action_space.low)
+        np.clip(action, action_space.low, action_space.high, out=action)
+        env.step(action.copy())
         env.reset(seed=0)
-        env.step(np.zeros_like(action_space.low))
+        env.step(action.copy())
 
 
 def api_test(env, num_cycles=1000, verbose_progress=False):
