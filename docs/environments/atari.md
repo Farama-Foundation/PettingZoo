@@ -79,42 +79,53 @@ Most games have two players, with the exception of Warlords and a couple of Pong
 
 The ALE has been studied extensively and a few notable problems have been identified:
 
-* **Determinism**: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/Farama-Foundation/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
+* **Determinism**: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. PettingZoo's `StickyActionV1` wrapper introduces randomness by occasionally repeating a previous action (see example below). This follows the recommendation in *Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*.
 * **Frame flickering**: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this computing the pixel-wise maximum of the previous 2 observations (see example below for implementation).
 
 ### Preprocessing
 
-We encourage the use of the [supersuit](https://github.com/Farama-Foundation/SuperSuit) library for preprocessing. The unique dependencies for this set of environments can be installed via:
+PettingZoo includes native wrappers for several common Atari preprocessing steps.
+The resizing step below still uses [SuperSuit](https://github.com/Farama-Foundation/SuperSuit) until a native resize wrapper is available (tracked in [#1471](https://github.com/Farama-Foundation/PettingZoo/issues/1471)).
+Install SuperSuit if you need the resizing step:
 
- ````bash
+````bash
 pip install supersuit
- ````
+````
 
-Here is some example usage for the Atari preprocessing:
+Here is an AEC environment preprocessing example using the native wrappers where available:
 
-``` python
+```python
 import supersuit
 from pettingzoo import make
+from pettingzoo.utils.wrappers import (
+    FrameSkipV1,
+    FrameStackV3,
+    MaxObservationV1,
+    StickyActionV1,
+)
 
 env = make("aec", "atari/space_invaders-v2")
 
-# as per openai baseline's MaxAndSKip wrapper, maxes over the last 2 frames
-# to deal with frame flickering
-env = supersuit.max_observation_v0(env, 2)
+# Take the pixel-wise maximum of the last two observations to reduce flickering.
+env = MaxObservationV1(env, memory=2)
 
-# repeat_action_probability is set to 0.25 to introduce non-determinism to the system
-env = supersuit.sticky_actions_v0(env, repeat_action_probability=0.25)
+# Occasionally repeat an agent's previous action to introduce nondeterminism.
+env = StickyActionV1(env, repeat_action_probability=0.25)
 
-# skip frames for faster processing and less control
-# to be compatible with gym, use frame_skip(env, (2,5))
-env = supersuit.frame_skip_v0(env, 4)
+# Repeat each action for four of that agent's turns to skip frames.
+# FrameSkipV1 (AEC) takes a fixed integer; FrameSkipParallelV1 also supports a range.
+env = FrameSkipV1(env, num_frames=4)
 
-# downscale observation for faster processing
+# Resize to 84 x 84 (still requires SuperSuit until the native port is ready).
 env = supersuit.resize_v1(env, 84, 84)
 
-# allow agent to see everything on the screen despite Atari's flickering screen problem
-env = supersuit.frame_stack_v1(env, 4)
+# Stack four frames; zero padding preserves SuperSuit frame_stack_v1 behavior.
+env = FrameStackV3(env, stack_size=4, initial="zeros")
 ```
+
+Omit the SuperSuit import and resizing call if you do not need smaller images;
+the remaining preprocessing steps use only PettingZoo. The imports above use
+`pettingzoo.utils.wrappers`, where the native wrappers are currently exposed.
 
 ### Common Parameters
 
