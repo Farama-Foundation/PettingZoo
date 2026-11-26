@@ -100,3 +100,42 @@ def test_invalid_center_box_size(center_box_size, error):
             n_pursuers=1,
             center_box_size=center_box_size,
         )
+
+
+@pytest.mark.parametrize(
+    ("center_box_size", "evader", "pursuers"),
+    [
+        # wall across the map in rows y=3,4: wall cells next to the evader at x=0 and x=7
+        ((8, 2), (0, 2), [(1, 2), (0, 1)]),
+        ((8, 2), (7, 2), [(6, 2), (7, 1)]),
+        # wall across the map in columns x=3,4: wall cells next to the evader at y=0 and y=7
+        ((2, 8), (2, 0), [(1, 0), (2, 1)]),
+        ((2, 8), (2, 7), [(1, 7), (2, 6)]),
+        # evader next to the wall away from the map edges
+        ((8, 2), (1, 2), [(0, 2), (2, 2), (1, 1)]),
+    ],
+)
+def test_surround_next_to_obstacle(center_box_size, evader, pursuers):
+    env = pursuit_v6.env(
+        x_size=8,
+        y_size=8,
+        n_evaders=1,
+        n_pursuers=len(pursuers),
+        freeze_evaders=True,
+        center_box_size=center_box_size,
+    )
+    env.reset(seed=0)
+    base_env = env.unwrapped.env
+    base_env.evader_layer.set_position(0, *evader)
+    for i, position in enumerate(pursuers):
+        base_env.pursuer_layer.set_position(i, *position)
+    base_env.model_state[1] = base_env.pursuer_layer.get_state_matrix()
+    base_env.model_state[2] = base_env.evader_layer.get_state_matrix()
+
+    # the pursuers occupy every open cell next to the evader, so it is caught
+    # at the end of the cycle
+    assert base_env.need_to_surround(*evader) == len(pursuers)
+    for _ in pursuers:
+        env.step(4)  # stay
+    assert base_env.evader_layer.n_agents() == 0
+    assert all(env.terminations.values())
