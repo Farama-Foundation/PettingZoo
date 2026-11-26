@@ -177,7 +177,6 @@ from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import AgentSelector
 
 
 def env(**kwargs):
@@ -455,9 +454,6 @@ class raw_env(AECEnv, EzPickle):
         self.terminations = self.hanabi_env.terminations
         self.truncations = self.hanabi_env.truncations
         self.infos = self.hanabi_env.infos
-
-        self._agent_selector = AgentSelector(self.agents)
-        self.agent_selection = self._agent_selector.reset()
 
     def step(
         self, action: int, observe: bool = True, as_vector: bool = True
