@@ -15,7 +15,6 @@ import argparse
 import os
 import random
 import time
-from distutils.util import strtobool
 
 import gymnasium as gym
 import imageio
@@ -28,6 +27,16 @@ from torch.distributions.categorical import Categorical
 from torch.utils.tensorboard import SummaryWriter
 
 from pettingzoo import make
+
+
+def strtobool(value):
+    """Same as distutils.util.strtobool (the distutils module was removed in Python 3.12)."""
+    value = value.lower()
+    if value in ("y", "yes", "t", "true", "on", "1"):
+        return 1
+    if value in ("n", "no", "f", "false", "off", "0"):
+        return 0
+    raise ValueError(f"invalid truth value {value!r}")
 
 
 def parse_args():
