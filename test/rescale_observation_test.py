@@ -393,3 +393,16 @@ def test_wide_float64_bounds(api, low, high, obs, min_obs, max_obs, expected):
     assert np.all(np.isfinite(got))
     np.testing.assert_allclose(got, expected, rtol=1e-14, atol=0.0)
     assert env.observation_space("agent_0").contains(got)
+
+
+@pytest.mark.parametrize(
+    "min_obs, max_obs",
+    [(0.0, np.inf), (-np.inf, 1.0), (-np.inf, np.inf), (np.nan, 1.0), (0.0, np.nan)],
+)
+@pytest.mark.parametrize(
+    "wrapper, inner",
+    [(RescaleObservationV1, DummyAEC), (RescaleObservationParallelV1, DummyParallel)],
+)
+def test_rejects_nonfinite_target_range(wrapper, inner, min_obs, max_obs):
+    with pytest.raises(AssertionError, match="finite"):
+        wrapper(inner(), min_obs, max_obs)
