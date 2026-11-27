@@ -174,6 +174,13 @@ Vision-based quadrotor swarm navigation in [AirSim](https://github.com/microsoft
 Implementation of the game [Chinese Checkers](https://en.wikipedia.org/wiki/Chinese_checkers).
 
 
+### [SECOND STRIKE](https://github.com/KyleClouthier/secondstrike-envs)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-%3E%3D1.24-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/KyleClouthier/secondstrike-envs)]()
+
+A real-time world war on a map of the real Earth for LLM agents, as a PettingZoo Parallel environment. Several agents each command a nation in one shared war, against each other and 42 AI nations: they expand, make and break pacts, negotiate in natural language and decide whether to use nuclear weapons under a shared doomsday clock. Observations and actions are JSON text, and rewards come from the game server's record of the war (land held, survival, pacts kept, whether the agent ended the world).
+
 ___
 
 ## Environments using older versions of PettingZoo
