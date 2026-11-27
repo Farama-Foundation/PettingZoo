@@ -103,6 +103,7 @@ if __name__ == "__main__":
             vf_loss_coeff=0.25,
             sgd_minibatch_size=64,
             num_sgd_iter=10,
+            model={"custom_model": "CNNModelV2"},
         )
         .debugging(log_level="ERROR")
         .framework(framework="torch")
