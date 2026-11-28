@@ -173,6 +173,13 @@ Vision-based quadrotor swarm navigation in [AirSim](https://github.com/microsoft
 
 Implementation of the game [Chinese Checkers](https://en.wikipedia.org/wiki/Chinese_checkers).
 
+### [Victris Arena](https://github.com/Victris-AI/victris-arena-sdk/tree/main/python)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-%3E%3D1.24-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/Victris-AI/victris-arena-sdk)]()
+
+A tile-based 1v1 fighting game with fog of war, a shrinking zone and pickups. `ArenaParallelEnv` is a two-agent Parallel API environment for self-play: both fighters act every tick, their turns resolve together, and each agent's info carries its action mask. It runs the same match code as the game's [public ranked ladder](https://victrisarena.com), where trained policies can play rated matches against other people's bots. Install with `pip install "victris-arena-sim[pettingzoo]"` (MIT).
+
 
 ___
 
